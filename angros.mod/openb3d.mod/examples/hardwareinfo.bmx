@@ -1,4 +1,5 @@
 ' hardwareinfo.bmx
+' maximize windowed screen
 
 Import Angros.Openb3d
 
@@ -9,7 +10,7 @@ Local width%=320,height%=240,depth%=0,hertz%=60
 Graphics width,height,depth,hertz ' get context
 
 THardwareInfo.GetInfo
-THardwareInfo.DisplayInfo 0 ' true for logfile
+THardwareInfo.DisplayInfo 0 ' true for logfile output
 
 EndGraphics
 

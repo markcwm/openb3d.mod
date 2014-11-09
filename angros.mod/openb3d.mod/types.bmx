@@ -8,19 +8,22 @@ Rem
 bbdoc: Blitz2D
 End Rem
 Type TBlitz2D
-
-	Function Text( x%, y%, str$ )
+	
+	Function Text(x:Int,y:Int,str$)
 	
 		' set active texture to texture 0 so gldrawtext will work correctly
-		glActiveTextureARB(GL_TEXTURE0)
-		glClientActiveTextureARB(GL_TEXTURE0)
-		
+		If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
+			glActiveTextureARB(GL_TEXTURE0)
+			glClientActiveTextureARB(GL_TEXTURE0)
+		EndIf
+			
 		glDisable(GL_LIGHTING)
 		glColor3f(1.0,1.0,1.0)
 		
 		' enable blend to hide text background
 		glEnable(GL_BLEND)
-		GLDrawText( str,x,y )
+
+		GLDrawText str,x,y
 		
 		glDisable(GL_BLEND)
 		glEnable(GL_LIGHTING)
@@ -29,59 +32,47 @@ Type TBlitz2D
 		glDisable(GL_TEXTURE_2D)
 		
 	End Function
-	
+
 	Function BeginMax2D()
 
-		' by Oddball
-		glPopClientAttrib()
-		glPopAttrib()
-		glMatrixMode(GL_MODELVIEW)
-		glPopMatrix()
-		glMatrixMode(GL_PROJECTION)
-		glPopMatrix()
-		glMatrixMode(GL_TEXTURE)
-		glPopMatrix()
-		glMatrixMode(GL_COLOR)
-		glPopMatrix()
-		
+		' Function by Oddball
+		glPopClientAttrib
+		glPopAttrib
+		glMatrixMode GL_MODELVIEW
+		glPopMatrix
+		glMatrixMode GL_PROJECTION
+		glPopMatrix
+		glMatrixMode GL_TEXTURE
+		glPopMatrix
+		glMatrixMode GL_COLOR
+		glPopMatrix 
+	
 	End Function
 	
 	Function EndMax2D()
-
-		' save the Max2D settings for later - by Oddball
-		glPushAttrib(GL_ALL_ATTRIB_BITS)
-		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-		glMatrixMode(GL_MODELVIEW)
-		glPushMatrix()
-		glMatrixMode(GL_PROJECTION)
-		glPushMatrix()
-		glMatrixMode(GL_TEXTURE)
-		glPushMatrix()
-		glMatrixMode(GL_COLOR)
-		glPushMatrix()
+	
+		' save the Max2D settings for later - Function by Oddball
+		glPushAttrib GL_ALL_ATTRIB_BITS
+		glPushClientAttrib GL_CLIENT_ALL_ATTRIB_BITS
+		glMatrixMode GL_MODELVIEW
+		glPushMatrix
+		glMatrixMode GL_PROJECTION
+		glPushMatrix
+		glMatrixMode GL_TEXTURE
+		glPushMatrix
+		glMatrixMode GL_COLOR
+		glPushMatrix 
 		
-		' Enable States
-		glEnable(GL_LIGHTING)
-		glEnable(GL_DEPTH_TEST)
-		glEnable(GL_FOG)
-		glEnable(GL_CULL_FACE)
-		glEnable(GL_SCISSOR_TEST)
-		
-		glEnable(GL_NORMALIZE)
-		
-		glEnableClientState(GL_VERTEX_ARRAY)
-		glEnableClientState(GL_COLOR_ARRAY)
-		glEnableClientState(GL_NORMAL_ARRAY)
-		
-		glDisable(GL_TEXTURE_2D)
+		TGlobal.EnableStates()
+		glDisable GL_TEXTURE_2D
 		
 		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
-		
-		glClearDepth(1.0)
+	
+		glClearDepth(1.0)						
 		glDepthFunc(GL_LEQUAL)
 		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
-		
+	
 		glAlphaFunc(GL_GEQUAL,0.5)
 		
 	End Function
@@ -264,6 +255,8 @@ Type TGlobal
 	Global tex:TTexture=New TTexture
 	Global voxelspr:TVoxelSprite=New TVoxelSprite
 	
+	Global vbo_enabled:Int=False ' set in GraphicsInit - will be set to true if the hardware supports vbos
+	
 	Function Graphics3D( width%, height%, depth%=0, Mode%=0, rate%=60, flags%=-1, usecanvas%=False )
 	
 		Select flags ' buffer values: back=2, alpha=4, depth=8, stencil=16, accum=32
@@ -283,15 +276,70 @@ Type TGlobal
 			Graphics( width,height,depth,rate,flags )
 		EndIf
 		
-		glewInit() ' required for ARB funcs
-		
-		BeginMax2D()
-		EndMax2D()
+		GraphicsInit()
 		
 		Graphics3D_( width,height,depth,Mode,rate )
 		
 	End Function
-
+	
+	Function GraphicsInit()
+	
+		TextureFilter("",9)
+		
+		glewInit() ' required for ARB funcs
+		
+		' get hardware info and set vbo_enabled accordingly
+		THardwareInfo.GetInfo()
+		'THardwareInfo.DisplayInfo()
+		If USE_VBO=True
+			vbo_enabled=THardwareInfo.VBOSupport
+		EndIf
+		
+		If USE_MAX2D=True
+		
+			' save the Max2D settings for later - by Oddball
+			glPushAttrib GL_ALL_ATTRIB_BITS
+			glPushClientAttrib GL_CLIENT_ALL_ATTRIB_BITS
+			glMatrixMode GL_MODELVIEW
+			glPushMatrix
+			glMatrixMode GL_PROJECTION
+			glPushMatrix
+			glMatrixMode GL_TEXTURE
+			glPushMatrix
+			glMatrixMode GL_COLOR
+			glPushMatrix
+		
+		EndIf
+		
+		EnableStates()
+		
+		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
+		
+		glClearDepth(1.0)						
+		glDepthFunc(GL_LEQUAL)
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+		
+		glAlphaFunc(GL_GEQUAL,0.5)
+		
+	End Function
+	
+	Function EnableStates()
+	
+		glEnable(GL_LIGHTING)
+   		glEnable(GL_DEPTH_TEST)
+		glEnable(GL_FOG)
+		glEnable(GL_CULL_FACE)
+		glEnable(GL_SCISSOR_TEST)
+		
+		glEnable(GL_NORMALIZE)
+		
+		glEnableClientState(GL_VERTEX_ARRAY)
+		glEnableClientState(GL_COLOR_ARRAY)
+		glEnableClientState(GL_NORMAL_ARRAY)
+		
+	End Function
+	
 End Type
 
 Rem

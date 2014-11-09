@@ -9,7 +9,6 @@ Import Pub.Glew
 Import Brl.Retro
 Import Brl.Map
 
-
 ' Global declarations
 ' -------------------
 
@@ -621,6 +620,11 @@ Function OpenLibrary()
 	
 End Function
 
+' Constants
+' ---------
+
+Const USE_MAX2D=True ' true to enable max2d/minib3d integration
+Const USE_VBO=True ' true to use vbos if supported by hardware
 
 ' Types and functions
 ' -------------------
