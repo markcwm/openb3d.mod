@@ -11,7 +11,7 @@ Import maxgui.drivers
 
 Strict
 
-SetGraphicsDriver GLMax2DDriver() ' needed before CreateCanvas in Windows
+SetGraphicsDriver GLMax2DDriver() ' needed before init in Windows
 
 Local win:TGadget=CreateWindow("MiniB3D in a GUI window", 10, 10, 512, 512 )
 

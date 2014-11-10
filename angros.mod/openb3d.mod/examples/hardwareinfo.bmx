@@ -7,6 +7,8 @@ Strict
 
 Local width%=320,height%=240,depth%=0,hertz%=60
 
+SetGraphicsDriver GLMax2DDriver() ' needed before init in Windows
+
 Graphics width,height,depth,hertz ' get context
 
 THardwareInfo.GetInfo
@@ -15,6 +17,7 @@ THardwareInfo.DisplayInfo 0 ' true for logfile output
 EndGraphics
 
 Graphics3D THardwareInfo.ScreenWidth,THardwareInfo.ScreenHeight,depth,2,THardwareInfo.ScreenHertz
+
 
 Local cam:TCamera=CreateCamera()
 
