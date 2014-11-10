@@ -1227,9 +1227,9 @@ Function CameraToTex( tex:TTexture, cam:TCamera, frame:Int=0 )
 	CameraToTex_( tex.instance, cam.instance, frame )
 End Function
 
-Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
-	DepthBufferToTex_( tex.instance, frame )
-End Function
+'Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
+'	DepthBufferToTex_( tex.instance, frame )
+'End Function
 
 Rem
 bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
