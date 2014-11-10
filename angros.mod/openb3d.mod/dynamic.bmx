@@ -15,6 +15,7 @@ Import Brl.Map
 Global BackBufferToTex_( tex:Byte Ptr, frame:Int )
 Global BufferToTex_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int )
 Global CameraToTex_( tex:Byte Ptr, cam:Byte Ptr, frame:Int )
+Global DepthBufferToTex_( tex:Byte Ptr, frame:Int )
 Global TexToBuffer_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int )
 ' Minib3d Only
 Global MeshCullRadius_( ent:Byte Ptr, radius:Float )
@@ -355,6 +356,7 @@ Function OpenLibrary()
 	BackBufferToTex_ = dlAddress("BackBufferToTex")
 	BufferToTex_ = dlAddress("BufferToTex")
 	CameraToTex_ = dlAddress("CameraToTex")
+	DepthBufferToTex_ = dlAddress("DepthBufferToTex")
 	TexToBuffer_ = dlAddress("TexToBuffer")
 	' Minib3d Only
 	MeshCullRadius_ = dlAddress("MeshCullRadius")
