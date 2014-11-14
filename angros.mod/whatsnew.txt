@@ -1,0 +1,80 @@
+V0.9
+Added:
+-Metaballs (CreateFluid and CreateBlob)
+-MD2 support (transitional animations are not yet supported)
+-Manual animation (mode 4): it's now possible the bones of an animated mesh, and the mesh will deform
+-Pre-rendered mesh animations: when a mesh is copied using RepeatMesh, all frames of the animation are rendered and stored in video memory, to be used for every instance of the mesh: animation is less smooth, but if many animated meshes are rendered at the same time, less system resources are used
+
+
+-Fixed
+-Some bugs in Octrees
+-SpriteRenderMode now works
+-Geosphere LOD works better
+-Upgraded image loader
+-Removed all the glBegin..glEnd pairs from the code: now, compiling for GLES should be easier
+
+
+V0.8
+Added:
+- ClearCollisions
+- Geospheres: now it's possible to make planets (spherical terrains)
+Fixed:
+- Collisions of child entities now works
+- if an entity has no parent, GeTParent returns 0: also, EntityParent ent,0 now works
+- AnimLength
+
+V0.7
+Added:
+- Octrees
+- Dynamic collisions (a sphere-to-sphere collision is detected even if both objects are moving)
+- VBO automatically disabled for older OpenGL version.
+
+Fixed:
+- Some memory leaks when a mesh is loaded or copied
+- RepeatMesh: repeated meshes can be used in collisions.
+- X and 3ds loader: surfaces were loaded twice.
+
+V0.62
+Added:
+-Can load some DirectX (.x) files
+
+Fixed:
+-Hiding an entity will hide its shadow, too
+
+V0.6
+
+Added:
+- CameraToTex: cubemapping will be easier.
+- Constructive Solid Geometry: with command MeshCSG it's possible to combine, subtract or intersect two meshes
+- Stencils: things like mirrors or portals are possible
+- UVW mapping: with the command UpdateTexCoords, the second texture map of a surface will be replaced with a UVW texture map, to apply materials (3D textures)
+- Materials: they are 3d textures, that can be stored in multiframe pictures (just like animated textures: they can be load with a similar syntax). Materials cannot be used on a surface directly, but they can be used in a shader template that can be applied to a surface. UVW data will be used to map it.
+- Voxel sprites: they are solid, and can be created from a material (as a 2D sprite can be created from a texture)
+
+Fixed:
+- a bug in TFormPoint: it didn't work correctly when a source entity and a destination entity were specified at the same time
+- a cubemap bug.
+- Some memory leaks (Thank D.J.Peters)
+- a bug in shadows: distance from the light was not computed correctly.
+
+V0.5
+
+Added:
+- Shader support
+- Command RepeatMesh: creates a new mesh using surfaces of another one: any change to surface of one mesh will affect its clones, too.
+- LightRange now affects shadows, too.
+- MeshCullRadius now works
+- LoadAnimTextures now can extract frames from more than one strip.
+
+Fixed:
+- fixed a bug in FreeEntity that caused memory leaks
+- Shadow anomalies: should be fixed
+- Mesh attached to animated bones were updated only when the animated mesh was turned/moved. Fixed.
+- CreateCylinder (solid mode)
+- EntityParent: when parenting to 0, scale was not restored
+- TranslateEntity: it worked in the wrong way. Fixed.
+- MeshesIntersect: fixed
+- Cleaned the source (thanks to D.J. Peters)
+- CopyEntity terrain: if entitytype was set, it crashed. Fixed.
+- CopyEntity terrain: now brush info are copied, too.
+

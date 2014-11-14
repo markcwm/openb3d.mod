@@ -173,6 +173,9 @@ Copy a rendered camera view to texture.
 <tr><td class=docleft width=1%><a href=#CountVertices>CountVertices</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountVertices">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBrush>CreateBrush</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
 </td></tr>
@@ -187,6 +190,9 @@ Copy a rendered camera view to texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateCylinder>CreateCylinder</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateFluid>CreateFluid</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateGeosphere>CreateGeosphere</a></td><td class=docright>
 undocumented.
@@ -241,6 +247,9 @@ undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#DeltaYaw>DeltaYaw</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaYaw">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DepthBufferToTex>DepthBufferToTex</a></td><td class=docright>
+Copy the contents of the depthbuffer to a texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndMax2D>EndMax2D</a></td><td class=docright>
 End using Max2D functions.
@@ -620,6 +629,9 @@ Apply shader to a surface.
 <tr><td class=docleft width=1%><a href=#ShowEntity>ShowEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ShowEntity">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#SpriteRenderMode>SpriteRenderMode</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#SpriteViewMode>SpriteViewMode</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a>
 </td></tr>
@@ -811,6 +823,9 @@ undocumented.
 <tr><td class=docleft width=1%><a href=#TBlitz2D>TBlitz2D</a></td><td class=docright>
 Blitz2D.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TBlob>TBlob</a></td><td class=docright>
+Blob entity.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TBrush>TBrush</a></td><td class=docright>
 Brush.
 </td></tr>
@@ -819,6 +834,9 @@ Camera entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TEntity>TEntity</a></td><td class=docright>
 Entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFluid>TFluid</a></td><td class=docright>
+Fluid mesh entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TGeosphere>TGeosphere</a></td><td class=docright>
 Geosphere terrain entity.
@@ -1142,6 +1160,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountVertices">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateBlob>
+<tr><td class=doctop colspan=2>Function CreateBlob:TBlob( fluid:TFluid, radius:Float, parent_ent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateBrush>
 <tr><td class=doctop colspan=2>Function CreateBrush:TBrush( r:Float=255, g:Float=255, b:Float=255 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a></td></tr>
@@ -1165,6 +1188,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=CreateCylinder>
 <tr><td class=doctop colspan=2>Function CreateCylinder:TMesh( segments:Int=8, solid:Int=True, parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateFluid>
+<tr><td class=doctop colspan=2>Function CreateFluid:TFluid()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateGeosphere>
@@ -1255,6 +1283,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=DeltaYaw>
 <tr><td class=doctop colspan=2>Function DeltaYaw:Float( ent1:TEntity, ent2:TEntity )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaYaw">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=DepthBufferToTex>
+<tr><td class=doctop colspan=2>Function DepthBufferToTex( tex:TTexture, frame:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the contents of the depthbuffer to a texture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndMax2D>
@@ -1889,6 +1922,11 @@ The usecanvas argument is set to true if using maxgui with a canvas context.</td
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ShowEntity">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=SpriteRenderMode>
+<tr><td class=doctop colspan=2>Function SpriteRenderMode( sprite:TSprite, Mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=SpriteViewMode>
 <tr><td class=doctop colspan=2>Function SpriteViewMode( sprite:TSprite, Mode:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a></td></tr>
@@ -2207,6 +2245,11 @@ The usecanvas argument is set to true if using maxgui with a canvas context.</td
 <tr><td class=docleft width=1%>Description</td><td class=docright>Blitz2D.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TBlob>
+<tr><td class=doctop colspan=2>Type TBlob Extends TEntity</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Blob entity.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TBrush>
 <tr><td class=doctop colspan=2>Type TBrush</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Brush.</td></tr>
@@ -2222,6 +2265,11 @@ The usecanvas argument is set to true if using maxgui with a canvas context.</td
 <tr><td class=docleft width=1%>Description</td><td class=docright>Entity.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Contains <b>Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )</b>
 and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TEntity=Null )</b>.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFluid>
+<tr><td class=doctop colspan=2>Type TFluid Extends TMesh</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Fluid mesh entity.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TGeosphere>

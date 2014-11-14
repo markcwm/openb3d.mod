@@ -80,6 +80,22 @@ Type TBlitz2D
 End Type
 
 Rem
+bbdoc: Blob entity
+End Rem
+Type TBlob Extends TEntity
+
+	Method NewBlob:TBlob( inst:Byte Ptr )
+	
+		Local blob:TBlob=New TBlob
+		entity_map.Insert( String(Long(inst)), blob )
+		blob.instance=inst
+		Return blob
+		
+	End Method
+	
+End Type
+
+Rem
 bbdoc: Brush
 End Rem
 Type TBrush
@@ -217,6 +233,22 @@ Type TEntity
 End Type
 
 Rem
+bbdoc: Fluid mesh entity
+End Rem
+Type TFluid Extends TMesh
+
+	Method NewFluid:TFluid( inst:Byte Ptr )
+	
+		Local fluid:TFluid=New TFluid
+		entity_map.Insert( String(Long(inst)), fluid )
+		fluid.instance=inst
+		Return fluid
+		
+	End Method
+	
+End Type
+
+Rem
 bbdoc: Geosphere terrain entity
 End Rem
 Type TGeosphere Extends TTerrain
@@ -237,9 +269,11 @@ bbdoc: Global
 End Rem
 Type TGlobal
 
+	Global blob:TBlob=New TBlob
 	Global brush:TBrush=New TBrush
 	Global cam:TCamera=New TCamera
 	Global ent:TEntity=New TEntity
+	Global fluid:TFluid=New TFluid
 	Global geo:TGeosphere=New TGeosphere
 	Global light:TLight=New TLight
 	Global mat:TMaterial=New TMaterial

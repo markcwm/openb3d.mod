@@ -788,6 +788,13 @@ Function ShowEntity( ent:TEntity )
 End Function
 
 Rem
+bbdoc: undocumented
+End Rem
+Function SpriteRenderMode( sprite:TSprite, Mode:Int )
+	SpriteRenderMode_( sprite.instance, Mode )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a>
 End Rem
 Function SpriteViewMode( sprite:TSprite, Mode:Int )
@@ -1221,15 +1228,18 @@ Function BufferToTex( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
 End Function
 
 Rem
+bbdoc: Copy the contents of the depthbuffer to a texture.
+End Rem
+Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
+	DepthBufferToTex_( tex.instance, frame )
+End Function
+
+Rem
 bbdoc: Copy a rendered camera view to texture.
 End Rem
 Function CameraToTex( tex:TTexture, cam:TCamera, frame:Int=0 )
 	CameraToTex_( tex.instance, cam.instance, frame )
 End Function
-
-'Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
-'	DepthBufferToTex_( tex.instance, frame )
-'End Function
 
 Rem
 bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
@@ -1301,6 +1311,15 @@ Function CopyMesh:TMesh( mesh:TMesh, parent:TEntity=Null )
 End Function
 
 Rem
+bbdoc: undocumented
+End Rem
+Function CreateBlob:TBlob( fluid:TFluid, radius:Float, parent_ent:TEntity=Null )
+	Local instance:Byte Ptr=CreateBlob_( fluid, radius, TEntity.EntityExists( parent_ent ) )
+	Local blob:TBlob=globals.blob.NewBlob( instance )
+	Return blob
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
 End Rem
 Function CreateBrush:TBrush( r:Float=255, g:Float=255, b:Float=255 )
@@ -1343,6 +1362,15 @@ Function CreateCube:TMesh( parent:TEntity=Null )
 	Local instance:Byte Ptr=CreateCube_( TEntity.EntityExists( parent ) )
 	Local mesh:TMesh=globals.mesh.NewMesh( instance )
 	Return mesh
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateFluid:TFluid()
+	Local instance:Byte Ptr=CreateFluid_()
+	Local fluid:TFluid=globals.fluid.NewFluid( instance )
+	Return fluid
 End Function
 
 Rem

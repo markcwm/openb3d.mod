@@ -1,11 +1,8 @@
 //@vertex 
 
-varying vec2 texCoords;
+attribute vec3 position;
 
 void main()
-{
-	texCoords = gl_MultiTexCoord0.st;
-	
-	//gl_Position = bb_Vertex;
-	gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex; 
+{	
+	gl_Position = vec4( position, 1.0 );
 } 
