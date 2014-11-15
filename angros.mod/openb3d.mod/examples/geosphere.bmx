@@ -1,5 +1,5 @@
 ' geosphere.bmx
-' www.freebasic.net/forum/viewtopic.php?f=14&t=15409&start=705
+' freebasic.net/forum/viewtopic.php?p=198556#p198556
 
 Import Angros.Openb3d
 

@@ -1314,7 +1314,7 @@ Rem
 bbdoc: undocumented
 End Rem
 Function CreateBlob:TBlob( fluid:TFluid, radius:Float, parent_ent:TEntity=Null )
-	Local instance:Byte Ptr=CreateBlob_( fluid, radius, TEntity.EntityExists( parent_ent ) )
+	Local instance:Byte Ptr=CreateBlob_( fluid.instance, radius, TEntity.EntityExists( parent_ent ) )
 	Local blob:TBlob=globals.blob.NewBlob( instance )
 	Return blob
 End Function
