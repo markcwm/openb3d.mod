@@ -14,6 +14,7 @@ ModuleInfo "Author: OpenB3D wrapper in BlitzMax by Mark Mcvittie"
 ModuleInfo "Credits: OpenB3D library in C++ by Angelo Rosina"
 ModuleInfo "Credits: MiniB3D in BlitzMax by Simon Harrison"
 
-' Comment one of these out
+' Uncomment one of these
 'Import "dynamic.bmx"
-Import "static.bmx"
+'Import "static.bmx"
+Import "source.bmx"
