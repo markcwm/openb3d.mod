@@ -23,10 +23,6 @@ void BackBufferToTex(Texture* tex,int frame){
 	tex->BackBufferToTex(frame);
 }
 
-void DepthBufferToTex(Texture* tex,int frame){
-	tex->DepthBufferToTex(frame);
-}
-
 void CameraToTex(Texture* tex, Camera* cam, int frame){
 	tex->CameraToTex(cam,frame);
 }
@@ -35,6 +31,28 @@ void TexToBuffer(Texture* tex,unsigned char* buffer, int frame){
 	tex->TexToBuffer(buffer,frame);
 }
 
+// wrapper only
+
+void DepthBufferToTex(Texture* tex,int frame){
+	tex->DepthBufferToTex(frame);
+}
+
+void GraphicsResize(int width,int height){
+	Global::width=width;
+	Global::height=height;
+}
+
+void SetRenderState(int capability,int flag){
+	
+	switch(capability){
+	case GL_COLOR_ARRAY: // for vertex colors
+		Global::fx2=flag;
+		break;
+	case GL_NORMAL_ARRAY: // for normal vectors
+		Global::fx1=flag;
+		break;
+	}
+}
 
 /*
 bbdoc: Minib3d Only
@@ -870,13 +888,6 @@ void Graphics3D(int width,int height,int depth,int mode,int rate){
 }
 
 /*
-*/
-void GraphicsResize(int width,int height){
-	Global::width=width;
-	Global::height=height;
-}
-
-/*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online Help</a>
 */
 void HandleSprite(Sprite* sprite,float h_x,float h_y){
@@ -1252,12 +1263,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">
 */
 void SetAnimTime(Entity* ent,float time,int seq){
 	ent->SetAnimTime(time,seq);
-}
-
-/*
-*/
-void SetColorState(int fx2){
-	Global::fx2=fx2;
 }
 
 /*

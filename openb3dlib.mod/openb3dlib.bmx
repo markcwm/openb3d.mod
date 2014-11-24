@@ -34,6 +34,9 @@ ModuleInfo "Copyright: Openb3d - Angelo Rosina"
 
 ModuleInfo "History: 1.00 Initial Release"
 
+?Win32
+ModuleInfo "CC_OPTS: -DGLEW_STATIC"
+?
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL

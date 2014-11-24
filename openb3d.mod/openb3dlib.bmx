@@ -33,8 +33,11 @@ Extern
 	Function BackBufferToTex_( tex:Byte Ptr, frame:Int ) = "BackBufferToTex"
 	Function BufferToTex_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int ) = "BufferToTex"
 	Function CameraToTex_( tex:Byte Ptr, cam:Byte Ptr, frame:Int ) = "CameraToTex"
-	Function DepthBufferToTex_( tex:Byte Ptr, frame:Int ) = "DepthBufferToTex"
 	Function TexToBuffer_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int ) = "TexToBuffer"
+	' wrapper only
+	Function DepthBufferToTex_( tex:Byte Ptr, frame:Int ) = "DepthBufferToTex"
+	Function GraphicsResize_( width:Int, height:Int ) = "GraphicsResize"
+	Function SetRenderState_( capability:Int, flag:Int ) = "SetRenderState"
 	' Minib3d Only
 	Function MeshCullRadius_( ent:Byte Ptr, radius:Float ) = "MeshCullRadius"
 	' Blitz3D functions, A-Z
@@ -156,7 +159,6 @@ Extern
 	Function GetSurface_:Byte Ptr( mesh:Byte Ptr, surf_no:Int ) = "GetSurface"
 	Function GetSurfaceBrush_:Byte Ptr( surf:Byte Ptr ) = "GetSurfaceBrush"	
 	Function Graphics3D_( width:Int, height:Int, depth:Int, Mode:Int, rate:Int ) = "Graphics3D"
-	Function GraphicsResize_( width:Int, height:Int ) = "GraphicsResize"
 	Function HandleSprite_( sprite:Byte Ptr, h_x:Float, h_y:Float ) = "HandleSprite"
 	Function HideEntity_( ent:Byte Ptr ) = "HideEntity"
 	Function LightColor_( light:Byte Ptr, red:Float, green:Float, blue:Float ) = "LightColor"
@@ -212,7 +214,6 @@ Extern
 	Function ScaleSprite_( sprite:Byte Ptr, s_x:Float, s_y:Float ) = "ScaleSprite"
 	Function ScaleTexture_( tex:Byte Ptr, u_scale:Float, v_scale:Float ) = "ScaleTexture"
 	Function SetAnimTime_( ent:Byte Ptr, time:Float, seq:Int ) = "SetAnimTime"
-	Function SetColorState_( fx2:Int ) = "SetColorState"
 	Function SetCubeFace_( tex:Byte Ptr, face:Int ) = "SetCubeFace"
 	Function SetCubeMode_( tex:Byte Ptr, Mode:Int ) = "SetCubeMode"
 	Function ShowEntity_( ent:Byte Ptr ) = "ShowEntity"
@@ -312,7 +313,6 @@ Public
 ' ---------
 
 Const USE_MAX2D=True ' true to enable max2d/minib3d integration
-Const USE_VBO=True ' true to use vbos if supported by hardware
 
 ' Blitz2D functions
 ' -----------------

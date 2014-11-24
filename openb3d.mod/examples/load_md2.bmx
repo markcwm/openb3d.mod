@@ -20,7 +20,7 @@ RotateEntity ent,-90,180,0
 Local tex:TTexture=LoadTexture("media/skin.jpg")
 EntityTexture ent,tex
 
-Local anim_time#=0
+Local anim_time#=0.1
 
 ' used by fps code
 Local old_ms%=MilliSecs()

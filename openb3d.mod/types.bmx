@@ -27,23 +27,15 @@ Type TGlobal
 	Global terr:TTerrain=New TTerrain
 	Global tex:TTexture=New TTexture
 	Global voxelspr:TVoxelSprite=New TVoxelSprite
-	
-	Global vbo_enabled:Int=False ' set to true if the hardware supports vbos - used in Text()
-	'Global colorstate:Int
-	
+		
 	Function GraphicsInit()
 	
 		TextureFilter("",9)
 		
 		glewInit() ' required for ARB funcs
 		
-		' get hardware info and set vbo_enabled accordingly
+		' get hardware info and set vbo_enabled accordingly (use THardwareInfo.VBOSupport)
 		THardwareInfo.GetInfo()
-		'THardwareInfo.DisplayInfo()
-		
-		If USE_VBO=True
-			vbo_enabled=THardwareInfo.VBOSupport
-		EndIf
 		
 		If USE_MAX2D=True
 		
@@ -62,7 +54,6 @@ Type TGlobal
 		EndIf
 		
 		EnableStates()
-		'colorstate=False
 		
 		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
@@ -88,19 +79,11 @@ Type TGlobal
 		glEnableClientState(GL_VERTEX_ARRAY)
 		glEnableClientState(GL_COLOR_ARRAY)
 		glEnableClientState(GL_NORMAL_ARRAY)
-		SetColorState(True) ' when drawing with Max2d
-		'colorstate=True
+		
+		SetRenderState(GL_COLOR_ARRAY,1) ' when drawing with Max2d
+		SetRenderState(GL_NORMAL_ARRAY,1) ' when using flat shading
 		
 	End Function
-	
-	'Function DisableStates()
-	
-	'	If colorstate=True
-	'		glDisableClientState(GL_COLOR_ARRAY)
-	'		colorstate=False
-	'	EndIf
-		
-	'End Function
 	
 End Type
 

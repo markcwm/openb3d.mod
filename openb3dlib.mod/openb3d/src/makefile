@@ -6,7 +6,7 @@ OBJECTS = model.o string_helper.o surface.o bank.o bone.o brush.o collision.o en
 	touch.o texture_filter.o tree.o animation.o animation_keys.o collision2.o maths_helper.o \
 	quaternion.o sprite_batch.o camera.o file.o mesh.o texture.o terrain.o stb_image.o 3ds.o \
 	collidetri.o shadow.o material.o stencil.o csg.o voxel.o x.o octree.o geosphere.o \
-	md2.o particle.o metaball.o GLee.o
+	md2.o particle.o metaball.o glew.o
 
 
 main : $(OBJECTS)
@@ -170,8 +170,8 @@ x.o : x.cpp x.h
 collidetri.o : collidetri.c
 	gcc $(CFLAGS) -c collidetri.c -o collidetri.o
 
-GLee.o : GLee.c
-	gcc $(CFLAGS) -c GLee.c -o GLee.o
+glew.o : glew.c
+	gcc $(CFLAGS) -c glew.c -o glew.o
 
 
 clean :

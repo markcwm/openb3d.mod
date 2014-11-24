@@ -6,10 +6,13 @@ extern "C" {
 
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void BackBufferToTex(Texture* tex,int frame);
-void DepthBufferToTex(Texture* tex,int frame);
 void CameraToTex(Texture* tex, Camera* cam, int frame);
 void TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
 
+// wrapper only
+void DepthBufferToTex(Texture* tex,int frame);
+void GraphicsResize(int width,int height);
+void SetRenderState(int capability,int flag);
 
 /*
 bbdoc: Minib3d Only
@@ -592,10 +595,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">O
 void Graphics3D(int width,int height,int depth,int mode,int rate);
 
 /*
-*/
-void GraphicsResize(int width,int height);
-
-/*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online Help</a>
 */
 void HandleSprite(Sprite* sprite,float h_x,float h_y);
@@ -859,10 +858,6 @@ void ScaleTexture(Texture* tex,float u_scale,float v_scale);
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online Help</a>
 */
 void SetAnimTime(Entity* ent,float time,int seq);
-
-/*
-*/
-void SetColorState(int fx2);
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online Help</a>

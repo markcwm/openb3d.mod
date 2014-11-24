@@ -35,6 +35,7 @@ For Local i%=0 To num-1
 	
 	cylinder[i]=CreateCylinder()
 	PositionEntity cylinder[i],Rnd(size),0,Rnd(size)
+	FitMesh cylinder[i],-1,-1,-1,2,5,2
 	shadow1[i]=CreateShadow(cylinder[i],static)
 Next
 

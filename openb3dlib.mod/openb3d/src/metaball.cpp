@@ -1,3 +1,7 @@
+
+#include "glew.h"
+
+/*
 #ifdef linux
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
@@ -9,6 +13,7 @@
 #ifdef __APPLE__
 #include "GLee.h"
 #endif
+*/
 
 #include "metaball.h"
 #include "global.h"

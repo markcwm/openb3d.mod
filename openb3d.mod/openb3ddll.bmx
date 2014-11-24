@@ -37,8 +37,11 @@ Import "-ldl"
 Global BackBufferToTex_( tex:Byte Ptr, frame:Int )
 Global BufferToTex_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int )
 Global CameraToTex_( tex:Byte Ptr, cam:Byte Ptr, frame:Int )
-Global DepthBufferToTex_( tex:Byte Ptr, frame:Int )
 Global TexToBuffer_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int )
+' wrapper only
+Global DepthBufferToTex_( tex:Byte Ptr, frame:Int )
+Global GraphicsResize_( width:Int, height:Int )
+Global SetRenderState_( capability:Int, flag:Int )
 ' Minib3d Only
 Global MeshCullRadius_( ent:Byte Ptr, radius:Float )
 ' Blitz3D functions, A-Z
@@ -160,7 +163,6 @@ Global GetParentEntity_:Byte Ptr( ent:Byte Ptr )
 Global GetSurface_:Byte Ptr( mesh:Byte Ptr, surf_no:Int )
 Global GetSurfaceBrush_:Byte Ptr( surf:Byte Ptr )	
 Global Graphics3D_( width:Int, height:Int, depth:Int, Mode:Int, rate:Int )
-Global GraphicsResize_( width:Int, height:Int )
 Global HandleSprite_( sprite:Byte Ptr, h_x:Float, h_y:Float )
 Global HideEntity_( ent:Byte Ptr )
 Global LightColor_( light:Byte Ptr, red:Float, green:Float, blue:Float )
@@ -216,7 +218,6 @@ Global ScaleMesh_( mesh:Byte Ptr, sx:Float, sy:Float, sz:Float )
 Global ScaleSprite_( sprite:Byte Ptr, s_x:Float, s_y:Float )
 Global ScaleTexture_( tex:Byte Ptr, u_scale:Float, v_scale:Float )
 Global SetAnimTime_( ent:Byte Ptr, time:Float, seq:Int )
-Global SetColorState_( fx2:Int )
 Global SetCubeFace_( tex:Byte Ptr, face:Int )
 Global SetCubeMode_( tex:Byte Ptr, Mode:Int )
 Global ShowEntity_( ent:Byte Ptr )
@@ -381,8 +382,11 @@ Function OpenLibrary()
 	BackBufferToTex_ = dlAddress("BackBufferToTex")
 	BufferToTex_ = dlAddress("BufferToTex")
 	CameraToTex_ = dlAddress("CameraToTex")
-	DepthBufferToTex_ = dlAddress("DepthBufferToTex")
 	TexToBuffer_ = dlAddress("TexToBuffer")
+	' wrapper only
+	DepthBufferToTex_ = dlAddress("DepthBufferToTex")
+	GraphicsResize_ = dlAddress("GraphicsResize")
+	SetRenderState_ = dlAddress("SetRenderState")
 	' Minib3d Only
 	MeshCullRadius_ = dlAddress("MeshCullRadius")
 	' Blitz3D functions, A-Z
@@ -504,7 +508,6 @@ Function OpenLibrary()
 	GetSurface_ = dlAddress("GetSurface")
 	GetSurfaceBrush_ = dlAddress("GetSurfaceBrush")
 	Graphics3D_ = dlAddress("Graphics3D")
-	GraphicsResize_ = dlAddress("GraphicsResize")
 	HandleSprite_ = dlAddress("HandleSprite")
 	HideEntity_ = dlAddress("HideEntity")
 	LightColor_ = dlAddress("LightColor")
@@ -560,7 +563,6 @@ Function OpenLibrary()
 	ScaleSprite_ = dlAddress("ScaleSprite")
 	ScaleTexture_ = dlAddress("ScaleTexture")
 	SetAnimTime_ = dlAddress("SetAnimTime")
-	SetColorState_ = dlAddress("SetColorState")
 	SetCubeFace_ = dlAddress("SetCubeFace")
 	SetCubeMode_ = dlAddress("SetCubeMode")
 	ShowEntity_ = dlAddress("ShowEntity")
@@ -655,7 +657,6 @@ End Function
 ' ---------
 
 Const USE_MAX2D=True ' true to enable max2d/minib3d integration
-Const USE_VBO=True ' true to use vbos if supported by hardware
 
 ' Blitz2D functions
 ' -----------------

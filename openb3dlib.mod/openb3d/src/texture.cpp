@@ -7,6 +7,9 @@
  *
  */
 
+#include "glew.h"
+
+/*
 #ifdef linux
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
@@ -21,6 +24,7 @@
 #include "GLee.h"
 #include <OpenGL/glu.h>
 #endif
+*/
 
 #include "texture.h"
 #include "stb_image.h"

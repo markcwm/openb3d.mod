@@ -21,9 +21,9 @@
 '
 SuperStrict
 
-'Import "../../pub.mod/glew.mod/GL/*.h"
+Import "../../pub.mod/glew.mod/GL/*.h"
 
-'Import "openb3d/src/*.h"
+Import "openb3d/src/*.h"
 
 Import "openb3d/src/3ds.cpp"
 Import "openb3d/src/animation.cpp"
@@ -73,7 +73,3 @@ Import "openb3d/src/x.cpp"
 
 Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
-?Not Linux
-Import "openb3d/src/GLee.c" ' use 5.4 - not in official src
-?
-'Import "openb3d/src/glew.c"

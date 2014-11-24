@@ -1937,15 +1937,14 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a>
 End Rem
 Function RenderWorld()
-	'TGlobal.DisableStates()
 	RenderWorld_()
 End Function
 
 Rem
-bbdoc: Update fx flag 2 - vertex colours
+bbdoc: Set render (client or server-side) state capability flags
 End Rem
-Function SetColorState( fx2:Int )
-	SetColorState_( fx2 )
+Function SetRenderState( capability:Int, flag:Int )
+	SetRenderState_( capability, flag )
 End Function
 
 Rem

@@ -578,9 +578,6 @@ Like CopyMesh but for instancing effects.
 <tr><td class=docleft width=1%><a href=#SetAnimTime>SetAnimTime</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
 </td></tr>
-<tr><td class=docleft width=1%><a href=#SetColorState>SetColorState</a></td><td class=docright>
-Update fx flag 2 - vertex colours.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#SetCubeFace>SetCubeFace</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online doc</a>
 </td></tr>
@@ -610,6 +607,9 @@ Set a shader variable name of a uniform ivec3 type to 3 integer values.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetInteger4>SetInteger4</a></td><td class=docright>
 Set a shader variable name of a uniform ivec4 type to 4 integer values.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetRenderState>SetRenderState</a></td><td class=docright>
+Set render (client or server-side) state capability flags.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeEntity>ShadeEntity</a></td><td class=docright>
 Apply shader to an entity.
@@ -1829,11 +1829,6 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a></td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=SetColorState>
-<tr><td class=doctop colspan=2>Function SetColorState( fx2:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Update fx flag 2 - vertex colours.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=SetCubeFace>
 <tr><td class=doctop colspan=2>Function SetCubeFace( tex:TTexture, face:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online doc</a></td></tr>
@@ -1882,6 +1877,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=SetInteger4>
 <tr><td class=doctop colspan=2>Function SetInteger4( material:TShader, name:String, v1:Int, v2:Int, v3:Int, v4:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set a shader variable name of a uniform ivec4 type to 4 integer values.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetRenderState>
+<tr><td class=doctop colspan=2>Function SetRenderState( capability:Int, flag:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set render (client or server-side) state capability flags.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadeEntity>
