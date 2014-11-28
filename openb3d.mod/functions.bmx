@@ -415,9 +415,11 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FindChild">Online doc</a>
 End Rem
 Function FindChild:TEntity( ent:TEntity, child_name:String )
-	Local instance:Byte Ptr=FindChild_( ent.instance, child_name.ToCString() )
+	Local cString:Byte Ptr=child_name.ToCString()
+	Local instance:Byte Ptr=FindChild_( ent.instance, cString )
 	Local child:TEntity=globals.ent.EntityValue( instance )
 	If child=Null And instance<>Null Then child=globals.ent.NewEntity( instance )
+	MemFree cString
 	Return child
 End Function
 
@@ -569,8 +571,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 End Rem
 Function LoadAnimTexture:TTexture( file:String, flags:Int, frame_width:Int, frame_height:Int, first_frame:Int, frame_count:Int )
-	Local instance:Byte Ptr=LoadAnimTexture_( file.ToCString(), flags, frame_width, frame_height, first_frame, frame_count )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadAnimTexture_( cString, flags, frame_width, frame_height, first_frame, frame_count )
 	Local tex:TTexture=globals.tex.NewTexture( instance )
+	MemFree cString
 	Return tex
 End Function
 
@@ -627,7 +631,9 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=NameEntity">Online doc</a>
 End Rem
 Function NameEntity( ent:TEntity, name:String )
-	NameEntity_( ent.instance, name.ToCString() )
+	Local cString:Byte Ptr=name.ToCString()
+	NameEntity_( ent.instance, cString )
+	MemFree cString
 End Function
 
 Rem
@@ -840,7 +846,9 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a>
 End Rem
 Function TextureFilter( match_text:String, flags:Int )
-	TextureFilter_( match_text.ToCString(), flags )
+	Local cString:Byte Ptr=match_text.ToCString()
+	TextureFilter_( cString, flags )
+	MemFree cString
 End Function
 
 Rem
@@ -1003,8 +1011,14 @@ Rem
 bbdoc: Load shader from two files, vertex and fragment.
 End Rem
 Function LoadShader:TShader( ShaderName:String, VshaderFileName:String, FshaderFileName:String )
-	Local instance:Byte Ptr=LoadShader_( ShaderName.ToCString(), VshaderFileName.ToCString(), FshaderFileName.ToCString() )
+	Local cString:Byte Ptr=ShaderName.ToCString()
+	Local vcString:Byte Ptr=VshaderFileName.ToCString()
+	Local fcString:Byte Ptr=FshaderFileName.ToCString()
+	Local instance:Byte Ptr=LoadShader_( cString, vcString, fcString )
 	Local material:TShader=globals.material.NewShader( instance )
+	MemFree cString
+	MemFree vcString
+	MemFree fcString
 	Return material
 End Function
 
@@ -1012,8 +1026,14 @@ Rem
 bbdoc: Load shader from two strings, vertex and fragment.
 End Rem
 Function CreateShader:TShader( ShaderName:String, VshaderString:String, FshaderString:String )
-	Local instance:Byte Ptr=CreateShader_( ShaderName.ToCString(), VshaderString.ToCString(), FshaderString.ToCString() )
+	Local cString:Byte Ptr=ShaderName.ToCString()
+	Local vcString:Byte Ptr=VshaderString.ToCString()
+	Local fcString:Byte Ptr=FshaderString.ToCString()
+	Local instance:Byte Ptr=CreateShader_( cString, vcString, fcString )
 	Local material:TShader=globals.material.NewShader( instance )
+	MemFree cString
+	MemFree vcString
+	MemFree fcString
 	Return material
 End Function
 
@@ -1042,119 +1062,153 @@ Rem
 bbdoc: Set a shader variable name of a uniform float type to a float value.
 End Rem
 Function SetFloat( material:TShader, name:String, v1:Float )
-	SetFloat_( material.instance, name.ToCString(), v1 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetFloat_( material.instance, cString, v1 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform vec2 type to 2 float values.
 End Rem
 Function SetFloat2( material:TShader, name:String, v1:Float, v2:Float )
-	SetFloat2_( material.instance, name.ToCString(), v1, v2 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetFloat2_( material.instance, cString, v1, v2 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform vec3 type to 3 float values.
 End Rem
 Function SetFloat3( material:TShader, name:String, v1:Float, v2:Float, v3:Float )
-	SetFloat3_( material.instance, name.ToCString(), v1, v2, v3 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetFloat3_( material.instance, cString, v1, v2, v3 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform vec4 type to 4 float values.
 End Rem
 Function SetFloat4( material:TShader, name:String, v1:Float, v2:Float, v3:Float, v4:Float )
-	SetFloat4_( material.instance, name.ToCString(), v1, v2, v3, v4 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetFloat4_( material.instance, cString, v1, v2, v3, v4 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind a float variable to a shader variable name of a uniform float type.
 End Rem
 Function UseFloat( material:TShader, name:String, v1:Float Var )
-	UseFloat_( material.instance, name.ToCString(), Varptr(v1) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseFloat_( material.instance, cString, Varptr(v1) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 2 float variables to a shader variable name of a uniform vec2 type.
 End Rem
 Function UseFloat2( material:TShader, name:String, v1:Float Var, v2:Float Var )
-	UseFloat2_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseFloat2_( material.instance, cString, Varptr(v1), Varptr(v2) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 3 float variables to a shader variable name of a uniform vec3 type.
 End Rem
 Function UseFloat3( material:TShader, name:String, v1:Float Var, v2:Float Var, v3:Float Var )
-	UseFloat3_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2), Varptr(v3) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseFloat3_( material.instance, cString, Varptr(v1), Varptr(v2), Varptr(v3) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 4 float variables to a shader variable name of a uniform vec4 type.
 End Rem
 Function UseFloat4( material:TShader, name:String, v1:Float Var, v2:Float Var, v3:Float Var, v4:Float Var )
-	UseFloat4_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2), Varptr(v3), Varptr(v4) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseFloat4_( material.instance, cString, Varptr(v1), Varptr(v2), Varptr(v3), Varptr(v4) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform int type to an integer value.
 End Rem
 Function SetInteger( material:TShader, name:String, v1:Int )
-	SetInteger_( material.instance, name.ToCString(), v1 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetInteger_( material.instance, cString, v1 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform ivec2 type to 2 integer values.
 End Rem
 Function SetInteger2( material:TShader, name:String, v1:Int, v2:Int )
-	SetInteger2_( material.instance, name.ToCString(), v1, v2 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetInteger2_( material.instance, cString, v1, v2 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform ivec3 type to 3 integer values.
 End Rem
 Function SetInteger3( material:TShader, name:String, v1:Int, v2:Int, v3:Int )
-	SetInteger3_( material.instance, name.ToCString(), v1, v2, v3 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetInteger3_( material.instance, cString, v1, v2, v3 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Set a shader variable name of a uniform ivec4 type to 4 integer values.
 End Rem
 Function SetInteger4( material:TShader, name:String, v1:Int, v2:Int, v3:Int, v4:Int )
-	SetInteger4_( material.instance, name.ToCString(), v1, v2, v3, v4 )
+	Local cString:Byte Ptr=name.ToCString()
+	SetInteger4_( material.instance, cString, v1, v2, v3, v4 )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind an integer variable to a shader variable name of a uniform int type.
 End Rem
 Function UseInteger( material:TShader, name:String, v1:Int Var )
-	UseInteger_( material.instance, name.ToCString(), Varptr(v1) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseInteger_( material.instance, cString, Varptr(v1) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 2 integer variables to a shader variable name of a uniform ivec2 type.
 End Rem
 Function UseInteger2( material:TShader, name:String, v1:Int Var, v2:Int Var )
-	UseInteger2_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseInteger2_( material.instance, cString, Varptr(v1), Varptr(v2) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 3 integer variables to a shader variable name of a uniform ivec3 type.
 End Rem
 Function UseInteger3( material:TShader, name:String, v1:Int Var, v2:Int Var, v3:Int Var )
-	UseInteger3_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2), Varptr(v3) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseInteger3_( material.instance, cString, Varptr(v1), Varptr(v2), Varptr(v3) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Bind 4 integer variables to a shader variable name of a uniform ivec4 type.
 End Rem
 Function UseInteger4( material:TShader, name:String, v1:Int Var, v2:Int Var, v3:Int Var, v4:Int Var )
-	UseInteger4_( material.instance, name.ToCString(), Varptr(v1), Varptr(v2), Varptr(v3), Varptr(v4) )
+	Local cString:Byte Ptr=name.ToCString()
+	UseInteger4_( material.instance, cString, Varptr(v1), Varptr(v2), Varptr(v3), Varptr(v4) )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
 Function UseSurface( material:TShader, name:String, surf:TSurface, vbo:Int )
-	UseSurface_( material.instance, name.ToCString(), surf.instance, vbo )
+	Local cString:Byte Ptr=name.ToCString()
+	UseSurface_( material.instance, cString, surf.instance, vbo )
+	MemFree cString
 End Function
 
 Rem
@@ -1162,15 +1216,19 @@ bbdoc: Send matrix data to a shader variable name of a uniform mat4 type.
 If mode is true it sends camera matrix otherwise projection matrix.
 End Rem
 Function UseMatrix( material:TShader, name:String, Mode:Int )
-	UseMatrix_( material.instance, name.ToCString(), Mode )
+	Local cString:Byte Ptr=name.ToCString()
+	UseMatrix_( material.instance, cString, Mode )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
 Function LoadMaterial:TMaterial( filename:String, flags:Int, frame_width:Int, frame_height:Int, first_frame:Int, frame_count:Int )
-	Local instance:Byte Ptr=LoadMaterial_( filename.ToCString(), flags, frame_width, frame_height, first_frame, frame_count )
+	Local cString:Byte Ptr=filename.ToCString()
+	Local instance:Byte Ptr=LoadMaterial_( cString, flags, frame_width, frame_height, first_frame, frame_count )
 	Local mat:TMaterial=globals.mat.NewMaterial( instance )
+	MemFree cString
 	Return mat
 End Function
 
@@ -1575,8 +1633,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 End Rem
 Function LoadAnimMesh:TMesh( file:String, parent:TEntity=Null )
-	Local instance:Byte Ptr=LoadAnimMesh_( file.ToCString(), TEntity.EntityExists( parent ) )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadAnimMesh_( cString, TEntity.EntityExists( parent ) )
 	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	MemFree cString
 	Return mesh
 End Function
 
@@ -1584,8 +1644,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a>
 End Rem
 Function LoadBrush:TBrush( file:String, flags:Int=1, u_scale:Float=1, v_scale:Float=1 )
-	Local instance:Byte Ptr=LoadBrush_( file.ToCString(), flags, u_scale, v_scale )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadBrush_( cString, flags, u_scale, v_scale )
 	Local brush:TBrush=globals.brush.NewBrush( instance )
+	MemFree cString
 	Return brush
 End Function
 
@@ -1593,8 +1655,10 @@ Rem
 bbdoc: undocumented
 End Rem
 Function LoadGeosphere:TGeosphere( file:String, parent:TEntity=Null )
-	Local instance:Byte Ptr=LoadGeosphere_( file.ToCString(), TEntity.EntityExists( parent ) )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadGeosphere_( cString, TEntity.EntityExists( parent ) )
 	Local geo:TGeosphere=globals.geo.NewGeosphere( instance )
+	MemFree cString
 	Return geo
 End Function
 
@@ -1602,8 +1666,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 End Rem
 Function LoadMesh:TMesh( file:String, parent:TEntity=Null )
-	Local instance:Byte Ptr=LoadMesh_( file.ToCString(), TEntity.EntityExists( parent ) )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadMesh_( cString, TEntity.EntityExists( parent ) )
 	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	MemFree cString
 	Return mesh
 End Function
 
@@ -1611,8 +1677,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
 End Rem
 Function LoadTerrain:TTerrain( file:String, parent:TEntity=Null )
-	Local instance:Byte Ptr=LoadTerrain_( file.ToCString(), TEntity.EntityExists( parent ) )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadTerrain_( cString, TEntity.EntityExists( parent ) )
 	Local terr:TTerrain=globals.terr.NewTerrain( instance )
+	MemFree cString
 	Return terr
 End Function
 
@@ -1620,8 +1688,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 End Rem
 Function LoadTexture:TTexture( file:String, flags:Int=1 )
-	Local instance:Byte Ptr=LoadTexture_( file.ToCString(), flags )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadTexture_( cString, flags )
 	Local tex:TTexture=globals.tex.NewTexture( instance )
+	MemFree cString
 	Return tex
 End Function
 
@@ -1629,8 +1699,10 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online doc</a>
 End Rem
 Function LoadSprite:TSprite( tex_file:String, tex_flag:Int=1, parent:TEntity=Null )
-	Local instance:Byte Ptr=LoadSprite_( tex_file.ToCString(), tex_flag, TEntity.EntityExists( parent ) )
+	Local cString:Byte Ptr=tex_file.ToCString()
+	Local instance:Byte Ptr=LoadSprite_( cString, tex_flag, TEntity.EntityExists( parent ) )
 	Local sprite:TSprite=globals.sprite.NewSprite( instance )
+	MemFree cString
 	Return sprite
 End Function
 
@@ -1784,14 +1856,18 @@ Rem
 bbdoc: Load a texture for 2D texture sampling.
 End Rem
 Function ShaderTexture( material:TShader, tex:TTexture, name:String, index:Int=0 )
-	ShaderTexture_( material.instance, tex.instance, name.ToCString(), index )
+	Local cString:Byte Ptr=name.ToCString()
+	ShaderTexture_( material.instance, tex.instance, cString, index )
+	MemFree cString
 End Function
 
 Rem
 bbdoc: Load a texture for 3D texture sampling.
 End Rem
 Function ShaderMaterial( material:TShader, tex:TMaterial, name:String, index:Int=0 )
-	ShaderMaterial_( material.instance, tex.instance, name.ToCString(), index )
+	Local cString:Byte Ptr=name.ToCString()
+	ShaderMaterial_( material.instance, tex.instance, cString, index )
+	MemFree cString
 End Function
 
 Rem
