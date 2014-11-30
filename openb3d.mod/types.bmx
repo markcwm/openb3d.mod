@@ -87,6 +87,24 @@ Type TGlobal
 	
 End Type
 
+' base type
+Type TObject
+
+	Field instance:Byte Ptr
+	
+	Function IsObject:Byte Ptr( obj:TObject )
+	
+		If obj=Null
+			'DebugLog "Attempt to pass null object to function"
+			Return Null
+		Else
+			Return obj.instance
+		EndIf
+	
+	End Function
+	
+End Type
+
 Rem
 bbdoc: Blob entity
 End Rem
@@ -106,12 +124,10 @@ End Type
 Rem
 bbdoc: Brush
 End Rem
-Type TBrush
+Type TBrush Extends TObject
 
 	Global brush_map:TMap=New TMap
-	
-	Field instance:Byte Ptr
-	
+		
 	Method NewBrush:TBrush( inst:Byte Ptr )
 	
 		Local brush:TBrush=New TBrush
@@ -130,16 +146,6 @@ Type TBrush
 	Method BrushValue:TBrush( inst:Byte Ptr )
 	
 		Return TBrush( brush_map.ValueForKey( String(Long(inst)) ) )
-	
-	End Method
-	
-	Method BrushExists:Byte Ptr( brush:TBrush )
-	
-		If brush=Null
-			Return Null
-		Else
-			Return brush.instance
-		EndIf
 	
 	End Method
 	
@@ -166,12 +172,10 @@ bbdoc: Entity
 about: Contains @{Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )} 
 and @{Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TEntity=Null )}.
 End Rem
-Type TEntity
+Type TEntity Extends TObject
 
 	Global entity_map:TMap=New TMap
-	
-	Field instance:Byte Ptr
-	
+		
 	Method NewEntity:TEntity( inst:Byte Ptr )
 
 		Local ent:TEntity=New TEntity
@@ -192,16 +196,6 @@ Type TEntity
 		Return TEntity( entity_map.ValueForKey( String(Long(inst)) ) )
 	
 	End Method
-	
-	Function EntityExists:Byte Ptr( ent:TEntity )
-	
-		If ent=Null
-			Return Null
-		Else
-			Return ent.instance
-		EndIf
-	
-	End Function
 	
 	' Recursively counts all children of an entity.
 	Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )
@@ -518,9 +512,7 @@ End Type
 Rem
 bbdoc: Shader
 End Rem
-Type TShader
-
-	Field instance:Byte Ptr
+Type TShader Extends TObject
 	
 	Method NewShader:TShader( inst:Byte Ptr )
 	
@@ -529,17 +521,15 @@ Type TShader
 		Return material
 		
 	End Method
-
+	
 End Type
 
 Rem
 bbdoc: Shadow-object
 End Rem
-Type TShadowObject
+Type TShadowObject Extends TObject
 
 	Global shad_map:TMap=New TMap
-
-	Field instance:Byte Ptr
 	
 	Method NewShadowObject:TShadowObject( inst:Byte Ptr )
 	
@@ -577,9 +567,7 @@ End Type
 Rem
 bbdoc: Stencil
 End Rem
-Type TStencil
-
-	Field instance:Byte Ptr
+Type TStencil Extends TObject
 	
 	Method NewStencil:TStencil( inst:Byte Ptr )
 	
@@ -594,12 +582,10 @@ End Type
 Rem
 bbdoc: Surface
 End Rem
-Type TSurface
+Type TSurface Extends TObject
 
 	Global surf_map:TMap=New TMap
-	
-	Field instance:Byte Ptr
-	
+		
 	Method NewSurface:TSurface( inst:Byte Ptr )
 	
 		Local surf:TSurface=New TSurface
@@ -636,11 +622,9 @@ End Type
 Rem
 bbdoc: Texture
 End Rem
-Type TTexture
+Type TTexture Extends TObject
 
 	Global tex_map:TMap=New TMap
-
-	Field instance:Byte Ptr
 	
 	Method NewTexture:TTexture( inst:Byte Ptr )
 	
