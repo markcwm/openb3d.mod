@@ -34,24 +34,21 @@ Type TGlobal
 		
 		glewInit() ' required for ARB funcs
 		
-		' get hardware info and set vbo_enabled accordingly (use THardwareInfo.VBOSupport)
+		' get hardware info and set vbo_enabled accordingly
 		THardwareInfo.GetInfo()
+		SetRenderState(GL_ARRAY_BUFFER,THardwareInfo.VBOSupport) ' vertex buffer objects
 		
-		If USE_MAX2D=True
-		
-			' save the Max2D settings for later - by Oddball
-			glPushAttrib(GL_ALL_ATTRIB_BITS)
-			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-			glMatrixMode(GL_MODELVIEW)
-			glPushMatrix()
-			glMatrixMode(GL_PROJECTION)
-			glPushMatrix()
-			glMatrixMode(GL_TEXTURE)
-			glPushMatrix()
-			glMatrixMode(GL_COLOR)
-			glPushMatrix()
-		
-		EndIf
+		' save the Max2D settings for later - by Oddball
+		glPushAttrib(GL_ALL_ATTRIB_BITS)
+		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
+		glMatrixMode(GL_MODELVIEW)
+		glPushMatrix()
+		glMatrixMode(GL_PROJECTION)
+		glPushMatrix()
+		glMatrixMode(GL_TEXTURE)
+		glPushMatrix()
+		glMatrixMode(GL_COLOR)
+		glPushMatrix()
 		
 		EnableStates()
 		
@@ -80,14 +77,13 @@ Type TGlobal
 		glEnableClientState(GL_COLOR_ARRAY)
 		glEnableClientState(GL_NORMAL_ARRAY)
 		
-		SetRenderState(GL_COLOR_ARRAY,1) ' when drawing with Max2d
-		SetRenderState(GL_NORMAL_ARRAY,1) ' when using flat shading
-		
 	End Function
 	
 End Type
 
-' base type
+Rem
+bbdoc: Object
+End Rem
 Type TObject
 
 	Field instance:Byte Ptr

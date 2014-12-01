@@ -472,27 +472,28 @@ void Camera::Update(){
 	static float fogb=-1.0;
 
 	if(fog_mode>0){
-	
-		//if(fog!=true){
-			glEnable(GL_FOG); // enable if disabled
-			if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
+		
+		glEnable(GL_FOG); // enable if disabled
+		glFogi(GL_FOG_MODE,GL_LINEAR); // each render when using 2d in 3d
+		if(fog!=true){
+			//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 			fog=true;
 			Global::fog_enabled=true; // used in mesh render
-		//}
+		}
 		
+		glFogf(GL_FOG_START,fog_range_near);
 		if(abs(fog_near-fog_range_near)>0.0001){
-			glFogf(GL_FOG_START,fog_range_near);
 			fog_near=fog_range_near;
 		}
 		
+		glFogf(GL_FOG_END,fog_range_far);
 		if(abs(fog_far-fog_range_far)>0.0001){
-			glFogf(GL_FOG_END,fog_range_far);
 			fog_far=fog_range_far;
 		}
 		
+		float rgb[]={fog_r,fog_g,fog_b};
+		glFogfv(GL_FOG_COLOR,rgb);
 		if(abs(fogr-fog_r)>0.0001||abs(fogg-fog_g)>0.0001||abs(fogb-fog_b)>0.0001){
-			float rgb[]={fog_r,fog_g,fog_b};
-			glFogfv(GL_FOG_COLOR,rgb);
 			fogr=fog_r;
 			fogg=fog_g;
 			fogb=fog_b;
@@ -500,11 +501,11 @@ void Camera::Update(){
 		
 	}else{
 		
-		//if(fog!=false){
-			glDisable(GL_FOG);
+		glDisable(GL_FOG);
+		if(fog!=false){
 			fog=false;
 			Global::fog_enabled=false; // used in mesh render
-		//}
+		}
 		
 	}
 	

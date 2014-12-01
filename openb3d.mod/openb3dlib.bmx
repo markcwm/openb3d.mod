@@ -309,11 +309,6 @@ Global globals:TGlobal=New TGlobal
 
 Public
 
-' Constants
-' ---------
-
-Const USE_MAX2D=True ' true to enable max2d/minib3d integration
-
 ' Blitz2D functions
 ' -----------------
 
@@ -354,7 +349,11 @@ Function EndMax2D()
 	glPushMatrix()
 	
 	TGlobal.EnableStates()
-	glDisable(GL_TEXTURE_2D)
+	glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
+	
+	SetRenderState(GL_BLEND,0) ' alpha blending
+	SetRenderState(GL_NORMAL_ARRAY,0) ' normal vectors - for flat shading
+	SetRenderState(GL_COLOR_ARRAY,1) ' vertex colors - when drawing with Max2d
 	
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
