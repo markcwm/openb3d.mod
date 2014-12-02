@@ -47,7 +47,7 @@ void SetRenderState(int capability,int flag){
 	case 1: // alpha blending
 		Global::alpha_enable=flag;
 		break;
-	case 2: // normal vectors
+	case 2: // full bright (no shading/normals)
 		Global::fx1=flag;
 		break;
 	case 3: // vertex colors
