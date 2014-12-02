@@ -696,7 +696,7 @@ Function EndMax2D()
 	glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 	
 	SetRenderState(TGlobal.ALPHA_ENABLE,0) ' alpha blending was disabled by Max2d
-	SetRenderState(TGlobal.FX1,0) ' full bright (no shading/normals) was enabled
+	SetRenderState(TGlobal.FX1,0) ' normals was enabled (full bright/no shading)
 	SetRenderState(TGlobal.FX2,1) ' vertex colors was enabled
 	
 	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
