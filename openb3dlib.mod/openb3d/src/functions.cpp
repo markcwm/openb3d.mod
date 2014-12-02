@@ -43,18 +43,17 @@ void GraphicsResize(int width,int height){
 }
 
 void SetRenderState(int capability,int flag){
-	
 	switch(capability){
-	case GL_BLEND: // alpha blending (3042)
+	case 1: // alpha blending
 		Global::alpha_enable=flag;
 		break;
-	case GL_NORMAL_ARRAY: // normal vectors (32885)
+	case 2: // normal vectors
 		Global::fx1=flag;
 		break;
-	case GL_COLOR_ARRAY: // vertex colors (32886)
+	case 3: // vertex colors
 		Global::fx2=flag;
 		break;
-	case GL_ARRAY_BUFFER: // vertex buffer objects (34962)
+	case 4: // vertex buffer objects
 		Global::vbo_enabled=flag;
 		break;
 	}

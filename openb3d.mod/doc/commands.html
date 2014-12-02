@@ -609,7 +609,7 @@ Set a shader variable name of a uniform ivec3 type to 3 integer values.
 Set a shader variable name of a uniform ivec4 type to 4 integer values.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetRenderState>SetRenderState</a></td><td class=docright>
-Set render (client or server-side) state capability flags.
+Set render state capability flags.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeEntity>ShadeEntity</a></td><td class=docright>
 Apply shader to an entity.
@@ -849,6 +849,9 @@ Material texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TMesh>TMesh</a></td><td class=docright>
 Mesh entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TObject>TObject</a></td><td class=docright>
+Object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TOcTree>TOcTree</a></td><td class=docright>
 Octree terrain entity.
@@ -1881,7 +1884,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=SetRenderState>
 <tr><td class=doctop colspan=2>Function SetRenderState( capability:Int, flag:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set render (client or server-side) state capability flags.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set render state capability flags.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadeEntity>
@@ -2233,7 +2236,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TBrush>
-<tr><td class=doctop colspan=2>Type TBrush</td></tr>
+<tr><td class=doctop colspan=2>Type TBrush Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Brush.</td></tr>
 </table>
 <br>
@@ -2243,7 +2246,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TEntity>
-<tr><td class=doctop colspan=2>Type TEntity</td></tr>
+<tr><td class=doctop colspan=2>Type TEntity Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Entity.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Contains <b>Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )</b>
 and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TEntity=Null )</b>.</td></tr>
@@ -2285,6 +2288,11 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 <tr><td class=docleft width=1%>Description</td><td class=docright>Mesh entity.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TObject>
+<tr><td class=doctop colspan=2>Type TObject</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Object.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TOcTree>
 <tr><td class=doctop colspan=2>Type TOcTree Extends TTerrain</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Octree terrain entity.</td></tr>
@@ -2296,12 +2304,12 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TShader>
-<tr><td class=doctop colspan=2>Type TShader</td></tr>
+<tr><td class=doctop colspan=2>Type TShader Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TShadowObject>
-<tr><td class=doctop colspan=2>Type TShadowObject</td></tr>
+<tr><td class=doctop colspan=2>Type TShadowObject Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shadow-object.</td></tr>
 </table>
 <br>
@@ -2311,12 +2319,12 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TStencil>
-<tr><td class=doctop colspan=2>Type TStencil</td></tr>
+<tr><td class=doctop colspan=2>Type TStencil Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Stencil.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TSurface>
-<tr><td class=doctop colspan=2>Type TSurface</td></tr>
+<tr><td class=doctop colspan=2>Type TSurface Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Surface.</td></tr>
 </table>
 <br>
@@ -2326,7 +2334,7 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TTexture>
-<tr><td class=doctop colspan=2>Type TTexture</td></tr>
+<tr><td class=doctop colspan=2>Type TTexture Extends TObject</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Texture.</td></tr>
 </table>
 <br>

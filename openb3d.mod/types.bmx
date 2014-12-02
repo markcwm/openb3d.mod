@@ -27,7 +27,9 @@ Type TGlobal
 	Global terr:TTerrain=New TTerrain
 	Global tex:TTexture=New TTexture
 	Global voxelspr:TVoxelSprite=New TVoxelSprite
-		
+	
+	Const ALPHA_ENABLE:Int=1, FX1:Int=2, FX2:Int=3, VBO_ENABLED:Int=4
+	
 	Function GraphicsInit()
 	
 		TextureFilter("",9)
@@ -36,7 +38,7 @@ Type TGlobal
 		
 		' get hardware info and set vbo_enabled accordingly
 		THardwareInfo.GetInfo()
-		SetRenderState(GL_ARRAY_BUFFER,THardwareInfo.VBOSupport) ' vertex buffer objects
+		SetRenderState(VBO_ENABLED,THardwareInfo.VBOSupport) ' vertex buffer objects
 		
 		' save the Max2D settings for later - by Oddball
 		glPushAttrib(GL_ALL_ATTRIB_BITS)

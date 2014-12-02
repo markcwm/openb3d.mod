@@ -1,5 +1,29 @@
 ' functions.bmx
 
+' Wrapper only (not in original)
+' ------------------------------
+
+Rem
+bbdoc: Copy the contents of the depthbuffer to a texture.
+End Rem
+Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
+	DepthBufferToTex_( TObject.IsObject( tex ), frame )
+End Function
+
+Rem
+bbdoc: Update screen size
+End Rem
+Function GraphicsResize( width:Int, height:Int )
+	GraphicsResize_( width, height )
+End Function
+
+Rem
+bbdoc: Set render state capability flags
+End Rem
+Function SetRenderState( capability:Int, flag:Int )
+	SetRenderState_( capability, flag )
+End Function
+
 ' Wrapper functions with Byte Ptr arguments
 ' -----------------------------------------
 
@@ -1251,13 +1275,6 @@ Function BufferToTex( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
 End Function
 
 Rem
-bbdoc: Copy the contents of the depthbuffer to a texture.
-End Rem
-Function DepthBufferToTex( tex:TTexture, frame:Int=0 )
-	DepthBufferToTex_( TObject.IsObject( tex ), frame )
-End Function
-
-Rem
 bbdoc: Copy a rendered camera view to texture.
 End Rem
 Function CameraToTex( tex:TTexture, cam:TCamera, frame:Int=0 )
@@ -1926,13 +1943,6 @@ Function ClearTextureFilters()
 End Function
 
 Rem
-bbdoc: Update screen size
-End Rem
-Function GraphicsResize( width:Int, height:Int )
-	GraphicsResize_( width, height )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNX">Online doc</a>
 End Rem
 Function PickedNX:Float()
@@ -2014,13 +2024,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">
 End Rem
 Function RenderWorld()
 	RenderWorld_()
-End Function
-
-Rem
-bbdoc: Set render (client or server-side) state capability flags
-End Rem
-Function SetRenderState( capability:Int, flag:Int )
-	SetRenderState_( capability, flag )
 End Function
 
 Rem

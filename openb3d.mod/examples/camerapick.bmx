@@ -69,9 +69,9 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 
 	RenderWorld
-	renders=renders+1
 
 	' calculate fps
+	renders=renders+1
 	If MilliSecs()-old_ms>=1000
 		old_ms=MilliSecs()
 		fps=renders

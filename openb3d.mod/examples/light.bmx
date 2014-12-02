@@ -60,9 +60,9 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	RenderWorld
-	renders=renders+1
 	
 	' calculate fps
+	renders=renders+1
 	If MilliSecs()-old_ms>=1000
 		old_ms=MilliSecs()
 		fps=renders

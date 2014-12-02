@@ -20,7 +20,7 @@ RotateEntity ent,-90,180,0
 Local tex:TTexture=LoadTexture("media/skin.jpg")
 EntityTexture ent,tex
 
-Local anim_time#=0.1
+Local anim_time#=0.0
 
 ' used by fps code
 Local old_ms%=MilliSecs()
@@ -34,10 +34,10 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	' change anim time values
-	If KeyDown(KEY_MINUS) Then anim_time#=anim_time#-0.1
-	If KeyDown(KEY_EQUALS) Then anim_time#=anim_time#+0.1
+	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
+	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
-	SetAnimTime(ent,anim_time#)
+	If anim_time<>0 Then SetAnimTime(ent,anim_time) ' bug: crashes if zero
 	
 	RenderWorld
 	

@@ -30,7 +30,6 @@ Local tex:TTexture=LoadTexture("media/spheremap.bmp",1+64)
 ' apply spherical environment map to teapot
 EntityTexture teapot,tex
 
-
 ' Initialise Max2D program
 ' ------------------------
 
@@ -69,9 +68,9 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity teapot,0,1,0
 	
 	RenderWorld
-	renders=renders+1
 	
 	' calculate fps
+	renders=renders+1
 	If MilliSecs()-old_ms>=1000
 		old_ms=MilliSecs()
 		fps=renders
