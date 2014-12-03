@@ -84,13 +84,13 @@ Type TGlobal
 End Type
 
 Rem
-bbdoc: Object
+bbdoc: Utility object
 End Rem
-Type TObject
+Type TUtility
 
 	Field instance:Byte Ptr
 	
-	Function IsObject:Byte Ptr( obj:TObject )
+	Function IsObject:Byte Ptr( obj:TUtility )
 	
 		If obj=Null
 			'DebugLog "Attempt to pass null object to function"
@@ -122,7 +122,7 @@ End Type
 Rem
 bbdoc: Brush
 End Rem
-Type TBrush Extends TObject
+Type TBrush Extends TUtility
 
 	Global brush_map:TMap=New TMap
 		
@@ -170,7 +170,7 @@ bbdoc: Entity
 about: Contains @{Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )} 
 and @{Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TEntity=Null )}.
 End Rem
-Type TEntity Extends TObject
+Type TEntity Extends TUtility
 
 	Global entity_map:TMap=New TMap
 		
@@ -510,7 +510,7 @@ End Type
 Rem
 bbdoc: Shader
 End Rem
-Type TShader Extends TObject
+Type TShader Extends TUtility
 	
 	Method NewShader:TShader( inst:Byte Ptr )
 	
@@ -525,7 +525,7 @@ End Type
 Rem
 bbdoc: Shadow-object
 End Rem
-Type TShadowObject Extends TObject
+Type TShadowObject Extends TUtility
 
 	Global shad_map:TMap=New TMap
 	
@@ -565,7 +565,7 @@ End Type
 Rem
 bbdoc: Stencil
 End Rem
-Type TStencil Extends TObject
+Type TStencil Extends TUtility
 	
 	Method NewStencil:TStencil( inst:Byte Ptr )
 	
@@ -580,7 +580,7 @@ End Type
 Rem
 bbdoc: Surface
 End Rem
-Type TSurface Extends TObject
+Type TSurface Extends TUtility
 
 	Global surf_map:TMap=New TMap
 		
@@ -620,7 +620,7 @@ End Type
 Rem
 bbdoc: Texture
 End Rem
-Type TTexture Extends TObject
+Type TTexture Extends TUtility
 
 	Global tex_map:TMap=New TMap
 	

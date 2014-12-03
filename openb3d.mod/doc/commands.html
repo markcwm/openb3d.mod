@@ -850,9 +850,6 @@ Material texture.
 <tr><td class=docleft width=1%><a href=#TMesh>TMesh</a></td><td class=docright>
 Mesh entity.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TObject>TObject</a></td><td class=docright>
-Object.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#TOcTree>TOcTree</a></td><td class=docright>
 Octree terrain entity.
 </td></tr>
@@ -879,6 +876,9 @@ Terrain entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TTexture>TTexture</a></td><td class=docright>
 Texture.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TUtility>TUtility</a></td><td class=docright>
+Utility object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TVoxelSprite>TVoxelSprite</a></td><td class=docright>
 Voxelsprite mesh entity.
@@ -2236,7 +2236,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TBrush>
-<tr><td class=doctop colspan=2>Type TBrush Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TBrush Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Brush.</td></tr>
 </table>
 <br>
@@ -2246,7 +2246,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TEntity>
-<tr><td class=doctop colspan=2>Type TEntity Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TEntity Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Entity.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Contains <b>Function CountAllChildren:Int( ent:TEntity, no_children:Int=0 )</b>
 and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TEntity=Null )</b>.</td></tr>
@@ -2288,11 +2288,6 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 <tr><td class=docleft width=1%>Description</td><td class=docright>Mesh entity.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=TObject>
-<tr><td class=doctop colspan=2>Type TObject</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Object.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=TOcTree>
 <tr><td class=doctop colspan=2>Type TOcTree Extends TTerrain</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Octree terrain entity.</td></tr>
@@ -2304,12 +2299,12 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TShader>
-<tr><td class=doctop colspan=2>Type TShader Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TShader Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TShadowObject>
-<tr><td class=doctop colspan=2>Type TShadowObject Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TShadowObject Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shadow-object.</td></tr>
 </table>
 <br>
@@ -2319,12 +2314,12 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TStencil>
-<tr><td class=doctop colspan=2>Type TStencil Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TStencil Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Stencil.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TSurface>
-<tr><td class=doctop colspan=2>Type TSurface Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TSurface Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Surface.</td></tr>
 </table>
 <br>
@@ -2334,8 +2329,13 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TTexture>
-<tr><td class=doctop colspan=2>Type TTexture Extends TObject</td></tr>
+<tr><td class=doctop colspan=2>Type TTexture Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TUtility>
+<tr><td class=doctop colspan=2>Type TUtility</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Utility object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TVoxelSprite>
