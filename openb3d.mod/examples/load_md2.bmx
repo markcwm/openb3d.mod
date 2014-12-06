@@ -37,7 +37,7 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
 	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
-	If anim_time<>0 Then SetAnimTime(ent,anim_time) ' bug: crashes if zero
+	SetAnimTime(ent,anim_time)
 	
 	RenderWorld
 	

@@ -1773,7 +1773,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
 End Rem
 Function SetAnimTime( ent:TEntity, time:Float, seq:Int=0 )
-	SetAnimTime_( TUtility.IsObject( ent ), time, seq )
+	If time<>0.0 Then SetAnimTime_( TUtility.IsObject( ent ), time, seq ) ' if zero crash fix
 End Function
 
 Rem

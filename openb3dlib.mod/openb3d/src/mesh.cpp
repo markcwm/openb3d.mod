@@ -2195,7 +2195,7 @@ void Mesh::Render(){
 
 		if(blend!=Global::blend_mode){
 			Global::blend_mode=blend;
-
+		}
 			switch(blend){
 				case 0:
 					glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA); // alpha
@@ -2211,7 +2211,6 @@ void Mesh::Render(){
 					break;
 			}
 
-		}
 
 		// fx modes
 
