@@ -222,7 +222,7 @@ XLoader_TreeNode* XLoader_MakeTree(string s, XLoader_TreeNode* parent = 0){
 }
 
 
-void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], string brushnames[]){
+void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], vector<string> &brushnames){
 	int count = 0;
 	list<XLoader_TreeNode*>::iterator material2;
 	XLoader_TreeNode* material;
@@ -230,7 +230,7 @@ void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], string brushna
 	for (material2 = matlist.begin(); material2 != matlist.end(); material2++){
 		material=*material2;
 
-		brushnames[count] = material->name;
+		brushnames.push_back(material->name);
 							
 		vector<string> brushrgba = split(material->content.substr(0,material->content.find(";;")), ';');
 		brushes[count] = Brush::CreateBrush(
@@ -330,7 +330,7 @@ Mesh* LoadX(string URL, Entity* parent_ent){
 						// fetch material data
 						list<XLoader_TreeNode*> matlist = XLoader_FindTreeElements(tree, "material");
 						Brush* brushes[matlist.size()];
-						string brushnames[matlist.size()];
+						vector<string> brushnames;
 
 						loadBrush(matlist, brushes, brushnames);
 
@@ -529,7 +529,7 @@ Mesh* LoadX(string URL, Entity* parent_ent){
 
 										list<XLoader_TreeNode*> Lmatlist = XLoader_FindTreeElements(meshnode, "material");
 										Brush* Lbrushes[Lmatlist.size()];
-										string Lbrushnames[Lmatlist.size()];
+										vector<string> Lbrushnames;
 
 										loadBrush(Lmatlist, Lbrushes, Lbrushnames);
 										//string texname = texdata.substr(0,texdata.find("}"));
