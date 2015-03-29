@@ -108,6 +108,14 @@ void Light::FreeEntity(){
 
 	Entity::FreeEntity();
 	
+	for (int i=0; i<no_lights;i++){
+		glDisable(gl_light[i]);
+		if (light_list[i]==this)
+			light_list.erase(light_list.begin()+i);
+	}
+	
+	no_lights=no_lights-1;
+	
 	delete this;
 	
 	return;
