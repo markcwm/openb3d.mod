@@ -68,7 +68,8 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 	file->ReadInt();
 	file->ReadInt();
 
-	int vno=file->ReadInt();
+	//int vno=
+	file->ReadInt();
 
 
 	//if(tag!="BB3D") RuntimeError(tag.c_str());//"Invalid b3d file");
@@ -153,16 +154,16 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 	// tris local vars
 	Surface* surf=NULL;
 	int tr_brush_id=0;
-	int tr_sz=0;
+	//int tr_sz=0;
 	int tr_vid0=0;
 	int tr_vid1=0;
 	int tr_vid2=0;
 
 
 	// anim local vars
-	int a_flags=0;
+	//int a_flags=0;
 	int a_frames=0;
-	int a_fps=0;
+	//int a_fps=0;
 
 	// bone local vars
 	Bone* bo_bone=0;
@@ -604,7 +605,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 			}
 
-			tr_sz=12;
+			//tr_sz=12;
 
 			new_tag=ReadTag(file);
 
@@ -640,9 +641,11 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 		}else if(tag_id==ANIM){
 
-			a_flags=file->ReadInt();
+			//a_flags=
+			file->ReadInt();
 			a_frames=file->ReadInt();
-			a_fps=file->ReadFloat();
+			//a_fps=
+			file->ReadFloat();
 
 			if(mesh!=NULL){
 
@@ -818,7 +821,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				bo_bone->mat.Overwrite(*new_mat);
 			}
 
-			bo_bone->inv_mat=bo_bone->mat.Inverse();
+			bo_bone->mat.GetInverse(bo_bone->inv_mat);
 
 			if(new_tag!="KEYS"){
 				Entity::entity_list.push_back(bo_bone);

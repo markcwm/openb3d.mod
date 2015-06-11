@@ -36,15 +36,17 @@ void Quaternion_MultiplyQuat( float x1, float y1, float z1, float w1, float x2, 
 	
 }
 
-Matrix* InterpolateMatrix(Matrix* a, float alpha){
+void InterpolateMatrix(Matrix &m, Matrix &a, float alpha){
 
-	Matrix* m=new Matrix();
-	m->LoadIdentity();
+	m.LoadIdentity();
 	float q1_x, q1_y, q1_z, q1_w;
 	float dd;
 	
-	a->ToQuat(q1_x, q1_y, q1_z, q1_w);
-	if (q1_w == 0) return a->Copy();
+	a.ToQuat(q1_x, q1_y, q1_z, q1_w);
+	if (q1_w == 0) {
+		m.Overwrite(a);
+		return;
+	}
 
 	//normalize
 	if (q1_w > 1) {
@@ -75,8 +77,8 @@ Matrix* InterpolateMatrix(Matrix* a, float alpha){
 
 	angle = angle * alpha;
 	Quaternion_FromAngleAxis(angle, x,y,z, q1_x, q1_y, q1_z, q1_w);
-	m->FromQuaternion(q1_x, q1_y, q1_z, q1_w);
+	m.FromQuaternion(q1_x, q1_y, q1_z, q1_w);
 	
-	return m;
+	return;
 	
 }

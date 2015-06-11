@@ -184,10 +184,11 @@ void Camera::CameraClsMode(int color,int zbuffer){
 
 }
 
-void Camera::CameraRange(float near,float far){
+void Camera::CameraRange(float Near,float Far){
 
-	range_near=near;
-	range_far=far;
+	range_near=Near;
+	range_far=Far;
+	UpdateProjMatrix();
 
 }
 
@@ -218,10 +219,10 @@ void Camera::CameraFogColor(float r,float g,float b){
 
 }
 
-void Camera::CameraFogRange(float near,float far){
+void Camera::CameraFogRange(float Near,float Far){
 
-	fog_range_near=near;
-	fog_range_far=far;
+	fog_range_near=Near;
+	fog_range_far=Far;
 
 }
 
@@ -274,37 +275,37 @@ float Camera::EntityInView(Entity* ent){
 	
 void Camera::ExtractFrustum(){
 
-	float proj[16]={0.0};
-	float modl[16]={0.0};
+	//float proj[16]={0.0};
+	//float modl[16]={0.0};
 	float clip[16]={0.0};
 	float t=0.0;
 	
 	// Get the current PROJECTION matrix from OpenGL
-	glGetFloatv( GL_PROJECTION_MATRIX, proj );
+	//glGetFloatv( GL_PROJECTION_MATRIX, proj );
 	
 	// Get the current MODELVIEW matrix from OpenGL
-	glGetFloatv( GL_MODELVIEW_MATRIX, modl );
+	//glGetFloatv( GL_MODELVIEW_MATRIX, modl );
 	
 	// Combine the two matrices (multiply projection by modelview)
-	clip[ 0] = modl[ 0] * proj[ 0] + modl[ 1] * proj[ 4] + modl[ 2] * proj[ 8] + modl[ 3] * proj[12];
-	clip[ 1] = modl[ 0] * proj[ 1] + modl[ 1] * proj[ 5] + modl[ 2] * proj[ 9] + modl[ 3] * proj[13];
-	clip[ 2] = modl[ 0] * proj[ 2] + modl[ 1] * proj[ 6] + modl[ 2] * proj[10] + modl[ 3] * proj[14];
-	clip[ 3] = modl[ 0] * proj[ 3] + modl[ 1] * proj[ 7] + modl[ 2] * proj[11] + modl[ 3] * proj[15];
+	clip[ 0] = mod_mat[ 0] * proj_mat[ 0] + mod_mat[ 1] * proj_mat[ 4] + mod_mat[ 2] * proj_mat[ 8] + mod_mat[ 3] * proj_mat[12];
+	clip[ 1] = mod_mat[ 0] * proj_mat[ 1] + mod_mat[ 1] * proj_mat[ 5] + mod_mat[ 2] * proj_mat[ 9] + mod_mat[ 3] * proj_mat[13];
+	clip[ 2] = mod_mat[ 0] * proj_mat[ 2] + mod_mat[ 1] * proj_mat[ 6] + mod_mat[ 2] * proj_mat[10] + mod_mat[ 3] * proj_mat[14];
+	clip[ 3] = mod_mat[ 0] * proj_mat[ 3] + mod_mat[ 1] * proj_mat[ 7] + mod_mat[ 2] * proj_mat[11] + mod_mat[ 3] * proj_mat[15];
 	
-	clip[ 4] = modl[ 4] * proj[ 0] + modl[ 5] * proj[ 4] + modl[ 6] * proj[ 8] + modl[ 7] * proj[12];
-	clip[ 5] = modl[ 4] * proj[ 1] + modl[ 5] * proj[ 5] + modl[ 6] * proj[ 9] + modl[ 7] * proj[13];
-	clip[ 6] = modl[ 4] * proj[ 2] + modl[ 5] * proj[ 6] + modl[ 6] * proj[10] + modl[ 7] * proj[14];
-	clip[ 7] = modl[ 4] * proj[ 3] + modl[ 5] * proj[ 7] + modl[ 6] * proj[11] + modl[ 7] * proj[15];
+	clip[ 4] = mod_mat[ 4] * proj_mat[ 0] + mod_mat[ 5] * proj_mat[ 4] + mod_mat[ 6] * proj_mat[ 8] + mod_mat[ 7] * proj_mat[12];
+	clip[ 5] = mod_mat[ 4] * proj_mat[ 1] + mod_mat[ 5] * proj_mat[ 5] + mod_mat[ 6] * proj_mat[ 9] + mod_mat[ 7] * proj_mat[13];
+	clip[ 6] = mod_mat[ 4] * proj_mat[ 2] + mod_mat[ 5] * proj_mat[ 6] + mod_mat[ 6] * proj_mat[10] + mod_mat[ 7] * proj_mat[14];
+	clip[ 7] = mod_mat[ 4] * proj_mat[ 3] + mod_mat[ 5] * proj_mat[ 7] + mod_mat[ 6] * proj_mat[11] + mod_mat[ 7] * proj_mat[15];
 	
-	clip[ 8] = modl[ 8] * proj[ 0] + modl[ 9] * proj[ 4] + modl[10] * proj[ 8] + modl[11] * proj[12];
-	clip[ 9] = modl[ 8] * proj[ 1] + modl[ 9] * proj[ 5] + modl[10] * proj[ 9] + modl[11] * proj[13];
-	clip[10] = modl[ 8] * proj[ 2] + modl[ 9] * proj[ 6] + modl[10] * proj[10] + modl[11] * proj[14];
-	clip[11] = modl[ 8] * proj[ 3] + modl[ 9] * proj[ 7] + modl[10] * proj[11] + modl[11] * proj[15];
+	clip[ 8] = mod_mat[ 8] * proj_mat[ 0] + mod_mat[ 9] * proj_mat[ 4] + mod_mat[10] * proj_mat[ 8] + mod_mat[11] * proj_mat[12];
+	clip[ 9] = mod_mat[ 8] * proj_mat[ 1] + mod_mat[ 9] * proj_mat[ 5] + mod_mat[10] * proj_mat[ 9] + mod_mat[11] * proj_mat[13];
+	clip[10] = mod_mat[ 8] * proj_mat[ 2] + mod_mat[ 9] * proj_mat[ 6] + mod_mat[10] * proj_mat[10] + mod_mat[11] * proj_mat[14];
+	clip[11] = mod_mat[ 8] * proj_mat[ 3] + mod_mat[ 9] * proj_mat[ 7] + mod_mat[10] * proj_mat[11] + mod_mat[11] * proj_mat[15];
 	
-	clip[12] = modl[12] * proj[ 0] + modl[13] * proj[ 4] + modl[14] * proj[ 8] + modl[15] * proj[12];
-	clip[13] = modl[12] * proj[ 1] + modl[13] * proj[ 5] + modl[14] * proj[ 9] + modl[15] * proj[13];
-	clip[14] = modl[12] * proj[ 2] + modl[13] * proj[ 6] + modl[14] * proj[10] + modl[15] * proj[14];
-	clip[15] = modl[12] * proj[ 3] + modl[13] * proj[ 7] + modl[14] * proj[11] + modl[15] * proj[15];
+	clip[12] = mod_mat[12] * proj_mat[ 0] + mod_mat[13] * proj_mat[ 4] + mod_mat[14] * proj_mat[ 8] + mod_mat[15] * proj_mat[12];
+	clip[13] = mod_mat[12] * proj_mat[ 1] + mod_mat[13] * proj_mat[ 5] + mod_mat[14] * proj_mat[ 9] + mod_mat[15] * proj_mat[13];
+	clip[14] = mod_mat[12] * proj_mat[ 2] + mod_mat[13] * proj_mat[ 6] + mod_mat[14] * proj_mat[10] + mod_mat[15] * proj_mat[14];
+	clip[15] = mod_mat[12] * proj_mat[ 3] + mod_mat[13] * proj_mat[ 7] + mod_mat[14] * proj_mat[11] + mod_mat[15] * proj_mat[15];
 	
 	// Extract the numbers for the right plane
 	frustum[0][0] = clip[ 3] - clip[ 0];
@@ -513,7 +514,8 @@ void Camera::Update(){
 
 	accPerspective(atan((1.0/(zoom*ratio)))*2.0,ratio,range_near,range_far,0.0,0.0,0.0,0.0,1.0);
 
-	Matrix new_mat=mat.Inverse();
+	Matrix new_mat;
+	mat.GetInverse(new_mat);
 	//mat.Inverse(Camera::InverseMat);
 
 	//glLoadMatrixf(&Camera::InverseMat.grid[0][0]);
@@ -521,11 +523,28 @@ void Camera::Update(){
 	glLoadMatrixf(&new_mat.grid[0][0]);
 
 	
+	mod_mat[0]=new_mat.grid[0][0];
+	mod_mat[1]=new_mat.grid[0][1];
+	mod_mat[2]=new_mat.grid[0][2];
+	mod_mat[3]=new_mat.grid[0][3];
+	mod_mat[4]=new_mat.grid[1][0];
+	mod_mat[5]=new_mat.grid[1][1];
+	mod_mat[6]=new_mat.grid[1][2];
+	mod_mat[7]=new_mat.grid[1][3];
+	mod_mat[8]=new_mat.grid[2][0];
+	mod_mat[9]=new_mat.grid[2][1];
+	mod_mat[10]=new_mat.grid[2][2];
+	mod_mat[11]=new_mat.grid[2][3];
+	mod_mat[12]=new_mat.grid[3][0];
+	mod_mat[13]=new_mat.grid[3][1];
+	mod_mat[14]=new_mat.grid[3][2];
+	mod_mat[15]=new_mat.grid[3][3];
+
 	if(project_enabled){ // only get these directly after a cameraproject/camerapick call, as they are expensive calls
 	
 		// get projection/model/viewport info - for use with cameraproject/camerapick
-		glGetFloatv(GL_MODELVIEW_MATRIX,&mod_mat[0]);
-		glGetFloatv(GL_PROJECTION_MATRIX,&proj_mat[0]);
+		//glGetFloatv(GL_MODELVIEW_MATRIX,&mod_mat[0]);
+		//glGetFloatv(GL_PROJECTION_MATRIX,&proj_mat[0]);
 		glGetIntegerv(GL_VIEWPORT,&viewport[0]);
 		
 		project_enabled=false;
@@ -649,7 +668,8 @@ void UpdateEntityRender(Entity* ent,Entity* cam){
 				
 						return;}
 					case (3):{
-						Surface* surf=ParticleBatch::GetParticleBatchSurface(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
+						ParticleBatch* p=ParticleBatch::GetParticleBatch(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
+						Surface* surf=*p->surf_list.begin();
 			
 						surf->no_verts++;
 
@@ -657,10 +677,10 @@ void UpdateEntityRender(Entity* ent,Entity* cam){
 						surf->vert_coords.push_back(sprite->mat.grid[3][1]);
 						surf->vert_coords.push_back(sprite->mat.grid[3][2]);
 
-						surf->vert_col.push_back(1.0);
-						surf->vert_col.push_back(1.0);
-						surf->vert_col.push_back(1.0);
-						surf->vert_col.push_back(1.0);
+						surf->vert_col.push_back(sprite->brush.red);
+						surf->vert_col.push_back(sprite->brush.green);
+						surf->vert_col.push_back(sprite->brush.blue);
+						surf->vert_col.push_back(sprite->brush.alpha);
 
 				
 						return;}
@@ -989,11 +1009,11 @@ void Camera::accPerspective(float fovy,float aspect,float zNear,float zFar,float
 
 void Camera::accFrustum(float left_,float right_,float bottom,float top,float zNear,float zFar,float pixdx,float pixdy,float eyedx,float eyedy,float focus){
 	
-	float xwsize=0.0,ywsize=0.0;
-	float dx=0.0,dy=0.0;
+	//float xwsize=0.0,ywsize=0.0;
+	//float dx=0.0,dy=0.0;
 	
-	xwsize=right_-left_;
-	ywsize=top-bottom;
+	//xwsize=right_-left_;
+	//ywsize=top-bottom;
 	//dx=(pixdx*xwsize/float(viewport[2])+eyedx*zNear/focus);
 	//dy=-(pixdy*ywsize/float(viewport[3])+eyedy*zNear/focus);
 	
@@ -1001,9 +1021,9 @@ void Camera::accFrustum(float left_,float right_,float bottom,float top,float zN
 	glLoadIdentity();
 	
 	if (proj_mode == 1) {
-		glFrustum(left_+dx,right_+dx,bottom+dy,top+dy,zNear,zFar);
+		glFrustum(left_,right_,bottom,top,zNear,zFar);
 	}else if (proj_mode == 2){
-		glOrtho(left_+dx,right_+dx,bottom+dy,top+dy,zNear,zFar);
+		glOrtho(left_,right_,bottom,top,zNear,zFar);
 	}
 	
 	glMatrixMode(GL_MODELVIEW);
@@ -1018,24 +1038,46 @@ void Camera::UpdateProjMatrix(){
 	float top=range_near/(cos(fov)/sin(fov));
 	float right_=top*ratio;
 
-	proj_mat[0]=range_near/right_;
-	proj_mat[1]=0;
-	proj_mat[2]=0;
-	proj_mat[3]=0;
+	if (proj_mode == 1) {
+		proj_mat[0]=range_near/right_;
+		proj_mat[1]=0;
+		proj_mat[2]=0;
+		proj_mat[3]=0;
 
-	proj_mat[4]=0;
-	proj_mat[5]=range_near/top;
-	proj_mat[6]=0;
-	proj_mat[7]=0;
+		proj_mat[4]=0;
+		proj_mat[5]=range_near/top;
+		proj_mat[6]=0;
+		proj_mat[7]=0;
 
-	proj_mat[8]=0;
-	proj_mat[9]=0;
-	proj_mat[10]=-(range_far+range_near)/(range_far-range_near);
-	proj_mat[11]=-1;
+		proj_mat[8]=0;
+		proj_mat[9]=0;
+		proj_mat[10]=-(range_far+range_near)/(range_far-range_near);
+		proj_mat[11]=-1;
 
-	proj_mat[12]=0;
-	proj_mat[13]=0;
-	proj_mat[14]=(-2*range_far*range_near)/(range_far-range_near);
-	proj_mat[15]=0;
+		proj_mat[12]=0;
+		proj_mat[13]=0;
+		proj_mat[14]=(-2*range_far*range_near)/(range_far-range_near);
+		proj_mat[15]=0;
+	}else if (proj_mode == 2){
+		proj_mat[0]=1.0/right_;
+		proj_mat[1]=0;
+		proj_mat[2]=0;
+		proj_mat[3]=0;
+
+		proj_mat[4]=0;
+		proj_mat[5]=1.0/top;
+		proj_mat[6]=0;
+		proj_mat[7]=0;
+
+		proj_mat[8]=0;
+		proj_mat[9]=0;
+		proj_mat[10]=-2.0/(range_far-range_near);
+		proj_mat[11]=0;
+
+		proj_mat[12]=0;
+		proj_mat[13]=0;
+		proj_mat[14]=-(range_far+range_near)/(range_far-range_near);
+		proj_mat[15]=1.0;
+	}
 
 }

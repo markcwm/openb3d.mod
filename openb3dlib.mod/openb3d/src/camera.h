@@ -80,12 +80,12 @@ public:
 	void CameraViewport(int,int,int,int);
 	void CameraClsColor(float r,float g,float b);
 	void CameraClsMode(int color,int zbuffer);
-	void CameraRange(float near,float far);
+	void CameraRange(float Near,float Far);
 	void CameraZoom(float zoom_val);
 	void CameraProjMode(int mode=1);
 	void CameraFogMode(int mode);
 	void CameraFogColor(float r,float g,float b);
-	void CameraFogRange(float near,float far);
+	void CameraFogRange(float Near,float Far);
 
 	void CameraProject(float x,float y,float z);
 	static float ProjectedX();

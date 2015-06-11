@@ -14,7 +14,7 @@
 using namespace std;
  
 string Left(string s,int length);
-string Right(string s,int length);
+string Right(string s,unsigned int length);
 string Mid(string s,int offset,int characters=0);
 string Replace(string s,string find,string replace);
 int Instr(string s1,string s2,int offset=0);

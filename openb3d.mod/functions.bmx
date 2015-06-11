@@ -1,7 +1,7 @@
 ' functions.bmx
 
-' Wrapper only (not in original)
-' ------------------------------
+' Wrapper only
+' ------------
 
 Rem
 bbdoc: Copy the contents of the depthbuffer to a texture.
@@ -26,6 +26,34 @@ End Function
 
 ' Wrapper functions with Byte Ptr arguments
 ' -----------------------------------------
+
+Rem
+bbdoc: Copy the contents of the backbuffer to a texture.
+End Rem
+Function BackBufferToTex( tex:TTexture, frame:Int=0 )
+	BackBufferToTex_( TUtility.IsObject( tex ), frame )
+End Function
+
+Rem
+bbdoc: Copy a pixmap buffer to texture, buffer must be a byte ptr.
+End Rem
+Function BufferToTex( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
+	BufferToTex_( TUtility.IsObject( tex ), buffer, frame )
+End Function
+
+Rem
+bbdoc: Copy a rendered camera view to texture.
+End Rem
+Function CameraToTex( tex:TTexture, cam:TCamera, frame:Int=0 )
+	CameraToTex_( TUtility.IsObject( tex ), TUtility.IsObject( cam ), frame )
+End Function
+
+Rem
+bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
+End Rem
+Function TexToBuffer( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
+	TexToBuffer_( TUtility.IsObject( tex ), buffer, frame )
+End Function
 
 ' Minib3d Only
 
@@ -60,6 +88,27 @@ Function AddTriangle:Int( surf:TSurface, v0:Int, v1:Int, v2:Int )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">Online doc</a>
+End Rem
+Function AddVertex:Int( surf:TSurface, x:Float, y:Float, z:Float, u:Float=0, v:Float=0, w:Float=0 )
+	Return AddVertex_( TUtility.IsObject( surf ), x, y, z, u, v, w )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
+End Rem
+Function AmbientLight( r:Float, g:Float, b:Float )
+	AmbientLight_( r, g, b )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a>
+End Rem
+Function Animate( ent:TEntity, Mode:Int=1, speed:Float=1, seq:Int=0, trans:Int=0 )
+	Animate_( TUtility.IsObject( ent ), Mode, speed, seq, trans )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animating">Online doc</a>
 End Rem
 Function Animating:Int( ent:TEntity )
@@ -85,6 +134,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimTime">Onl
 End Rem
 Function AnimTime:Float( ent:TEntity )
 	Return AnimTime_( TUtility.IsObject( ent ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
+End Rem
+Function AntiAlias( samples:Int )
+	AntiAlias_( samples )
 End Function
 
 Rem
@@ -120,6 +176,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushShinines
 End Rem
 Function BrushShininess( brush:TBrush, s:Float )
 	BrushShininess_( TUtility.IsObject( brush ), s )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushTexture">Online doc</a>
+End Rem
+Function BrushTexture( brush:TBrush, tex:TTexture, frame:Int=0, index:Int=0 )
+	BrushTexture_( TUtility.IsObject( brush ), TUtility.IsObject( tex ), frame, index )
 End Function
 
 Rem
@@ -200,6 +263,34 @@ Function CameraZoom( cam:TCamera, zoom:Float )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearCollisions">Online doc</a>
+End Rem
+Function ClearCollisions()
+	ClearCollisions_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearSurface">Online doc</a>
+End Rem
+Function ClearSurface( surf:TSurface, clear_verts:Int=True, clear_tris:Int=True )
+	ClearSurface_( TUtility.IsObject( surf ), clear_verts, clear_tris )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearTextureFilters">Online doc</a>
+End Rem
+Function ClearTextureFilters()
+	ClearTextureFilters_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online doc</a>
+End Rem
+Function ClearWorld( entities:Int=True, brushes:Int=True, textures:Int=True )
+	ClearWorld_( entities, brushes, textures )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionEntity">Online doc</a>
 End Rem
 Function CollisionEntity:TEntity( ent:TEntity, index:Int )
@@ -225,6 +316,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNZ">
 End Rem
 Function CollisionNZ:Float( ent:TEntity, index:Int )
 	Return CollisionNZ_( TUtility.IsObject( ent ), index )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online doc</a>
+End Rem
+Function Collisions( src_no:Int, dest_no:Int, method_no:Int, response_no:Int=0 )
+	Collisions_( src_no, dest_no, method_no, response_no )
 End Function
 
 Rem
@@ -273,6 +371,24 @@ Function CollisionZ:Float( ent:TEntity, index:Int )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a>
+End Rem
+Function CopyEntity:TEntity( ent:TEntity, parent:TEntity=Null )
+	Local instance:Byte Ptr=CopyEntity_( TUtility.IsObject( ent ), TUtility.IsObject( parent ) )
+	Local copy:TEntity=globals.ent.NewEntity( instance )
+	Return copy
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a>
+End Rem
+Function CopyMesh:TMesh( mesh:TMesh, parent:TEntity=Null )
+	Local instance:Byte Ptr=CopyMesh_( TUtility.IsObject( mesh ), TUtility.IsObject( parent ) )
+	Local copy:TMesh=globals.mesh.NewMesh( instance )
+	Return copy
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online doc</a>
 End Rem
 Function CountChildren:Int( ent:TEntity )
@@ -310,10 +426,190 @@ End Function
 Rem
 bbdoc: undocumented
 End Rem
+Function CreateBlob:TBlob( fluid:TFluid, radius:Float, parent_ent:TEntity=Null )
+	Local instance:Byte Ptr=CreateBlob_( TUtility.IsObject( fluid ), radius, TUtility.IsObject( parent_ent ) )
+	Local blob:TBlob=globals.blob.NewBlob( instance )
+	Return blob
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateBone:TBone( mesh:TMesh, parent_ent:TEntity=Null )
+	Local instance:Byte Ptr=CreateBone_( TUtility.IsObject( mesh ), TUtility.IsObject( parent_ent ) )
+	Local bone:TBone=globals.bone.NewBone( instance )
+	Return bone
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
+End Rem
+Function CreateBrush:TBrush( r:Float=255, g:Float=255, b:Float=255 )
+	Local instance:Byte Ptr=CreateBrush_( r, g, b )
+	Local brush:TBrush=globals.brush.NewBrush( instance )
+	Return brush
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCamera">Online doc</a>
+End Rem
+Function CreateCamera:TCamera( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateCamera_( TUtility.IsObject( parent ) )
+	Local cam:TCamera=globals.cam.NewCamera( instance )
+	Return cam
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online doc</a>
+End Rem
+Function CreateCone:TMesh( segments:Int=8, solid:Int=True, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateCone_( segments, solid, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a>
+End Rem
+Function CreateCylinder:TMesh( segments:Int=8, solid:Int=True, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateCylinder_( segments, solid, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCube">Online doc</a>
+End Rem
+Function CreateCube:TMesh( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateCube_( TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateGeosphere:TGeosphere( size:Int, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateGeosphere_( size, TUtility.IsObject( parent ) )
+	Local geo:TGeosphere=globals.geo.NewGeosphere( instance )
+	Return geo
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateMesh">Online doc</a>
+End Rem
+Function CreateMesh:TMesh( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateMesh_( TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateLight">Online doc</a>
+End Rem
+Function CreateLight:TLight( light_type:Int=1, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateLight_( light_type, TUtility.IsObject( parent ) )
+	Local light:TLight=globals.light.NewLight( instance )
+	Return light
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePivot">Online doc</a>
+End Rem
+Function CreatePivot:TPivot( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreatePivot_( TUtility.IsObject( parent ) )
+	Local piv:TPivot=globals.piv.NewPivot( instance )
+	Return piv
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
+End Rem
+Function CreatePlane:TMesh( divisions:Int=1, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreatePlane_( divisions, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateQuad:TMesh( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateQuad_( TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateShadow:TShadowObject( parent:TMesh, Static:Int=False )
+	Local instance:Byte Ptr=CreateShadow_( TUtility.IsObject( parent ), Static )
+	Local shad:TShadowObject=globals.shad.NewShadowObject( instance )
+	Return shad
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a>
+End Rem
+Function CreateSphere:TMesh( segments:Int=8, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateSphere_( segments, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSprite">Online doc</a>
+End Rem
+Function CreateSprite:TSprite( parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateSprite_( TUtility.IsObject( parent ) )
+	Local sprite:TSprite=globals.sprite.NewSprite( instance )
+	Return sprite
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
 Function CreateStencil:TStencil()
 	Local instance:Byte Ptr=CreateStencil_()
 	Local stencil:TStencil=globals.stencil.NewStencil( instance )
 	Return stencil
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSurface">Online doc</a>
+End Rem
+Function CreateSurface:TSurface( mesh:TMesh, brush:TBrush=Null )
+	Local instance:Byte Ptr=CreateSurface_( TUtility.IsObject( mesh ), TUtility.IsObject( brush ) )
+	Local surf:TSurface=globals.surf.NewSurface( instance )
+	Return surf
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a>
+End Rem
+Function CreateTerrain:TTerrain( size:Int, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateTerrain_( size, TUtility.IsObject( parent ) )
+	Local terr:TTerrain=globals.terr.NewTerrain( instance )
+	Return terr
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online doc</a>
+End Rem
+Function CreateTexture:TTexture( width:Int, height:Int, flags:Int=9, frames:Int=1 )
+	Local instance:Byte Ptr=CreateTexture_( width, height, flags, frames )
+	Local tex:TTexture=globals.tex.NewTexture( instance )
+	Return tex
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateVoxelSprite:TVoxelSprite( slices:Int=64, parent:TEntity=Null )
+	Local instance:Byte Ptr=CreateVoxelSprite_( slices, TUtility.IsObject( parent ) )
+	Local voxelspr:TVoxelSprite=globals.voxelspr.NewVoxelSprite( instance )
+	Return voxelspr
 End Function
 
 Rem
@@ -415,10 +711,45 @@ Function EntityOrder( ent:TEntity, order:Int )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityParent">Online doc</a>
+End Rem
+Function EntityParent( ent:TEntity, parent_ent:TEntity, glob:Int=True )
+	EntityParent_( TUtility.IsObject( ent ), TUtility.IsObject( parent_ent ), glob )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPick">Online doc</a>
 End Rem
 Function EntityPick:TEntity( ent:TEntity, Range:Float )
 	Return globals.ent.EntityValue( EntityPick_( TUtility.IsObject( ent ), Range ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPickMode">Online doc</a>
+End Rem
+Function EntityPickMode( ent:TEntity, pick_mode:Int, obscurer:Int=True )
+	EntityPickMode_( TUtility.IsObject( ent ), pick_mode, obscurer )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPitch">Online doc</a>
+End Rem
+Function EntityPitch:Float( ent:TEntity, glob:Int=False )
+	Return -EntityPitch_( TUtility.IsObject( ent ), glob ) ' inverted pitch
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRadius">Online doc</a>
+End Rem
+Function EntityRadius( ent:TEntity, radius_x:Float, radius_y:Float=0 )
+	EntityRadius_( TUtility.IsObject( ent ), radius_x, radius_y )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRoll">Online doc</a>
+End Rem
+Function EntityRoll:Float( ent:TEntity, glob:Int=True )
+	Return EntityRoll_( TUtility.IsObject( ent ), glob )
 End Function
 
 Rem
@@ -429,10 +760,59 @@ Function EntityShininess( ent:TEntity, shine:Float )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online doc</a>
+End Rem
+Function EntityTexture( ent:TEntity, tex:TTexture, frame:Int=0, index:Int=0 )
+	EntityTexture_( TUtility.IsObject( ent ), TUtility.IsObject( tex ), frame, index )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>
+End Rem
+Function EntityType( ent:TEntity, type_no:Int, recursive:Int=False )
+	EntityType_( TUtility.IsObject( ent ), type_no, recursive )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityVisible">Online doc</a>
 End Rem
 Function EntityVisible:Int( src_ent:TEntity, dest_ent:TEntity )
 	Return EntityVisible_( TUtility.IsObject( src_ent ), TUtility.IsObject( dest_ent ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityX">Online doc</a>
+End Rem
+Function EntityX:Float( ent:TEntity, glob:Int=False )
+	Return EntityX_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityY">Online doc</a>
+End Rem
+Function EntityY:Float( ent:TEntity, glob:Int=False )
+	Return EntityY_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityYaw">Online doc</a>
+End Rem
+Function EntityYaw:Float( ent:TEntity, glob:Int=False )
+	Return EntityYaw_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityZ">Online doc</a>
+End Rem
+Function EntityZ:Float( ent:TEntity, glob:Int=False )
+	Return EntityZ_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ExtractAnimSeq">Online doc</a>
+End Rem
+Function ExtractAnimSeq:Int( ent:TEntity, first_frame:Int, last_frame:Int, seq:Int=0 )
+	Return ExtractAnimSeq_( TUtility.IsObject( ent ), first_frame, last_frame, seq )
 End Function
 
 Rem
@@ -458,10 +838,38 @@ Function FindSurface:TSurface( mesh:TMesh, brush:TBrush )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FitMesh">Online doc</a>
+End Rem
+Function FitMesh( mesh:TMesh, x:Float, y:Float, z:Float, width:Float, height:Float, depth:Float, uniform:Int=False )
+	FitMesh_( TUtility.IsObject( mesh ), x, y, z, width, height, depth, uniform )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FlipMesh">Online doc</a>
 End Rem
 Function FlipMesh( mesh:TMesh )
 	FlipMesh_( TUtility.IsObject( mesh ) )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidArray( fluid:TFluid, Array:Float Var, w:Int, h:Int, d:Int)
+	FluidArray_( TUtility.IsObject( fluid ), Varptr(Array), w, h, d )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidFunction( fluid:TFluid, FieldFunction:Float( x:Float, y:Float, z:Float ) )
+	FluidFunction_( TUtility.IsObject( fluid ), FieldFunction )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidThreshold( fluid:TFluid, threshold:Float )
+	FluidThreshold_( TUtility.IsObject( fluid ), threshold )
 End Function
 
 Rem
@@ -481,6 +889,14 @@ Function FreeEntity( ent:TEntity )
 End Function
 
 Rem
+bbdoc: undocumented
+End Rem
+Function FreeShadow( shad:TShadowObject )
+	shad.DeleteShadowObject( TUtility.IsObject( shad ) )
+	FreeShadow_( TUtility.IsObject( shad ) )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
 End Rem
 Function FreeTexture( tex:TTexture )
@@ -493,6 +909,16 @@ bbdoc: undocumented
 End Rem
 Function GeosphereHeight( geo:TGeosphere, h:Float )
 	GeosphereHeight_( TUtility.IsObject( geo ), h )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>
+End Rem
+Function GetBrushTexture:TTexture( brush:TBrush, index:Int=0 )
+	Local instance:Byte Ptr=GetBrushTexture_( TUtility.IsObject( brush ), index )
+	Local tex:TTexture=globals.tex.TextureValue( instance )
+	If tex=Null And instance<>Null Then tex=globals.tex.NewTexture( instance )
+	Return tex
 End Function
 
 Rem
@@ -592,6 +1018,34 @@ Function LightRange( light:TLight, Range:Float )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a>
+End Rem
+Function LinePick:TEntity( x:Float, y:Float, z:Float, dx:Float, dy:Float, dz:Float, radius:Float=0 )
+	Return globals.ent.EntityValue( LinePick_( x, y, z, dx, dy, dz, radius ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
+End Rem
+Function LoadAnimMesh:TMesh( file:String, parent:TEntity=Null )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadAnimMesh_( cString, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	MemFree cString
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a>
+End Rem
+Function LoadAnimSeq:Int( ent:TEntity, file:String )
+	Local cString:Byte Ptr=file.ToCString()
+	Local seqnum:Int=LoadAnimSeq_( TUtility.IsObject( ent ), cString )
+	MemFree cString
+	Return seqnum
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 End Rem
 Function LoadAnimTexture:TTexture( file:String, flags:Int, frame_width:Int, frame_height:Int, first_frame:Int, frame_count:Int )
@@ -600,6 +1054,81 @@ Function LoadAnimTexture:TTexture( file:String, flags:Int, frame_width:Int, fram
 	Local tex:TTexture=globals.tex.NewTexture( instance )
 	MemFree cString
 	Return tex
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a>
+End Rem
+Function LoadBrush:TBrush( file:String, flags:Int=1, u_scale:Float=1, v_scale:Float=1 )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadBrush_( cString, flags, u_scale, v_scale )
+	Local brush:TBrush=globals.brush.NewBrush( instance )
+	MemFree cString
+	Return brush
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function LoadGeosphere:TGeosphere( file:String, parent:TEntity=Null )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadGeosphere_( cString, TUtility.IsObject( parent ) )
+	Local geo:TGeosphere=globals.geo.NewGeosphere( instance )
+	MemFree cString
+	Return geo
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
+End Rem
+Function LoadMesh:TMesh( file:String, parent:TEntity=Null )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadMesh_( cString, TUtility.IsObject( parent ) )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	MemFree cString
+	Return mesh
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
+End Rem
+Function LoadTerrain:TTerrain( file:String, parent:TEntity=Null )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadTerrain_( cString, TUtility.IsObject( parent ) )
+	Local terr:TTerrain=globals.terr.NewTerrain( instance )
+	MemFree cString
+	Return terr
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
+End Rem
+Function LoadTexture:TTexture( file:String, flags:Int=1 )
+	Local cString:Byte Ptr=file.ToCString()
+	Local instance:Byte Ptr=LoadTexture_( cString, flags )
+	Local tex:TTexture=globals.tex.NewTexture( instance )
+	MemFree cString
+	Return tex
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online doc</a>
+End Rem
+Function LoadSprite:TSprite( tex_file:String, tex_flag:Int=1, parent:TEntity=Null )
+	Local cString:Byte Ptr=tex_file.ToCString()
+	Local instance:Byte Ptr=LoadSprite_( cString, tex_flag, TUtility.IsObject( parent ) )
+	Local sprite:TSprite=globals.sprite.NewSprite( instance )
+	MemFree cString
+	Return sprite
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function MeshCSG:TMesh( m1:TMesh, m2:TMesh, method_no:Int=1 )
+	Local instance:Byte Ptr=MeshCSG_( TUtility.IsObject( m1 ), TUtility.IsObject( m2 ), method_no )
+	Local mesh:TMesh=globals.mesh.NewMesh( instance )
+	Return mesh
 End Function
 
 Rem
@@ -682,10 +1211,52 @@ Function PaintSurface( surf:TSurface, brush:TBrush )
 End Function
 
 Rem
+bbdoc: undocumented
+End Rem
+Function ParticleColor( sprite:TSprite, r:Float, g:Float, b:Float, a:Float=0 )
+	ParticleColor_( TUtility.IsObject( sprite ), r, g, b, a )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ParticleVector( sprite:TSprite, x:Float, y:Float, z:Float )
+	ParticleVector_( TUtility.IsObject( sprite ), x, y, z )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ParticleTrail( sprite:TSprite, length:Int )
+	ParticleTrail_( TUtility.IsObject( sprite ), length )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedEntity">Online doc</a>
 End Rem
 Function PickedEntity:TEntity()
 	Return globals.ent.EntityValue( PickedEntity_() )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNX">Online doc</a>
+End Rem
+Function PickedNX:Float()
+	Return PickedNX_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNY">Online doc</a>
+End Rem
+Function PickedNY:Float()
+	Return PickedNY_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNZ">Online doc</a>
+End Rem
+Function PickedNZ:Float()
+	Return PickedNZ_()
 End Function
 
 Rem
@@ -696,6 +1267,55 @@ Function PickedSurface:TSurface()
 	Local surf:TSurface=globals.surf.SurfaceValue( instance )
 	If surf=Null And instance<>Null Then surf=globals.surf.NewSurface( instance )
 	Return surf
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTime">Online doc</a>
+End Rem
+Function PickedTime:Float()
+	Return PickedTime_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTriangle">Online doc</a>
+End Rem
+Function PickedTriangle:Int()
+	Return PickedTriangle_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedX">Online doc</a>
+End Rem
+Function PickedX:Float()
+	Return PickedX_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedY">Online doc</a>
+End Rem
+Function PickedY:Float()
+	Return PickedY_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedZ">Online doc</a>
+End Rem
+Function PickedZ:Float()
+	Return PickedZ_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PointEntity">Online doc</a>
+End Rem
+Function PointEntity( ent:TEntity, target_ent:TEntity, roll:Float=0 )
+	PointEntity_( TUtility.IsObject( ent ), TUtility.IsObject( target_ent ), roll )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionEntity">Online doc</a>
+End Rem
+Function PositionEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
+	PositionEntity_( TUtility.IsObject( ent ), x, y, z, glob )
 End Function
 
 Rem
@@ -713,10 +1333,54 @@ Function PositionTexture( tex:TTexture, u_pos:Float, v_pos:Float )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedX">Online doc</a>
+End Rem
+Function ProjectedX:Float()
+	Return ProjectedX_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedY">Online doc</a>
+End Rem
+Function ProjectedY:Float()
+	Return ProjectedY_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedZ">Online doc</a>
+End Rem
+Function ProjectedZ:Float()
+	Return ProjectedZ_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a>
+End Rem
+Function RenderWorld()
+	RenderWorld_()
+End Function
+
+Rem
+bbdoc: Like CopyMesh but for instancing effects.
+End Rem
+Function RepeatMesh:TMesh( mesh:TMesh, parent:TEntity=Null )
+	Local instance:Byte Ptr=RepeatMesh_( TUtility.IsObject( mesh ), TUtility.IsObject( parent ) )
+	Local copy:TMesh=globals.mesh.NewMesh( instance )
+	Return copy
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a>
 End Rem
 Function ResetEntity( ent:TEntity )
 	ResetEntity_( TUtility.IsObject( ent ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a>
+End Rem
+Function RotateEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
+	RotateEntity_( TUtility.IsObject( ent ), -x, y, z, glob ) ' inverted pitch
 End Function
 
 Rem
@@ -741,6 +1405,13 @@ Function RotateTexture( tex:TTexture, ang:Float )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleEntity">Online doc</a>
+End Rem
+Function ScaleEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
+	ScaleEntity_( TUtility.IsObject( ent ), x, y, z, glob )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleMesh">Online doc</a>
 End Rem
 Function ScaleMesh( mesh:TMesh, sx:Float, sy:Float, sz:Float )
@@ -759,6 +1430,20 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleTexture"
 End Rem
 Function ScaleTexture( tex:TTexture, u_scale:Float, v_scale:Float )
 	ScaleTexture_( TUtility.IsObject( tex ), u_scale, v_scale )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a>
+End Rem
+Function SetAnimKey( ent:TEntity, frame:Float, pos_key:Int=True, rot_key:Int=True, scale_key:Int=True )
+	SetAnimKey_( TUtility.IsObject( ent ), frame, pos_key, rot_key, scale_key )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
+End Rem
+Function SetAnimTime( ent:TEntity, time:Float, seq:Int=0 )
+	If time<>0.0 Then SetAnimTime_( TUtility.IsObject( ent ), time, seq ) ' if zero crash fix
 End Function
 
 Rem
@@ -815,6 +1500,20 @@ bbdoc: undocumented
 End Rem
 Function StencilClsMode( stencil:TStencil, cls_depth:Int, cls_zbuffer:Int )
 	StencilClsMode_( TUtility.IsObject( stencil ), cls_depth, cls_zbuffer )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilMesh( stencil:TStencil, mesh:TMesh, Mode:Int=1 )
+	StencilMesh_( TUtility.IsObject( stencil ), TUtility.IsObject( mesh ), Mode )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilMode( stencil:TStencil, m:Int, o:Int=1 )
+	StencilMode_( TUtility.IsObject( stencil ), m, o )
 End Function
 
 Rem
@@ -890,6 +1589,27 @@ Function TextureWidth:Int( tex:TTexture )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedX">Online doc</a>
+End Rem
+Function TFormedX:Float()
+	Return TFormedX_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedY">Online doc</a>
+End Rem
+Function TFormedY:Float()
+	Return TFormedY_()
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedZ">Online doc</a>
+End Rem
+Function TFormedZ:Float()
+	Return TFormedZ_()
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormNormal">Online doc</a>
 End Rem
 Function TFormNormal( x:Float, y:Float, z:Float, src_ent:TEntity, dest_ent:TEntity )
@@ -911,10 +1631,24 @@ Function TFormVector( x:Float, y:Float, z:Float, src_ent:TEntity, dest_ent:TEnti
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TranslateEntity">Online doc</a>
+End Rem
+Function TranslateEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
+	TranslateEntity_( TUtility.IsObject( ent ), x, y, z, glob )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TriangleVertex">Online doc</a>
 End Rem
 Function TriangleVertex:Int( surf:TSurface, tri_no:Int, corner:Int )
 	Return TriangleVertex_( TUtility.IsObject( surf ), tri_no, corner )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TurnEntity">Online doc</a>
+End Rem
+Function TurnEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
+	TurnEntity_( TUtility.IsObject( ent ), -x, y, z, glob ) ' inverted pitch
 End Function
 
 Rem
@@ -932,10 +1666,31 @@ Function UpdateTexCoords( surf:TSurface )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a>
+End Rem
+Function UpdateWorld( anim_speed:Float=1 )
+	UpdateWorld_( anim_speed )
+End Function
+
+Rem
 bbdoc: undocumented
 End Rem
 Function UseStencil( stencil:TStencil )
 	UseStencil_( TUtility.IsObject( stencil ) )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorPitch">Online doc</a>
+End Rem
+Function VectorPitch:Float( vx:Float, vy:Float, vz:Float )
+	Return -VectorPitch_( vx, vy, vz ) ' inverted pitch
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorYaw">Online doc</a>
+End Rem
+Function VectorYaw:Float( vx:Float, vy:Float, vz:Float )
+	Return VectorYaw_( vx, vy, vz )
 End Function
 
 Rem
@@ -950,6 +1705,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexBlue">O
 End Rem
 Function VertexBlue:Float( surf:TSurface, vid:Int )
 	Return VertexBlue_( TUtility.IsObject( surf ), vid )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexColor">Online doc</a>
+End Rem
+Function VertexColor( surf:TSurface, vid:Int, r:Float, g:Float, b:Float, a:Float=1 )
+	VertexColor_( TUtility.IsObject( surf ), vid, r, g, b, a )
 End Function
 
 Rem
@@ -1002,6 +1764,34 @@ Function VertexRed:Float( surf:TSurface, vid:Int )
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexTexCoords">Online doc</a>
+End Rem
+Function VertexTexCoords( surf:TSurface, vid:Int, u:Float, v:Float, w:Float=0, coord_set:Int=0 )
+	VertexTexCoords_( TUtility.IsObject( surf ), vid, u, v, w, coord_set )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexU">Online doc</a>
+End Rem
+Function VertexU:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
+	Return VertexU_( TUtility.IsObject( surf ), vid, coord_set )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexV">Online doc</a>
+End Rem
+Function VertexV:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
+	Return VertexV_( TUtility.IsObject( surf ), vid, coord_set )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexW">Online doc</a>
+End Rem
+Function VertexW:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
+	Return VertexW_( TUtility.IsObject( surf ), vid, coord_set )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexX">Online doc</a>
 End Rem
 Function VertexX:Float( surf:TSurface, vid:Int )
@@ -1029,7 +1819,36 @@ Function VoxelSpriteMaterial( voxelspr:TVoxelSprite, mat:TMaterial )
 	VoxelSpriteMaterial_( TUtility.IsObject( voxelspr ), TUtility.IsObject( mat ) )
 End Function
 
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a>
+End Rem
+Function Wireframe( enable:Int )
+	Wireframe_( enable )
+End Function
+
 ' ***extras***
+' ------------
+
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityScaleX:Float( ent:TEntity, glob:Int=False )
+	Return EntityScaleX_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityScaleY:Float( ent:TEntity, glob:Int=False )
+	Return EntityScaleY_( TUtility.IsObject( ent ), glob )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityScaleZ:Float( ent:TEntity, glob:Int=False )
+	Return EntityScaleZ_( TUtility.IsObject( ent ), glob )
+End Function
 
 Rem
 bbdoc: Load shader from two files, vertex and fragment.
@@ -1080,6 +1899,15 @@ bbdoc: Apply shader to an entity.
 End Rem
 Function ShadeEntity( ent:TEntity, material:TShader )
 	ShadeEntity_( TUtility.IsObject( ent ), TUtility.IsObject( material ) )
+End Function
+
+Rem
+bbdoc: Load a texture for 2D texture sampling.
+End Rem
+Function ShaderTexture( material:TShader, tex:TTexture, name:String, index:Int=0 )
+	Local cString:Byte Ptr=name.ToCString()
+	ShaderTexture_( TUtility.IsObject( material ), TUtility.IsObject( tex ), cString, index )
+	MemFree cString
 End Function
 
 Rem
@@ -1236,8 +2064,7 @@ Function UseSurface( material:TShader, name:String, surf:TSurface, vbo:Int )
 End Function
 
 Rem
-bbdoc: Send matrix data to a shader variable name of a uniform mat4 type.
-If mode is true it sends camera matrix otherwise projection matrix.
+bbdoc: Sends matrix data to a shader variable name of a uniform mat4 type.
 End Rem
 Function UseMatrix( material:TShader, name:String, Mode:Int )
 	Local cString:Byte Ptr=name.ToCString()
@@ -1254,628 +2081,6 @@ Function LoadMaterial:TMaterial( filename:String, flags:Int, frame_width:Int, fr
 	Local mat:TMaterial=globals.mat.NewMaterial( instance )
 	MemFree cString
 	Return mat
-End Function
-
-
-' Wrapper functions with default arguments (can't be set in declarations)
-' -----------------------------------------------------------------------
-
-Rem
-bbdoc: Copy the contents of the backbuffer to a texture.
-End Rem
-Function BackBufferToTex( tex:TTexture, frame:Int=0 )
-	BackBufferToTex_( TUtility.IsObject( tex ), frame )
-End Function
-
-Rem
-bbdoc: Copy a pixmap buffer to texture, buffer must be a byte ptr.
-End Rem
-Function BufferToTex( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
-	BufferToTex_( TUtility.IsObject( tex ), buffer, frame )
-End Function
-
-Rem
-bbdoc: Copy a rendered camera view to texture.
-End Rem
-Function CameraToTex( tex:TTexture, cam:TCamera, frame:Int=0 )
-	CameraToTex_( TUtility.IsObject( tex ), TUtility.IsObject( cam ), frame )
-End Function
-
-Rem
-bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
-End Rem
-Function TexToBuffer( tex:TTexture, buffer:Byte Ptr, frame:Int=0 )
-	TexToBuffer_( TUtility.IsObject( tex ), buffer, frame )
-End Function
-
-' Blitz3D functions, A-Z
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">Online doc</a>
-End Rem
-Function AddVertex:Int( surf:TSurface, x:Float, y:Float, z:Float, u:Float=0, v:Float=0, w:Float=0 )
-	Return AddVertex_( TUtility.IsObject( surf ), x, y, z, u, v, w )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a>
-End Rem
-Function Animate( ent:TEntity, Mode:Int=1, speed:Float=1, seq:Int=0, trans:Int=0 )
-	Animate_( TUtility.IsObject( ent ), Mode, speed, seq, trans )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushTexture">Online doc</a>
-End Rem
-Function BrushTexture( brush:TBrush, tex:TTexture, frame:Int=0, index:Int=0 )
-	BrushTexture_( TUtility.IsObject( brush ), TUtility.IsObject( tex ), frame, index )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearSurface">Online doc</a>
-End Rem
-Function ClearSurface( surf:TSurface, clear_verts:Int=True, clear_tris:Int=True )
-	ClearSurface_( TUtility.IsObject( surf ), clear_verts, clear_tris )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online doc</a>
-End Rem
-Function ClearWorld( entities:Int=True, brushes:Int=True, textures:Int=True )
-	ClearWorld_( entities, brushes, textures )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online doc</a>
-End Rem
-Function Collisions( src_no:Int, dest_no:Int, method_no:Int, response_no:Int=0 )
-	Collisions_( src_no, dest_no, method_no, response_no )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a>
-End Rem
-Function CopyEntity:TEntity( ent:TEntity, parent:TEntity=Null )
-	Local instance:Byte Ptr=CopyEntity_( TUtility.IsObject( ent ), TUtility.IsObject( parent ) )
-	Local copy:TEntity=globals.ent.NewEntity( instance )
-	Return copy
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a>
-End Rem
-Function CopyMesh:TMesh( mesh:TMesh, parent:TEntity=Null )
-	Local instance:Byte Ptr=CopyMesh_( TUtility.IsObject( mesh ), TUtility.IsObject( parent ) )
-	Local copy:TMesh=globals.mesh.NewMesh( instance )
-	Return copy
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateBlob:TBlob( fluid:TFluid, radius:Float, parent_ent:TEntity=Null )
-	Local instance:Byte Ptr=CreateBlob_( TUtility.IsObject( fluid ), radius, TUtility.IsObject( parent_ent ) )
-	Local blob:TBlob=globals.blob.NewBlob( instance )
-	Return blob
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
-End Rem
-Function CreateBrush:TBrush( r:Float=255, g:Float=255, b:Float=255 )
-	Local instance:Byte Ptr=CreateBrush_( r, g, b )
-	Local brush:TBrush=globals.brush.NewBrush( instance )
-	Return brush
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCamera">Online doc</a>
-End Rem
-Function CreateCamera:TCamera( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateCamera_( TUtility.IsObject( parent ) )
-	Local cam:TCamera=globals.cam.NewCamera( instance )
-	Return cam
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online doc</a>
-End Rem
-Function CreateCone:TMesh( segments:Int=8, solid:Int=True, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateCone_( segments, solid, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a>
-End Rem
-Function CreateCylinder:TMesh( segments:Int=8, solid:Int=True, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateCylinder_( segments, solid, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCube">Online doc</a>
-End Rem
-Function CreateCube:TMesh( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateCube_( TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateFluid:TFluid()
-	Local instance:Byte Ptr=CreateFluid_()
-	Local fluid:TFluid=globals.fluid.NewFluid( instance )
-	Return fluid
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateGeosphere:TGeosphere( size:Int, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateGeosphere_( size, TUtility.IsObject( parent ) )
-	Local geo:TGeosphere=globals.geo.NewGeosphere( instance )
-	Return geo
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateMesh">Online doc</a>
-End Rem
-Function CreateMesh:TMesh( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateMesh_( TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateLight">Online doc</a>
-End Rem
-Function CreateLight:TLight( light_type:Int=1, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateLight_( light_type, TUtility.IsObject( parent ) )
-	Local light:TLight=globals.light.NewLight( instance )
-	Return light
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePivot">Online doc</a>
-End Rem
-Function CreatePivot:TPivot( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreatePivot_( TUtility.IsObject( parent ) )
-	Local piv:TPivot=globals.piv.NewPivot( instance )
-	Return piv
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
-End Rem
-Function CreatePlane:TMesh( divisions:Int=1, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreatePlane_( divisions, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateQuad:TMesh( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateQuad_( TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateShadow:TShadowObject( parent:TMesh, Static:Int=False )
-	Local instance:Byte Ptr=CreateShadow_( TUtility.IsObject( parent ), Static )
-	Local shad:TShadowObject=globals.shad.NewShadowObject( instance )
-	Return shad
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a>
-End Rem
-Function CreateSphere:TMesh( segments:Int=8, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateSphere_( segments, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSprite">Online doc</a>
-End Rem
-Function CreateSprite:TSprite( parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateSprite_( TUtility.IsObject( parent ) )
-	Local sprite:TSprite=globals.sprite.NewSprite( instance )
-	Return sprite
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSurface">Online doc</a>
-End Rem
-Function CreateSurface:TSurface( mesh:TMesh, brush:TBrush=Null )
-	Local instance:Byte Ptr=CreateSurface_( TUtility.IsObject( mesh ), TUtility.IsObject( brush ) )
-	Local surf:TSurface=globals.surf.NewSurface( instance )
-	Return surf
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a>
-End Rem
-Function CreateTerrain:TTerrain( size:Int, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateTerrain_( size, TUtility.IsObject( parent ) )
-	Local terr:TTerrain=globals.terr.NewTerrain( instance )
-	Return terr
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online doc</a>
-End Rem
-Function CreateTexture:TTexture( width:Int, height:Int, flags:Int=9, frames:Int=1 )
-	Local instance:Byte Ptr=CreateTexture_( width, height, flags, frames )
-	Local tex:TTexture=globals.tex.NewTexture( instance )
-	Return tex
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateVoxelSprite:TVoxelSprite( slices:Int=64, parent:TEntity=Null )
-	Local instance:Byte Ptr=CreateVoxelSprite_( slices, TUtility.IsObject( parent ) )
-	Local voxelspr:TVoxelSprite=globals.voxelspr.NewVoxelSprite( instance )
-	Return voxelspr
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityParent">Online doc</a>
-End Rem
-Function EntityParent( ent:TEntity, parent_ent:TEntity, glob:Int=True )
-	EntityParent_( TUtility.IsObject( ent ), TUtility.IsObject( parent_ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPickMode">Online doc</a>
-End Rem
-Function EntityPickMode( ent:TEntity, pick_mode:Int, obscurer:Int=True )
-	EntityPickMode_( TUtility.IsObject( ent ), pick_mode, obscurer )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPitch">Online doc</a>
-End Rem
-Function EntityPitch:Float( ent:TEntity, glob:Int=False )
-	Return -EntityPitch_( TUtility.IsObject( ent ), glob ) ' inverted pitch
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRadius">Online doc</a>
-End Rem
-Function EntityRadius( ent:TEntity, radius_x:Float, radius_y:Float=0 )
-	EntityRadius_( TUtility.IsObject( ent ), radius_x, radius_y )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRoll">Online doc</a>
-End Rem
-Function EntityRoll:Float( ent:TEntity, glob:Int=True )
-	Return EntityRoll_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online doc</a>
-End Rem
-Function EntityTexture( ent:TEntity, tex:TTexture, frame:Int=0, index:Int=0 )
-	EntityTexture_( TUtility.IsObject( ent ), TUtility.IsObject( tex ), frame, index )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>
-End Rem
-Function EntityType( ent:TEntity, type_no:Int, recursive:Int=False )
-	EntityType_( TUtility.IsObject( ent ), type_no, recursive )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityX">Online doc</a>
-End Rem
-Function EntityX:Float( ent:TEntity, glob:Int=False )
-	Return EntityX_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityY">Online doc</a>
-End Rem
-Function EntityY:Float( ent:TEntity, glob:Int=False )
-	Return EntityY_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityYaw">Online doc</a>
-End Rem
-Function EntityYaw:Float( ent:TEntity, glob:Int=False )
-	Return EntityYaw_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityZ">Online doc</a>
-End Rem
-Function EntityZ:Float( ent:TEntity, glob:Int=False )
-	Return EntityZ_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ExtractAnimSeq">Online doc</a>
-End Rem
-Function ExtractAnimSeq:Int( ent:TEntity, first_frame:Int, last_frame:Int, seq:Int=0 )
-	Return ExtractAnimSeq_( TUtility.IsObject( ent ), first_frame, last_frame, seq )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FitMesh">Online doc</a>
-End Rem
-Function FitMesh( mesh:TMesh, x:Float, y:Float, z:Float, width:Float, height:Float, depth:Float, uniform:Int=False )
-	FitMesh_( TUtility.IsObject( mesh ), x, y, z, width, height, depth, uniform )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function FreeShadow( shad:TShadowObject )
-	shad.DeleteShadowObject( TUtility.IsObject( shad ) )
-	FreeShadow_( TUtility.IsObject( shad ) )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>
-End Rem
-Function GetBrushTexture:TTexture( brush:TBrush, index:Int=0 )
-	Local instance:Byte Ptr=GetBrushTexture_( TUtility.IsObject( brush ), index )
-	Local tex:TTexture=globals.tex.TextureValue( instance )
-	If tex=Null And instance<>Null Then tex=globals.tex.NewTexture( instance )
-	Return tex
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a>
-End Rem
-Function LinePick:TEntity( x:Float, y:Float, z:Float, dx:Float, dy:Float, dz:Float, radius:Float=0 )
-	Return globals.ent.EntityValue( LinePick_( x, y, z, dx, dy, dz, radius ) )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
-End Rem
-Function LoadAnimMesh:TMesh( file:String, parent:TEntity=Null )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadAnimMesh_( cString, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	MemFree cString
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a>
-End Rem
-Function LoadBrush:TBrush( file:String, flags:Int=1, u_scale:Float=1, v_scale:Float=1 )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadBrush_( cString, flags, u_scale, v_scale )
-	Local brush:TBrush=globals.brush.NewBrush( instance )
-	MemFree cString
-	Return brush
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function LoadGeosphere:TGeosphere( file:String, parent:TEntity=Null )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadGeosphere_( cString, TUtility.IsObject( parent ) )
-	Local geo:TGeosphere=globals.geo.NewGeosphere( instance )
-	MemFree cString
-	Return geo
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
-End Rem
-Function LoadMesh:TMesh( file:String, parent:TEntity=Null )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadMesh_( cString, TUtility.IsObject( parent ) )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	MemFree cString
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
-End Rem
-Function LoadTerrain:TTerrain( file:String, parent:TEntity=Null )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadTerrain_( cString, TUtility.IsObject( parent ) )
-	Local terr:TTerrain=globals.terr.NewTerrain( instance )
-	MemFree cString
-	Return terr
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
-End Rem
-Function LoadTexture:TTexture( file:String, flags:Int=1 )
-	Local cString:Byte Ptr=file.ToCString()
-	Local instance:Byte Ptr=LoadTexture_( cString, flags )
-	Local tex:TTexture=globals.tex.NewTexture( instance )
-	MemFree cString
-	Return tex
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online doc</a>
-End Rem
-Function LoadSprite:TSprite( tex_file:String, tex_flag:Int=1, parent:TEntity=Null )
-	Local cString:Byte Ptr=tex_file.ToCString()
-	Local instance:Byte Ptr=LoadSprite_( cString, tex_flag, TUtility.IsObject( parent ) )
-	Local sprite:TSprite=globals.sprite.NewSprite( instance )
-	MemFree cString
-	Return sprite
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function MeshCSG:TMesh( m1:TMesh, m2:TMesh, method_no:Int=1 )
-	Local instance:Byte Ptr=MeshCSG_( TUtility.IsObject( m1 ), TUtility.IsObject( m2 ), method_no )
-	Local mesh:TMesh=globals.mesh.NewMesh( instance )
-	Return mesh
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PointEntity">Online doc</a>
-End Rem
-Function PointEntity( ent:TEntity, target_ent:TEntity, roll:Float=0 )
-	PointEntity_( TUtility.IsObject( ent ), TUtility.IsObject( target_ent ), roll )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionEntity">Online doc</a>
-End Rem
-Function PositionEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
-	PositionEntity_( TUtility.IsObject( ent ), x, y, z, glob )
-End Function
-
-Rem
-bbdoc: Like CopyMesh but for instancing effects.
-End Rem
-Function RepeatMesh:TMesh( mesh:TMesh, parent:TEntity=Null )
-	Local instance:Byte Ptr=RepeatMesh_( TUtility.IsObject( mesh ), TUtility.IsObject( parent ) )
-	Local copy:TMesh=globals.mesh.NewMesh( instance )
-	Return copy
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a>
-End Rem
-Function RotateEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
-	RotateEntity_( TUtility.IsObject( ent ), -x, y, z, glob ) ' inverted pitch
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleEntity">Online doc</a>
-End Rem
-Function ScaleEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
-	ScaleEntity_( TUtility.IsObject( ent ), x, y, z, glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
-End Rem
-Function SetAnimTime( ent:TEntity, time:Float, seq:Int=0 )
-	If time<>0.0 Then SetAnimTime_( TUtility.IsObject( ent ), time, seq ) ' if zero crash fix
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilMesh( stencil:TStencil, mesh:TMesh, Mode:Int=1 )
-	StencilMesh_( TUtility.IsObject( stencil ), TUtility.IsObject( mesh ), Mode )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilMode( stencil:TStencil, m:Int, o:Int=1 )
-	StencilMode_( TUtility.IsObject( stencil ), m, o )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TranslateEntity">Online doc</a>
-End Rem
-Function TranslateEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
-	TranslateEntity_( TUtility.IsObject( ent ), x, y, z, glob )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TurnEntity">Online doc</a>
-End Rem
-Function TurnEntity( ent:TEntity, x:Float, y:Float, z:Float, glob:Int=False )
-	TurnEntity_( TUtility.IsObject( ent ), -x, y, z, glob ) ' inverted pitch
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a>
-End Rem
-Function UpdateWorld( anim_speed:Float=1 )
-	UpdateWorld_( anim_speed )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexColor">Online doc</a>
-End Rem
-Function VertexColor( surf:TSurface, vid:Int, r:Float, g:Float, b:Float, a:Float=1 )
-	VertexColor_( TUtility.IsObject( surf ), vid, r, g, b, a )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexTexCoords">Online doc</a>
-End Rem
-Function VertexTexCoords( surf:TSurface, vid:Int, u:Float, v:Float, w:Float=0, coord_set:Int=0 )
-	VertexTexCoords_( TUtility.IsObject( surf ), vid, u, v, w, coord_set )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexU">Online doc</a>
-End Rem
-Function VertexU:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
-	Return VertexU_( TUtility.IsObject( surf ), vid, coord_set )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexV">Online doc</a>
-End Rem
-Function VertexV:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
-	Return VertexV_( TUtility.IsObject( surf ), vid, coord_set )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexW">Online doc</a>
-End Rem
-Function VertexW:Float( surf:TSurface, vid:Int, coord_set:Int=0 )
-	Return VertexW_( TUtility.IsObject( surf ), vid, coord_set )
-End Function
-
-' ***extras***
-
-Rem
-bbdoc: undocumented
-End Rem
-Function EntityScaleX:Float( ent:TEntity, glob:Int=False )
-	Return EntityScaleX_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function EntityScaleY:Float( ent:TEntity, glob:Int=False )
-	Return EntityScaleY_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function EntityScaleZ:Float( ent:TEntity, glob:Int=False )
-	Return EntityScaleZ_( TUtility.IsObject( ent ), glob )
-End Function
-
-Rem
-bbdoc: Load a texture for 2D texture sampling.
-End Rem
-Function ShaderTexture( material:TShader, tex:TTexture, name:String, index:Int=0 )
-	Local cString:Byte Ptr=name.ToCString()
-	ShaderTexture_( TUtility.IsObject( material ), TUtility.IsObject( tex ), cString, index )
-	MemFree cString
 End Function
 
 Rem
@@ -1910,160 +2115,12 @@ Function OctreeMesh( octree:TOcTree, mesh:TMesh, level:Int, X:Float, Y:Float, Z:
 	OctreeMesh_( TUtility.IsObject( octree ), TUtility.IsObject( mesh ), level, X, Y, Z, Near, Far )
 End Function
 
-
-' Remaining functions (wrapped for docs)
-' --------------------------------------
-
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
+bbdoc: undocumented
 End Rem
-Function AmbientLight( r:Float, g:Float, b:Float )
-	AmbientLight_( r, g, b )
+Function CreateFluid:TFluid()
+	Local instance:Byte Ptr=CreateFluid_()
+	Local fluid:TFluid=globals.fluid.NewFluid( instance )
+	Return fluid
 End Function
 
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
-End Rem
-Function AntiAlias( samples:Int )
-	AntiAlias_( samples )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearCollisions">Online doc</a>
-End Rem
-Function ClearCollisions()
-	ClearCollisions_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearTextureFilters">Online doc</a>
-End Rem
-Function ClearTextureFilters()
-	ClearTextureFilters_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNX">Online doc</a>
-End Rem
-Function PickedNX:Float()
-	Return PickedNX_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNY">Online doc</a>
-End Rem
-Function PickedNY:Float()
-	Return PickedNY_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNZ">Online doc</a>
-End Rem
-Function PickedNZ:Float()
-	Return PickedNZ_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTime">Online doc</a>
-End Rem
-Function PickedTime:Float()
-	Return PickedTime_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTriangle">Online doc</a>
-End Rem
-Function PickedTriangle:Int()
-	Return PickedTriangle_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedX">Online doc</a>
-End Rem
-Function PickedX:Float()
-	Return PickedX_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedY">Online doc</a>
-End Rem
-Function PickedY:Float()
-	Return PickedY_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedZ">Online doc</a>
-End Rem
-Function PickedZ:Float()
-	Return PickedZ_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedX">Online doc</a>
-End Rem
-Function ProjectedX:Float()
-	Return ProjectedX_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedY">Online doc</a>
-End Rem
-Function ProjectedY:Float()
-	Return ProjectedY_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedZ">Online doc</a>
-End Rem
-Function ProjectedZ:Float()
-	Return ProjectedZ_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a>
-End Rem
-Function RenderWorld()
-	RenderWorld_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedX">Online doc</a>
-End Rem
-Function TFormedX:Float()
-	Return TFormedX_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedY">Online doc</a>
-End Rem
-Function TFormedY:Float()
-	Return TFormedY_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedZ">Online doc</a>
-End Rem
-Function TFormedZ:Float()
-	Return TFormedZ_()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorPitch">Online doc</a>
-End Rem
-Function VectorPitch:Float( vx:Float, vy:Float, vz:Float )
-	Return -VectorPitch_( vx, vy, vz ) ' inverted pitch
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorYaw">Online doc</a>
-End Rem
-Function VectorYaw:Float( vx:Float, vy:Float, vz:Float )
-	Return VectorYaw_( vx, vy, vz )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a>
-End Rem
-Function Wireframe( enable:Int )
-	Wireframe_( enable )
-End Function

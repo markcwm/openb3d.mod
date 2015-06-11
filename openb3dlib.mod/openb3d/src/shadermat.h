@@ -10,7 +10,6 @@
 
 #include <string>
 #include <sstream>
-#include <vector>
 
 class Surface;
 class Entity;
@@ -74,7 +73,7 @@ class Shader {//: public MaterialPlugin{
 	// internal 
 public:
 	static Shader* CreateShaderMaterial(string Name = "");
-	void TurnOn(Surface* surf, Matrix& mat);
+	void TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices=0);
 	void TurnOff();
 	void AddShader(string _vert, string _frag);
 	void AddShaderFromString(string _vert, string _frag);

@@ -107,14 +107,19 @@ Light* Light::CopyEntity(Entity* parent_ent){
 void Light::FreeEntity(){
 
 	Entity::FreeEntity();
-	
+
+	int erased=0;
+
 	for (int i=0; i<no_lights;i++){
 		glDisable(gl_light[i]);
-		if (light_list[i]==this)
+		if (!erased && light_list[i]==this){
 			light_list.erase(light_list.begin()+i);
+			erased=1;
+		}
 	}
-	
+
 	no_lights=no_lights-1;
+
 	
 	delete this;
 	
@@ -124,12 +129,12 @@ void Light::FreeEntity(){
 
 Light* Light::CreateLight(int l_type,Entity* parent_ent){
 
+	if(no_lights>=max_lights) return NULL; // no more lights available, return and don't create
+
 	Light* light=new Light;
 	light->light_type=l_type;
 	light->class_name="Light";
-		
-	if(no_lights>=max_lights) return NULL; // no more lights available, return and gc will collect create light
-		
+	
 	// no of lights increased, enable additional gl light
 	no_lights=no_lights+1;
 	glEnable(gl_light[no_lights-1]);

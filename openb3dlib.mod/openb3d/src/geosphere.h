@@ -13,7 +13,7 @@
 
 class Geosphere : public Terrain{
 private:
-	Matrix* tmat;
+	Matrix tmat;
 	float dradius;
 	float* NormalsMap;
 	//int* EqToToast;
@@ -33,7 +33,7 @@ public:
 
 	static Geosphere* CreateGeosphere(int tsize=0, Entity* parent_ent=NULL);
 	static Geosphere* LoadGeosphere(string filename,Entity* parent_ent=NULL);
-	Terrain* CopyEntity(Entity* parent_ent=NULL);
+	Geosphere* CopyEntity(Entity* parent_ent=NULL);
 	void FreeEntity(void);
 
 	//void TreeCheck(CollisionInfo* ci);

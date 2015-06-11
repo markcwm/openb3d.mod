@@ -21,7 +21,7 @@ const int ROAM_LMAX = 20; 		//<-----------terrain detail here
 
 class Terrain : public Entity{
 private:
-	Matrix* tmat;
+	Matrix tmat;
 	float dradius;
 	float* NormalsMap;
 	float xcf,ycf,zcf; 			//used to store camera position

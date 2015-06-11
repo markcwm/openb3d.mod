@@ -33,6 +33,4 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 
 ModuleInfo "History: 1.00 Initial Release"
 
-' Uncomment one of these for static or dynamic library
 Import "openb3dlib.bmx"
-'Import "openb3ddll.bmx"

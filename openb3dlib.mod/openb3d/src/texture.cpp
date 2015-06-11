@@ -16,10 +16,12 @@
 #include <GL/glext.h>
 #include <GL/glu.h>
 #endif
+
 #ifdef WIN32
-#include "GLee.h"
+#include <gl\GLee.h>
 #include <GL\glu.h>
 #endif
+
 #ifdef __APPLE__
 #include "GLee.h"
 #include <OpenGL/glu.h>
@@ -318,6 +320,7 @@ string Texture::Strip(string filename){
 	}
 
 	return stripped_filename;
+
 }
 
 // strips file info from filepath

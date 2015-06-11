@@ -7,9 +7,11 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 #endif
+
 #ifdef WIN32
-#include "GLee.h"
+#include <gl\GLee.h>
 #endif
+
 #ifdef __APPLE__
 #include "GLee.h"
 #endif
@@ -136,16 +138,25 @@ void ParticleBatch::Render(){
 
 	//Trails
 
-	for(int i=0;i<=surf->no_verts-1;i++){
-		surf->vert_col[i*4+3]*=.99;
-		surf->vert_coords[i*3]+=0;
-		surf->vert_coords[i*3+1]+=.1;
-		surf->vert_coords[i*3+2]+=0;
+	if (trail>1){
+		float r=(brush.red-2)/trail;
+		float g=(brush.green-2)/trail;
+		float b=(brush.blue-2)/trail;
+		float a=(brush.alpha-2)/trail;
+		for(int i=0;i<=surf->no_verts-1;i++){
+			surf->vert_col[i*4]+=r;
+			surf->vert_col[i*4+1]+=g;
+			surf->vert_col[i*4+2]+=b;
+			surf->vert_col[i*4+3]+=a;
+			surf->vert_coords[i*3]+=px;
+			surf->vert_coords[i*3+1]+=py;
+			surf->vert_coords[i*3+2]+=pz;
 
+		}
 	}
 
 
-int del_trail_points=surf->no_verts/1;//3000;
+	int del_trail_points=surf->no_verts/trail;
 
 	if (del_trail_points!=0){
 		surf->vert_tex_coords0.clear();

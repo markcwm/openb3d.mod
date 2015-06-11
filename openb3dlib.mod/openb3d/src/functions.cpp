@@ -11,7 +11,8 @@
 #include "voxel.h"
 #include "octree.h"
 #include "geosphere.h"
-#include "metaball.h"
+#include "isosurface.h"
+#include "particle.h"
 
 extern "C" {
 
@@ -435,6 +436,10 @@ Blob* CreateBlob(Fluid* fluid, float radius, Entity* parent_ent){
 	return Blob::CreateBlob(fluid, radius, parent_ent);
 }
 
+Bone* CreateBone(Mesh* mesh, Entity* parent_ent){
+	return mesh->CreateBone(parent_ent);
+}
+
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online Help</a>
 */
@@ -793,6 +798,18 @@ void FlipMesh(Mesh* mesh){
 	mesh->FlipMesh();
 }
 
+void FluidArray(Fluid* fluid, float* Array, int w, int h, int d){
+	fluid->FluidArray(Array, w, h, d);
+}
+
+void FluidFunction(Fluid* fluid, float (*FieldFunction)(float, float, float)){
+	fluid->FluidFunction(FieldFunction);
+}
+
+void FluidThreshold(Fluid* fluid, float threshold){
+	fluid->threshold=threshold;
+}
+
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online Help</a>
 */
@@ -823,7 +840,6 @@ void FreeTexture(Texture* tex){
 void GeosphereHeight(Geosphere* geo, float h){
 	geo->vsize=h;
 }
-
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online Help</a>
@@ -940,6 +956,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh"
 */
 Mesh* LoadAnimMesh(char* file,Entity* parent){
 	return Mesh::LoadAnimMesh(file,parent);
+}
+
+/*
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online Help</a>
+*/
+int LoadAnimSeq(Entity* ent, char* file){
+	return ent->LoadAnimSeq(file);
 }
 
 /*
@@ -1064,6 +1087,27 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface"
 void PaintSurface(Surface* surf,Brush* brush){
 	surf->PaintSurface(brush);
 }
+
+void ParticleColor(Sprite* sprite, float r, float g, float b, float a){
+	ParticleBatch* p=ParticleBatch::GetParticleBatch(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
+	p->brush.red=r/255.0+2;
+	p->brush.green=g/255.0+2;
+	p->brush.blue=b/255.0+2;
+	p->brush.alpha=a+2;
+}
+
+void ParticleVector(Sprite* sprite, float x, float y, float z){
+	ParticleBatch* p=ParticleBatch::GetParticleBatch(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
+	p->px=x;
+	p->py=y;
+	p->pz=z;
+}
+
+void ParticleTrail(Sprite* sprite,int length){
+	ParticleBatch* p=ParticleBatch::GetParticleBatch(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
+	p->trail=length;
+}
+
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedEntity">Online Help</a>
@@ -1264,6 +1308,13 @@ void ScaleTexture(Texture* tex,float u_scale,float v_scale){
 }
 
 /*
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online Help</a>
+*/
+void SetAnimKey(Entity* ent, float frame, int pos_key=true, int rot_key=true, int scale_key=true){
+	ent->SetAnimKey(frame, pos_key, rot_key, scale_key);
+}
+
+/*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online Help</a>
 */
 void SetAnimTime(Entity* ent,float time,int seq){
@@ -1274,12 +1325,19 @@ void SetAnimTime(Entity* ent,float time,int seq){
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online Help</a>
 */
 void SetCubeFace(Texture* tex,int face){
+
+
 	tex->cube_face=face;
 }
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeMode">Online Help</a>
 */
+
+
+
+
+
 void SetCubeMode(Texture* tex,int mode){
 	tex->cube_mode=mode;
 }
@@ -1290,6 +1348,11 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ShowEntity">O
 void ShowEntity(Entity* ent){
 	ent->ShowEntity();
 }
+
+void SkinMesh(Mesh* mesh, int surf_no_get, int vid, int bone1, float weight1=1.0, int bone2=0, float weight2=0, int bone3=0, float weight3=0, int bone4=0, float weight4=0){
+	mesh->SkinMesh(surf_no_get, vid, bone1, weight1, bone2, weight2, bone3, weight3, bone4, weight4);
+}
+
 
 void SpriteRenderMode(Sprite* sprite,int mode){
 	sprite->SpriteRenderMode(mode);
@@ -1943,14 +2006,6 @@ void SetParameter4D(Shader* material, char* name, double v1, double v2, double v
 
 /*
 Function LightMesh(mesh:TMesh,red#,green#,blue#,range#=0,light_x#=0,light_y#=0,light_z#=0)
-End Function
-Function MeshesIntersect(mesh1:TMesh,mesh2:TMesh)
-End Function
-Function CreatePlane(sub_divs=1,parent:TEntity=Null)
-End Function
-Function AlignToVector(vx:Float,vy:Float,vz:Float,axis,rate=1)
-End Function
-Function LoadAnimSeq(ent:TEntity,filename$)
 End Function
 Function SetAnimKey(ent:TEntity,frame,pos_key=True,rot_key=True,scale_key=True)
 End Function

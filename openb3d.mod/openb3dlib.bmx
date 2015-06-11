@@ -25,6 +25,7 @@ Import Brl.StandardIO
 Import Brl.Map
 Import Brl.Graphics
 Import angros.openb3dlib
+Import brl.retro
 
 ' Global declarations
 ' -------------------
@@ -92,6 +93,7 @@ Extern
 	Function CountTriangles_:Int( surf:Byte Ptr ) = "CountTriangles"
 	Function CountVertices_:Int( surf:Byte Ptr ) = "CountVertices"
 	Function CreateBlob_:Byte Ptr( fluid:Byte Ptr, radius:Float, parent_ent:Byte Ptr ) = "CreateBlob"
+	Function CreateBone_:Byte Ptr( mesh:Byte Ptr, parent_ent:Byte Ptr ) = "CreateBone"
 	Function CreateBrush_:Byte Ptr( r:Float, g:Float, b:Float ) = "CreateBrush"
 	Function CreateCamera_:Byte Ptr( parent:Byte Ptr ) = "CreateCamera"
 	Function CreateCone_:Byte Ptr( segments:Int, solid:Int, parent:Byte Ptr ) = "CreateCone"
@@ -145,6 +147,9 @@ Extern
 	Function FindSurface_:Byte Ptr( mesh:Byte Ptr, brush:Byte Ptr ) = "FindSurface"
 	Function FitMesh_( mesh:Byte Ptr, x:Float, y:Float, z:Float, width:Float, height:Float, depth:Float, uniform:Int ) = "FitMesh"
 	Function FlipMesh_( mesh:Byte Ptr ) = "FlipMesh"
+	Function FluidArray_( fluid:Byte Ptr, Array:Float Ptr, w:Int, h:Int, d:Int) = "FluidArray"
+	Function FluidFunction_( fluid:Byte Ptr, FieldFunction:Float( x:Float, y:Float, z:Float ) ) = "FluidFunction"
+	Function FluidThreshold_( fluid:Byte Ptr, threshold:Float ) = "FluidThreshold"
 	Function FreeBrush_( brush:Byte Ptr ) = "FreeBrush"
 	Function FreeEntity_( ent:Byte Ptr ) = "FreeEntity"
 	Function FreeShadow_( shad:Byte Ptr ) = "FreeShadow"
@@ -166,6 +171,7 @@ Extern
 	Function LightRange_( light:Byte Ptr, Range:Float ) = "LightRange"
 	Function LinePick_:Byte Ptr( x:Float, y:Float, z:Float, dx:Float, dy:Float, dz:Float, radius:Float ) = "LinePick"
 	Function LoadAnimMesh_:Byte Ptr( file:Byte Ptr, parent:Byte Ptr ) = "LoadAnimMesh"
+	Function LoadAnimSeq_:Int( ent:Byte Ptr, file:Byte Ptr ) = "LoadAnimSeq"
 	Function LoadAnimTexture_:Byte Ptr( file:Byte Ptr, flags:Int, frame_width:Int, frame_height:Int, first_frame:Int, frame_count:Int ) = "LoadAnimTexture"
 	Function LoadBrush_:Byte Ptr( file:Byte Ptr, flags:Int, u_scale:Float, v_scale:Float ) = "LoadBrush"
 	Function LoadGeosphere_:Byte Ptr( file:Byte Ptr, parent:Byte Ptr ) = "LoadGeosphere"
@@ -185,6 +191,9 @@ Extern
 	Function PaintEntity_( ent:Byte Ptr, brush:Byte Ptr ) = "PaintEntity"
 	Function PaintMesh_( mesh:Byte Ptr, brush:Byte Ptr ) = "PaintMesh"
 	Function PaintSurface_( surf:Byte Ptr, brush:Byte Ptr ) = "PaintSurface"
+	Function ParticleColor_( sprite:Byte Ptr, r:Float, g:Float, b:Float, a:Float ) = "ParticleColor"
+	Function ParticleVector_( sprite:Byte Ptr, x:Float, y:Float, z:Float ) = "ParticleVector"
+	Function ParticleTrail_( sprite:Byte Ptr, length:Int ) = "ParticleTrail"
 	Function PickedEntity_:Byte Ptr() = "PickedEntity"
 	Function PickedNX_:Float() = "PickedNX"
 	Function PickedNY_:Float() = "PickedNY"
@@ -213,6 +222,7 @@ Extern
 	Function ScaleMesh_( mesh:Byte Ptr, sx:Float, sy:Float, sz:Float ) = "ScaleMesh"
 	Function ScaleSprite_( sprite:Byte Ptr, s_x:Float, s_y:Float ) = "ScaleSprite"
 	Function ScaleTexture_( tex:Byte Ptr, u_scale:Float, v_scale:Float ) = "ScaleTexture"
+	Function SetAnimKey_( ent:Byte Ptr, frame:Float, pos_key:Int, rot_key:Int, scale_key:Int ) = "SetAnimKey"
 	Function SetAnimTime_( ent:Byte Ptr, time:Float, seq:Int ) = "SetAnimTime"
 	Function SetCubeFace_( tex:Byte Ptr, face:Int ) = "SetCubeFace"
 	Function SetCubeMode_( tex:Byte Ptr, Mode:Int ) = "SetCubeMode"

@@ -10,6 +10,7 @@
 #include "entity.h"
 #include "camera.h"
 #include "mesh.h"
+#include "model.h"
 #include "animation.h"
 #include "pick.h"
 #include "maths_helper.h"
@@ -64,8 +65,8 @@ void Entity::EntityParent(Entity* parent_ent,int glob){
 	float orgx=0.0f,orgy=0.0f,orgz=0.0f;
 	float orgw,orgh,orgd;
 	float neww,newh,newd;
-	Matrix* m1=0;
-	Matrix* m2;
+	Matrix m1;
+	Matrix m2;
 
 	//get global position/rotation
 	if (glob != 0) {
@@ -73,10 +74,10 @@ void Entity::EntityParent(Entity* parent_ent,int glob){
 		orgx = tformed_x;
 		orgy = tformed_y;
 		orgz = tformed_z;
-		m1 = MQ_GetMatrix(true);
-		m1->grid[3][0] = 0; //remove translation
-		m1->grid[3][1] = 0;
-		m1->grid[3][2] = 0;
+		MQ_GetMatrix(m1, true);
+		m1.grid[3][0] = 0; //remove translation
+		m1.grid[3][1] = 0;
+		m1.grid[3][2] = 0;
 		//get scaling
 		MQ_GetScaleXYZ(orgw,orgh,orgd);
 	}
@@ -105,19 +106,16 @@ void Entity::EntityParent(Entity* parent_ent,int glob){
 		pz = orgz;
 		//get parent inverted rotation matrix
 		if (parent_ent == 0) {
-			m2 = new Matrix; //no parent
-			m2->LoadIdentity();
+			m2.LoadIdentity(); //no parent
 		}else{
-			m2 = parent_ent->MQ_GetInvMatrix(true);
-			m2->grid[3][0] = 0; //remove translation
-			m2->grid[3][1] = 0;
-			m2->grid[3][2] = 0;
+			parent_ent->MQ_GetInvMatrix(m2, true);
+			m2.grid[3][0] = 0; //remove translation
+			m2.grid[3][1] = 0;
+			m2.grid[3][2] = 0;
 		}
 		//apply rotation matrix
-		m1->Multiply2(*m2);
-		rotmat.Overwrite(*m1);
-		delete m2;
-		delete m1;
+		m1.Multiply2(m2);
+		rotmat.Overwrite(m1);
 	}
 
 	if (parent_ent == 0) {
@@ -289,15 +287,14 @@ void Entity::RotateEntity(float x,float y,float z,int global){
 	if (global != 0) {
 		//get parent inverted rotation matrix
 		if (parent != 0) {
-			Matrix* m2;
-			m2 = parent->MQ_GetInvMatrix(true);
-			m2->grid[3][0] = 0; //remove translation
-			m2->grid[3][1] = 0;
-			m2->grid[3][2] = 0;
-			m2->Scale(parent->sx, parent->sy, parent->sz);
+			Matrix m2;
+			parent->MQ_GetInvMatrix(m2,true);
+			m2.grid[3][0] = 0; //remove translation
+			m2.grid[3][1] = 0;
+			m2.grid[3][2] = 0;
+			m2.Scale(parent->sx, parent->sy, parent->sz);
 			//apply rotation matrix
-			rotmat.Multiply2(*m2);
-			delete m2;
+			rotmat.Multiply2(m2);
 		}
 	}
 
@@ -357,9 +354,9 @@ float Entity::EntityPitch(int global){
 	if(global==false){
 		return rotmat.GetPitch();
 	}else{
-		Matrix* m=MQ_GetMatrix(false);
-		float f=m->GetPitch();
-		delete m;
+		Matrix m;
+		MQ_GetMatrix(m,false);
+		float f=m.GetPitch();
 		return f;
 	}
 }
@@ -368,9 +365,9 @@ float Entity::EntityYaw(int global){
 	if(global==false){
 		return rotmat.GetYaw();
 	}else{
-		Matrix* m=MQ_GetMatrix(false);
-		float f=m->GetYaw();
-		delete m;
+		Matrix m;
+		MQ_GetMatrix(m,false);
+		float f=m.GetYaw();
 		return f;
 	}
 }
@@ -379,9 +376,9 @@ float Entity::EntityRoll(int global){
 	if(global==false){
 		return rotmat.GetRoll();
 	}else{
-		Matrix* m=MQ_GetMatrix(false);
-		float f=m->GetRoll();
-		delete m;
+		Matrix m;
+		MQ_GetMatrix(m,false);
+		float f=m.GetRoll();
 		return f;
 	}
 }
@@ -731,6 +728,175 @@ int Entity::ExtractAnimSeq(int first_frame,int last_frame,int seq){
 
 }
 
+int Entity::LoadAnimSeq(string filename){
+	// mesh that we will load anim seq from
+	Mesh* mesh=LoadAnimB3D(filename);
+	if (anim==false || mesh->anim==false){	//' mesh or self contains no anim data
+		mesh->FreeEntity();
+		return 0; 
+	}
+	no_seqs=no_seqs+1;
+
+	// expand anim_seqs array
+	anim_seqs_first.push_back(0);
+	anim_seqs_last.push_back(0);
+
+	// update anim_seqs array
+	anim_seqs_first[no_seqs]=anim_seqs_last[0];
+	anim_seqs_last[no_seqs]=anim_seqs_last[0]+mesh->anim_seqs_last[0];
+
+	// update anim_seqs_last[0] - sequence 0 is for all frames, so this needs to be increased
+	// must be done after updating anim_seqs array above
+	anim_seqs_last[0]=anim_seqs_last[0]+mesh->anim_seqs_last[0];
+
+	if (mesh){
+		// go through all bones belonging to self
+
+		vector<Bone*>::iterator it;
+
+		Mesh* m1=dynamic_cast<Mesh*>(this);
+		for(it=m1->bones.begin();it!=m1->bones.end();it++){
+
+			Bone& bone=**it;
+
+			// find bone in mesh that matches bone in self - search based on bone name
+			Bone* mesh_bone=dynamic_cast<Bone*>(mesh->FindChild(bone.name));
+
+			if (mesh_bone){
+				// resize self arrays first so the one empty element at the end is removed
+				bone.keys->flags.pop_back();
+				bone.keys->px.pop_back();
+				bone.keys->py.pop_back();
+				bone.keys->pz.pop_back();
+				bone.keys->sx.pop_back();
+				bone.keys->sy.pop_back();
+				bone.keys->sz.pop_back();
+				bone.keys->qw.pop_back();
+				bone.keys->qx.pop_back();
+				bone.keys->qy.pop_back();
+				bone.keys->qz.pop_back();
+
+				// add mesh bone key arrays to self bone key arrays
+				bone.keys->frames=anim_seqs_last[0];
+				bone.keys->flags.insert(bone.keys->flags.end(),mesh_bone->keys->flags.begin(),mesh_bone->keys->flags.end());
+				bone.keys->px.insert(bone.keys->px.end(), mesh_bone->keys->px.begin(), mesh_bone->keys->px.end());
+				bone.keys->py.insert(bone.keys->py.end(), mesh_bone->keys->py.begin(), mesh_bone->keys->py.end());
+				bone.keys->pz.insert(bone.keys->pz.end(), mesh_bone->keys->pz.begin(), mesh_bone->keys->pz.end());
+				bone.keys->sx.insert(bone.keys->sx.end(), mesh_bone->keys->sx.begin(), mesh_bone->keys->sx.end());
+				bone.keys->sy.insert(bone.keys->sy.end(), mesh_bone->keys->sy.begin(), mesh_bone->keys->sy.end());
+				bone.keys->sz.insert(bone.keys->sz.end(), mesh_bone->keys->sz.begin(), mesh_bone->keys->sz.end());
+				bone.keys->qw.insert(bone.keys->qw.end(), mesh_bone->keys->qw.begin(), mesh_bone->keys->qw.end());
+				bone.keys->qx.insert(bone.keys->qx.end(), mesh_bone->keys->qx.begin(), mesh_bone->keys->qx.end());
+				bone.keys->qy.insert(bone.keys->qy.end(), mesh_bone->keys->qy.begin(), mesh_bone->keys->qy.end());
+				bone.keys->qz.insert(bone.keys->qz.end(), mesh_bone->keys->qz.begin(), mesh_bone->keys->qz.end());
+			}
+		}
+	}
+	mesh->FreeEntity();
+	return no_seqs;
+}
+
+void Entity::SetAnimKey(float frame, int pos_key, int rot_key, int scale_key){
+	if(dynamic_cast<Mesh*>(this)){
+		if (anim==1){			//Bone based animation
+
+			Mesh* mesh=dynamic_cast<Mesh*>(this);
+			vector<Bone*>::iterator it;
+
+			int iframe=frame;
+
+			for(it=mesh->bones.begin();it!=mesh->bones.end();it++){
+
+				Bone& bone=**it;
+				bone.keys->flags[iframe]=0;
+
+				if (rot_key){
+					bone.keys->flags[iframe] |= 4;
+					float q1_x, q1_y, q1_z, q1_w;
+					bone.rotmat.ToQuat(q1_x, q1_y, q1_z, q1_w);
+					bone.keys->qw[iframe]=-q1_w;
+					bone.keys->qx[iframe]=q1_x;
+					bone.keys->qy[iframe]=q1_y;
+					bone.keys->qz[iframe]=q1_z;
+				}
+
+				if (pos_key){
+					bone.keys->flags[iframe] |= 1;
+					bone.keys->px[iframe]=bone.px;
+					bone.keys->py[iframe]=bone.py;
+					bone.keys->pz[iframe]=-bone.pz;
+				}
+
+				if (scale_key){
+					bone.keys->flags[iframe] |= 2;
+					bone.keys->sx[iframe]=bone.sx;
+					bone.keys->sy[iframe]=bone.sy;
+					bone.keys->sz[iframe]=bone.sz;
+				}
+			}
+
+
+
+		}
+		else if (anim==2){		//Vertex based animation
+
+			Mesh* mesh=dynamic_cast<Mesh*>(this);
+
+			list<Surface*>::iterator surf_it;
+			surf_it=mesh->surf_list.begin();
+
+			list<Surface*>::iterator anim_surf_it;
+
+
+			// cycle through all surfs
+			for(anim_surf_it=mesh->anim_surf_list.begin();anim_surf_it!=mesh->anim_surf_list.end();anim_surf_it++){
+
+				Surface& anim_surf=**anim_surf_it;
+
+				Surface& surf=**surf_it;
+
+				unsigned int t=anim_surf.vert_weight4.size();
+
+				for(unsigned int i=0;i<=anim_surf.vert_weight4.size();i++){
+					if (anim_surf.vert_weight4[i]>=frame){
+						t=i;
+						break;
+					}
+				}
+				anim_surf.vert_weight4.insert(anim_surf.vert_weight4.begin()+t, frame);
+
+				t*=anim_surf.no_verts*3;
+
+				for(int i=0;i<anim_surf.no_verts;i++){
+					float x=surf.vert_coords[i*3];
+					float y=surf.vert_coords[i*3+1];
+					float z=surf.vert_coords[i*3+2];
+					if (pos_key){
+						x+=px;
+						y+=py;
+						z-=pz;
+					}
+					if (scale_key){
+						x*=sx;
+						y*=sy;
+						z*=sz;
+					}
+					if (rot_key){
+						rotmat.TransformVec(x,y,z);
+					}
+					surf.vert_coords.insert(surf.vert_coords.begin()+i*3+t, x);
+					surf.vert_coords.insert(surf.vert_coords.begin()+i*3+1+t, y);
+					surf.vert_coords.insert(surf.vert_coords.begin()+i*3+2+t, z);
+
+				}
+				surf_it++;
+
+			}
+		}
+	}
+
+}
+
 int Entity::AddAnimSeq(int length){
 
 	if (anim==false){
@@ -742,12 +908,8 @@ int Entity::AddAnimSeq(int length){
 			anim_render=true;
 
 			//mesh->frames=a_frames
-			anim_seqs_first.push_back(0);
-			anim_seqs_last.push_back(0);
-
 			anim_seqs_first[0]=0;
 			anim_seqs_last[0]=length;
-			no_seqs=1;
 
 			// create anim surfs, copy vertex coords array, add to anim_surf_list
 
@@ -762,16 +924,22 @@ int Entity::AddAnimSeq(int length){
 				mesh->anim_surf_list.push_back(anim_surf);
 				anim_surf->no_verts=surf.no_verts;
 
+				//First frame
 				anim_surf->vert_coords=surf.vert_coords;
+				anim_surf->vert_weight4.push_back(0);
 
-				anim_surf->vert_bone1_no.resize(surf.no_verts+1);
+				//Last frame
+				surf.vert_coords.insert(surf.vert_coords.end(), anim_surf->vert_coords.begin(),anim_surf->vert_coords.end());
+				anim_surf->vert_weight4.push_back(length);
+
+				/*anim_surf->vert_bone1_no.resize(surf.no_verts+1);
 				anim_surf->vert_bone2_no.resize(surf.no_verts+1);
 				anim_surf->vert_bone3_no.resize(surf.no_verts+1);
 				anim_surf->vert_bone4_no.resize(surf.no_verts+1);
 				anim_surf->vert_weight1.resize(surf.no_verts+1);
 				anim_surf->vert_weight2.resize(surf.no_verts+1);
 				anim_surf->vert_weight3.resize(surf.no_verts+1);
-				anim_surf->vert_weight4.resize(surf.no_verts+1);
+				anim_surf->vert_weight4.resize(surf.no_verts+1);*/
 
 				// transfer vmin/vmax values for using with TrimVerts func after
 				anim_surf->vmin=surf.vmin;
@@ -783,11 +951,46 @@ int Entity::AddAnimSeq(int length){
 		no_seqs=no_seqs+1;
 
 		// expand anim_seqs array
-		anim_seqs_first.push_back(0);
-		anim_seqs_last.push_back(0);
+		anim_seqs_first.push_back(anim_seqs_last[0]);
+		anim_seqs_last.push_back(anim_seqs_last[0]+length);
 
-		anim_seqs_first[no_seqs]=anim_seqs_last[no_seqs-1];
-		anim_seqs_last[no_seqs]=anim_seqs_last[no_seqs-1]+length;
+		anim_seqs_last[0]=anim_seqs_last[0]+length;
+
+		if (anim==1){			//Bone based animation
+			Mesh* mesh=dynamic_cast<Mesh*>(this);
+			vector<Bone*>::iterator it;
+
+			for(it=mesh->bones.begin();it!=mesh->bones.end();it++){
+
+				Bone& bone=**it;
+				bone.keys->frames=anim_seqs_last[0];;
+				bone.keys->flags.resize(anim_seqs_last[0]+1);
+				bone.keys->px.resize(anim_seqs_last[0]+1);
+				bone.keys->py.resize(anim_seqs_last[0]+1);
+				bone.keys->pz.resize(anim_seqs_last[0]+1);
+				bone.keys->sx.resize(anim_seqs_last[0]+1);
+				bone.keys->sy.resize(anim_seqs_last[0]+1);
+				bone.keys->sz.resize(anim_seqs_last[0]+1);
+				bone.keys->qw.resize(anim_seqs_last[0]+1);
+				bone.keys->qx.resize(anim_seqs_last[0]+1);
+				bone.keys->qy.resize(anim_seqs_last[0]+1);
+				bone.keys->qz.resize(anim_seqs_last[0]+1);
+
+
+			}
+
+		}else if (anim==2){		//Vertex based animation
+
+			Mesh* mesh=dynamic_cast<Mesh*>(this);
+			list<Surface*>::iterator it;
+
+			for(it=mesh->anim_surf_list.begin();it!=mesh->anim_surf_list.end();it++){
+				Surface& anim_surf=**it;
+
+				anim_surf.vert_weight4.back()=anim_seqs_last[0];
+			}
+		}
+
 	}
 	return no_seqs;
 }
@@ -992,7 +1195,7 @@ void Entity::AlignToVector(float x,float y,float z, int axis=3, float rate=1){
 	if (axis<1 || axis>3)
 	  return;
 
-	Matrix* m=new Matrix;
+	Matrix m;
 
 	//normalize
 	float dd = sqrt( x*x + y*y + z*z );
@@ -1013,37 +1216,36 @@ void Entity::AlignToVector(float x,float y,float z, int axis=3, float rate=1){
 	az =  TFormedZ();
 
  	//get transformation matrix from org. axis to new one
-	m->FromToRotation(ax,ay,-az, x,y,-z);
+	m.FromToRotation(ax,ay,-az, x,y,-z);
 
 	//interpolate
 	if (rate < 1.0){
-		m = InterpolateMatrix(m, rate);
+		InterpolateMatrix(m, m, rate);
 	}
 
      //apply matrix
-	this->rotmat.Multiply2(*m);
+	this->rotmat.Multiply2(m);
 	this->MQ_Update();
 
-	delete m;
 
 }
 
 
 // tform
 void Entity::TFormPoint(float x,float y,float z,Entity* src_ent,Entity* dest_ent){
-	Matrix* mat1=0;
-	Matrix* mat2=0;
+	Matrix mat1;
+	Matrix mat2;
 
 	if(src_ent != 0){
-		mat1 = src_ent->MQ_GetMatrix(true);
+		src_ent->MQ_GetMatrix(mat1, true);
 	}
 
 	if(dest_ent != 0){
-		mat2 = dest_ent->MQ_GetInvMatrix(true);
+		dest_ent->MQ_GetInvMatrix(mat2, true);
 	}
 
-	if (dest_ent != 0) {mat2->TransformVec(x, y, z, 1);delete mat2;}//global to mesh
-	if (src_ent  != 0) {mat1->TransformVec(x, y, z, 1);delete mat1;}//mesh to global
+	if (dest_ent != 0) {mat2.TransformVec(x, y, z, 1);}//global to mesh
+	if (src_ent  != 0) {mat1.TransformVec(x, y, z, 1);}//mesh to global
 
 	tformed_x=x;
 	tformed_y=y;
@@ -1053,28 +1255,28 @@ void Entity::TFormPoint(float x,float y,float z,Entity* src_ent,Entity* dest_ent
 
 void Entity::TFormVector(float x,float y,float z,Entity* src_ent,Entity* dest_ent){
 
-	Matrix* mat1=0;
-	Matrix* mat2=0;
+	Matrix mat1;
+	Matrix mat2;
 
 	//get src matrix
 	if(src_ent != 0){
-		mat1 = src_ent->MQ_GetMatrix(true);
-		mat1->grid[3][0] = 0; //remove translation
-		mat1->grid[3][1] = 0;
-		mat1->grid[3][2] = 0;
+		src_ent->MQ_GetMatrix(mat1, true);
+		mat1.grid[3][0] = 0; //remove translation
+		mat1.grid[3][1] = 0;
+		mat1.grid[3][2] = 0;
 	}
 
 	//get dest matrix
 	if(dest_ent != 0){
-		mat2 = dest_ent->MQ_GetInvMatrix(true);
-		mat2->grid[3][0] = 0; //remove translation
-		mat2->grid[3][1] = 0;
-		mat2->grid[3][2] = 0;
+		dest_ent->MQ_GetInvMatrix(mat2, true);
+		mat2.grid[3][0] = 0; //remove translation
+		mat2.grid[3][1] = 0;
+		mat2.grid[3][2] = 0;
 	}
 
 	//transform point by matrix
-	if (dest_ent != 0) {mat2->TransformVec(x, y, z, 1);delete mat2;}//global to mesh
-	if (src_ent  != 0) {mat1->TransformVec(x, y, z, 1);delete mat1;}//mesh to global
+	if (dest_ent != 0) {mat2.TransformVec(x, y, z, 1);}//global to mesh
+	if (src_ent  != 0) {mat1.TransformVec(x, y, z, 1);}//mesh to global
 
 	tformed_x=x;
 	tformed_y=y;
@@ -1136,26 +1338,24 @@ float Entity::EntityDistanceSquared(Entity* ent2){
 	return xd*xd + yd*yd + zd*zd;
 }
 
-Matrix* Entity::MQ_GetInvMatrix(int scale=true){
+void Entity::MQ_GetInvMatrix(Matrix &mat0, int scale=true){
 	Matrix mat3;
 	mat3.LoadIdentity();
 	Matrix mat2;
 	mat2.LoadIdentity();
-	Matrix* mat1;
-	Matrix* mat0;
+	Matrix mat1;
 
 	if (parent != 0) {
 		//transform by parent matrix
-		mat0 = parent->MQ_GetInvMatrix(scale);
+		parent->MQ_GetInvMatrix(mat0, scale);
 	}else{
-		mat0 = new Matrix;
-		mat0->LoadIdentity();
+		mat0.LoadIdentity();
 	}
 
 
 	//get inverted rotation matrix
-	mat1 = rotmat.Copy();
-	mat1->Transpose();
+	mat1.Overwrite(rotmat);
+	mat1.Transpose();
 
 	//scale
 	if (scale!=0) {if (sx != 0 && sy != 0 && sz != 0) {mat3.Scale(1 / sx, 1 / sy, 1 / sz);}}
@@ -1163,41 +1363,38 @@ Matrix* Entity::MQ_GetInvMatrix(int scale=true){
 	mat2.SetTranslate(-px,-py, pz);
 
 	//combine
-	mat1->Multiply2(mat3);
-	mat2.Multiply2(*mat1);
-	mat0->Multiply2(mat2);
+	mat1.Multiply2(mat3);
+	mat2.Multiply2(mat1);
+	mat0.Multiply2(mat2);
 
-	delete mat1;
-	return mat0;
+	return;
 }
 
-Matrix* Entity::MQ_GetMatrix(int scale=true){
-	Matrix* mat3 = new Matrix;
-	mat3->LoadIdentity();
+void Entity::MQ_GetMatrix(Matrix &mat3, int scale=true){
+	mat3.LoadIdentity();
 	Matrix mat2;
 	mat2.LoadIdentity();
-	Matrix* mat1;
+	Matrix mat1;
 	//float ipz;
 
 	//scale
-	if (scale!=0) {mat3->Scale(sx, sy, sz);}
+	if (scale!=0) {mat3.Scale(sx, sy, sz);}
 	//position
 	mat2.SetTranslate(px, py, -pz);
 	//rotation
-	mat1 = rotmat.Copy();
+	mat1.Overwrite(rotmat);
 
-	mat3->Multiply2(*mat1);
-	mat3->Multiply2(mat2);
+	mat3.Multiply2(mat1);
+	mat3.Multiply2(mat2);
 
 	if (parent != 0) {
 		//transform by parent matrix
-		Matrix* m=parent->MQ_GetMatrix(scale);
-		mat3->Multiply2(*m);
-		delete m;
+		Matrix m;
+		parent->MQ_GetMatrix(m, scale);
+		mat3.Multiply2(m);
 	}
 
-	delete mat1;
-	return mat3;
+	return;
 
 }
 
@@ -1216,35 +1413,31 @@ void Entity::MQ_Turn( float ang, float vx, float vy, float vz, int glob ){
 }
 
 void Entity::MQ_GetScaleXYZ(float &width, float &height, float &depth, int glob){
-	Matrix* m;
+	Matrix m;
 
 	if (glob != 0){
-		m = MQ_GetMatrix();
+		MQ_GetMatrix(m);
 	}else{
-		m = new Matrix;
-		m->LoadIdentity();
-		m->Scale(sx, sy, sz);
+		m.LoadIdentity();
+		m.Scale(sx, sy, sz);
 	}
 
 	float xx=1,xy=0,xz=0;
 	float yx=0,yy=1,yz=0;
 	float zx=0,zy=0,zz=1;
 
-	m->TransformVec(xx,xy,xz);
-	m->TransformVec(yx,yy,yz);
-	m->TransformVec(zx,zy,zz);
+	m.TransformVec(xx,xy,xz);
+	m.TransformVec(yx,yy,yz);
+	m.TransformVec(zx,zy,zz);
 
 	width  = sqrt((xx*xx)+(xy*xy)+(xz*xz));
 	height = sqrt((yx*yx)+(yy*yy)+(yz*yz));
 	depth  = sqrt((zx*zx)+(zy*zy)+(zz*zz));
 
-	delete m;
 }
 
 void Entity::MQ_Update(){
-	Matrix* m=MQ_GetMatrix(true);
-	mat.Overwrite(*m);
-	delete m;
+	MQ_GetMatrix(mat, true);
 
 	//update child_list
 	list<Entity*>::iterator it;

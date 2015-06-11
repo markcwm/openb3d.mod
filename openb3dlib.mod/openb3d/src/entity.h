@@ -62,7 +62,7 @@ public:
 	static list<Entity*> animate_list;
 	int anim; // true if mesh contains anim data
 	int anim_render; // true to render as anim mesh
-	float anim_mode;
+	int anim_mode;
 	float anim_time;
 	float anim_speed;
 	int anim_seq;
@@ -167,6 +167,8 @@ public:
 											
 	}
 	
+	//virtual ~Entity(){};		//Actually not needed, since no class derived from Entity has a destructor
+
 	virtual Entity* CopyEntity(Entity* ent)=0;
 	virtual void FreeEntity(void);
 	// relations
@@ -223,6 +225,8 @@ public:
 	int AnimLength();
 	float AnimTime();
 	int ExtractAnimSeq(int first_frame,int last_frame,int seq=0);
+	int LoadAnimSeq(string filename);
+	void SetAnimKey(float frame, int pos_key=true, int rot_key=true, int scale_key=true);
 	int AddAnimSeq(int length);
 	// collisions
 	void EntityType(int type_no,int recursive=false);
@@ -263,8 +267,8 @@ public:
 	float EntityDistanceSquared(Entity* ent2);	
 	// Quaternions
 	void MQ_Update();
-	Matrix* MQ_GetMatrix(int scale);
-	Matrix* MQ_GetInvMatrix(int scale);
+	void MQ_GetInvMatrix(Matrix &mat0, int scale);
+	void MQ_GetMatrix(Matrix &mat3, int scale);
 	void MQ_GetScaleXYZ(float &width, float &height, float &depth, int glob=true);
 	void MQ_Turn( float ang, float vx, float vy, float vz, int glob=false);
 	// virtual

@@ -1,5 +1,6 @@
 ;
 #include <map>
+#include <vector>
 
 
 
@@ -83,6 +84,7 @@ class ProgramObject{
 	//-------------------------------------------------------------------------------------
 	//  Array Parameter
 	void SetParameterArray(string name, Surface* surf, int vbo);
+	void SetParameterArray(string name, vector<float>* vertices, int vbo);
 
 	//-------------------------------------------------------------------------------------
 	// Float Parameter

@@ -19,7 +19,7 @@ string Left(string s,int length){
 
 }
 
-string Right(string s,int length){
+string Right(string s,unsigned int length){
 
 	if (length > s.size()) return ""; // SK: fix out of bounds.
 	return s.substr(s.length()-length);

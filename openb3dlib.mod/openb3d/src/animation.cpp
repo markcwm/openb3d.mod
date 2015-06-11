@@ -207,7 +207,7 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 		}
 		no_keys=false;
 
-		// store current keyframe for use with transtions
+		// store current keyframe for use with transitions
 		bent.kx=px3;
 		bent.ky=py3;
 		bent.kz=pz3;
@@ -286,7 +286,7 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 		}
 		no_keys=false;
 
-		// store current keyframe for use with transtions
+		// store current keyframe for use with transitions
 		bent.kqw=w3;
 		bent.kqx=x3;
 		bent.kqy=y3;
@@ -330,10 +330,10 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 		// set mat2 - does not include root parent transformation
 		// mat2 is used to store local bone positions, and is needed for vertex deform
 		if(dynamic_cast<Bone*>(bent.parent)!=NULL){
-			Matrix* new_mat=dynamic_cast<Bone*>(bent.parent)->mat2.Copy();
-			new_mat->Multiply(bent.mat2);
-			bent.mat2.Overwrite(*new_mat);
-			delete new_mat;
+			Matrix new_mat;
+			new_mat.Overwrite(dynamic_cast<Bone*>(bent.parent)->mat2);
+			new_mat.Multiply(bent.mat2);
+			bent.mat2.Overwrite(new_mat);
 		}
 
 		// set tform mat
@@ -361,7 +361,57 @@ void Animation::AnimateMesh2(Mesh* ent1,float framef,int start_frame,int end_fra
 
 	//if(dynamic_cast<Mesh*>(ent1)!=NULL){
 
-	if(ent1->anim!=1) return; // mesh contains no anim data
+	if(ent1->anim!=1) {			//Not a bone based animation
+
+		if(ent1->anim==2) { 
+			//Vertex deform animation
+			ent1->anim_render=true;
+
+			list<Surface*>::iterator surf_it;
+			surf_it=ent1->surf_list.begin();
+
+			list<Surface*>::iterator anim_surf_it;
+
+
+			// cycle through all surfs
+			for(anim_surf_it=ent1->anim_surf_list.begin();anim_surf_it!=ent1->anim_surf_list.end();anim_surf_it++){
+
+				Surface& anim_surf=**anim_surf_it;
+
+				Surface& surf=**surf_it;
+
+				anim_surf.reset_vbo=anim_surf.reset_vbo|1;
+
+				int t0=0;
+				for(unsigned int i=0;i<=anim_surf.vert_weight4.size();i++){
+					if (anim_surf.vert_weight4[i]>=start_frame){
+						t0=i;
+						break;
+					}
+				}
+
+
+				t0*=anim_surf.no_verts*3;
+
+				float m0=1.0/ent1->anim_trans;
+				float m1=1.0-m0;
+
+				for(int i=0;i<=anim_surf.no_verts*3;i++){
+					anim_surf.vert_coords[i]=surf.vert_coords[i+t0]*m0+anim_surf.vert_coords[i]*m1;
+
+				}
+
+
+
+
+				surf_it++;
+
+			}
+			
+		}
+		return;
+
+	}
 
 		ent1->anim_render=true;
 
@@ -533,10 +583,10 @@ void Animation::AnimateMesh2(Mesh* ent1,float framef,int start_frame,int end_fra
 			// set mat2 - does not include root parent transformation
 			// mat2 is used to store local bone positions, and is needed for vertex deform
 			if(dynamic_cast<Bone*>(bent.parent)!=NULL){
-				Matrix* new_mat=dynamic_cast<Bone*>(bent.parent)->mat2.Copy();
-				new_mat->Multiply(bent.mat2);
-				bent.mat2.Overwrite(*new_mat);
-				delete new_mat;
+				Matrix new_mat;
+				new_mat.Overwrite(dynamic_cast<Bone*>(bent.parent)->mat2);
+				new_mat.Multiply(bent.mat2);
+				bent.mat2.Overwrite(new_mat);
 			}
 
 			// set tform mat
@@ -573,14 +623,32 @@ void Animation::AnimateMesh3(Mesh* ent1){
 			Bone& bent=**it;
 
 			// set mat2 to equal mat
-			bent.mat2.Overwrite(bent.mat);
+			bent.mat2.Overwrite(bent.rotmat);
 
-			bent.mat2.grid[3][0]-=ent1->mat.grid[3][0];
-			bent.mat2.grid[3][1]-=ent1->mat.grid[3][1];
-			bent.mat2.grid[3][2]-=ent1->mat.grid[3][2];
+			bent.mat2.grid[3][0]=bent.px;
+			bent.mat2.grid[3][1]=bent.py;
+			bent.mat2.grid[3][2]=-bent.pz;
+
+			// store current keyframe for use with transitions
+
+			bent.rotmat.ToQuat(bent.kqx, bent.kqy, bent.kqz, bent.kqw);
+			bent.kqw=-bent.kqw;
+
+			bent.kx=bent.px;
+			bent.ky=bent.py;
+			bent.kz=-bent.pz;
+
+
 
 
 			// mat2 is used to store local bone positions, and is needed for vertex deform
+			if(dynamic_cast<Bone*>(bent.parent)!=NULL){
+				Matrix new_mat;
+				new_mat.Overwrite(dynamic_cast<Bone*>(bent.parent)->mat2);
+				new_mat.Multiply(bent.mat2);
+				bent.mat2.Overwrite(new_mat);
+			}
+
 
 			// set tform mat
 			// A tform mat is needed to transform vertices, and is basically the bone mat multiplied by the inverse reference pose mat

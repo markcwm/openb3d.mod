@@ -186,19 +186,25 @@ Mesh* LoadMD2(string filename,Entity* parent_ent){
 	Surface* surf = mesh->CreateSurface();
 
 	int skinwidth=Stream->ReadInt(); int skinheight=Stream->ReadInt();
-	int framesize=Stream->ReadInt();
-	int num_skins=Stream->ReadInt();
+	//int framesize=
+	Stream->ReadInt();
+	//int num_skins=
+	Stream->ReadInt();
 	int num_vertices=Stream->ReadInt();
 	int num_st=Stream->ReadInt();
 	int num_tris=Stream->ReadInt();
-	int num_glcmds=Stream->ReadInt();
+	//int num_glcmds=
+	Stream->ReadInt();
 	int num_frames=Stream->ReadInt();
-	int offset_skins=Stream->ReadInt();
+	//int offset_skins=
+	Stream->ReadInt();
 	int offset_st=Stream->ReadInt();
 	int offset_tris=Stream->ReadInt();
 	int offset_frames=Stream->ReadInt();
-	int offset_glcmds=Stream->ReadInt();
-	int offset_end=Stream->ReadInt();
+	//int offset_glcmds=
+	Stream->ReadInt();
+	//int offset_end=
+	Stream->ReadInt();
 	//string skin[num_skins];
 	float* st=new float[num_st*2];
 	surf->vert_tex_coords0.reserve(num_vertices*2);

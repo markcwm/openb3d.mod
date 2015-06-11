@@ -102,9 +102,7 @@ public:
 
 	}
 
-	Matrix Inverse(){
-
-		Matrix mat;
+	Matrix GetInverse(Matrix &mat){
 
 		float tx=0;
 		float ty=0;
@@ -607,6 +605,6 @@ public:
 
 void Quaternion_FromAngleAxis( float angle, float ax, float ay, float az, float &rx, float &ry, float &rz, float &rw);
 void Quaternion_MultiplyQuat( float x1, float y1, float z1, float w1, float x2, float y2, float z2, float w2, float &rx, float &ry, float &rz, float &rw );
-Matrix* InterpolateMatrix(Matrix* a, float alpha);
+void InterpolateMatrix(Matrix &m, Matrix &a, float alpha);
 #endif
 

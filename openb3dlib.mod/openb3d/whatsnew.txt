@@ -1,3 +1,17 @@
+V1.0
+Added:
+-LoadAnimSeq 
+-SetAnimKey: it's now possible to create custom animation (both vertex morphing and skeletal-based animations are supported)
+-CreateBone: create a new bone
+-SkinMesh: used to attach a bone to a mesh: surface and mode must be provided as integers, not as handles (the first bone is 1, not the number returned by CreateBone)
+-Isosurfaces (created by CreateFluid) can be built using arrays (FluidArray), or by using custom functions
+-Particle system: with SpriteRenderMode ..,3 sprites are rendered as particles: they are much faster than normal sprites, and can have a trail: trail length can be set with ParticleTrail, and it can move toward a direction with ParticleVector (useful for fire/smoke effects); also, ParticleColor can be used to set the fading color.
+
+Fixed
+-Transitional animations now works with MD2 animations, and with manual mode skeletal animations.
+-Vertex shaders can be used on terrains and geospheres: compiling for GLES2 should be easier
+-bug in AddMesh: textures sometimes were changed.
+
 V0.9
 Added:
 -Metaballs (CreateFluid and CreateBlob)

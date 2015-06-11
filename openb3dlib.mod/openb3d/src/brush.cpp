@@ -155,7 +155,7 @@ int Brush::CompareBrushes(Brush* brush1,Brush* brush2){
 			if(brush1->tex[i]==NULL && brush2->tex[i]!=NULL) return false;
 			if(brush1->tex[i]!=NULL && brush2->tex[i]==NULL) return false;
 			if(brush1->tex[i]!=NULL && brush2->tex[i]!=NULL){
-				//if(brush1->tex[i]->texture!=brush2->tex[i]->texture) return false;
+				if(brush1->tex[i]->texture!=brush2->tex[i]->texture) return false;
 				if(brush1->tex[i]->blend!=brush2->tex[i]->blend) return false;
 				if(brush1->tex[i]->coords!=brush2->tex[i]->coords) return false;
 			}

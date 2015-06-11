@@ -24,22 +24,25 @@ public:
 
 	static list<ParticleBatch*> particle_batch_list;
 
+	int trail;
+
 	void Render();
 
 	
 	ParticleBatch(){
 		no_surfs=1;
-		no_bones=0;
 		
 		c_col_tree=NULL;
 		reset_col_tree=0;
 		
 		reset_bounds=true;
+
+		trail=1;
 		
 		min_x=-999999999;;min_y=-999999999;;min_z=-999999999;;max_x=999999999;;max_y=999999999;;max_z=999999999;;
 	};
 	
-	static Surface* GetParticleBatchSurface(Texture* tex,int blend,int order){
+	static ParticleBatch* GetParticleBatch(Texture* tex,int blend,int order){
 	
 		ParticleBatch* particle_batch=NULL;
 	
@@ -48,7 +51,7 @@ public:
 		for(it=particle_batch_list.begin();it!=particle_batch_list.end();it++){
 			particle_batch=*it;
 			if(particle_batch->brush.tex[0]==tex && particle_batch->brush.blend==blend && particle_batch->order==order){
-				return *particle_batch->surf_list.begin();
+				return particle_batch;		//*particle_batch->surf_list.begin();
 			}
 		}
 		
@@ -67,7 +70,7 @@ public:
 		particle_batch->brush.blend=blend;
 		particle_batch->order=order;
 		particle_batch_list.push_back(particle_batch);
-		return surf;
+		return particle_batch;
 		
 	}
 

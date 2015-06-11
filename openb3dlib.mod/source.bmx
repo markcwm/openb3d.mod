@@ -41,13 +41,13 @@ Import "openb3d/src/functions.cpp"
 Import "openb3d/src/geom.cpp"
 Import "openb3d/src/geosphere.cpp" ' 0.8
 Import "openb3d/src/global.cpp"
+Import "openb3d/src/isosurface.cpp" ' was metaball 0.9
 Import "openb3d/src/light.cpp"
 Import "openb3d/src/material.cpp"
 Import "openb3d/src/maths_helper.cpp"
 Import "openb3d/src/matrix.cpp"
 Import "openb3d/src/md2.cpp" ' 0.9
 Import "openb3d/src/mesh.cpp"
-Import "openb3d/src/metaball.cpp" ' 0.9
 Import "openb3d/src/model.cpp"
 Import "openb3d/src/octree.cpp"
 Import "openb3d/src/particle.cpp" ' 0.9

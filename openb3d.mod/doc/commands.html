@@ -176,6 +176,9 @@ Copy a rendered camera view to texture.
 <tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
 undocumented.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateBone>CreateBone</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBrush>CreateBrush</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
 </td></tr>
@@ -356,6 +359,15 @@ undocumented.
 <tr><td class=docleft width=1%><a href=#FlipMesh>FlipMesh</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FlipMesh">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#FluidArray>FluidArray</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FluidFunction>FluidFunction</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FluidThreshold>FluidThreshold</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#FreeBrush>FreeBrush</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a>
 </td></tr>
@@ -418,6 +430,9 @@ Update screen size.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimSeq>LoadAnimSeq</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimTexture>LoadAnimTexture</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
@@ -490,6 +505,15 @@ undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#PaintSurface>PaintSurface</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ParticleColor>ParticleColor</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ParticleTrail>ParticleTrail</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ParticleVector>ParticleVector</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#PickedEntity>PickedEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedEntity">Online doc</a>
@@ -574,6 +598,9 @@ Like CopyMesh but for instancing effects.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ScaleTexture>ScaleTexture</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetAnimKey>SetAnimKey</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetAnimTime>SetAnimTime</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
@@ -744,7 +771,7 @@ Bind 3 integer variables to a shader variable name of a uniform ivec3 type.
 Bind 4 integer variables to a shader variable name of a uniform ivec4 type.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseMatrix>UseMatrix</a></td><td class=docright>
-Send matrix data to a shader variable name of a uniform mat4 type.
+Sends matrix data to a shader variable name of a uniform mat4 type.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseStencil>UseStencil</a></td><td class=docright>
 undocumented.
@@ -820,6 +847,9 @@ undocumented.
 <tr><td class=docleft width=1%><a href=#TBlob>TBlob</a></td><td class=docright>
 Blob entity.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TBone>TBone</a></td><td class=docright>
+Bone entity.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TBrush>TBrush</a></td><td class=docright>
 Brush.
 </td></tr>
@@ -838,8 +868,11 @@ Geosphere terrain entity.
 <tr><td class=docleft width=1%><a href=#TGlobal>TGlobal</a></td><td class=docright>
 Global.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TGLShader>TGLShader</a></td><td class=docright>
+Shader methods.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#THardwareInfo>THardwareInfo</a></td><td class=docright>
-Hardware-info.
+Hardware info.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TLight>TLight</a></td><td class=docright>
 Light entity.
@@ -1162,6 +1195,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateBone>
+<tr><td class=doctop colspan=2>Function CreateBone:TBone( mesh:TMesh, parent_ent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateBrush>
 <tr><td class=doctop colspan=2>Function CreateBrush:TBrush( r:Float=255, g:Float=255, b:Float=255 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a></td></tr>
@@ -1462,6 +1500,21 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FlipMesh">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=FluidArray>
+<tr><td class=doctop colspan=2>Function FluidArray( fluid:TFluid, Array:Float Var, w:Int, h:Int, d:Int)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FluidFunction>
+<tr><td class=doctop colspan=2>Function FluidFunction( fluid:TFluid, FieldFunction:Float( x:Float, y:Float, z:Float ) )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FluidThreshold>
+<tr><td class=doctop colspan=2>Function FluidThreshold( fluid:TFluid, threshold:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=FreeBrush>
 <tr><td class=doctop colspan=2>Function FreeBrush( brush:TBrush )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a></td></tr>
@@ -1565,6 +1618,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
 <tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( file:String, parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimSeq>
+<tr><td class=doctop colspan=2>Function LoadAnimSeq:Int( ent:TEntity, file:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a></td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimTexture>
@@ -1685,6 +1743,21 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=PaintSurface>
 <tr><td class=doctop colspan=2>Function PaintSurface( surf:TSurface, brush:TBrush )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ParticleColor>
+<tr><td class=doctop colspan=2>Function ParticleColor( sprite:TSprite, r:Float, g:Float, b:Float, a:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ParticleTrail>
+<tr><td class=doctop colspan=2>Function ParticleTrail( sprite:TSprite, length:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ParticleVector>
+<tr><td class=doctop colspan=2>Function ParticleVector( sprite:TSprite, x:Float, y:Float, z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=PickedEntity>
@@ -1825,6 +1898,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=ScaleTexture>
 <tr><td class=doctop colspan=2>Function ScaleTexture( tex:TTexture, u_scale:Float, v_scale:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetAnimKey>
+<tr><td class=doctop colspan=2>Function SetAnimKey( ent:TEntity, frame:Float, pos_key:Int=True, rot_key:Int=True, scale_key:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a></td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SetAnimTime>
@@ -2109,7 +2187,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=UseMatrix>
 <tr><td class=doctop colspan=2>Function UseMatrix( material:TShader, name:String, Mode:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Send matrix data to a shader variable name of a uniform mat4 type.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sends matrix data to a shader variable name of a uniform mat4 type.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseStencil>
@@ -2235,6 +2313,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright>Blob entity.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TBone>
+<tr><td class=doctop colspan=2>Type TBone Extends TEntity</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Bone entity.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TBrush>
 <tr><td class=doctop colspan=2>Type TBrush Extends TUtility</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Brush.</td></tr>
@@ -2267,10 +2350,16 @@ and <b>Method GetChildFromAll:TEntity( child_no:Int, no_children:Int Var, ent:TE
 <tr><td class=docleft width=1%>Description</td><td class=docright>Global.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TGLShader>
+<tr><td class=doctop colspan=2>Type TGLShader</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Shader methods.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Reports errors.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=THardwareInfo>
 <tr><td class=doctop colspan=2>Type THardwareInfo</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Hardware-info.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Contains <b>Function GetInfo()</b> and <b>DisplayInfo(LogFile:Int=False)</b>.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Hardware info.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Contains functions <b>GetInfo()</b> And <b>DisplayInfo(LogFile:Int=False)</b>.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TLight>

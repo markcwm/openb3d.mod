@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-;
 
 #include "glew.h"
 
@@ -11,10 +10,12 @@
 #include <GL/glext.h>
 #include <GL/glu.h>
 #endif
+
 #ifdef WIN32
-#include "GLee.h"
+#include <gl\GLee.h>
 #include <GL\glu.h>
 #endif
+
 #ifdef __APPLE__
 #include "GLee.h"
 #include <OpenGL/glu.h>
@@ -34,13 +35,6 @@ list<ProgramObject*> ProgramObject::ProgramObjectList;
 int Shader::ShaderIDCount;
 
 
-/*ShaderObject* ShaderObject::CreateVertShader(string shaderFileName);
-ShaderObject* ShaderObject::CreateFragShader(string shaderFileName);
-ShaderObject* ShaderObject::CreateVertShaderFromString(string shadercode);
-ShaderObject* ShaderObject::CreateFragShaderFromString(string shadercode);
-*/
-
-
 ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 	// Load the shader and dump it into a Byte Array
 	File* file=File::ReadFile(shaderFileName); // opens as ASCII!
@@ -48,48 +42,37 @@ ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 		return 0;
 	}
 
-/*	unsigned long pos=file.tellg();
-	file.seekg(0,ios::end);
-	unsigned long FileLength = file.tellg();
-	file.seekg(ios::beg);
-*/	
 	fseek(file->pFile, 0L, SEEK_END);
 	unsigned long FileLength = ftell(file->pFile);
 	fseek(file->pFile, 0L, SEEK_SET);
+	// wrong size "void main(){}"
+	if (FileLength<13){
+		file->CloseFile();
+		return 0;
+	}
+	char* shaderSrc = new char[FileLength+1];
+	// out of memory
+	if (shaderSrc == 0) {
+		file->CloseFile();
+		return 0;
+	}
+
+	// FileLength isn't always strlen cause some characters are stripped in ascii read...
+	// it is important to 0-terminate the real length later, len is just max possible value...
+	shaderSrc[FileLength] = 0;
+	unsigned int i=0;
+	while (!file->Eof()){
+		shaderSrc[i] = file->ReadByte();       // get character from file.
+		i++;
+	}
+	shaderSrc[i] = 0;  // 0-terminate it at the correct position
+	file->CloseFile();
 
 	//int ShaderObject;
 	ShaderObject* myShader = new ShaderObject;
 	
 	myShader->ShaderObj = glCreateShader(GL_VERTEX_SHADER);
 	myShader->ShaderType = 1; // 1 = Vert, 2 = Frag/Pixel
-
-	char* shaderSrc;
-
-	shaderSrc = new char[FileLength+1];
-	if (shaderSrc == 0) return 0;   // can't reserve memory
-   
-	// FileLength isn't always strlen cause some characters are stripped in ascii read...
-	// it is important to 0-terminate the real length later, len is just max possible value... 
-	shaderSrc[FileLength] = 0; 
-
-	unsigned int i=0;
-	while (!file->Eof())
-	{
-		shaderSrc[i] = file->ReadByte();       // get character from file.
-		i++;
-	}
-    
-	shaderSrc[i] = 0;  // 0-terminate it at the correct position
-    
-	file->CloseFile();
-
-
-	
-	int shaderLen[1];
-	shaderLen[0] = i;
-
-	//Local shaderPtr:Byte Ptr[1]
-	//shaderPtr[0] = Varptr(shaderSrc[0])
 
 	// Send shader to ShaderObject, then compile it
 	glShaderSource(myShader->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
@@ -100,14 +83,16 @@ ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		delete [] shaderSrc;
 		delete myShader;
 		return 0;
-		}
+	}
 
 
 	//myShader.Attached = New TList
 	myShader->shaderName = shaderFileName;
 	ShaderObject::ShaderObjectList.push_back(myShader);
+	delete [] shaderSrc;
 	
 	return myShader;
 }
@@ -129,53 +114,41 @@ ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 ShaderObject* ShaderObject::CreateFragShader(string shaderFileName){
 	// Load the shader and dump it into a Byte Array
 	File* file=File::ReadFile(shaderFileName); // opens as ASCII!
-
 	if(file==0) {
 		return 0;
 	}
 
-/*	unsigned long pos=file.tellg();
-	file.seekg(0,ios::end);
-	unsigned long FileLength = file.tellg();
-	file.seekg(ios::beg);
-*/	
 	fseek(file->pFile, 0L, SEEK_END);
 	unsigned long FileLength = ftell(file->pFile);
 	fseek(file->pFile, 0L, SEEK_SET);
+	// wrong size "void main(){}"
+	if (FileLength<13){
+		file->CloseFile();
+		return 0;
+	}
+	char* shaderSrc = new char[FileLength+1];
+	// out of memory
+	if (shaderSrc == 0) {
+		file->CloseFile();
+		return 0;
+	}
+
+	// FileLength isn't always strlen cause some characters are stripped in ascii read...
+	// it is important to 0-terminate the real length later, len is just max possible value...
+	shaderSrc[FileLength] = 0;
+	unsigned int i=0;
+	while (!file->Eof()){
+		shaderSrc[i] = file->ReadByte();       // get character from file.
+		i++;
+	}
+	shaderSrc[i] = 0;  // 0-terminate it at the correct position
+	file->CloseFile();
 
 	//int ShaderObject;
 	ShaderObject* myShader = new ShaderObject;
 	
 	myShader->ShaderObj = glCreateShader(GL_FRAGMENT_SHADER);
 	myShader->ShaderType = 2; // 1 = Vert, 2 = Frag/Pixel
-
-	char* shaderSrc;
-
-	shaderSrc = new char[FileLength+1];
-	if (shaderSrc == 0) return 0;   // can't reserve memory
-   
-	// FileLength isn't always strlen cause some characters are stripped in ascii read...
-	// it is important to 0-terminate the real length later, len is just max possible value... 
-	shaderSrc[FileLength] = 0; 
-
-	unsigned int i=0;
-	while (!file->Eof())
-	{
-		shaderSrc[i] = file->ReadByte();       // get character from file.
-		i++;
-	}
-    
-	shaderSrc[i] = 0;  // 0-terminate it at the correct position
-    
-	file->CloseFile();
-
-
-	
-	int shaderLen[1];
-	shaderLen[0] = i;
-
-	//Local shaderPtr:Byte Ptr[1]
-	//shaderPtr[0] = Varptr(shaderSrc[0])
 
 	// Send shader to ShaderObject, then compile it
 	glShaderSource(myShader->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
@@ -186,14 +159,17 @@ ShaderObject* ShaderObject::CreateFragShader(string shaderFileName){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		delete [] shaderSrc;
 		delete myShader;
 		return 0;
-		}
+	}
 
 
 	//myShader.Attached = New TList
 	myShader->shaderName = shaderFileName;
 	ShaderObject::ShaderObjectList.push_back(myShader);
+	delete [] shaderSrc;
+	
 	return myShader;
 }
 /*
@@ -214,7 +190,11 @@ ShaderObject* ShaderObject::CreateVertShaderFromString(string shadercode){
 	
 	//Local tempShaderName:String = "Code"+Rand(10000)
 	unsigned int FileLength = shadercode.size();
-	//int ShaderObject;
+	// wrong size "void main(){}"
+	if (FileLength<13){
+		return 0;
+	}
+
 	ShaderObject* myShader = new ShaderObject;
 	
 	myShader->ShaderObj = glCreateShader(GL_VERTEX_SHADER);
@@ -250,14 +230,16 @@ ShaderObject* ShaderObject::CreateVertShaderFromString(string shadercode){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		delete [] shaderSrc;
 		delete myShader;
 		return 0;
-		}
+	}
 
 
 	//myShader.Attached = New TList
 	//myShader->shaderName = shaderFileName;
 	ShaderObject::ShaderObjectList.push_back(myShader);
+	delete [] shaderSrc;
 	
 	return myShader;
 }
@@ -279,6 +261,10 @@ ShaderObject* ShaderObject::CreateFragShaderFromString(string shadercode){
 	
 	//Local tempShaderName:String = "Code"+Rand(10000)
 	unsigned int FileLength = shadercode.size();
+	// wrong size "void main(){}"
+	if (FileLength<13){
+		return 0;
+	}
 	//int ShaderObject;
 	ShaderObject* myShader = new ShaderObject;
 	
@@ -315,14 +301,16 @@ ShaderObject* ShaderObject::CreateFragShaderFromString(string shadercode){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		delete [] shaderSrc;
 		delete myShader;
 		return 0;
-		}
+	}
 
 
 	//myShader.Attached = New TList
 	//myShader->shaderName = shaderFileName;
 	ShaderObject::ShaderObjectList.push_back(myShader);
+	delete [] shaderSrc;
 	
 	return myShader;
 }
@@ -464,7 +452,7 @@ Shader* Shader::CreateShaderMaterial(string Name){
 }
 	*/
 // internal 
-void Shader::TurnOn(Surface* surf, Matrix& mat){
+void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 	ProgramAttriBegin();
 	// Update Data
 
@@ -505,19 +493,42 @@ void Shader::TurnOn(Surface* surf, Matrix& mat){
 			Parameters[i].ent->EntityZ());}
 			break;
 		case 13:
-			if (arb_program !=0){arb_program->SetParameterArray(Parameters[i].name,Parameters[i].surf,Parameters[i].vbo);}
+			if (arb_program !=0){
+				if(Parameters[i].surf!=0){
+					arb_program->SetParameterArray(Parameters[i].name,Parameters[i].surf,Parameters[i].vbo);
+				}else{
+					if (surf!=0){
+						arb_program->SetParameterArray(Parameters[i].name,surf,Parameters[i].vbo);
+					}else{
+						arb_program->SetParameterArray(Parameters[i].name,vertices,Parameters[i].vbo);
+					}
+				}
+			}
 			break;
 		case 14:
 			if (arb_program !=0){
-				Matrix new_mat=Global::camera_in_use->mat.Inverse();
-				new_mat.Multiply(mat);
+				arb_program->SetMatrix4F(Parameters[i].name, &mat.grid[0][0]);
+			}
+			break;
+		case 15:
+			if (arb_program !=0){
+				Matrix new_mat;
+				Global::camera_in_use->mat.GetInverse(new_mat);
 				arb_program->SetMatrix4F(Parameters[i].name, &new_mat.grid[0][0]);
 			}
 			break;
 
-		case 15:
+		case 16:
 			if (arb_program !=0){
 				arb_program->SetMatrix4F(Parameters[i].name, &Global::camera_in_use->proj_mat[0]);
+			}
+			break;
+		case 17:
+			if (arb_program !=0){
+				Matrix new_mat;
+				Global::camera_in_use->mat.GetInverse(new_mat);
+				new_mat.Multiply(mat);
+				arb_program->SetMatrix4F(Parameters[i].name, &new_mat.grid[0][0]);
 			}
 			break;
 
@@ -839,12 +850,16 @@ void Shader::AddShader(string _vert, string _frag){
 	
 	if (_vert != ""){
 		Vert = ShaderObject::CreateVertShader(_vert);
-		arb_program->AttachVertShader(Vert);
+		if (Vert!=0) {
+			arb_program->AttachVertShader(Vert);
+		}
 	}
 		
 	if (_frag != ""){
 		Frag = ShaderObject::CreateFragShader(_frag);
-		arb_program->AttachFragShader(Frag);
+		if (Frag!=0) {
+			arb_program->AttachFragShader(Frag);
+		}
 	}
 }
 	
@@ -855,12 +870,16 @@ void Shader::AddShaderFromString(string _vert, string _frag){
 		
 	if (_vert != ""){
 		Vert = ShaderObject::CreateVertShaderFromString(_vert);
-		arb_program->AttachVertShader(Vert);
+		if (Vert!=0) {
+			arb_program->AttachVertShader(Vert);
+		}
 	}
 		
 	if (_frag != ""){
 		Frag = ShaderObject::CreateFragShaderFromString(_frag);
-		arb_program->AttachFragShader(Frag);
+		if (Frag!=0) {
+			arb_program->AttachFragShader(Frag);
+		}
 	}
 }
 
@@ -1032,10 +1051,14 @@ void Shader::UseSurface(string name, Surface* surf, int vbo){
 void Shader::UseMatrix(string name, int mode){
 	ShaderData data;
 	data.name=name;
-	if (mode==1) {
+	if (mode==0) {		//model matrix
 		data.type=14;
-	}else{
+	}else if(mode==1){	//view matrix
 		data.type=15;
+	}else if(mode==2){	//projection matrix
+		data.type=16;
+	}else if(mode==3){	//modelview matrix
+		data.type=17;
 	}
 	Parameters.push_back(data);
 }
@@ -1166,6 +1189,7 @@ ProgramObject* ProgramObject::Create(string name){
 	//Create a new GL ProgramObject
 	p->Program = glCreateProgram();
 	if (p->Program == 0){
+		delete p;
 		p = 0;
 		return 0;
 	}
@@ -1339,6 +1363,7 @@ void ProgramObject::SetParameter4D(string name, double v1, double v2, double v3,
 
 void ProgramObject::SetParameterArray(string name, Surface* surf, int vbo){
 	int loc= glGetAttribLocation(Program, name.c_str());
+
 	if(surf->vbo_enabled!=0){
 		surf->reset_vbo=vbo;
 
@@ -1352,7 +1377,7 @@ void ProgramObject::SetParameterArray(string name, Surface* surf, int vbo){
 		case 2:
 			glBindBuffer(GL_ARRAY_BUFFER,surf2.vbo_id[1]);
 			glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
+			break;
 		case 3:
 			glBindBuffer(GL_ARRAY_BUFFER,surf2.vbo_id[2]);
 			glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 0, 0);
@@ -1400,6 +1425,29 @@ void ProgramObject::SetParameterArray(string name, Surface* surf, int vbo){
 
 	glEnableVertexAttribArray(loc);
 }
+
+void ProgramObject::SetParameterArray(string name, vector<float>* verticesPtr, int vbo){
+	vector<float>&vertices=*verticesPtr;
+	int loc= glGetAttribLocation(Program, name.c_str());
+
+	//special case, terrain surface
+	glBindBuffer(GL_ARRAY_BUFFER,0);
+	switch (vbo){
+	case 1:
+		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 32, &vertices[0]);
+		break;
+	case 2:
+	case 3:
+		glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 32, &vertices[6]);
+		break;
+	case 4:
+		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 32, &vertices[3]);
+		break;
+	}
+	glEnableVertexAttribArray(loc);
+	return;
+}
+
 
 //-------------------------------------------------------------------------------------
 // Float Parameter
