@@ -92,8 +92,8 @@ Local xrotspeed#=1.5,yrotspeed#=0.5,height#=4.0
 While Not KeyDown(KEY_ESCAPE)
 
 	' move ball
-	If KeyDown(KEY_PAGEUP) Then height:+0.33
-	If KeyDown(KEY_PAGEDOWN) Then height:-0.33
+	If KeyDown(KEY_EQUALS) Then height:+0.33
+	If KeyDown(KEY_MINUS) Then height:-0.33
 	If height<0 Then height=0
 	
 	PositionEntity sphere,0,height,0
@@ -131,7 +131,7 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"PageUp/Down: move ball, WSAD: move camera, Arrows: rotate camera"
+	Text 0,20,"Plus/Minus: move ball, WSAD: move camera, Arrows: rotate camera"
 	
 	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
 	UseStencil stencil
