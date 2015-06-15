@@ -13,15 +13,17 @@ Import bah.gtkmaxgui
 Import maxgui.drivers
 ?
 
-SetGraphicsDriver GLMax2DDriver() ' needed before init in Windows
+SetGraphicsDriver GLMax2DDriver() ' needed in Windows
 
-Local win:TGadget=CreateWindow("MiniB3D in a GUI window", 10, 10, 512, 512 )
+Local win:TGadget=CreateWindow("MiniB3D in a GUI window",10,10,512,512)
 
 Local can:TGadget=CreateCanvas(0,0,ClientWidth(win),ClientHeight(win),win,0)
 SetGadgetLayout can,1,1,1,1
 SetGraphics CanvasGraphics(can)
 
-Graphics3D ClientWidth(win),ClientHeight(win),0,2,60,-1,True ' true if using a canvas context
+'EnablePolledInput() ' to activate the normal Key and Mouse Commands
+
+Graphics3D ClientWidth(win),ClientHeight(win),0,2,60,-1,True ' true if using a canvas
 
 
 Local cam:TCamera=CreateCamera()
@@ -59,6 +61,10 @@ Local old_ms%=MilliSecs()
 Local renders%, fps%
 
 Local up_key%, down_key%, left_key%, right_key%
+Local left_mouse%,mouse_x%,mouse_y%
+Local resized%=True
+
+BeginMax2D() ' needed in Linux, due to no initial EVENT_WINDOWSIZE
 
 CreateTimer(60)
 
@@ -68,7 +74,26 @@ While True
 	WaitEvent()
 
 	Select EventID()
+	
+		Case EVENT_MOUSEDOWN
+		
+			Select EventData()
+				Case MOUSE_LEFT
+					left_mouse=1
+			EndSelect
+			
+		Case EVENT_MOUSEUP
+		
+			Select EventData()
+				Case MOUSE_LEFT
+					left_mouse=0
+			EndSelect
 
+		Case EVENT_MOUSEMOVE
+		
+			mouse_x=EventX()
+			mouse_y=EventY()
+			
 		Case EVENT_KEYDOWN
 		
 			Select EventData()
@@ -103,12 +128,9 @@ While True
 
 		Case EVENT_WINDOWSIZE
 		
-			GraphicsResize(ClientWidth(win),ClientHeight(win)) ' update width/height values
+			resized=True
+			BeginMax2D() ' pop old values
 			
-			CameraViewport(cam,0,0,ClientWidth(win),ClientHeight(win)) ' set camera size
-			
-			DebugLog "EVENT_WINDOWSIZE"
-
 		Case EVENT_TIMERTICK
 
 			If up_key Then cz#=cz#+1.0
@@ -124,14 +146,31 @@ While True
 			cz#=0
 
 			RedrawGadget can
-              
+             
 		Case EVENT_GADGETPAINT
 			
 			SetGraphics CanvasGraphics(can)
-
+			
+			If resized=True
+				SetViewport 0,0,ClientWidth(win),ClientHeight(win)
+				EndMax2D() ' push new values
+				
+				CameraViewport cam,0,0,ClientWidth(win),ClientHeight(win)
+				GraphicsResize ClientWidth(win),ClientHeight(win) ' values used in texture rendering
+				resized=False
+			EndIf
+			
 			TurnEntity cube,0,1,0
-
+			
 			RenderWorld
+			
+			Text 20,0,"Text"
+			Text 20,20,"left_mouse="+left_mouse
+			Text 20,40,"mouse_x="+mouse_x
+			Text 20,60,"mouse_y="+mouse_y
+			BeginMax2D()
+			DrawText "DrawText",ClientWidth(win)-100,0
+			EndMax2D()
 			
 			Flip
                                 

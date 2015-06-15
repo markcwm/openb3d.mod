@@ -16,7 +16,7 @@ Local camera:TCamera=CreateCamera()
 Local plan_cam:TCamera=CreateCamera()
 TurnEntity plan_cam,90,0,0
 PositionEntity plan_cam,0,20,0
-CameraViewport plan_cam,0,0,128,128 ' y is inverted
+CameraViewport plan_cam,0,GraphicsHeight()-0-128,128,128 ' unlike minib3d, y is inverted
 CameraClsColor plan_cam,0,0,0
 
 Local light:TLight=CreateLight()

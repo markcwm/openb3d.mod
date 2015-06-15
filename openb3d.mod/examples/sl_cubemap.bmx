@@ -11,7 +11,6 @@ Graphics3D 800,600,0,2
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,70,180,235
 PositionEntity camera,0,8,-10
-'CameraRange camera,0.1,100
 
 ' create separate camera for updating cube map - this allows us to avoid any confusion
 Local cube_cam:TCamera=CreateCamera()
@@ -86,6 +85,8 @@ Local cubemode%=1, blendmode%, pixellight%, lmkey%
 ' used by fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%, ticks%
+
+CameraToTex cubetex,cube_cam ' needed on some setups to init texture rendering
 
 
 While Not KeyDown(KEY_ESCAPE)
@@ -168,7 +169,7 @@ Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)
 	
 	' set the camera's viewport so it is the same size as our texture
 	' - so we can fit entire screen contents into texture
-	CameraViewport camera,0,GraphicsHeight()-tex_sz,tex_sz,tex_sz ' y is inverted
+	CameraViewport camera,0,GraphicsHeight()-0-tex_sz,tex_sz,tex_sz ' unlike minib3d, y is inverted
 	
 	' update cubemap - Blitz3D uses CopyRect 0,0,tex_sz,tex_sz,0,0,BackBuffer(),TextureBuffer(tex)
 

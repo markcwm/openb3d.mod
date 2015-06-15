@@ -252,7 +252,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraViewport">Online doc</a>
 End Rem
 Function CameraViewport( cam:TCamera, x:Int, y:Int, width:Int, height:Int )
-	CameraViewport_( TUtility.IsObject( cam ), x, GraphicsHeight()-height, width, height ) ' inverted y
+	CameraViewport_( TUtility.IsObject( cam ), x, y, width, height )
 End Function
 
 Rem

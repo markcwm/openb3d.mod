@@ -17,16 +17,6 @@ RotateEntity light,45,45,0
 PositionEntity light,10,10,0
 LightRange light,10
 
-' teapot
-Local teapot:TMesh=LoadMesh("media/teapot.b3d")
-ScaleEntity teapot,5,5,5
-PositionEntity teapot,0,6,10
-
-Local teapotcopy:TMesh=LoadMesh("media/teapot.b3d")
-ScaleEntity teapotcopy,5,-5,5
-FlipMesh teapotcopy
-PositionEntity teapotcopy,0,-6,10
-
 ' ground
 Local ground:TMesh=LoadMesh("media/grid.b3d")
 ScaleEntity ground,0.5,1,0.5
@@ -45,12 +35,23 @@ EntityFX sky,1
 Local sky_tex:TTexture=LoadTexture("media/sky.bmp")
 EntityTexture sky,sky_tex
 
+' teapot
+Local teapot:TMesh=LoadMesh("media/teapot.b3d")
+ScaleEntity teapot,5,5,5
+PositionEntity teapot,0,6,10
+
+Local teapotcopy:TMesh=LoadMesh("media/teapot.b3d")
+ScaleEntity teapotcopy,5,-5,5
+FlipMesh teapotcopy
+PositionEntity teapotcopy,0,-(EntityY(teapot)-EntityY(ground)),10
+
 ' cactus
 Local cactus:TMesh=LoadMesh("media/cactus2.b3d")
 FitMesh cactus,-5,0,0,2,6,0.5
 
 Local cactuscopy:TMesh=LoadMesh("media/cactus2.b3d")
 FitMesh cactuscopy,-5,0,0,2,-6,0.5
+FlipMesh cactuscopy
 
 ' camel
 Local camel:TMesh=LoadMesh("media/camel.b3d")
@@ -58,17 +59,18 @@ FitMesh camel,5,0,0,6,5,4
 
 Local camelcopy:TMesh=LoadMesh("media/camel.b3d")
 FitMesh camelcopy,5,0,0,6,-5,4
+FlipMesh camelcopy
 
 ' load ufo to give us a dynamic moving object that the stencil will be able to reflect
 Local ufo_piv:TPivot=CreatePivot()
-PositionEntity ufo_piv,0,10,10
+PositionEntity ufo_piv,0,0,10
 Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
-PositionEntity ufo,0,0,10
+PositionEntity ufo,0,10,10
 
 Local ufocopy:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
 ScaleEntity ufocopy,1,-1,1
 FlipMesh ufocopy
-PositionEntity ufocopy,0,-20,10
+PositionEntity ufocopy,0,-(EntityY(ufo)-EntityY(ground)),10
 
 ' ball
 Local sphere:TMesh=CreateSphere()

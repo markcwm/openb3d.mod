@@ -69,6 +69,8 @@ Local renders%, fps%, ticks%=0
 
 Local blendmode%, cubemode%=1
 
+CameraToTex tex,cube_cam ' needed on some setups to init texture rendering
+
 
 While Not KeyDown(KEY_ESCAPE)
 
@@ -138,7 +140,7 @@ Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)
 	
 	' set the camera's viewport so it is the same size as our texture
 	' - so we can fit entire screen contents into texture
-	CameraViewport camera,0,0,tex_sz,tex_sz ' y is inverted
+	CameraViewport camera,0,GraphicsHeight()-0-tex_sz,tex_sz,tex_sz ' unlike minib3d, y is inverted
 	
 	' update cubemap - Blitz3D uses CopyRect 0,0,tex_sz,tex_sz,0,0,BackBuffer(),TextureBuffer(tex)
 
