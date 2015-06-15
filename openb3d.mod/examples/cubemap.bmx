@@ -187,3 +187,4 @@ Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)
 	HideEntity camera
 	
 End Function
+

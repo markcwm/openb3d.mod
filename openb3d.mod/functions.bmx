@@ -2123,4 +2123,3 @@ Function CreateFluid:TFluid()
 	Local fluid:TFluid=globals.fluid.NewFluid( instance )
 	Return fluid
 End Function
-
