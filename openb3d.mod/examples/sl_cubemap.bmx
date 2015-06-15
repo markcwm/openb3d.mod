@@ -169,7 +169,7 @@ Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)
 	
 	' set the camera's viewport so it is the same size as our texture
 	' - so we can fit entire screen contents into texture
-	CameraViewport camera,0,GraphicsHeight()-0-tex_sz,tex_sz,tex_sz ' unlike minib3d, y is inverted
+	CameraViewport camera,0,0,tex_sz,tex_sz
 	
 	' update cubemap - Blitz3D uses CopyRect 0,0,tex_sz,tex_sz,0,0,BackBuffer(),TextureBuffer(tex)
 
@@ -216,4 +216,3 @@ Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)
 	HideEntity camera
 	
 End Function
-

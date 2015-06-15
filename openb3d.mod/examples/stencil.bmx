@@ -149,4 +149,3 @@ While Not KeyDown(KEY_ESCAPE)
 	
 Wend
 End
-
