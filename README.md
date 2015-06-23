@@ -3,5 +3,9 @@ angros.mod
 
 BlitzMax wrapper for Openb3d library version 1.0.
 
-Extract angros.mod-master folder to BlitzMax/mod and remove -master.
+License
+=======
+
+OpenB3D is licensed under the GNU LGPLv2 or later, 
+with an exception to allow static linking.
 

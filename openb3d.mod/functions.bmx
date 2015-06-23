@@ -1123,7 +1123,7 @@ Function LoadSprite:TSprite( tex_file:String, tex_flag:Int=1, parent:TEntity=Nul
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Method 0 subtracts mesh2 from mesh1, 1 adds meshes and removes intersections, 2 inverse adds keeping intersections.
 End Rem
 Function MeshCSG:TMesh( m1:TMesh, m2:TMesh, method_no:Int=1 )
 	Local instance:Byte Ptr=MeshCSG_( TUtility.IsObject( m1 ), TUtility.IsObject( m2 ), method_no )

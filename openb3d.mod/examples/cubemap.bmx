@@ -69,8 +69,6 @@ Local renders%, fps%, ticks%=0
 
 Local blendmode%, cubemode%=1
 
-CameraToTex tex,cube_cam ' needed on some setups to init texture rendering
-
 
 While Not KeyDown(KEY_ESCAPE)
 
