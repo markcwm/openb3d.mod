@@ -462,7 +462,7 @@ Load shader from two files, vertex and fragment.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
-Method 0 subtracts mesh2 from mesh1, 1 adds meshes and removes intersections, 2 inverse adds keeping intersections.
+Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCullRadius>MeshCullRadius</a></td><td class=docright>
 undocumented.
@@ -1672,7 +1672,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
 <tr><td class=doctop colspan=2>Function MeshCSG:TMesh( m1:TMesh, m2:TMesh, method_no:Int=1 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Method 0 subtracts mesh2 from mesh1, 1 adds meshes and removes intersections, 2 inverse adds keeping intersections.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCullRadius>
