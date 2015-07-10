@@ -1,21 +1,5 @@
 ' functions.bmx
 
-' *** Blitz2D functions
-
-Rem
-bbdoc: Begin using Max2D functions.
-End Rem
-Function BeginMax2D()
-	TBlitz2D.BeginMax2D()
-End Function
-
-Rem
-bbdoc: End using Max2D functions.
-End Rem
-Function EndMax2D()
-	TBlitz2D.EndMax2D()
-End Function
-
 ' *** Wrapper only
 
 Rem
@@ -1582,7 +1566,7 @@ Rem
 bbdoc: undocumented
 End Rem
 Function UseStencil( stencil:TStencil )
-	stencil.UseStencil()
+	TStencil.UseStencil( stencil )
 End Function
 
 Rem

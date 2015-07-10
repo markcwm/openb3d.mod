@@ -1,7 +1,6 @@
 ' types.bmx
 
-' Extra types
-' -----------
+' *** Extra types
 
 Rem
 bbdoc: Blob entity
@@ -532,11 +531,11 @@ Type TStencil
 		
 	End Method
 	
-	Method UseStencil()
+	Function UseStencil( sten:TStencil ) ' as function so Null can be passed
 	
-		UseStencil_( GetInstance(Self) )
+		UseStencil_( GetInstance(sten) )
 		
-	End Method
+	End Function
 	
 End Type
 
