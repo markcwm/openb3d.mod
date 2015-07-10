@@ -38,15 +38,15 @@ Import angros.openb3d
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
 about: The flags argument sets the graphics buffers (back, alpha, depth, stencil and accum). 
-The usecanvas argument is set to true if using maxgui with a canvas context.
+Set usecanvas to true if using maxgui with a canvas context.
 End Rem
-Function Graphics3D( width%,height%,depth%=0,Mode%=0,rate%=60,flags%=-1,usecanvas%=False )
+Function Graphics3D( width:Int,height:Int,depth:Int=0,Mode:Int=0,rate:Int=60,flags:Int=-1,usecanvas:Int=False )
 	TGlobal.Graphics3D( width,height,depth,Mode,rate,flags,usecanvas )
 End Function
 
 Rem
 bbdoc: Draw text, does not need Max2D.
 End Rem
-Function Text( x%,y%,Text$ )
+Function Text( x:Int,y:Int,Text:String )
 	TBlitz2D.Text( x,y,Text )
 End Function

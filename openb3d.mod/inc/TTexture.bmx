@@ -129,7 +129,7 @@ Type TTexture
 		
 	End Function
 
-	Function LoadCubeMapTexture:TTexture(file$,flags:Int=1,tex:TTexture=Null)
+	Function LoadCubeMapTexture:TTexture(file:String,flags:Int=1,tex:TTexture=Null)
 		
 		
 
@@ -243,7 +243,7 @@ Type TTexture
 	End Method
 	
 	
-	Function FileFind%(file$ Var) 'SMALLFIXES, replaced function to alow Incbin and Zipstream (from http://blitzmax.com/Community/posts.php?topic=88901#1009408 ) 
+	Function FileFind:Int(file:String Var) 'SMALLFIXES, replaced function to alow Incbin and Zipstream (from http://blitzmax.com/Community/posts.php?topic=88901#1009408 ) 
 	
 		
 		
@@ -251,14 +251,14 @@ Type TTexture
 	
 	Rem
 	' Internal - not recommended for general use	
-	Function FileFind:Int(file$ Var)
+	Function FileFind:Int(file:String Var)
 	
 		
 		
 	End Function
 	EndRem
 	
-	Function FileAbs$(file$)
+	Function FileAbs:String(file:String)
 	
 		
 	

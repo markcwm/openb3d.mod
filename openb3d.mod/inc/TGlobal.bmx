@@ -16,20 +16,20 @@ Type TGlobal
 	
 	Const ALPHA_ENABLE:Int=1, FX1:Int=2, FX2:Int=3, VBO_ENABLED:Int=4
 	
-	Function Graphics3D( w%,h%,d%=0,m%=0,r%=60,flags%=-1,usecanvas%=False )
+	Function Graphics3D( w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1,usecanvas:Int=False )
 	
-		Select flags ' buffer values: back=2, alpha=4, depth=8, stencil=16, accum=32
-			Case -1
+		Select flags ' buffer values: back=2|alpha=4|depth=8|stencil=16|accum=32
+			Case -1 ' 2+4+8+16+32
 				flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_STENCILBUFFER|GRAPHICS_ACCUMBUFFER
-			Case -2
-				flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER ' 2+4
-			Case -3
-				flags=GRAPHICS_BACKBUFFER|GRAPHICS_DEPTHBUFFER ' 2+8
-			Case -4
-				flags=GRAPHICS_BACKBUFFER|GRAPHICS_STENCILBUFFER ' 2+16
-			Case -5
-				flags=GRAPHICS_BACKBUFFER|GRAPHICS_ACCUMBUFFER ' 2+32
-			Default
+			Case -2 ' 2+4
+				flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER
+			Case -3 ' 2+8
+				flags=GRAPHICS_BACKBUFFER|GRAPHICS_DEPTHBUFFER
+			Case -4 ' 2+16
+				flags=GRAPHICS_BACKBUFFER|GRAPHICS_STENCILBUFFER
+			Case -5 ' 2+32
+				flags=GRAPHICS_BACKBUFFER|GRAPHICS_ACCUMBUFFER
+			Default ' 2
 				flags=GRAPHICS_BACKBUFFER
 		End Select
 		

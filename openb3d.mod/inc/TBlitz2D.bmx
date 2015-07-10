@@ -3,7 +3,7 @@ bbdoc: Blitz2D
 EndRem
 Type TBlitz2D
 
-	Function Text( x%,y%,Text$ )
+	Function Text( x:Int,y:Int,Text:String )
 	
 		' set active texture to texture 0 so gldrawtext will work correctly
 		If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing

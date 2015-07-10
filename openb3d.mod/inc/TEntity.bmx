@@ -93,7 +93,7 @@ Type TEntity
 	' Recursively counts all children of an entity.
 	Function CountAllChildren:Int( ent:TEntity,no_children:Int=0 )
 	
-		Local children%=ent.CountChildren()
+		Local children:Int=ent.CountChildren()
 		
 		For Local id:Int=1 To children
 			no_children=no_children+1
@@ -110,7 +110,7 @@ Type TEntity
 		If ent=Null Then ent=Self
 		
 		Local ent2:TEntity=Null
-		Local children%=ent.CountChildren()
+		Local children:Int=ent.CountChildren()
 		
 		For Local id:Int=1 To children
 			no_children=no_children+1

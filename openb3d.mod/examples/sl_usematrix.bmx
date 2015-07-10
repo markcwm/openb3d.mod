@@ -24,7 +24,7 @@ Local camz#, tz#=5.5
 While Not KeyDown(KEY_ESCAPE)
 	
 	' use camera matrix
-	If KeyHit(KEY_M) Then UseMatrix(shader,"_Object2World",True)
+	If KeyHit(KEY_M) Then UseMatrix(shader,"_Object2World",0) ' 0=model matrix
 	
 	' move teapot
 	If KeyDown(KEY_UP) Then tz:+.1
