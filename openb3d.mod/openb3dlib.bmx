@@ -25,12 +25,15 @@ Import Brl.StandardIO
 Import Brl.Map
 Import Brl.Graphics
 Import angros.openb3dlib
-Import brl.retro
+Import Brl.Retro
+Import BRL.Pixmap
+Import Brl.GLMax2d
 
 ' Global declarations
 ' -------------------
 
 Extern
+
 	Function BackBufferToTex_( tex:Byte Ptr, frame:Int ) = "BackBufferToTex"
 	Function BufferToTex_( tex:Byte Ptr, buffer:Byte Ptr, frame:Int ) = "BufferToTex"
 	Function CameraToTex_( tex:Byte Ptr, cam:Byte Ptr, frame:Int ) = "CameraToTex"
@@ -227,6 +230,7 @@ Extern
 	Function SetCubeFace_( tex:Byte Ptr, face:Int ) = "SetCubeFace"
 	Function SetCubeMode_( tex:Byte Ptr, Mode:Int ) = "SetCubeMode"
 	Function ShowEntity_( ent:Byte Ptr ) = "ShowEntity"
+	Function SkinMesh_( mesh:Byte Ptr, surf_no_get:Int, vid:Int, bone1:Int, weight1:Float, bone2:Int, weight2:Float, bone3:Int, weight3:Float, bone4:Int, weight4:Float ) = "SkinMesh"
 	Function SpriteRenderMode_( sprite:Byte Ptr, Mode:Int ) = "SpriteRenderMode"
 	Function SpriteViewMode_( sprite:Byte Ptr, Mode:Int ) = "SpriteViewMode"
 	Function StencilAlpha_( stencil:Byte Ptr, a:Float ) = "StencilAlpha"
@@ -311,73 +315,60 @@ Extern
 	Function CreateOcTree_:Byte Ptr( w:Float, h:Float, d:Float, parent_ent:Byte Ptr ) = "CreateOcTree"
 	Function OctreeBlock_( octree:Byte Ptr, mesh:Byte Ptr, level:Int, X:Float, Y:Float, Z:Float, Near:Float, Far:Float ) = "OctreeBlock"
 	Function OctreeMesh_( octree:Byte Ptr, mesh:Byte Ptr, level:Int, X:Float, Y:Float, Z:Float, Near:Float, Far:Float ) = "OctreeMesh"
+	
 End Extern
-
-Private
-
-Global globals:TGlobal=New TGlobal
-
-Public
-
-' Blitz2D functions
-' -----------------
-
-Rem
-bbdoc: Begin using Max2D functions.
-End Rem
-Function BeginMax2D()
-
-	' Function by Oddball
-	glPopClientAttrib()
-	glPopAttrib()
-	glMatrixMode(GL_MODELVIEW)
-	glPopMatrix()
-	glMatrixMode(GL_PROJECTION)
-	glPopMatrix()
-	glMatrixMode(GL_TEXTURE)
-	glPopMatrix()
-	glMatrixMode(GL_COLOR)
-	glPopMatrix()
-	
-End Function
-
-Rem
-bbdoc: End using Max2D functions.
-End Rem
-Function EndMax2D()
-
-	' save the Max2D settings for later - Function by Oddball
-	glPushAttrib(GL_ALL_ATTRIB_BITS)
-	glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-	glMatrixMode(GL_MODELVIEW)
-	glPushMatrix()
-	glMatrixMode(GL_PROJECTION)
-	glPushMatrix()
-	glMatrixMode(GL_TEXTURE)
-	glPushMatrix()
-	glMatrixMode(GL_COLOR)
-	glPushMatrix()
-	
-	TGlobal.EnableStates()
-	glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
-	
-	SetRenderState(TGlobal.ALPHA_ENABLE,0) ' alpha blending was disabled by Max2d
-	SetRenderState(TGlobal.FX1,0) ' normals was enabled (full bright/no shading)
-	SetRenderState(TGlobal.FX2,1) ' vertex colors was enabled
-	
-	glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
-	glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
-	
-	glClearDepth(1.0)						
-	glDepthFunc(GL_LEQUAL)
-	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
-
-	glAlphaFunc(GL_GEQUAL,0.5)
-	
-End Function
 
 ' Includes
 ' --------
 
-Include "types.bmx"
-Include "functions.bmx"
+' global
+Include "inc/TGlobal.bmx"
+
+' entity
+Include "inc/TEntity.bmx"
+Include "inc/TCamera.bmx"
+Include "inc/TLight.bmx"
+Include "inc/TPivot.bmx"
+Include "inc/TMesh.bmx"
+Include "inc/TSprite.bmx"
+Include "inc/TBone.bmx"
+
+' mesh structure
+Include "inc/TSurface.bmx"
+Include "inc/TTexture.bmx"
+Include "inc/TBrush.bmx"
+'Include "inc/TAnimation.bmx"
+'Include "inc/TModel.bmx"
+
+' picking/collision
+'Include "inc/TColTree.bmx"
+Include "inc/TPick.bmx"
+'Include "inc/TCollision.bmx"
+
+' geom
+Include "inc/TVector.bmx"
+'Include "inc/TMatrix.bmx"
+'Include "inc/TQuaternion.bmx"
+Include "inc/BoxSphere.bmx"
+
+' misc
+Include "inc/THardwareInfo.bmx"
+Include "inc/TBlitz2D.bmx"
+Include "inc/TUtility.bmx"
+'Include "inc/TDebug.bmx"
+
+' data
+Include "inc/data.bmx"
+
+' extra
+Include "inc/types.bmx"
+Include "inc/TGLShader.bmx"
+
+' functions
+Include "inc/functions.bmx"
+
+Const USE_MAX2D=True	' true to enable max2d/minib3d integration
+Const USE_VBO=True	' true to use vbos if supported by hardware
+Const VBO_MIN_TRIS=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+Const LOG_NEW=False	' true to write to debuglog when new minib3d object created
+Const LOG_DEL=False	' true to write to debuglog when minib3d object destroyed
