@@ -1,3 +1,4 @@
+
 Rem
 bbdoc: Blitz2D
 EndRem
@@ -26,8 +27,7 @@ Type TBlitz2D
 		
 	End Function
 	
-	' Function by Oddball
-	Function BeginMax2D()
+	Function BeginMax2D() ' Function by Oddball
 	
 		glPopClientAttrib()
 		glPopAttrib()
@@ -42,8 +42,7 @@ Type TBlitz2D
 		
 	End Function
 	
-	' Function by Oddball
-	Function EndMax2D()
+	Function EndMax2D() ' Function by Oddball
 	
 		' save the Max2D settings for later
 		glPushAttrib(GL_ALL_ATTRIB_BITS)
@@ -57,12 +56,13 @@ Type TBlitz2D
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		TGlobal.EnableStates()
+		TGlobal.EnableStates() ' enables normals and vertex colors
 		glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 		
-		SetRenderState(TGlobal.ALPHA_ENABLE,0) ' alpha blending was disabled by Max2d
-		SetRenderState(TGlobal.FX1,0) ' normals was enabled (full bright/no shading)
-		SetRenderState(TGlobal.FX2,1) ' vertex colors was enabled
+		' set render state flags (crashes if fx2 is not set)
+		TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
+		TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
+		TGlobal.fx2[0]=1 ' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
 		
 		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)

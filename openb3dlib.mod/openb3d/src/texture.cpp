@@ -38,7 +38,6 @@
 #include "shadow.h"
 
 #include <string.h>
-#include <fstream>
 
 list<Texture*> Texture::tex_list;
 
@@ -323,59 +322,6 @@ string Texture::Strip(string filename){
 
 }
 
-// strips file info from filepath
-string Texture::StripFile(string filename){
-	string stripped_filename=filename;
-	string::size_type idx;
-
-	idx=filename.find('/');
-	if(idx!=string::npos){
-		stripped_filename=filename.substr(0,filename.rfind('/'));
-	}
-
-	idx=filename.find("\\");
-	if(idx!=string::npos){
-		stripped_filename=filename.substr(0,filename.rfind("\\"));
-	}
-	
-	return stripped_filename;
-}
-
-// makes a new path for a filename from a given filepath
-string Texture::NewFilePath(string filepath, string filename){
-	string fpath=StripFile(filepath);	
-	string fname=Strip(filename);
-	ifstream ifs;
-	
-	ifs.open((fpath+"/"+fname).c_str());
-	if(ifs.is_open()){
-		ifs.close();
-		return fpath+"/"+fname; // Unix
-	}
-	ifs.open((fpath+"\\"+fname).c_str());
-	if(ifs.is_open()){
-		ifs.close();
-		return fpath+"\\"+fname; // Windows
-	}
-	
-	for(int i=0; fname[i]; i++){ // try filename all lowercase
-		fname[i] = tolower(fname[i]);
-	}
-	ifs.open((fpath+"/"+fname).c_str());
-	if(ifs.is_open()){
-		ifs.close();
-		return fpath+"/"+fname; // unix
-	}
-	ifs.open((fpath+"\\"+fname).c_str());
-	if(ifs.is_open()){
-		ifs.close();
-		return fpath+"\\"+fname; // windows
-	}
-	
-	cout << "Error: Can't Find Resource File '"+filename+"'" << endl;
-	return filename;
-}
-
 void Texture::BufferToTex(unsigned char* buffer, int frame){
 	if(flags&128){
 		glBindTexture (GL_TEXTURE_CUBE_MAP,texture);
@@ -435,12 +381,6 @@ void Texture::BackBufferToTex(int frame){
 		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0);
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 	}
-}
-
-void Texture::DepthBufferToTex(int frame){
-		glBindTexture (GL_TEXTURE_2D,texture);
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,Global::height-height,width,height,0);
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 }
 
 void Texture::CameraToTex(Camera* cam, int frame){

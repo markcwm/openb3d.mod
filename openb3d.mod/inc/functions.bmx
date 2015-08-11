@@ -1,26 +1,10 @@
 ' functions.bmx
 
-' *** Wrapper only
+' *** Extra functions
 
-Rem
-bbdoc: Copy the contents of the depthbuffer to a texture.
-End Rem
+' Copy the contents of the depthbuffer To a texture.
 Function DepthBufferToTex( tex:TTexture,frame:Int=0 )
 	tex.DepthBufferToTex( frame )
-End Function
-
-Rem
-bbdoc: Update screen size
-End Rem
-Function GraphicsResize( width:Int,height:Int )
-	GraphicsResize_( width,height )
-End Function
-
-Rem
-bbdoc: Set render state capability flags
-End Rem
-Function SetRenderState( capability:Int,flag:Int )
-	SetRenderState_( capability,flag )
 End Function
 
 ' *** Texture rendering
@@ -137,9 +121,12 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
 End Rem
+Rem
+' removed since it was too slow and used the accum buffer
 Function AntiAlias( samples:Int )
 	TGlobal.AntiAlias( samples )
 End Function
+EndRem
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushAlpha">Online doc</a>
@@ -415,14 +402,14 @@ Function CountVertices:Int( surf:TSurface )
 End Function
 
 Rem
-bbdoc: Creates a blob entity.
+bbdoc: undocumented
 End Rem
 Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )
 	Return TBlob.CreateBlob( fluid,radius,parent_ent )
 End Function
 
 Rem
-bbdoc: Creates a bone entity.
+bbdoc: undocumented
 End Rem
 Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
 	Return TBone.CreateBone( mesh,parent_ent )
@@ -464,14 +451,14 @@ Function CreateCube:TMesh( parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: Creates a fluid mesh.
+bbdoc: undocumented
 End Rem
 Function CreateFluid:TFluid()
 	Return TFluid.CreateFluid()
 End Function
 
 Rem
-bbdoc: Creates a geosphere terrain.
+bbdoc: undocumented
 End Rem
 Function CreateGeosphere:TTerrain( size:Int,parent:TEntity=Null )
 	Return TGeosphere.CreateGeosphere( size,parent )
@@ -506,14 +493,14 @@ Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: Creates a quad mesh.
+bbdoc: undocumented
 End Rem
 Function CreateQuad:TMesh( parent:TEntity=Null )
 	Return TMesh.CreateQuad( parent )
 End Function
 
 Rem
-bbdoc: Creates a stencil shadow object.
+bbdoc: undocumented
 End Rem
 Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )
 	Return TShadowObject.CreateShadow( parent,Static )
@@ -534,7 +521,7 @@ Function CreateSprite:TSprite( parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: Creates a stencil object.
+bbdoc: undocumented
 End Rem
 Function CreateStencil:TStencil()
 	Return TStencil.CreateStencil()
@@ -562,7 +549,7 @@ Function CreateTexture:TTexture( width:Int,height:Int,flags:Int=9,frames:Int=1 )
 End Function
 
 Rem
-bbdoc: Creates a voxel sprite mesh.
+bbdoc: undocumented
 End Rem
 Function CreateVoxelSprite:TVoxelSprite( slices:Int=64,parent:TEntity=Null )
 	Return TVoxelSprite.CreateVoxelSprite( slices,parent )
@@ -592,9 +579,12 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityAutoFade">Online doc</a>
 End Rem
+Rem
+' removed due to having lots of checks per entity - alternative is octrees
 Function EntityAutoFade( ent:TEntity,near:Float,far:Float )
 	ent.EntityAutoFade( near,far )
 End Function
+EndRem
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBlend">Online doc</a>
@@ -1374,35 +1364,35 @@ Function SpriteViewMode( sprite:TSprite,Mode:Int )
 End Function
 
 Rem
-bbdoc: Sets stencil alpha level.
+bbdoc: undocumented
 End Rem
 Function StencilAlpha( stencil:TStencil,a:Float )
 	stencil.StencilAlpha( a )
 End Function
 
 Rem
-bbdoc: Sets stencil background color.
+bbdoc: undocumented
 End Rem
 Function StencilClsColor( stencil:TStencil,r:Float,g:Float,b:Float )
 	stencil.StencilClsColor( r,g,b )
 End Function
 
 Rem
-bbdoc: Sets stencil clear mode for color and depth buffers.
+bbdoc: undocumented
 End Rem
 Function StencilClsMode( stencil:TStencil,cls_depth:Int,cls_zbuffer:Int )
 	stencil.StencilClsMode( cls_depth,cls_zbuffer )
 End Function
 
 Rem
-bbdoc: Sets a mesh to be used as a stencil mesh object.
+bbdoc: undocumented
 End Rem
 Function StencilMesh( stencil:TStencil,mesh:TMesh,Mode:Int=1 )
 	stencil.StencilMesh( mesh,Mode )
 End Function
 
 Rem
-bbdoc: Stencil test mode. Set m from 0-1 (mode) and o from 0-3 (draw when stencil NOTEQUAL, EQUAL, LEQUAL, GEQUAL to mode).
+bbdoc: undocumented
 End Rem
 Function StencilMode( stencil:TStencil,m:Int,o:Int=1 )
 	stencil.StencilMode( m,o )
@@ -1563,7 +1553,7 @@ Function UpdateWorld( anim_speed:Float=1 )
 End Function
 
 Rem
-bbdoc: Object to use in stencil testing, or Null to disable.
+bbdoc: undocumented
 End Rem
 Function UseStencil( stencil:TStencil )
 	TStencil.UseStencil( stencil )
@@ -1901,7 +1891,7 @@ Function UseSurface( material:TShader,name:String,surf:TSurface,vbo:Int )
 End Function
 
 Rem
-bbdoc: Sends matrix data to a shader variable name of a uniform mat4 type. Set Mode from 0-3 (model, view, projection, modelview).
+bbdoc: Sends matrix data to a shader variable name of a uniform mat4 type.
 End Rem
 Function UseMatrix( material:TShader,name:String,Mode:Int )
 	material.UseMatrix( name,Mode )

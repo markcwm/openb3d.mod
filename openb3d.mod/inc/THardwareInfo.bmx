@@ -1,10 +1,14 @@
+
+' Minib3d
+
 Rem
 bbdoc: Hardware info
 about: Contains @{Function GetInfo()} And @{DisplayInfo(LogFile:Int=False)}.
 End Rem
-Type THardwareInfo ' By klepto2
+Type THardwareInfo ' Code by klepto2
 
-	Global ScreenWidth  : Int = DesktopWidth() ' added
+	' added
+	Global ScreenWidth  : Int = DesktopWidth()
 	Global ScreenHeight : Int = DesktopHeight()
 	Global ScreenDepth  : Int = DesktopDepth()
 	Global ScreenHertz  : Int = DesktopHertz()

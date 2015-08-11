@@ -1,0 +1,1351 @@
+// data.cpp
+
+#include "data.h"
+
+#include <stdio.h>
+#include <string.h>
+
+// Classid - used with static data fields
+const int ANIMATION_class=		1;
+const int ANIMATIONKEYS_class=	2;
+const int BONE_class=			3;
+const int BRUSH_class=			4;
+const int CAMERA_class=			5;
+const int COLLISION_class=		6; // collision.h
+const int COLLISIONINFO_class=	7;
+const int COLLISIONPAIR_class=	8; // collision2.h
+const int COLLISIONIMPACT_class=9;
+const int CSGTRIANGLE_class=	10; // csg.h
+const int ENTITY_class=			11;
+const int VECTOR_class=			12; // geom.h
+const int LINE_class=			13;
+const int PLANE_class=			14;
+const int QUAT_class=			15;
+const int MMATRIX_class=		16;
+const int BOX_class=			17;
+const int TRANSFORM_class=		18;
+const int GEOSPHERE_class=		19;
+const int GLOBAL_class=			20;
+const int FLUID_class=			21; // isosurface.h
+const int BLOB_class=			22;
+const int FIELDARRAY_class=		23;
+const int LIGHT_class=			24;
+const int MATERIALPLUGIN_class=	25; // material.h
+const int MATRIX_class=			26;
+const int MESH_class=			27;
+const int OCTREE_class=			28; // octree.h
+const int OCTREECHILD_class=	29;
+const int PARTICLEBATCH_class=	30; // particle.h
+const int PICK_class=			31;
+const int PIVOT_class=			32;
+const int QUATERNION_class=		33;
+const int SHADERDATA_class=		34; // shadermat.h
+const int SAMPLER_class=		35;
+const int MATERIAL_class=		36;
+const int SHADER_class=			37;
+const int SHADEROBJECT_class=	38; // shaderobject.h
+const int PROGRAMOBJECT_class=	39;
+const int SHADOWTRIANGLE_class=	40; // shadow.h
+const int EDGE_class=			41;
+const int SHADOWOBJECT_class=	42;
+const int SPRITE_class=			43;
+const int SPRITEBATCH_class=	44;
+const int STENCIL_class=		45;
+const int SURFACE_class=		46;
+const int TERRAIN_class=		47;
+const int TEXTURE_class=		48;
+const int TEXTUREFILTER_class=	49;
+const int TILT_class=			50;
+const int TOUCH_class=			51;
+const int MESHCOLLIDER_class=	52; // tree.h
+const int MESHINFO_class=		53;
+const int VOXELSPRITE_class=	54; // voxel.h
+
+// AnimationKeys varid
+const int ANIMATIONKEYS_frames=	1;
+const int ANIMATIONKEYS_flags=	2;
+const int ANIMATIONKEYS_px=		3;
+const int ANIMATIONKEYS_py=		4;
+const int ANIMATIONKEYS_pz=		5;
+const int ANIMATIONKEYS_sx=		6;
+const int ANIMATIONKEYS_sy=		7;
+const int ANIMATIONKEYS_sz=		8;
+const int ANIMATIONKEYS_qw=		9;
+const int ANIMATIONKEYS_qx=		10;
+const int ANIMATIONKEYS_qy=		11;
+const int ANIMATIONKEYS_qz=		12;
+
+// Bone varid
+const int BONE_n_px=		1;
+const int BONE_n_py=		2;
+const int BONE_n_pz=		3;
+const int BONE_n_sx=		4;
+const int BONE_n_sy=		5;
+const int BONE_n_sz=		6;
+const int BONE_n_rx=		7;
+const int BONE_n_ry=		8;
+const int BONE_n_rz=		9;
+const int BONE_n_qw=		10;
+const int BONE_n_qx=		11;
+const int BONE_n_qy=		12;
+const int BONE_n_qz=		13;
+const int BONE_keys=		14;
+const int BONE_mat2=		15;
+const int BONE_inv_mat=		16;
+const int BONE_tform_mat=	17;
+const int BONE_kx=			18;
+const int BONE_ky=			19;
+const int BONE_kz=			20;
+const int BONE_kqw=			21;
+const int BONE_kqx=			22;
+const int BONE_kqy=			23;
+const int BONE_kqz=			24;
+
+// Brush varid
+const int BRUSH_no_texs=		1;
+const int BRUSH_name=			2;
+const int BRUSH_red=			3;
+const int BRUSH_green=			4;
+const int BRUSH_blue=			5;
+const int BRUSH_alpha=			6;
+const int BRUSH_shine=			7;
+const int BRUSH_blend=			8;
+const int BRUSH_fx=				9;
+const int BRUSH_cache_frame=	10;
+const int BRUSH_tex=			11;
+
+// Camera varid
+const int CAMERA_cam_list=			1;
+const int CAMERA_render_list=		2;
+const int CAMERA_vx=				3;
+const int CAMERA_vy=				4;
+const int CAMERA_vwidth=			5;
+const int CAMERA_vheight=			6;
+const int CAMERA_cls_r=				7;
+const int CAMERA_cls_g=				8;
+const int CAMERA_cls_b=				9;
+const int CAMERA_cls_color=			10;
+const int CAMERA_cls_zbuffer=		11;
+const int CAMERA_range_near=		12;
+const int CAMERA_range_far=			13;
+const int CAMERA_zoom=				14;
+const int CAMERA_proj_mode=			15;
+const int CAMERA_fog_mode=			16;
+const int CAMERA_fog_r=				17;
+const int CAMERA_fog_g=				18;
+const int CAMERA_fog_b=				19;
+const int CAMERA_fog_range_near=	20;
+const int CAMERA_fog_range_far=		21;
+const int CAMERA_project_enabled=	22;
+const int CAMERA_mod_mat=			23; // array [16]
+const int CAMERA_proj_mat=			24; // array [16]
+const int CAMERA_viewport=			25; // array [4]
+const int CAMERA_projected_x=		26;
+const int CAMERA_projected_y=		27;
+const int CAMERA_projected_z=		28;
+const int CAMERA_frustum=			29; // array [6][4]
+
+// CollisionPair varid
+const int COLLISIONPAIR_cp_list=	1;
+const int COLLISIONPAIR_ent_lists=	2;
+const int COLLISIONPAIR_src_type=	3;
+const int COLLISIONPAIR_des_type=	4;
+const int COLLISIONPAIR_col_method=	5;
+const int COLLISIONPAIR_response=	6;
+
+// CollisionImpact varid
+const int COLLISIONIMPACT_x=	1;
+const int COLLISIONIMPACT_y=	2;
+const int COLLISIONIMPACT_z=	3;
+const int COLLISIONIMPACT_nx=	4;
+const int COLLISIONIMPACT_ny=	5;
+const int COLLISIONIMPACT_nz=	6;
+const int COLLISIONIMPACT_time=	7;
+const int COLLISIONIMPACT_ent=	8;
+const int COLLISIONIMPACT_surf=	9;
+const int COLLISIONIMPACT_tri=	10;
+
+// Entity varid
+const int ENTITY_entity_list=		1;
+const int ENTITY_child_list=		2;
+const int ENTITY_parent=			3;
+const int ENTITY_mat=				4;
+const int ENTITY_rotmat=			5;
+const int ENTITY_px=				6;
+const int ENTITY_py=				7;
+const int ENTITY_pz=				8;
+const int ENTITY_sx=				9;
+const int ENTITY_sy=				10;
+const int ENTITY_sz=				11;
+const int ENTITY_rx=				12;
+const int ENTITY_ry=				13;
+const int ENTITY_rz=				14;
+const int ENTITY_qw=				15;
+const int ENTITY_qx=				16;
+const int ENTITY_qy=				17;
+const int ENTITY_qz=				18;
+const int ENTITY_brush=				19;
+const int ENTITY_order=				20;
+const int ENTITY_alpha_order=		21;
+const int ENTITY_hide=				22;
+const int ENTITY_cull_radius=		23;
+const int ENTITY_name=				24;
+const int ENTITY_class_name=		25;
+const int ENTITY_animate_list=		26;
+const int ENTITY_anim=				27; // true if mesh contains anim data
+const int ENTITY_anim_render=		28; // true to render as anim mesh
+const int ENTITY_anim_mode=			29;
+const int ENTITY_anim_time=			30;
+const int ENTITY_anim_speed=		31;
+const int ENTITY_anim_seq=			32;
+const int ENTITY_anim_trans=		33;
+const int ENTITY_anim_dir=			34; // 1=forward, -1=backward
+const int ENTITY_anim_seqs_first=	35;
+const int ENTITY_anim_seqs_last=	36;
+const int ENTITY_no_seqs=			37;
+const int ENTITY_anim_update=		38;
+const int ENTITY_anim_list=			39;
+const int ENTITY_collision_type=	40;
+const int ENTITY_radius_x=			41;
+const int ENTITY_radius_y=			42;
+const int ENTITY_box_x=				43;
+const int ENTITY_box_y=				44;
+const int ENTITY_box_z=				45;
+const int ENTITY_box_w=				46;
+const int ENTITY_box_h=				47;
+const int ENTITY_box_d=				48;
+const int ENTITY_no_collisions=		49;
+const int ENTITY_collision=			50;
+const int ENTITY_old_x=				51;
+const int ENTITY_old_y=				52;
+const int ENTITY_old_z=				53;
+const int ENTITY_old_pitch=			54;
+const int ENTITY_old_yaw=			55;
+const int ENTITY_old_roll=			56;
+const int ENTITY_new_x=				57;
+const int ENTITY_new_y=				58;
+const int ENTITY_new_z=				59;
+const int ENTITY_new_no=			60;
+const int ENTITY_old_mat=			61;
+const int ENTITY_dynamic=			62;
+const int ENTITY_dynamic_x=			63;
+const int ENTITY_dynamic_y=			64;
+const int ENTITY_dynamic_z=			65;
+const int ENTITY_dynamic_yaw=		66;
+const int ENTITY_dynamic_pitch=		67;
+const int ENTITY_dynamic_roll=		68;
+const int ENTITY_pick_mode=			69;
+const int ENTITY_obscurer=			70;
+const int ENTITY_tformed_x=			71;
+const int ENTITY_tformed_y=			72;
+const int ENTITY_tformed_z=			73;
+
+// Global varid
+const int GLOBAL_width=				1;
+const int GLOBAL_height=			2;
+const int GLOBAL_mode=				3;
+const int GLOBAL_depth=				4;
+const int GLOBAL_rate=				5;
+const int GLOBAL_ambient_red=		6;
+const int GLOBAL_ambient_green=		7;
+const int GLOBAL_ambient_blue=		8;
+const int GLOBAL_vbo_enabled=		9;
+const int GLOBAL_vbo_min_tris=		10;
+const int GLOBAL_Shadows_enabled=	11;
+const int GLOBAL_anim_speed=		12;
+const int GLOBAL_fog_enabled=		13;
+const int GLOBAL_root_ent=			14;
+const int GLOBAL_camera_in_use=		15;
+const int GLOBAL_alpha_enable=		16;
+const int GLOBAL_blend_mode=		17;
+const int GLOBAL_fx1=				18;
+const int GLOBAL_fx2=				19;
+
+// Light varid
+const int LIGHT_light_no=	1;
+const int LIGHT_no_lights=	2;
+const int LIGHT_max_lights=	3;	
+const int LIGHT_gl_light=	4;
+const int LIGHT_light_list=	5;
+const int LIGHT_light_type=	6;
+const int LIGHT_range=		7;
+const int LIGHT_red=		8;
+const int LIGHT_green=		9;
+const int LIGHT_blue=		10;
+const int LIGHT_inner_ang=	11;
+const int LIGHT_outer_ang=	12;
+	
+// Matrix varid
+const int MATRIX_grid=	1;
+
+// Mesh varid
+const int MESH_no_surfs=		1;
+const int MESH_surf_list=		2;
+const int MESH_anim_surf_list=	3;
+const int MESH_bones=			4;
+const int MESH_mat_sp=			5;
+const int MESH_c_col_tree=		6;
+const int MESH_reset_col_tree=	7;
+const int MESH_reset_bounds=	8;
+const int MESH_min_x=			9;
+const int MESH_min_y=			10;
+const int MESH_min_z=			11;
+const int MESH_max_x=			12;
+const int MESH_max_y=			13;
+const int MESH_max_z=			14;
+
+// MeshCollider varid
+const int MESHCOLLIDER_coords=	1;
+const int MESHCOLLIDER_surface=	2;
+const int MESHCOLLIDER_verts=	3;
+const int MESHCOLLIDER_index=	4;
+
+// MeshInfo varid
+const int MESHINFO_tri_list=	1;
+const int MESHINFO_vert_list=	2;
+
+// Pick varid
+const int PICK_ent_list=		1;
+const int PICK_picked_x=		2;
+const int PICK_picked_y=		3;
+const int PICK_picked_z=		4;
+const int PICK_picked_nx=		5;
+const int PICK_picked_ny=		6;
+const int PICK_picked_nz=		7;
+const int PICK_picked_time=		8;
+const int PICK_picked_ent=		9;
+const int PICK_picked_surface=	10;
+const int PICK_picked_triangle=	11;
+
+// Sprite varid
+const int SPRITE_angle=			1;
+const int SPRITE_scale_x=		2;
+const int SPRITE_scale_y=		3;
+const int SPRITE_handle_x=		4;
+const int SPRITE_handle_y=		5; 
+const int SPRITE_view_mode=		6;
+const int SPRITE_render_mode=	7;
+
+// Surface varid
+const int SURFACE_no_verts=			1;
+const int SURFACE_no_tris=			2;
+const int SURFACE_vert_coords=		3;
+const int SURFACE_vert_norm=		4;
+const int SURFACE_vert_tex_coords0=	5;
+const int SURFACE_vert_tex_coords1=	6;
+const int SURFACE_vert_col=			7;
+const int SURFACE_tris=				8;
+const int SURFACE_vert_bone1_no=	9;
+const int SURFACE_vert_bone2_no=	10;
+const int SURFACE_vert_bone3_no=	11;
+const int SURFACE_vert_bone4_no=	12;
+const int SURFACE_vert_weight1=		13;
+const int SURFACE_vert_weight2=		14;
+const int SURFACE_vert_weight3=		15;
+const int SURFACE_vert_weight4=		16;
+const int SURFACE_brush=			17;
+const int SURFACE_ShaderMat=		18;
+const int SURFACE_vbo_id=			19;
+const int SURFACE_vert_array_size=	20;
+const int SURFACE_tri_array_size=	21;
+const int SURFACE_vmin=				22;
+const int SURFACE_vmax=				23;
+const int SURFACE_vbo_enabled=		24;
+const int SURFACE_reset_vbo=		25;
+const int SURFACE_alpha_enable=		26;	
+
+// Texture varid
+const int TEXTURE_texture=		1;
+const int TEXTURE_tex_list=		2;
+const int TEXTURE_file=			3;
+const int TEXTURE_frames=		4;
+const int TEXTURE_flags=		5;
+const int TEXTURE_blend=		6;
+const int TEXTURE_coords=		7;
+const int TEXTURE_u_scale=		8;
+const int TEXTURE_v_scale=		9;
+const int TEXTURE_u_pos=		10;
+const int TEXTURE_v_pos=		11;
+const int TEXTURE_angle=		12;
+const int TEXTURE_file_abs=		13;
+const int TEXTURE_width=		14;
+const int TEXTURE_height=		15;
+const int TEXTURE_no_frames=	16;
+const int TEXTURE_framebuffer=	17;
+const int TEXTURE_cube_face=	18;
+const int TEXTURE_cube_mode=	19;
+
+// Vector varid
+const int VECTOR_x=	1;
+const int VECTOR_y=	2;
+const int VECTOR_z=	3;
+
+// Define instance of statics
+int Global::mode,Global::depth,Global::rate;
+
+extern "C" {
+
+// Static
+
+int* StaticInt( int classid,int varid ){
+	switch (classid){
+		case GLOBAL_class :
+			switch (varid){
+				case GLOBAL_width : return &Global::width;
+				case GLOBAL_height : return &Global::height;
+				case GLOBAL_mode : return &Global::mode;
+				case GLOBAL_depth : return &Global::depth;
+				case GLOBAL_rate : return &Global::rate;
+				case GLOBAL_vbo_enabled : return &Global::vbo_enabled;
+				case GLOBAL_vbo_min_tris : return &Global::vbo_min_tris;
+				case GLOBAL_Shadows_enabled : return &Global::Shadows_enabled;
+				case GLOBAL_fog_enabled : return &Global::fog_enabled;
+				case GLOBAL_alpha_enable : return &Global::alpha_enable;
+				case GLOBAL_blend_mode : return &Global::blend_mode;
+				case GLOBAL_fx1 : return &Global::fx1;
+				case GLOBAL_fx2 : return &Global::fx2;
+			}
+		case PICK_class :
+			switch (varid){
+				case PICK_picked_triangle : return &Pick::picked_triangle;
+			}
+		case LIGHT_class :
+			switch (varid){
+				case LIGHT_light_no : return &Light::light_no;
+				case LIGHT_no_lights : return &Light::no_lights;
+				case LIGHT_max_lights : return &Light::max_lights;
+				case LIGHT_gl_light : return &Light::gl_light[0];
+			}
+	}
+	return NULL;
+}
+
+float* StaticFloat( int classid,int varid ){
+	switch (classid){
+		case GLOBAL_class :
+			switch (varid){
+				case GLOBAL_ambient_red : return &Global::ambient_red;
+				case GLOBAL_ambient_green : return &Global::ambient_green;
+				case GLOBAL_ambient_blue : return &Global::ambient_blue;
+				case GLOBAL_anim_speed : return &Global::anim_speed;
+			}
+		case ENTITY_class :
+			switch (varid){
+				case ENTITY_tformed_x : return &Entity::tformed_x;
+				case ENTITY_tformed_y : return &Entity::tformed_y;
+				case ENTITY_tformed_z : return &Entity::tformed_z;
+			}
+		case CAMERA_class :
+			switch (varid){
+				case CAMERA_projected_x : return &Camera::projected_x;
+				case CAMERA_projected_y : return &Camera::projected_y;
+				case CAMERA_projected_z : return &Camera::projected_z;
+			}
+		case PICK_class :
+			switch (varid){
+				case PICK_picked_x : return &Pick::picked_x;
+				case PICK_picked_y : return &Pick::picked_y;
+				case PICK_picked_z : return &Pick::picked_z;
+				case PICK_picked_nx : return &Pick::picked_nx;
+				case PICK_picked_ny : return &Pick::picked_ny;
+				case PICK_picked_nz : return &Pick::picked_nz;
+				case PICK_picked_time : return &Pick::picked_time;
+			}
+	}
+	return NULL;
+}
+
+Camera* StaticCamera( int classid,int varid ){
+	switch (classid){
+		case GLOBAL_class :
+			switch (varid){
+				case GLOBAL_camera_in_use : return Global::camera_in_use;
+			}
+	}
+	return NULL;
+}
+
+Entity* StaticEntity( int classid,int varid ){
+	switch (classid){
+		case PICK_class :
+			switch (varid){
+				case PICK_picked_ent : return Pick::picked_ent;
+			}
+	}
+	return NULL;
+}
+
+Pivot* StaticPivot( int classid,int varid ){
+	switch (classid){
+		case GLOBAL_class :
+			switch (varid){
+				case GLOBAL_root_ent : return Global::root_ent;
+			}
+	}
+	return NULL;
+}
+
+Surface* StaticSurface( int classid,int varid ){
+	switch (classid){
+		case PICK_class :
+			switch (varid){
+				case PICK_picked_surface : return Pick::picked_surface;
+			}
+	}
+	return NULL;
+}
+
+int StaticListSize( int classid,int varid ){
+	switch (classid){
+		case ENTITY_class :
+			switch (varid){
+				case ENTITY_entity_list : return Entity::entity_list.size();
+				case ENTITY_animate_list : return Entity::animate_list.size();
+			}
+		case TEXTURE_class :
+			switch (varid){
+				case TEXTURE_tex_list : return Texture::tex_list.size();
+			}
+		case CAMERA_class :
+			switch (varid){
+				case CAMERA_cam_list : return Camera::cam_list.size();
+				case CAMERA_render_list : return Camera::render_list.size();
+			}
+		case PICK_class :
+			switch (varid){
+				case PICK_ent_list : return Pick::ent_list.size();
+			}
+		case LIGHT_class :
+			switch (varid){
+				case LIGHT_light_list : return Light::light_list.size();
+			}
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_cp_list : return CollisionPair::cp_list.size();
+			}
+	}
+	return 0;
+}
+
+int StaticListSizeArray( int classid,int varid,int index ){
+	switch (classid){
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_ent_lists : return CollisionPair::ent_lists[index].size();
+			}
+	}
+	return 0;
+}
+
+Camera* StaticIterListCamera( int classid,int varid ){
+	static int id=0;
+	static list<Camera*> objlist;
+	static list<Camera*>::iterator it;
+	static Camera* obj;
+	
+	switch (classid){
+		case CAMERA_class :
+			switch (varid){
+				case CAMERA_cam_list : objlist=Camera::cam_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+	
+CollisionPair* StaticIterListCollisionPair( int classid,int varid ){
+	static int id=0;
+	static list<CollisionPair*> objlist;
+	static list<CollisionPair*>::iterator it;
+	static CollisionPair* obj;
+	
+	switch (classid){
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_cp_list : objlist=CollisionPair::cp_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Entity* StaticIterListEntity( int classid,int varid ){
+	static int id=0;
+	static list<Entity*> objlist;
+	static list<Entity*>::iterator it;
+	static Entity* obj;
+	
+	switch (classid){
+		case ENTITY_class :
+			switch (varid){
+				case ENTITY_entity_list : objlist=Entity::entity_list; break;
+				case ENTITY_animate_list : objlist=Entity::animate_list; break;
+			}
+		case PICK_class :
+			switch (varid){
+				case PICK_ent_list : objlist=Pick::ent_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Entity* StaticIterListEntityArray( int classid,int varid,int index ){
+	static int id=0;
+	static list<Entity*> objlist;
+	static list<Entity*>::iterator it;
+	static Entity* obj;
+	
+	switch (classid){
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_ent_lists : objlist=CollisionPair::ent_lists[index]; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Mesh* StaticIterListMesh( int classid,int varid ){
+	static int id=0;
+	static list<Mesh*> objlist;
+	static list<Mesh*>::iterator it;
+	static Mesh* obj;
+	
+	switch (classid){
+		case CAMERA_class :
+			switch (varid){
+				case CAMERA_render_list : objlist=Camera::render_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Texture* StaticIterListTexture( int classid,int varid ){
+	static int id=0;
+	static list<Texture*> objlist;
+	static list<Texture*>::iterator it;
+	static Texture* obj;
+	
+	switch (classid){
+		case TEXTURE_class :
+			switch (varid){
+				case TEXTURE_tex_list : objlist=Texture::tex_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Light* StaticIterVectorLight( int classid,int varid ){
+	static int id=0;
+	static vector<Light*> objlist;
+	static vector<Light*>::iterator it;
+	static Light* obj;
+	
+	switch (classid){
+		case LIGHT_class :
+			switch (varid){
+				case LIGHT_light_list : objlist=Light::light_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+// AnimationKeys
+
+int* AnimationKeysInt( AnimationKeys* obj,int varid ){
+	switch (varid){
+		case ANIMATIONKEYS_frames : return &obj->frames;
+		case ANIMATIONKEYS_flags : return &obj->flags[0];
+	}
+	return NULL;
+}
+
+float* AnimationKeysFloat( AnimationKeys* obj,int varid ){
+	switch (varid){
+		case ANIMATIONKEYS_px : return &obj->px[0];
+		case ANIMATIONKEYS_py : return &obj->py[0];
+		case ANIMATIONKEYS_pz : return &obj->pz[0];
+		case ANIMATIONKEYS_sx : return &obj->sx[0];
+		case ANIMATIONKEYS_sy : return &obj->sy[0];
+		case ANIMATIONKEYS_sz : return &obj->sz[0];
+		case ANIMATIONKEYS_qw : return &obj->qw[0];
+		case ANIMATIONKEYS_qx : return &obj->qx[0];
+		case ANIMATIONKEYS_qy : return &obj->qy[0];
+		case ANIMATIONKEYS_qz : return &obj->qz[0];	
+	}
+	return NULL;
+}
+
+// Bone
+
+float* BoneFloat( Bone* obj,int varid ){
+	switch (varid){
+		case BONE_n_px : return &obj->n_px;
+		case BONE_n_py : return &obj->n_py;
+		case BONE_n_pz : return &obj->n_pz;
+		case BONE_n_sx : return &obj->n_sx;
+		case BONE_n_sy : return &obj->n_sy;
+		case BONE_n_sz : return &obj->n_sz;
+		case BONE_n_rx : return &obj->n_rx;
+		case BONE_n_ry : return &obj->n_ry;
+		case BONE_n_rz : return &obj->n_rz;
+		case BONE_n_qw : return &obj->n_qw;
+		case BONE_n_qx : return &obj->n_qx;
+		case BONE_n_qy : return &obj->n_qy;
+		case BONE_n_qz : return &obj->n_qz;
+		case BONE_kx : return &obj->kx;
+		case BONE_ky : return &obj->ky;
+		case BONE_kz : return &obj->kz;
+		case BONE_kqw : return &obj->kqw;
+		case BONE_kqx : return &obj->kqx;
+		case BONE_kqy : return &obj->kqy;
+		case BONE_kqz : return &obj->kqz;
+	}
+	return NULL;
+}
+
+AnimationKeys* BoneAnimationKeys( Bone* obj,int varid ){
+	switch (varid){
+		case BONE_keys : return obj->keys;
+	}
+	return NULL;
+}
+
+Matrix* BoneMatrix( Bone* obj,int varid ){
+	switch (varid){
+		case BONE_mat2 : return &obj->mat2;
+		case BONE_inv_mat : return &obj->inv_mat;
+		case BONE_tform_mat : return &obj->tform_mat;
+	}
+	return NULL;
+}
+
+// Brush
+
+int* BrushInt( Brush* obj,int varid ){
+	switch (varid){
+		case BRUSH_no_texs : return &obj->no_texs;
+		case BRUSH_blend : return &obj->blend;
+		case BRUSH_fx : return &obj->fx;
+	}
+	return NULL;
+}
+
+unsigned int* BrushUInt( Brush* obj,int varid ){
+	switch (varid){
+		case BRUSH_cache_frame : return &obj->cache_frame[0]; // array 8
+	}
+	return NULL;
+}
+
+float* BrushFloat( Brush* obj,int varid ){
+	switch (varid){
+		case BRUSH_red : return &obj->red;
+		case BRUSH_green : return &obj->green;
+		case BRUSH_blue : return &obj->blue;
+		case BRUSH_alpha : return &obj->alpha;
+		case BRUSH_shine : return &obj->shine;
+	}
+	return NULL;
+}
+
+const char* BrushString( Brush* obj,int varid ){
+	switch (varid){
+		case BRUSH_name : return obj->name.c_str();
+	}
+	return NULL;
+}
+
+Texture* BrushTextureArray( Brush* obj,int varid,int index ){
+	switch (varid){
+		case BRUSH_tex : return obj->tex[index];
+	}
+	return NULL;
+}
+
+// Camera
+
+bool* CameraBool( Camera* obj,int varid ){
+	switch (varid){
+		case CAMERA_cls_color : return &obj->cls_color;
+		case CAMERA_cls_zbuffer : return &obj->cls_zbuffer;
+	}
+	return NULL;
+}
+
+int* CameraInt( Camera* obj,int varid ){
+	switch (varid){
+		case CAMERA_vx : return &obj->vx;
+		case CAMERA_vy : return &obj->vy;
+		case CAMERA_vwidth : return &obj->vwidth;
+		case CAMERA_vheight : return &obj->vheight;
+		case CAMERA_proj_mode : return &obj->proj_mode;
+		case CAMERA_fog_mode : return &obj->fog_mode;
+		case CAMERA_project_enabled : return &obj->project_enabled;
+		case CAMERA_viewport : return &obj->viewport[0]; // [4]
+	}
+	return NULL;
+}
+
+float* CameraFloat( Camera* obj,int varid ){
+	switch (varid){
+		case CAMERA_cls_r : return &obj->cls_r;	
+		case CAMERA_cls_g : return &obj->cls_g;	
+		case CAMERA_cls_b : return &obj->cls_b;	
+		case CAMERA_range_near : return &obj->range_near;	
+		case CAMERA_range_far : return &obj->range_far;	
+		case CAMERA_zoom : return &obj->zoom;	
+		case CAMERA_fog_r : return &obj->fog_r;	
+		case CAMERA_fog_g : return &obj->fog_g;	
+		case CAMERA_fog_b : return &obj->fog_b;	
+		case CAMERA_fog_range_near : return &obj->fog_range_near;	
+		case CAMERA_fog_range_far : return &obj->fog_range_far;
+		case CAMERA_mod_mat : return &obj->mod_mat[0]; // [16]	
+		case CAMERA_proj_mat : return &obj->proj_mat[0]; // [16]
+		case CAMERA_frustum : return &obj->frustum[0][0]; // [6][4]
+	}
+	return NULL;
+}
+
+// CollisionPair
+
+int* CollisionPairInt( CollisionPair* obj,int varid ){
+	switch (varid){
+		case COLLISIONPAIR_src_type : return &obj->src_type;
+		case COLLISIONPAIR_des_type : return &obj->des_type;
+		case COLLISIONPAIR_col_method : return &obj->col_method;
+		case COLLISIONPAIR_response : return &obj->response;
+	}
+	return NULL;
+}
+
+// CollisionImpact
+
+int* CollisionImpactInt( CollisionImpact* obj,int varid ){
+	switch (varid){
+		case COLLISIONIMPACT_tri : return &obj->tri;
+	}
+	return NULL;
+}
+
+float* CollisionImpactFloat( CollisionImpact* obj,int varid ){
+	switch (varid){
+		case COLLISIONIMPACT_x : return &obj->x;
+		case COLLISIONIMPACT_y : return &obj->y;
+		case COLLISIONIMPACT_z : return &obj->z;
+		case COLLISIONIMPACT_nx : return &obj->nx;
+		case COLLISIONIMPACT_ny : return &obj->ny;
+		case COLLISIONIMPACT_nz : return &obj->nz;
+		case COLLISIONIMPACT_time : return &obj->time;
+	}
+	return NULL;
+}
+
+Entity* CollisionImpactEntity( CollisionImpact* obj,int varid ){
+	switch (varid){
+		case COLLISIONIMPACT_ent : return obj->ent;
+	}
+	return NULL;
+}
+
+Surface* CollisionImpactSurface( CollisionImpact* obj,int varid ){
+	switch (varid){
+		case COLLISIONIMPACT_surf : return obj->surf;
+	}
+	return NULL;
+}
+
+// Entity
+
+int* EntityInt( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_order : return &obj->order;
+		case ENTITY_hide : return &obj->hide;
+		case ENTITY_anim : return &obj->anim;
+		case ENTITY_anim_render : return &obj->anim_render;
+		case ENTITY_anim_mode : return &obj->anim_mode;
+		case ENTITY_anim_seq : return &obj->anim_seq;
+		case ENTITY_anim_trans : return &obj->anim_trans;
+		case ENTITY_anim_dir : return &obj->anim_dir;
+		case ENTITY_anim_seqs_first : return &obj->anim_seqs_first[0];
+		case ENTITY_anim_seqs_last : return &obj->anim_seqs_last[0];
+		case ENTITY_no_seqs : return &obj->no_seqs;
+		case ENTITY_anim_update : return &obj->anim_update;
+		case ENTITY_anim_list : return &obj->anim_list;
+		case ENTITY_collision_type : return &obj->collision_type;
+		case ENTITY_no_collisions : return &obj->no_collisions;
+		case ENTITY_new_no : return &obj->new_no;
+		case ENTITY_dynamic : return &obj->dynamic;
+		case ENTITY_pick_mode : return &obj->pick_mode;
+		case ENTITY_obscurer : return &obj->obscurer;
+	}
+	return NULL;
+}
+
+float* EntityFloat( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_px : return &obj->px;
+		case ENTITY_py : return &obj->py;
+		case ENTITY_pz : return &obj->pz;
+		case ENTITY_sx : return &obj->sx;
+		case ENTITY_sy : return &obj->sy;
+		case ENTITY_sz : return &obj->sz;
+		case ENTITY_rx : return &obj->rx;
+		case ENTITY_ry : return &obj->ry;
+		case ENTITY_rz : return &obj->rz;
+		case ENTITY_qw : return &obj->qw;
+		case ENTITY_qx : return &obj->qx;
+		case ENTITY_qy : return &obj->qy;
+		case ENTITY_qz : return &obj->qz;
+		case ENTITY_alpha_order : return &obj->alpha_order;
+		case ENTITY_cull_radius : return &obj->cull_radius;
+		case ENTITY_anim_time : return &obj->anim_time;
+		case ENTITY_anim_speed : return &obj->anim_speed;
+		case ENTITY_radius_x : return &obj->radius_x;
+		case ENTITY_radius_y : return &obj->radius_y;
+		case ENTITY_box_x : return &obj->box_x;
+		case ENTITY_box_y : return &obj->box_y;
+		case ENTITY_box_z : return &obj->box_z;
+		case ENTITY_box_w : return &obj->box_w;
+		case ENTITY_box_h : return &obj->box_h;
+		case ENTITY_box_d : return &obj->box_d;
+		case ENTITY_old_x : return &obj->old_x;
+		case ENTITY_old_y : return &obj->old_y;
+		case ENTITY_old_z : return &obj->old_z;
+		case ENTITY_old_pitch : return &obj->old_pitch;
+		case ENTITY_old_yaw : return &obj->old_yaw;
+		case ENTITY_old_roll : return &obj->old_roll;
+		case ENTITY_new_x : return &obj->new_x;
+		case ENTITY_new_y : return &obj->new_y;
+		case ENTITY_new_z : return &obj->new_z;
+		case ENTITY_dynamic_x : return &obj->dynamic_x;
+		case ENTITY_dynamic_y : return &obj->dynamic_y;
+		case ENTITY_dynamic_z : return &obj->dynamic_z;
+		case ENTITY_dynamic_yaw : return &obj->dynamic_yaw;
+		case ENTITY_dynamic_pitch : return &obj->dynamic_pitch;
+		case ENTITY_dynamic_roll : return &obj->dynamic_roll;
+	}
+	return NULL;
+}
+
+const char* EntityString( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_name : return obj->name.c_str();
+		case ENTITY_class_name : return obj->class_name.c_str();
+	}
+	return NULL;
+}
+
+Entity* EntityEntity( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_parent : return obj->parent;
+	}
+	return NULL;
+}
+
+Brush* EntityBrush( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_brush : return &obj->brush;
+	}
+	return NULL;
+}
+
+Matrix* EntityMatrix( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_mat : return &obj->mat;
+		case ENTITY_rotmat : return &obj->rotmat;
+		case ENTITY_old_mat : return &obj->old_mat;
+	}
+	return NULL;
+}
+
+int EntityListSize( Entity* obj,int varid ){
+	switch (varid){
+		case ENTITY_child_list : return obj->child_list.size();
+		case ENTITY_collision : return obj->collision.size();
+	}
+	return 0;
+}
+
+Entity* EntityIterListEntity( Entity* obj,int varid ){
+	static int id=0;
+	static list<Entity*> objlist;
+	static list<Entity*>::iterator it;
+	static Entity* obj2;
+	
+	switch (varid){
+		case ENTITY_child_list : objlist=obj->child_list; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}
+
+CollisionImpact* EntityIterVectorCollisionImpact( Entity* obj,int varid ){
+	static int id=0;
+	static vector<CollisionImpact*> objlist;
+	static vector<CollisionImpact*>::iterator it;
+	static CollisionImpact* obj2;
+	
+	switch (varid){
+		case ENTITY_collision : objlist=obj->collision; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}
+
+// Light
+
+int* LightInt( Light* obj,int varid ){
+	switch (varid){
+		case LIGHT_light_type : return &obj->light_type;
+	}
+	return NULL;
+}
+
+float* LightFloat( Light* obj,int varid ){
+	switch (varid){
+		case LIGHT_range : return &obj->range;
+		case LIGHT_red : return &obj->red;
+		case LIGHT_green : return &obj->green;
+		case LIGHT_blue : return &obj->blue;
+		case LIGHT_inner_ang : return &obj->inner_ang;
+		case LIGHT_outer_ang : return &obj->outer_ang;
+	}
+	return NULL;
+}
+
+// Matrix
+
+float* MatrixFloat( Matrix* obj,int varid ){
+	switch (varid){
+		case MATRIX_grid : return &obj->grid[0][0];
+	}
+	return NULL;
+}
+
+// Mesh
+
+int* MeshInt( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_no_surfs : return &obj->no_surfs;
+		case MESH_reset_col_tree : return &obj->reset_col_tree;
+		case MESH_reset_bounds : return &obj->reset_bounds;
+	}
+	return NULL;
+}
+
+float* MeshFloat( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_min_x : return &obj->min_x;
+		case MESH_min_y : return &obj->min_y;
+		case MESH_min_z : return &obj->min_z;
+		case MESH_max_x : return &obj->max_x;
+		case MESH_max_y : return &obj->max_y;
+		case MESH_max_z : return &obj->max_z;	
+	}
+	return NULL;
+}
+
+Matrix* MeshMatrix( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_mat_sp : return &obj->mat_sp;
+	}
+	return NULL;
+}
+
+/*MeshCollider* MeshMeshCollider( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_c_col_tree : return obj->c_col_tree;
+	}
+	return NULL;
+}*/
+
+int MeshListSize( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_surf_list : return obj->surf_list.size();
+		case MESH_anim_surf_list : return obj->anim_surf_list.size();
+		case MESH_bones : return obj->bones.size();
+	}
+	return 0;
+}
+
+Surface* MeshIterListSurface( Mesh* obj,int varid ){
+	static int id=0;
+	static list<Surface*> objlist;
+	static list<Surface*>::iterator it;
+	static Surface* obj2;
+	
+	switch (varid){
+		case MESH_surf_list : objlist=obj->surf_list; break;
+		case MESH_anim_surf_list : objlist=obj->anim_surf_list; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}
+
+Bone* MeshIterVectorBone( Mesh* obj,int varid ){
+	static int id=0;
+	static vector<Bone*> objlist;
+	static vector<Bone*>::iterator it;
+	static Bone* obj2;
+	
+	switch (varid){
+		case MESH_bones : objlist=obj->bones; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}
+
+vector<Bone*>* MeshVectorBone( Mesh* obj,int varid ){
+	switch (varid){
+		case MESH_bones : return &obj->bones;
+	}
+	return NULL;
+}
+
+// MeshInfo
+
+/*int MeshInfoListSize( MeshInfo* obj,int varid ){
+	switch (varid){
+		case MESHINFO_tri_list : return obj->tri_list.size();
+		case MESHINFO_vert_list : return obj->vert_list.size();
+	}
+	return 0;
+}
+
+MeshCollider::Triangle* MeshInfoIterVectorTriangle( MeshInfo* obj,int varid ){
+	static int id=0;
+	static vector<MeshCollider::Triangle> objlist;
+	static vector<MeshCollider::Triangle>::iterator it;
+	static MeshCollider::Triangle* obj2;
+	
+	switch (varid){
+		case MESHINFO_tri_list : objlist=obj->tri_list; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=&(*it);
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}
+
+MeshCollider::Vertex* MeshInfoIterVectorVertex( MeshInfo* obj,int varid ){
+	static int id=0;
+	static vector<MeshCollider::Vertex> objlist;
+	static vector<MeshCollider::Vertex>::iterator it;
+	static MeshCollider::Vertex* obj2;
+	
+	switch (varid){
+		case MESHINFO_vert_list : objlist=obj->vert_list; break;
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj2=&(*it);
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj2;
+}*/
+
+// Sprite
+
+int* SpriteInt( Sprite* obj,int varid ){
+	switch (varid){
+		case SPRITE_view_mode : return &obj->view_mode;
+		case SPRITE_render_mode : return &obj->render_mode;
+	}
+	return NULL;
+}
+
+float* SpriteFloat( Sprite* obj,int varid ){
+	switch (varid){
+		case SPRITE_angle : return &obj->angle;
+		case SPRITE_scale_x : return &obj->scale_x;
+		case SPRITE_scale_y : return &obj->scale_y;
+		case SPRITE_handle_x : return &obj->handle_x;
+		case SPRITE_handle_y : return &obj->handle_y;
+	}
+	return NULL;
+}
+
+// Surface
+
+unsigned short* SurfaceUShort( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_tris : return &obj->tris[0];
+	}
+	return NULL;
+}
+
+int* SurfaceInt( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_no_verts : return &obj->no_verts;
+		case SURFACE_no_tris : return &obj->no_tris;
+		case SURFACE_vert_bone1_no : return &obj->vert_bone1_no[0];
+		case SURFACE_vert_bone2_no : return &obj->vert_bone2_no[0];
+		case SURFACE_vert_bone3_no : return &obj->vert_bone3_no[0];
+		case SURFACE_vert_bone4_no : return &obj->vert_bone4_no[0];
+		case SURFACE_vert_array_size : return &obj->vert_array_size;
+		case SURFACE_tri_array_size : return &obj->tri_array_size;
+		case SURFACE_vmin : return &obj->vmin;
+		case SURFACE_vmax : return &obj->vmax;
+		case SURFACE_vbo_enabled : return &obj->vbo_enabled;
+		case SURFACE_reset_vbo : return &obj->reset_vbo;
+		case SURFACE_alpha_enable : return &obj->alpha_enable;
+	}
+	return NULL;
+}
+
+unsigned int* SurfaceUInt( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_vbo_id : return &obj->vbo_id[0];
+	}
+	return NULL;
+}
+
+float* SurfaceFloat( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_vert_coords : return &obj->vert_coords[0];
+		case SURFACE_vert_norm : return &obj->vert_norm[0];
+		case SURFACE_vert_tex_coords0 : return &obj->vert_tex_coords0[0];
+		case SURFACE_vert_tex_coords1 : return &obj->vert_tex_coords1[0];
+		case SURFACE_vert_col : return &obj->vert_col[0];
+		case SURFACE_vert_weight1 : return &obj->vert_weight1[0];
+		case SURFACE_vert_weight2 : return &obj->vert_weight2[0];
+		case SURFACE_vert_weight3 : return &obj->vert_weight3[0];
+		case SURFACE_vert_weight4 : return &obj->vert_weight4[0];
+	}
+	return NULL;
+}
+
+Brush* SurfaceBrush( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_brush : return obj->brush;
+	}
+	return NULL;
+}
+
+Shader* SurfaceShader( Surface* obj,int varid ){
+	switch (varid){
+		case SURFACE_ShaderMat : return obj->ShaderMat;
+	}
+	return NULL;
+}
+
+// Texture
+
+int* TextureInt( Texture* obj,int varid ){
+	switch (varid){
+		case TEXTURE_flags : return &obj->flags;
+		case TEXTURE_blend : return &obj->blend;
+		case TEXTURE_coords : return &obj->coords;
+		case TEXTURE_width : return &obj->width;
+		case TEXTURE_height : return &obj->height;
+		case TEXTURE_no_frames : return &obj->no_frames;
+		case TEXTURE_cube_face : return &obj->cube_face;
+		case TEXTURE_cube_mode : return &obj->cube_mode;
+	}
+	return NULL;
+}
+
+unsigned int* TextureUInt( Texture* obj,int varid ){
+	switch (varid){
+		case TEXTURE_texture : return &obj->texture;
+		case TEXTURE_frames : return obj->frames;
+		case TEXTURE_framebuffer : return obj->framebuffer;
+	}
+	return NULL;
+}
+
+float* TextureFloat( Texture* obj,int varid ){
+	switch (varid){
+		case TEXTURE_u_scale : return &obj->u_scale;
+		case TEXTURE_v_scale : return &obj->v_scale;
+		case TEXTURE_u_pos : return &obj->u_pos;
+		case TEXTURE_v_pos : return &obj->v_pos;
+		case TEXTURE_angle : return &obj->angle;
+	}
+	return NULL;
+}
+
+const char* TextureString( Texture* obj,int varid ){
+	switch (varid){
+		case TEXTURE_file : return obj->file.c_str();
+		case TEXTURE_file_abs : return obj->file_abs.c_str();
+	}
+	return NULL;
+}
+
+// Vector
+
+/*float* VectorFloat( Vector* obj,int varid ){
+	switch (varid){
+		case VECTOR_x : return &obj->x;
+		case VECTOR_y : return &obj->y;
+		case VECTOR_z : return &obj->z;
+	}
+	return NULL;
+}*/
+
+}

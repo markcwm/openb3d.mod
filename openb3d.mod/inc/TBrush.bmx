@@ -1,60 +1,94 @@
+
 Rem
 bbdoc: Brush
 End Rem
 Type TBrush
 
-	Field no_texs:Int
-	Field name$
-	Field red#=1.0,green#=1.0,blue#=1.0,alpha#=1.0
-	Field shine#
-	Field blend:Int,fx:Int
-	Field tex_frame:Int
-	Field tex:TTexture[8]
+	Field no_texs:Int Ptr ' 0
+	Field name:Byte Ptr ' string - ""
+	Field red:Float Ptr,green:Float Ptr,blue:Float Ptr,alpha:Float Ptr ' 1.0/1.0/1.0/1.0
+	Field shine:Float Ptr ' 0.0
+	Field blend:Int Ptr,fx:Int Ptr ' 0/0
+	Field cache_frame:Int Ptr ' openb3d: unsigned int array [8]
+	Field tex:TTexture[8] ' returned by GetBrushTexture - NULL
 	
+	' minib3d
+	'Field tex_frame:Int ' 0
+	
+	' wrapper
 	Global brush_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
-	' Create and map object from C++ instance
-	Function NewObject:TBrush( inst:Byte Ptr )
+	Function CreateObject:TBrush( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
+		If inst=Null Then Return Null
 		Local obj:TBrush=New TBrush
 		brush_map.Insert( String(Long(inst)),obj )
 		obj.instance=inst
+		obj.InitFields()
 		Return obj
 		
 	End Function
 	
-	' Delete object from C++ instance
-	Function DeleteObject( inst:Byte Ptr )
+	Function FreeObject( inst:Byte Ptr )
 	
 		brush_map.Remove( String(Long(inst)) )
 		
 	End Function
 	
-	' Get object from C++ instance
 	Function GetObject:TBrush( inst:Byte Ptr )
 	
 		Return TBrush( brush_map.ValueForKey( String(Long(inst)) ) )
 		
 	End Function
 	
-	' Get C++ instance from object (used for passing object to C++ function)
-	Function GetInstance:Byte Ptr( obj:TBrush )
+	Function GetInstance:Byte Ptr( obj:TBrush ) ' Get C++ instance from object
 	
 		If obj=Null Then Return Null ' Attempt to pass null object to function
 		Return obj.instance
 		
 	End Function
 	
-	' moved from TTexture.bmx
-	Method GetBrushTexture:TTexture( index:Int=0 )
+	Method InitFields() ' Once per CreateObject
 	
-		Local instance:Byte Ptr=GetBrushTexture_( GetInstance(Self),index )
-		Local tex:TTexture=TTexture.GetObject(instance)
-		If tex=Null And instance<>Null Then tex=TTexture.NewObject(instance)
+		' int
+		no_texs=BrushInt_( GetInstance(Self),BRUSH_no_texs )
+		blend=BrushInt_( GetInstance(Self),BRUSH_blend )
+		fx=BrushInt_( GetInstance(Self),BRUSH_fx )
+		
+		' uint
+		cache_frame=BrushUInt_( GetInstance(Self),BRUSH_cache_frame )
+		
+		' float
+		red=BrushFloat_( GetInstance(Self),BRUSH_red )
+		green=BrushFloat_( GetInstance(Self),BRUSH_green )
+		blue=BrushFloat_( GetInstance(Self),BRUSH_blue )
+		alpha=BrushFloat_( GetInstance(Self),BRUSH_alpha )
+		shine=BrushFloat_( GetInstance(Self),BRUSH_shine )
+		
+		' string
+		name=BrushString_( GetInstance(Self),BRUSH_name )	
+		
+		' texture
+		For Local id:Int=0 To 7
+			Local inst:Byte Ptr=BrushTextureArray_( GetInstance(Self),BRUSH_tex,id )
+			tex[id]=TTexture.CreateObject(inst)
+		Next
+		
+	End Method
+	
+	' Openb3d
+	
+	Method GetBrushTexture:TTexture( index:Int=0 ) ' same as function in TTexture
+	
+		Local inst:Byte Ptr=GetBrushTexture_( GetInstance(Self),index )
+		Local tex:TTexture=TTexture.GetObject(inst)
+		If tex=Null And inst<>Null Then tex=TTexture.CreateObject(inst)
 		Return tex
 		
 	End Method
+	
+	' Minib3d
 	
 	Method New()
 	
@@ -72,31 +106,25 @@ Type TBrush
 	
 	End Method
 	
-	Method Copy:TBrush()
-		
-		
-
-	End Method
-	
 	Method FreeBrush()
 	
-		DeleteObject( GetInstance(Self) )
+		FreeObject( GetInstance(Self) )
 		FreeBrush_( GetInstance(Self) )
 		
 	End Method
 		
 	Function CreateBrush:TBrush( r:Float=255,g:Float=255,b:Float=255 )
 	
-		Local instance:Byte Ptr=CreateBrush_( r,g,b )
-		Return NewObject(instance)
+		Local inst:Byte Ptr=CreateBrush_( r,g,b )
+		Return CreateObject(inst)
 		
 	End Function
 	
 	Function LoadBrush:TBrush( file:String,flags:Int=1,u_scale:Float=1,v_scale:Float=1 )
 	
 		Local cString:Byte Ptr=file.ToCString()
-		Local instance:Byte Ptr=LoadBrush_( cString,flags,u_scale,v_scale )
-		Local brush:TBrush=NewObject(instance)
+		Local inst:Byte Ptr=LoadBrush_( cString,flags,u_scale,v_scale )
+		Local brush:TBrush=CreateObject(inst)
 		MemFree cString
 		Return brush
 		
@@ -138,28 +166,38 @@ Type TBrush
 		
 	End Method
 	
-	Rem
-	' moved to TEntity.bmx
-	Function GetEntityBrush:TBrush( ent:TEntity )
+	Function GetEntityBrush:TBrush( ent:TEntity ) ' same as method in TEntity
 	
-		
-		
-	End Function
-	EndRem
-	
-	Function GetSurfaceBrush:TBrush( surf:TSurface )
-	
-		Local instance:Byte Ptr=GetSurfaceBrush_( TSurface.GetInstance(surf) )
-		Local brush:TBrush=GetObject(instance)
-		If brush=Null And instance<>Null Then brush=NewObject(instance)
+		Local inst:Byte Ptr=GetEntityBrush_( TEntity.GetInstance(ent) )
+		Local brush:TBrush=GetObject(inst)
+		If brush=Null And inst<>Null Then brush=CreateObject(inst)
 		Return brush
 		
 	End Function
 	
-	Function CompareBrushes:Int(brush1:TBrush,brush2:TBrush)
+	Function GetSurfaceBrush:TBrush( surf:TSurface ) ' same as method in TSurface
 	
+		Local inst:Byte Ptr=GetSurfaceBrush_( TSurface.GetInstance(surf) )
+		Local brush:TBrush=GetObject(inst)
+		If brush=Null And inst<>Null Then brush=CreateObject(inst)
+		Return brush
 		
+	End Function
 	
+	' Internal
+	
+	Method Copy:TBrush()
+		
+		Local inst:Byte Ptr=CopyBrush_( GetInstance(Self) )
+		Return CreateObject(inst)
+		
+	End Method
+	
+	' returns true if specified brush1 has same properties as brush2 - called by AddMesh
+	Function CompareBrushes:Int( brush1:TBrush,brush2:TBrush )
+	
+		Return CompareBrushes_( GetInstance(brush1),GetInstance(brush2) )
+		
 	End Function
 	
 End Type

@@ -33,10 +33,8 @@ Import Brl.GLMax2d
 
 Extern
 
-	' *** Wrapper only
+	' *** Added functions
 	Function DepthBufferToTex_( tex:Byte Ptr,frame:Int ) = "DepthBufferToTex"
-	Function GraphicsResize_( width:Int,height:Int ) = "GraphicsResize"
-	Function SetRenderState_( capability:Int,flag:Int ) = "SetRenderState"
 	' *** Texture rendering
 	Function BackBufferToTex_( tex:Byte Ptr,frame:Int ) = "BackBufferToTex"
 	Function BufferToTex_( tex:Byte Ptr,buffer:Byte Ptr,frame:Int ) = "BufferToTex"
@@ -50,7 +48,7 @@ Extern
 	Function AddTriangle_:Int( surf:Byte Ptr,v0:Int,v1:Int,v2:Int ) = "AddTriangle"
 	Function AddVertex_:Int( surf:Byte Ptr,x:Float,y:Float,z:Float,u:Float,v:Float,w:Float ) = "AddVertex"
 	Function AmbientLight_( r:Float,g:Float,b:Float ) = "AmbientLight"
-	Function AntiAlias_( samples:Int ) = "AntiAlias"
+	'Function AntiAlias_( samples:Int ) = "AntiAlias"
 	Function Animate_( ent:Byte Ptr,Mode:Int,speed:Float,seq:Int,trans:Int ) = "Animate"
 	Function Animating_:Int( ent:Byte Ptr ) = "Animating"
 	Function AnimLength_( ent:Byte Ptr ) = "AnimLength"
@@ -120,7 +118,7 @@ Extern
 	Function DeltaPitch_:Float( ent1:Byte Ptr,ent2:Byte Ptr ) = "DeltaPitch"
 	Function DeltaYaw_:Float( ent1:Byte Ptr,ent2:Byte Ptr ) = "DeltaYaw"
 	Function EntityAlpha_( ent:Byte Ptr,alpha:Float ) = "EntityAlpha"
-	Function EntityAutoFade_( ent:Byte Ptr,near:Float,far:Float ) = "EntityAutoFade"
+	'Function EntityAutoFade_( ent:Byte Ptr,near:Float,far:Float ) = "EntityAutoFade"
 	Function EntityBlend_( ent:Byte Ptr,blend:Int ) = "EntityBlend"
 	Function EntityBox_( ent:Byte Ptr,x:Float,y:Float,z:Float,w:Float,h:Float,d:Float ) = "EntityBox"
 	Function EntityClass_:Byte Ptr( ent:Byte Ptr ) = "EntityClass"
@@ -162,7 +160,7 @@ Extern
 	Function GetChild_:Byte Ptr( ent:Byte Ptr,child_no:Int ) = "GetChild"
 	Function GetEntityBrush_:Byte Ptr( ent:Byte Ptr ) = "GetEntityBrush"
 	Function GetEntityType_:Int( ent:Byte Ptr ) = "GetEntityType"
-	Function GetMatElement_:Float( ent:Byte Ptr,row:Int,col:Int ) = "GetMatElement"
+	'Function GetMatElement_:Float( ent:Byte Ptr,row:Int,col:Int ) = "GetMatElement"
 	Function GetParentEntity_:Byte Ptr( ent:Byte Ptr ) = "GetParentEntity"
 	Function GetSurface_:Byte Ptr( mesh:Byte Ptr,surf_no:Int ) = "GetSurface"
 	Function GetSurfaceBrush_:Byte Ptr( surf:Byte Ptr ) = "GetSurfaceBrush"	
@@ -318,7 +316,15 @@ Extern
 	
 End Extern
 
-' *** Blitz2D functions
+' *** Constants
+
+Const USE_MAX2D=True	' true to enable max2d/minib3d integration
+Const USE_VBO=True	' true to use vbos if supported by hardware
+Const VBO_MIN_TRIS=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+Const LOG_NEW=False	' true to write to debuglog when new minib3d object created
+Const LOG_DEL=False	' true to write to debuglog when minib3d object destroyed
+
+' *** Extra functions
 
 Rem
 bbdoc: Begin using Max2D functions.
@@ -332,6 +338,55 @@ bbdoc: End using Max2D functions.
 End Rem
 Function EndMax2D()
 	TBlitz2D.EndMax2D()
+End Function
+
+Rem
+bbdoc: Global list and listarray. Call this before accessing lists.
+EndRem
+Function CopyList( list:TList,listarray:TList[]=Null )
+
+	Select list
+	
+		Case TCamera.cam_list
+			TCamera.CopyList_( TCamera.cam_list )
+		Case TCamera.render_list
+			TCamera.CopyList_( TCamera.render_list )
+			
+		Case TCollisionPair.cp_list
+			TCollisionPair.CopyList_( TCollisionPair.cp_list )
+		Case Null ' If first parameter Null
+			Select listarray
+				Case TCollisionPair.ent_lists
+					TCollisionPair.CopyList_( Null,TCollisionPair.ent_lists )
+			End Select
+			
+		'Case ent.child_list ' For reference
+			'ent.CopyList( ent.child_list )
+		'Case ent.collision
+			'ent.CopyList( ent.collision )
+		Case TEntity.entity_list
+			TEntity.CopyList_( TEntity.entity_list )
+		Case TEntity.animate_list
+			TEntity.CopyList_( TEntity.animate_list )
+			
+		Case TLight.light_list
+			TLight.CopyList_( TLight.light_list )
+			
+		'Case mesh.surf_list ' For reference
+			'mesh.CopyList( mesh.surf_list )
+		'Case mesh.anim_surf_list
+			'mesh.CopyList( mesh.anim_surf_list )
+		'Case mesh.bones
+			'mesh.CopyList( mesh.bones )
+		
+		Case TPick.ent_list
+			TPick.CopyList_( TPick.ent_list )
+		
+		Case TTexture.tex_list
+			TTexture.CopyList_( TTexture.tex_list )
+			
+	End Select
+	
 End Function
 
 ' *** Includes
@@ -352,38 +407,41 @@ Include "inc/TBone.bmx"
 Include "inc/TSurface.bmx"
 Include "inc/TTexture.bmx"
 Include "inc/TBrush.bmx"
- Include "inc/TAnimation.bmx"
- Include "inc/TModel.bmx"
+Include "inc/TAnimation.bmx"
+'Include "inc/TModel.bmx"
 
 ' picking/collision
- Include "inc/TColTree.bmx"
+'Include "inc/TColTree.bmx"
 Include "inc/TPick.bmx"
- Include "inc/TCollision.bmx"
+Include "inc/TCollision.bmx"
 
 ' geom
 Include "inc/TVector.bmx"
- Include "inc/TMatrix.bmx"
- Include "inc/TQuaternion.bmx"
+'Include "inc/TVector2.bmx"
+Include "inc/TMatrix.bmx"
+Include "inc/TMatrix2.bmx"
+Include "inc/TQuaternion.bmx"
 Include "inc/BoxSphere.bmx"
 
 ' misc
 Include "inc/THardwareInfo.bmx"
 Include "inc/TBlitz2D.bmx"
 Include "inc/TUtility.bmx"
- Include "inc/TDebug.bmx"
+'Include "inc/TDebug.bmx"
 
 ' data
-Include "inc/data.bmx"
+'Include "inc/data.bmx"
 
 ' extra
-Include "inc/types.bmx"
+Include "inc/TShader.bmx"
+Include "inc/TTerrain.bmx"
+Include "inc/TShadowObject.bmx"
+Include "inc/TStencil.bmx"
+Include "inc/TFluid.bmx"
+Include "inc/TGeosphere.bmx"
+Include "inc/TOcTree.bmx"
+Include "inc/TVoxelSprite.bmx"
 Include "inc/TGLShader.bmx"
 
 ' functions
 Include "inc/functions.bmx"
-
-Const USE_MAX2D=True	' true to enable max2d/minib3d integration
-Const USE_VBO=True	' true to use vbos if supported by hardware
-Const VBO_MIN_TRIS=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
-Const LOG_NEW=False	' true to write to debuglog when new minib3d object created
-Const LOG_DEL=False	' true to write to debuglog when minib3d object destroyed

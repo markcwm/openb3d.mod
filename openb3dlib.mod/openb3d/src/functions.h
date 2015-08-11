@@ -22,8 +22,6 @@ void DLL_EXPORT TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
 
 // wrapper only
 void DLL_EXPORT DepthBufferToTex(Texture* tex,int frame);
-void DLL_EXPORT GraphicsResize(int width,int height);
-void DLL_EXPORT SetRenderState(int capability,int flag);
 
 /*
 bbdoc: Minib3d Only

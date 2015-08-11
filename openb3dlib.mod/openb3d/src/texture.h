@@ -45,6 +45,7 @@ public:
 		file="";
 		flags=0,blend=2,coords=0;
 		u_scale=1.0,v_scale=1.0,u_pos=0.0,v_pos=0.0,angle=0.0;
+		
 		string file_abs="";
 		width=0,height=0; // returned by Name/Width/Height commands
 		no_frames=1;
@@ -67,7 +68,6 @@ public:
 	void BufferToTex(unsigned char* buffer, int frames=0);
 	void TexToBuffer(unsigned char* buffer, int frames=0);
 	void BackBufferToTex(int frames=0);
-	void DepthBufferToTex(int frames=0);
 	void CameraToTex(Camera* cam, int frames=0);
 	string TextureName();
 	static void ClearTextureFilters();
@@ -75,8 +75,6 @@ public:
 	Texture* TexInList();
 	void FilterFlags();
 	static string Strip(string filename);
-	static string StripFile(string filename);
-	static string NewFilePath(string filepath, string filename);
 };
 
 #endif

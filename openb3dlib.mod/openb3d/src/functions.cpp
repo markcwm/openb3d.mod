@@ -32,34 +32,6 @@ void TexToBuffer(Texture* tex,unsigned char* buffer, int frame){
 	tex->TexToBuffer(buffer,frame);
 }
 
-// wrapper only
-
-void DepthBufferToTex(Texture* tex,int frame){
-	tex->DepthBufferToTex(frame);
-}
-
-void GraphicsResize(int width,int height){
-	Global::width=width;
-	Global::height=height;
-}
-
-void SetRenderState(int capability,int flag){
-	switch(capability){
-	case 1: // alpha blending
-		Global::alpha_enable=flag;
-		break;
-	case 2: // full bright (no shading/normals)
-		Global::fx1=flag;
-		break;
-	case 3: // vertex colors
-		Global::fx2=flag;
-		break;
-	case 4: // vertex buffer objects
-		Global::vbo_enabled=flag;
-		break;
-	}
-}
-
 /*
 bbdoc: Minib3d Only
 about:
@@ -1072,6 +1044,7 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintEntity">
 */
 void PaintEntity(Entity* ent,Brush* brush){
 //	mesh(ent)->PaintEntity(brush);
+	ent->PaintEntity(*brush);
 }
 
 /*
@@ -1450,6 +1423,7 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter
 */
 void TextureFilter(char* match_text,int flags){
 //	Texture::TextureFilter(match_text,flags);
+	Texture::AddTextureFilter(match_text,flags);
 }
 
 /*

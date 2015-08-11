@@ -1,17 +1,27 @@
+
 Rem
 bbdoc: Pivot entity
 End Rem
 Type TPivot Extends TEntity
 
-	' Create and map object from C++ instance
-	Function NewObject:TPivot( inst:Byte Ptr )
+	Function CreateObject:TPivot( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
+		If inst=Null Then Return Null
 		Local obj:TPivot=New TPivot
 		ent_map.Insert( String(Long(inst)),obj )
 		obj.instance=inst
+		obj.InitFields()
 		Return obj
 		
 	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		Super.InitFields()
+				
+	End Method
+	
+	' Minib3d
 	
 	Method New()
 	
@@ -29,19 +39,6 @@ Type TPivot Extends TEntity
 	
 	End Method
 	
-	Method CopyEntity:TPivot( parent:TEntity=Null )
-	
-		Local instance:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return NewObject(instance)
-		
-	End Method
-	
-	Method Update()
-	
-		
-		
-	End Method
-	
 	Method FreeEntity()
 	
 		Super.FreeEntity() 
@@ -50,9 +47,24 @@ Type TPivot Extends TEntity
 	
 	Function CreatePivot:TPivot( parent:TEntity=Null )
 	
-		Local instance:Byte Ptr=CreatePivot_( GetInstance(parent) )
-		Return NewObject(instance)
+		Local inst:Byte Ptr=CreatePivot_( GetInstance(parent) )
+		Return CreateObject(inst)
 		
 	End Function
+	
+	' Internal
+	
+	Method CopyEntity:TPivot( parent:TEntity=Null )
+	
+		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
+		Return CreateObject(inst)
+		
+	End Method
+	
+	Method Update() ' empty
+	
+		
+		
+	End Method
 	
 End Type
