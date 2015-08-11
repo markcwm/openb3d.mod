@@ -22,24 +22,19 @@ void DepthBufferToTex( Texture* tex,int frame ){
 
 // strips file info from filepath
 string StripFile( string filename ){
-	string stripped_filename=filename;
 	string::size_type idx;
 	
 	// Unix
 	idx=filename.find('/');
 	if(idx!=string::npos)
-		stripped_filename=filename.substr(0,filename.rfind('/'));
-	else
-		stripped_filename="";
+		return filename.substr(0,filename.rfind('/'));
 	
-	// Windows
+	 // Windows
 	idx=filename.find("\\");
 	if(idx!=string::npos)
-		stripped_filename=filename.substr(0,filename.rfind("\\"));
-	else
-		stripped_filename="";
+		return filename.substr(0,filename.rfind("\\"));
 	
-	return stripped_filename;
+	return "";
 }
 
 // makes a new path for a filename from a given filepath
@@ -50,7 +45,7 @@ string NewFilePath(string filepath, string filename){
 	File* stream;
 	
 	// Unix
-	if (fpath.length()>0) url=fpath+"/"+fname; else url=fname;
+	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
 	stream=File::ReadFile(url);
 	if (stream == 0)
 		return "";
@@ -61,7 +56,7 @@ string NewFilePath(string filepath, string filename){
 	}
 	
 	// Windows
-	if (fpath.length()>0) url=fpath+"\\"+fname; else url=fname;
+	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
 	stream=File::ReadFile(url);
 	if (stream == 0)
 		return "";
@@ -75,7 +70,7 @@ string NewFilePath(string filepath, string filename){
 	for(int i=0; fname[i]; i++){
 		fname[i] = tolower(fname[i]);
 	}
-	if (fpath.length()>0) url=fpath+"/"+fname; else url=fname;
+	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
 	stream=File::ReadFile(url);
 	if (stream == 0)
 		return "";
