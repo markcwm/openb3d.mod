@@ -24,16 +24,17 @@ void DepthBufferToTex( Texture* tex,int frame ){
 string StripFile( string filename ){
 	string::size_type idx;
 	
+#ifdef WIN32
+	// Windows
+	idx=filename.find("\\");
+	if(idx!=string::npos)
+		return filename.substr(0,filename.rfind("\\"));
+#else
 	// Unix
 	idx=filename.find('/');
 	if(idx!=string::npos)
 		return filename.substr(0,filename.rfind('/'));
-	
-	 // Windows
-	idx=filename.find("\\");
-	if(idx!=string::npos)
-		return filename.substr(0,filename.rfind("\\"));
-	
+#endif
 	return "";
 }
 
@@ -44,6 +45,18 @@ string NewFilePath(string filepath, string filename){
 	string url;
 	File* stream;
 	
+#ifdef WIN32
+	// Windows
+	if (fpath.length() == 0) url=fname; else url=fpath+"\\"+fname;
+	stream=File::ReadFile(url);
+	if (stream == 0)
+		return "";
+	else{
+		stream->CloseFile();
+		//cout << "windows: '"+url+"'" << endl;
+		return url;
+	}
+#else
 	// Unix
 	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
 	stream=File::ReadFile(url);
@@ -54,31 +67,8 @@ string NewFilePath(string filepath, string filename){
 		//cout << "unix: '"+url+"'" << endl;
 		return url;
 	}
-	
-	// Windows
-	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
-	stream=File::ReadFile(url);
-	if (stream == 0)
-		return "";
-	else{
-		stream->CloseFile();
-		//cout << "windows: '"+url+"'" << endl;
-		return url;
-	}
-	
-	// Unix - try all lowercase
-	for(int i=0; fname[i]; i++){
-		fname[i] = tolower(fname[i]);
-	}
-	if (fpath.length() == 0) url=fname; else url=fpath+"/"+fname;
-	stream=File::ReadFile(url);
-	if (stream == 0)
-		return "";
-	else{
-		stream->CloseFile();
-		return url;
-	}
-	
+#endif
+
 	cout << "Error: Can't Find Resource File '"+filename+"'" << endl;
 	return "";
 }
