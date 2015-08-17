@@ -79,7 +79,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a>
 End Rem
-Function AlignToVector( entity:TEntity,vx:Float,vy:Float,vz:Float,axis:Int,rate:Int=1 )
+Function AlignToVector( entity:TEntity,x:Float,y:Float,z:Float,axis:Int,rate:Int=1 )
 	entity.AlignToVector( x,y,z,axis,rate )
 End Function
 
