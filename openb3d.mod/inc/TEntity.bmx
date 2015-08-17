@@ -269,6 +269,13 @@ Type TEntity
 		
 	End Method
 	
+	' Aligns an entity axis to a vector
+	Method AlignToVector( x:Float,y:Float,z:Float,axis:Int,rate:Float=1 )
+	
+		AlignToVector_( GetInstance(Self),x,y,z,axis,rate )
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()
@@ -885,13 +892,6 @@ Type TEntity
 		Next
 		
 		Return ent2
-		
-	End Method
-	
-	' Aligns an entity axis to a vector
-	Method AlignToVector( x:Float,y:Float,z:Float,axis:Int,rate:Float )
-	
-		AlignToVector_( GetInstance(Self),x,y,z,axis,rate )
 		
 	End Method
 	

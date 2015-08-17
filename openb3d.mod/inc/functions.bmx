@@ -77,6 +77,13 @@ Function AddVertex:Int( surf:TSurface,x:Float,y:Float,z:Float,u:Float=0,v:Float=
 End Function
 
 Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a>
+End Rem
+Function AlignToVector( entity:TEntity,vx:Float,vy:Float,vz:Float,axis:Int,rate:Int=1 )
+	entity.AlignToVector( x,y,z,axis,rate )
+End Function
+
+Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
 End Rem
 Function AmbientLight( r:Float,g:Float,b:Float )
