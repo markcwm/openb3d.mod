@@ -888,9 +888,9 @@ Function GetMatElement:Float( ent:TEntity,row:Int,col:Int )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetParent">Online doc</a>
 End Rem
-Function GetParentEntity:TEntity( ent:TEntity )
+Function GetParent:TEntity( ent:TEntity )
 	Return ent.GetParent()
 End Function
 
