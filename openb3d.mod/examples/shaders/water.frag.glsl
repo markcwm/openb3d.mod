@@ -7,15 +7,15 @@ uniform float alpha;
 varying vec3 Normal;
 varying vec3 EyeDir;
 
-uniform float texmix;
+uniform vec4 texmix;
 uniform float uvdrag;
 
 void main() {
 	// Set the output color of our current pixel
-	vec4 color = texture2D(color_texture, gl_TexCoord[0].st + uvdrag);
+	vec4 tex = texture2D(color_texture, gl_TexCoord[0].st + uvdrag);
 	
 	// specular cubemap
 	vec3 reflectDir = reflect(EyeDir, normalize(Normal));
 	vec4 pixel = textureCube(Env, vec3(-reflectDir.x, -reflectDir.y, reflectDir.z));
-	gl_FragColor = (texmix * vec4(pixel.rgb, alpha)) + ((1.0-texmix) * vec4(color.rgb, alpha));
+	gl_FragColor = (texmix.x * vec4(pixel.rgb, alpha)) + (texmix.y * vec4(tex.rgb, alpha));
 }

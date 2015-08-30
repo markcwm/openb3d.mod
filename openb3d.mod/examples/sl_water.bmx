@@ -12,17 +12,21 @@ Graphics3D 800,600,0,2
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,70,180,235
 PositionEntity camera,0,15,30
-RotateEntity camera,40,180,0
+RotateEntity camera,30,180,0
 
 ' create separate camera for updating cube map - this allows us to avoid any confusion
 Local cube_cam:TCamera=CreateCamera()
 HideEntity cube_cam
 
-Local light:TLight=CreateLight()
-PositionEntity light,5,5,5
+Local lighttype%=1
+
+Local light:TLight=CreateLight(lighttype)
+RotateEntity light,33,0,0
+PositionEntity light,0,10,0
+LightRange light,10
 
 ' sky
-Local sky:TMesh=CreateSphere(12)
+Local sky:TMesh=CreateSphere(24)
 ScaleEntity sky,500,500,500
 FlipMesh sky
 EntityFX sky,1
@@ -52,8 +56,6 @@ Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
 PositionEntity ufo,0,0,10
 
 Local gridsize#=50 ' actual size
-Local alpha#=0.9
-Local texmix#=0.8 ' texture mixing ratio, value between 0..1
 Local uvscale#=0.03
 
 Local water:TMesh=CreateFlatMesh(gridsize,gridsize,2,0,0,0,uvscale,uvscale)
@@ -73,32 +75,44 @@ Local wall4:TMesh=CreateCube()
 ScaleEntity wall4,1,1,gridsize/2
 PositionEntity wall4,-gridsize/2,1,0
 
-
-Local shader:TShader=LoadShader("","shaders/water.vert.glsl","shaders/water.frag.glsl")
-
-Local tex:TTexture=LoadTexture("media/water.bmp")
-ShaderTexture(shader,tex,"color_texture",0)
-
-Local cubetex:TTexture=CreateTexture(512,512,1+2+128)
-ShaderTexture(shader,cubetex,"Env",1)
-
 Local wiretoggle%=-1
 Local blendmode%=1
+Local pixellight%, lmkey%
 
+Local waveAlpha:Float=0.9
 Local waveWidth:Float=0.66
 Local waveHeight:Float=0.33
-Local uvdrag:Float ' time value
-Local uvratio:Float=100 ' dividing value, smaller is faster
+Local uvdrag:Float ' waveTime / uvratio
+Local uvratio:Float=250 ' smaller is faster
 
-Local time#, framerate#=60.0, animspeed#=2
+Local waveTime#, framerate#=60.0, animspeed#=2
 Local timer:TTimer=CreateTimer(framerate)
 
-UseFloat(shader,"alpha",alpha)
+Local tex:TTexture=LoadTexture("media/water.bmp")
+Local cubetex:TTexture=CreateTexture(512,512,1+2+128)
+
+' no pixel light shader
+Local shader:TShader=LoadShader("","shaders/water.vert.glsl","shaders/water.frag.glsl")
+ShaderTexture(shader,tex,"color_texture",0)
+ShaderTexture(shader,cubetex,"Env",1)
+UseFloat(shader,"alpha",waveAlpha)
 UseFloat(shader,"uvdrag",uvdrag)
-UseFloat(shader,"texmix",texmix)
-UseFloat(shader,"waveTime",time)
+UseFloat(shader,"waveTime",waveTime)
 UseFloat(shader,"waveWidth",waveWidth)
 UseFloat(shader,"waveHeight",waveHeight)
+SetFloat4(shader,"texmix",0.8,0.2,0,0) ' texture mixing (cubemap,tex) value between 0..1
+
+' pixel light shader
+Local shader2:TShader=LoadShader("","shaders/water2.vert.glsl","shaders/water2.frag.glsl")
+ShaderTexture(shader2,tex,"color_texture",0)
+ShaderTexture(shader2,cubetex,"Env",1)
+UseFloat(shader2,"alpha",waveAlpha)
+UseFloat(shader2,"uvdrag",uvdrag)
+UseFloat(shader2,"waveTime",waveTime)
+UseFloat(shader2,"waveWidth",waveWidth)
+UseFloat(shader2,"waveHeight",waveHeight)
+SetFloat4(shader2,"texmix",0.4,0.2,0.4,0) ' texture mixing (cubemap,tex,light) value between 0..1
+SetInteger(shader2,"lighttype",lighttype)
 
 ShadeEntity(water,shader)
 EntityFX(water,32)
@@ -122,26 +136,34 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyHit(KEY_U) Then waveHeight:-0.1
 	If KeyHit(KEY_J) Then waveHeight:+0.1
 	
-	If KeyHit(KEY_I) Then texmix:-0.1
-	If KeyHit(KEY_K) Then texmix:+0.1
-	
 	' enable blending: alpha / nothing
 	If KeyHit(KEY_B)
 		blendmode=Not blendmode
 		If blendmode Then EntityFX(water,32) Else EntityFX(water,0)
 	EndIf
 	
+	' enable pixel lighting
+	If KeyHit(KEY_P)
+		pixellight:+1 ; If pixellight=2 Then pixellight=0
+		lmkey=1
+	EndIf
+	If lmkey
+		lmkey=0
+		If pixellight=0 Then ShadeEntity(water,shader)
+		If pixellight=1 Then ShadeEntity(water,shader2)
+	EndIf
+	
 	TurnEntity ufo_piv,0,2,0
 	
-	time=Float((TimerTicks(timer) / framerate) * animspeed)
-	uvdrag=time / uvratio
+	waveTime=Float((TimerTicks(timer) / framerate) * animspeed)
+	uvdrag=waveTime / uvratio
 	
 	' hide main camera before updating cube map - we don't need to render it when cube_cam is rendered
 	HideEntity camera
 	HideEntity camel ' objects in water are hidden to prevent big reflections
 	HideEntity cactus
 	HideEntity wall ; HideEntity wall2 ; HideEntity wall3 ; HideEntity wall4
-	MoveEntity ufo,0,10,0 ' moved away a bit to reduce reflection size
+	MoveEntity ufo,0,20,0 ' moved away a bit to reduce reflection size
 	
 	UpdateCubemap(cubetex,cube_cam,water)
 	
@@ -149,7 +171,8 @@ While Not KeyDown(KEY_ESCAPE)
 	ShowEntity camel
 	ShowEntity cactus
 	ShowEntity wall ; ShowEntity wall2 ; ShowEntity wall3 ; ShowEntity wall4
-	MoveEntity ufo,0,-10,0
+	MoveEntity ufo,0,-20,0
+	
 	UpdateWorld
 	RenderWorld
 	
@@ -161,10 +184,9 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"WSAD and Arrows: move camera, Space: wireframe, B: blending"
-	Text 0,40,"Y/H: waveWidth, U/J: waveHeight, I/K: texmix"
-	Text 0,60,"time = "+time+", waveWidth = "+waveWidth+", waveHeight = "+waveHeight+", texmix = "+texmix
+	Text 0,0,"FPS: "+fps+", WSAD and Arrows: move camera, Space: wireframe"
+	Text 0,20,"B: blending = "+blendmode+", P: pixellight = "+pixellight
+	Text 0,40,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", waveTime = "+waveTime
 	
 	Flip
 
