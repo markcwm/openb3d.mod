@@ -51,7 +51,7 @@ FitMesh cactus,-5,0,0,2,6,0.5
 Local camel:TMesh=LoadMesh("media/camel.b3d")
 FitMesh camel,5,0,0,6,5,4
 
-' load ufo to give us a dynamic moving object that the cubemap will be able to reflect
+' load ufo - to give us a dynamic moving object that the cubemap will be able to reflect
 Local ufo_piv:TPivot=CreatePivot()
 PositionEntity ufo_piv,0,10,10
 Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
@@ -63,11 +63,11 @@ Local tex:TTexture=CreateTexture(256,256,1+128)
 ' apply cubic environment map to teapot
 EntityTexture teapot,tex
 
-' used by fps code
-Local old_ms%=MilliSecs()
-Local renders%, fps%, ticks%=0
-
 Local blendmode%, cubemode%=1
+
+' fps code
+Local old_ms%=MilliSecs()
+Local renders%, fps%
 
 
 While Not KeyDown(KEY_ESCAPE)
@@ -94,10 +94,8 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	' hide main camera before updating cube map - we don't need to render it when cube_cam is rendered
 	HideEntity cam
-
-	' update cubemap
-	If ticks=0 Then UpdateCubemap(tex,cube_cam,teapot)
-	ticks:+1 ; If ticks>=2 Then ticks=0 ' once every 3 ticks
+	
+	UpdateCubemap(tex,cube_cam,teapot)
 	
 	' show main camera again
 	ShowEntity cam

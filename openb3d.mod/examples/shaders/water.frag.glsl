@@ -8,7 +8,7 @@ varying vec3 Normal;
 varying vec3 EyeDir;
 
 uniform vec4 texmix;
-uniform float uvdrag;
+uniform vec2 uvdrag;
 
 void main() {
 	// Set the output color of our current pixel

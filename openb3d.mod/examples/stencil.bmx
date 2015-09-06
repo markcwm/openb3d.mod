@@ -24,7 +24,7 @@ Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
 EntityTexture ground,ground_tex
 EntityAlpha ground,0.75
 
-Local groundcopy:TMesh=LoadMesh("media/grid.b3d")
+Local groundcopy:TMesh=CopyMesh(ground)
 ScaleEntity groundcopy,0.5,1,0.5
 
 ' sky
@@ -40,7 +40,7 @@ Local teapot:TMesh=LoadMesh("media/teapot.b3d")
 ScaleEntity teapot,5,5,5
 PositionEntity teapot,0,6,10
 
-Local teapotcopy:TMesh=LoadMesh("media/teapot.b3d")
+Local teapotcopy:TMesh=CopyMesh(teapot)
 ScaleEntity teapotcopy,5,-5,5
 FlipMesh teapotcopy
 PositionEntity teapotcopy,0,-(EntityY(teapot)-EntityY(ground)),10
@@ -49,7 +49,7 @@ PositionEntity teapotcopy,0,-(EntityY(teapot)-EntityY(ground)),10
 Local cactus:TMesh=LoadMesh("media/cactus2.b3d")
 FitMesh cactus,-5,0,0,2,6,0.5
 
-Local cactuscopy:TMesh=LoadMesh("media/cactus2.b3d")
+Local cactuscopy:TMesh=CopyMesh(cactus)
 FitMesh cactuscopy,-5,0,0,2,-6,0.5
 FlipMesh cactuscopy
 
@@ -57,17 +57,17 @@ FlipMesh cactuscopy
 Local camel:TMesh=LoadMesh("media/camel.b3d")
 FitMesh camel,5,0,0,6,5,4
 
-Local camelcopy:TMesh=LoadMesh("media/camel.b3d")
+Local camelcopy:TMesh=CopyMesh(camel)
 FitMesh camelcopy,5,0,0,6,-5,4
 FlipMesh camelcopy
 
-' load ufo to give us a dynamic moving object that the stencil will be able to reflect
+' load ufo - to give us a dynamic moving object that the stencil will be able to reflect
 Local ufo_piv:TPivot=CreatePivot()
 PositionEntity ufo_piv,0,0,10
 Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
 PositionEntity ufo,0,10,10
 
-Local ufocopy:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
+Local ufocopy:TMesh=CopyMesh(ufo,ufo_piv)
 ScaleEntity ufocopy,1,-1,1
 FlipMesh ufocopy
 PositionEntity ufocopy,0,-(EntityY(ufo)-EntityY(ground)),10
@@ -77,18 +77,19 @@ Local sphere:TMesh=CreateSphere()
 Local tex:TTexture=LoadTexture("media/Ball.bmp")
 EntityTexture sphere,tex
 
-Local spherecopy:TMesh=CreateSphere()
+Local spherecopy:TMesh=CopyMesh(sphere)
 EntityTexture spherecopy,tex
 
+' stencil
 Local stencil:TStencil=CreateStencil()
 StencilMesh stencil,groundcopy,1
 StencilMode stencil,1,1
 
-' used by fps code
+Local xrotspeed#=1.5,yrotspeed#=0.5,height#=4.0
+
+' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%, ticks%=0
-
-Local xrotspeed#=1.5,yrotspeed#=0.5,height#=4.0
 
 
 While Not KeyDown(KEY_ESCAPE)

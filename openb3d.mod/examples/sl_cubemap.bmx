@@ -46,7 +46,7 @@ FitMesh cactus,-5,0,0,2,6,.5
 Local camel:TMesh=LoadMesh("media/camel.b3d")
 FitMesh camel,5,0,0,6,5,4
 
-' load ufo to give us a dynamic moving object that the cubemap will be able to reflect
+' load ufo - to give us a dynamic moving object that the cubemap will be able to reflect
 Local ufo_piv:TPivot=CreatePivot()
 PositionEntity ufo_piv,0,10,10
 Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
@@ -60,37 +60,41 @@ PositionEntity(teapot,0,6,10)
 Local cubetex:TTexture=CreateTexture(256,256,1+2+128)
 Local lighttype%=1, alpha#=0.7
 
+' non lit/ambient specular cubemap
 Local shader:TShader=LoadShader("","shaders/cubemap.vert.glsl","shaders/cubemap.frag.glsl")
 ShaderTexture(shader,cubetex,"Env",0)
 ShadeEntity(teapot,shader)
 SetFloat(shader,"alpha",alpha)
 
+' non lit/ambient diffuse cubemap
 Local shader2:TShader=LoadShader("","shaders/cubemap2.vert.glsl","shaders/cubemap2.frag.glsl")
 ShaderTexture(shader2,cubetex,"Env",0)
 SetFloat(shader2,"alpha",alpha)
 
+' pixel lit specular cubemap
 Local shader3:TShader=LoadShader("","shaders/cubemap3.vert.glsl","shaders/cubemap3.frag.glsl")
 ShaderTexture(shader3,cubetex,"Env",0)
 SetFloat(shader3,"alpha",alpha)
 SetInteger(shader3,"lighttype",lighttype)
 
+' pixel lit diffuse cubemap
 Local shader4:TShader=LoadShader("","shaders/cubemap4.vert.glsl","shaders/cubemap4.frag.glsl")
 ShaderTexture(shader4,cubetex,"Env",0)
 SetFloat(shader4,"alpha",alpha)
 SetInteger(shader4,"lighttype",lighttype)
 
-' set initial cube mode value
+CameraToTex cubetex,cube_cam ' needed for cubemaps to work on some Win setups
+
 Local cubemode%=1, blendmode%, pixellight%, lmkey%
 
-' used by fps code
+' fps code
 Local old_ms%=MilliSecs()
-Local renders%, fps%, ticks%
-
-CameraToTex cubetex,cube_cam ' needed on some setups to init texture rendering
+Local renders%, fps%
 
 
 While Not KeyDown(KEY_ESCAPE)
 
+	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
@@ -119,16 +123,13 @@ While Not KeyDown(KEY_ESCAPE)
 		If blendmode Then EntityFX(teapot,32) Else EntityFX(teapot,0)
 	EndIf
 	
-	TurnEntity(teapot,0,0.5,-0.1)
-	
+	TurnEntity teapot,0,0.5,-0.1
 	TurnEntity ufo_piv,0,2,0
 	
 	' hide main camera before updating cube map - we don't need to render it when cube_cam is rendered
 	HideEntity camera
-
-	' update cubemap
-	If ticks=0 Then UpdateCubemap(cubetex,cube_cam,teapot)
-	ticks:+1 ; If ticks>=2 Then ticks=0 ' once every 3 ticks
+	
+	UpdateCubemap(cubetex,cube_cam,teapot)
 	
 	ShowEntity camera
 
