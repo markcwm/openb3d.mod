@@ -1,4 +1,4 @@
-' sl_alphamap.bmx
+' alphamap.bmx
 ' using alpha maps for transparency
 
 Strict
@@ -27,17 +27,18 @@ ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
-' note: more than one visible surface is needed for alpha to work
-Local shader:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap2.frag.glsl")
-ShaderTexture(shader,LoadTexture("media/colorkey.jpg"),"tex",0)
-ShaderTexture(shader,LoadTexture("media/spark.png"),"alphatex",1)
-ShadeEntity(cube,shader)
-EntityFX(cube,32)
+' note: this does not work in minib3d so use shader version
+Local tex0:TTexture=LoadTexture("media/colorkey.jpg",1+2)
+Local tex1:TTexture=LoadTexture("media/spark.png",1+2)
+EntityTexture cube,tex0,0,0
+EntityTexture cube,tex1,0,1
+'TextureBlend tex0,1
+'TextureBlend tex1,2
+EntityAlpha cube,0.9
 
 ' tranlucency - from single image with alpha channel
-Local shader2:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap.frag.glsl")
-ShaderTexture(shader2,LoadTexture("media/alpha_map.png"),"tex",0)
-ShadeEntity(cube2,shader2)
+Local tex2:TTexture=LoadTexture("media/alpha_map.png")
+EntityTexture(cube2,tex2)
 EntityFX(cube2,32)
 
 Local efx%=1
@@ -70,6 +71,6 @@ While Not KeyDown(KEY_ESCAPE)
 	Text 0,0,"Left/Right: turn cubes"+", B: alpha blending = "+efx
 	
 	Flip
-
+	
 Wend
 End
