@@ -5,7 +5,7 @@ struct FloatArray {
 };
 
 #define MAX_LIGHTS 8
-#define NUM_LIGHTS 1
+#define NUM_LIGHTS 2
 uniform sampler2D colorMap; // color map
 uniform sampler2D normalMap; // normal map
 uniform sampler2D specularMap; // specular map

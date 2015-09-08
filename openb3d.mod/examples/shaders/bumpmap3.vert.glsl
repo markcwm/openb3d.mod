@@ -1,7 +1,7 @@
 //
 
 #define MAX_LIGHTS 8
-#define NUM_LIGHTS 1
+#define NUM_LIGHTS 2
 uniform float texturescale;
 varying vec2 Vertex_UV;
 varying vec3 Vertex_Normal;
