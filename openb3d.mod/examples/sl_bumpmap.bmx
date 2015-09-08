@@ -18,6 +18,11 @@ Local light:TLight=CreateLight(2,lpivot)
 PositionEntity light,0,1.2,0
 RotateEntity light,90,0,0
 
+Local lpivot2:TPivot=CreatePivot()
+Local light2:TLight=CreateLight(2,lpivot2)
+PositionEntity light2,0,1.2,2
+LightColor light2,200,100,100
+
 Local sky:TMesh=CreateSphere(32)
 Local tex:TTexture=LoadTexture("media/sky.bmp")
 ScaleTexture tex,0.5,0.5
@@ -107,7 +112,10 @@ SetFloat(shader3,"lightradius[0].Float",0.2)
 SetFloat(shader3,"texturescale",1.0)
 SetFloat4(shader3,"vambient",0.2,0.2,0.2,0.2)
 
-' used by fps code
+Local clr#, cfb#, cud#
+Local lightmode%, bumpmode%
+
+' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
@@ -116,9 +124,6 @@ Local elapsed%
 Local time%=MilliSecs()
 HideMouse
 MoveMouse 0,0
-
-Local clr#, cfb#, cud#
-Local lightmode%, bumpmode%
 
 
 While Not KeyDown(KEY_ESCAPE)
@@ -167,6 +172,7 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	If lightmode=1 ' pivoting
 		PositionEntity light,0,1.2,3 ; TurnEntity lpivot,0,3,0
+		PositionEntity light2,0,1.2,3 ; TurnEntity lpivot2,0,-3,0
 	EndIf
 	If lightmode=2 ' from camera
 		PositionEntity light,0,1.2,0 ; RotateEntity lpivot,0,0,0
@@ -195,7 +201,7 @@ Wend
 End
 
 
-' from firepaint3d.bb (by Mark Sibly)
+' from firepaint3d.bb
 Function MouseLook(pivot:TPivot,camera:TCamera,time%,elapsed%)
 
 	Repeat

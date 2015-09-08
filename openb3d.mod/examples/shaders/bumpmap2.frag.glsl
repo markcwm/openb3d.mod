@@ -1,6 +1,6 @@
 // en.wikibooks.org/wiki/GLSL_Programming/Blender/Lighting_of_Bumpy_Surfaces
 
-#define NUM_LIGHTS 1
+#define NUM_LIGHTS 2
 varying mat3 localSurface2View;
 varying vec4 texCoords;
 varying vec4 position;
