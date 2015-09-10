@@ -150,16 +150,16 @@ float EntityDistanceSquared( Entity* obj,Entity* ent2 ){
 void MQ_Update( Entity* obj ){
 	obj->MQ_Update();
 }
-void MQ_GetInvMatrix( Entity* obj,Matrix &mat0,int scale ){
-	obj->MQ_GetInvMatrix( mat0,scale );
+void MQ_GetInvMatrix( Entity* obj,Matrix &mat0 ){
+	obj->MQ_GetInvMatrix( mat0 );
 }
 
-void MQ_GetMatrix( Entity* obj,Matrix &mat3,int scale ){
-	obj->MQ_GetMatrix( mat3,scale );
+void MQ_GetMatrix( Entity* obj,Matrix &mat3 ){
+	obj->MQ_GetMatrix( mat3 );
 }
 
-void MQ_GetScaleXYZ( Entity* obj,float &width,float &height,float &depth,int glob ){
-	obj->MQ_GetScaleXYZ( width,height,depth,glob );
+void MQ_GetScaleXYZ( Entity* obj,float &width,float &height,float &depth ){
+	obj->MQ_GetScaleXYZ( width,height,depth );
 }
 
 void MQ_Turn( Entity* obj,float ang,float vx,float vy,float vz,int glob ){
@@ -192,8 +192,8 @@ void MatrixOverwrite( Matrix* obj,Matrix &mat ){
 	obj->Overwrite( mat );
 }
 
-Matrix MatrixGetInverse( Matrix* obj,Matrix &mat ){
-	return obj->GetInverse( mat );
+void MatrixGetInverse( Matrix* obj,Matrix &mat ){
+	obj->GetInverse( mat );
 }
 
 void MatrixMultiply( Matrix* obj,Matrix &mat ){
@@ -242,6 +242,10 @@ void MatrixSetTranslate( Matrix* obj,float x,float y,float z ){
 
 void MatrixMultiply2( Matrix* obj,Matrix &mat ){
 	obj->Multiply2( mat );
+}
+
+void MatrixGetInverse2( Matrix* obj,Matrix &mat ){
+	obj->GetInverse2( mat );
 }
 
 float MatrixGetPitch( Matrix* obj ){
