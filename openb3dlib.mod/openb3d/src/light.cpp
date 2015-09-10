@@ -85,6 +85,7 @@ Light* Light::CopyEntity(Entity* parent_ent){
 	light->box_w=box_w;
 	light->box_h=box_h;
 	light->box_d=box_d;
+	light->collision_type=collision_type;
 	light->pick_mode=pick_mode;
 	light->obscurer=obscurer;
 

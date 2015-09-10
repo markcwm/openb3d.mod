@@ -698,6 +698,7 @@ OcTree* OcTree::CopyEntity(Entity* parent_ent){
 	oct->box_w=box_w;
 	oct->box_h=box_h;
 	oct->box_d=box_d;
+	oct->collision_type=collision_type;
 	oct->pick_mode=pick_mode;
 	oct->obscurer=obscurer;
 

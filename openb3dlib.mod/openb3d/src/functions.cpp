@@ -13,8 +13,14 @@
 #include "geosphere.h"
 #include "isosurface.h"
 #include "particle.h"
+#include "physics.h"
+#include "actions.h"
 
 extern "C" {
+
+/*void ResetShadow(ShadowObject* shad){
+	shad->VCreated=0;
+}*/
 
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
@@ -31,6 +37,7 @@ void CameraToTex(Texture* tex, Camera* cam, int frame){
 void TexToBuffer(Texture* tex,unsigned char* buffer, int frame){
 	tex->TexToBuffer(buffer,frame);
 }
+
 
 /*
 bbdoc: Minib3d Only
@@ -426,6 +433,11 @@ Camera* CreateCamera(Entity* parent){
 	return Camera::CreateCamera(parent);
 }
 
+Constraint* CreateConstraint(Entity* p1, Entity* p2, float l){
+	return Constraint::CreateConstraint(p1, p2, l);
+}
+
+
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online Help</a>
 */
@@ -481,6 +493,11 @@ Mesh* CreatePlane(int divisions,Entity* parent){
 Mesh* CreateQuad(Entity* parent){
     return Mesh::CreateQuad(parent);
 }
+
+RigidBody* CreateRigidBody(Entity* body, Entity* p1, Entity* p2, Entity* p3, Entity* p4){
+	return RigidBody::CreateRigidBody(body, p1, p2, p3, p4);
+}
+
 
 ShadowObject* CreateShadow(Mesh* parent, char Static){
 	return ShadowObject::Create(parent, Static);
@@ -546,6 +563,33 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaYaw">Onl
 float DeltaYaw(Entity* ent1,Entity* ent2){
 	return ent1->DeltaYaw(ent2);
 }
+
+void EmitterVector(ParticleEmitter* emit, float x, float y, float z){
+	emit->EmitterVector(x, y, z);
+}
+
+void EmitterRate(ParticleEmitter* emit, float r){
+	emit->EmitterRate(r);
+}
+
+void EmitterParticleLife(ParticleEmitter* emit, int l){
+	emit->EmitterParticleLife(l);
+}
+
+void EmitterParticleFunction(ParticleEmitter* emit, void (*EmitterFunction)(Entity*, int)){
+	emit->EmitterParticleFunction(EmitterFunction);
+}
+
+
+void EmitterParticleSpeed(ParticleEmitter* emit, float s){
+	emit->EmitterParticleSpeed(s);
+}
+
+void EmitterVariance(ParticleEmitter* emit, float v){
+	emit->EmitterVariance(v);
+}
+
+
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityAlpha">Online Help</a>
@@ -1043,7 +1087,6 @@ void NameEntity(Entity* ent,char* name){
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintEntity">Online Help</a>
 */
 void PaintEntity(Entity* ent,Brush* brush){
-//	mesh(ent)->PaintEntity(brush);
 	ent->PaintEntity(*brush);
 }
 
@@ -1422,7 +1465,6 @@ int TextureHeight(Texture* tex){
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online Help</a>
 */
 void TextureFilter(char* match_text,int flags){
-//	Texture::TextureFilter(match_text,flags);
 	Texture::AddTextureFilter(match_text,flags);
 }
 
@@ -1840,8 +1882,9 @@ void ShaderMaterial(Shader* material, Material* tex, char* name, int index){
 	material->AddSampler3D(name, index, tex);
 }
 
-
-
+void AmbientShader(Shader* material){
+	Global::ambient_shader=material;
+}
 
 
 
@@ -1859,6 +1902,62 @@ void OctreeMesh(OcTree* octree, Mesh* mesh, int level, float X, float Y, float Z
 
 Fluid* CreateFluid(){
 	return Fluid::CreateFluid();
+}
+
+ParticleEmitter* CreateParticleEmitter(Entity* particle, Entity* parent_ent=0){
+	return ParticleEmitter::CreateParticleEmitter(particle, parent_ent);
+}
+
+Action* ActMoveBy(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_MOVEBY, a, b, c, rate);
+}
+
+Action* ActTurnBy(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_TURNBY, a, b, c, rate);
+}
+
+Action* ActVector(Entity* ent, float a, float b, float c){
+	return Action::AddAction(ent, ACT_VECTOR, a, b, c, 0);
+}
+
+Action* ActMoveTo(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_MOVETO, a, b, c, rate);
+}
+
+Action* ActTurnTo(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_TURNTO, a, b, c, rate);
+}
+
+Action* ActScaleTo(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_SCALETO, a, b, c, rate);
+}
+
+Action* ActFadeTo(Entity* ent, float a, float rate){
+	return Action::AddAction(ent, ACT_FADETO, a, 0, 0, rate);
+}
+
+Action* ActTintTo(Entity* ent, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_TINTTO, a, b, c, rate);
+}
+
+Action* ActTrackByPoint(Entity* ent, Entity* target, float a, float b, float c, float rate){
+	return Action::AddAction(ent, ACT_TRACK_BY_POINT, target, a, b, c, rate);
+}
+
+Action* ActTrackByDistance(Entity* ent, Entity* target, float a, float rate){
+	return Action::AddAction(ent, ACT_TRACK_BY_DISTANCE, target, a, 0, 0, rate);
+}
+
+Action* ActNewtonian(Entity* ent, float rate){
+	return Action::AddAction(ent, ACT_NEWTONIAN, ent->mat.grid[3][0], ent->mat.grid[3][1], -ent->mat.grid[3][2], rate);
+}
+
+void AppendAction(Action* act1, Action* act2){
+	act1->AppendAction(act2);
+}
+
+void DepthBufferToTex( Texture* tex, Camera* cam=0 ){
+	tex->DepthBufferToTex(cam);
 }
 
 /*void SetParameter1S(Shader* material, char* name, float v1){

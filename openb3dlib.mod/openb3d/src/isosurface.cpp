@@ -1094,7 +1094,7 @@ void Fluid::Render(){
 	{
 		//Array
 		data_array=fieldarray;
-		MQ_GetInvMatrix(fieldarray->mat, true);
+		MQ_GetInvMatrix(fieldarray->mat);
 	}
 
 	level=0;
@@ -1554,11 +1554,14 @@ Blob* Blob::CopyEntity(Entity* parent_ent){
 	blob->box_w=box_w;
 	blob->box_h=box_h;
 	blob->box_d=box_d;
+	blob->collision_type=collision_type;
 	blob->pick_mode=pick_mode;
 	blob->obscurer=obscurer;
 
 	blob->charge=charge;
 	blob->fluid=fluid;
+
+	fluid->metaball_list.push_back(blob);
 
 	return blob;
 	

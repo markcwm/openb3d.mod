@@ -187,6 +187,13 @@ Type TMatrix2
 		
 	End Method
 	
+	' inverse transformation on the specified matrix
+	Method GetInverse2( mat:TMatrix2 )
+	
+		MatrixGetInverse2_( GetInstance(Self),GetInstance(mat) )
+		
+	End Method
+	
 	' returns x rotation of matrix
 	Method GetPitch:Float()
 	

@@ -265,8 +265,8 @@ void UpdateDynamicCollisions(){
 	static Pivot* piv2o=Pivot::CreatePivot();
 	static Pivot* piv2=Pivot::CreatePivot(piv2o);
 
-	static Mesh* sphere=Mesh::CreateSphere();
-	sphere->HideEntity();
+	/*static Mesh* sphere=Mesh::CreateSphere();
+	sphere->HideEntity();*/
 
 	list<CollisionPair*>::iterator cp_it;
 
@@ -307,9 +307,9 @@ void UpdateDynamicCollisions(){
 				float dy;
 				float dz;
 
-				dx=ent.EntityX()-ent2.EntityX();
-				dy=ent.EntityY()-ent2.EntityY();
-				dz=ent.EntityZ()-ent2.EntityZ();
+				dx=ent.EntityX(true)-ent2.EntityX(true);
+				dy=ent.EntityY(true)-ent2.EntityY(true);
+				dz=ent.EntityZ(true)-ent2.EntityZ(true);
 
 				float dx2;
 				float dy2;
@@ -322,12 +322,33 @@ void UpdateDynamicCollisions(){
 				piv1->PositionEntity(dx,dy,dz,false);
 				piv2->PositionEntity(dx2,dy2,dz2,false);
 
-				piv1o->RotateEntity(-ent2.EntityPitch(),-ent2.EntityYaw(),-ent2.EntityRoll());
-				piv2o->RotateEntity(-ent2.old_pitch,-ent2.old_yaw,-ent2.old_roll);
+				//piv1o->RotateEntity(-ent2.mat.GetPitch(),-ent2.mat.GetYaw(),-ent2.mat.GetRoll());
+				ent2.mat.GetInverse2(piv1o->mat);
+				piv1o->mat.SetTranslate(0,0,0);
+				piv1->MQ_Update();
+				piv11->MQ_Update();
+				piv111->MQ_Update();
+				//piv2o->RotateEntity(-ent2.old_pitch,-ent2.old_yaw,-ent2.old_roll);
+				ent2.old_mat.GetInverse2(piv2o->mat);
+				piv2o->mat.SetTranslate(0,0,0);
+				piv2->MQ_Update();
+
+				float xx=1,xy=0,xz=0;
+				float yx=0,yy=1,yz=0;
+				float zx=0,zy=0,zz=1;
+
+				ent2.mat.TransformVec(xx,xy,xz);
+				ent2.mat.TransformVec(yx,yy,yz);
+				ent2.mat.TransformVec(zx,zy,zz);
+
+				piv1o->sx=1/sqrt((xx*xx)+(xy*xy)+(xz*xz));
+				piv1o->sy=1/sqrt((yx*yx)+(yy*yy)+(yz*yz));
+				piv1o->sz=1/sqrt((zx*zx)+(zy*zy)+(zz*zz));
+
 
 				Vector vec_a(piv1->EntityX(true),piv1->EntityY(true),piv1->EntityZ(true));
 				Vector vec_b(piv2->EntityX(true),piv2->EntityY(true),piv2->EntityZ(true));
-				Vector vec_radius(ent.radius_x,ent.radius_x,ent.radius_x);
+				Vector vec_radius(ent.radius_x*piv1o->sx,ent.radius_x*piv1o->sy,ent.radius_x*piv1o->sz);
 
 				CollisionInfo* c_col_info=C_CreateCollisionInfoObject(&vec_a,&vec_b,&vec_radius);
 
@@ -400,22 +421,35 @@ void UpdateDynamicCollisions(){
 					float z=C_CollisionPosZ();
 
 					piv1o->RotateEntity(0,0,0);
+
 					piv1->PositionEntity(x,y,z,true);
 					piv11->PositionEntity(eci->x,eci->y,eci->z,true);
 
-					piv2o->RotateEntity(0,0,0,false);
+					//piv2o->RotateEntity(0,0,0,false);
+					//piv2o->ScaleEntity(1,1,1,false);
+					piv2o->mat.LoadIdentity();
 					piv2->PositionEntity(eci->nx,eci->ny,eci->nz,false);
 
-					piv1o->PositionEntity(ent2.EntityX(true),ent2.EntityY(true),ent2.EntityZ(true),true);
-					piv1o->RotateEntity(ent2.EntityPitch(),ent2.EntityYaw(),ent2.EntityRoll());
+					//piv1o->PositionEntity(ent2.EntityX(true),ent2.EntityY(true),ent2.EntityZ(true),true);
+					//piv1o->RotateEntity(ent2.mat.GetPitch(),ent2.mat.GetYaw(),ent2.mat.GetRoll());
+					//piv1o->ScaleEntity(1, 1, 1);
+					piv1o->mat.Overwrite(ent2.mat);
+					piv1o->mat.Scale(piv1o->sx,piv1o->sy,piv1o->sz);
+					piv1->MQ_Update();
+					piv11->MQ_Update();
 
-					piv2o->RotateEntity(ent2.EntityPitch(),ent2.EntityYaw(),ent2.EntityRoll());
+
+					//piv2o->RotateEntity(ent2.EntityPitch(),ent2.EntityYaw(),ent2.EntityRoll());
+					piv2o->mat.Overwrite(ent2.mat);
+					piv2o->mat.SetTranslate(0,0,0);
+					piv2->MQ_Update();
+
 
 					x=piv1->EntityX(true);
 					y=piv1->EntityY(true);
 					z=piv1->EntityZ(true);
 
-					sphere->PositionEntity(x,y,z,true);
+					//sphere->PositionEntity(x,y,z,true);
 
 					ent.new_x=x;
 					ent.new_y=y;
@@ -423,9 +457,9 @@ void UpdateDynamicCollisions(){
 
 					// moved from PositionEntities
 
-					ent.new_x=(ent.new_x-ent.EntityX(true))+ent.EntityX(true);
+					/*ent.new_x=(ent.new_x-ent.EntityX(true))+ent.EntityX(true);
 					ent.new_y=(ent.new_y-ent.EntityY(true))+ent.EntityY(true);
-					ent.new_z=(ent.new_z-ent.EntityZ(true))+ent.EntityZ(true);
+					ent.new_z=(ent.new_z-ent.EntityZ(true))+ent.EntityZ(true);*/
 
 					ent.PositionEntity(ent.new_x,ent.new_y,ent.new_z,true);
 
@@ -460,9 +494,11 @@ void UpdateDynamicCollisions(){
 
 				piv1o->PositionEntity(0,0,0,true);
 				piv1o->RotateEntity(0,0,0,true);
+				piv1o->ScaleEntity(1,1,1,true);
 
 				piv2o->PositionEntity(0,0,0,true);
 				piv2o->RotateEntity(0,0,0,true);
+				piv2o->ScaleEntity(1,1,1,true);
 
 			} // end of dest ent loop
 

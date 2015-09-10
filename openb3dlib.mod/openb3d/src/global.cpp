@@ -17,6 +17,9 @@
 #include "pick.h"
 #include "collision2.h"
 #include "shadow.h"
+#include "particle.h"
+#include "physics.h"
+#include "actions.h"
 
 #include <list>
 #include <stdlib.h>
@@ -24,6 +27,8 @@
 using namespace std;
 
 float Global::ambient_red=0.5,Global::ambient_green=0.5,Global::ambient_blue=0.5;
+
+Shader* Global::ambient_shader=0;
 
 int Global::vbo_enabled=true,Global::vbo_min_tris=0;
 
@@ -162,8 +167,17 @@ void Global::ClearWorld(int entities,int brushes,int textures){
 
 void Global::UpdateWorld(float anim_speed){
 	Global::anim_speed=anim_speed;
-	// collision
-	UpdateCollisions();
+
+	// particles
+	list<ParticleEmitter*>::iterator it2;
+
+	for(it2=ParticleEmitter::emitter_list.begin();it2!=ParticleEmitter::emitter_list.end();it2++){
+		ParticleEmitter* emitter=*it2;
+		emitter->Update();
+	}
+
+	// Actions
+	Action::Update();
 
 	// anim
 	list<Entity*>::iterator it;
@@ -172,6 +186,15 @@ void Global::UpdateWorld(float anim_speed){
 		Mesh* mesh=dynamic_cast<Mesh*>(*it);
 		UpdateEntityAnim(*mesh);
 	}
+
+	//Physics
+	Constraint::Update();
+	RigidBody::Update();
+
+	// collision
+	UpdateCollisions();
+
+
 }
 
 void Global::RenderWorld(){

@@ -38,24 +38,6 @@ Type TSprite Extends TMesh
 	
 	' Openb3d
 	
-	Method ParticleColor( r:Float,g:Float,b:Float,a:Float=0 )
-	
-		ParticleColor_( GetInstance(Self),r,g,b,a )
-		
-	End Method
-	
-	Method ParticleVector( x:Float,y:Float,z:Float )
-	
-		ParticleVector_( GetInstance(Self),x,y,z )
-		
-	End Method
-	
-	Method ParticleTrail( length:Int )
-	
-		ParticleTrail_( GetInstance(Self),length )
-		
-	End Method
-	
 	Method SpriteRenderMode( Mode:Int )
 	
 		SpriteRenderMode_( GetInstance(Self),Mode )

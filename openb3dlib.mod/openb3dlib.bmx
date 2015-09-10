@@ -38,8 +38,7 @@ ModuleInfo "History: 1.00 Initial Release"
 ModuleInfo "CC_OPTS: -DGLEW_STATIC"
 ?
 
-Import Pub.Glew
-Import Pub.OpenGL ' order is important, glew before OpenGL
+Import Pub.Glew ' imports Pub.OpenGL
 
 Import "source.bmx"
 
@@ -121,6 +120,7 @@ Extern
 	Function MatrixTranspose_( obj:Byte Ptr ) = "MatrixTranspose"
 	Function MatrixSetTranslate_( obj:Byte Ptr,x:Float,y:Float,z:Float ) = "MatrixSetTranslate"
 	Function MatrixMultiply2_( obj:Byte Ptr,mat:Byte Ptr ) = "MatrixMultiply2"
+	Function MatrixGetInverse2_( obj:Byte Ptr,mat:Byte Ptr ) = "MatrixGetInverse2"	
 	Function MatrixGetPitch_:Float( obj:Byte Ptr ) = "MatrixGetPitch"
 	Function MatrixGetYaw_:Float( obj:Byte Ptr ) = "MatrixGetYaw"
 	Function MatrixGetRoll_:Float( obj:Byte Ptr ) = "MatrixGetRoll"

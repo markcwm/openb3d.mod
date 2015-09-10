@@ -11,6 +11,7 @@
 #define SPRITE_BATCH_H
 
 #include "mesh.h"
+#include "global.h"
 #include "surface.h"
 #include "texture.h"
 
@@ -55,7 +56,7 @@ public:
 		sprite_batch=new SpriteBatch;
 		sprite_batch->surf=new Surface;
 		sprite_batch->surf->vbo_enabled=false;
-		sprite_batch->surf->ShaderMat=0;
+		sprite_batch->surf->ShaderMat=Global::ambient_shader;
 		sprite_batch->texture=tex;
 		sprite_batch->blend=blend;
 		sprite_batch->order=order;

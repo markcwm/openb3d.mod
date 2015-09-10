@@ -127,10 +127,9 @@ Type TTexture
 		
 	End Method
 	
-	' Copy the contents of the depthbuffer To a texture.
-	Method DepthBufferToTex( frame:Int=0 )
+	Method DepthBufferToTex( cam:TCamera=Null )
 	
-		DepthBufferToTex_( GetInstance(Self),frame )
+		DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
 		
 	End Method
 	

@@ -267,9 +267,9 @@ public:
 	float EntityDistanceSquared(Entity* ent2);	
 	// Quaternions
 	void MQ_Update();
-	void MQ_GetInvMatrix(Matrix &mat0, int scale);
-	void MQ_GetMatrix(Matrix &mat3, int scale);
-	void MQ_GetScaleXYZ(float &width, float &height, float &depth, int glob=true);
+	void MQ_GetInvMatrix(Matrix &mat0);
+	void MQ_GetMatrix(Matrix &mat3);
+	void MQ_GetScaleXYZ(float &width, float &height, float &depth);
 	void MQ_Turn( float ang, float vx, float vy, float vz, int glob=false);
 	// virtual
 	virtual void Update() {};

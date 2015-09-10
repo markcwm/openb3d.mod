@@ -79,6 +79,7 @@ Pivot* Pivot::CopyEntity(Entity* parent_ent){
 	piv->box_w=box_w;
 	piv->box_h=box_h;
 	piv->box_d=box_d;
+	piv->collision_type=collision_type;
 	piv->pick_mode=pick_mode;
 	piv->obscurer=obscurer;
 

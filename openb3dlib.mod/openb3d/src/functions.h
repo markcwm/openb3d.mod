@@ -20,8 +20,6 @@ void DLL_EXPORT BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT BackBufferToTex(Texture* tex,int frame);
 void DLL_EXPORT TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
 
-// wrapper only
-void DLL_EXPORT DepthBufferToTex(Texture* tex,int frame);
 
 /*
 bbdoc: Minib3d Only

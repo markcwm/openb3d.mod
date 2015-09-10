@@ -110,6 +110,7 @@ Geosphere* Geosphere::CopyEntity(Entity* parent_ent){
 	geo->box_w=box_w;
 	geo->box_h=box_h;
 	geo->box_d=box_d;
+	geo->collision_type=collision_type;
 	geo->pick_mode=pick_mode;
 	geo->obscurer=obscurer;
 
@@ -165,7 +166,7 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 		geo->level2dzsize[i] = tsize*LOD[i];/*1000000000.0*(float)pow((float)tsize/8192 / sqrt((float)(1 << i)),2);	// <-------------terrain detail here*/
 	}
 
-	geo->ShaderMat=0;
+	geo->ShaderMat=Global::ambient_shader;
 	//geo->EqToToast=0;
 
 	//terr->brush=new brush;
@@ -175,12 +176,14 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 	geo->AddParent(*parent_ent);
 	terrain_list.push_back(geo);
 	if (tsize!=0){
-		geo->size=tsize;
-		geo->hsize=tsize/2;
+		geo->size=tsize/2;
+		geo->hsize=tsize/4;
 
 		geo->vsize=.05;
 		geo->height=new float[(tsize+1)*(tsize+1)];
 		geo->NormalsMap=new float[(tsize+1)*(tsize+1)*5];
+
+		geo->EquirectangularToTOAST();
 
 	}
 
@@ -596,7 +599,7 @@ void Geosphere::RecreateGeoROAM(){
 	}
 
 
-	MQ_GetMatrix(tmat, true);
+	//MQ_GetMatrix(tmat, true);
 
 
 	triangleindex = 0;
@@ -657,7 +660,7 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 		float vcx=x;
 		float vcy=y;
 		float vcz=-z;
-		tmat.TransformVec(vcx, vcy, vcz, 1);
+		mat.TransformVec(vcx, vcy, vcz, 1);
 
 		for (int i = 0 ;i<= 5; i++){
 			float d = eyepoint->frustum[i][0] * vcx + eyepoint->frustum[i][1] * vcy - eyepoint->frustum[i][2] * vcz + eyepoint->frustum[i][3];
@@ -1109,10 +1112,6 @@ Geosphere* Geosphere::LoadGeosphere(string filename,Entity* parent_ent){
 
 		geo=Geosphere::CreateGeosphere(width, parent_ent);
 
-		geo->size=height;
-		geo->hsize=height/2;
-		geo->EquirectangularToTOAST();
-
 		for (int y=0;y<geo->size;y++){
 			for (int x=0;x<geo->size;x++){
 				int x1=geo->NormalsMap[5*(x*(int)geo->size+ y)+3]*2;
@@ -1134,8 +1133,6 @@ Geosphere* Geosphere::LoadGeosphere(string filename,Entity* parent_ent){
 		// create a dummy terrain only as a dirty fallback
 		height =128;
 		geo=Geosphere::CreateGeosphere(256, parent_ent);
-		geo->size=height;
-		geo->hsize=height/2;
 		//geo->height=new float[(width+1)*(width+1)];
 		for (int x=0;x<=geo->size-1;x++){
 			for (int y=0;y<=geo->size-1;y++){
@@ -1197,7 +1194,7 @@ void Geosphere::TreeCheck(CollisionInfo* ci){
 	}
 
 
-	MQ_GetMatrix(tmat, true);
+	//MQ_GetMatrix(tmat, true);
 
 
 
@@ -1266,7 +1263,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 		float vcx=x;
 		float vcy=y;
 		float vcz=-z;
-		tmat.TransformVec(vcx, vcy, vcz, 1);
+		mat.TransformVec(vcx, vcy, vcz, 1);
 
 		/*Is triangle on the collision line?*/
 
@@ -1351,6 +1348,7 @@ void Geosphere::FreeEntity(){
 	delete[] NormalsMap;		
 	//delete[] EqToToast;		
 
+	terrain_list.remove(this);
 	delete c_col_tree;
 
 	Entity::FreeEntity();

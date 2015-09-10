@@ -116,6 +116,7 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 	terr->box_w=box_w;
 	terr->box_h=box_h;
 	terr->box_d=box_d;
+	terr->collision_type=collision_type;
 	terr->pick_mode=pick_mode;
 	terr->obscurer=obscurer;
 
@@ -165,7 +166,7 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 		terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <-------------terrain detail here
 	}
 
-	terr->ShaderMat=0;
+	terr->ShaderMat=Global::ambient_shader;
 
 	//terr->brush=new brush;
 	mesh_info=C_NewMeshInfo();
@@ -576,7 +577,7 @@ void Terrain::RecreateROAM(){
 	}
 
 
-	MQ_GetMatrix(tmat, true);
+	//MQ_GetMatrix(tmat, true);
 
 
 
@@ -641,7 +642,7 @@ void Terrain::drawsub(int l, float v0[], float v1[], float v2[]){
 		float vcx=vc[0];
 		float vcy=vc[1];
 		float vcz=-vc[2];
-		tmat.TransformVec(vcx, vcy, vcz, 1);
+		mat.TransformVec(vcx, vcy, vcz, 1);
 
 		for (int i = 0 ;i<= 5; i++){
 			float d = eyepoint->frustum[i][0] * vcx + eyepoint->frustum[i][1] * vcy - eyepoint->frustum[i][2] * vcz + eyepoint->frustum[i][3];
@@ -813,7 +814,7 @@ void Terrain::TreeCheck(CollisionInfo* ci){
 	}
 
 
-	MQ_GetMatrix(tmat, true);
+	//MQ_GetMatrix(tmat, true);
 
 
 
@@ -887,7 +888,7 @@ void Terrain::col_tree_sub(int l, float v0[], float v1[], float v2[]){
 		float vcx=vc[0];
 		float vcy=vc[1];
 		float vcz=-vc[2];
-		tmat.TransformVec(vcx, vcy, vcz, 1);
+		mat.TransformVec(vcx, vcy, vcz, 1);
 
 
 		/*Is triangle on the collision line?*/
@@ -982,6 +983,7 @@ void Terrain::FreeEntity(){
 	delete[] height;
 	delete[] NormalsMap;		
 
+	terrain_list.remove(this);
 	delete c_col_tree;
 
 	Entity::FreeEntity();

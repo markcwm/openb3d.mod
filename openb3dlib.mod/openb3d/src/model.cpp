@@ -17,7 +17,6 @@
 #include "quaternion.h"
 #include "file.h"
 //#include "misc.h"
-#include "added.h"
 
 const int TEXS=1;
 const int BRUS=2;
@@ -333,8 +332,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				// if not then the texture created above (supplied as param below) will be returned
 				new_tex=Texture::LoadTexture(te_file,te_flags);//,tex[tex_no]); ***todo***
 				*/
-				
-				te_file=NewFilePath(f_name,te_file); // added
+
 				Texture* new_tex=Texture::LoadTexture(te_file,te_flags);
 
 				new_tex->blend=te_blend;

@@ -61,6 +61,7 @@ Type TBlitz2D
 		
 		' set render state flags (crashes if fx2 is not set)
 		TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
+		TGlobal.blend_mode[0]=1 ' force alpha blending
 		TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
 		TGlobal.fx2[0]=1 ' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
 		

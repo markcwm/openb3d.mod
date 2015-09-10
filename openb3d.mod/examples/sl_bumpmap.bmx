@@ -3,7 +3,7 @@
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 
 Graphics3D 800,600,0,2
 
@@ -23,6 +23,7 @@ Local light2:TLight=CreateLight(2,lpivot2)
 PositionEntity light2,0,1.2,2
 LightColor light2,200,100,100
 
+' sky
 Local sky:TMesh=CreateSphere(32)
 Local tex:TTexture=LoadTexture("media/sky.bmp")
 ScaleTexture tex,0.5,0.5
@@ -31,18 +32,16 @@ ScaleEntity sky,500,500,500
 EntityFX sky,1
 FlipMesh sky
 
-'create room
+' room
 Local ground:TMesh=CreateCubeUV(8.0,8.0)
 ScaleMesh ground,8,0.05,8
 
 Local wall1:TMesh=CreateCubeUV(4.0,1.0)
 ScaleMesh wall1,0.05,1,4
 PositionEntity wall1,4,1,0
-
 Local wall2:TMesh=CreateCubeUV(4.0,1.0)
 ScaleMesh wall2,0.05,1,4
 PositionEntity wall2,-4,1,0
-
 Local wall3:TMesh=CreateCubeUV(4.0,1.0)
 ScaleMesh wall3,4,1,0.05
 PositionEntity wall3,0,1,4
@@ -58,15 +57,12 @@ PositionEntity ceiling,0,2,0
 Local column:TMesh=CreateCylinder(16)
 PositionEntity column,3,1,3
 ScaleEntity column,0.5,1,0.5
-
 Local column2:TMesh=CreateCylinder(16)
 PositionEntity column2,-3,1,3
 ScaleEntity column2,0.5,1,0.5
-
 Local column3:TMesh=CreateCylinder(16)
 PositionEntity column3,3,1,-3
 ScaleEntity column3,0.5,1,0.5
-
 Local column4:TMesh=CreateCylinder(16)
 PositionEntity column4,-3,1,-3
 ScaleEntity column4,0.5,1,0.5
@@ -89,12 +85,6 @@ ShaderTexture(shader,normaltex,"normalMap",1)
 SetFloat3(shader,"vTangent",0.1,0.1,0.1)
 SetFloat(shader,"invRadius",0.01)
 
-ShadeEntity(ground,shader) ; ShadeEntity(ceiling,shader)
-ShadeEntity(wall1,shader) ; ShadeEntity(wall2,shader)
-ShadeEntity(wall3,shader) ; ShadeEntity(sphere,shader)
-ShadeEntity(column,shader) ; ShadeEntity(column2,shader)
-ShadeEntity(column3,shader) ; ShadeEntity(column4,shader)
-
 ' bump map 2 - no directional, multiple point lights
 Local shader2:TShader=LoadShader("","shaders/bumpmap2.vert.glsl","shaders/bumpmap2.frag.glsl")
 ShaderTexture(shader2,colortex,"colorMap",0)
@@ -108,12 +98,21 @@ Local shader3:TShader=LoadShader("","shaders/bumpmap3.vert.glsl","shaders/bumpma
 ShaderTexture(shader3,colortex,"colorMap",0)
 ShaderTexture(shader3,normaltex,"normalMap",1)
 ShaderTexture(shader3,spectex,"specularMap",2)
-SetFloat(shader3,"lightradius[0].Float",0.2)
+Local num_lights%=1
+For Local irad%=0 To num_lights-1
+	SetFloat(shader3,"lightradius["+irad+"].Float",0.2)
+Next
 SetFloat(shader3,"texturescale",1.0)
 SetFloat4(shader3,"vambient",0.2,0.2,0.2,0.2)
 
+ShadeEntity(ground,shader) ; ShadeEntity(ceiling,shader)
+ShadeEntity(wall1,shader) ; ShadeEntity(wall2,shader)
+ShadeEntity(wall3,shader) ; ShadeEntity(sphere,shader)
+ShadeEntity(column,shader) ; ShadeEntity(column2,shader)
+ShadeEntity(column3,shader) ; ShadeEntity(column4,shader)
+
 Local clr#, cfb#, cud#
-Local lightmode%, bumpmode%
+Local lightmode%=1, bumpmode%
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -183,7 +182,7 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity(sphere,0,0.5,-0.1)
 	
 	RenderWorld
-
+	
 	' calculate fps
 	renders=renders+1
 	If MilliSecs()-old_ms>=1000
@@ -195,14 +194,21 @@ While Not KeyDown(KEY_ESCAPE)
 	Text 0,0,"FPS: "+fps
 	Text 0,20,"WSAD: move camera, M: bump map mode = "+bumpmode+", L: light mode = "+lightmode
 	Text 0,40,""+EntityX(cpivot)+" "+EntityY(cpivot)+" "+EntityZ(cpivot)
-
+	
+	Local max2d%=1
+	If max2d
+		BeginMax2D()
+		DrawText "Testing Max2d",0,60
+		EndMax2D()
+	EndIf
+	
 	Flip
 Wend
 End
 
 
-' from firepaint3d.bb
-Function MouseLook(pivot:TPivot,camera:TCamera,time%,elapsed%)
+' camera mouse look (from firepaint3d.bb)
+Function MouseLook( pivot:TPivot,camera:TCamera,time%,elapsed% )
 
 	Repeat
 		elapsed=MilliSecs()-time
@@ -222,8 +228,8 @@ Function MouseLook(pivot:TPivot,camera:TCamera,time%,elapsed%)
 	
 End Function
 
-' CreateCubeUV from minib3d TMesh.bmx (tcu/tcv - texture scaling)
-Function CreateCubeUV:TMesh(tcu#, tcv#, parent_ent:TEntity=Null)
+' create a textured cube - tcu/tcv: texture scaling (from Minib3d TMesh.bmx)
+Function CreateCubeUV:TMesh( tcu#,tcv#,parent_ent:TEntity=Null )
 
 	Local mesh:TMesh=CreateMesh(parent_ent)
 	Local surf:TSurface=CreateSurface(mesh)
@@ -335,8 +341,8 @@ Function CreateCubeUV:TMesh(tcu#, tcv#, parent_ent:TEntity=Null)
 	
 EndFunction
 
-' create a textured quad (tcu/tcv - texture scaling)
-Function CreateQuadUV:TMesh(tcu#,tcz#,parent_ent:TEntity=Null)
+' create a textured quad - tcu/tcv: texture scaling
+Function CreateQuadUV:TMesh( tcu#,tcz#,parent_ent:TEntity=Null )
 
 	Local mesh:TMesh=CreateMesh(parent_ent)
 	Local surf:TSurface=CreateSurface(mesh)

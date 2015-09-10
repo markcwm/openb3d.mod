@@ -13,7 +13,6 @@
 
 class Geosphere : public Terrain{
 private:
-	Matrix tmat;
 	float dradius;
 	float* NormalsMap;
 	//int* EqToToast;

@@ -90,6 +90,7 @@ Camera* Camera::CopyEntity(Entity* parent_ent){
 	cam->box_w=box_w;
 	cam->box_h=box_h;
 	cam->box_d=box_d;
+	cam->collision_type=collision_type;
 	cam->pick_mode=pick_mode;
 	cam->obscurer=obscurer;
 
@@ -475,14 +476,14 @@ void Camera::Update(){
 	if(fog_mode>0){
 		
 		glEnable(GL_FOG); // enable if disabled
-		glFogi(GL_FOG_MODE,GL_LINEAR); // each render when using 2d in 3d
+		glFogi(GL_FOG_MODE,GL_LINEAR); // each render when 2d in 3d
 		if(fog!=true){
 			//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 			fog=true;
 			Global::fog_enabled=true; // used in mesh render
 		}
 		
-		glFogf(GL_FOG_START,fog_range_near);
+		glFogf(GL_FOG_START,fog_range_near); // also when 2d in 3d
 		if(abs(fog_near-fog_range_near)>0.0001){
 			fog_near=fog_range_near;
 		}
@@ -626,9 +627,9 @@ void UpdateEntityRender(Entity* ent,Entity* cam){
 	ent->old_x=ent->EntityX(true);
 	ent->old_y=ent->EntityY(true);
 	ent->old_z=ent->EntityZ(true);
-	ent->old_pitch=ent->EntityPitch();
-	ent->old_yaw=ent->EntityYaw();
-	ent->old_roll=ent->EntityRoll();
+	/*ent->old_pitch=ent->mat.GetPitch();
+	ent->old_yaw=ent->mat.GetYaw();
+	ent->old_roll=ent->mat.GetRoll();*/
 	ent->old_mat.Overwrite(ent->mat);
 	
 	Mesh* mesh=dynamic_cast<Mesh*>(ent);

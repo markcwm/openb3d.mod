@@ -74,4 +74,5 @@ Import "openb3d/src/x.cpp"
 Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
 
-Import "openb3d/src/added.cpp"
+Import "openb3d/src/actions.cpp"
+Import "openb3d/src/physics.cpp"

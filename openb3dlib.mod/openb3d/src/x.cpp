@@ -222,7 +222,7 @@ XLoader_TreeNode* XLoader_MakeTree(string s, XLoader_TreeNode* parent = 0){
 }
 
 
-void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], vector<string> &brushnames){
+void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], string brushnames[]){
 	int count = 0;
 	list<XLoader_TreeNode*>::iterator material2;
 	XLoader_TreeNode* material;
@@ -230,7 +230,7 @@ void loadBrush(list<XLoader_TreeNode*> matlist, Brush* brushes[], vector<string>
 	for (material2 = matlist.begin(); material2 != matlist.end(); material2++){
 		material=*material2;
 
-		brushnames.push_back(material->name);
+		brushnames[count] = material->name;
 							
 		vector<string> brushrgba = split(material->content.substr(0,material->content.find(";;")), ';');
 		brushes[count] = Brush::CreateBrush(
@@ -330,7 +330,7 @@ Mesh* LoadX(string URL, Entity* parent_ent){
 						// fetch material data
 						list<XLoader_TreeNode*> matlist = XLoader_FindTreeElements(tree, "material");
 						Brush* brushes[matlist.size()];
-						vector<string> brushnames;
+						string brushnames[matlist.size()];
 
 						loadBrush(matlist, brushes, brushnames);
 
@@ -419,7 +419,7 @@ Mesh* LoadX(string URL, Entity* parent_ent){
 										float x = vertx * tformmat.grid[0][0] + verty * tformmat.grid[0][1] + vertz * tformmat.grid[0][2] + tformmat.grid[0][3];
 										float y = vertx * tformmat.grid[1][0] + verty * tformmat.grid[1][1] + vertz * tformmat.grid[1][2] + tformmat.grid[1][3];
 										float z = vertx * tformmat.grid[2][0] + verty * tformmat.grid[2][1] + vertz * tformmat.grid[2][2] + tformmat.grid[2][3];
-										float w = tformmat.grid[3][0] + tformmat.grid[3][1] + tformmat.grid[3][2] + tformmat.grid[3][3];
+										//float w = tformmat.grid[3][0] + tformmat.grid[3][1] + tformmat.grid[3][2] + tformmat.grid[3][3];
 											
 										surf->AddVertex(x, y, z);
 									}
@@ -529,7 +529,7 @@ Mesh* LoadX(string URL, Entity* parent_ent){
 
 										list<XLoader_TreeNode*> Lmatlist = XLoader_FindTreeElements(meshnode, "material");
 										Brush* Lbrushes[Lmatlist.size()];
-										vector<string> Lbrushnames;
+										string Lbrushnames[Lmatlist.size()];
 
 										loadBrush(Lmatlist, Lbrushes, Lbrushnames);
 										//string texname = texdata.substr(0,texdata.find("}"));

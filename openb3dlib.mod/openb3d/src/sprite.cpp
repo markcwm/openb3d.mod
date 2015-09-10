@@ -83,6 +83,7 @@ Sprite* Sprite::CopyEntity(Entity* parent_ent){
 	sprite->box_w=box_w;
 	sprite->box_h=box_h;
 	sprite->box_d=box_d;
+	sprite->collision_type=collision_type;
 	sprite->pick_mode=pick_mode;
 	sprite->obscurer=obscurer;
 

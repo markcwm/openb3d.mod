@@ -5,7 +5,6 @@
 #include "texture.h"
 #include "file.h"
 #include <list>
-#include "added.h"
 
 namespace load3ds{
 
@@ -209,13 +208,12 @@ void ReadTexCoords(){
   }
 }
 
-void LoadMap(string Filepath){
+void LoadMap(){
   string Filename;
   //int Pixmap;
   Filename = ReadCString();
   //Pixmap = FileType(Filename)
   //If Pixmap <> 0 Then
-  Filename = NewFilePath(Filepath,Filename); // added
   texture = Texture::LoadTexture(Filename,4);
   if (TextureLayer == M3D_3DS_TEXTUREMAP1){
     // Layer 0
@@ -351,7 +349,7 @@ Mesh* Load3ds(string URL, Entity* parent_ent){
       //'Loader.Brush.BrushShininess(Percent)
       break;
     case M3D_3DS_MAPFILENAME:
-      LoadMap(URL);
+      LoadMap();
       break;
     case M3D_3DS_MAPVSCALE:
       texture->v_scale = Stream->ReadFloat();

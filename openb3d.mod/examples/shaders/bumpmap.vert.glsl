@@ -1,12 +1,14 @@
 // www.ozone3d.net/tutorials/bump_mapping.php
 
-varying vec3 lightVec; 
+#define MAX_LIGHTS 8
+#define NUM_LIGHTS 2
+varying vec3 lightVec[MAX_LIGHTS]; 
 varying vec3 eyeVec;
 varying vec2 texCoord;
 attribute vec3 vTangent;
 
 void main(void)
-{	
+{
 	gl_Position = ftransform();
 	texCoord = gl_MultiTexCoord0.xy;
 
@@ -15,11 +17,18 @@ void main(void)
 	vec3 b = cross(n, t);
 
 	vec3 vVertex = vec3(gl_ModelViewMatrix * gl_Vertex);
-	vec3 tmpVec = gl_LightSource[0].position.xyz - vVertex;
 
-	lightVec.x = dot(tmpVec, t);
-	lightVec.y = dot(tmpVec, b);
-	lightVec.z = dot(tmpVec, n);
+	vec3 tmpVec;
+	for (int i=0; i<NUM_LIGHTS; ++i)
+	{
+		tmpVec = gl_LightSource[i].position.xyz - vVertex;
+
+		//lightVec[i].x = dot(tmpVec, t);
+		//lightVec[i].y = dot(tmpVec, b);
+		lightVec[i].x = tmpVec.x;
+		lightVec[i].y = tmpVec.y;
+		lightVec[i].z = dot(tmpVec, n);
+	}
 
 	tmpVec = -vVertex;
 	eyeVec.x = dot(tmpVec, t);

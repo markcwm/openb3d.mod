@@ -74,7 +74,7 @@ void Entity::EntityParent(Entity* parent_ent,int glob){
 		orgx = tformed_x;
 		orgy = tformed_y;
 		orgz = tformed_z;
-		MQ_GetMatrix(m1, true);
+		MQ_GetMatrix(m1);
 		m1.grid[3][0] = 0; //remove translation
 		m1.grid[3][1] = 0;
 		m1.grid[3][2] = 0;
@@ -108,7 +108,7 @@ void Entity::EntityParent(Entity* parent_ent,int glob){
 		if (parent_ent == 0) {
 			m2.LoadIdentity(); //no parent
 		}else{
-			parent_ent->MQ_GetInvMatrix(m2, true);
+			parent_ent->MQ_GetInvMatrix(m2);
 			m2.grid[3][0] = 0; //remove translation
 			m2.grid[3][1] = 0;
 			m2.grid[3][2] = 0;
@@ -288,7 +288,7 @@ void Entity::RotateEntity(float x,float y,float z,int global){
 		//get parent inverted rotation matrix
 		if (parent != 0) {
 			Matrix m2;
-			parent->MQ_GetInvMatrix(m2,true);
+			parent->MQ_GetInvMatrix(m2);
 			m2.grid[3][0] = 0; //remove translation
 			m2.grid[3][1] = 0;
 			m2.grid[3][2] = 0;
@@ -351,36 +351,54 @@ float Entity::EntityZ(int global){
 }
 
 float Entity::EntityPitch(int global){
-	if(global==false){
-		return rotmat.GetPitch();
-	}else{
-		Matrix m;
-		MQ_GetMatrix(m,false);
-		float f=m.GetPitch();
-		return f;
+	if(global==true){
+		if(parent != 0){
+			Entity* ent=this;
+			Matrix m;
+			m.Overwrite(rotmat);
+			do{
+				m.Multiply2(parent->rotmat);
+				ent=ent->parent;
+			}while(ent->parent);
+			return m.GetPitch();
+		}
+
 	}
+	return rotmat.GetPitch();
 }
 
 float Entity::EntityYaw(int global){
-	if(global==false){
-		return rotmat.GetYaw();
-	}else{
-		Matrix m;
-		MQ_GetMatrix(m,false);
-		float f=m.GetYaw();
-		return f;
+	if(global==true){
+		if(parent != 0){
+			Entity* ent=this;
+			Matrix m;
+			m.Overwrite(rotmat);
+			do{
+				m.Multiply2(parent->rotmat);
+				ent=ent->parent;
+			}while(ent->parent);
+			return m.GetYaw();
+		}
+
 	}
+	return rotmat.GetYaw();
 }
 
 float Entity::EntityRoll(int global){
-	if(global==false){
-		return rotmat.GetRoll();
-	}else{
-		Matrix m;
-		MQ_GetMatrix(m,false);
-		float f=m.GetRoll();
-		return f;
+	if(global==true){
+		if(parent != 0){
+			Entity* ent=this;
+			Matrix m;
+			m.Overwrite(rotmat);
+			do{
+				m.Multiply2(parent->rotmat);
+				ent=ent->parent;
+			}while(ent->parent);
+			return m.GetRoll();
+		}
+
 	}
+	return rotmat.GetRoll();
 }
 
 float Entity::EntityScaleX(int glob){
@@ -1233,19 +1251,19 @@ void Entity::AlignToVector(float x,float y,float z, int axis=3, float rate=1){
 
 // tform
 void Entity::TFormPoint(float x,float y,float z,Entity* src_ent,Entity* dest_ent){
-	Matrix mat1;
+	//Matrix mat1;
 	Matrix mat2;
 
-	if(src_ent != 0){
-		src_ent->MQ_GetMatrix(mat1, true);
-	}
+	/*if(src_ent != 0){
+		src_ent->MQ_GetMatrix(mat1);
+	}*/
 
 	if(dest_ent != 0){
-		dest_ent->MQ_GetInvMatrix(mat2, true);
+		dest_ent->MQ_GetInvMatrix(mat2);
 	}
 
 	if (dest_ent != 0) {mat2.TransformVec(x, y, z, 1);}//global to mesh
-	if (src_ent  != 0) {mat1.TransformVec(x, y, z, 1);}//mesh to global
+	if (src_ent  != 0) {src_ent->mat.TransformVec(x, y, z, 1);}//mesh to global
 
 	tformed_x=x;
 	tformed_y=y;
@@ -1260,7 +1278,8 @@ void Entity::TFormVector(float x,float y,float z,Entity* src_ent,Entity* dest_en
 
 	//get src matrix
 	if(src_ent != 0){
-		src_ent->MQ_GetMatrix(mat1, true);
+		//src_ent->MQ_GetMatrix(mat1);
+		mat1.Overwrite(src_ent->mat);
 		mat1.grid[3][0] = 0; //remove translation
 		mat1.grid[3][1] = 0;
 		mat1.grid[3][2] = 0;
@@ -1268,7 +1287,7 @@ void Entity::TFormVector(float x,float y,float z,Entity* src_ent,Entity* dest_en
 
 	//get dest matrix
 	if(dest_ent != 0){
-		dest_ent->MQ_GetInvMatrix(mat2, true);
+		dest_ent->MQ_GetInvMatrix(mat2);
 		mat2.grid[3][0] = 0; //remove translation
 		mat2.grid[3][1] = 0;
 		mat2.grid[3][2] = 0;
@@ -1338,7 +1357,7 @@ float Entity::EntityDistanceSquared(Entity* ent2){
 	return xd*xd + yd*yd + zd*zd;
 }
 
-void Entity::MQ_GetInvMatrix(Matrix &mat0, int scale=true){
+void Entity::MQ_GetInvMatrix(Matrix &mat0){
 	Matrix mat3;
 	mat3.LoadIdentity();
 	Matrix mat2;
@@ -1347,7 +1366,7 @@ void Entity::MQ_GetInvMatrix(Matrix &mat0, int scale=true){
 
 	if (parent != 0) {
 		//transform by parent matrix
-		parent->MQ_GetInvMatrix(mat0, scale);
+		parent->MQ_GetInvMatrix(mat0);
 	}else{
 		mat0.LoadIdentity();
 	}
@@ -1358,7 +1377,7 @@ void Entity::MQ_GetInvMatrix(Matrix &mat0, int scale=true){
 	mat1.Transpose();
 
 	//scale
-	if (scale!=0) {if (sx != 0 && sy != 0 && sz != 0) {mat3.Scale(1 / sx, 1 / sy, 1 / sz);}}
+	if (sx != 0 && sy != 0 && sz != 0) {mat3.Scale(1 / sx, 1 / sy, 1 / sz);}
 	//position
 	mat2.SetTranslate(-px,-py, pz);
 
@@ -1370,28 +1389,28 @@ void Entity::MQ_GetInvMatrix(Matrix &mat0, int scale=true){
 	return;
 }
 
-void Entity::MQ_GetMatrix(Matrix &mat3, int scale=true){
+void Entity::MQ_GetMatrix(Matrix &mat3){
 	mat3.LoadIdentity();
 	Matrix mat2;
 	mat2.LoadIdentity();
-	Matrix mat1;
+	//Matrix mat1;
 	//float ipz;
 
 	//scale
-	if (scale!=0) {mat3.Scale(sx, sy, sz);}
+	mat3.Scale(sx, sy, sz);
 	//position
 	mat2.SetTranslate(px, py, -pz);
 	//rotation
-	mat1.Overwrite(rotmat);
+	//mat1.Overwrite(rotmat);
 
-	mat3.Multiply2(mat1);
+	mat3.Multiply2(rotmat);
 	mat3.Multiply2(mat2);
 
 	if (parent != 0) {
 		//transform by parent matrix
-		Matrix m;
-		parent->MQ_GetMatrix(m, scale);
-		mat3.Multiply2(m);
+		/*Matrix m;
+		parent->MQ_GetMatrix(m, scale);*/
+		mat3.Multiply2(parent->mat);
 	}
 
 	return;
@@ -1412,15 +1431,10 @@ void Entity::MQ_Turn( float ang, float vx, float vy, float vz, int glob ){
 	}
 }
 
-void Entity::MQ_GetScaleXYZ(float &width, float &height, float &depth, int glob){
+void Entity::MQ_GetScaleXYZ(float &width, float &height, float &depth){
 	Matrix m;
 
-	if (glob != 0){
-		MQ_GetMatrix(m);
-	}else{
-		m.LoadIdentity();
-		m.Scale(sx, sy, sz);
-	}
+	MQ_GetMatrix(m);
 
 	float xx=1,xy=0,xz=0;
 	float yx=0,yy=1,yz=0;
@@ -1437,7 +1451,7 @@ void Entity::MQ_GetScaleXYZ(float &width, float &height, float &depth, int glob)
 }
 
 void Entity::MQ_Update(){
-	MQ_GetMatrix(mat, true);
+	MQ_GetMatrix(mat);
 
 	//update child_list
 	list<Entity*>::iterator it;

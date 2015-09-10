@@ -1,13 +1,10 @@
 ' functions.bmx
 
-' *** Extra functions
+'Function ResetShadow( shad:TShadowObject )
+'	ResetShadow_( TShadowObject.GetInstance( shad ) )
+'End Function
 
-' Copy the contents of the depthbuffer To a texture.
-Function DepthBufferToTex( tex:TTexture,frame:Int=0 )
-	tex.DepthBufferToTex( frame )
-End Function
-
-' *** Texture rendering
+' *** Minib3d only
 
 Rem
 bbdoc: Copy the contents of the backbuffer to a texture.
@@ -17,43 +14,34 @@ Function BackBufferToTex( tex:TTexture,frame:Int=0 )
 End Function
 
 Rem
-bbdoc: Copy a pixmap buffer to texture, buffer must be a byte ptr.
-End Rem
-Function BufferToTex( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )
-	tex.BufferToTex( buffer,frame )
-End Function
-
-Rem
-bbdoc: Copy a rendered camera view to texture.
-End Rem
-Function CameraToTex( tex:TTexture,cam:TCamera,frame:Int=0 )
-	tex.CameraToTex( cam,frame )
-End Function
-
-Rem
-bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
-End Rem
-Function TexToBuffer( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )
-	tex.TexToBuffer( buffer,frame )
-End Function
-
-' *** Minib3d Only
-
-Rem
 bbdoc: undocumented
 End Rem
 Function MeshCullRadius( ent:TEntity,radius:Float )
 	ent.MeshCullRadius( radius )
 End Function
 
-' *** Blitz3D functions, A-Z
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityScaleX:Float( ent:TEntity,glob:Int=False )
+	Return ent.EntityScaleX( glob )
+End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddAnimSeq">Online doc</a>
+bbdoc: undocumented
 End Rem
-Function AddAnimSeq:Int( ent:TEntity,length:Int )
-	Return ent.AddAnimSeq( length )
+Function EntityScaleY:Float( ent:TEntity,glob:Int=False )
+	Return ent.EntityScaleY( glob )
 End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityScaleZ:Float( ent:TEntity,glob:Int=False )
+	Return ent.EntityScaleZ( glob )
+End Function
+
+' *** Blitz3D functions, A-Z (in Minib3d)
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddMesh">Online doc</a>
@@ -74,13 +62,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">On
 End Rem
 Function AddVertex:Int( surf:TSurface,x:Float,y:Float,z:Float,u:Float=0,v:Float=0,w:Float=0 )
 	Return surf.AddVertex( x,y,z,u,v,w )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a>
-End Rem
-Function AlignToVector( entity:TEntity,x:Float,y:Float,z:Float,axis:Int,rate:Int=1 )
-	entity.AlignToVector( x,y,z,axis,rate )
 End Function
 
 Rem
@@ -409,20 +390,6 @@ Function CountVertices:Int( surf:TSurface )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )
-	Return TBlob.CreateBlob( fluid,radius,parent_ent )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
-	Return TBone.CreateBone( mesh,parent_ent )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
 End Rem
 Function CreateBrush:TBrush( r:Float=255,g:Float=255,b:Float=255 )
@@ -458,20 +425,6 @@ Function CreateCube:TMesh( parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function CreateFluid:TFluid()
-	Return TFluid.CreateFluid()
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateGeosphere:TTerrain( size:Int,parent:TEntity=Null )
-	Return TGeosphere.CreateGeosphere( size,parent )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateMesh">Online doc</a>
 End Rem
 Function CreateMesh:TMesh( parent:TEntity=Null )
@@ -493,27 +446,6 @@ Function CreatePivot:TPivot( parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
-End Rem
-Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
-	Return TMesh.CreatePlane( divisions,parent )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateQuad:TMesh( parent:TEntity=Null )
-	Return TMesh.CreateQuad( parent )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )
-	Return TShadowObject.CreateShadow( parent,Static )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a>
 End Rem
 Function CreateSphere:TMesh( segments:Int=8,parent:TEntity=Null )
@@ -528,13 +460,6 @@ Function CreateSprite:TSprite( parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function CreateStencil:TStencil()
-	Return TStencil.CreateStencil()
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSurface">Online doc</a>
 End Rem
 Function CreateSurface:TSurface( mesh:TMesh,brush:TBrush=Null )
@@ -542,24 +467,10 @@ Function CreateSurface:TSurface( mesh:TMesh,brush:TBrush=Null )
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a>
-End Rem
-Function CreateTerrain:TTerrain( size:Int,parent:TEntity=Null )
-	Return TTerrain.CreateTerrain( size,parent )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online doc</a>
 End Rem
 Function CreateTexture:TTexture( width:Int,height:Int,flags:Int=9,frames:Int=1 )
 	Return TTexture.CreateTexture( width,height,flags,frames )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function CreateVoxelSprite:TVoxelSprite( slices:Int=64,parent:TEntity=Null )
-	Return TVoxelSprite.CreateVoxelSprite( slices,parent )
 End Function
 
 Rem
@@ -797,27 +708,6 @@ Function FlipMesh( mesh:TMesh )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function FluidArray( fluid:TFluid,Array:Float Var,w:Int,h:Int,d:Int )
-	fluid.FluidArray( Array,w,h,d )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function FluidFunction( fluid:TFluid,FieldFunction:Float( x:Float,y:Float,z:Float ) )
-	fluid.FluidFunction( FieldFunction )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function FluidThreshold( fluid:TFluid,threshold:Float )
-	fluid.FluidThreshold( threshold )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a>
 End Rem
 Function FreeBrush( brush:TBrush )
@@ -832,24 +722,10 @@ Function FreeEntity( ent:TEntity )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function FreeShadow( shad:TShadowObject )
-	shad.FreeShadow()
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
 End Rem
 Function FreeTexture( tex:TTexture )
 	tex.FreeTexture()
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function GeosphereHeight( geo:TGeosphere, h:Float )
-	geo.GeosphereHeight( h )
 End Function
 
 Rem
@@ -891,7 +767,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetParent">Online doc</a>
 End Rem
 Function GetParent:TEntity( ent:TEntity )
-	Return ent.GetParent()
+	Return ent.GetParent() ' uses GetParentEntity_
 End Function
 
 Rem
@@ -907,6 +783,8 @@ End Rem
 Function GetSurfaceBrush:TBrush( surf:TSurface )
 	Return surf.GetSurfaceBrush()
 End Function
+
+' Graphics3D is in Angros.B3dglgraphics
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online doc</a>
@@ -958,13 +836,6 @@ Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a>
-End Rem
-Function LoadAnimSeq:Int( ent:TEntity,file:String )
-	Return ent.LoadAnimSeq( file )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 End Rem
 Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int )
@@ -979,24 +850,10 @@ Function LoadBrush:TBrush( file:String,flags:Int=1,u_scale:Float=1,v_scale:Float
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function LoadGeosphere:TTerrain( file:String,parent:TEntity=Null )
-	Return TGeosphere.LoadGeosphere( file,parent )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 End Rem
 Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadMesh( file,parent )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
-End Rem
-Function LoadTerrain:TTerrain( file:String,parent:TEntity=Null )
-	Return TTerrain.LoadTerrain( file,parent )
 End Function
 
 Rem
@@ -1014,24 +871,10 @@ Function LoadSprite:TSprite( tex_file:String,tex_flag:Int=1,parent:TEntity=Null 
 End Function
 
 Rem
-bbdoc: Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
-End Rem
-Function MeshCSG:TMesh( m1:TMesh,m2:TMesh,method_no:Int=1 )
-	Return TMesh.MeshCSG( m1,m2,method_no )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshDepth">Online doc</a>
 End Rem
 Function MeshDepth:Float( mesh:TMesh )
 	Return mesh.MeshDepth()
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshesIntersect">Online doc</a>
-End Rem
-Function MeshesIntersect:Int( mesh1:TMesh,mesh2:TMesh )
-	Return mesh1.MeshesIntersect( mesh2 )
 End Function
 
 Rem
@@ -1046,20 +889,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshWidth">On
 End Rem
 Function MeshWidth:Float( mesh:TMesh )
 	Return mesh.MeshWidth()
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )
-	geo.ModifyGeosphere( x,z,new_height )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ModifyTerrain">Online doc</a>
-End Rem
-Function ModifyTerrain( terr:TTerrain,x:Int,z:Int,new_height:Float )
-	terr.ModifyTerrain( x,z,new_height )
 End Function
 
 Rem
@@ -1095,27 +924,6 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface"
 End Rem
 Function PaintSurface( surf:TSurface,brush:TBrush )
 	surf.PaintSurface( brush )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function ParticleColor( sprite:TSprite,r:Float,g:Float,b:Float,a:Float=0 )
-	sprite.ParticleColor( r,g,b,a )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function ParticleVector( sprite:TSprite,x:Float,y:Float,z:Float )
-	sprite.ParticleVector( x,y,z )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function ParticleTrail( sprite:TSprite,length:Int )
-	sprite.ParticleTrail( length )
 End Function
 
 Rem
@@ -1245,13 +1053,6 @@ Function RenderWorld()
 End Function
 
 Rem
-bbdoc: Like CopyMesh but for instancing effects.
-End Rem
-Function RepeatMesh:TMesh( mesh:TMesh,parent:TEntity=Null )
-	Return mesh.RepeatMesh( parent )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a>
 End Rem
 Function ResetEntity( ent:TEntity )
@@ -1315,13 +1116,6 @@ Function ScaleTexture( tex:TTexture,u_scale:Float,v_scale:Float )
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a>
-End Rem
-Function SetAnimKey( ent:TEntity,frame:Float,pos_key:Int=True,rot_key:Int=True,scale_key:Int=True )
-	ent.SetAnimKey( frame,pos_key,rot_key,scale_key )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
 End Rem
 Function SetAnimTime( ent:TEntity,time:Float,seq:Int=0 )
@@ -1350,87 +1144,10 @@ Function ShowEntity( ent:TEntity )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function SkinMesh( mesh:TMesh,surf_no_get:Int,vid:Int,bone1:Int,weight1:Float=1.0,bone2:Int=0,weight2:Float=0,bone3:Int=0,weight3:Float=0,bone4:Int=0,weight4:Float=0 )
-	mesh.SkinMesh( surf_no_get,vid,bone1,weight1,bone2,weight2,bone3,weight3,bone4,weight4 )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function SpriteRenderMode( sprite:TSprite,Mode:Int )
-	sprite.SpriteRenderMode( Mode )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a>
 End Rem
 Function SpriteViewMode( sprite:TSprite,Mode:Int )
 	sprite.SpriteViewMode( Mode )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilAlpha( stencil:TStencil,a:Float )
-	stencil.StencilAlpha( a )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilClsColor( stencil:TStencil,r:Float,g:Float,b:Float )
-	stencil.StencilClsColor( r,g,b )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilClsMode( stencil:TStencil,cls_depth:Int,cls_zbuffer:Int )
-	stencil.StencilClsMode( cls_depth,cls_zbuffer )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilMesh( stencil:TStencil,mesh:TMesh,Mode:Int=1 )
-	stencil.StencilMesh( mesh,Mode )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function StencilMode( stencil:TStencil,m:Int,o:Int=1 )
-	stencil.StencilMode( m,o )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainHeight">Online doc</a>
-End Rem
-Function TerrainHeight:Float( terr:TTerrain,x:Int,z:Int )
-	Return terr.TerrainHeight( x,z )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainX">Online doc</a>
-End Rem
-Function TerrainX:Float( terr:TTerrain,x:Float,y:Float,z:Float )
-	Return terr.TerrainX( x,y,z )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainY">Online doc</a>
-End Rem
-Function TerrainY:Float( terr:TTerrain,x:Float,y:Float,z:Float )
-	Return terr.TerrainY( x,y,z )
-End Function
-
-Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainZ">Online doc</a>
-End Rem
-Function TerrainZ:Float( terr:TTerrain,x:Float,y:Float,z:Float )
-	Return terr.TerrainZ( x,y,z )
 End Function
 
 Rem
@@ -1546,24 +1263,10 @@ Function UpdateNormals( mesh:TMesh )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function UpdateTexCoords( surf:TSurface )
-	surf.UpdateTexCoords()
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a>
 End Rem
 Function UpdateWorld( anim_speed:Float=1 )
 	TGlobal.UpdateWorld( anim_speed )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function UseStencil( stencil:TStencil )
-	TStencil.UseStencil( stencil )
 End Function
 
 Rem
@@ -1700,41 +1403,464 @@ Function VertexZ:Float( surf:TSurface,vid:Int )
 End Function
 
 Rem
-bbdoc: undocumented
-End Rem
-Function VoxelSpriteMaterial( voxelspr:TVoxelSprite,mat:TMaterial )
-	voxelspr.VoxelSpriteMaterial( mat )
-End Function
-
-Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a>
 End Rem
 Function Wireframe( enable:Int )
 	TGlobal.Wireframe( enable )
 End Function
 
-' *** Extras
+' *** Blitz3D functions, A-Z (in Openb3d)
 
 Rem
-bbdoc: undocumented
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddAnimSeq">Online doc</a>
 End Rem
-Function EntityScaleX:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleX( glob )
+Function AddAnimSeq:Int( ent:TEntity,length:Int )
+	Return ent.AddAnimSeq( length )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a>
+End Rem
+Function AlignToVector( entity:TEntity,x:Float,y:Float,z:Float,axis:Int,rate:Int=1 )
+	entity.AlignToVector( x,y,z,axis,rate )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
+End Rem
+Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
+	Return TMesh.CreatePlane( divisions,parent )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a>
+End Rem
+Function CreateTerrain:TTerrain( size:Int,parent:TEntity=Null )
+	Return TTerrain.CreateTerrain( size,parent )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a>
+End Rem
+Function LoadAnimSeq:Int( ent:TEntity,file:String )
+	Return ent.LoadAnimSeq( file )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
+End Rem
+Function LoadTerrain:TTerrain( file:String,parent:TEntity=Null )
+	Return TTerrain.LoadTerrain( file,parent )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshesIntersect">Online doc</a>
+End Rem
+Function MeshesIntersect:Int( mesh1:TMesh,mesh2:TMesh )
+	Return mesh1.MeshesIntersect( mesh2 )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ModifyTerrain">Online doc</a>
+End Rem
+Function ModifyTerrain( terr:TTerrain,x:Int,z:Int,new_height:Float )
+	terr.ModifyTerrain( x,z,new_height )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a>
+End Rem
+Function SetAnimKey( ent:TEntity,frame:Float,pos_key:Int=True,rot_key:Int=True,scale_key:Int=True )
+	ent.SetAnimKey( frame,pos_key,rot_key,scale_key )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainHeight">Online doc</a>
+End Rem
+Function TerrainHeight:Float( terr:TTerrain,x:Int,z:Int )
+	Return terr.TerrainHeight( x,z )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainX">Online doc</a>
+End Rem
+Function TerrainX:Float( terr:TTerrain,x:Float,y:Float,z:Float )
+	Return terr.TerrainX( x,y,z )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainY">Online doc</a>
+End Rem
+Function TerrainY:Float( terr:TTerrain,x:Float,y:Float,z:Float )
+	Return terr.TerrainY( x,y,z )
+End Function
+
+Rem
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainZ">Online doc</a>
+End Rem
+Function TerrainZ:Float( terr:TTerrain,x:Float,y:Float,z:Float )
+	Return terr.TerrainZ( x,y,z )
+End Function
+
+' *** Openb3d only
+
+Rem
+bbdoc: Copy a pixmap buffer to texture, buffer must be a byte ptr.
+End Rem
+Function BufferToTex( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )
+	tex.BufferToTex( buffer,frame )
+End Function
+
+Rem
+bbdoc: Copy a rendered camera view to texture.
+End Rem
+Function CameraToTex( tex:TTexture,cam:TCamera,frame:Int=0 )
+	tex.CameraToTex( cam,frame )
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
-Function EntityScaleY:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleY( glob )
+Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
+	Return TBone.CreateBone( mesh,parent_ent )
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
-Function EntityScaleZ:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleZ( glob )
+Function CreateQuad:TMesh( parent:TEntity=Null )
+	Return TMesh.CreateQuad( parent )
 End Function
+
+Rem
+bbdoc: Copy the contents of the depth buffer to a texture.
+End Rem
+Function DepthBufferToTex( tex:TTexture,cam:TCamera=Null )
+	tex.DepthBufferToTex( cam )
+End Function
+
+Rem
+bbdoc: Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
+End Rem
+Function MeshCSG:TMesh( m1:TMesh,m2:TMesh,method_no:Int=1 )
+	Return TMesh.MeshCSG( m1,m2,method_no )
+End Function
+
+Rem
+bbdoc: Like CopyMesh but for instancing effects.
+End Rem
+Function RepeatMesh:TMesh( mesh:TMesh,parent:TEntity=Null )
+	Return mesh.RepeatMesh( parent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function SkinMesh( mesh:TMesh,surf_no_get:Int,vid:Int,bone1:Int,weight1:Float=1.0,bone2:Int=0,weight2:Float=0,bone3:Int=0,weight3:Float=0,bone4:Int=0,weight4:Float=0 )
+	mesh.SkinMesh( surf_no_get,vid,bone1,weight1,bone2,weight2,bone3,weight3,bone4,weight4 )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function SpriteRenderMode( sprite:TSprite,Mode:Int )
+	sprite.SpriteRenderMode( Mode )
+End Function
+
+Rem
+bbdoc: Copy a texture to a pixmap buffer, buffer must be a byte ptr.
+End Rem
+Function TexToBuffer( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )
+	tex.TexToBuffer( buffer,frame )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function UpdateTexCoords( surf:TSurface )
+	surf.UpdateTexCoords()
+End Function
+
+' *** Action
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActMoveBy:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActMoveBy_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActTurnBy:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActTurnBy_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActVector:TAction( ent:TEntity,a:Float,b:Float,c:Float )
+	Local inst:Byte Ptr=ActVector_( TEntity.GetInstance(ent),a,b,c )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActMoveTo:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActMoveTo_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActTurnTo:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActTurnTo_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActScaleTo:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActScaleTo_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActFadeTo:TAction( ent:TEntity,a:Float,rate:Float )
+	Local inst:Byte Ptr=ActFadeTo_( TEntity.GetInstance(ent),a,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActTintTo:TAction( ent:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActTintTo_( TEntity.GetInstance(ent),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActTrackByPoint:TAction( ent:TEntity,target:TEntity,a:Float,b:Float,c:Float,rate:Float )
+	Local inst:Byte Ptr=ActTrackByPoint_( TEntity.GetInstance(ent),TEntity.GetInstance(target),a,b,c,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActTrackByDistance:TAction( ent:TEntity,target:TEntity,a:Float,rate:Float )
+	Local inst:Byte Ptr=ActTrackByDistance_( TEntity.GetInstance(ent),TEntity.GetInstance(target),a,rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ActNewtonian:TAction( ent:TEntity,rate:Float )
+	Local inst:Byte Ptr=ActNewtonian_( TEntity.GetInstance(ent),rate )
+	Local act:TAction=TAction.GetObject(inst)
+	If act=Null And inst<>Null Then act=TAction.CreateObject(inst)
+	Return act
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function AppendAction( act1:TAction,act2:TAction )
+	act1.AppendAction( act2 )
+End Function
+
+' *** Constraint
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateConstraint:TConstraint( p1:TEntity,p2:TEntity,l:Float )
+	Return TConstraint.CreateConstraint( p1,p2,l )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateRigidBody:TRigidBody( body:TEntity,p1:TEntity,p2:TEntity,p3:TEntity,p4:TEntity )
+	Return TRigidBody.CreateRigidBody( body,p1,p2,p3,p4 )
+End Function
+
+' *** Fluid
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )
+	Return TBlob.CreateBlob( fluid,radius,parent_ent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateFluid:TFluid()
+	Return TFluid.CreateFluid()
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidArray( fluid:TFluid,Array:Float Var,w:Int,h:Int,d:Int )
+	fluid.FluidArray( Array,w,h,d )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidFunction( fluid:TFluid,FieldFunction:Float( x:Float,y:Float,z:Float ) )
+	fluid.FluidFunction( FieldFunction )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function FluidThreshold( fluid:TFluid,threshold:Float )
+	fluid.FluidThreshold( threshold )
+End Function
+
+' *** Geosphere
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateGeosphere:TTerrain( size:Int,parent:TEntity=Null )
+	Return TGeosphere.CreateGeosphere( size,parent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function GeosphereHeight( geo:TGeosphere, h:Float )
+	geo.GeosphereHeight( h )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function LoadGeosphere:TTerrain( file:String,parent:TEntity=Null )
+	Return TGeosphere.LoadGeosphere( file,parent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )
+	geo.ModifyGeosphere( x,z,new_height )
+End Function
+
+' *** Octree
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateOcTree:TOcTree( w:Float,h:Float,d:Float,parent_ent:TEntity=Null )
+	Return TOcTree.CreateOcTree( w,h,d,parent_ent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function OctreeBlock( octree:TOcTree,mesh:TMesh,level:Int,X:Float,Y:Float,Z:Float,Near:Float=0,Far:Float=1000 )
+	octree.OctreeBlock( mesh,level,X,Y,Z,Near,Far )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function OctreeMesh( octree:TOcTree,mesh:TMesh,level:Int,X:Float,Y:Float,Z:Float,Near:Float=0,Far:Float=1000 )
+	octree.OctreeMesh( mesh,level,X,Y,Z,Near,Far )
+End Function
+
+' *** Particle
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateParticleEmitter:TParticleEmitter( particle:TEntity,parent_ent:TEntity=Null )
+	Return TParticleEmitter.CreateParticleEmitter( particle,parent_ent )
+End Function
+
+Function EmitterVector( emit:TParticleEmitter,x:Float,y:Float,z:Float )
+	emit.EmitterVector( x,y,z )
+End Function
+
+Function EmitterRate( emit:TParticleEmitter,r:Float )
+	emit.EmitterRate( r )
+End Function
+
+Function EmitterParticleLife( emit:TParticleEmitter,l:Int )
+	emit.EmitterParticleLife( l )
+End Function
+
+Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )
+	emit.EmitterParticleFunction( EmitterFunction ) ' note: must use TEntity.GetInstance(ent)
+End Function
+
+Function EmitterParticleSpeed( emit:TParticleEmitter,s:Float )
+	emit.EmitterParticleSpeed( s )
+End Function
+
+Function EmitterVariance( emit:TParticleEmitter,v:Float )
+	emit.EmitterVariance( v )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ParticleColor( sprite:TSprite,r:Float,g:Float,b:Float,a:Float=0 )
+	ParticleColor_( TSprite.GetInstance(sprite),r,g,b,a )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ParticleVector( sprite:TSprite,x:Float,y:Float,z:Float )
+	ParticleVector_( TSprite.GetInstance(sprite),x,y,z )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ParticleTrail( sprite:TSprite,length:Int )
+	ParticleTrail_( TSprite.GetInstance(sprite),length )
+End Function
+
+' *** Shader
 
 Rem
 bbdoc: Load shader from two files, vertex and fragment.
@@ -1921,20 +2047,89 @@ End Function
 Rem
 bbdoc: undocumented
 End Rem
-Function CreateOcTree:TOcTree( w:Float,h:Float,d:Float,parent_ent:TEntity=Null )
-	Return TOcTree.CreateOcTree( w,h,d,parent_ent )
+Function AmbientShader( material:TShader )
+	material.AmbientShader()
+End Function
+
+' *** Shadow
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )
+	Return TShadowObject.CreateShadow( parent,Static )
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
-Function OctreeBlock( octree:TOcTree,mesh:TMesh,level:Int,X:Float,Y:Float,Z:Float,Near:Float=0,Far:Float=1000 )
-	octree.OctreeBlock( mesh,level,X,Y,Z,Near,Far )
+Function FreeShadow( shad:TShadowObject )
+	shad.FreeShadow()
+End Function
+
+' *** Stencil
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateStencil:TStencil()
+	Return TStencil.CreateStencil()
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
-Function OctreeMesh( octree:TOcTree,mesh:TMesh,level:Int,X:Float,Y:Float,Z:Float,Near:Float=0,Far:Float=1000 )
-	octree.OctreeMesh( mesh,level,X,Y,Z,Near,Far )
+Function StencilAlpha( stencil:TStencil,a:Float )
+	stencil.StencilAlpha( a )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilClsColor( stencil:TStencil,r:Float,g:Float,b:Float )
+	stencil.StencilClsColor( r,g,b )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilClsMode( stencil:TStencil,cls_depth:Int,cls_zbuffer:Int )
+	stencil.StencilClsMode( cls_depth,cls_zbuffer )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilMesh( stencil:TStencil,mesh:TMesh,Mode:Int=1 )
+	stencil.StencilMesh( mesh,Mode )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function StencilMode( stencil:TStencil,m:Int,o:Int=1 )
+	stencil.StencilMode( m,o )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function UseStencil( stencil:TStencil )
+	TStencil.UseStencil( stencil )
+End Function
+
+' *** VoxelSprite
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreateVoxelSprite:TVoxelSprite( slices:Int=64,parent:TEntity=Null )
+	Return TVoxelSprite.CreateVoxelSprite( slices,parent )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function VoxelSpriteMaterial( voxelspr:TVoxelSprite,mat:TMaterial )
+	voxelspr.VoxelSpriteMaterial( mat )
 End Function

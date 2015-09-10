@@ -1,7 +1,7 @@
 CCMPILER = g++
 CC=g++ -Wall -O3 
 
-OBJECTS = model.o string_helper.o surface.o bank.o bone.o brush.o collision.o entity.o functions.o geom.o global.o light.o matrix.o pick.o pivot.o project.o sprite.o tilt.o touch.o texture_filter.o tree.o animation.o animation_keys.o collision2.o maths_helper.o quaternion.o sprite_batch.o camera.o file.o mesh.o texture.o terrain.o stb_image.o 3ds.o collidetri.o shadow.o material.o stencil.o csg.o voxel.o x.o octree.o geosphere.o md2.o isosurface.o particle.o
+OBJECTS = model.o string_helper.o surface.o bank.o bone.o brush.o collision.o entity.o functions.o geom.o global.o light.o matrix.o pick.o pivot.o project.o sprite.o tilt.o touch.o texture_filter.o tree.o animation.o animation_keys.o collision2.o maths_helper.o quaternion.o sprite_batch.o camera.o file.o mesh.o texture.o terrain.o stb_image.o 3ds.o collidetri.o shadow.o material.o stencil.o csg.o voxel.o x.o octree.o geosphere.o md2.o isosurface.o particle.o physics.o actions.o
 
 main:$(OBJECTS) 
 ifeq ($(shell uname), Linux)
@@ -16,6 +16,9 @@ endif
 
 md2.o  : md2.cpp md2.h
 	$(CC) -c md2.cpp -o md2.o
+
+actions.o  : actions.cpp actions.h
+	$(CC) -c actions.cpp -o actions.o
 
 bank.o : bank.cpp bank.h
 	$(CC) -c bank.cpp -o bank.o
@@ -115,6 +118,9 @@ maths_helper.o : maths_helper.cpp maths_helper.h
 
 particle.o : particle.cpp particle.h
 	$(CC) -c particle.cpp -o particle.o
+
+physics.o : physics.cpp physics.h
+	$(CC) -c physics.cpp -o physics.o
 
 quaternion.o : quaternion.cpp quaternion.h
 	$(CC) -c quaternion.cpp -o quaternion.o

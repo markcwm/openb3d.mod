@@ -267,4 +267,10 @@ Type TShader
 		
 	End Method
 	
+	Method AmbientShader()
+	
+		AmbientShader_( GetInstance(Self) )
+		
+	End Method
+	
 End Type

@@ -59,7 +59,7 @@ public:
 		particle_batch=new ParticleBatch;
 		Surface* surf=new Surface;
 		surf->vbo_enabled=false;
-		surf->ShaderMat=0;
+		surf->ShaderMat=Global::ambient_shader;
 		particle_batch->surf_list.push_back(surf);
 		particle_batch->hide=false;
 		entity_list.push_back(particle_batch);
@@ -74,45 +74,62 @@ public:
 		
 	}
 
-/*	Mesh* GetParticleBatchMesh(){
 
-		mesh=new Particle();
-	
-		mesh->surf_list.push_back(surf);
-	
-		mesh->no_surfs=mesh->no_surfs+1;
-	
-		// new mesh surface - update reset flags
-		mesh->reset_bounds=true;
-		mesh->reset_col_tree=true;
-		
-		mesh->brush.tex[0]=texture;
-		mesh->brush.cache_frame[0]=texture->texture;
-
-		mesh->brush.no_texs=1;
-		mesh->brush.blend=blend;
-		mesh->brush.fx=35;
-		
-		mesh->order=order;
-
-		return mesh;
-	
-	}
-	
-	static void Clear(){
-
-		list<ParticleBatch*>::iterator it;
-		for(it=particle_batch_list.begin();it!=particle_batch_list.end();it++){
-			ParticleBatch* particle_batch=*it;
-			delete particle_batch->mesh;
-			delete particle_batch->surf;
-			delete particle_batch;
-		}
-		particle_batch_list.clear();
-	
-	}*/
 
 };
 
+class ParticleEmitter: public Entity{
+
+private:
+	int rate_counter;
+
+	struct ParticleData{
+		Entity* ent;
+		int particleLife;
+		float vx,vy,vz;
+	};
+
+	list<ParticleData> particles;
+
+public:
+	static list<ParticleEmitter*> emitter_list;
+
+	Entity* particle_base;
+
+
+	int rate;
+	int lifetime;
+
+	float gx,gy,gz;		//Gravity
+	float variance;
+	float particleSpeed;
+
+	void (*UpdateParticle)(Entity* ent, int life);
+
+	void Update();
+
+	ParticleEmitter(){
+		rate=1;
+		particleSpeed=1;
+		rate_counter=0;
+		lifetime=0;
+		gx=0;gy=0;gz=0;
+		variance=0;
+		UpdateParticle=0;
+	}
+
+	ParticleEmitter* CopyEntity(Entity* parent_ent=NULL);
+	static ParticleEmitter* CreateParticleEmitter(Entity* particle, Entity* parent_ent=NULL);
+	void FreeEntity(void);
+
+	void EmitterVector(float x, float y, float z);
+	void EmitterRate (float r);
+	void EmitterVariance (float v);
+	void EmitterParticleLife (int l);
+	void EmitterParticleSpeed (float s);
+	void EmitterParticleFunction(void (*EmitterFunction)(Entity*, int));
+
+	
+};
 
 #endif

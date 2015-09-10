@@ -21,6 +21,7 @@ public:
 
 	static int width,height,mode,depth,rate;
 	static float ambient_red,ambient_green,ambient_blue;
+	static Shader* ambient_shader;
 
 	static int vbo_enabled;
 	static int vbo_min_tris;

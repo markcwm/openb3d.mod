@@ -34,6 +34,26 @@ list<ShaderObject*> ShaderObject::ShaderObjectList;
 list<ProgramObject*> ProgramObject::ProgramObjectList;
 int Shader::ShaderIDCount;
 
+static int default_program=0;
+
+enum{
+USE_FLOAT_1,
+USE_FLOAT_2,
+USE_FLOAT_3,
+USE_FLOAT_4,
+USE_INTEGER_1,
+USE_INTEGER_2,
+USE_INTEGER_3,
+USE_INTEGER_4,
+USE_ENTITY_COORDS,
+USE_SURFACE,
+USE_MODEL_MATRIX,
+USE_VIEW_MATRIX,
+USE_PROJ_MATRIX,
+USE_MODELVIEW_MATRIX
+};
+
+
 
 ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 	// Load the shader and dump it into a Byte Array
@@ -458,41 +478,41 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 
 	for (unsigned int i=0;i<Parameters.size();i++){
 		switch(Parameters[i].type){
-		case 0:
+		case USE_FLOAT_1:
 			if (arb_program !=0){arb_program->SetParameter1F(Parameters[i].name,*(Parameters[i].fp[0]));}
 			break;
-		case 1:
+		case USE_FLOAT_2:
 			if (arb_program !=0){arb_program->SetParameter2F(Parameters[i].name,*(Parameters[i].fp[0]),*(Parameters[i].fp[1]));}
 			break;
-		case 2:
+		case USE_FLOAT_3:
 			if (arb_program !=0){arb_program->SetParameter3F(Parameters[i].name,*(Parameters[i].fp[0]),*(Parameters[i].fp[1]),
 			*(Parameters[i].fp[2]));}
 			break;
-		case 3:
+		case USE_FLOAT_4:
 			if (arb_program !=0){arb_program->SetParameter4F(Parameters[i].name,*(Parameters[i].fp[0]),*(Parameters[i].fp[1]),
 			*(Parameters[i].fp[2]),*(Parameters[i].fp[3]));}
 			break;
-		case 4:
+		case USE_INTEGER_1:
 			if (arb_program !=0){arb_program->SetParameter1I(Parameters[i].name,*(Parameters[i].ip[0]));}
 			break;
-		case 5:
+		case USE_INTEGER_2:
 			if (arb_program !=0){arb_program->SetParameter2I(Parameters[i].name,*(Parameters[i].ip[0]),*(Parameters[i].ip[1]));}
 			break;
-		case 6:
+		case USE_INTEGER_3:
 			if (arb_program !=0){arb_program->SetParameter3I(Parameters[i].name,*(Parameters[i].ip[0]),*(Parameters[i].ip[1]),
 			*(Parameters[i].ip[2]));}
 			break;
-		case 7:
+		case USE_INTEGER_4:
 			if (arb_program !=0){arb_program->SetParameter4I(Parameters[i].name,*(Parameters[i].ip[0]),*(Parameters[i].ip[1]),
 			*(Parameters[i].ip[2]),*(Parameters[i].ip[3]));}
 			break;
-		case 8:
+		case USE_ENTITY_COORDS:
 			if (arb_program !=0){arb_program->SetParameter3F(Parameters[i].name, 
 			Parameters[i].ent->EntityX(), 
 			Parameters[i].ent->EntityY(),
 			Parameters[i].ent->EntityZ());}
 			break;
-		case 13:
+		case USE_SURFACE:
 			if (arb_program !=0){
 				if(Parameters[i].surf!=0){
 					arb_program->SetParameterArray(Parameters[i].name,Parameters[i].surf,Parameters[i].vbo);
@@ -505,12 +525,12 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 				}
 			}
 			break;
-		case 14:
+		case USE_MODEL_MATRIX:
 			if (arb_program !=0){
 				arb_program->SetMatrix4F(Parameters[i].name, &mat.grid[0][0]);
 			}
 			break;
-		case 15:
+		case USE_VIEW_MATRIX:
 			if (arb_program !=0){
 				Matrix new_mat;
 				Global::camera_in_use->mat.GetInverse(new_mat);
@@ -518,12 +538,12 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 			}
 			break;
 
-		case 16:
+		case USE_PROJ_MATRIX:
 			if (arb_program !=0){
 				arb_program->SetMatrix4F(Parameters[i].name, &Global::camera_in_use->proj_mat[0]);
 			}
 			break;
-		case 17:
+		case USE_MODELVIEW_MATRIX:
 			if (arb_program !=0){
 				Matrix new_mat;
 				Global::camera_in_use->mat.GetInverse(new_mat);
@@ -815,7 +835,7 @@ void Shader::TurnOff(){
 	}
 	for (unsigned int i=0;i<Parameters.size();i++){
 		switch(Parameters[i].type){
-		case 13:
+		case USE_SURFACE:
 			if (arb_program !=0){	
 				int loc= glGetAttribLocation(arb_program->Program, Parameters[i].name.c_str());
 				glDisableVertexAttribArray(loc);
@@ -906,11 +926,20 @@ void Shader::AddSampler3D(string Name, int Slot, Texture* Tex){
 
 
 void Shader::ProgramAttriBegin(){
-	if (arb_program !=0){arb_program->Activate();}
+	if (arb_program !=0){
+		if (this==Global::ambient_shader){
+			if (default_program==arb_program->Program) return;
+			default_program=arb_program->Program;
+		}
+		arb_program->Activate();
+	}
 }	
 
 void Shader::ProgramAttriEnd(){
-	if (arb_program !=0){arb_program->DeActivate();}
+	if (arb_program !=0){
+		if (default_program==arb_program->Program) return;
+		arb_program->DeActivate();
+	}
 }	
 
 void Shader::SetFloat(string name, float v1){
@@ -940,7 +969,7 @@ void Shader::SetFloat4(string name, float v1, float v2, float v3, float v4){
 void Shader::UseFloat(string name, float* v1){
 	ShaderData data;
 	data.name=name;
-	data.type=0;
+	data.type=USE_FLOAT_1;
 	data.fp[0]=v1;
 	Parameters.push_back(data);
 }
@@ -948,7 +977,7 @@ void Shader::UseFloat(string name, float* v1){
 void Shader::UseFloat2(string name, float* v1, float* v2){
 	ShaderData data;
 	data.name=name;
-	data.type=1;
+	data.type=USE_FLOAT_2;
 	data.fp[0]=v1;
 	data.fp[1]=v2;
 	Parameters.push_back(data);
@@ -957,7 +986,7 @@ void Shader::UseFloat2(string name, float* v1, float* v2){
 void Shader::UseFloat3(string name, float* v1, float* v2, float* v3){
 	ShaderData data;
 	data.name=name;
-	data.type=2;
+	data.type=USE_FLOAT_3;
 	data.fp[0]=v1;
 	data.fp[1]=v2;
 	data.fp[2]=v3;
@@ -967,7 +996,7 @@ void Shader::UseFloat3(string name, float* v1, float* v2, float* v3){
 void Shader::UseFloat4(string name, float* v1, float* v2, float* v3, float* v4){
 	ShaderData data;
 	data.name=name;
-	data.type=3;
+	data.type=USE_FLOAT_4;
 	data.fp[0]=v1;
 	data.fp[1]=v2;
 	data.fp[2]=v3;
@@ -1002,7 +1031,7 @@ void Shader::SetInteger4(string name, int v1, int v2, int v3, int v4){
 void Shader::UseInteger(string name, int* v1){
 	ShaderData data;
 	data.name=name;
-	data.type=4;
+	data.type=USE_INTEGER_1;
 	data.ip[0]=v1;
 	Parameters.push_back(data);
 }
@@ -1010,7 +1039,7 @@ void Shader::UseInteger(string name, int* v1){
 void Shader::UseInteger2(string name, int* v1, int* v2){
 	ShaderData data;
 	data.name=name;
-	data.type=5;
+	data.type=USE_INTEGER_2;
 	data.ip[0]=v1;
 	data.ip[1]=v2;
 	Parameters.push_back(data);
@@ -1019,7 +1048,7 @@ void Shader::UseInteger2(string name, int* v1, int* v2){
 void Shader::UseInteger3(string name, int* v1, int* v2, int* v3){
 	ShaderData data;
 	data.name=name;
-	data.type=6;
+	data.type=USE_INTEGER_3;
 	data.ip[0]=v1;
 	data.ip[1]=v2;
 	data.ip[2]=v3;
@@ -1029,7 +1058,7 @@ void Shader::UseInteger3(string name, int* v1, int* v2, int* v3){
 void Shader::UseInteger4(string name, int* v1, int* v2, int* v3, int* v4){
 	ShaderData data;
 	data.name=name;
-	data.type=7;
+	data.type=USE_INTEGER_4;
 	data.ip[0]=v1;
 	data.ip[1]=v2;
 	data.ip[2]=v3;
@@ -1042,7 +1071,7 @@ void Shader::UseInteger4(string name, int* v1, int* v2, int* v3, int* v4){
 void Shader::UseSurface(string name, Surface* surf, int vbo){
 	ShaderData data;
 	data.name=name;
-	data.type=13;
+	data.type=USE_SURFACE;
 	data.surf=surf;
 	data.vbo=vbo;
 	Parameters.push_back(data);
@@ -1052,13 +1081,13 @@ void Shader::UseMatrix(string name, int mode){
 	ShaderData data;
 	data.name=name;
 	if (mode==0) {		//model matrix
-		data.type=14;
+		data.type=USE_MODEL_MATRIX;
 	}else if(mode==1){	//view matrix
-		data.type=15;
+		data.type=USE_VIEW_MATRIX;
 	}else if(mode==2){	//projection matrix
-		data.type=16;
+		data.type=USE_PROJ_MATRIX;
 	}else if(mode==3){	//modelview matrix
-		data.type=17;
+		data.type=USE_MODELVIEW_MATRIX;
 	}
 	Parameters.push_back(data);
 }
@@ -1224,7 +1253,7 @@ void ProgramObject::Activate(){
 }
 
 void ProgramObject::DeActivate(){
-	glUseProgram(0);
+	glUseProgram(default_program);
 }
 
 void ProgramObject::RefreshTypeMap(){
@@ -1699,6 +1728,7 @@ void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeig
 Material* Material::LoadMaterial(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
 
 	//filename=Strip(filename); // get rid of path info
+	filename=File::ResourceFilePath(filename);
 
 	if(File::ResourceFilePath(filename)==""){
 		cout << "Error: Cannot Find Texture: " << filename << endl;
