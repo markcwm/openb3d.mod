@@ -1,5 +1,5 @@
-' stencil.bmx
-' stencil reflections
+' mirror.bmx
+' simple mirror reflections, no stencil clipping (fast)
 
 Framework Angros.B3dglgraphics
 
@@ -12,6 +12,9 @@ Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,8,-24
 RotateEntity cam,20,0,0
 
+Local mirror_cam:TCamera=CreateCamera()
+HideEntity mirror_cam
+
 Local light:TLight=CreateLight(2)
 RotateEntity light,45,45,0
 PositionEntity light,10,10,0
@@ -23,9 +26,6 @@ ScaleEntity ground,0.5,1,0.5
 Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
 EntityTexture ground,ground_tex
 EntityAlpha ground,0.75
-
-Local groundcopy:TMesh=CopyMesh(ground)
-ScaleEntity groundcopy,0.5,1,0.5
 
 ' sky
 Local sky:TMesh=CreateSphere(24)
@@ -80,10 +80,20 @@ EntityTexture sphere,tex
 Local spherecopy:TMesh=CopyMesh(sphere)
 EntityTexture spherecopy,tex
 
-' stencil
-Local stencil:TStencil=CreateStencil()
-StencilMesh stencil,groundcopy,1
-StencilMode stencil,1,1
+' mirror walls
+Local size#=27
+Local wall:TMesh=CreateCube()
+ScaleEntity wall,size/2,0.5,1
+PositionEntity wall,0,0.5,size/2
+Local wall2:TMesh=CreateCube()
+ScaleEntity wall2,size/2,0.5,1
+PositionEntity wall2,0,0.5,-size/2
+Local wall3:TMesh=CreateCube()
+ScaleEntity wall3,1,0.5,size/2
+PositionEntity wall3,size/2,0.5,0
+Local wall4:TMesh=CreateCube()
+ScaleEntity wall4,1,0.5,size/2
+PositionEntity wall4,-size/2,0.5,0
 
 Local xrotspeed#=1.5,yrotspeed#=0.5,height#=4.0
 
@@ -114,15 +124,6 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity teapot,0,0.5,-0.1
 	TurnEntity teapotcopy,0,0.5,-0.1
 	
-	' disable reflections, so they will be clipped outside their stencil surface
-	UseStencil Null
-	HideEntity teapotcopy
-	HideEntity cactuscopy
-	HideEntity camelcopy
-	HideEntity ufocopy
-	HideEntity spherecopy
-	CameraClsMode cam,1,1
-	
 	' calculate fps
 	renders=renders+1
 	If MilliSecs()-old_ms>=1000
@@ -136,16 +137,6 @@ While Not KeyDown(KEY_ESCAPE)
 	Text 0,0,"FPS: "+fps
 	Text 0,20,"Plus/Minus: move ball, WSAD: move camera, Arrows: rotate camera"
 	
-	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
-	UseStencil stencil
-	ShowEntity teapotcopy
-	ShowEntity cactuscopy
-	ShowEntity camelcopy
-	ShowEntity ufocopy
-	ShowEntity spherecopy
-	CameraClsMode cam,0,0
-	
-	RenderWorld
 	Flip
 	
 Wend
