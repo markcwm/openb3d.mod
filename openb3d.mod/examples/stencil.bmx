@@ -85,7 +85,10 @@ Local stencil:TStencil=CreateStencil()
 StencilMesh stencil,groundcopy,1
 StencilMode stencil,1,1
 
-Local xrotspeed#=1.5,yrotspeed#=0.5,height#=4.0
+Local stmode%=1
+Local xrotspeed#=1.5
+Local yrotspeed#=0.5
+Local height#=4.0
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -109,19 +112,24 @@ While Not KeyDown(KEY_ESCAPE)
 	MoveEntity cam,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
+	' stencil mode, enable/disable stenciling
+	If KeyHit(KEY_M) Then stmode=Not stmode
+	
 	' turn ufo pivot, causing child ufo mesh to spin around it (and teapot)
 	TurnEntity ufo_piv,0,1,0
 	TurnEntity teapot,0,0.5,-0.1
 	TurnEntity teapotcopy,0,0.5,-0.1
 	
 	' disable reflections, so they will be clipped outside their stencil surface
-	UseStencil Null
-	HideEntity teapotcopy
-	HideEntity cactuscopy
-	HideEntity camelcopy
-	HideEntity ufocopy
-	HideEntity spherecopy
-	CameraClsMode cam,1,1
+	If stmode=1
+		UseStencil Null
+		CameraClsMode cam,1,1
+		HideEntity teapotcopy
+		HideEntity cactuscopy
+		HideEntity camelcopy
+		HideEntity ufocopy
+		HideEntity spherecopy
+	EndIf
 	
 	' calculate fps
 	renders=renders+1
@@ -134,18 +142,24 @@ While Not KeyDown(KEY_ESCAPE)
 	RenderWorld
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"Plus/Minus: move ball, WSAD: move camera, Arrows: rotate camera"
-	
+	Text 0,20,"WSAD: move camera, Arrows: rotate camera, Plus/Minus: move ball, M: stencil mode = "+stmode
+		
 	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
-	UseStencil stencil
-	ShowEntity teapotcopy
-	ShowEntity cactuscopy
-	ShowEntity camelcopy
-	ShowEntity ufocopy
-	ShowEntity spherecopy
-	CameraClsMode cam,0,0
-	
-	RenderWorld
+	If stmode=1
+		UseStencil stencil
+		ShowEntity teapotcopy
+		ShowEntity cactuscopy
+		ShowEntity camelcopy
+		ShowEntity ufocopy
+		ShowEntity spherecopy
+		CameraClsMode cam,0,0
+		
+		RenderWorld
+	Else
+		UseStencil Null
+		CameraClsMode cam,1,1
+	EndIf
+
 	Flip
 	
 Wend
