@@ -3,7 +3,7 @@
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Timer
 
 Graphics3D 800,600,0,2
@@ -68,11 +68,11 @@ FlipMesh ufocopy
 PositionEntity ufocopy,0,-Abs(EntityY(ufo)-EntityY(ground)),15
 
 ' water
-Local gridsize#=50 ' actual size
-Local uvscale#=0.03
+Local watersize#=48
+Local uvscale#=0.05
 
 ' parameters = x/z mesh dimensions, quad size, x/y/z center pos, u/v tex size
-Local water:TMesh=CreateFlatMesh(gridsize,gridsize,2.0,0,0,0,uvscale,uvscale)
+Local water:TMesh=CreateGrid(20,Null,watersize,uvscale)
 PositionEntity water,0,1,0
 
 Local watercopy:TMesh=CopyMesh(water)
@@ -80,25 +80,24 @@ PositionEntity watercopy,0,1,0
 
 ' pool walls
 Local wall:TMesh=CreateCube()
-ScaleEntity wall,gridsize/2,1,1
-PositionEntity wall,0,1,gridsize/2
+ScaleEntity wall,watersize/2,1,1
+PositionEntity wall,0,1,watersize/2
 Local wall2:TMesh=CreateCube()
-ScaleEntity wall2,gridsize/2,1,1
-PositionEntity wall2,0,1,-gridsize/2
+ScaleEntity wall2,watersize/2,1,1
+PositionEntity wall2,0,1,-watersize/2
 Local wall3:TMesh=CreateCube()
-ScaleEntity wall3,1,1,gridsize/2
-PositionEntity wall3,gridsize/2,1,0
+ScaleEntity wall3,1,1,watersize/2
+PositionEntity wall3,watersize/2,1,0
 Local wall4:TMesh=CreateCube()
-ScaleEntity wall4,1,1,gridsize/2
-PositionEntity wall4,-gridsize/2,1,0
+ScaleEntity wall4,1,1,watersize/2
+PositionEntity wall4,-watersize/2,1,0
 
-' shaders vars
 Local waveAlpha:Float=0.9
 Local waveWidth:Float=0.3
-Local waveHeight:Float=0.2
+Local waveHeight:Float=0.3
 Local waveLength:Float=0.9
 Local udrag:Float, vdrag:Float ' waveTime / uvratio
-Local uratio:Float=1000,vratio:Float=200 ' smaller is faster
+Local uratio:Float=1200,vratio:Float=400 ' smaller is faster
 
 Local waveTime#, framerate#=60.0, animspeed#=2
 Local timer:TTimer=CreateTimer(framerate)
@@ -129,7 +128,7 @@ UseFloat(shader2,"waveTime",waveTime)
 UseFloat(shader2,"waveWidth",waveWidth)
 UseFloat(shader2,"waveHeight",waveHeight)
 UseFloat(shader2,"waveLength",waveLength)
-SetFloat4(shader2,"texmix",0.4,0.2,0.4,0) ' multi-texturing (cubemap,tex,light) value between 0..1
+SetFloat4(shader2,"texmix",0.4,0.2,0.4,0) ' multi-textured (cubemap,tex,light) value range 0..1
 SetInteger(shader2,"lighttype",lighttype)
 
 ShadeEntity(water,shader2)
@@ -144,7 +143,9 @@ CameraToTex cubetex,cube_cam ' needed for cubemaps to work on some Win setups
 
 Local wiretoggle%=-1
 Local blendmode%=1
-Local pixellight%=1, lightmode%
+Local pixellight%=1
+Local lightmode%
+Local stmode%=1
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -187,6 +188,9 @@ While Not KeyDown(KEY_ESCAPE)
 		If pixellight=1 Then ShadeEntity(water,shader2)
 	EndIf
 	
+	' stencil mode, enable/disable stenciling
+	If KeyHit(KEY_M) Then stmode=Not stmode
+	
 	TurnEntity ufo_piv,0,2,0
 	
 	' hide main camera before updating cube map - we don't need to render it when cube_cam is rendered
@@ -205,10 +209,12 @@ While Not KeyDown(KEY_ESCAPE)
 	ShowEntity ufo
 	
 	' disable reflections, so they will be clipped outside their stencil surface
-	UseStencil Null
-	CameraClsMode camera,1,1
-	HideEntity ufocopy
-	HideEntity camelcopy
+	If stmode=1
+		UseStencil Null
+		CameraClsMode camera,1,1
+		HideEntity ufocopy
+		HideEntity camelcopy
+	EndIf
 	
 	UpdateWorld
 	RenderWorld
@@ -226,23 +232,25 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
-	UseStencil stencil
-	CameraClsMode camera,0,0
-	HideEntity ground ' stencil reflection objects are below ground so we need to hide it to see them
-	ShowEntity ufocopy
-	ShowEntity camelcopy
-	
-	RenderWorld
-	
-	' disable reflections again, for normal rendering state
-	UseStencil Null
-	CameraClsMode camera,1,1
-	ShowEntity ground
-	HideEntity ufocopy
-	HideEntity camelcopy
+	If stmode=1
+		UseStencil stencil
+		CameraClsMode camera,0,0
+		HideEntity ground ' stencil reflection objects are below ground so we need to hide it to see them
+		ShowEntity ufocopy
+		ShowEntity camelcopy
+		
+		RenderWorld
+		
+		' disable reflections again, for normal rendering state
+		UseStencil Null
+		CameraClsMode camera,1,1
+		ShowEntity ground
+		HideEntity ufocopy
+		HideEntity camelcopy
+	EndIf
 	
 	Text 0,0,"FPS: "+fps+", WSAD and Arrows: move camera, Space: wireframe"
-	Text 0,20,"B: blending = "+blendmode+", P: pixellight = "+pixellight
+	Text 0,20,"B: blending = "+blendmode+", P: pixel light = "+pixellight+", M: stencil mode = "+stmode
 	Text 0,40,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", I/K: waveLength = "+waveLength
 	
 	Flip
@@ -317,38 +325,38 @@ Function UpdateCubemap( tex:TTexture,camera:TCamera,entity:TEntity )
 	
 End Function
 
-Function CreateFlatMesh:TMesh( Xlen#,Zlen#,Size#,Xpos#,Ypos#,Zpos#,UScale#=1,VScale#=1 )
-	'Xlen/Zlen=mesh dimensions, Size=quad size, Xpos/Ypos/Zpos=xyz center, UScale/VScale=uv size
-	
-	Local mesh:TMesh,surf:TSurface,xnum%,znum%,ix%,iz%,ptx#,ptz#,iv%
-	
-	mesh=CreateMesh()
-	surf=CreateSurface(mesh)
-	xnum=Xlen/Size 'number of vertices on axis
-	znum=Zlen/Size
-	
-	'Create grid vertices, centered And offset
-	For iz=0 To znum
-		For ix=0 To xnum
-			ptx=(ix*Size)-(xnum*Size*0.5) 'ipos-midpos
-			ptz=(iz*Size)-(znum*Size*0.5)
-			AddVertex(surf,ptx+Xpos,Ypos,ptz+Zpos) 'pos+offset
-			iv=ix+(iz*(xnum+1)) 'iv=x+(z*x1)
-			VertexTexCoords(surf,iv,ix*UScale,iz*VScale)
-			VertexNormal(surf,iv,0.0,1.0,0.0)
-		Next
-	Next
+' like CreatePlane but with additional mesh size and uv parameters
+Function CreateGrid:TMesh( divisions%=1,parent:TEntity=Null,meshsize#=50,uvscale#=1.0 )
 
-	'fill in quad triangles, created in "reverse z" order
-	For iz=0 To znum-1
-		For ix=0 To xnum-1
-			iv=ix+(iz*(xnum+1)) 'iv=x+(z*x1)
-			AddTriangle(surf,iv,iv+xnum+1,iv+xnum+2) '0,x1,x2
-			AddTriangle(surf,iv+xnum+2,iv+1,iv) 'x2,1,0
+	' code is to replace currently unfinished func in Openb3d
+	Local mesh:TMesh=CreateMesh(parent)
+	Local surf:TSurface=mesh.CreateSurface()
+	
+	Local size#=meshsize/divisions
+	Local iv%,ix%,iz%,ptx#,ptz#
+	
+	' create grid vertices
+	For iz=0 To divisions
+		For ix=0 To divisions
+			ptx=(ix*size)-(divisions*size*0.5) ' ipos-midpos
+			ptz=(iz*size)-(divisions*size*0.5)
+			iv=ix+(iz*(divisions+1)) ' iv=x+(z*x1)
+			surf.AddVertex(ptx,0,ptz)
+			surf.VertexTexCoords(iv,iz*uvscale,ix*uvscale)
+			surf.VertexNormal(iv,0.0,1.0,0.0)
 		Next
 	Next
 	
-	UpdateNormals mesh 'set normals, for cubemaps and lighting
+	' fill in quad triangles
+	For iz=0 To divisions-1
+		For ix=0 To divisions-1
+			iv=ix+(iz*(divisions+1))
+			surf.AddTriangle(iv,iv+divisions+1,iv+divisions+2) ' 0,x1,x2
+			surf.AddTriangle(iv+divisions+2,iv+1,iv) ' x2,1,0
+		Next
+	Next
+	
+	RotateMesh mesh,0,-90,0 ' just to match CreatePlane rotation
 	Return mesh
 	
 End Function

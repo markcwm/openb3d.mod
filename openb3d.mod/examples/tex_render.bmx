@@ -1,9 +1,9 @@
 ' tex_render.bmx
-' from minib3d examples
+' from Minib3d examples
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Random
 
 Graphics3D 800,600,0,2

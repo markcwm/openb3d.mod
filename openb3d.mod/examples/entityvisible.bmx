@@ -1,9 +1,9 @@
 ' entityvisible.bmx
-' from minib3d examples
+' from Minib3d examples
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 
 Local width%=800,height%=600,depth%=0,Mode%=2
 

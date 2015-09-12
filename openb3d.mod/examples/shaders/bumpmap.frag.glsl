@@ -33,7 +33,7 @@ void main (void)
 		float specular = pow(clamp(dot(reflect(-lVec, bump), vVec), 0.0, 1.0), gl_FrontMaterial.shininess );
 		vec4 vSpecular = gl_LightSource[i].specular * gl_FrontMaterial.specular * specular;
 
-		final_color += ((vAmbient * base + vDiffuse * base + vSpecular) * att);
+		final_color += (vAmbient * base + vDiffuse * base + vSpecular) * att;
 	}
 
 	gl_FragColor = final_color;

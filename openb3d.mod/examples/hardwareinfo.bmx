@@ -3,7 +3,7 @@
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 
 Local width%=320,height%=240,depth%=0,hertz%=60
 

@@ -3,7 +3,7 @@
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Timer
 
 Graphics3D 800,600,0,2

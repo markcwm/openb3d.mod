@@ -1,4 +1,5 @@
-//
+// unknown source
+// by DarkGiver
 
 #define MAX_LIGHTS 8
 #define NUM_LIGHTS 2

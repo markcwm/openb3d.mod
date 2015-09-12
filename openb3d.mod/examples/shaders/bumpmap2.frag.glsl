@@ -1,4 +1,5 @@
 // en.wikibooks.org/wiki/GLSL_Programming/Blender/Lighting_of_Bumpy_Surfaces
+// by Ferret
 
 #define NUM_LIGHTS 2
 varying mat3 localSurface2View;
@@ -20,7 +21,7 @@ void main()
 	vec3 viewDirection = -normalize(vec3(position)); 
 	vec3 lightDirection;
 	float attenuation;
-
+	
 	vec3 totalLighting = vec3(gl_LightModel.ambient) * emission;
 
 	for (int i=0;i<NUM_LIGHTS;i++)

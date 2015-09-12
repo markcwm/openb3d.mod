@@ -1,9 +1,9 @@
 ' max2d.bmx
-' from minib3d examples
+' from Minib3d examples
 
 SuperStrict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Random
 Import Brl.PngLoader
 

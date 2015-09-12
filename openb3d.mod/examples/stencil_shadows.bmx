@@ -1,9 +1,9 @@
 ' stencil_shadows.bmx
-' dynamic stencil shadows
+' stencil shadows
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Random
 
 Graphics3D 800,600,0,2

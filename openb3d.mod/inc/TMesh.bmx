@@ -104,10 +104,43 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
+	' unlike B3d divisions can be more than 16
 	Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
 	
-		Local inst:Byte Ptr=CreatePlane_( divisions,GetInstance(parent) )
-		Return CreateObject(inst)
+		'Local inst:Byte Ptr=CreatePlane_( divisions,GetInstance(parent) )
+		'Return CreateObject(inst)
+		
+		' currently unfinished in Openb3d
+		Local mesh:TMesh=CreateMesh(parent)
+		Local surf:TSurface=mesh.CreateSurface()
+		
+		Local size#=50000/divisions
+		Local uvscale#=50000/5000 ' 10 - increases texture resolution
+		Local iv%,ix%,iz%,ptx#,ptz#
+		
+		' create grid vertices
+		For iz=0 To divisions
+			For ix=0 To divisions
+				ptx=(ix*size)-(divisions*size*0.5) ' ipos-midpos
+				ptz=(iz*size)-(divisions*size*0.5)
+				iv=ix+(iz*(divisions+1)) ' iv=x+(z*x1)
+				surf.AddVertex(ptx,0,ptz)
+				surf.VertexTexCoords(iv,iz*uvscale,ix*uvscale)
+				surf.VertexNormal(iv,0.0,1.0,0.0)
+			Next
+		Next
+		
+		' fill in quad triangles
+		For iz=0 To divisions-1
+			For ix=0 To divisions-1
+				iv=ix+(iz*(divisions+1))
+				surf.AddTriangle(iv,iv+divisions+1,iv+divisions+2) ' 0,x1,x2
+				surf.AddTriangle(iv+divisions+2,iv+1,iv) ' x2,1,0
+			Next
+		Next
+		
+		RotateMesh mesh,0,-90,0 ' just to match CreatePlane rotation
+		Return mesh
 		
 	End Function
 	

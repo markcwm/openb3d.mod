@@ -1,5 +1,5 @@
 ' sl_bumpmap.bmx
-' bump mapping (shader code by Ferret and DarkGiver)
+' bumpmapping
 
 Strict
 
@@ -67,7 +67,9 @@ Local column4:TMesh=CreateCylinder(16)
 PositionEntity column4,-3,1,-3
 ScaleEntity column4,0.5,1,0.5
 
+Local num_lights%=2
 Local es#=0.1
+
 EntityShininess(ground,es) ; EntityShininess(ceiling,es)
 EntityShininess(wall1,es) ; EntityShininess(wall2,es)
 EntityShininess(wall3,es) ; EntityShininess(sphere,es)
@@ -78,32 +80,38 @@ Local colortex:TTexture=LoadTexture("media/07_DIFFUSE.jpg")
 Local normaltex:TTexture=LoadTexture("media/07_NORMAL.jpg")
 Local spectex:TTexture=LoadTexture("media/07_DISP.jpg")
 
-' bump map 1 - one light, directional or point
+' bumpmap 1 - one light, directional or point
 Local shader:TShader=LoadShader("","shaders/bumpmap.vert.glsl","shaders/bumpmap.frag.glsl")
 ShaderTexture(shader,colortex,"colorMap",0)
 ShaderTexture(shader,normaltex,"normalMap",1)
+
 SetFloat3(shader,"vTangent",0.1,0.1,0.1)
 SetFloat(shader,"invRadius",0.01)
 
-' bump map 2 - no directional, multiple point lights
+' bumpmap 2 - no directional, multiple point lights
 Local shader2:TShader=LoadShader("","shaders/bumpmap2.vert.glsl","shaders/bumpmap2.frag.glsl")
 ShaderTexture(shader2,colortex,"colorMap",0)
 ShaderTexture(shader2,normaltex,"normalMap",1)
-SetFloat4(shader2,"tangent",0.1,0.1,0.1,0.1)
+
+SetFloat3(shader2,"tangent",0.1,0.1,0.1)
 SetFloat3(shader2,"emission",0.0015,0.0015,0.0015)
 SetFloat(shader2,"attspec",0.01)
 
-' bump map 3 - multiple lights, directional or point
+Local constantAttenuation#[]=[0.0] ' default gl_LightSource values for Max2d fix
+Local linearAttenuation#[]=[0.001]
+Local quadraticAttenuation#[]=[0.0]
+
+' bumpmap 3 - multiple lights, directional or point
 Local shader3:TShader=LoadShader("","shaders/bumpmap3.vert.glsl","shaders/bumpmap3.frag.glsl")
 ShaderTexture(shader3,colortex,"colorMap",0)
 ShaderTexture(shader3,normaltex,"normalMap",1)
 ShaderTexture(shader3,spectex,"specularMap",2)
-Local num_lights%=1
-For Local irad%=0 To num_lights-1
-	SetFloat(shader3,"lightradius["+irad+"].Float",0.2)
+
+For Local iradius%=0 To num_lights-1
+	SetFloat(shader3,"lightradius["+iradius+"].Float",0.2)
 Next
 SetFloat(shader3,"texturescale",1.0)
-SetFloat4(shader3,"vambient",0.2,0.2,0.2,0.2)
+SetFloat4(shader3,"vambient",0.15,0.15,0.15,0.15)
 
 ShadeEntity(ground,shader) ; ShadeEntity(ceiling,shader)
 ShadeEntity(wall1,shader) ; ShadeEntity(wall2,shader)
@@ -112,7 +120,9 @@ ShadeEntity(column,shader) ; ShadeEntity(column2,shader)
 ShadeEntity(column3,shader) ; ShadeEntity(column4,shader)
 
 Local clr#, cfb#, cud#
-Local lightmode%=1, bumpmode%
+Local lightmode%=1
+Local bumpmode%=0
+Local max2dmode%=0
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -139,8 +149,8 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyDown(KEY_E) Then cud:-0.1
 	MoveEntity cpivot,clr,cud,cfb
 	
-	' bump map mode
-	If KeyHit(KEY_M)
+	' bumpmap mode
+	If KeyHit(KEY_B)
 		bumpmode:+1 ; If bumpmode=3 Then bumpmode=0
 		If bumpmode=0			
 			ShadeEntity(ground,shader) ; ShadeEntity(ceiling,shader)
@@ -179,7 +189,17 @@ While Not KeyDown(KEY_ESCAPE)
 		PositionEntity light,EntityX(cpivot),EntityY(cpivot),EntityZ(cpivot)
 	EndIf
 	
+	' max2d mode
+	If KeyHit(KEY_M) Then max2dmode=Not max2dmode
+	
 	TurnEntity(sphere,0,0.5,-0.1)
+	
+	' bumpmap 2 with Max2d fix - gl_LightSource Parameters are not restored after EndMax2d
+	For Local ilight%=0 To num_lights-1
+		glLightfv(GL_LIGHT0+ilight, GL_CONSTANT_ATTENUATION, constantAttenuation)
+		glLightfv(GL_LIGHT0+ilight, GL_LINEAR_ATTENUATION, linearAttenuation)
+		glLightfv(GL_LIGHT0+ilight, GL_QUADRATIC_ATTENUATION, quadraticAttenuation)
+	Next
 	
 	RenderWorld
 	
@@ -192,13 +212,11 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"WSAD: move camera, M: bump map mode = "+bumpmode+", L: light mode = "+lightmode
-	Text 0,40,""+EntityX(cpivot)+" "+EntityY(cpivot)+" "+EntityZ(cpivot)
+	Text 0,20,"WSAD: move camera, B: bumpmap mode = "+bumpmode+", L: light mode = "+lightmode
 	
-	Local max2d%=1
-	If max2d
+	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,60
+		DrawText "Testing Max2d",0,40
 		EndMax2D()
 	EndIf
 	
@@ -207,7 +225,7 @@ Wend
 End
 
 
-' camera mouse look (from firepaint3d.bb)
+' camera mouselook (from firepaint3d.bb)
 Function MouseLook( pivot:TPivot,camera:TCamera,time%,elapsed% )
 
 	Repeat

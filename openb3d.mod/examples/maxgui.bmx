@@ -1,9 +1,9 @@
 ' maxgui.bmx
-' from minib3d examples (Based on code by Birdie and Peter Scheutz)
+' from minib3d examples
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Timer
 Import Brl.EventQueue
 

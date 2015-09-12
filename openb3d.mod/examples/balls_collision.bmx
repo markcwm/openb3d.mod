@@ -1,9 +1,9 @@
 ' balls_collision.bmx
-' from minib3d examples
+' from Minib3d examples
 
 Strict
 
-Framework angros.b3dglgraphics
+Framework Angros.B3dglgraphics
 Import Brl.Random
 
 Local width%=800,height%=600,depth%=0,Mode%=2,hertz%=60

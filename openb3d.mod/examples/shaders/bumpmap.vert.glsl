@@ -5,7 +5,7 @@
 varying vec3 lightVec[MAX_LIGHTS]; 
 varying vec3 eyeVec;
 varying vec2 texCoord;
-attribute vec3 vTangent;
+uniform vec3 vTangent; //attribute
 
 void main(void)
 {
@@ -23,10 +23,8 @@ void main(void)
 	{
 		tmpVec = gl_LightSource[i].position.xyz - vVertex;
 
-		//lightVec[i].x = dot(tmpVec, t);
-		//lightVec[i].y = dot(tmpVec, b);
-		lightVec[i].x = tmpVec.x;
-		lightVec[i].y = tmpVec.y;
+		lightVec[i].x = dot(tmpVec, t);
+		lightVec[i].y = dot(tmpVec, b);
 		lightVec[i].z = dot(tmpVec, n);
 	}
 
