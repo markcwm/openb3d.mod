@@ -18,6 +18,20 @@ Type TLight Extends TEntity
 	Field red:Float Ptr,green:Float Ptr,blue:Float Ptr ' 1.0/1.0/1.0
 	Field inner_ang:Float Ptr,outer_ang:Float Ptr ' 0.0/45.0
 	
+	' wrapper
+	Global ambient#[8,4] ' [0.0,0.0,0.0,1.0]
+	Global diffuse#[8,4] ' [1.0,1.0,1.0,1.0]
+	Global specular#[8,4] ' [1.0,1.0,1.0,1.0]
+	Global position#[8,4] ' [0.0,0.0,1.0,0.0]
+	'Global halfVector#[8,4] ' derived
+	Global spotDirection#[8,3] ' [0.0,0.0,-1.0]
+	Global spotExponent#[8,1] ' [0.0]
+	Global spotCutoff#[8,1] ' [180.0] (Range: [0.0,90.0], 180.0)
+	'Global spotCosCutoff#[8,1] ' derived
+	Global constantAtt#[8,1] ' [1.0/0.0]
+	Global linearAtt#[8,1] ' [0.0/0.001]
+	Global quadraticAtt#[8,1] ' [0.0]
+	
 	Function CreateObject:TLight( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -136,5 +150,41 @@ Type TLight Extends TEntity
 		LightUpdate_( GetInstance(Self) )
 		
 	End Method
+	
+	' at init, call after a RenderWorld
+	Function GetLightValues()
+		
+		For Local i%=0 To no_lights[0]-1
+			glGetLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0]))
+		Next
+		
+	End Function
+	
+	' in main loop, call before RenderWorld
+	Function SetLightValues()
+	
+		For Local i%=0 To no_lights[0]-1
+			glLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0]))
+			glLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0]))
+		Next
+	
+	End Function
 	
 End Type

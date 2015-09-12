@@ -67,9 +67,7 @@ Local column4:TMesh=CreateCylinder(16)
 PositionEntity column4,-3,1,-3
 ScaleEntity column4,0.5,1,0.5
 
-Local num_lights%=2
 Local es#=0.1
-
 EntityShininess(ground,es) ; EntityShininess(ceiling,es)
 EntityShininess(wall1,es) ; EntityShininess(wall2,es)
 EntityShininess(wall3,es) ; EntityShininess(sphere,es)
@@ -93,13 +91,9 @@ Local shader2:TShader=LoadShader("","shaders/bumpmap2.vert.glsl","shaders/bumpma
 ShaderTexture(shader2,colortex,"colorMap",0)
 ShaderTexture(shader2,normaltex,"normalMap",1)
 
-SetFloat3(shader2,"tangent",0.1,0.1,0.1)
+SetFloat4(shader2,"tangent",0.1,0.1,0.1,0.1)
 SetFloat3(shader2,"emission",0.0015,0.0015,0.0015)
 SetFloat(shader2,"attspec",0.01)
-
-Local constantAttenuation#[]=[0.0] ' default gl_LightSource values for Max2d fix
-Local linearAttenuation#[]=[0.001]
-Local quadraticAttenuation#[]=[0.0]
 
 ' bumpmap 3 - multiple lights, directional or point
 Local shader3:TShader=LoadShader("","shaders/bumpmap3.vert.glsl","shaders/bumpmap3.frag.glsl")
@@ -107,7 +101,7 @@ ShaderTexture(shader3,colortex,"colorMap",0)
 ShaderTexture(shader3,normaltex,"normalMap",1)
 ShaderTexture(shader3,spectex,"specularMap",2)
 
-For Local iradius%=0 To num_lights-1
+For Local iradius%=0 To TLight.no_lights[0]-1
 	SetFloat(shader3,"lightradius["+iradius+"].Float",0.2)
 Next
 SetFloat(shader3,"texturescale",1.0)
@@ -123,6 +117,7 @@ Local clr#, cfb#, cud#
 Local lightmode%=1
 Local bumpmode%=0
 Local max2dmode%=0
+Local debuglight%=0
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -134,11 +129,13 @@ Local time%=MilliSecs()
 HideMouse
 MoveMouse 0,0
 
+' init light parameters - for default values comment out RenderWorld
+RenderWorld
+TLight.GetLightValues()
+
 
 While Not KeyDown(KEY_ESCAPE)
 
-	MouseLook(cpivot,camera,time,elapsed)
-	
 	' move camera
 	clr=0 ; cfb=0 ; cud=0
 	If KeyDown(KEY_W) Then cfb:+0.1
@@ -192,14 +189,12 @@ While Not KeyDown(KEY_ESCAPE)
 	' max2d mode
 	If KeyHit(KEY_M) Then max2dmode=Not max2dmode
 	
-	TurnEntity(sphere,0,0.5,-0.1)
+	' debug light parameters
+	If KeyHit(KEY_P) Then debuglight=Not debuglight
 	
-	' bumpmap 2 with Max2d fix - gl_LightSource Parameters are not restored after EndMax2d
-	For Local ilight%=0 To num_lights-1
-		glLightfv(GL_LIGHT0+ilight, GL_CONSTANT_ATTENUATION, constantAttenuation)
-		glLightfv(GL_LIGHT0+ilight, GL_LINEAR_ATTENUATION, linearAttenuation)
-		glLightfv(GL_LIGHT0+ilight, GL_QUADRATIC_ATTENUATION, quadraticAttenuation)
-	Next
+	MouseLook(cpivot,camera,time,elapsed)
+	
+	TurnEntity(sphere,0,0.5,-0.1)
 	
 	RenderWorld
 	
@@ -213,17 +208,39 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	Text 0,0,"FPS: "+fps
 	Text 0,20,"WSAD: move camera, B: bumpmap mode = "+bumpmode+", L: light mode = "+lightmode
+	Text 0,40,"M: Max2d mode, P: debug light parameters"
+	
+	If debuglight
+		DebugLightValues( 80,1 ) ' ypos,light_no
+	EndIf
 	
 	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,40
+		DrawText "Testing Max2d",0,60
 		EndMax2D()
 	EndIf
 	
+	' fix for gl_LightSourceParameters not being restored after Max2d
+	TLight.SetLightValues()
+	
 	Flip
+	
 Wend
 End
 
+
+' debug with Text ypos, i = light_no
+Function DebugLightValues( ypos%,i%=0 )
+
+	Text 0,ypos,"ambient="+TLight.ambient[i,0]+" "+TLight.ambient[i,1]+" "+TLight.ambient[i,2]+" "+TLight.ambient[i,3]
+	Text 0,ypos+20,"diffuse="+TLight.diffuse[i,0]+" "+TLight.diffuse[i,1]+" "+TLight.diffuse[i,2]+" "+TLight.diffuse[i,3]
+	Text 0,ypos+40,"specular="+TLight.specular[i,0]+" "+TLight.specular[i,1]+" "+TLight.specular[i,2]+" "+TLight.specular[i,3]
+	Text 0,ypos+60,"position="+TLight.position[i,0]+" "+TLight.position[i,1]+" "+TLight.position[i,2]+" "+TLight.position[i,3]
+	Text 0,ypos+80,"spotDirection="+TLight.spotDirection[i,0]+" "+TLight.spotDirection[i,1]+" "+TLight.spotDirection[i,2]
+	Text 0,ypos+100,"spotExponent="+TLight.spotExponent[i,0]+" spotCutoff="+TLight.spotCutoff[i,0]
+	Text 0,ypos+120,"constantAtt="+TLight.constantAtt[i,0]+" linearAtt="+TLight.linearAtt[i,0]+" quadraticAtt="+TLight.quadraticAtt[i,0]
+	
+End Function
 
 ' camera mouselook (from firepaint3d.bb)
 Function MouseLook( pivot:TPivot,camera:TCamera,time%,elapsed% )
