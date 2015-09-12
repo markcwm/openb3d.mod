@@ -132,6 +132,7 @@ MoveMouse 0,0
 ' init light parameters - for default values comment out RenderWorld
 RenderWorld
 TLight.GetLightValues()
+TLight.specular[1,0]=200/255.0 ; TLight.specular[1,1]=100/255.0 ; TLight.specular[1,2]=100/255.0
 
 
 While Not KeyDown(KEY_ESCAPE)
