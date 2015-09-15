@@ -62,9 +62,9 @@ light1shadows=light1shadows[..numshadows+1]
 light2shadows=light2shadows[..numshadows+1]
 
 lightcasters[numshadows]=ent ' anim at index 0
-light1shadows[numshadows]=CreateShadow(lightcasters[numshadows],1)
+light1shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
 If static=1
-	light2shadows[numshadows]=CreateShadow(lightcasters[numshadows],1)
+	light2shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
 EndIf
 numshadows:+1 ' increment array index
 
