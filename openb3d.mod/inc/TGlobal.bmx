@@ -13,7 +13,7 @@ Type TGlobal
 	Global ambient_red:Float Ptr ' 0.5
 	Global ambient_green:Float Ptr ' 0.5
 	Global ambient_blue:Float Ptr ' 0.5
-	'Global ambient_shader:TShader ' *todo* openb3d
+	'Global ambient_shader:TShader ' openb3d
 	
 	' vbo_enabled is set in GraphicsInit - set to true if USE_VBO is true and the hardware supports vbos
 	Global vbo_enabled:Int Ptr ' true

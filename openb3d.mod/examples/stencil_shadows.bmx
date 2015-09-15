@@ -17,7 +17,6 @@ CameraClsColor camera,0,0,255
 Local lightmode%=2
 Local light:TLight=CreateLight(lightmode)
 Local light2:TLight=CreateLight(lightmode)
-'CopyList(TLight.light_list)
 
 Local light_piv:TPivot=CreatePivot()
 PositionEntity light_piv,50,0,50
@@ -51,22 +50,23 @@ Global lightcasters:TMesh[] ' all shadow casters
 Global light1shadows:TShadowObject[] ' all lights if dynamic
 Global light2shadows:TShadowObject[] ' second shadow array for static shadows
 
+Local animnumshadows%=0
+Global animlightcasters:TMesh[1]
+Global animlight1shadows:TShadowObject[1]
+Global animlight2shadows:TShadowObject[1]
+
 ' load anim mesh
 Local anim_time#=0
 Local animmode%=1
 Local ent:TMesh=LoadAnimMesh("media/zombie.b3d")
 PositionEntity ent,55,0,50
 
-lightcasters=lightcasters[..numshadows+1] ' resize
-light1shadows=light1shadows[..numshadows+1]
-light2shadows=light2shadows[..numshadows+1]
-
-lightcasters[numshadows]=ent ' anim at index 0
-light1shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
+animlightcasters[animnumshadows]=ent
+animlight1shadows[animnumshadows]=CreateShadow(animlightcasters[animnumshadows],static)
 If static=1
-	light2shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
+	animlight2shadows[animnumshadows]=CreateShadow(animlightcasters[animnumshadows],static)
 EndIf
-numshadows:+1 ' increment array index
+animnumshadows:+1 ' increment array index
 
 ' load cubes - static shadows need a separate shadow array for each light
 For Local i%=0 To numtypes-1
@@ -112,7 +112,7 @@ Next
 TurnEntity light_piv2,0,-90,0
 PositionEntity light,EntityX(sphere,1),EntityY(sphere,1),EntityZ(sphere,1)	
 PositionEntity light2,EntityX(sphere2,1),EntityY(sphere2,1),EntityZ(sphere2,1)
-If static=1 Then CastStaticShadows(numshadows,camera,light,light2)
+If static=1 Then CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
 
 Local wiretoggle%=-1
 Local lightmove%=1
@@ -142,7 +142,7 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	If KeyHit(KEY_L) Then lightmove=-lightmove
 	If lightmove=1 Then TurnEntity light_piv,0,1,0 ; TurnEntity light_piv2,0,-1,0
 	
-	' start/stop cylinder movement
+	' start/stop cube/cylinder movement
 	If KeyHit(KEY_C) Then cylindermove=-cylindermove
 	If static=0 '  static shadows only work for static casters - causes 'wrong' casting on casters
 		For Local j%=1 To numshadows-1
@@ -151,10 +151,10 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	EndIf
 	
 	' reset static shadows
-	If KeyDown(KEY_R)
-		If static=1 Then CastStaticShadows(numshadows,camera,light,light2)
+	If KeyHit(KEY_R)
+		If static=1 Then CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
 	EndIf
-		
+	
 	' hide/show light1 - hide unwanted static shadows by freeing/re-creating
 	If KeyHit(KEY_1)
 		hidelight1=Not hidelight1
@@ -165,7 +165,11 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 				For Local i%=0 To numshadows-1
 					FreeShadow(light1shadows[i])
 				Next
-				CastStaticShadows(numshadows,camera,light,light2)
+				CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
+				For Local i%=0 To animnumshadows-1
+					FreeShadow(animlight1shadows[i])
+				Next
+				CastAnimStaticShadows(1,numshadows,animnumshadows,camera,light,light2)
 			EndIf
 		Else
 			ShowEntity light
@@ -174,7 +178,11 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 				For Local i%=0 To numshadows-1
 					light1shadows[i]=CreateShadow(lightcasters[i],static)
 				Next
-				CastStaticShadows(numshadows,camera,light,light2)
+				CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
+				For Local i%=0 To animnumshadows-1
+					animlight1shadows[i]=CreateShadow(animlightcasters[i],static)
+				Next
+				CastAnimStaticShadows(1,numshadows,animnumshadows,camera,light,light2)
 			EndIf
 		EndIf
 	EndIf
@@ -189,7 +197,11 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 				For Local i%=0 To numshadows-1
 					FreeShadow(light2shadows[i])
 				Next
-				CastStaticShadows(numshadows,camera,light,light2)
+				CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
+				For Local i%=0 To animnumshadows-1
+					FreeShadow(animlight2shadows[i])
+				Next
+				CastAnimStaticShadows(1,numshadows,animnumshadows,camera,light,light2)
 			EndIf
 		Else
 			ShowEntity light2
@@ -198,18 +210,23 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 				For Local i%=0 To numshadows-1
 					light2shadows[i]=CreateShadow(lightcasters[i],static)
 				Next
-				CastStaticShadows(numshadows,camera,light,light2)
+				CastStaticShadows(numshadows,animnumshadows,camera,light,light2)
+				For Local i%=0 To animnumshadows-1
+					animlight2shadows[i]=CreateShadow(animlightcasters[i],static)
+				Next
+				CastAnimStaticShadows(1,numshadows,animnumshadows,camera,light,light2)
 			EndIf
 		EndIf
 	EndIf
 	
 	' anim mode
-	If KeyHit(KEY_A) Then animmode=Not animmode
-	If animmode=1 Then anim_time#:+-0.5
+	If KeyHit(KEY_A) Then animmode:+1
+	If animmode>2 Then animmode=0
+	If animmode>0 Then anim_time#:+-0.5
 	SetAnimTime(ent,anim_time#)
 	
-	If static=1 And animmode=1 ' shows dynamic with static shadows - anim is just set at array index 0
-		CastAnimStaticShadows(numshadows,camera,light,light2)
+	If static=1 And animmode>0 ' shows dynamic with static shadows - anim is just set at array index 0
+		CastAnimStaticShadows(animmode,numshadows,animnumshadows,camera,light,light2)
 	EndIf
 	
 	PositionEntity light,EntityX(sphere,1),EntityY(sphere,1),EntityZ(sphere,1)
@@ -240,7 +257,7 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	EndIf
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"Arrows: move camera, L: light movement, C: cylinder movement"
+	Text 0,20,"Arrows: move camera, L: light movement, C: cylinder movement, A: anim mode = "+animmode
 	Text 0,40,"R: reset static shadows, 1/2: hide lights, light mode = "+lightmode
 	Text 0,60,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
 	
@@ -248,7 +265,7 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	
 Wend
 
-Function CastStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight )
+Function CastStaticShadows( numshadows%,animnumshadows%,camera:TCamera,light:TLight,light2:TLight )
 
 	Local currdist#, maxdist#=0
 	Local light1hid%=light.hide[0]
@@ -258,20 +275,30 @@ Function CastStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight
 		currdist=EntityDistance(camera,lightcasters[i])
 		If currdist>maxdist Then maxdist=currdist
 	Next
+	For Local i%=0 To animnumshadows-1 ' calculate furthest caster from camera to set camera range
+		currdist=EntityDistance(camera,animlightcasters[i])
+		If currdist>maxdist Then maxdist=currdist
+	Next
 	
 	CameraRange camera,1,maxdist+100 ' shorthen camera range to cap any 'detached' static shadows
 	
 	If light2hid=0 And light1hid=0 ' light2 on, light1 on - 2 lights, 3 possible states
 		ShowEntity light2
 		HideEntity light
-		For Local i%=1 To numshadows-1
+		For Local i%=0 To animnumshadows-1
+			animlight2shadows[i].ResetShadow()
+		Next
+		For Local i%=0 To numshadows-1
 			light2shadows[i].ResetShadow()
 		Next
 		RenderWorld
 		
 		HideEntity light2
 		ShowEntity light
-		For Local i%=1 To numshadows-1
+		For Local i%=0 To animnumshadows-1
+			animlight1shadows[i].ResetShadow()
+		Next
+		For Local i%=0 To numshadows-1
 			light1shadows[i].ResetShadow()
 		Next
 		RenderWorld
@@ -283,7 +310,10 @@ Function CastStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight
 	If light2hid=1 And light1hid=0 ' light2 off, light1 on
 		HideEntity light2
 		ShowEntity light
-		For Local i%=1 To numshadows-1
+		For Local i%=0 To animnumshadows-1
+			animlight1shadows[i].ResetShadow()
+		Next
+		For Local i%=0 To numshadows-1
 			light1shadows[i].ResetShadow()
 		Next
 		RenderWorld
@@ -294,7 +324,10 @@ Function CastStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight
 	If light2hid=0 And light1hid=1 ' light2 on, light1 off
 		ShowEntity light2
 		HideEntity light
-		For Local i%=1 To numshadows-1
+		For Local i%=0 To animnumshadows-1
+			animlight2shadows[i].ResetShadow()
+		Next
+		For Local i%=0 To numshadows-1
 			light2shadows[i].ResetShadow()
 		Next
 		RenderWorld
@@ -306,7 +339,7 @@ Function CastStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight
 	
 End Function
 
-Function CastAnimStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TLight )
+Function CastAnimStaticShadows( animmode%,numshadows%,animnumshadows%,camera:TCamera,light:TLight,light2:TLight )
 
 	Local currdist#, maxdist#=0
 	Local light1hid%=light.hide[0]
@@ -316,18 +349,36 @@ Function CastAnimStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TL
 		currdist=EntityDistance(camera,lightcasters[i])
 		If currdist>maxdist Then maxdist=currdist
 	Next
+	For Local i%=0 To animnumshadows-1 ' calculate furthest caster from camera to set camera range
+		currdist=EntityDistance(camera,animlightcasters[i])
+		If currdist>maxdist Then maxdist=currdist
+	Next
 	
 	CameraRange camera,1,maxdist+100 ' shorthen camera range to cap any 'detached' static shadows
 	
 	If light2hid=0 And light1hid=0 ' light2 on, light1 on - 2 lights, 3 possible states
 		ShowEntity light2
 		HideEntity light
-		light2shadows[0].ResetShadow()
+		For Local i%=0 To animnumshadows-1
+			animlight2shadows[i].ResetShadow()
+		Next
+		If animmode=2
+			For Local i%=0 To numshadows-1
+				light2shadows[i].ResetShadow()
+			Next
+		EndIf
 		RenderWorld
 		
 		HideEntity light2
 		ShowEntity light
-		light1shadows[0].ResetShadow()
+		For Local i%=0 To animnumshadows-1
+			animlight1shadows[i].ResetShadow()
+		Next
+		If animmode=2
+			For Local i%=0 To numshadows-1
+				light1shadows[i].ResetShadow()
+			Next
+		EndIf
 		RenderWorld
 		
 		ShowEntity light
@@ -337,7 +388,14 @@ Function CastAnimStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TL
 	If light2hid=1 And light1hid=0 ' light2 off, light1 on
 		HideEntity light2
 		ShowEntity light
-		light1shadows[0].ResetShadow()
+		For Local i%=0 To animnumshadows-1
+			animlight1shadows[i].ResetShadow()
+		Next
+		If animmode=2
+			For Local i%=0 To numshadows-1
+				light1shadows[i].ResetShadow()
+			Next
+		EndIf
 		RenderWorld
 		
 		ShowEntity light
@@ -346,7 +404,14 @@ Function CastAnimStaticShadows( numshadows,camera:TCamera,light:TLight,light2:TL
 	If light2hid=0 And light1hid=1 ' light2 on, light1 off
 		ShowEntity light2
 		HideEntity light
-		light2shadows[0].ResetShadow()
+		For Local i%=0 To animnumshadows-1
+			animlight2shadows[i].ResetShadow()
+		Next
+		If animmode=2
+			For Local i%=0 To numshadows-1
+				light2shadows[i].ResetShadow()
+			Next
+		EndIf
 		RenderWorld
 		
 		ShowEntity light2
