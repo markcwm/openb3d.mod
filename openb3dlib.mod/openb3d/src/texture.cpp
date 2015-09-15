@@ -49,10 +49,10 @@ Texture* Texture::LoadTexture(string filename,int flags){
 		//filename=Strip(filename); // get rid of path info
 		filename=File::ResourceFilePath(filename);
 
-		if (File::ResourceFilePath(filename)==""){
+		/*if (filename==""){
 			cout << "Error: Cannot Find Texture: " << filename << endl;
 			return NULL;
-		}
+		}*/
 
 		Texture* tex=new Texture();
 		tex->file=filename;
@@ -125,12 +125,13 @@ Texture* Texture::LoadTexture(string filename,int flags){
 Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
 
 	//filename=Strip(filename); // get rid of path info
+
 	filename=File::ResourceFilePath(filename);
 
-	if(File::ResourceFilePath(filename)==""){
+	/*if (filename==""){
 		cout << "Error: Cannot Find Texture: " << filename << endl;
 		return NULL;
-	}
+	}*/
 
 	Texture* tex=new Texture();
 	tex->file=filename;
@@ -307,7 +308,7 @@ void Texture::FilterFlags(){
 }
 
 // used in LoadTexture, strips path info from filename
-string Texture::Strip(string filename){
+/*string Texture::Strip(string filename){
 	string stripped_filename=filename;
 	string::size_type idx;
 
@@ -323,7 +324,7 @@ string Texture::Strip(string filename){
 
 	return stripped_filename;
 
-}
+}*/
 
 void Texture::BufferToTex(unsigned char* buffer, int frame){
 	if(flags&128){

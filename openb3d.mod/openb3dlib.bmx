@@ -30,8 +30,7 @@ Import BRL.JPGLoader		' imports BRL.Pixmap, PUB.LibJPEG
 Import BRL.Retro			' imports BRL.Basic
 Import BRL.Map
 
-' *** Global declarations
-
+' functions.cpp
 Extern
 
 	' *** Minib3d only
@@ -427,6 +426,9 @@ Function CopyList( list:TList,listarray:TList[]=Null )
 		
 		Case TPick.ent_list
 			TPick.CopyList_( TPick.ent_list )
+		
+		Case TShadowObject.shadow_list
+			TShadowObject.CopyList_( TShadowObject.shadow_list )
 		
 		Case TTexture.tex_list
 			TTexture.CopyList_( TTexture.tex_list )

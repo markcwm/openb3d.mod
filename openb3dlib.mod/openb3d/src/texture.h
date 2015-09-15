@@ -74,7 +74,7 @@ public:
 	static void AddTextureFilter(string text_match,int flags);
 	Texture* TexInList();
 	void FilterFlags();
-	static string Strip(string filename);
+	//static string Strip(string filename);
 };
 
 #endif

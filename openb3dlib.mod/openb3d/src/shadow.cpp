@@ -106,6 +106,7 @@ void ShadowObject::Update(Camera* Cam){
 	vector<Light*>::iterator it;
 	for(it=Light::light_list.begin();it!=Light::light_list.end();++it){
 		Light* Light=*it;
+		if (Light->hide==true || Light->cast_shadow==false) continue;
 
 		light_x = Light->EntityX(true) * (1 + parallel * 1);
 		light_y = Light->EntityY(true) * (1 + parallel * 1);

@@ -93,6 +93,7 @@ Light* Light::CopyEntity(Entity* parent_ent){
 		
 	light_list.push_back(light); // add new light to global light list
 	
+	light->cast_shadow=cast_shadow;
 	light->light_type=light_type;
 	light->range=range;
 	light->red=red;
@@ -133,7 +134,12 @@ Light* Light::CreateLight(int l_type,Entity* parent_ent){
 	if(no_lights>=max_lights) return NULL; // no more lights available, return and don't create
 
 	Light* light=new Light;
-	light->light_type=l_type;
+	if (l_type>0){
+		light->light_type=l_type;
+	}else{
+		light->light_type=-l_type;
+		light->cast_shadow=0;			//if type is negative, light won't cast shadows
+	}
 	light->class_name="Light";
 	
 	// no of lights increased, enable additional gl light
@@ -197,15 +203,15 @@ void Light::Update(){
 	light_no=light_no+1;
 	if(light_no>no_lights) light_no=1;
 	
-	/*
-	if(Hidden()=true){
+	
+	if(hide==true){
 		glDisable(gl_light[light_no-1]);
 		return;
 	}else{
 		glEnable(gl_light[light_no-1]);
 	}
-	*/
-	glEnable(gl_light[light_no-1]);
+	
+	/*glEnable(gl_light[light_no-1]);*/
 
 	glPushMatrix();
 

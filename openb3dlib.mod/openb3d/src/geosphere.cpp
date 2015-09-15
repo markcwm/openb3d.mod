@@ -1074,10 +1074,11 @@ void Geosphere::UpdateNormals (int preserve){
 Geosphere* Geosphere::LoadGeosphere(string filename,Entity* parent_ent){
 	//filename=Strip(filename); // get rid of path info
 
-	if(File::ResourceFilePath(filename)==""){
+	filename=File::ResourceFilePath(filename);
+	/*if(File::ResourceFilePath(filename)==""){
 		cout << "Error: Cannot Find Terrain: " << filename << endl;
 		return NULL;
-	}
+	}*/
 
 	string filename_left=Left(filename,Len(filename)-4);
 	string filename_right=Right(filename,3);

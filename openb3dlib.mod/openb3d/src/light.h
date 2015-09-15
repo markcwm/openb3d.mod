@@ -29,13 +29,15 @@ public:
 
 	static vector<Light*> light_list;
 
-	int light_type;
+	char cast_shadow;
+	char light_type;
 	float range;
 	float red,green,blue;
 	float inner_ang,outer_ang;
 	
 	Light(){
-											
+
+		cast_shadow=1;
 		light_type=0;
 		range=1.0/1000.0;
 		red=1.0;

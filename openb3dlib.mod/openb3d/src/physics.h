@@ -14,6 +14,7 @@ class Constraint{
 public:
 	static Constraint* CreateConstraint(Entity* p1, Entity* p2, float l);
 	static void Update();
+	void FreeConstraint();
 };
 
 class RigidBody{
@@ -25,6 +26,7 @@ class RigidBody{
 public:
 	static RigidBody* CreateRigidBody(Entity* body, Entity* p1, Entity* p2, Entity* p3, Entity* p4);
 	static void Update();
+	void FreeRigidBody();
 };
 
 

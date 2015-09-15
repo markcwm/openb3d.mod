@@ -221,3 +221,9 @@ void Action::AppendAction(Action* a){
 	action_list.remove(a);
 	nextActions.push_back(a);
 }
+
+void Action::FreeAction(){
+	//The action will be removed at the first update; it cannot be erased immediately, because other actions might point at it
+	act=ACT_COMPLETED;
+}
+

@@ -931,23 +931,23 @@ Type TEntity
 	End Method
 	
 	' inverted matrix - called in RotateEntity, TFormPoint/Vector
-	Method MQ_GetInvMatrix( mat0:TMatrix2,scale:Int=True )
+	Method MQ_GetInvMatrix( mat0:TMatrix2 )
 		
-		MQ_GetInvMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat0),scale )
+		MQ_GetInvMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat0) )
 		
 	End Method
 	
 	' global position/rotation - called in EntityParent, EntityPitch/Yaw/Roll, TFormPoint/Vector
-	Method MQ_GetMatrix( mat3:TMatrix2,scale:Int=True )
+	Method MQ_GetMatrix( mat3:TMatrix2 )
 		
-		MQ_GetMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat3),scale )
+		MQ_GetMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat3) )
 		
 	End Method
 	
 	' scaling - called in EntityParent
-	Method MQ_GetScaleXYZ( width:Float Var,height:Float Var,depth:Float Var,glob:Int=True )
+	Method MQ_GetScaleXYZ( width:Float Var,height:Float Var,depth:Float Var )
 		
-		MQ_GetScaleXYZ_( GetInstance(Self),Varptr(width),Varptr(height),Varptr(depth),glob )
+		MQ_GetScaleXYZ_( GetInstance(Self),Varptr(width),Varptr(height),Varptr(depth) )
 		
 	End Method
 	

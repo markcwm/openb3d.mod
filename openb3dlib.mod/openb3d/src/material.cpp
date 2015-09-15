@@ -1727,13 +1727,12 @@ void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeig
 
 Material* Material::LoadMaterial(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
 
-	//filename=Strip(filename); // get rid of path info
 	filename=File::ResourceFilePath(filename);
 
-	if(File::ResourceFilePath(filename)==""){
+	/*if (filename==""){
 		cout << "Error: Cannot Find Texture: " << filename << endl;
 		return NULL;
-	}
+	}*/
 
 	Material* tex=new Material();
 	tex->file=filename;

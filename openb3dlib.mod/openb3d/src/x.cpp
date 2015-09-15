@@ -298,7 +298,7 @@ list<XLoader_TreeNode*> XLoader_FindTreeElements(XLoader_TreeNode* tree, string 
 
 
 Mesh* LoadX(string URL, Entity* parent_ent){
-	Stream = File::ReadFile(URL);
+	Stream = File::ReadResourceFile(URL);
 	if (Stream == 0) return 0;
 
 	string header = xReadString(Stream, 4);

@@ -4,6 +4,7 @@
 #include "openb3d/src/animation_keys.h"
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
+#include "openb3d/src/shadow.h"
 
 extern "C" {
 
@@ -342,6 +343,48 @@ void UpdateShadow( Mesh* obj ){
 
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius ){
 	return Pick::PickMain( ax,ay,az,bx,by,bz,radius );
+}
+
+// ShadowObject
+
+void SetShadowColor( ShadowObject* obj,int R,int G,int B,int A ){
+	obj->SetShadowColor( R,G,B,A );
+}
+
+void ShadowInit(){
+	ShadowObject::ShadowInit();
+}
+
+void RemoveShadowfromMesh( ShadowObject* obj,Mesh* M ){
+	obj->RemoveShadowfromMesh( M );
+}
+
+void ShadowObjectUpdate( Camera* Cam ){
+	ShadowObject::Update( Cam );
+}
+
+void RenderVolume(){
+	ShadowObject::RenderVolume();
+}
+
+void UpdateAnim( ShadowObject* obj ){
+	obj->UpdateAnim();
+}
+
+void ShadowObjectInit( ShadowObject* obj ){
+	obj->Init();
+}
+
+void InitShadow( ShadowObject* obj ){
+	obj->InitShadow();
+}
+
+void UpdateCaster( ShadowObject* obj ){
+	obj->UpdateCaster();
+}
+
+void ShadowRenderWorldZFail(){
+	ShadowObject::ShadowRenderWorldZFail();
 }
 
 // Sprite

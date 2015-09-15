@@ -272,7 +272,7 @@ Mesh* Load3ds(string URL, Entity* parent_ent){
   unsigned char Red, Green, Blue;
   //unsigned char Percent;
   //Local Pixmap:TPixmap
-  Stream = File::ReadFile(URL);
+  Stream = File::ReadResourceFile(URL);
   if (Stream == 0) return 0;
 
   //Size = Stream.Size()

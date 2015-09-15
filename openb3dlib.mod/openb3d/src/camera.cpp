@@ -476,7 +476,7 @@ void Camera::Update(){
 	if(fog_mode>0){
 		
 		glEnable(GL_FOG); // enable if disabled
-		glFogi(GL_FOG_MODE,GL_LINEAR); // each render when 2d in 3d
+		glFogf(GL_FOG_MODE,GL_LINEAR); // each render when 2d in 3d
 		if(fog!=true){
 			//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 			fog=true;

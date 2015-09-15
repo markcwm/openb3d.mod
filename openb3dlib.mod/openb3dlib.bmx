@@ -45,7 +45,7 @@ Import "source.bmx"
 Import "methods.cpp"
 Import "data.cpp"
 
-' methods
+' methods.cpp
 Extern
 
 	' Animation
@@ -98,9 +98,9 @@ Extern
 	Function UpdateChildren_( ent_p:Byte Ptr ) = "UpdateChildren"
 	Function EntityDistanceSquared_:Float( obj:Byte Ptr,ent2:Byte Ptr ) = "EntityDistanceSquared"
 	Function MQ_Update_( obj:Byte Ptr ) = "MQ_Update"
-	Function MQ_GetInvMatrix_( obj:Byte Ptr,mat0:Byte Ptr,scale:Int ) = "MQ_GetInvMatrix"
-	Function MQ_GetMatrix_( obj:Byte Ptr,mat3:Byte Ptr,scale:Int ) = "MQ_GetMatrix"
-	Function MQ_GetScaleXYZ_( obj:Byte Ptr,width:Float Ptr,height:Float Ptr,depth:Float Ptr,glob:Int ) = "MQ_GetScaleXYZ"
+	Function MQ_GetInvMatrix_( obj:Byte Ptr,mat0:Byte Ptr ) = "MQ_GetInvMatrix"
+	Function MQ_GetMatrix_( obj:Byte Ptr,mat3:Byte Ptr ) = "MQ_GetMatrix"
+	Function MQ_GetScaleXYZ_( obj:Byte Ptr,width:Float Ptr,height:Float Ptr,depth:Float Ptr ) = "MQ_GetScaleXYZ"
 	Function MQ_Turn_( obj:Byte Ptr,ang:Float,vx:Float,vy:Float,vz:Float,glob:Int ) = "MQ_Turn"
 	
 	' Matrix2
@@ -149,6 +149,18 @@ Extern
 	' Pick
 	Function PickMain_:Byte Ptr( ax:Float,ay:Float,az:Float,bx:Float,by:Float,bz:Float,radius:Float ) = "PickMain"
 	
+	' ShadowObject
+	Function SetShadowColor_( obj:Byte Ptr,R:Int,G:Int,B:Int,A:Int ) = "SetShadowColor"
+	Function ShadowInit_() = "ShadowInit"
+	Function RemoveShadowfromMesh_( obj:Byte Ptr,M:Byte Ptr ) = "RemoveShadowfromMesh"
+	Function ShadowObjectUpdate_( Cam:Byte Ptr ) = "ShadowObjectUpdate"
+	Function RenderVolume_() = "RenderVolume"
+	Function UpdateAnim_( obj:Byte Ptr ) = "UpdateAnim"
+	Function ShadowObjectInit_( obj:Byte Ptr ) = "ShadowObjectInit"
+	Function InitShadow_( obj:Byte Ptr ) = "InitShadow"
+	Function UpdateCaster_( obj:Byte Ptr ) = "UpdateCaster"
+	Function ShadowRenderWorldZFail_() = "ShadowRenderWorldZFail"
+	
 	' Sprite
 	Function SpriteTexCoords_( obj:Byte Ptr,cell_x:Int,cell_y:Int,cell_w:Int,cell_h:Int,tex_w:Int,tex_h:Int,uv_set:Int ) = "SpriteTexCoords"
 	Function SpriteVertexColor_( obj:Byte Ptr,v:Int,r:Float,g:Float,b:Float ) = "SpriteVertexColor"
@@ -174,10 +186,11 @@ Extern
 	
 End Extern
 
-' data
+' data.cpp
 Extern
 
 	' Static
+	Function StaticChar_:Byte Ptr( classid:Int,varid:Int ) = "StaticChar"
 	Function StaticInt_:Int Ptr( classid:Int,varid:Int ) = "StaticInt"
 	Function StaticFloat_:Float Ptr( classid:Int,varid:Int ) = "StaticFloat"
 	Function StaticEntity_:Byte Ptr( classid:Int,varid:Int ) = "StaticEntity"
@@ -192,6 +205,7 @@ Extern
 	Function StaticIterListEntity_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListEntity"
 	Function StaticIterListEntityArray_:Byte Ptr( classid:Int,varid:Int,index:Int ) = "StaticIterListEntityArray"
 	Function StaticIterListMesh_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListMesh"
+	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListShadowObject"
 	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListTexture"
 	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterVectorLight"
 	
@@ -237,7 +251,7 @@ Extern
 	Function EntityIterVectorCollisionImpact_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityIterVectorCollisionImpact"
 	
 	' Light
-	Function LightInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "LightInt"
+	Function LightChar_:Int Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"
 	Function LightFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "LightFloat"
 	
 	' Matrix
@@ -257,6 +271,12 @@ Extern
 	'Function MeshInfoListSize_:Int( obj:Byte Ptr,varid:Int ) = "MeshInfoListSize"
 	'Function MeshInfoIterVectorTriangle_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshInfoIterVectorTriangle"
 	'Function MeshInfoIterVectorVertex_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshInfoIterVectorVertex"
+	
+	' ShadowObject
+	Function ShadowObjectChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectChar"
+	Function ShadowObjectInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectInt"
+	Function ShadowObjectMesh_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectMesh"
+	Function ShadowObjectSurface_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectSurface"
 	
 	' Sprite
 	Function SpriteInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "SpriteInt"
@@ -543,13 +563,14 @@ Const LIGHT_no_lights:Int=	2
 Const LIGHT_max_lights:Int=	3	
 Const LIGHT_gl_light:Int=	4
 Const LIGHT_light_list:Int=	5
-Const LIGHT_light_type:Int=	6
-Const LIGHT_range:Int=		7
-Const LIGHT_red:Int=		8
-Const LIGHT_green:Int=		9
-Const LIGHT_blue:Int=		10
-Const LIGHT_inner_ang:Int=	11
-Const LIGHT_outer_ang:Int=	12
+Const LIGHT_cast_shadow:Int=6
+Const LIGHT_light_type:Int=	7
+Const LIGHT_range:Int=		8
+Const LIGHT_red:Int=		9
+Const LIGHT_green:Int=		10
+Const LIGHT_blue:Int=		11
+Const LIGHT_inner_ang:Int=	12
+Const LIGHT_outer_ang:Int=	13
 
 ' Matrix varid
 Const MATRIX_grid:Int=	1
@@ -592,6 +613,27 @@ Const PICK_picked_time:Int=		8
 Const PICK_picked_ent:Int=		9
 Const PICK_picked_surface:Int=	10
 Const PICK_picked_triangle:Int=	11
+
+' ShadowObject varid
+Const SHADOWOBJECT_shadow_list:Int=		1
+Const SHADOWOBJECT_Parent:Int=			2
+Const SHADOWOBJECT_cnt_tris:Int=		3
+Const SHADOWOBJECT_ShadowMesh:Int=		4
+Const SHADOWOBJECT_ShadowVolume:Int=	5
+Const SHADOWOBJECT_Render:Int=			6
+Const SHADOWOBJECT_Static:Int=			7
+Const SHADOWOBJECT_VCreated:Int=		8
+Const SHADOWOBJECT_VolumeLength:Int=	9
+Const SHADOWOBJECT_top_caps:Int=		10
+Const SHADOWOBJECT_parallel:Int=		11
+Const SHADOWOBJECT_light_x:Int=			12
+Const SHADOWOBJECT_light_y:Int=			13
+Const SHADOWOBJECT_light_z:Int=			14
+Const SHADOWOBJECT_midStencilVal:Int=	15
+Const SHADOWOBJECT_ShadowRed:Int=		16
+Const SHADOWOBJECT_ShadowGreen:Int=		17
+Const SHADOWOBJECT_ShadowBlue:Int=		18
+Const SHADOWOBJECT_ShadowAlpha:Int=		19
 
 ' Sprite varid
 Const SPRITE_angle:Int=			1

@@ -137,7 +137,9 @@ Type TCamera Extends TEntity
 	Function CreateCamera:TCamera( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CreateCamera_( GetInstance(parent) )
-		Return CreateObject(inst)
+		Local cam:TCamera=CreateObject(inst)
+		CopyList(TCamera.cam_list)
+		Return cam
 		
 	End Function
 	
@@ -320,6 +322,22 @@ Type TCamera Extends TEntity
 		CameraUpdateEntityRender_( TEntity.GetInstance(ent),GetInstance(cam) )
 		
 	End Function
+	
+	' fog with Max2d fix
+	Method UpdateFog()
+	
+		If TGlobal.fog_enabled[0]=1
+			glEnable(GL_FOG)
+			glFogf(GL_FOG_MODE,GL_LINEAR)
+			glFogf(GL_FOG_START,fog_range_near[0])
+			glFogf(GL_FOG_END,fog_range_far[0])
+			Local rgb#[]=[fog_r[0],fog_g[0],fog_b[0]]
+			glFogfv(GL_FOG_COLOR,rgb)
+		Else
+			glDisable(GL_FOG)
+		EndIf
+		
+	End Method
 	
 	Rem
 	Method SphereInFrustum:Float(x#,y#,z#,radius#)

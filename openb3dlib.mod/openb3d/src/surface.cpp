@@ -14,8 +14,8 @@
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
 #include <GL/glext.h>
-#endif
 
+#endif
 #ifdef WIN32
 #include <gl\GLee.h>
 #endif

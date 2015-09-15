@@ -39,6 +39,7 @@ public:
 		return AddAction(ent, action, t, 0, 0, 0, rate);
 	};
 	void AppendAction (Action* a);
+	void FreeAction ();
 	static void Update();
 };
 

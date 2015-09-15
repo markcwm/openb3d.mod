@@ -267,13 +267,14 @@ const int LIGHT_no_lights=	2;
 const int LIGHT_max_lights=	3;	
 const int LIGHT_gl_light=	4;
 const int LIGHT_light_list=	5;
-const int LIGHT_light_type=	6;
-const int LIGHT_range=		7;
-const int LIGHT_red=		8;
-const int LIGHT_green=		9;
-const int LIGHT_blue=		10;
-const int LIGHT_inner_ang=	11;
-const int LIGHT_outer_ang=	12;
+const int LIGHT_cast_shadow=6;
+const int LIGHT_light_type=	7;
+const int LIGHT_range=		8;
+const int LIGHT_red=		9;
+const int LIGHT_green=		10;
+const int LIGHT_blue=		11;
+const int LIGHT_inner_ang=	12;
+const int LIGHT_outer_ang=	13;
 	
 // Matrix varid
 const int MATRIX_grid=	1;
@@ -316,6 +317,27 @@ const int PICK_picked_time=		8;
 const int PICK_picked_ent=		9;
 const int PICK_picked_surface=	10;
 const int PICK_picked_triangle=	11;
+
+// ShadowObject varid
+const int SHADOWOBJECT_shadow_list=		1;
+const int SHADOWOBJECT_Parent=			2;
+const int SHADOWOBJECT_cnt_tris=		3;
+const int SHADOWOBJECT_ShadowMesh=		4;
+const int SHADOWOBJECT_ShadowVolume=	5;
+const int SHADOWOBJECT_Render=			6;
+const int SHADOWOBJECT_Static=			7;
+const int SHADOWOBJECT_VCreated=		8;
+const int SHADOWOBJECT_VolumeLength=	9;
+const int SHADOWOBJECT_top_caps=		10;
+const int SHADOWOBJECT_parallel=		11;
+const int SHADOWOBJECT_light_x=			12;
+const int SHADOWOBJECT_light_y=			13;
+const int SHADOWOBJECT_light_z=			14;
+const int SHADOWOBJECT_midStencilVal=	15;
+const int SHADOWOBJECT_ShadowRed=		16;
+const int SHADOWOBJECT_ShadowGreen=		17;
+const int SHADOWOBJECT_ShadowBlue=		18;
+const int SHADOWOBJECT_ShadowAlpha=		19;
 
 // Sprite varid
 const int SPRITE_angle=			1;
@@ -387,6 +409,16 @@ extern "C" {
 
 // Static
 
+char* StaticChar( int classid,int varid ){
+	switch (classid){
+		case SHADOWOBJECT_class :
+			switch (varid){
+				case SHADOWOBJECT_top_caps : return &ShadowObject::top_caps;
+			}
+	}
+	return NULL;
+}
+
 int* StaticInt( int classid,int varid ){
 	switch (classid){
 		case GLOBAL_class :
@@ -405,10 +437,6 @@ int* StaticInt( int classid,int varid ){
 				case GLOBAL_fx1 : return &Global::fx1;
 				case GLOBAL_fx2 : return &Global::fx2;
 			}
-		case PICK_class :
-			switch (varid){
-				case PICK_picked_triangle : return &Pick::picked_triangle;
-			}
 		case LIGHT_class :
 			switch (varid){
 				case LIGHT_light_no : return &Light::light_no;
@@ -416,18 +444,26 @@ int* StaticInt( int classid,int varid ){
 				case LIGHT_max_lights : return &Light::max_lights;
 				case LIGHT_gl_light : return &Light::gl_light[0];
 			}
+		case PICK_class :
+			switch (varid){
+				case PICK_picked_triangle : return &Pick::picked_triangle;
+			}
+		case SHADOWOBJECT_class :
+			switch (varid){
+				case SHADOWOBJECT_parallel : return &ShadowObject::parallel;
+				case SHADOWOBJECT_midStencilVal : return &ShadowObject::midStencilVal;
+			}
 	}
 	return NULL;
 }
 
 float* StaticFloat( int classid,int varid ){
 	switch (classid){
-		case GLOBAL_class :
+		case CAMERA_class :
 			switch (varid){
-				case GLOBAL_ambient_red : return &Global::ambient_red;
-				case GLOBAL_ambient_green : return &Global::ambient_green;
-				case GLOBAL_ambient_blue : return &Global::ambient_blue;
-				case GLOBAL_anim_speed : return &Global::anim_speed;
+				case CAMERA_projected_x : return &Camera::projected_x;
+				case CAMERA_projected_y : return &Camera::projected_y;
+				case CAMERA_projected_z : return &Camera::projected_z;
 			}
 		case ENTITY_class :
 			switch (varid){
@@ -435,11 +471,12 @@ float* StaticFloat( int classid,int varid ){
 				case ENTITY_tformed_y : return &Entity::tformed_y;
 				case ENTITY_tformed_z : return &Entity::tformed_z;
 			}
-		case CAMERA_class :
+		case GLOBAL_class :
 			switch (varid){
-				case CAMERA_projected_x : return &Camera::projected_x;
-				case CAMERA_projected_y : return &Camera::projected_y;
-				case CAMERA_projected_z : return &Camera::projected_z;
+				case GLOBAL_ambient_red : return &Global::ambient_red;
+				case GLOBAL_ambient_green : return &Global::ambient_green;
+				case GLOBAL_ambient_blue : return &Global::ambient_blue;
+				case GLOBAL_anim_speed : return &Global::anim_speed;
 			}
 		case PICK_class :
 			switch (varid){
@@ -450,6 +487,17 @@ float* StaticFloat( int classid,int varid ){
 				case PICK_picked_ny : return &Pick::picked_ny;
 				case PICK_picked_nz : return &Pick::picked_nz;
 				case PICK_picked_time : return &Pick::picked_time;
+			}
+		case SHADOWOBJECT_class :
+			switch (varid){
+				case SHADOWOBJECT_VolumeLength : return &ShadowObject::VolumeLength;
+				case SHADOWOBJECT_light_x : return &ShadowObject::light_x;
+				case SHADOWOBJECT_light_y : return &ShadowObject::light_y;
+				case SHADOWOBJECT_light_z : return &ShadowObject::light_z;
+				case SHADOWOBJECT_ShadowRed : return &ShadowObject::ShadowRed;
+				case SHADOWOBJECT_ShadowGreen : return &ShadowObject::ShadowGreen;
+				case SHADOWOBJECT_ShadowBlue : return &ShadowObject::ShadowBlue;
+				case SHADOWOBJECT_ShadowAlpha : return &ShadowObject::ShadowAlpha;
 			}
 	}
 	return NULL;
@@ -497,31 +545,35 @@ Surface* StaticSurface( int classid,int varid ){
 
 int StaticListSize( int classid,int varid ){
 	switch (classid){
-		case ENTITY_class :
-			switch (varid){
-				case ENTITY_entity_list : return Entity::entity_list.size();
-				case ENTITY_animate_list : return Entity::animate_list.size();
-			}
-		case TEXTURE_class :
-			switch (varid){
-				case TEXTURE_tex_list : return Texture::tex_list.size();
-			}
 		case CAMERA_class :
 			switch (varid){
 				case CAMERA_cam_list : return Camera::cam_list.size();
 				case CAMERA_render_list : return Camera::render_list.size();
 			}
-		case PICK_class :
+		case COLLISIONPAIR_class :
 			switch (varid){
-				case PICK_ent_list : return Pick::ent_list.size();
+				case COLLISIONPAIR_cp_list : return CollisionPair::cp_list.size();
+			}
+		case ENTITY_class :
+			switch (varid){
+				case ENTITY_entity_list : return Entity::entity_list.size();
+				case ENTITY_animate_list : return Entity::animate_list.size();
 			}
 		case LIGHT_class :
 			switch (varid){
 				case LIGHT_light_list : return Light::light_list.size();
 			}
-		case COLLISIONPAIR_class :
+		case PICK_class :
 			switch (varid){
-				case COLLISIONPAIR_cp_list : return CollisionPair::cp_list.size();
+				case PICK_ent_list : return Pick::ent_list.size();
+			}
+		case SHADOWOBJECT_class :
+			switch (varid){
+				case SHADOWOBJECT_shadow_list : return ShadowObject::shadow_list.size();
+			}
+		case TEXTURE_class :
+			switch (varid){
+				case TEXTURE_tex_list : return Texture::tex_list.size();
 			}
 	}
 	return 0;
@@ -636,6 +688,27 @@ Mesh* StaticIterListMesh( int classid,int varid ){
 		case CAMERA_class :
 			switch (varid){
 				case CAMERA_render_list : objlist=Camera::render_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+ShadowObject* StaticIterListShadowObject( int classid,int varid ){
+	static int id=0;
+	static list<ShadowObject*> objlist;
+	static list<ShadowObject*>::iterator it;
+	static ShadowObject* obj;
+	
+	switch (classid){
+		case SHADOWOBJECT_class :
+			switch (varid){
+				case SHADOWOBJECT_shadow_list : objlist=ShadowObject::shadow_list; break;
 			}
 	}
 	if (objlist.size() == 0) return NULL;
@@ -1044,8 +1117,9 @@ CollisionImpact* EntityIterVectorCollisionImpact( Entity* obj,int varid ){
 
 // Light
 
-int* LightInt( Light* obj,int varid ){
+char* LightChar( Light* obj,int varid ){
 	switch (varid){
+		case LIGHT_cast_shadow : return &obj->cast_shadow;
 		case LIGHT_light_type : return &obj->light_type;
 	}
 	return NULL;
@@ -1207,6 +1281,39 @@ MeshCollider::Vertex* MeshInfoIterVectorVertex( MeshInfo* obj,int varid ){
 	if (id == objlist.size()) id=0;
 	return obj2;
 }*/
+
+// ShadowObject
+
+char* ShadowObjectChar( ShadowObject* obj,int varid ){
+	switch (varid){
+		case SHADOWOBJECT_Render : return &obj->Render;
+		case SHADOWOBJECT_Static : return &obj->Static;
+		case SHADOWOBJECT_VCreated : return &obj->VCreated;
+	}
+	return NULL;
+}
+
+int* ShadowObjectInt( ShadowObject* obj,int varid ){
+	switch (varid){
+		case SHADOWOBJECT_cnt_tris : return &obj->cnt_tris;
+	}
+	return NULL;
+}
+
+Mesh* ShadowObjectMesh( ShadowObject* obj,int varid ){
+	switch (varid){
+		case SHADOWOBJECT_Parent : return obj->Parent;
+		case SHADOWOBJECT_ShadowMesh : return obj->ShadowMesh;
+	}
+	return NULL;
+}
+
+Surface* ShadowObjectSurface( ShadowObject* obj,int varid ){
+	switch (varid){
+		case SHADOWOBJECT_ShadowVolume : return obj->ShadowVolume;
+	}
+	return NULL;
+}
 
 // Sprite
 

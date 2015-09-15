@@ -38,6 +38,11 @@ Constraint* Constraint::CreateConstraint(Entity* p1, Entity* p2, float l){
 	return c;
 }
 
+void Constraint::FreeConstraint(){
+	constraint_list.remove(this);
+	delete this;
+}
+
 void RigidBody::Update(){
 	list<RigidBody*>::iterator it;
 
@@ -73,14 +78,15 @@ void RigidBody::Update(){
 
 		b->body->rotmat.grid[2][0]=b->body->mat.grid[2][0];
 		b->body->rotmat.grid[2][1]=b->body->mat.grid[2][1];
-		b->body->rotmat.grid[2][2]=-b->body->mat.grid[2][2];*/
+		b->body->rotmat.grid[2][2]=-b->body->mat.grid[2][2];
 
 		list<Entity*>::iterator it2;
 
 		for(it2=b->body->child_list.begin();it2!=b->body->child_list.end();it2++){
 			Entity* ent=*it2;
 			ent->MQ_Update();
-		}
+		}*/
+		Entity::UpdateChildren(b->body);
 
 	}
 
@@ -96,4 +102,9 @@ RigidBody* RigidBody::CreateRigidBody(Entity* body, Entity* p1, Entity* p2, Enti
 
 	rigidBody_list.push_back(b);
 	return b;
+}
+
+void RigidBody::FreeRigidBody(){
+	rigidBody_list.remove(this);
+	delete this;
 }

@@ -18,10 +18,6 @@
 
 extern "C" {
 
-/*void ResetShadow(ShadowObject* shad){
-	shad->VCreated=0;
-}*/
-
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
 }
@@ -833,11 +829,19 @@ void  FreeBrush(Brush* brush){
 	brush->FreeBrush();
 }
 
+void FreeConstraint(Constraint* con){
+	con->FreeConstraint();
+}
+
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeEntity">Online Help</a>
 */
 void FreeEntity(Entity* ent){
 	ent->FreeEntity();
+}
+
+void FreeRigidBody(RigidBody* body){
+	body->FreeRigidBody();
 }
 
 void FreeShadow(ShadowObject* shad){
@@ -1266,6 +1270,11 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">
 void ResetEntity(Entity* ent){
 	ent->ResetEntity();
 }
+
+void ResetShadow(ShadowObject* shad){
+	shad->VCreated=0;
+}
+
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online Help</a>
@@ -1954,6 +1963,10 @@ Action* ActNewtonian(Entity* ent, float rate){
 
 void AppendAction(Action* act1, Action* act2){
 	act1->AppendAction(act2);
+}
+
+void FreeAction(Action* act){
+	act->FreeAction();
 }
 
 void DepthBufferToTex( Texture* tex, Camera* cam=0 ){

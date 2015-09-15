@@ -114,6 +114,18 @@ void TrimVerts(Surface* surf);*/
 // Pick
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius );
 
+// ShadowObject
+void SetShadowColor( ShadowObject* obj,int R,int G,int B,int A );
+void ShadowInit();
+void RemoveShadowfromMesh( ShadowObject* obj,Mesh* M );
+void ShadowObjectUpdate( Camera* Cam );
+void RenderVolume();
+void UpdateAnim( ShadowObject* obj );
+void ShadowObjectInit( ShadowObject* obj );
+void InitShadow( ShadowObject* obj );
+void UpdateCaster( ShadowObject* obj );
+void ShadowRenderWorldZFail();
+
 // Sprite
 void SpriteTexCoords( Sprite* obj,int cell_x,int cell_y,int cell_w,int cell_h,int tex_w,int tex_h,int uv_set );
 void SpriteVertexColor( Sprite* obj,int v,float r,float g,float b );

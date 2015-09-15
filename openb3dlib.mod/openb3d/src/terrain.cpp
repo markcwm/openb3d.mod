@@ -12,8 +12,8 @@
 #define GL_GLEXT_PROTOTYPES
 #include <GL/gl.h>
 #include <GL/glext.h>
-#endif
 
+#endif
 #ifdef WIN32
 #include <gl\GLee.h>
 #endif
@@ -717,10 +717,11 @@ void Terrain::UpdateNormals(){
 Terrain* Terrain::LoadTerrain(string filename,Entity* parent_ent){
 	//filename=Strip(filename); // get rid of path info
 
-	if(File::ResourceFilePath(filename)==""){
+	filename=File::ResourceFilePath(filename);
+	/*if(File::ResourceFilePath(filename)==""){
 		cout << "Error: Cannot Find Terrain: " << filename << endl;
 		return NULL;
-	}
+	}*/
 
 	string filename_left=Left(filename,Len(filename)-4);
 	string filename_right=Right(filename,3);

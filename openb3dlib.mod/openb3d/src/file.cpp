@@ -16,6 +16,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <algorithm>
+
 using namespace std;
 
 static string filepath_in_use;
@@ -83,44 +84,6 @@ string File::ResourceFilePath(string filename){
 
 }
 
-/*string File::ResourceFilePath(string filename){
-
-	if(filename==""){
-		return "";
-	}
-
-	if(filename==""){
-		return "";
-	}
-*/
-	//const char* c_filename=filename.c_str();
-
-	/*NSString* ns_string = [NSString stringWithUTF8String: c_filename];
-
-	NSArray* ns_string_parts = [ns_string componentsSeparatedByString:@"."];
-
-	if([ns_string_parts count]!=2) return "";
-
-	NSString* ns_string_part1=[ns_string_parts objectAtIndex: 0];
-	NSString* ns_string_part2=[ns_string_parts objectAtIndex: 1];
-
-	if([ns_string_part1 length]==0 || [ns_string_part2 length]==0){
-		return "";
-	}
-
-	CFStringRef fileString;
-	fileString = (CFStringRef)[[NSBundle mainBundle] pathForResource:ns_string_part1 ofType:ns_string_part2];
-
-	if(fileString==0) return "";
-
-	//cout << "fileString: " << fileString << endl;
-
-	const char* filename2=CFStringGetCStringPtr(fileString,CFStringGetSystemEncoding());*/
-/*
-	return filename;
-
-}*/
-
 File* File::ReadResourceFile(string filename){
 
 	std::replace(filename.begin(), filename.end(), '\\', '/');
@@ -132,6 +95,8 @@ File* File::ReadResourceFile(string filename){
 	}
 
 	//string filename2=ResourceFilePath(filename);
+
+	
 
 	if(filename==""){
 		cout << "Error: No Filename: " << filename << endl;
@@ -152,30 +117,6 @@ File* File::ReadResourceFile(string filename){
 	return file;
 
 }
-
-/*File* File::ReadResourceFile(string filename){
-
-	string filename2=ResourceFilePath(filename);
-
-	if(filename2==""){
-		cout << "Error: No Filename: " << filename << endl;
-	}
-
-	const char* c_filename=filename2.c_str();
-
-	FILE* pFile=fopen(c_filename,"rb");
-
-	if(pFile==NULL){
-		cout << "Error: Cannot Find Resource File: " << filename << endl;
-		return NULL;
-	}
-
-	File* file=new File();
-	file->pFile=pFile;
-
-	return file;
-
-}*/
 
 File* File::ReadFile(string filename){
 

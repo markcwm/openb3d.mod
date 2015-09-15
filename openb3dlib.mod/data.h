@@ -2,6 +2,7 @@
 
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
+#include "openb3d/src/shadow.h"
 
 #include <vector>
 #include <list>
@@ -10,6 +11,7 @@
 extern "C" {
 
 // Static
+char* StaticChar( int classid,int varid );
 int* StaticInt( int classid,int varid );
 float* StaticFloat( int classid,int varid );
 Entity* StaticEntity( int classid,int varid );
@@ -23,6 +25,7 @@ Camera* StaticIterListCamera( int classid,int varid );
 Entity* StaticIterListEntity( int classid,int varid );
 Entity* StaticIterListEntityArray( int classid,int varid,int index );
 Mesh* StaticIterListMesh( int classid,int varid );
+ShadowObject* StaticIterListShadowObject( int classid,int varid );
 Texture* StaticIterListTexture( int classid,int varid );
 Light* StaticIterVectorLight( int classid,int varid );
 
@@ -68,7 +71,7 @@ Entity* EntityIterListEntity( Entity* obj,int varid );
 CollisionImpact* EntityIterVectorCollisionImpact( Entity* obj,int varid );
 
 // Light
-int* LightInt( Light* obj,int varid );
+char* LightChar( Light* obj,int varid );
 float* LightFloat( Light* obj,int varid );
 
 // Matrix
@@ -88,6 +91,12 @@ vector<Bone*>* MeshVectorBone( Mesh* obj,int varid );
 /*int MeshInfoListSize( MeshInfo* obj,int varid );
 MeshCollider::Triangle* MeshInfoIterVectorTriangle( MeshInfo* obj,int varid );
 MeshCollider::Vertex* MeshInfoIterVectorVertex( MeshInfo* obj,int varid );*/
+
+// ShadowObject
+char* ShadowObjectChar( ShadowObject* obj,int varid );
+int* ShadowObjectInt( ShadowObject* obj,int varid );
+Mesh* ShadowObjectMesh( ShadowObject* obj,int varid );
+Surface* ShadowObjectSurface( ShadowObject* obj,int varid );
 
 // Sprite
 int* SpriteInt( Sprite* obj,int varid );

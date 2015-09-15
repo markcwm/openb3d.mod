@@ -1344,9 +1344,9 @@ void Entity::UpdateChildren(Entity* ent_p){
 	list<Entity*>::iterator it;
 	for(it=ent_p->child_list.begin();it!=ent_p->child_list.end();it++){
 		Entity* p=*it;
-		p->mat.Overwrite(ent_p->mat);
-		p->UpdateMat();
-		UpdateChildren(p);
+		//p->mat.Overwrite(ent_p->mat);
+		p->MQ_Update();
+		//UpdateChildren(p);
 	}
 }
 

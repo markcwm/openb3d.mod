@@ -1,9 +1,5 @@
 ' functions.bmx
 
-'Function ResetShadow( shad:TShadowObject )
-'	ResetShadow_( TShadowObject.GetInstance( shad ) )
-'End Function
-
 ' *** Minib3d only
 
 Rem

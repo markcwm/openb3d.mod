@@ -28,7 +28,7 @@ Type TSurface
 	
 	' brush applied to surface
 	Field brush:TBrush ' new
-	'Field ShaderMat:TShader ' openb3d - NULL
+	'Field ShaderMat:TShader ' *todo* openb3d - NULL
 	
 	' vbo
 	Field vbo_id:Int Ptr ' unsigned int array [7] - 0
