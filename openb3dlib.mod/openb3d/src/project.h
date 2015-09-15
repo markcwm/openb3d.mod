@@ -21,9 +21,12 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
+#include "glew.h"
+
+/*
 //#import <OpenGLES/ES1/gl.h>
 #include <GL/gl.h>
-
+*/
 
 #ifdef PC_HEADER
 #include "all.h"
