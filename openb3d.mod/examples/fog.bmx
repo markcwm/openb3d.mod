@@ -85,7 +85,7 @@ While Not KeyDown(KEY_ESCAPE)
 		EndMax2D()
 	EndIf
 	
-	cam.UpdateFog() ' fog with Max2d fix
+	cam.UpdateFog() ' fog with Max2d fix - needed on Linux
 	
 	Flip
 	

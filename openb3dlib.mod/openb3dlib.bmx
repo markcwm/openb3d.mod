@@ -42,9 +42,6 @@ Import Pub.Glew ' imports Pub.OpenGL
 
 Import "source.bmx"
 
-Import "methods.cpp"
-Import "data.cpp"
-
 ' methods.cpp
 Extern
 

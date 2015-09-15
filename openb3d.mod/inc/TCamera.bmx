@@ -323,7 +323,7 @@ Type TCamera Extends TEntity
 		
 	End Function
 	
-	' fog with Max2d fix
+	' fog with Max2d fix - needed on Linux
 	Method UpdateFog()
 	
 		If TGlobal.fog_enabled[0]=1

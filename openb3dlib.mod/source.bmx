@@ -26,6 +26,7 @@ Import "../../pub.mod/glew.mod/GL/*.h"
 Import "openb3d/src/*.h"
 
 Import "openb3d/src/3ds.cpp"
+Import "openb3d/src/actions.cpp" ' 1.1
 Import "openb3d/src/animation.cpp"
 Import "openb3d/src/animation_keys.cpp"
 Import "openb3d/src/bank.cpp"
@@ -51,6 +52,7 @@ Import "openb3d/src/mesh.cpp"
 Import "openb3d/src/model.cpp"
 Import "openb3d/src/octree.cpp"
 Import "openb3d/src/particle.cpp" ' 0.9
+Import "openb3d/src/physics.cpp" ' 1.1
 Import "openb3d/src/pick.cpp"
 Import "openb3d/src/pivot.cpp"
 Import "openb3d/src/project.cpp"
@@ -74,5 +76,5 @@ Import "openb3d/src/x.cpp"
 Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
 
-Import "openb3d/src/actions.cpp"
-Import "openb3d/src/physics.cpp"
+Import "methods.cpp" ' must be imported in this file on Mac
+Import "data.cpp"
