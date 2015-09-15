@@ -1,7 +1,7 @@
 angros.mod
 ==========
 
-BlitzMax wrapper for Openb3d library version 1.0.
+BlitzMax wrapper for Openb3d library version 1.1.
 
 License
 =======
