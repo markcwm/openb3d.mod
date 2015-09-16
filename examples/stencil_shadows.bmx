@@ -54,6 +54,16 @@ Global animlightcasters:TMesh[1]
 Global animlight1shadows:TShadowObject[1]
 Global animlight2shadows:TShadowObject[1]
 
+' alphamapped quad
+Local quad:TMesh=CreateQuad()
+RotateMesh quad,90,0,0
+ScaleMesh quad,15,15,15
+PositionEntity quad,15,0,55
+
+Local tex2:TTexture=LoadTexture("media/alpha_map.png")
+EntityTexture(quad,tex2)
+EntityFX(quad,32)
+
 ' load anim mesh
 Local anim_time#=0
 Local animmode%=1
@@ -118,6 +128,7 @@ Local lightmove%=1
 Local cylindermove%=1
 Local hidelight1%=0
 Local hidelight2%=0
+Local max2dmode%=0
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -190,6 +201,9 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 		EndIf
 	EndIf
 	
+	' max2d mode
+	If KeyHit(KEY_M) Then max2dmode=Not max2dmode
+	
 	' anim mode
 	If KeyHit(KEY_A) Then animmode:+1
 	If animmode>2 Then animmode=0
@@ -225,9 +239,15 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	
 	Text 0,0,"FPS: "+fps
 	Text 0,20,"Arrows: move camera, L: light movement, C: cube/cylinder movement, A: anim mode = "+animmode
-	Text 0,40,"R: reset static shadows, 1/2: hide lights, light mode = "+lightmode
+	Text 0,40,"R: reset static shadows, 1/2: hide lights, M: Max2d mode, light mode = "+lightmode
 	Text 0,60,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
-	Text 0,80,"shadow alpha = "+TShadowObject.ShadowAlpha[0]
+	
+	If max2dmode
+		BeginMax2D()
+		DrawText "Testing Max2d",0,80
+		EndMax2D()
+		camera.UpdateFog() ' fog with Max2d fix
+	EndIf
 	
 	Flip
 	

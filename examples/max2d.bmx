@@ -65,7 +65,7 @@ While Not KeyDown(KEY_ESCAPE)
 	MoveEntity cam,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
-	TurnEntity teapot,0,1,0
+	TurnEntity teapot,0.5,0.75,1.0
 	
 	RenderWorld
 	
@@ -82,8 +82,7 @@ While Not KeyDown(KEY_ESCAPE)
 	BeginMax2D() ' MiniB3D function
 	UpdateMax2D() ' your function
 	EndMax2D() ' MiniB3D function
-	
-	cam.UpdateFog() ' fog with Max2d fix - needed on Linux
+	cam.UpdateFog() ' fog with Max2d fix
 	
 	Flip
 	Cls

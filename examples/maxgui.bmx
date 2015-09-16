@@ -104,6 +104,7 @@ While Not KeyDown(KEY_ESCAPE)
 			BeginMax2D()
 			DrawText "DrawText",ClientWidth(win)-100,0
 			EndMax2D()
+			cam.UpdateFog() ' fog with Max2d fix
 			
 			Flip
 			
@@ -132,7 +133,8 @@ Type TResize
 			EndMax2D() ' push new values
 			
 			CameraViewport cam,0,0,ClientWidth(win),ClientHeight(win)
-			GraphicsResize ClientWidth(win),ClientHeight(win) ' values used in texture rendering
+			TGlobal.width[0]=ClientWidth(win) ' values used in texture rendering
+			TGlobal.height[0]=ClientHeight(win)
 			resized=False
 		EndIf
 		

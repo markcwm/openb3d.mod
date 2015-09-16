@@ -83,9 +83,9 @@ While Not KeyDown(KEY_ESCAPE)
 		BeginMax2D()
 		DrawText "Testing Max2d",0,40
 		EndMax2D()
+		cam.UpdateFog() ' fog with Max2d fix
 	EndIf
 	
-	cam.UpdateFog() ' fog with Max2d fix
 	
 	Flip
 	

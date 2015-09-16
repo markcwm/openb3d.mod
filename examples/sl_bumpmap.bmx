@@ -219,6 +219,7 @@ While Not KeyDown(KEY_ESCAPE)
 		BeginMax2D()
 		DrawText "Testing Max2d",0,60
 		EndMax2D()
+		camera.UpdateFog() ' fog with Max2d fix
 	EndIf
 	
 	' fix for gl_LightSourceParameters not being restored after Max2d
