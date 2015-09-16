@@ -780,7 +780,7 @@ Function GetSurfaceBrush:TBrush( surf:TSurface )
 	Return surf.GetSurfaceBrush()
 End Function
 
-' Graphics3D is in Angros.B3dglgraphics
+' Graphics3D is in B3dglgraphics.mod
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online doc</a>

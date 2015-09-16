@@ -25,7 +25,7 @@ Rem
 bbdoc: OpenB3D Wrapper
 about: Online Blitz3D doc links.
 End Rem
-Module angros.openb3d
+Module Openb3d.Openb3d
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: zlib/libpng"

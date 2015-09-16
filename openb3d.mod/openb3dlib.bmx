@@ -21,7 +21,7 @@
 '
 Strict
 
-Import Angros.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
+Import Openb3d.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
 Import BRL.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import BRL.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import BRL.BMPLoader		' imports BRL.Pixmap, BRL.EndianStream
@@ -239,7 +239,7 @@ Extern
 	
 	' *** Blitz3D functions, A-Z (in Openb3d)
 	Function AddAnimSeq_:Int( ent:Byte Ptr,length:Int ) = "AddAnimSeq"
-	'AlignToVector_ is in Angros.Openb3dlib
+	'AlignToVector_ is in Openb3dlib.mod
 	Function CreatePlane_:Byte Ptr( divisions:Int,parent:Byte Ptr ) = "CreatePlane"
 	Function CreateTerrain_:Byte Ptr( size:Int,parent:Byte Ptr ) = "CreateTerrain"
 	Function LoadAnimSeq_:Int( ent:Byte Ptr,file:Byte Ptr ) = "LoadAnimSeq"

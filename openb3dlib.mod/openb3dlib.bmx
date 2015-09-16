@@ -24,7 +24,7 @@ SuperStrict
 Rem
 bbdoc: 
 End Rem
-Module angros.openb3dlib
+Module Openb3d.Openb3dlib
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: Wrapper - zlib/libpng"

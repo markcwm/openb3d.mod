@@ -24,7 +24,7 @@ SuperStrict
 Rem
 bbdoc: GLGraphics backend for B3D.
 End Rem
-Module angros.b3dglgraphics
+Module Openb3d.B3dglgraphics
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: zlib/libpng"
@@ -33,7 +33,7 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "History: 1.00 Initial Release"
 
 
-Import angros.openb3d
+Import Openb3d.Openb3d
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
