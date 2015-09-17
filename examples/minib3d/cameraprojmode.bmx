@@ -1,5 +1,4 @@
 ' cameraprojmode.bmx
-' from Minib3d examples
 
 Strict
 

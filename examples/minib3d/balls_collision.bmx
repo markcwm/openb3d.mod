@@ -1,5 +1,4 @@
 ' balls_collision.bmx
-' from Minib3d examples
 
 Strict
 
@@ -112,7 +111,7 @@ CameraRange cam,.5,500
 Local light:TLight=CreateLight(1)
 RotateEntity light,90,0,0
 
-Local mesh:TMesh=LoadMesh("media/test.b3d")
+Local mesh:TMesh=LoadMesh("../media/test.b3d")
 
 ScaleMesh mesh,10,10,10
 

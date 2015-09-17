@@ -1,5 +1,4 @@
 ' maxgui.bmx
-' from minib3d examples
 
 Strict
 
@@ -8,9 +7,9 @@ Import Brl.Timer
 Import Brl.EventQueue
 
 ?Linux
-Import bah.gtkmaxgui
+Import Bah.Gtkmaxgui
 ?Not Linux
-Import maxgui.drivers
+Import Maxgui.Drivers
 ?
 
 SetGraphicsDriver GLMax2DDriver() ' Windows defaults to DX
@@ -31,7 +30,7 @@ PositionEntity cam,0,0,-10
 
 Local light:TLight=CreateLight(1)
 
-Local tex:TTexture=LoadTexture("media/test.png")
+Local tex:TTexture=LoadTexture("../media/test.png")
 
 Local cube:TMesh=CreateCube()
 Local sphere:TMesh=CreateSphere()
@@ -102,7 +101,7 @@ While Not KeyDown(KEY_ESCAPE)
 			Text 20,60,"mouse_y:"+mouse_y
 			
 			BeginMax2D()
-			DrawText "DrawText",ClientWidth(win)-100,0
+			DrawText "Testing Max2d",ClientWidth(win)-120,0
 			EndMax2D()
 			
 			Flip

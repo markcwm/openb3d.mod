@@ -1,5 +1,4 @@
 ' camerapick.bmx
-' from Minib3d examples
 
 Strict
 
@@ -25,7 +24,7 @@ EntityRadius sphere,1
 EntityPickMode sphere,1
 PositionEntity sphere,-10,0,0
 
-Local mesh:TMesh=LoadMesh("media/teapot.b3d")
+Local mesh:TMesh=LoadMesh("../media/teapot.b3d")
 EntityPickMode mesh,2
 ScaleEntity mesh,4,4,4
 

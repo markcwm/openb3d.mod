@@ -1,4 +1,4 @@
-' LoadTexture.bmx
+' LoadTexture2.bmx
 ' supported texture formats
 
 Strict

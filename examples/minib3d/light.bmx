@@ -1,5 +1,4 @@
 ' light.bmx
-' from Minib3d examples
 
 Strict
 
@@ -25,7 +24,7 @@ LightColor light2,0,255,0
 LightRange light2,5
 PositionEntity light2,0,0,10
 
-Local ent1:TMesh=LoadAnimMesh("media/grid.b3d")
+Local ent1:TMesh=LoadAnimMesh("../media/grid.b3d")
 Local ent2:TEntity=CopyEntity(ent1)
 
 PositionEntity ent1,0,10,0

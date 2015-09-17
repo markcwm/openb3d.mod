@@ -1,12 +1,11 @@
 ' tex_render.bmx
-' from Minib3d examples
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
-Graphics3D 800,600,0,2
+Graphics3D 800,600
 
 
 ClearTextureFilters

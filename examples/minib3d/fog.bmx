@@ -1,12 +1,12 @@
 ' fog.bmx
-' from Minib3d examples
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Local width=800,height=600,depth=0,Mode=2
 
+Graphics3D width,height,depth,Mode
 
 ClearTextureFilters
 
@@ -19,10 +19,10 @@ CameraFogRange cam,0,1000
 
 Local light:TLight=CreateLight(1)
 
-Local grid:TMesh=LoadAnimMesh("media/grid.b3d")
+Local grid:TMesh=LoadAnimMesh("../media/grid.b3d")
 ScaleEntity grid,100,1,100
 
-Local tex:TTexture=LoadTexture("media/test.png")
+Local tex:TTexture=LoadTexture("../media/test.png")
 
 Local cube:TMesh=CreateCube()
 Local sphere:TMesh=CreateSphere()

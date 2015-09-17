@@ -1,5 +1,4 @@
 ' bones.bmx
-' from Minib3d examples
 
 Strict
 
@@ -16,7 +15,7 @@ PositionEntity cam,0,10,-15
 Local light:TLight=CreateLight()
 
 ' load anim mesh
-Local ent:TMesh=LoadAnimMesh("media/zombie.b3d")
+Local ent:TMesh=LoadAnimMesh("../media/zombie.b3d")
 
 ' child entity variables
 Local child_ent:TEntity ' this will store child entity of anim mesh

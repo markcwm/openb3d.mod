@@ -1,5 +1,4 @@
 ' max2d.bmx
-' from Minib3d examples
 
 SuperStrict
 
@@ -22,10 +21,10 @@ Local light:TLight=CreateLight()
 RotateEntity light,90,0,0
 
 ' load object we will apply spheremap to - the classic teapot
-Local teapot:TMesh=LoadMesh("media/teapot.b3d")
+Local teapot:TMesh=LoadMesh("../media/teapot.b3d")
 
 ' load texture with color + spherical environment map
-Local tex:TTexture=LoadTexture("media/spheremap.bmp",1+64)
+Local tex:TTexture=LoadTexture("../media/spheremap.bmp",1+64)
 
 ' apply spherical environment map to teapot
 EntityTexture teapot,tex
@@ -39,7 +38,7 @@ Type spark
 End Type
 
 ' Load spark image
-Global sparki:TImage=LoadImage("media/spark.png")
+Global sparki:TImage=LoadImage("../media/spark.png")
 
 ' Set no. of sparks to be created per firework
 Global no_sparks%=500

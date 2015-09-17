@@ -1,5 +1,4 @@
 ' entityvisible.bmx
-' from Minib3d examples
 
 Strict
 

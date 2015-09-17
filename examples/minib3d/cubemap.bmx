@@ -1,5 +1,4 @@
 ' cubemap.bmx
-' from Minib3d examples
 
 Strict
 
@@ -23,15 +22,15 @@ PositionEntity light,10,10,0
 LightRange light,10
 
 ' load object we will apply cubemap to - the classic teapot
-Local teapot:TMesh=LoadMesh("media/teapot.b3d")
+Local teapot:TMesh=LoadMesh("../media/teapot.b3d")
 ScaleEntity teapot,5,5,5
 PositionEntity teapot,0,6,10
 
 ' ground
-Local ground:TMesh=LoadMesh("media/grid.b3d")
+Local ground:TMesh=LoadMesh("../media/grid.b3d")
 ScaleEntity ground,1000,1,1000
 EntityColor ground,168,133,55
-Local ground_tex:TTexture=LoadTexture("media/sand.bmp")
+Local ground_tex:TTexture=LoadTexture("../media/sand.bmp")
 ScaleTexture ground_tex,0.001,0.001
 EntityTexture ground,ground_tex
 
@@ -40,21 +39,21 @@ Local sky:TMesh=CreateSphere(24)
 ScaleEntity sky,500,500,500
 FlipMesh sky
 EntityFX sky,1
-Local sky_tex:TTexture=LoadTexture("media/sky.bmp")
+Local sky_tex:TTexture=LoadTexture("../media/sky.bmp")
 EntityTexture sky,sky_tex
 
 ' cactus
-Local cactus:TMesh=LoadMesh("media/cactus2.b3d")
+Local cactus:TMesh=LoadMesh("../media/cactus2.b3d")
 FitMesh cactus,-5,0,0,2,6,0.5
 
 ' camel
-Local camel:TMesh=LoadMesh("media/camel.b3d")
+Local camel:TMesh=LoadMesh("../media/camel.b3d")
 FitMesh camel,5,0,0,6,5,4
 
 ' load ufo - to give us a dynamic moving object that the cubemap will be able to reflect
 Local ufo_piv:TPivot=CreatePivot()
 PositionEntity ufo_piv,0,10,10
-Local ufo:TMesh=LoadMesh("media/green_ufo.b3d",ufo_piv)
+Local ufo:TMesh=LoadMesh("../media/green_ufo.b3d",ufo_piv)
 PositionEntity ufo,0,0,10
 
 ' create texture with color + cubic environment map

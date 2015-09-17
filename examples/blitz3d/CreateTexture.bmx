@@ -1,11 +1,10 @@
 ' CreateTexture.bmx
-' from Blitz3D help
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D 640,480
 
 
 Local camera:TCamera=CreateCamera()
@@ -48,18 +47,18 @@ BufferToTex(tex,PixmapPixelPtr(pix,0,0))
 EntityTexture cube,tex
 
 
-While Not KeyDown(KEY_ESCAPE)
+While Not KeyDown( KEY_ESCAPE )
 
 	Local pitch#=0
 	Local yaw#=0
 	Local roll#=0
 
-	If KeyDown( key_down )=True Then pitch#=-1	
-	If KeyDown( key_up )=True Then pitch#=1
-	If KeyDown( key_left )=True Then yaw#=-1
-	If KeyDown( key_right )=True Then yaw#=1
-	If KeyDown( key_z )=True Then roll#=-1
-	If KeyDown( key_x )=True Then roll#=1
+	If KeyDown( KEY_DOWN )=True Then pitch#=-1	
+	If KeyDown( KEY_UP )=True Then pitch#=1
+	If KeyDown( KEY_LEFT )=True Then yaw#=-1
+	If KeyDown( KEY_RIGHT )=True Then yaw#=1
+	If KeyDown( KEY_Z )=True Then roll#=-1
+	If KeyDown( KEY_X )=True Then roll#=1
 
 	TurnEntity cube,pitch#,yaw#,roll#
 	
