@@ -82,7 +82,6 @@ While Not KeyDown(KEY_ESCAPE)
 	BeginMax2D() ' MiniB3D function
 	UpdateMax2D() ' your function
 	EndMax2D() ' MiniB3D function
-	cam.UpdateFog() ' fog with Max2d fix
 	
 	Flip
 	Cls

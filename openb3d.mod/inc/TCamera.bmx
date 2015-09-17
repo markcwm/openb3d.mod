@@ -138,7 +138,7 @@ Type TCamera Extends TEntity
 	
 		Local inst:Byte Ptr=CreateCamera_( GetInstance(parent) )
 		Local cam:TCamera=CreateObject(inst)
-		'CopyList(TCamera.cam_list)
+		CopyList(TCamera.cam_list)
 		Return cam
 		
 	End Function

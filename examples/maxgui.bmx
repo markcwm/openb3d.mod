@@ -104,7 +104,6 @@ While Not KeyDown(KEY_ESCAPE)
 			BeginMax2D()
 			DrawText "DrawText",ClientWidth(win)-100,0
 			EndMax2D()
-			cam.UpdateFog() ' fog with Max2d fix
 			
 			Flip
 			

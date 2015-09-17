@@ -74,6 +74,13 @@ Type TBlitz2D
 		
 		glAlphaFunc(GL_GEQUAL,0.5)
 		
+		For Local cam:TCamera=EachIn TCamera.cam_list
+			If cam.hide[0]=0 ' active camera
+				cam.UpdateFog() ' fog with Max2d fix
+				Exit
+			EndIf
+		Next
+		
 	End Function
 	
 End Type
