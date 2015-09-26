@@ -58,29 +58,12 @@ Global animlight2shadows:TShadowObject[1]
 Local quad:TMesh=CreateQuad()
 RotateMesh quad,90,0,0
 ScaleMesh quad,15,15,15
-PositionEntity quad,15,0,55
-
-Local quad2:TMesh=CreateQuad()
-RotateMesh quad2,90,0,0
-ScaleMesh quad2,15,15,15
-PositionEntity quad2,0,0.1,30
-
-Local quad3:TMesh=CreateQuad()
-RotateMesh quad3,90,0,0
-ScaleMesh quad3,15,15,15
-PositionEntity quad3,0,0.2,80
+PositionEntity quad,15,5,55
 
 Local tex2:TTexture=LoadTexture("media/alpha_map.png")
 EntityTexture(quad,tex2)
 EntityFX(quad,32)
-
-Local tex3:TTexture=LoadTexture("media/alpha_map.png")
-EntityTexture(quad2,tex3)
-EntityFX(quad2,32)
-
-Local tex4:TTexture=LoadTexture("media/alpha_map.png")
-EntityTexture(quad3,tex4)
-EntityFX(quad3,32)
+HideEntity quad
 
 ' load anim mesh
 Local anim_time#=0
@@ -147,6 +130,7 @@ Local cylindermove%=1
 Local hidelight1%=0
 Local hidelight2%=0
 Local max2dmode%=0
+Local hidealpha%=1
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -222,6 +206,12 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	' max2d mode
 	If KeyHit(KEY_M) Then max2dmode=Not max2dmode
 	
+	' hide alpha quad
+	If KeyHit(KEY_Q)
+		hidealpha=Not hidealpha
+		If hidealpha Then HideEntity quad Else ShowEntity quad
+	EndIf
+	
 	' anim mode
 	If KeyHit(KEY_A) Then animmode:+1
 	If animmode>2 Then animmode=0
@@ -256,13 +246,14 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	EndIf
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"Arrows: move camera, L: light movement, C: cube/cylinder movement, A: anim mode = "+animmode
-	Text 0,40,"R: reset static shadows, 1/2: hide lights, M: Max2d mode, light mode = "+lightmode
-	Text 0,60,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
+	Text 0,20,"Arrows: move camera, L: light movement, C: cube/cylinder movement"
+	Text 0,40,"R: reset static shadows, 1/2: hide lights, light mode = "+lightmode
+	Text 0,60,"M: Max2d mode, Q: hide alpha quad, A: anim mode = "+animmode
+	Text 0,80,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
 	
 	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,80
+		DrawText "Testing Max2d",0,100
 		EndMax2D()
 	EndIf
 	

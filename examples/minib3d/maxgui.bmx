@@ -12,7 +12,8 @@ Import Bah.Gtkmaxgui
 Import Maxgui.Drivers
 ?
 
-SetGraphicsDriver GLMax2DDriver() ' Windows defaults to DX
+Local flags%=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_STENCILBUFFER|GRAPHICS_ACCUMBUFFER
+SetGraphicsDriver GLMax2DDriver(),flags ' before SetGraphics
 
 Local win:TGadget=CreateWindow("MiniB3D in a GUI window",10,10,512,512)
 
