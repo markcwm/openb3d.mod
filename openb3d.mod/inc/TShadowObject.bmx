@@ -141,13 +141,6 @@ Type TShadowObject
 	
 	' Internal
 	
-	' sets color R/G/B range 0..255 and A range 0..1
-	Method SetShadowColor( R:Int,G:Int,B:Int,A:Int )
-	
-		SetShadowColor_( GetInstance(Self),R,G,B,A )
-		
-	End Method
-	
 	' clears stencil, called in InitShadow
 	Function ShadowInit()
 	

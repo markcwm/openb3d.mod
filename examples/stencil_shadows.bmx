@@ -40,12 +40,13 @@ PointEntity camera,plane
 PositionEntity camera,-40,25,55
 
 ' set shadow vars
-Local static%=1 ' global static or dynamic shadows
+Local static%=0 ' global static or dynamic shadows
 Local numtypes%=25 ' number of cubes or cylinders
 Local size%=100 ' size of area
-Local scolor:Int[]=[100,100,100,100] ' global shadow colors 0..255
 Local numshadows%=0 ' shadow counter
 Local animnumshadows%=0
+Global scolor:Int[]=[100,100,100,100] ' global shadow colors 0..255
+SetShadowColor(scolor[0],scolor[1],scolor[2],scolor[3])
 
 Global lightcasters:TMesh[] ' all shadow casters
 Global light1shadows:TShadowObject[] ' all lights if dynamic
@@ -88,10 +89,8 @@ For Local i%=0 To numtypes-1
 	PositionEntity lightcasters[numshadows],Rnd(size),0,Rnd(size)
 	EntityColor lightcasters[numshadows],Rnd(255),Rnd(255),Rnd(255)
 	light1shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
-	light1shadows[numshadows].SetShadowColor(scolor[0],scolor[1],scolor[2],scolor[3])
 	If static=1
 		light2shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
-		light2shadows[numshadows].SetShadowColor(scolor[0],scolor[1],scolor[2],scolor[3])
 	EndIf
 	
 	numshadows:+1
@@ -109,10 +108,8 @@ For Local i%=0 To numtypes-1
 	FitMesh lightcasters[numshadows],-1,-1,-1,2,5,2 ' use ScaleMesh/FitMesh but not ScaleEntity
 	'ScaleEntity cylinder[i],2,5,2
 	light1shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
-	light1shadows[numshadows].SetShadowColor(scolor[0],scolor[1],scolor[2],scolor[3])
 	If static=1
 		light2shadows[numshadows]=CreateShadow(lightcasters[numshadows],static)
-		light2shadows[numshadows].SetShadowColor(scolor[0],scolor[1],scolor[2],scolor[3])
 	EndIf
 	
 	numshadows:+1
@@ -231,7 +228,19 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 		HideStaticLights(light,light2,hidelight1,hidelight2)
 	EndIf
 	
+	If static=0 ' render first shadow color
+		SetShadowColor(scolor[0],scolor[1],scolor[2],100) ' light1 color
+	EndIf
+	
 	RenderWorld
+	
+	If static=0 ' render second shadow color
+		SetShadowColor(scolor[0],scolor[1],scolor[2],250) ' light2 color
+		If light2.Hidden() Then SetShadowColor(scolor[0],scolor[1],scolor[2],100)
+		If Not light.Hidden() Or Not light2.Hidden() ' don't render if no lights
+			TShadowObject.ShadowRenderWorldZFail() ' re-render shadows
+		EndIf
+	EndIf
 	
 	If static=1
 		ShowStaticLights(light,light2,hidelight1,hidelight2)
@@ -366,7 +375,7 @@ Function CastStaticShadows( numshadows%,animnumshadows%,camera:TCamera,light:TLi
 			For Local i%=0 To numshadows-1
 				light1shadows[i].ResetShadow()
 			Next
-		EndIf
+		EndIf		
 		RenderWorld
 		
 		ShowEntity light

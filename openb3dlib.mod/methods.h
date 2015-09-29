@@ -115,7 +115,7 @@ void TrimVerts(Surface* surf);*/
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius );
 
 // ShadowObject
-void SetShadowColor( ShadowObject* obj,int R,int G,int B,int A );
+void SetShadowColor( int R,int G,int B,int A );
 void ShadowInit();
 void RemoveShadowfromMesh( ShadowObject* obj,Mesh* M );
 void ShadowObjectUpdate( Camera* Cam );

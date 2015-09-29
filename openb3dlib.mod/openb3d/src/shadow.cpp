@@ -511,7 +511,7 @@ void ShadowObject::ShadowRenderWorldZFail(){
 	    glOrtho(0 , 1 , 1 , 0 , 0 , 1);
 
 	    //float no_mat[]={0.0,0.0};
-	    float mat_ambient[]={ShadowRed,ShadowGreen,ShadowBlue,ShadowAlpha};
+	    float mat_ambient[]={ShadowRed,ShadowGreen,ShadowBlue,1.0};
 	    float mat_diffuse[]={0,0,0,ShadowAlpha};
 	    float mat_specular[]={0,0,0,0.5};
 	    float mat_shininess[]={0.0}; // upto 128

@@ -147,7 +147,7 @@ Extern
 	Function PickMain_:Byte Ptr( ax:Float,ay:Float,az:Float,bx:Float,by:Float,bz:Float,radius:Float ) = "PickMain"
 	
 	' ShadowObject
-	Function SetShadowColor_( obj:Byte Ptr,R:Int,G:Int,B:Int,A:Int ) = "SetShadowColor"
+	Function SetShadowColor_( R:Int,G:Int,B:Int,A:Int ) = "SetShadowColor"
 	Function ShadowInit_() = "ShadowInit"
 	Function RemoveShadowfromMesh_( obj:Byte Ptr,M:Byte Ptr ) = "RemoveShadowfromMesh"
 	Function ShadowObjectUpdate_( Cam:Byte Ptr ) = "ShadowObjectUpdate"

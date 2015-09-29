@@ -347,8 +347,8 @@ Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float ra
 
 // ShadowObject
 
-void SetShadowColor( ShadowObject* obj,int R,int G,int B,int A ){
-	obj->SetShadowColor( R,G,B,A );
+void SetShadowColor( int R,int G,int B,int A ){
+	ShadowObject::SetShadowColor( R,G,B,A );
 }
 
 void ShadowInit(){

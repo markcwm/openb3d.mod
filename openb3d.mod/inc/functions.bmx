@@ -2050,18 +2050,26 @@ End Function
 ' *** Shadow
 
 Rem
-bbdoc: undocumented
+bbdoc: Creates stencil shadow, static flag is for static or dynamic shadows
 End Rem
 Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )
 	Return TShadowObject.CreateShadow( parent,Static )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Frees stencil shadow
 End Rem
 Function FreeShadow( shad:TShadowObject )
 	shad.FreeShadow()
 End Function
+
+Rem
+bbdoc: Sets color R/G/B range 0..255 and A range 0..1
+End Rem
+Function SetShadowColor( R:Int,G:Int,B:Int,A:Int )	
+	SetShadowColor_( R,G,B,A )
+End Function
+
 
 ' *** Stencil
 
