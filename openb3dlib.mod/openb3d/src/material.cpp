@@ -820,6 +820,8 @@ void Shader::TurnOff(){
 		// reset texture matrix
 		glMatrixMode(GL_TEXTURE);
 		glLoadIdentity();
+
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 				
 		if (Shader_Tex[ix]->is3D==0){
 			glDisable(GL_TEXTURE_2D);

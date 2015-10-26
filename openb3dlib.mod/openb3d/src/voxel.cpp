@@ -338,6 +338,7 @@ void VoxelSprite::Render(){
 	
 		glDisable(GL_TEXTURE_3D);
 	}
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 
