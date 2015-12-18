@@ -1,5 +1,5 @@
-angros.mod
-==========
+openb3d.mod
+===========
 
 BlitzMax wrapper for Openb3d library version 1.1.
 

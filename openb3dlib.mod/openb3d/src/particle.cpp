@@ -127,6 +127,7 @@ void ParticleBatch::Render(){
 
 	}
 
+	glBindBuffer(GL_ARRAY_BUFFER,0); // reset - necessary for when non-vbo surf follows vbo surf
 	glColorPointer(4,GL_FLOAT,0,&surf->vert_col[0]);
 
 	glVertexPointer(3,GL_FLOAT,0,&surf->vert_coords[0]);

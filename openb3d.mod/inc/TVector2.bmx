@@ -1,5 +1,4 @@
 
-Rem
 Type TVector2
 
 	Field x:Float Ptr,y:Float Ptr,z:Float Ptr
@@ -157,4 +156,3 @@ Type TVector2
 	End Function
 	
 End Type
-EndRem

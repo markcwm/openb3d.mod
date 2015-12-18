@@ -451,6 +451,28 @@ void RemoveTri( Surface* obj,int tri ){
 	obj->RemoveTri( tri );
 }
 
+// Terrain
+
+void UpdateTerrain( Terrain* obj ){
+	obj->UpdateTerrain();
+}
+
+void RecreateROAM( Terrain* obj ){
+	obj->RecreateROAM();
+}
+
+void drawsub( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
+	obj->drawsub( l,v0,v1,v2 );
+}
+
+void TerrainUpdateNormals( Terrain* obj ){
+	obj->UpdateNormals();
+}
+
+void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
+	obj->col_tree_sub( l,v0,v1,v2 );
+}
+
 // Texture
 
 Texture* TexInList( Texture* obj ){

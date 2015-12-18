@@ -56,11 +56,8 @@ Type TMesh Extends TEntity
 		
 		' matrix
 		Local inst:Byte Ptr=MeshMatrix_( GetInstance(Self),MESH_mat_sp )
-		mat_sp=TMatrix2.CreateObject(inst)
-		
-		' meshcollider
-		'inst=MeshMeshCollider_( GetInstance(Self),MESH_c_col_tree )
-		'c_col_tree=TMeshCollider.CreateObject(inst)
+		mat_sp=TMatrix2.GetObject(inst)
+		If mat_sp=Null And inst<>Null Then mat_sp=TMatrix2.CreateObject(inst)
 		
 	End Method
 	
@@ -87,7 +84,7 @@ Type TMesh Extends TEntity
 			Case bones
 				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_bones )-1
 					inst=MeshIterVectorBone_( GetInstance(Self),MESH_bones )
-					Local obj:TBone=TBone( GetObject(inst) )
+					Local obj:TBone=TBone( TEntity.GetObject(inst) )
 					If obj=Null And inst<>Null Then obj=TBone.CreateObject(inst)
 					ListAddLast list,obj
 				Next

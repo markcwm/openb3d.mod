@@ -102,7 +102,7 @@ Type TCamera Extends TEntity
 			Case render_list
 				For Local id:Int=0 To StaticListSize_( CAMERA_class,CAMERA_render_list )-1
 					inst=StaticIterListMesh_( CAMERA_class,CAMERA_render_list )
-					Local obj:TMesh=TMesh( GetObject(inst) )
+					Local obj:TMesh=TMesh( TEntity.GetObject(inst) )
 					If obj=Null And inst<>Null Then obj=TMesh.CreateObject(inst)
 					ListAddLast list,obj
 				Next
@@ -183,7 +183,7 @@ Type TCamera Extends TEntity
 	
 		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,GraphicsHeight()-y ) ' inverted y
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method

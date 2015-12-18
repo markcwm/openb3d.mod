@@ -191,19 +191,24 @@ Type TEntity
 		
 		' entity
 		Local inst:Byte Ptr=EntityEntity_( GetInstance(Self),ENTITY_parent )
-		parent=CreateObject(inst)
+		parent=GetObject(inst)
+		If parent=Null And inst<>Null Then parent=CreateObject(inst)
 		
 		' matrix
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_mat )
-		mat=TMatrix2.CreateObject(inst)
+		mat=TMatrix2.GetObject(inst)
+		If mat=Null And inst<>Null Then mat=TMatrix2.CreateObject(inst)
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_rotmat )
-		rotmat=TMatrix2.CreateObject(inst)
+		rotmat=TMatrix2.GetObject(inst)
+		If rotmat=Null And inst<>Null Then rotmat=TMatrix2.CreateObject(inst)
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_old_mat )
-		old_mat=TMatrix2.CreateObject(inst)
+		old_mat=TMatrix2.GetObject(inst)
+		If old_mat=Null And inst<>Null Then old_mat=TMatrix2.CreateObject(inst)
 		
 		' brush
 		inst=EntityBrush_( GetInstance(Self),ENTITY_brush )
-		brush=TBrush.CreateObject(inst)
+		brush=TBrush.GetObject(inst)
+		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
 	End Method
 	
@@ -496,7 +501,7 @@ Type TEntity
 	
 		Local inst:Byte Ptr=GetParentEntity_( GetInstance(Self) )
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method
@@ -587,7 +592,7 @@ Type TEntity
 	
 		Local inst:Byte Ptr=EntityPick_( GetInstance(Self),Range )
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method
@@ -597,7 +602,7 @@ Type TEntity
 	
 		Local inst:Byte Ptr=LinePick_( x,y,z,dx,dy,dz,radius )
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method
@@ -713,7 +718,7 @@ Type TEntity
 	
 		Local inst:Byte Ptr=EntityCollided_( GetInstance(Self),type_no )
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method
@@ -770,7 +775,7 @@ Type TEntity
 	
 		Local inst:Byte Ptr=CollisionEntity_( GetInstance(Self),index )
 		Local ent:TEntity=GetObject(inst)
-		If ent=Null And ent<>Null Then ent=CreateObject(inst)
+		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent
 		
 	End Method

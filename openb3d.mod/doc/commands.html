@@ -63,7 +63,7 @@ undocumented.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#AmbientShader>AmbientShader</a></td><td class=docright>
-undocumented.
+Set shader to be used for all surfaces.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Animate>Animate</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a>
@@ -273,7 +273,7 @@ undocumented.
 Load shader from two strings, vertex and fragment.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateShadow>CreateShadow</a></td><td class=docright>
-undocumented.
+Creates stencil shadow, static flag is for static or dynamic shadows.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateSphere>CreateSphere</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a>
@@ -304,6 +304,24 @@ undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#DepthBufferToTex>DepthBufferToTex</a></td><td class=docright>
 Copy the contents of the depth buffer to a texture.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleFunction>EmitterParticleFunction</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleLife>EmitterParticleLife</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleSpeed>EmitterParticleSpeed</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterRate>EmitterRate</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterVariance>EmitterVariance</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterVector>EmitterVector</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndMax2D>EndMax2D</a></td><td class=docright>
 End using Max2D functions.
@@ -423,7 +441,7 @@ undocumented.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeEntity">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeShadow>FreeShadow</a></td><td class=docright>
-undocumented.
+Frees stencil shadow.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeTexture>FreeTexture</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
@@ -620,6 +638,9 @@ Like CopyMesh but for instancing effects.
 <tr><td class=docleft width=1%><a href=#ResetEntity>ResetEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#ResetShadow>ResetShadow</a></td><td class=docright>
+Reset flag to update static shadow.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#RotateEntity>RotateEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a>
 </td></tr>
@@ -679,6 +700,9 @@ Set a shader variable name of a uniform ivec3 type to 3 integer values.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetInteger4>SetInteger4</a></td><td class=docright>
 Set a shader variable name of a uniform ivec4 type to 4 integer values.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetShadowColor>SetShadowColor</a></td><td class=docright>
+Sets color R/G/B range 0..255 and A range 0..1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeEntity>ShadeEntity</a></td><td class=docright>
 Apply shader to an entity.
@@ -819,7 +843,7 @@ Bind 4 integer variables to a shader variable name of a uniform ivec4 type.
 Sends matrix data to a shader variable name of a uniform mat4 type.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseStencil>UseStencil</a></td><td class=docright>
-undocumented.
+stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 undocumented.
@@ -1070,7 +1094,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=AmbientShader>
 <tr><td class=doctop colspan=2>Function AmbientShader( material:TShader )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set shader to be used for all surfaces.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=Animate>
@@ -1289,7 +1313,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyList>
-<tr><td class=doctop colspan=2>Function CopyList( list:TList,listarray:TList[]=Null )</td></tr>
+<tr><td class=doctop colspan=2>Function CopyList( list:TList,listarray:TList[]=Null ) ' list should be Null if accessing listarray</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Global list and listarray. Call this before accessing lists.</td></tr>
 </table>
 <br>
@@ -1420,7 +1444,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateShadow>
 <tr><td class=doctop colspan=2>Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates stencil shadow, static flag is for static or dynamic shadows.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateSphere>
@@ -1471,6 +1495,36 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=DepthBufferToTex>
 <tr><td class=doctop colspan=2>Function DepthBufferToTex( tex:TTexture,cam:TCamera=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy the contents of the depth buffer to a texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleFunction>
+<tr><td class=doctop colspan=2>Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleLife>
+<tr><td class=doctop colspan=2>Function EmitterParticleLife( emit:TParticleEmitter,l:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleSpeed>
+<tr><td class=doctop colspan=2>Function EmitterParticleSpeed( emit:TParticleEmitter,s:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterRate>
+<tr><td class=doctop colspan=2>Function EmitterRate( emit:TParticleEmitter,r:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterVariance>
+<tr><td class=doctop colspan=2>Function EmitterVariance( emit:TParticleEmitter,v:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterVector>
+<tr><td class=doctop colspan=2>Function EmitterVector( emit:TParticleEmitter,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndMax2D>
@@ -1670,7 +1724,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeShadow>
 <tr><td class=doctop colspan=2>Function FreeShadow( shad:TShadowObject )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Frees stencil shadow.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeTexture>
@@ -1998,6 +2052,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=ResetShadow>
+<tr><td class=doctop colspan=2>Function ResetShadow( shad:TShadowObject )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Reset flag to update static shadow.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=RotateEntity>
 <tr><td class=doctop colspan=2>Function RotateEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a></td></tr>
@@ -2096,6 +2155,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=SetInteger4>
 <tr><td class=doctop colspan=2>Function SetInteger4( material:TShader,name:String,v1:Int,v2:Int,v3:Int,v4:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set a shader variable name of a uniform ivec4 type to 4 integer values.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetShadowColor>
+<tr><td class=doctop colspan=2>Function SetShadowColor( R:Int,G:Int,B:Int,A:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets color R/G/B range 0..255 and A range 0..1.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadeEntity>
@@ -2330,7 +2394,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=UseStencil>
 <tr><td class=doctop colspan=2>Function UseStencil( stencil:TStencil )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>stencil to use, set to Null to disable stencil.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseSurface>

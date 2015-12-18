@@ -186,11 +186,13 @@ Type TCollisionImpact
 		
 		' entity
 		Local inst:Byte Ptr=CollisionImpactEntity_( GetInstance(Self),COLLISIONIMPACT_ent )
-		ent=TEntity.CreateObject(inst)
+		ent=TEntity.GetObject(inst)
+		If ent=Null And inst<>Null Then ent=TEntity.CreateObject(inst)
 		
 		' surface
 		inst=CollisionImpactSurface_( GetInstance(Self),COLLISIONIMPACT_surf )
-		surf=TSurface.CreateObject(inst)
+		surf=TSurface.GetObject(inst)
+		If surf=Null And inst<>Null Then surf=TSurface.CreateObject(inst)
 		
 	End Method
 	

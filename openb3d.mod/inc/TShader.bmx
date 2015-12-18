@@ -41,14 +41,29 @@ bbdoc: Shader
 End Rem
 Type TShader
 
+	' wrapper
+	Global shader_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TShader( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TShader=New TShader
+		shader_map.Insert( String(Long(inst)),obj )
 		obj.instance=inst
 		Return obj
+		
+	End Function
+	
+	Function DeleteObject( inst:Byte Ptr )
+	
+		shader_map.Remove( String(Long(inst)) )
+		
+	End Function
+	
+	Function GetObject:TShader( inst:Byte Ptr )
+	
+		Return TShader( shader_map.ValueForKey( String(Long(inst)) ) )
 		
 	End Function
 	

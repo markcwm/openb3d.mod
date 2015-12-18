@@ -388,7 +388,7 @@ End Function
 Rem
 bbdoc: Global list and listarray. Call this before accessing lists.
 EndRem
-Function CopyList( list:TList,listarray:TList[]=Null )
+Function CopyList( list:TList,listarray:TList[]=Null ) ' list should be Null if accessing listarray
 
 	Select list
 	
@@ -399,7 +399,7 @@ Function CopyList( list:TList,listarray:TList[]=Null )
 			
 		Case TCollisionPair.cp_list
 			TCollisionPair.CopyList_( TCollisionPair.cp_list )
-		Case Null ' If first parameter Null
+		Case Null
 			Select listarray
 				Case TCollisionPair.ent_lists
 					TCollisionPair.CopyList_( Null,TCollisionPair.ent_lists )
@@ -430,6 +430,9 @@ Function CopyList( list:TList,listarray:TList[]=Null )
 		Case TShadowObject.shadow_list
 			TShadowObject.CopyList_( TShadowObject.shadow_list )
 		
+		Case TTerrain.terrain_list
+			TTerrain.CopyList_( TTerrain.terrain_list )
+			
 		Case TTexture.tex_list
 			TTexture.CopyList_( TTexture.tex_list )
 			

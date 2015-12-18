@@ -296,16 +296,6 @@ const int MESH_max_x=			12;
 const int MESH_max_y=			13;
 const int MESH_max_z=			14;
 
-// MeshCollider varid
-const int MESHCOLLIDER_coords=	1;
-const int MESHCOLLIDER_surface=	2;
-const int MESHCOLLIDER_verts=	3;
-const int MESHCOLLIDER_index=	4;
-
-// MeshInfo varid
-const int MESHINFO_tri_list=	1;
-const int MESHINFO_vert_list=	2;
-
 // Pick varid
 const int PICK_ent_list=		1;
 const int PICK_picked_x=		2;
@@ -377,6 +367,18 @@ const int SURFACE_vbo_enabled=		24;
 const int SURFACE_reset_vbo=		25;
 const int SURFACE_alpha_enable=		26;	
 
+// Terrain varid
+const int TERRAIN_terrain_list=	1;
+const int TERRAIN_triangleindex=2;
+const int TERRAIN_mesh_info=	3;
+const int TERRAIN_size=			4;
+const int TERRAIN_vsize=		5;
+const int TERRAIN_level2dzsize=	6;
+const int TERRAIN_height=		7;
+const int TERRAIN_c_col_tree=	8;
+const int TERRAIN_eyepoint=		9;
+const int TERRAIN_ShaderMat=	10;
+
 // Texture varid
 const int TEXTURE_texture=		1;
 const int TEXTURE_tex_list=		2;
@@ -397,11 +399,6 @@ const int TEXTURE_no_frames=	16;
 const int TEXTURE_framebuffer=	17;
 const int TEXTURE_cube_face=	18;
 const int TEXTURE_cube_mode=	19;
-
-// Vector varid
-const int VECTOR_x=	1;
-const int VECTOR_y=	2;
-const int VECTOR_z=	3;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -453,6 +450,10 @@ int* StaticInt( int classid,int varid ){
 			switch (varid){
 				case SHADOWOBJECT_parallel : return &ShadowObject::parallel;
 				case SHADOWOBJECT_midStencilVal : return &ShadowObject::midStencilVal;
+			}
+		case TERRAIN_class :
+			switch (varid){
+				case TERRAIN_triangleindex : return &Terrain::triangleindex;
 			}
 	}
 	return NULL;
@@ -575,7 +576,12 @@ int StaticListSize( int classid,int varid ){
 		case TEXTURE_class :
 			switch (varid){
 				case TEXTURE_tex_list : return Texture::tex_list.size();
+			}			
+		case TERRAIN_class :
+			switch (varid){
+				case TERRAIN_terrain_list : return Terrain::terrain_list.size();
 			}
+
 	}
 	return 0;
 }
@@ -710,6 +716,27 @@ ShadowObject* StaticIterListShadowObject( int classid,int varid ){
 		case SHADOWOBJECT_class :
 			switch (varid){
 				case SHADOWOBJECT_shadow_list : objlist=ShadowObject::shadow_list; break;
+			}
+	}
+	if (objlist.size() == 0) return NULL;
+	if (id == 0) it=objlist.begin();
+	obj=*it;
+	it++;
+	id++;
+	if (id == objlist.size()) id=0;
+	return obj;
+}
+
+Terrain* StaticIterListTerrain( int classid,int varid ){
+	static int id=0;
+	static list<Terrain*> objlist;
+	static list<Terrain*>::iterator it;
+	static Terrain* obj;
+	
+	switch (classid){
+		case TERRAIN_class :
+			switch (varid){
+				case TERRAIN_terrain_list : objlist=Terrain::terrain_list; break;
 			}
 	}
 	if (objlist.size() == 0) return NULL;
@@ -1177,13 +1204,6 @@ Matrix* MeshMatrix( Mesh* obj,int varid ){
 	return NULL;
 }
 
-/*MeshCollider* MeshMeshCollider( Mesh* obj,int varid ){
-	switch (varid){
-		case MESH_c_col_tree : return obj->c_col_tree;
-	}
-	return NULL;
-}*/
-
 int MeshListSize( Mesh* obj,int varid ){
 	switch (varid){
 		case MESH_surf_list : return obj->surf_list.size();
@@ -1236,52 +1256,6 @@ vector<Bone*>* MeshVectorBone( Mesh* obj,int varid ){
 	}
 	return NULL;
 }
-
-// MeshInfo
-
-/*int MeshInfoListSize( MeshInfo* obj,int varid ){
-	switch (varid){
-		case MESHINFO_tri_list : return obj->tri_list.size();
-		case MESHINFO_vert_list : return obj->vert_list.size();
-	}
-	return 0;
-}
-
-MeshCollider::Triangle* MeshInfoIterVectorTriangle( MeshInfo* obj,int varid ){
-	static int id=0;
-	static vector<MeshCollider::Triangle> objlist;
-	static vector<MeshCollider::Triangle>::iterator it;
-	static MeshCollider::Triangle* obj2;
-	
-	switch (varid){
-		case MESHINFO_tri_list : objlist=obj->tri_list; break;
-	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=&(*it);
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
-	return obj2;
-}
-
-MeshCollider::Vertex* MeshInfoIterVectorVertex( MeshInfo* obj,int varid ){
-	static int id=0;
-	static vector<MeshCollider::Vertex> objlist;
-	static vector<MeshCollider::Vertex>::iterator it;
-	static MeshCollider::Vertex* obj2;
-	
-	switch (varid){
-		case MESHINFO_vert_list : objlist=obj->vert_list; break;
-	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=&(*it);
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
-	return obj2;
-}*/
 
 // ShadowObject
 
@@ -1401,6 +1375,32 @@ Shader* SurfaceShader( Surface* obj,int varid ){
 	return NULL;
 }
 
+// Terrain
+
+float* TerrainFloat( Terrain* obj,int varid ){
+	switch (varid){
+		case TERRAIN_size : return &obj->size;
+		case TERRAIN_vsize : return &obj->vsize;
+		case TERRAIN_level2dzsize : return &obj->level2dzsize[0];
+		case TERRAIN_height : return obj->height;		
+	}
+	return NULL;
+}
+
+Camera* TerrainCamera( Terrain* obj,int varid ){
+	switch (varid){
+		case TERRAIN_eyepoint : return obj->eyepoint;
+	}
+	return NULL;
+}
+
+Shader* TerrainShader( Terrain* obj,int varid ){
+	switch (varid){
+		case TERRAIN_ShaderMat : return obj->ShaderMat;
+	}
+	return NULL;
+}
+
 // Texture
 
 int* TextureInt( Texture* obj,int varid ){
@@ -1444,16 +1444,5 @@ const char* TextureString( Texture* obj,int varid ){
 	}
 	return NULL;
 }
-
-// Vector
-
-/*float* VectorFloat( Vector* obj,int varid ){
-	switch (varid){
-		case VECTOR_x : return &obj->x;
-		case VECTOR_y : return &obj->y;
-		case VECTOR_z : return &obj->z;
-	}
-	return NULL;
-}*/
 
 }

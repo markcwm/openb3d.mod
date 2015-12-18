@@ -560,9 +560,16 @@ void Terrain::RecreateROAM(){
 
 
 	v[0][0] = 0.0; 		v[0][2] = size;
+	v[0][1] = height[(int)size] * vsize;
+
 	v[1][0] = size; 	v[1][2] = size;
+	v[1][1] = height[(int)(size*(size+1))] * vsize;
+
 	v[2][0] = size; 	v[2][2] = 0;
+	v[2][1] = height[(int)(size*size)] * vsize;
+
 	v[3][0] = 0.0; 		v[3][2] = 0;
+	v[3][1] = height[0] * vsize;
 
 	// diamond radius - apply entity scale
 	float rx=EntityScaleX(true);
@@ -579,10 +586,7 @@ void Terrain::RecreateROAM(){
 
 	//MQ_GetMatrix(tmat, true);
 
-	v[0][1] = height[(int)(v[0][0]*size+ v[0][2])] * vsize;
-	v[1][1] = height[(int)(v[1][0]*size+ v[1][2])] * vsize;
-	v[2][1] = height[(int)(v[2][0]*size+ v[2][2])] * vsize;
-	v[3][1] = height[(int)(v[3][0]*size+ v[3][2])] * vsize;
+
 
 	triangleindex = 0;
 

@@ -59,15 +59,19 @@ Type TBone Extends TEntity
 		
 		' animationkeys
 		Local inst:Byte Ptr=BoneAnimationKeys_( GetInstance(Self),BONE_keys )
-		keys=TAnimationKeys.CreateObject(inst)
+		keys=TAnimationKeys.GetObject(inst)
+		If keys=Null And inst<>Null Then keys=TAnimationKeys.CreateObject(inst)
 		
 		' matrix
 		inst=BoneMatrix_( GetInstance(Self),BONE_mat2 )
-		mat2=TMatrix2.CreateObject(inst)
+		mat2=TMatrix2.GetObject(inst)
+		If mat2=Null And inst<>Null Then mat2=TMatrix2.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_inv_mat )
-		inv_mat=TMatrix2.CreateObject(inst)
+		inv_mat=TMatrix2.GetObject(inst)
+		If inv_mat=Null And inst<>Null Then inv_mat=TMatrix2.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_tform_mat )
-		tform_mat=TMatrix2.CreateObject(inst)
+		tform_mat=TMatrix2.GetObject(inst)
+		If tform_mat=Null And inst<>Null Then tform_mat=TMatrix2.CreateObject(inst)
 		
 	End Method
 	

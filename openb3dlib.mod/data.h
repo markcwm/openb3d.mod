@@ -26,6 +26,7 @@ Entity* StaticIterListEntity( int classid,int varid );
 Entity* StaticIterListEntityArray( int classid,int varid,int index );
 Mesh* StaticIterListMesh( int classid,int varid );
 ShadowObject* StaticIterListShadowObject( int classid,int varid );
+Terrain* StaticIterListTerrain( int classid,int varid );
 Texture* StaticIterListTexture( int classid,int varid );
 Light* StaticIterVectorLight( int classid,int varid );
 
@@ -81,16 +82,10 @@ float* MatrixFloat( Matrix* obj,int varid );
 int* MeshInt( Mesh* obj,int varid );
 float* MeshFloat( Mesh* obj,int varid );
 Matrix* MeshMatrix( Mesh* obj,int varid );
-//MeshCollider* MeshMeshCollider( Mesh* obj,int varid );
 int MeshListSize( Mesh* obj,int varid );
 Surface* MeshIterListSurface( Mesh* obj,int varid );
 Bone* MeshIterVectorBone( Mesh* obj,int varid );
 vector<Bone*>* MeshVectorBone( Mesh* obj,int varid );
-
-// MeshInfo
-/*int MeshInfoListSize( MeshInfo* obj,int varid );
-MeshCollider::Triangle* MeshInfoIterVectorTriangle( MeshInfo* obj,int varid );
-MeshCollider::Vertex* MeshInfoIterVectorVertex( MeshInfo* obj,int varid );*/
 
 // ShadowObject
 char* ShadowObjectChar( ShadowObject* obj,int varid );
@@ -110,14 +105,15 @@ float* SurfaceFloat( Surface* obj,int varid );
 Brush* SurfaceBrush( Surface* obj,int varid );
 Shader* SurfaceShader( Surface* obj,int varid );
 
-// Texture
+// Terrain
+float* TerrainFloat( Terrain* obj,int varid );
+Camera* TerrainCamera( Terrain* obj,int varid );
+Shader* TerrainShader( Terrain* obj,int varid );
 
+// Texture
 int* TextureInt( Texture* obj,int varid );
 unsigned int* TextureUInt( Texture* obj,int varid );
 float* TextureFloat( Texture* obj,int varid );
 const char* TextureString( Texture* obj,int varid );
-
-// Vector
-//float* VectorFloat( Vector* obj,int varid );
 
 } // extern "C"

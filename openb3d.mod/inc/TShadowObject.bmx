@@ -96,13 +96,17 @@ Type TShadowObject
 		
 		' mesh
 		Local inst:Byte Ptr=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_Parent )
-		Parent=TMesh.CreateObject(inst)
+		Parent=TMesh( TEntity.GetObject(inst) )
+		If Parent=Null And inst<>Null Then Parent=TMesh.CreateObject(inst)
+		
 		inst=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_ShadowMesh )
-		ShadowMesh=TMesh.CreateObject(inst)
+		ShadowMesh=TMesh( TEntity.GetObject(inst) )
+		If ShadowMesh=Null And inst<>Null Then ShadowMesh=TMesh.CreateObject(inst)
 		
 		' surface
 		inst=ShadowObjectSurface_( GetInstance(Self),SHADOWOBJECT_ShadowVolume )
-		ShadowVolume=TSurface.CreateObject(inst)
+		ShadowVolume=TSurface.GetObject(inst)
+		If ShadowVolume=Null And inst<>Null Then ShadowVolume=TSurface.CreateObject(inst)
 		
 	End Method
 	
@@ -115,7 +119,7 @@ Type TShadowObject
 			Case shadow_list
 				For Local id:Int=0 To StaticListSize_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )-1
 					inst=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )
-					Local obj:TShadowObject=TShadowObject( GetObject(inst) )
+					Local obj:TShadowObject=GetObject(inst)
 					If obj=Null And inst<>Null Then obj=CreateObject(inst)
 					ListAddLast list,obj
 				Next

@@ -28,7 +28,7 @@ Type TSurface
 	
 	' brush applied to surface
 	Field brush:TBrush ' new
-	'Field ShaderMat:TShader ' openb3d - NULL
+	Field ShaderMat:TShader ' openb3d - NULL
 	
 	' vbo
 	Field vbo_id:Int Ptr ' unsigned int array [7] - 0
@@ -116,11 +116,13 @@ Type TSurface
 		
 		' brush
 		Local inst:Byte Ptr=SurfaceBrush_( GetInstance(Self),SURFACE_brush )
-		brush=TBrush.CreateObject(inst)
+		brush=TBrush.GetObject(inst)
+		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
 		' shader
-		'inst=SurfaceShader_( GetInstance(Self),SURFACE_ShaderMat )
-		'ShaderMat=TShader.CreateObject(inst)
+		inst=SurfaceShader_( GetInstance(Self),SURFACE_ShaderMat )
+		ShaderMat=TShader.GetObject(inst)
+		If ShaderMat=Null And inst<>Null Then ShaderMat=TShader.CreateObject(inst)
 		
 	End Method
 	

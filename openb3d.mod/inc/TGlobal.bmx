@@ -78,6 +78,7 @@ Type TGlobal
 		TLight.InitGlobals()
 		TPick.InitGlobals()
 		TShadowObject.InitGlobals()
+		TTerrain.InitGlobals()
 		
 	End Function
 	

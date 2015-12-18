@@ -145,6 +145,14 @@ void UpdateVBO( Surface* obj );
 void FreeVBO( Surface* obj );
 void RemoveTri( Surface* obj,int tri );
 
+// Terrain
+void UpdateTerrain( Terrain* obj );
+void RecreateROAM( Terrain* obj );
+void drawsub( Terrain* obj,int l,float v0[],float v1[],float v2[] );
+void TerrainUpdateNormals( Terrain* obj );
+//virtual void TreeCheck(CollisionInfo* ci);
+void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] );
+
 // Texture
 Texture* TexInList( Texture* obj );
 void FilterFlags( Texture* obj );

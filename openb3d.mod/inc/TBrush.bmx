@@ -72,7 +72,8 @@ Type TBrush
 		' texture
 		For Local id:Int=0 To 7
 			Local inst:Byte Ptr=BrushTextureArray_( GetInstance(Self),BRUSH_tex,id )
-			tex[id]=TTexture.CreateObject(inst)
+			tex[id]=TTexture.GetObject(inst)
+			If tex[id]=Null And inst<>Null Then tex[id]=TTexture.CreateObject(inst)
 		Next
 		
 	End Method

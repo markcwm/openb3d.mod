@@ -177,6 +177,13 @@ Extern
 	Function FreeVBO_( obj:Byte Ptr ) = "FreeVBO"
 	Function RemoveTri_( obj:Byte Ptr,tri:Int ) = "RemoveTri"
 	
+	' Terrain
+	Function UpdateTerrain_( obj:Byte Ptr ) = "UpdateTerrain"
+	Function RecreateROAM_( obj:Byte Ptr ) = "RecreateROAM"
+	Function drawsub_( obj:Byte Ptr,l:Int,v0:Float Ptr,v1:Float Ptr,v2:Float Ptr ) = "drawsub"
+	Function TerrainUpdateNormals_( obj:Byte Ptr ) = "TerrainUpdateNormals"
+	Function col_tree_sub_( obj:Byte Ptr,l:Int,v0:Float Ptr,v1:Float Ptr,v2:Float Ptr ) = "col_tree_sub"
+	
 	' Texture
 	Function TexInList_:Byte Ptr( obj:Byte Ptr ) = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr ) = "FilterFlags"
@@ -203,6 +210,7 @@ Extern
 	Function StaticIterListEntityArray_:Byte Ptr( classid:Int,varid:Int,index:Int ) = "StaticIterListEntityArray"
 	Function StaticIterListMesh_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListMesh"
 	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListShadowObject"
+	Function StaticIterListTerrain_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListTerrain"
 	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListTexture"
 	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterVectorLight"
 	
@@ -248,7 +256,7 @@ Extern
 	Function EntityIterVectorCollisionImpact_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityIterVectorCollisionImpact"
 	
 	' Light
-	Function LightChar_:Int Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"
+	Function LightChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"
 	Function LightFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "LightFloat"
 	
 	' Matrix
@@ -258,16 +266,10 @@ Extern
 	Function MeshInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "MeshInt"
 	Function MeshFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "MeshFloat"
 	Function MeshMatrix_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshMatrix"
-	'Function MeshMeshCollider_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshMeshCollider"
 	Function MeshListSize_:Int( obj:Byte Ptr,varid:Int ) = "MeshListSize"
 	Function MeshIterListSurface_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshIterListSurface"
 	Function MeshIterVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshIterVectorBone"
 	Function MeshVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshVectorBone"
-	
-	' MeshInfo
-	'Function MeshInfoListSize_:Int( obj:Byte Ptr,varid:Int ) = "MeshInfoListSize"
-	'Function MeshInfoIterVectorTriangle_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshInfoIterVectorTriangle"
-	'Function MeshInfoIterVectorVertex_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshInfoIterVectorVertex"
 	
 	' ShadowObject
 	Function ShadowObjectChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectChar"
@@ -287,14 +289,16 @@ Extern
 	Function SurfaceBrush_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "SurfaceBrush"
 	Function SurfaceShader_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "SurfaceShader"
 	
+	' Terrain
+	Function TerrainFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "TerrainFloat"
+	Function TerrainCamera_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TerrainCamera"
+	Function TerrainShader_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TerrainShader"
+	
 	' Texture
 	Function TextureInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "TextureInt"
 	Function TextureUInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "TextureUInt"
 	Function TextureFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "TextureFloat"
 	Function TextureString_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TextureString"
-	
-	' Vector2
-	Function VectorFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "VectorFloat"
 	
 End Extern
 
@@ -589,16 +593,6 @@ Const MESH_max_x:Int=			12
 Const MESH_max_y:Int=			13
 Const MESH_max_z:Int=			14
 
-' MeshCollider varid
-'Const MESHCOLLIDER_coords:Int=	1
-'Const MESHCOLLIDER_surface:Int=	2
-'Const MESHCOLLIDER_verts:Int=	3
-'Const MESHCOLLIDER_index:Int=	4
-
-' MeshInfo varid
-'Const MESHINFO_tri_list:Int=	1
-'Const MESHINFO_vert_list:Int=	2
-
 ' Pick varid
 Const PICK_ent_list:Int=		1
 Const PICK_picked_x:Int=		2
@@ -670,6 +664,18 @@ Const SURFACE_vbo_enabled:Int=		24
 Const SURFACE_reset_vbo:Int=		25
 Const SURFACE_alpha_enable:Int=		26
 
+' Terrain varid
+Const TERRAIN_terrain_list:Int=	1
+Const TERRAIN_triangleindex:Int=2
+Const TERRAIN_mesh_info:Int=	3
+Const TERRAIN_size:Int=			4
+Const TERRAIN_vsize:Int=		5
+Const TERRAIN_level2dzsize:Int=	6
+Const TERRAIN_height:Int=		7
+Const TERRAIN_c_col_tree:Int=	8
+Const TERRAIN_eyepoint:Int=		9
+Const TERRAIN_ShaderMat:Int=	10
+
 ' Texture varid
 Const TEXTURE_texture:Int=		1
 Const TEXTURE_tex_list:Int=		2
@@ -690,8 +696,3 @@ Const TEXTURE_no_frames:Int=	16
 Const TEXTURE_framebuffer:Int=	17
 Const TEXTURE_cube_face:Int=	18
 Const TEXTURE_cube_mode:Int=	19
-
-' Vector varid
-'Const VECTOR_x:Int=	1
-'Const VECTOR_y:Int=	2
-'Const VECTOR_z:Int=	3

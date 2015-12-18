@@ -6,6 +6,48 @@ Type TVertex ' struct
 
 	Field coords:TVector2
 	
+	' wrapper
+	Global vertex_map:TMap=New TMap
+	Field instance:Byte Ptr
+	
+	Function CreateObject:TVertex( inst:Byte Ptr ) ' Create and map object from C++ instance
+	
+		If inst=Null Then Return Null
+		Local obj:TVertex=New TVertex
+		vertex_map.Insert( String(Long(inst)),obj )
+		obj.instance=inst
+		obj.InitFields()
+		Return obj
+		
+	End Function
+	
+	Function DeleteObject( inst:Byte Ptr )
+	
+		vertex_map.Remove( String(Long(inst)) )
+		
+	End Function
+	
+	Function GetObject:TVertex( inst:Byte Ptr )
+	
+		Return TVertex( vertex_map.ValueForKey( String(Long(inst)) ) )
+		
+	End Function
+	
+	Function GetInstance:Byte Ptr( obj:TVertex ) ' Get C++ instance from object
+	
+		If obj=Null Then Return Null ' Attempt to pass null object to function
+		Return obj.instance
+		
+	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		Local inst:Byte Ptr=VertexVector_( GetInstance(Self),MESHCOLLIDER_coords )
+		coords=TVector2.GetObject(inst)
+		If coords=Null And inst<>Null Then coords=TVector2.CreateObject(inst)
+		
+	End Method
+	
 End Type
 
 Type TTriangle ' struct
@@ -14,15 +56,53 @@ Type TTriangle ' struct
 	Field verts:Int Ptr ' array [3]
 	Field index:Int Ptr
 	
+	' wrapper
+	Global triangle_map:TMap=New TMap
+	Field instance:Byte Ptr
+	
+	Function CreateObject:TTriangle( inst:Byte Ptr ) ' Create and map object from C++ instance
+	
+		If inst=Null Then Return Null
+		Local obj:TTriangle=New TTriangle
+		triangle_map.Insert( String(Long(inst)),obj )
+		obj.instance=inst
+		obj.InitFields()
+		Return obj
+		
+	End Function
+	
+	Function DeleteObject( inst:Byte Ptr )
+	
+		triangle_map.Remove( String(Long(inst)) )
+		
+	End Function
+	
+	Function GetObject:TTriangle( inst:Byte Ptr )
+	
+		Return TTriangle( triangle_map.ValueForKey( String(Long(inst)) ) )
+		
+	End Function
+	
+	Function GetInstance:Byte Ptr( obj:TTriangle ) ' Get C++ instance from object
+	
+		If obj=Null Then Return Null ' Attempt to pass null object to function
+		Return obj.instance
+		
+	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		surface=TriangleInt_( GetInstance(Self),MESHCOLLIDER_surface )
+		verts=TriangleInt_( GetInstance(Self),MESHCOLLIDER_verts )
+		index=TriangleInt_( GetInstance(Self),MESHCOLLIDER_index )
+		
+	End Method
+	
 End Type
 
 Type TMeshCollider ' returned by C_CreateColTree
 
 	' structs are unnamed, accessed by vectors
-	
-	' data fields are private
-	Field vertices:TList ' TVertex vector
-	Field triangles:TList ' TTriangle vector
 	
 End Type
 
@@ -30,6 +110,64 @@ Type TMeshInfo ' returned by C_NewMeshInfo
 
 	Field tri_list:TList=CreateList() ' TTriangle vector
 	Field vert_list:TList=CreateList() ' TVertex vector
+	
+	' wrapper
+	Global info_map:TMap=New TMap
+	Field instance:Byte Ptr
+	
+	Function CreateObject:TMeshInfo( inst:Byte Ptr ) ' Create and map object from C++ instance
+	
+		If inst=Null Then Return Null
+		Local obj:TMeshInfo=New TMeshInfo
+		info_map.Insert( String(Long(inst)),obj )
+		obj.instance=inst
+		DebugLog "meshinfo="+Int(inst)
+		Return obj
+		
+	End Function
+	
+	Function DeleteObject( inst:Byte Ptr )
+	
+		info_map.Remove( String(Long(inst)) )
+		
+	End Function
+	
+	Function GetObject:TMeshInfo( inst:Byte Ptr )
+	
+		Return TMeshInfo( info_map.ValueForKey( String(Long(inst)) ) )
+		
+	End Function
+	
+	Function GetInstance:Byte Ptr( obj:TMeshInfo ) ' Get C++ instance from object
+	
+		If obj=Null Then Return Null ' Attempt to pass null object to function
+		Return obj.instance
+		
+	End Function
+	
+	Method CopyList( list:TList ) ' Field list
+	
+		Local inst:Byte Ptr
+		ClearList list
+		
+		Select list
+			Case tri_list
+				For Local id:Int=0 To MeshInfoListSize_( GetInstance(Self),MESHINFO_tri_list )-1
+					inst=MeshInfoIterVectorTriangle_( GetInstance(Self),MESHINFO_tri_list )
+					Local obj:TTriangle=TTriangle.GetObject(inst)
+					If obj=Null And inst<>Null Then obj=TTriangle.CreateObject(inst)
+					ListAddLast list,obj
+				Next
+			Case vert_list
+				For Local id:Int=0 To MeshInfoListSize_( GetInstance(Self),MESHINFO_vert_list )-1
+					inst=MeshInfoIterVectorVertex_( GetInstance(Self),MESHINFO_vert_list )
+					Local obj:TVertex=TVertex.GetObject(inst)
+					If obj=Null And inst<>Null Then obj=TVertex.CreateObject(inst)
+					ListAddLast list,obj
+				Next
+			End Select
+			
+	End Method
 	
 End Type
 EndRem

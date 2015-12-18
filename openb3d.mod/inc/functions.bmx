@@ -13,7 +13,7 @@ Rem
 bbdoc: undocumented
 End Rem
 Function MeshCullRadius( ent:TEntity,radius:Float )
-	ent.MeshCullRadius( radius )
+	MeshCullRadius_( TEntity.GetInstance(ent),radius )
 End Function
 
 Rem
@@ -78,7 +78,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animating">Online doc</a>
 End Rem
 Function Animating:Int( ent:TEntity )
-	Return ent.Animating()
+	Return Animating_( TEntity.GetInstance(ent) )
 End Function
 
 Rem
@@ -92,7 +92,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimSeq">Online doc</a>
 End Rem
 Function AnimSeq:Int( ent:TEntity )
-	Return ent.AnimSeq()
+	Return AnimSeq_( TEntity.GetInstance(ent) )
 End Function
 
 Rem
@@ -1024,21 +1024,21 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedX">Online doc</a>
 End Rem
 Function ProjectedX:Float()
-	Return TCamera.ProjectedX()
+	Return ProjectedX_()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedY">Online doc</a>
 End Rem
 Function ProjectedY:Float()
-	Return TCamera.ProjectedY()
+	Return ProjectedY_()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedZ">Online doc</a>
 End Rem
 Function ProjectedZ:Float()
-	Return TCamera.ProjectedZ()
+	Return ProjectedZ_()
 End Function
 
 Rem
@@ -1122,14 +1122,14 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online doc</a>
 End Rem
 Function SetCubeFace( tex:TTexture,face:Int )
-	tex.SetCubeFace( face )
+	SetCubeFace_( TTexture.GetInstance(tex),face )
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeMode">Online doc</a>
 End Rem
 Function SetCubeMode( tex:TTexture,Mode:Int )
-	tex.SetCubeMode( Mode )
+	SetCubeMode_( TTexture.GetInstance(tex),Mode )
 End Function
 
 Rem
@@ -1164,7 +1164,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online doc</a>
 End Rem
 Function TextureHeight:Int( tex:TTexture )
-	Return tex.TextureHeight()
+	Return TextureHeight_( TTexture.GetInstance(tex) )
 End Function
 
 Rem
@@ -1185,7 +1185,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureWidth">Online doc</a>
 End Rem
 Function TextureWidth:Int( tex:TTexture )
-	Return tex.TextureWidth()
+	Return TextureWidth_( TTexture.GetInstance(tex) )
 End Function
 
 Rem
@@ -1402,7 +1402,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a>
 End Rem
 Function Wireframe( enable:Int )
-	TGlobal.Wireframe( enable )
+	Wireframe_( enable )
 End Function
 
 ' *** Blitz3D functions, A-Z (in Openb3d)
@@ -1746,7 +1746,7 @@ Rem
 bbdoc: undocumented
 End Rem
 Function FluidThreshold( fluid:TFluid,threshold:Float )
-	fluid.FluidThreshold( threshold )
+	FluidThreshold_( TFluid.GetInstance(fluid),threshold )
 End Function
 
 ' *** Geosphere
@@ -1762,7 +1762,7 @@ Rem
 bbdoc: undocumented
 End Rem
 Function GeosphereHeight( geo:TGeosphere, h:Float )
-	geo.GeosphereHeight( h )
+	GeosphereHeight_( TGeosphere.GetInstance(geo),h )
 End Function
 
 Rem
@@ -1811,26 +1811,44 @@ Function CreateParticleEmitter:TParticleEmitter( particle:TEntity,parent_ent:TEn
 	Return TParticleEmitter.CreateParticleEmitter( particle,parent_ent )
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterVector( emit:TParticleEmitter,x:Float,y:Float,z:Float )
 	emit.EmitterVector( x,y,z )
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterRate( emit:TParticleEmitter,r:Float )
 	emit.EmitterRate( r )
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterParticleLife( emit:TParticleEmitter,l:Int )
 	emit.EmitterParticleLife( l )
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )
 	emit.EmitterParticleFunction( EmitterFunction ) ' note: must use TEntity.GetInstance(ent)
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterParticleSpeed( emit:TParticleEmitter,s:Float )
 	emit.EmitterParticleSpeed( s )
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
 Function EmitterVariance( emit:TParticleEmitter,v:Float )
 	emit.EmitterVariance( v )
 End Function
@@ -1876,21 +1894,21 @@ Rem
 bbdoc: Apply shader to a surface.
 End Rem
 Function ShadeSurface( surf:TSurface,material:TShader )
-	material.ShadeSurface( surf )
+	ShadeSurface_( TSurface.GetInstance(surf),TShader.GetInstance(material) )
 End Function
 
 Rem
 bbdoc: Apply shader to a mesh.
 End Rem
 Function ShadeMesh( mesh:TMesh,material:TShader )
-	material.ShadeMesh( mesh )
+	ShadeMesh_( TMesh.GetInstance(mesh),TShader.GetInstance(material) )
 End Function
 
 Rem
 bbdoc: Apply shader to an entity.
 End Rem
 Function ShadeEntity( ent:TEntity,material:TShader )
-	material.ShadeEntity( ent )
+	ShadeEntity_( TEntity.GetInstance(ent),TShader.GetInstance(material) )
 End Function
 
 Rem
@@ -2041,10 +2059,10 @@ Function ShaderMaterial( material:TShader,tex:TMaterial,name:String,index:Int=0 
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Set shader to be used for all surfaces
 End Rem
 Function AmbientShader( material:TShader )
-	material.AmbientShader()
+	AmbientShader_( TShader.GetInstance(material) )
 End Function
 
 ' *** Shadow
@@ -2061,6 +2079,13 @@ bbdoc: Frees stencil shadow
 End Rem
 Function FreeShadow( shad:TShadowObject )
 	shad.FreeShadow()
+End Function
+
+Rem
+bbdoc: Reset flag to update static shadow
+End Rem
+Function ResetShadow( shad:TShadowObject )
+	shad.VCreated[0]=0
 End Function
 
 Rem
@@ -2116,10 +2141,10 @@ Function StencilMode( stencil:TStencil,m:Int,o:Int=1 )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: stencil to use, set to Null to disable stencil
 End Rem
 Function UseStencil( stencil:TStencil )
-	TStencil.UseStencil( stencil )
+	UseStencil_( TStencil.GetInstance(stencil) )
 End Function
 
 ' *** VoxelSprite

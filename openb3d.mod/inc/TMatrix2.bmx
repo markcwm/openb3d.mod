@@ -87,9 +87,8 @@ Type TMatrix2
 	Method GetInverse:TMatrix2( mat:TMatrix2 )
 	
 		Local inst:Byte Ptr=MatrixGetInverse_( GetInstance(Self),GetInstance(mat) )	
-		Return GetObject(inst)
 		Local mat2:TMatrix2=GetObject(inst)
-		If mat2=Null And mat2<>Null Then mat2=CreateObject(inst)
+		If mat2=Null And inst<>Null Then mat2=CreateObject(inst)
 		Return mat2
 		
 	End Method
