@@ -408,6 +408,85 @@ Type TTexture
 		
 	End Function
 	
+Method CameraToTexEXT( cam:TCamera,frame:Int )
+
+	Local target:Int
+	
+	TGlobal.camera_in_use=cam
+
+	If flags[0] & 128
+		target=GL_TEXTURE_CUBE_MAP
+	Else
+		target=GL_TEXTURE_2D
+	EndIf
+	
+	glBindTexture(target, texture[0])
+
+	If framebuffer=Null
+		framebuffer=Int Ptr(MemAlloc(8))
+		glGenFramebuffersEXT(1, Varptr framebuffer[0])
+		glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+		If flags[0] & 128
+			For Local i:Int=0 Until 6 ' i<6
+				Select i
+					Case 0
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					Case 1
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					Case 2
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					Case 3
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					Case 4
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					Case 5
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+				EndSelect
+			Next
+		Else
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+		EndIf
+	EndIf
+
+	glBindFramebufferEXT(GL_FRAMEBUFFER, framebuffer[0])
+
+	If flags[0] & 128
+		Select cube_face[0]
+			Case 0
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, texture[0], 0)
+			Case 1
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, texture[0], 0)
+			Case 2
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture[0], 0)
+			Case 3
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, texture[0], 0)
+			Case 4
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, texture[0], 0)
+			Case 5
+				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, texture[0], 0)
+		EndSelect
+	Else
+		glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[0], 0)
+	EndIf
+
+	' Depth buffer
+	glBindRenderbufferEXT(GL_RENDERBUFFER, framebuffer[1])
+	glRenderbufferStorageEXT( GL_RENDERBUFFER, GL_DEPTH_STENCIL, width[0], height[0])
+	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1])
+	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1])
+
+	cam.Render()
+
+	If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+
+	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0)
+
+	glGenerateMipmapEXT(target)
+	glBindFramebufferEXT(GL_FRAMEBUFFER, 0)
+	glBindRenderbufferEXT(GL_RENDERBUFFER, 0)
+
+End Method
+
 	Rem
 	Function CreateCubeMapTexture:TTexture(width:Int,height:Int,flags:Int,tex:TTexture=Null)
 		

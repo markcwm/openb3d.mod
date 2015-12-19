@@ -40,16 +40,16 @@ EntityTexture ground,ground_tex
 
 Local colortex:TTexture=CreateTexture(800,600,1+256)
 
-Local heatw%=width/4, heath%=height/4
-Local tex:TTexture=CreateTexture(heatw,heath)
-Local map:TPixmap=CreatePixmap(heatw,heath,PF_RGBA8888)
-For Local i%=0 To PixmapWidth(map)-1
-	For Local j%=0 To PixmapHeight(map)-1
+Local noisew%=width/4, noiseh%=height/4
+Local noisetex:TTexture=CreateTexture(noisew,noiseh)
+Local noisemap:TPixmap=CreatePixmap(noisew,noiseh,PF_RGBA8888)
+For Local i%=0 To PixmapWidth(noisemap)-1
+	For Local j%=0 To PixmapHeight(noisemap)-1
 		Local rgb%=Rand(0,255)+(Rand(0,255) Shl 8)+(Rand(0,255) Shl 16)
-		WritePixel map,i,j,rgb|$ff000000
+		WritePixel noisemap,i,j,rgb|$ff000000
 	Next
 Next
-BufferToTex tex,PixmapPixelPtr(map,0,0)
+BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
 
 ' check for framebuffer errors
 CameraToTex(colortex,camera)
@@ -95,7 +95,7 @@ MoveEntity camera,0,0,-25
 
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
-ShaderTexture(shader,tex,"distortionMapTexture",1) ' Our heat distortion map texture
+ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
 SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
 SetFloat(shader,"riseFactor",0.007) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)

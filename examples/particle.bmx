@@ -19,13 +19,13 @@ TurnEntity light,45,45,0
 Local pivot:TPivot=CreatePivot()
 PositionEntity pivot,0,2,0
 
-Local t_sphere:TMesh=CreateSphere( 8 )
+Local t_sphere:TMesh=CreateSphere(8)
 EntityShininess t_sphere,0.2
 
 Local lastsphere:TEntity
 For Local t%=0 To 359 Step 36
 	Local sphere:TEntity=CopyEntity(t_sphere,pivot)
-	EntityColor sphere,Rnd(256),Rnd(256),Rnd(256)
+	EntityColor sphere,Rnd(255),Rnd(255),Rnd(255)
 	TurnEntity sphere,0,t,0
 	MoveEntity sphere,0,2,10
 	lastsphere=sphere
@@ -35,23 +35,25 @@ FreeEntity t_sphere
 Local cube:TMesh=CreateCube()
 PositionEntity cube,0,7,0
 ScaleEntity cube,2,2,2
-EntityColor cube,Rnd(256),Rnd(256),Rnd(256)
+EntityColor cube,Rnd(255),Rnd(255),Rnd(255)
 
-Local ground:TMesh=CreatePlane(128)
+'Local ground:TMesh=CreatePlane(128)
+Local ground:TMesh=CreateCube()
+ScaleEntity ground,1000,1,1000
 Local ground_tex:TTexture=LoadTexture("media/sand.bmp")
+ScaleTexture ground_tex,0.01,0.01 ' scale uvs
 EntityTexture ground,ground_tex
+
+Local cone:TMesh=CreateCone()
+PositionEntity cone,25,3,25
 
 Local sprite:TSprite=CreateSprite()
 EntityColor sprite,250,250,150
 'ScaleSprite sprite,1.5,1.5
 EntityAlpha sprite,0.2
-
-Local cone:TMesh=CreateCone()
-PositionEntity cone,25,3,25
-
-Local tex:TTexture=LoadTexture("media/smoke.png",1+2)
-'Local tex:TTexture=CreateTexture(1,1)
-EntityTexture sprite,tex
+Local noisetex:TTexture=LoadTexture("media/smoke.png",1+2)
+'Local noisetex:TTexture=CreateTexture(1,1)
+EntityTexture sprite,noisetex
 
 'SpriteRenderMode sprite,3 ' 1: normal, 2: sprite batch, 3: particle batch?
 'ParticleTrail sprite,20 ' particle trail for particle
