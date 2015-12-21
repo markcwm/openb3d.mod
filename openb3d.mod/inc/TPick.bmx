@@ -55,7 +55,7 @@ Type TPick
 	
 	Function CameraPick:TEntity( cam:TCamera,x:Float,y:Float ) ' same as method in TCamera
 	
-		Local inst:Byte Ptr=CameraPick_( TCamera.GetInstance(cam),x,GraphicsHeight()-y ) ' inverted y
+		Local inst:Byte Ptr=CameraPick_( TCamera.GetInstance(cam),x,cam.vheight[0]-y ) ' inverted y
 		Return TCamera.GetObject(inst)
 		
 	End Function

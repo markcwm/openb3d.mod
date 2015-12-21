@@ -9,7 +9,8 @@ uniform float riseFactor; // Factor used to control how fast air rises
 
 void main()
 {
-    vec2 distortionMapCoordinate = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t);
+	vec2 coords = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t); // flip texture
+    vec2 distortionMapCoordinate = coords;
 
     // We use the time value to scroll our distortion texture upwards
     // Since we enabled texture repeating, OpenGL takes care of
@@ -41,7 +42,7 @@ void main()
     // Remember, OpenGL 0 is at the bottom
     distortionPositionOffset *= gl_TexCoord[0].t; // was 1.f - t
 
-    vec2 distortedTextureCoordinate = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t) + distortionPositionOffset;
+    vec2 distortedTextureCoordinate = coords + distortionPositionOffset;
 
     gl_FragColor = gl_Color * texture2D(currentTexture, distortedTextureCoordinate);
 }

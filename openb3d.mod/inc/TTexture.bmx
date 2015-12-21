@@ -123,13 +123,21 @@ Type TTexture
 	
 	Method CameraToTex( cam:TCamera,frame:Int=0 )
 	
-		CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
+		If GL_VERSION_2_1 ' GL 2.1 and above
+			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
+		Else ' GL 2.0 and below
+			CameraToTexEXT( cam )
+		EndIf
 		
 	End Method
 	
 	Method DepthBufferToTex( cam:TCamera=Null )
 	
-		DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
+		If GL_VERSION_2_1 ' GL 2.1 and above
+			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
+		Else ' GL 2.0 and below
+			DepthBufferToTexEXT( cam )
+		EndIf
 		
 	End Method
 	
@@ -151,7 +159,8 @@ Type TTexture
 	
 	End Method
 	
-	Method FreeTexture() 'SMALLFIXES New function from www.blitzbasic.com/Community/posts.php?topic=88263#1002039
+	' SMALLFIXES New function from www.blitzbasic.com/Community/posts.php?topic=88263#1002039
+	Method FreeTexture()
 	
 		FreeObject( GetInstance(Self) )
 		FreeTexture_( GetInstance(Self) )
@@ -297,7 +306,7 @@ Type TTexture
 	
 	' return if file exists
 	' SMALLFIXES, replaced FileFind function to alow Incbin and Zipstream
-	' from http://blitzmax.com/Community/posts.php?topic=88901#1009408
+	' from www.blitzmax.com/Community/posts.php?topic=88901#1009408
 	Function FileFind:Int( file:String Var )
 	
 		Local TS:TStream = OpenFile(file$,True,False)
@@ -408,84 +417,131 @@ Type TTexture
 		
 	End Function
 	
-Method CameraToTexEXT( cam:TCamera,frame:Int )
-
-	Local target:Int
+	' GL 2.0 support
+	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
 	
-	TGlobal.camera_in_use=cam
-
-	If flags[0] & 128
-		target=GL_TEXTURE_CUBE_MAP
-	Else
-		target=GL_TEXTURE_2D
-	EndIf
-	
-	glBindTexture(target, texture[0])
-
-	If framebuffer=Null
-		framebuffer=Int Ptr(MemAlloc(8))
-		glGenFramebuffersEXT(1, Varptr framebuffer[0])
-		glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+		TGlobal.camera_in_use=cam
+		
+		Local target:Int
 		If flags[0] & 128
-			For Local i:Int=0 Until 6 ' i<6
-				Select i
-					Case 0
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					Case 1
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					Case 2
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					Case 3
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					Case 4
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					Case 5
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-				EndSelect
-			Next
+			target=GL_TEXTURE_CUBE_MAP
 		Else
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+			target=GL_TEXTURE_2D
 		EndIf
-	EndIf
-
-	glBindFramebufferEXT(GL_FRAMEBUFFER, framebuffer[0])
-
-	If flags[0] & 128
-		Select cube_face[0]
-			Case 0
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, texture[0], 0)
-			Case 1
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, texture[0], 0)
-			Case 2
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture[0], 0)
-			Case 3
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, texture[0], 0)
-			Case 4
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, texture[0], 0)
-			Case 5
-				glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, texture[0], 0)
-		EndSelect
-	Else
-		glFramebufferTexture2DEXT(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture[0], 0)
-	EndIf
-
-	' Depth buffer
-	glBindRenderbufferEXT(GL_RENDERBUFFER, framebuffer[1])
-	glRenderbufferStorageEXT( GL_RENDERBUFFER, GL_DEPTH_STENCIL, width[0], height[0])
-	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1])
-	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1])
-
-	cam.Render()
-
-	If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
-
-	glFramebufferRenderbufferEXT( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0)
-
-	glGenerateMipmapEXT(target)
-	glBindFramebufferEXT(GL_FRAMEBUFFER, 0)
-	glBindRenderbufferEXT(GL_RENDERBUFFER, 0)
-
-End Method
+		
+		glBindTexture(target, texture[0])
+		If framebuffer=Null ' Create texture image
+			framebuffer=Int Ptr(MemAlloc(8))
+			glGenFramebuffersEXT(1, Varptr framebuffer[0])
+			glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+			If flags[0] & 128
+				For Local i:Int=0 Until 6 ' i<6
+					Select i
+						Case 0
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 1
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 2
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 3
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 4
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 5
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					EndSelect
+				Next
+			Else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+			EndIf
+		EndIf
+		
+		' Attach texture to FBO
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
+		If flags[0] & 128
+			Select cube_face[0]
+				Case 0
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, texture[0], 0)
+				Case 1
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, texture[0], 0)
+				Case 2
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture[0], 0)
+				Case 3
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, texture[0], 0)
+				Case 4
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, texture[0], 0)
+				Case 5
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, texture[0], 0)
+			EndSelect
+		Else
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
+		EndIf
+		
+		' Depth buffer, and stencil if supported
+		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
+		If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
+		If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
+		glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+		If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+		
+		cam.Render()
+		
+		If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+		
+		'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
+		
+		' Generate mipmaps for texture, need to bind after Render
+		glBindTexture(target,texture[0])
+		glGenerateMipmapEXT(target)
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
+		
+	End Method
+	
+	' GL 2.0 support
+	Method DepthBufferToTexEXT( cam:TCamera=Null,frame:Int=0 )
+	
+		' Copy viewport to texture
+		glBindTexture(GL_TEXTURE_2D, texture[0])	
+		If cam=Null
+			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,TGlobal.height[0]-height[0],width[0],height[0],0)
+			glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE)
+		Else
+			TGlobal.camera_in_use=cam
+			
+			If framebuffer=Null ' Create texture image
+				framebuffer=Int Ptr(MemAlloc(8))
+				glGenFramebuffersEXT(1, Varptr framebuffer[0])
+				glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+			'glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width[0], height[0], 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, Null)
+			EndIf
+			
+			' Attach texture to FBO
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
+			
+			' Depth buffer, and stencil if supported
+			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
+			If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
+			If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
+			glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+			If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+			
+			cam.Render()
+			
+			If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+		
+			'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
+			
+			' Generate mipmaps for texture, need to bind after Render
+			glBindTexture(GL_TEXTURE_2D,texture[0])
+			glGenerateMipmapEXT(GL_TEXTURE_2D)
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
+		EndIf
+		
+	End Method
 
 	Rem
 	Function CreateCubeMapTexture:TTexture(width:Int,height:Int,flags:Int,tex:TTexture=Null)

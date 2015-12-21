@@ -18,21 +18,22 @@ Type THardwareInfo ' Code by klepto2
 	Global OGLVersion : String
 
 	Global Extensions      : String
-	Global VBOSupport      : Int ' Vertex Buffer Object
-	Global GLTCSupport     : Int ' OpenGL's TextureCompression
-	Global S3TCSupport     : Int ' S3's TextureCompression
-	Global AnIsoSupport    : Int ' An-Istropic Filtering
-	Global MultiTexSupport : Int ' MultiTexturing
-	Global TexBlendSupport : Int ' TextureBlend
-	Global CubemapSupport  : Int ' CubeMapping
-	Global DepthmapSupport : Int ' DepthTexturing
-	Global VPSupport       : Int ' VertexProgram (ARBvp1.0)
-	Global FPSupport       : Int ' FragmentProgram (ARBfp1.0)
-	Global ShaderSupport   : Int ' glSlang Shader Program
-	Global VSSupport       : Int ' glSlang VertexShader
-	Global FSSupport       : Int ' glSlang FragmentShader
-	Global SLSupport       : Int ' OpenGL Shading Language 1.00
-
+	Global GLTCSupport     : Int ' OpenGL's TextureCompression - GL 1.1
+	Global S3TCSupport     : Int ' S3's TextureCompression, aka DXTC - GL 1.1
+	Global AnIsoSupport    : Int ' An-Istropic Filtering, for mipmaps - GL 1.2
+	Global MultiTexSupport : Int ' MultiTexturing - GL 1.2
+	Global TexBlendSupport : Int ' TextureBlend, texture combine env - GL 1.1
+	Global CubemapSupport  : Int ' CubeMapping - GL 1.2
+	Global DepthmapSupport : Int ' DepthTexturing - GL 1.1
+	Global VBOSupport      : Int ' Vertex Buffer Objects - GL 1.4
+	Global VPSupport       : Int ' VertexProgram (ARBvp1.0) - GL 1.3
+	Global FPSupport       : Int ' FragmentProgram (ARBfp1.0) - GL 1.3
+	Global ShaderSupport   : Int ' glSlang Shader Program - GL 1.4
+	Global VSSupport       : Int ' glSlang VertexShader - GL 1.4
+	Global FSSupport       : Int ' glSlang FragmentShader - GL 1.4
+	Global SLSupport       : Int ' OpenGL Shading Language 1.00 - GL 1.5
+	Global FBOSupport      : Int ' Framebuffer objects - GL 1.5
+	Global DepthStencil    : Int ' Packed depth-stencil buffer - GL 2.0
 	Global MaxTextures : Int
 	Global MaxTexSize  : Int
 	Global MaxLights   : Int
@@ -48,28 +49,30 @@ Type THardwareInfo ' Code by klepto2
 		' Get Extensions
 		Extensions = String.FromCString(Byte Ptr(glGetString(GL_EXTENSIONS)))
 		THardwareInfo.Extensions = Extensions
-
+		
 		' Check for Extensions
-		THardwareInfo.VBOSupport      = Extensions.Find("GL_ARB_vertex_buffer_object") > -1
-		THardwareInfo.GLTCSupport     = Extensions.Find("GL_ARB_texture_compression")
+		THardwareInfo.GLTCSupport     = Extensions.Find("GL_ARB_texture_compression") > -1
 		THardwareInfo.S3TCSupport     = Extensions.Find("GL_EXT_texture_compression_s3tc") > -1
-		THardwareInfo.AnIsoSupport    = Extensions.Find("GL_EXT_texture_filter_anisotropic")
+		THardwareInfo.AnIsoSupport    = Extensions.Find("GL_EXT_texture_filter_anisotropic") > -1
 		THardwareInfo.MultiTexSupport = Extensions.Find("GL_ARB_multitexture") > -1
 		THardwareInfo.TexBlendSupport = Extensions.Find("GL_EXT_texture_env_combine") > -1
-		If Not THardwareInfo.TexBlendSupport 'SMALLFIXES use the ARB version that works the same
-			THardwareInfo.TexBlendSupport = Extensions.Find("GL_ARB_texture_env_combine") > -1
-		EndIf
 		THardwareInfo.CubemapSupport  = Extensions.Find("GL_ARB_texture_cube_map") > -1
 		THardwareInfo.DepthmapSupport = Extensions.Find("GL_ARB_depth_texture") > -1
+		THardwareInfo.VBOSupport      = Extensions.Find("GL_ARB_vertex_buffer_object") > -1
 		THardwareInfo.VPSupport       = Extensions.Find("GL_ARB_vertex_program") > -1
 		THardwareInfo.FPSupport       = Extensions.Find("GL_ARB_fragment_program") > -1
 		THardwareInfo.ShaderSupport   = Extensions.Find("GL_ARB_shader_objects") > -1
 		THardwareInfo.VSSupport       = Extensions.Find("GL_ARB_vertex_shader") > -1
 		THardwareInfo.FSSupport       = Extensions.Find("GL_ARB_fragment_shader") > -1
-		THardwareInfo.SLSupport = Extensions.Find("GL_ARB_shading_language_100") > - 1
+		THardwareInfo.SLSupport       = Extensions.Find("GL_ARB_shading_language_100") > - 1
+		THardwareInfo.FBOSupport      = Extensions.Find("GL_EXT_framebuffer_object") > - 1
+		THardwareInfo.DepthStencil    = Extensions.Find("GL_EXT_packed_depth_stencil") > -1
 		
 		If THardwareInfo.VSSupport = False Or THardwareInfo.FSSupport = False Then
 			THardwareInfo.ShaderSupport = False
+		EndIf
+		If Not THardwareInfo.TexBlendSupport ' SMALLFIXES use the ARB version that works the same
+			THardwareInfo.TexBlendSupport = Extensions.Find("GL_ARB_texture_env_combine") > -1
 		EndIf
 
 		' Get some numerics

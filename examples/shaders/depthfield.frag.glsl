@@ -1,12 +1,13 @@
 // from Minib3dPFXNewton0.40.tar.gz by klepto2
 
+varying vec2 texCoords;
 uniform sampler2D colortex;
 uniform sampler2D depthtex;
 uniform float blursize; // 0.002
 
 void main(void)
 {
-	vec2 coords = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t);
+	vec2 coords = vec2(texCoords.s, -texCoords.t); // flip texture
 	vec4 blurFactor = texture2D(depthtex, coords) * blursize;
 	float bf = blurFactor.r;
 	vec4 blurSample = vec4(0.0,0.0,0.0,0.0);

@@ -18,7 +18,7 @@ CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to preven
 CameraClsColor camera,150,200,250
 
 Local light:TLight=CreateLight()
-TurnEntity light,45,45,0
+PositionEntity light,5,5,5
 
 Local pivot:TPivot=CreatePivot()
 PositionEntity pivot,0,2,0
@@ -31,26 +31,6 @@ For Local t%=0 To 359 Step 36
 	MoveEntity sphere,0,0,15
 Next
 FreeEntity t_sphere
-
-Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
-EntityTexture ground,ground_tex
-
-Local colortex:TTexture=CreateTexture(width,height,1+256)
-Local depthtex:TTexture=CreateTexture(width,height,1+256)
-
-' check for framebuffer errors
-CameraToTex(colortex,camera)
-DepthBufferToTex(depthtex,camera)
-Local status:Int=glCheckFramebufferStatus(GL_FRAMEBUFFER)
-Select status
-	Case GL_FRAMEBUFFER_COMPLETE
-		DebugLog "..FBO success"
-	Case GL_FRAMEBUFFER_UNSUPPORTED
-		DebugLog "**FBO: unsupported. choose different formats" ' Return Null
-	Default
-		DebugLog "**FBO unsuccessful :"+status ' Return Null
-EndSelect
 
 Local cube:TMesh=CreateCube()
 PositionEntity cube,0,7,0
@@ -67,29 +47,62 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
+Local colortex:TTexture=CreateTexture(width,height)
+Local depthtex:TTexture=CreateTexture(width,height)
+
+' in GL 2.0 render textures need attached before other textures (EntityTexture)
+CameraToTex colortex,camera
+DepthBufferToTex depthtex,camera
+Local status:Int=glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
+Select status
+	Case GL_FRAMEBUFFER_COMPLETE_EXT
+		DebugLog "FBO created"
+	Case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT
+	  	DebugLog "Incomplete attachment"
+	Case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT
+	  	DebugLog "Missing attachment"
+	Case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
+	  	DebugLog "Incomplete dimensions"
+	Case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
+	  	DebugLog "Incomplete formats"
+	Case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT
+	 	DebugLog "Incomplete draw buffer"
+	Case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT
+	  	DebugLog "Incomplete read buffer"
+	Case GL_FRAMEBUFFER_UNSUPPORTED_EXT
+		DebugLog "Type is not Supported"
+	Default
+		DebugLog "FBO unsuccessful: "+status
+EndSelect
+
 ' screen sprite (by BlitzSupport)
 Local screensprite:TSprite=CreateSprite()
-EntityOrder screensprite,-1
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
-MoveEntity screensprite,0,0,0.99 ' just under 1.0, instead of clamping uvs to edge
+EntityOrder screensprite,-1
 EntityParent screensprite,camera
+MoveEntity screensprite,0,0,0.99 ' just under 1.0, instead of clamping uvs
+
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
-Local shader:TShader=LoadShader("","shaders/depthfield.vert.glsl", "shaders/depthfield.frag.glsl")
-ShaderTexture(shader,colortex,"colortex",0)
-ShaderTexture(shader,depthtex,"depthtex",1)
-ShadeEntity(screensprite, shader)
+Local ground:TMesh=CreatePlane(128)
+Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
+EntityTexture ground,ground_tex
+
+Local shader:TShader=LoadShader("","shaders/depthfield.vert.glsl","shaders/depthfield.frag.glsl")
+ShaderTexture(shader,colortex,"colortex",0) ' Our render texture
+ShaderTexture(shader,depthtex,"depthtex",1) ' Our distortion map texture
+ShadeEntity(screensprite,shader)
 
 Local postprocess%=1
-Local blursize#=0.0015
+Local blursize#=0.002
 UseFloat(shader,"blursize",blursize)
 
 ' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
-While Not KeyHit(KEY_ESCAPE)
+While Not KeyDown(KEY_ESCAPE)
 	
 	If KeyHit(KEY_SPACE) Then postprocess=Not postprocess
 	If KeyDown(KEY_EQUALS) And blursize<0.004 Then blursize:+0.0001
@@ -105,15 +118,13 @@ While Not KeyHit(KEY_ESCAPE)
 	UpdateWorld
 	
 	HideEntity screensprite
-	RenderWorld
-	
 	If postprocess=1
-		CameraToTex(colortex,camera)
-		DepthBufferToTex(depthtex,camera)
-
+		CameraToTex colortex,camera
+		DepthBufferToTex depthtex,camera
+		
 		ShowEntity screensprite
-		RenderWorld
 	EndIf
+	RenderWorld
 	
 	' calculate fps
 	renders=renders+1
@@ -127,4 +138,6 @@ While Not KeyHit(KEY_ESCAPE)
 	Text 0,20,"postprocess: "+postprocess+", blursize: "+blursize
 	
 	Flip
+
 Wend
+End

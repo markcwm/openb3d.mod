@@ -143,10 +143,12 @@ Type TCamera Extends TEntity
 		
 	End Function
 	
+	' GraphicsHeight was replaced with vheight[0] as it only worked for main cam (full res)
 	Method CameraViewport( x:Int,y:Int,width:Int,height:Int )
 	
-		CameraViewport_( GetInstance(Self),x,GraphicsHeight()-y-height,width,height ) ' inverted y
-		
+		CameraViewport_( GetInstance(Self),x,y,width,height) ' update values before inverted y
+		CameraViewport_( GetInstance(Self),x,vheight[0]-y-height,width,height )
+				
 	End Method
 	
 	Method CameraClsColor( r:Float,g:Float,b:Float )
@@ -181,7 +183,7 @@ Type TCamera Extends TEntity
 	
 	Method CameraPick:TEntity( x:Float,y:Float ) ' same as function in TPick
 	
-		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,GraphicsHeight()-y ) ' inverted y
+		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,vheight[0]-y ) ' inverted y
 		Local ent:TEntity=GetObject(inst)
 		If ent=Null And inst<>Null Then ent=CreateObject(inst)
 		Return ent

@@ -33,36 +33,6 @@ For Local t%=0 To 359 Step 36
 Next
 FreeEntity t_sphere
 
-Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
-ScaleTexture ground_tex,2,2
-EntityTexture ground,ground_tex
-
-Local colortex:TTexture=CreateTexture(800,600,1+256)
-
-Local noisew%=width/4, noiseh%=height/4
-Local noisetex:TTexture=CreateTexture(noisew,noiseh)
-Local noisemap:TPixmap=CreatePixmap(noisew,noiseh,PF_RGBA8888)
-For Local i%=0 To PixmapWidth(noisemap)-1
-	For Local j%=0 To PixmapHeight(noisemap)-1
-		Local rgb%=Rand(0,255)+(Rand(0,255) Shl 8)+(Rand(0,255) Shl 16)
-		WritePixel noisemap,i,j,rgb|$ff000000
-	Next
-Next
-BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
-
-' check for framebuffer errors
-CameraToTex(colortex,camera)
-Local status:Int=glCheckFramebufferStatus(GL_FRAMEBUFFER)
-Select status
-	Case GL_FRAMEBUFFER_COMPLETE
-		DebugLog "..FBO success"
-	Case GL_FRAMEBUFFER_UNSUPPORTED
-		DebugLog "**FBO: unsupported. choose different formats" ' Return Null
-	Default
-		DebugLog "**FBO unsuccessful :"+status ' Return Null
-EndSelect
-
 Local cube:TMesh=CreateCube()
 PositionEntity cube,0,7,0
 ScaleEntity cube,3,3,3
@@ -83,6 +53,43 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
+Local colortex:TTexture=CreateTexture(800,600,1+256)
+
+Local noisew%=width/4, noiseh%=height/4
+Local noisetex:TTexture=CreateTexture(noisew,noiseh)
+Local noisemap:TPixmap=CreatePixmap(noisew,noiseh,PF_RGBA8888)
+For Local i%=0 To PixmapWidth(noisemap)-1
+	For Local j%=0 To PixmapHeight(noisemap)-1
+		Local rgb%=Rand(0,255)+(Rand(0,255) Shl 8)+(Rand(0,255) Shl 16)
+		WritePixel noisemap,i,j,rgb|$ff000000
+	Next
+Next
+BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
+
+' in GL 2.0 render textures need attached before other textures (EntityTexture)
+CameraToTex colortex,camera
+Local status:Int=glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
+Select status
+	Case GL_FRAMEBUFFER_COMPLETE_EXT
+		DebugLog "FBO created"
+	Case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT
+	  	DebugLog "Incomplete attachment"
+	Case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT
+	  	DebugLog "Missing attachment"
+	Case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
+	  	DebugLog "Incomplete dimensions"
+	Case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
+	  	DebugLog "Incomplete formats"
+	Case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT
+	 	DebugLog "Incomplete draw buffer"
+	Case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT
+	  	DebugLog "Incomplete read buffer"
+	Case GL_FRAMEBUFFER_UNSUPPORTED_EXT
+		DebugLog "Type is not Supported"
+	Default
+		DebugLog "FBO unsuccessful: "+status
+EndSelect
+
 ' screen sprite (by BlitzSupport)
 Local screensprite:TSprite=CreateSprite()
 EntityOrder screensprite,-1
@@ -92,6 +99,11 @@ EntityParent screensprite,camera
 
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
+
+Local ground:TMesh=CreatePlane(128)
+Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
+ScaleTexture ground_tex,2,2
+EntityTexture ground,ground_tex
 
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
@@ -129,7 +141,7 @@ While Not KeyHit(KEY_ESCAPE)
 	RenderWorld
 	
 	If postprocess=1
-		CameraToTex(colortex,camera)
+		colortex.CameraToTexEXT camera
 		
 		ShowEntity screensprite
 		RenderWorld
@@ -148,3 +160,4 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	Flip
 Wend
+
