@@ -141,7 +141,7 @@ While Not KeyHit(KEY_ESCAPE)
 	RenderWorld
 	
 	If postprocess=1
-		colortex.CameraToTexEXT camera
+		CameraToTex colortex,camera
 		
 		ShowEntity screensprite
 		RenderWorld
