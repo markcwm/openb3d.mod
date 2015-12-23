@@ -2304,6 +2304,15 @@ void Mesh::Render(){
 				case 3:
 					glBlendFunc(GL_SRC_ALPHA,GL_ONE); // additive and alpha
 					break;
+				case 4:
+					// dot3
+					break;
+				case 5:
+					// multiply 2
+					break;
+				case 6:
+					glBlendFunc(surf.brush->sfactor,surf.brush->dfactor);// custom
+					break;
 			}
 
 		}

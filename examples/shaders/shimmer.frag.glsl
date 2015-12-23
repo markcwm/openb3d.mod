@@ -26,8 +26,8 @@ void main()
     // We want negative offsets too, so we subtract 0.5 and multiply by 2
     // We end up with values in the range [-1, 1]
     vec2 distortionPositionOffset = distortionMapValue.xy;
-    distortionPositionOffset -= vec2(0.5f, 0.5f);
-    distortionPositionOffset *= 2.f;
+    distortionPositionOffset -= vec2(0.5, 0.5);
+    distortionPositionOffset *= 2.0;
 
     // The factor scales the offset and thus controls the severity
     distortionPositionOffset *= distortionFactor;

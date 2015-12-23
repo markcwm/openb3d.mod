@@ -18,6 +18,19 @@
 
 extern "C" {
 
+void SurfaceGLColor(Surface* surf, float r, float g, float b, float a){//
+	surf->brush->red = r;
+	surf->brush->green = g;
+	surf->brush->blue = b;
+	surf->brush->alpha = a;
+}
+
+void SurfaceGLBlendFunc(Surface* surf, int sfactor, int dfactor){//
+	surf->brush->sfactor=sfactor;
+	surf->brush->dfactor=dfactor;
+	surf->brush->BrushBlend(6);
+}
+
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
 }

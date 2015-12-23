@@ -1,5 +1,19 @@
 ' functions.bmx
 
+Rem
+bbdoc: undocumented
+End Rem
+Function SurfaceGLColor( surf:TSurface,r:Float,g:Float,b:Float,a:Float=1.0 ) ''
+	SurfaceGLColor_( TSurface.GetInstance(surf),r,g,b,a )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function SurfaceGLBlendFunc( surf:TSurface,sfactor:Int,dfactor:Int ) ''
+	SurfaceGLBlendFunc_( TSurface.GetInstance(surf),sfactor,dfactor )
+End Function
+
 ' *** Minib3d only
 
 Rem
