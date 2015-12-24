@@ -30,7 +30,7 @@ public:
 	unsigned int cache_frame[8];
 	Texture* tex[8];
 	
-	int sfactor,dfactor;// glBlendFunc
+	int glBlendFunc[2];//
 
 	Brush(){
 
@@ -41,8 +41,6 @@ public:
 		blend=0,fx=0;
 		//tex_frame=0;
 		
-		sfactor=0,dfactor=0;//
-
 		for(int i=0;i<8;i++){
 			tex[i]=NULL;
 		}

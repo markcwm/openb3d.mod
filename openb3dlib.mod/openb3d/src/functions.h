@@ -16,8 +16,9 @@
 extern "C" {
 #endif
 
-void DLL_EXPORT SurfaceGLColor(Surface* surf, float r, float g, float b, float a);//
-void DLL_EXPORT SurfaceGLBlendFunc(Surface* surf, int sfactor, int dfactor);//
+void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);//
+void DLL_EXPORT BrushGLColor(Brush* brush, float r, float g, float b, float a);//
+void DLL_EXPORT BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor);//
 
 void DLL_EXPORT BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT BackBufferToTex(Texture* tex,int frame);

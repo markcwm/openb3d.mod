@@ -3,15 +3,22 @@
 Rem
 bbdoc: undocumented
 End Rem
-Function SurfaceGLColor( surf:TSurface,r:Float,g:Float,b:Float,a:Float=1.0 ) ''
-	SurfaceGLColor_( TSurface.GetInstance(surf),r,g,b,a )
+Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
+	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
 End Function
 
 Rem
 bbdoc: undocumented
 End Rem
-Function SurfaceGLBlendFunc( surf:TSurface,sfactor:Int,dfactor:Int ) ''
-	SurfaceGLBlendFunc_( TSurface.GetInstance(surf),sfactor,dfactor )
+Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 ) ''
+	BrushGLColor_( TBrush.GetInstance(brush),r,g,b,a )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int ) ''
+	BrushGLBlendFunc_( TBrush.GetInstance(brush),sfactor,dfactor )
 End Function
 
 ' *** Minib3d only

@@ -38,6 +38,9 @@ public:
 	int no_frames;
 	unsigned int* framebuffer;
 	int cube_face,cube_mode;
+	
+	int glTexEnv[3][12];//
+	int glTexEnv_count;//
 
 	Texture(){
 
@@ -50,6 +53,8 @@ public:
 		no_frames=1;
 		framebuffer=0;
 		cube_face=0,cube_mode=1;
+		
+		glTexEnv_count=0;//
 
 	};
 

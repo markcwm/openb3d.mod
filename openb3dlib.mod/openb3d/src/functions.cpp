@@ -18,17 +18,26 @@
 
 extern "C" {
 
-void SurfaceGLColor(Surface* surf, float r, float g, float b, float a){//
-	surf->brush->red = r;
-	surf->brush->green = g;
-	surf->brush->blue = b;
-	surf->brush->alpha = a;
+void TextureGLTexEnv(Texture* tex, int target, int pname, int param){//
+	if(target==0) tex->glTexEnv_count=0;
+	tex->glTexEnv[0][tex->glTexEnv_count] = target;
+	tex->glTexEnv[1][tex->glTexEnv_count] = pname;
+	tex->glTexEnv[2][tex->glTexEnv_count] = param;
+	tex->TextureBlend(6);
+	if(tex->glTexEnv_count<12) tex->glTexEnv_count++;
 }
 
-void SurfaceGLBlendFunc(Surface* surf, int sfactor, int dfactor){//
-	surf->brush->sfactor=sfactor;
-	surf->brush->dfactor=dfactor;
-	surf->brush->BrushBlend(6);
+void BrushGLColor(Brush* brush, float r, float g, float b, float a){//
+	brush->red = r;
+	brush->green = g;
+	brush->blue = b;
+	brush->alpha = a;
+}
+
+void BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor){//
+	brush->glBlendFunc[0] = sfactor;
+	brush->glBlendFunc[1] = dfactor;
+	brush->BrushBlend(6);
 }
 
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){

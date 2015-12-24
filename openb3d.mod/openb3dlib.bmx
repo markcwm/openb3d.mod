@@ -33,8 +33,9 @@ Import BRL.Map
 ' functions.cpp
 Extern
 
-	Function SurfaceGLColor_( surf:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "SurfaceGLColor" ''
-	Function SurfaceGLBlendFunc_( surf:Byte Ptr,sfactor:Int,dfactor:Int ) = "SurfaceGLBlendFunc" ''
+	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv" ''
+	Function BrushGLColor_( brush:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "BrushGLColor" ''
+	Function BrushGLBlendFunc_( brush:Byte Ptr,sfactor:Int,dfactor:Int ) = "BrushGLBlendFunc" ''
 	
 	' *** Minib3d only
 	Function BackBufferToTex_( tex:Byte Ptr,frame:Int ) = "BackBufferToTex"

@@ -2304,14 +2304,12 @@ void Mesh::Render(){
 				case 3:
 					glBlendFunc(GL_SRC_ALPHA,GL_ONE); // additive and alpha
 					break;
-				case 4:
-					// dot3
+				case 4:// dot3
 					break;
-				case 5:
-					// multiply 2
+				case 5:// multiply 2
 					break;
-				case 6:
-					glBlendFunc(surf.brush->sfactor,surf.brush->dfactor);// custom
+				case 6:// custom
+					glBlendFunc(surf.brush->glBlendFunc[0],surf.brush->glBlendFunc[1]);
 					break;
 			}
 
@@ -2607,6 +2605,13 @@ void Mesh::Render(){
 							glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_COMBINE);
 							glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_MODULATE);
 							glTexEnvi(GL_TEXTURE_ENV,GL_RGB_SCALE,2.0);
+							break;
+						case 6:// custom
+						for(int itexenv=0;itexenv<surf.brush->tex[ix]->glTexEnv_count;itexenv++){
+							glTexEnvi(	surf.brush->tex[ix]->glTexEnv[0][itexenv],
+										surf.brush->tex[ix]->glTexEnv[1][itexenv],
+										surf.brush->tex[ix]->glTexEnv[2][itexenv]);
+						}
 							break;
 						default: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 					}
