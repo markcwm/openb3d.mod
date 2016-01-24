@@ -478,15 +478,11 @@ Include "inc/TAnimation.bmx"
 'Include "inc/TModel.bmx"
 
 ' picking/collision
-'Include "inc/TColTree.bmx"
 Include "inc/TPick.bmx"
-'Include "inc/TCollision.bmx"
 
 ' geom
 Include "inc/TVector.bmx"
-'Include "inc/TVector2.bmx"
 Include "inc/TMatrix.bmx"
-Include "inc/TMatrix2.bmx"
 Include "inc/TQuaternion.bmx"
 Include "inc/BoxSphere.bmx"
 
