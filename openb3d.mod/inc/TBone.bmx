@@ -12,9 +12,9 @@ Type TBone Extends TEntity
 	Field keys:TAnimationKeys
 	
 	' additional matrices used for animation purposes
-	Field mat2:TMatrix2
-	Field inv_mat:TMatrix2 ' set in TModel, when loading anim mesh
-	Field tform_mat:TMatrix2
+	Field mat2:TMatrix
+	Field inv_mat:TMatrix ' set in TModel, when loading anim mesh
+	Field tform_mat:TMatrix
 	
 	' used to store current keyframe in AnimateMesh, for use with transition
 	Field kx:Float Ptr,ky:Float Ptr,kz:Float Ptr
@@ -64,14 +64,14 @@ Type TBone Extends TEntity
 		
 		' matrix
 		inst=BoneMatrix_( GetInstance(Self),BONE_mat2 )
-		mat2=TMatrix2.GetObject(inst)
-		If mat2=Null And inst<>Null Then mat2=TMatrix2.CreateObject(inst)
+		mat2=TMatrix.GetObject(inst)
+		If mat2=Null And inst<>Null Then mat2=TMatrix.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_inv_mat )
-		inv_mat=TMatrix2.GetObject(inst)
-		If inv_mat=Null And inst<>Null Then inv_mat=TMatrix2.CreateObject(inst)
+		inv_mat=TMatrix.GetObject(inst)
+		If inv_mat=Null And inst<>Null Then inv_mat=TMatrix.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_tform_mat )
-		tform_mat=TMatrix2.GetObject(inst)
-		If tform_mat=Null And inst<>Null Then tform_mat=TMatrix2.CreateObject(inst)
+		tform_mat=TMatrix.GetObject(inst)
+		If tform_mat=Null And inst<>Null Then tform_mat=TMatrix.CreateObject(inst)
 		
 	End Method
 	

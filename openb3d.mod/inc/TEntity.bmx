@@ -9,8 +9,8 @@ Type TEntity
 	Field parent:TEntity ' returned by GetParent - NULL
 	
 	' transform
-	Field mat:TMatrix2 ' returned by EntityX/Y/Z (global) - LoadIdentity
-	Field rotmat:TMatrix2 ' openb3d: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
+	Field mat:TMatrix ' returned by EntityX/Y/Z (global) - LoadIdentity
+	Field rotmat:TMatrix ' openb3d: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
 	Field px:Float Ptr,py:Float Ptr,pz:Float Ptr ' returned by EntityX/Y/Z (local) - 0.0/0.0/0.0
 	Field sx:Float Ptr,sy:Float Ptr,sz:Float Ptr ' returned by EntityScaleX/Y/Z (local) - 1.0/1.0/1.0
 	Field rx:Float Ptr,ry:Float Ptr,rz:Float Ptr ' rotation - 0.0/0.0/0.0
@@ -57,7 +57,7 @@ Type TEntity
 	Field new_x:Float Ptr,new_y:Float Ptr,new_z:Float Ptr ' openb3d - 0.0/0.0/0.0
 	Field new_no:Int Ptr ' openb3d - 0
 	
-	Field old_mat:TMatrix2 ' openb3d - LoadIdentity
+	Field old_mat:TMatrix ' openb3d - LoadIdentity
 	Field dynamic:Int Ptr ' openb3d - false
 	Field dynamic_x:Float Ptr,dynamic_y:Float Ptr,dynamic_z:Float Ptr ' openb3d - 0.0/0.0/0.0
 	Field dynamic_yaw:Float Ptr,dynamic_pitch:Float Ptr,dynamic_roll:Float Ptr ' openb3d - 0.0/0.0/0.0
@@ -192,14 +192,14 @@ Type TEntity
 		
 		' matrix
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_mat )
-		mat=TMatrix2.GetObject(inst)
-		If mat=Null And inst<>Null Then mat=TMatrix2.CreateObject(inst)
+		mat=TMatrix.GetObject(inst)
+		If mat=Null And inst<>Null Then mat=TMatrix.CreateObject(inst)
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_rotmat )
-		rotmat=TMatrix2.GetObject(inst)
-		If rotmat=Null And inst<>Null Then rotmat=TMatrix2.CreateObject(inst)
+		rotmat=TMatrix.GetObject(inst)
+		If rotmat=Null And inst<>Null Then rotmat=TMatrix.CreateObject(inst)
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_old_mat )
-		old_mat=TMatrix2.GetObject(inst)
-		If old_mat=Null And inst<>Null Then old_mat=TMatrix2.CreateObject(inst)
+		old_mat=TMatrix.GetObject(inst)
+		If old_mat=Null And inst<>Null Then old_mat=TMatrix.CreateObject(inst)
 		
 		' brush
 		inst=EntityBrush_( GetInstance(Self),ENTITY_brush )
@@ -987,16 +987,16 @@ Type TEntity
 	End Method
 	
 	' inverted matrix - called in RotateEntity, TFormPoint/Vector
-	Method MQ_GetInvMatrix( mat0:TMatrix2 )
+	Method MQ_GetInvMatrix( mat0:TMatrix )
 		
-		MQ_GetInvMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat0) )
+		MQ_GetInvMatrix_( GetInstance(Self),TMatrix.GetInstance(mat0) )
 		
 	End Method
 	
 	' global position/rotation - called in EntityParent, EntityPitch/Yaw/Roll, TFormPoint/Vector
-	Method MQ_GetMatrix( mat3:TMatrix2 )
+	Method MQ_GetMatrix( mat3:TMatrix )
 		
-		MQ_GetMatrix_( GetInstance(Self),TMatrix2.GetInstance(mat3) )
+		MQ_GetMatrix_( GetInstance(Self),TMatrix.GetInstance(mat3) )
 		
 	End Method
 	

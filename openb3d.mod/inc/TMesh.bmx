@@ -11,7 +11,7 @@ Type TMesh Extends TEntity
 	
 	Field bones:TList=CreateList() ' Bone vector
 	
-	Field mat_sp:TMatrix2 ' used in TMesh's Update to provide necessary additional transform matrix for sprites
+	Field mat_sp:TMatrix ' used in TMesh's Update to provide necessary additional transform matrix for sprites
 	
 	'Field c_col_tree:TMeshCollider ' openb3d: used for terrain collisions - NULL
 	Field reset_col_tree:Int Ptr ' true (reset flag) - 0
@@ -65,8 +65,8 @@ Type TMesh Extends TEntity
 		
 		' matrix
 		Local inst:Byte Ptr=MeshMatrix_( GetInstance(Self),MESH_mat_sp )
-		mat_sp=TMatrix2.GetObject(inst)
-		If mat_sp=Null And inst<>Null Then mat_sp=TMatrix2.CreateObject(inst)
+		mat_sp=TMatrix.GetObject(inst)
+		If mat_sp=Null And inst<>Null Then mat_sp=TMatrix.CreateObject(inst)
 		
 	End Method
 	
@@ -507,9 +507,9 @@ Type TMesh Extends TEntity
 	End Method
 
 	' used by LoadMesh
-	Method TransformMesh( mat:TMatrix2 )
+	Method TransformMesh( mat:TMatrix )
 	
-		TransformMesh_( GetInstance(Self),TMatrix2.GetInstance(mat) )
+		TransformMesh_( GetInstance(Self),TMatrix.GetInstance(mat) )
 		
 	End Method
 	

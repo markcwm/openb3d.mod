@@ -39,22 +39,22 @@ Type TQuaternion
 		Local wy#=q[0]*q[2]
 		Local wz#=q[0]*q[3]
 	
-		mat.grid[0,0]=1-2*(yy+zz)
-		mat.grid[0,1]=  2*(xy-wz)
-		mat.grid[0,2]=  2*(xz+wy)
-		mat.grid[1,0]=  2*(xy+wz)
-		mat.grid[1,1]=1-2*(xx+zz)
-		mat.grid[1,2]=  2*(yz-wx)
-		mat.grid[2,0]=  2*(xz-wy)
-		mat.grid[2,1]=  2*(yz+wx)
-		mat.grid[2,2]=1-2*(xx+yy)
-		mat.grid[3,3]=1
+		mat.grid[(4*0)+0]=1-2*(yy+zz)
+		mat.grid[(4*0)+1]=  2*(xy-wz)
+		mat.grid[(4*0)+2]=  2*(xz+wy)
+		mat.grid[(4*1)+0]=  2*(xy+wz)
+		mat.grid[(4*1)+1]=1-2*(xx+zz)
+		mat.grid[(4*1)+2]=  2*(yz-wx)
+		mat.grid[(4*2)+0]=  2*(xz-wy)
+		mat.grid[(4*2)+1]=  2*(yz+wx)
+		mat.grid[(4*2)+2]=1-2*(xx+yy)
+		mat.grid[(4*3)+3]=1
 	
 		For Local iy:Int=0 To 3
 			For Local ix:Int=0 To 3
-				xx#=mat.grid[ix,iy]
+				xx#=mat.grid[(4*ix)+iy]
 				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
-				mat.grid[ix,iy]=xx#
+				mat.grid[(4*ix)+iy]=xx#
 			Next
 		Next
 	
@@ -80,28 +80,28 @@ Type TQuaternion
 	
 		Local mat:TMatrix=New TMatrix
 		
-		mat.grid[0,0]=1-2*(yy+zz)
-		mat.grid[0,1]=  2*(xy-wz)
-		mat.grid[0,2]=  2*(xz+wy)
-		mat.grid[1,0]=  2*(xy+wz)
-		mat.grid[1,1]=1-2*(xx+zz)
-		mat.grid[1,2]=  2*(yz-wx)
-		mat.grid[2,0]=  2*(xz-wy)
-		mat.grid[2,1]=  2*(yz+wx)
-		mat.grid[2,2]=1-2*(xx+yy)
-		mat.grid[3,3]=1
+		mat.grid[(4*0)+0]=1-2*(yy+zz)
+		mat.grid[(4*0)+1]=  2*(xy-wz)
+		mat.grid[(4*0)+2]=  2*(xz+wy)
+		mat.grid[(4*1)+0]=  2*(xy+wz)
+		mat.grid[(4*1)+1]=1-2*(xx+zz)
+		mat.grid[(4*1)+2]=  2*(yz-wx)
+		mat.grid[(4*2)+0]=  2*(xz-wy)
+		mat.grid[(4*2)+1]=  2*(yz+wx)
+		mat.grid[(4*2)+2]=1-2*(xx+yy)
+		mat.grid[(4*3)+3]=1
 	
 		For Local iy:Int=0 To 3
 			For Local ix:Int=0 To 3
-				xx#=mat.grid[ix,iy]
+				xx#=mat.grid[(4*ix)+iy]
 				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
-				mat.grid[ix,iy]=xx#
+				mat.grid[(4*ix)+iy]=xx#
 			Next
 		Next
 	
-		pitch#=ATan2( mat.grid[2,1],Sqr( mat.grid[2,0]*mat.grid[2,0]+mat.grid[2,2]*mat.grid[2,2] ) )
-		yaw#=ATan2(mat.grid[2,0],mat.grid[2,2])
-		roll#=ATan2(mat.grid[0,1],mat.grid[1,1])
+		pitch#=ATan2( mat.grid[(4*2)+1],Sqr( mat.grid[(4*2)+0]*mat.grid[(4*2)+0]+mat.grid[(4*2)+2]*mat.grid[(4*2)+2] ) )
+		yaw#=ATan2(mat.grid[(4*2)+0],mat.grid[(4*2)+2])
+		roll#=ATan2(mat.grid[(4*0)+1],mat.grid[(4*1)+1])
 				
 		'If pitch#=nan# Then pitch#=0
 		'If yaw#  =nan# Then yaw#  =0
