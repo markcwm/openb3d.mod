@@ -269,17 +269,17 @@ Type TEntity
 					If obj Then ListAddLast( list,obj )
 				Next
 				For Local ent:TEntity=EachIn child_list_queue
-					child_list_id=0 ; created=1
+					ent.child_list_id=0 ; created=1
 					For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
-						Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(child_list_id) )
+						Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(ent.child_list_id) )
 						Local obj:TEntity=GetObject(inst)
 						If obj=Null Then created=0 ; Exit ' list not fully created yet
 					Next
 					If created
-						child_list_id=0
+						ent.child_list_id=0
 						ListRemove( child_list_queue,ent )
 						For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
-							Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(child_list_id) )
+							Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(ent.child_list_id) )
 							Local obj:TEntity=GetObject(inst)
 							If obj Then ListAddLast( ent.child_list,obj )
 						Next
