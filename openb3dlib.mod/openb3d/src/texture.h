@@ -62,6 +62,7 @@ public:
 	static Texture* LoadAnimTexture(string filename,int flags=0, int frame_width=0,int frame_height=0,int first_frame=0,int frame_count=1);
 	static Texture* CreateTexture(int width=256,int height=256,int flags=3, int frames=0);
 
+	Texture* Copy();
 	void FreeTexture();
 	void DrawTexture(int x,int y);
 	void TextureBlend(int blend_no);

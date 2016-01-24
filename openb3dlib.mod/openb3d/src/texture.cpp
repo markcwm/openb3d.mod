@@ -43,6 +43,31 @@ list<Texture*> Texture::tex_list;
 
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
 
+Texture* Texture::Copy(){
+	Texture *tex=new Texture();
+	
+	tex->texture=texture;
+	tex->file=file;
+	tex->frames=frames;
+	
+	tex->flags=flags;
+	tex->blend=blend;
+	tex->coords=coords;
+	tex->u_scale=u_scale;
+	tex->v_scale=v_scale;
+	tex->u_pos=u_pos;
+	tex->v_pos=v_pos;
+	tex->angle=angle;
+	tex->file_abs=file_abs;
+	tex->width=width;
+	tex->height=height;
+	tex->no_frames=no_frames;
+	tex->framebuffer=framebuffer;
+	tex->cube_face=cube_face;
+	tex->cube_mode=cube_mode;
+	
+	return tex;
+}
 
 Texture* Texture::LoadTexture(string filename,int flags){
 	if (flags&128) {
