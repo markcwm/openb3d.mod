@@ -34,7 +34,7 @@ AnimationKeys* AnimationKeysCopy( AnimationKeys* obj ){
 
 // Brush
 
-Brush* CopyBrush( Brush* obj ){
+Brush* BrushCopy( Brush* obj ){
 	return obj->Copy();
 }
 
@@ -474,6 +474,10 @@ void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
 }
 
 // Texture
+
+Texture* TextureCopy( Texture* obj ){
+	return obj->Copy();
+}
 
 Texture* TexInList( Texture* obj ){
 	return obj->TexInList();

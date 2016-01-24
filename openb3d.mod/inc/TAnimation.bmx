@@ -78,7 +78,7 @@ Type TAnimationKeys
 		
 	End Function
 	
-	Function DeleteObject( inst:Byte Ptr )
+	Function FreeObject( inst:Byte Ptr )
 	
 		animkeys_map.Remove( String(Long(inst)) )
 		

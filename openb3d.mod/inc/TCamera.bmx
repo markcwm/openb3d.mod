@@ -5,7 +5,7 @@ End Rem
 Type TCamera Extends TEntity
 
 	Global cam_list:TList=CreateList() ' Camera list
-	Global render_list:TList=CreateList() ' openb3d: Mesh list
+	'Global render_list:TList=CreateList() ' openb3d: Mesh list - used in Render
 	
 	Field vx:Int Ptr,vy:Int Ptr,vwidth:Int Ptr,vheight:Int Ptr ' 0/0/320/480
 	Field cls_r:Float Ptr,cls_g:Float Ptr,cls_b:Float Ptr ' 0.0/0.0/0.0
@@ -30,6 +30,9 @@ Type TCamera Extends TEntity
 	Global projected_z:Float Ptr
 	
 	Field frustum:Float Ptr ' array [6][4]
+	
+	' wrapper
+	Global cam_list_id:Int=0
 	
 	Function CreateObject:TCamera( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
@@ -84,27 +87,36 @@ Type TCamera Extends TEntity
 		proj_mat=CameraFloat_( GetInstance(Self),CAMERA_proj_mat )
 		frustum=CameraFloat_( GetInstance(Self),CAMERA_frustum )
 		
+		AddList_(cam_list)
+		
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
-		ClearList list
+		Super.AddList_(list)
 		
 		Select list
 			Case cam_list
+				If StaticListSize_( CAMERA_class,CAMERA_cam_list )
+					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr(cam_list_id) )
+					Local obj:TCamera=TCamera( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
+		Super.CopyList_(list) ' calls ClearList
+		
+		Select list
+			Case cam_list
+				cam_list_id=0
 				For Local id:Int=0 To StaticListSize_( CAMERA_class,CAMERA_cam_list )-1
-					inst=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list )
-					Local obj:TCamera=TCamera( GetObject(inst) )
-					If obj=Null And inst<>Null Then obj=TCamera.CreateObject(inst)
-					ListAddLast list,obj
-				Next
-			Case render_list
-				For Local id:Int=0 To StaticListSize_( CAMERA_class,CAMERA_render_list )-1
-					inst=StaticIterListMesh_( CAMERA_class,CAMERA_render_list )
-					Local obj:TMesh=TMesh( TEntity.GetObject(inst) )
-					If obj=Null And inst<>Null Then obj=TMesh.CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr(cam_list_id) )
+					Local obj:TCamera=TCamera( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
@@ -130,6 +142,8 @@ Type TCamera Extends TEntity
 	
 	Method FreeEntity()
 	
+		If Not exists Then Return
+		ListRemove( cam_list,Self ) ; cam_list_id:-1
 		Super.FreeEntity()
 		
 	End Method
@@ -138,17 +152,15 @@ Type TCamera Extends TEntity
 	
 		Local inst:Byte Ptr=CreateCamera_( GetInstance(parent) )
 		Local cam:TCamera=CreateObject(inst)
-		CopyList(TCamera.cam_list)
+		TGlobal.camera_in_use=cam
 		Return cam
 		
 	End Function
 	
-	' GraphicsHeight was replaced with vheight[0] as it only worked for main cam (full res)
 	Method CameraViewport( x:Int,y:Int,width:Int,height:Int )
 	
-		CameraViewport_( GetInstance(Self),x,y,width,height) ' update values before inverted y
-		CameraViewport_( GetInstance(Self),x,vheight[0]-y-height,width,height )
-				
+		CameraViewport_( GetInstance(Self),x,GraphicsHeight()-y-height,width,height ) ' inverted y
+		
 	End Method
 	
 	Method CameraClsColor( r:Float,g:Float,b:Float )
@@ -183,10 +195,8 @@ Type TCamera Extends TEntity
 	
 	Method CameraPick:TEntity( x:Float,y:Float ) ' same as function in TPick
 	
-		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,vheight[0]-y ) ' inverted y
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,GraphicsHeight()-y ) ' inverted y
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -243,7 +253,9 @@ Type TCamera Extends TEntity
 	Method CopyEntity:TCamera( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local cam:TCamera=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return cam
 		
 	End Method
 	
@@ -254,7 +266,7 @@ Type TCamera Extends TEntity
 		
 	End Method
 	
-	' Render camera - renders all meshes camera can see, called in RenderWorld
+	' renders all meshes camera can see, called in RenderWorld
 	Method Render()
 	
 		CameraRender_( GetInstance(Self) )

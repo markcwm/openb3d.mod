@@ -108,7 +108,9 @@ Type TSprite Extends TMesh
 	Method CopyEntity:TSprite( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local sprite:TSprite=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return sprite
 		
 	End Method
 	

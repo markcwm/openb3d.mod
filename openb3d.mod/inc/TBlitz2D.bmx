@@ -75,7 +75,7 @@ Type TBlitz2D
 		glAlphaFunc(GL_GEQUAL,0.5)
 		
 		For Local cam:TCamera=EachIn TCamera.cam_list
-			If cam.hide[0]=0 ' active camera
+			If cam=TGlobal.camera_in_use ' active camera - was if cam.hide[0]=0
 				cam.UpdateFog() ' fog with Max2d fix
 				Exit
 			EndIf

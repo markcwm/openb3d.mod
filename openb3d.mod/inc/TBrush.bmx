@@ -19,6 +19,8 @@ Type TBrush
 	Global brush_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
+	Field exists:Int=0 ' FreeBrush
+	
 	Function CreateObject:TBrush( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -76,6 +78,8 @@ Type TBrush
 			If tex[id]=Null And inst<>Null Then tex[id]=TTexture.CreateObject(inst)
 		Next
 		
+		exists=1
+		
 	End Method
 	
 	' Openb3d
@@ -83,9 +87,7 @@ Type TBrush
 	Method GetBrushTexture:TTexture( index:Int=0 ) ' same as function in TTexture
 	
 		Local inst:Byte Ptr=GetBrushTexture_( GetInstance(Self),index )
-		Local tex:TTexture=TTexture.GetObject(inst)
-		If tex=Null And inst<>Null Then tex=TTexture.CreateObject(inst)
-		Return tex
+		Return TTexture.GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -109,11 +111,13 @@ Type TBrush
 	
 	Method FreeBrush()
 	
+		If Not exists Then Return
 		FreeObject( GetInstance(Self) )
 		FreeBrush_( GetInstance(Self) )
+		exists=0
 		
 	End Method
-		
+	
 	Function CreateBrush:TBrush( r:Float=255,g:Float=255,b:Float=255 )
 	
 		Local inst:Byte Ptr=CreateBrush_( r,g,b )
@@ -189,7 +193,7 @@ Type TBrush
 	
 	Method Copy:TBrush()
 		
-		Local inst:Byte Ptr=CopyBrush_( GetInstance(Self) )
+		Local inst:Byte Ptr=BrushCopy_( GetInstance(Self) )
 		Return CreateObject(inst)
 		
 	End Method

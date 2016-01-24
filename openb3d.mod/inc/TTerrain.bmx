@@ -17,6 +17,9 @@ Type TTerrain Extends TEntity
 	Field eyepoint:TCamera ' reference to camera
 	Field ShaderMat:TShader ' NULL
 	
+	' wrapper
+	Global terrain_list_id:Int=0
+	
 	Function CreateObject:TTerrain( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -46,34 +49,56 @@ Type TTerrain Extends TEntity
 		
 		' camera_
 		Local inst:Byte Ptr=TerrainCamera_( GetInstance(Self),TERRAIN_eyepoint )
-		eyepoint=TCamera( TEntity.GetObject(inst) )
-		If eyepoint=Null And inst<>Null Then eyepoint=TCamera.CreateObject(inst)
+		eyepoint=TCamera( TEntity.GetObject(inst) ) ' no CreateObject
 		
 		' shader
 		inst=TerrainShader_( GetInstance(Self),TERRAIN_ShaderMat )
-		ShaderMat=TShader.GetObject(inst)
-		If ShaderMat=Null And inst<>Null Then ShaderMat=TShader.CreateObject(inst)
+		ShaderMat=TShader.GetObject(inst) ' no CreateObject
+		
+		AddList_(terrain_list)
 		
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
-		ClearList list
+		Super.AddList_(list)
 		
 		Select list
 			Case terrain_list
+				If StaticListSize_( TERRAIN_class,TERRAIN_terrain_list )
+					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr(terrain_list_id) )
+					Local obj:TTerrain=TTerrain( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
+		Super.CopyList_(list) ' calls ClearList
+		
+		Select list
+			Case terrain_list
+				terrain_list_id=0
 				For Local id:Int=0 To StaticListSize_( TERRAIN_class,TERRAIN_terrain_list )-1
-					inst=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list )
-					Local obj:TTerrain=TTerrain( GetObject(inst) )
-					If obj=Null And inst<>Null Then obj=TTerrain.CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr(terrain_list_id) )
+					Local obj:TTerrain=TTerrain( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
 	End Function
 	
 	' Openb3d
+	
+	Method FreeEntity()
+	
+		If Not exists Then Return
+		ListRemove( terrain_list,Self ) ; terrain_list_id:-1
+		Super.FreeEntity()
+		
+	End Method
 	
 	Function CreateTerrain:TTerrain( size:Int,parent:TEntity=Null )
 	
@@ -127,7 +152,9 @@ Type TTerrain Extends TEntity
 	Method CopyEntity:TTerrain( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local terr:TTerrain=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return terr
 		
 	End Method
 	

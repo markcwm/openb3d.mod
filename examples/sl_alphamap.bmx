@@ -28,14 +28,14 @@ MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
 ' note: more than one visible surface is needed for alpha to work
-Local shader:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap2.frag.glsl")
+Local shader:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap.frag.glsl")
 ShaderTexture(shader,LoadTexture("media/colorkey.jpg"),"tex",0)
 ShaderTexture(shader,LoadTexture("media/spark.png"),"alphatex",1)
 ShadeEntity(cube,shader)
 EntityFX(cube,32)
 
 ' tranlucency - from single image with alpha channel
-Local shader2:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap.frag.glsl")
+Local shader2:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap2.frag.glsl")
 ShaderTexture(shader2,LoadTexture("media/alpha_map.png"),"tex",0)
 ShadeEntity(cube2,shader2)
 EntityFX(cube2,32)

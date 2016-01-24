@@ -6,7 +6,7 @@ Type TPick
 
 	Const EPSILON:Float=0.0001
 	
-	Global ent_list:TList=CreateList() ' Entity list containing pickable entities (set in EntityPickMode)
+	Global ent_list:TList=CreateList() ' Entity list containing pickable entities - set in EntityPickMode
 	
 	Global picked_x:Float Ptr
 	Global picked_y:Float Ptr
@@ -19,6 +19,9 @@ Type TPick
 	Global picked_surface:TSurface
 	Global picked_triangle:Int Ptr
 	
+	' wrapper
+	Global ent_list_id:Int=0
+	
 	Function InitGlobals() ' Once per Graphics3D
 	
 		picked_x=StaticFloat_( PICK_class,PICK_picked_x )
@@ -28,24 +31,35 @@ Type TPick
 		picked_ny=StaticFloat_( PICK_class,PICK_picked_ny )
 		picked_nz=StaticFloat_( PICK_class,PICK_picked_nz )
 		picked_time=StaticFloat_( PICK_class,PICK_picked_time )
-		picked_ent=TEntity.CreateObject( StaticEntity_( PICK_class,PICK_picked_ent ) )
-		picked_surface=TSurface.CreateObject( StaticSurface_( PICK_class,PICK_picked_surface ) )
+		
 		picked_triangle=StaticInt_( PICK_class,PICK_picked_triangle )
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
+		Select list
+			Case ent_list
+				If StaticListSize_( PICK_class,PICK_ent_list )
+					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr(ent_list_id) )
+					Local obj:TEntity=TEntity.GetObject(inst) ' no CreateObject
+					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
 		ClearList list
 		
 		Select list
 			Case ent_list
+				ent_list_id=0
 				For Local id:Int=0 To StaticListSize_( PICK_class,PICK_ent_list )-1
-					inst=StaticIterListEntity_( PICK_class,PICK_ent_list )
-					Local obj:TEntity=TEntity.GetObject(inst)
-					If obj=Null And inst<>Null Then obj=TEntity.CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr(ent_list_id) )
+					Local obj:TEntity=TEntity.GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
@@ -55,7 +69,7 @@ Type TPick
 	
 	Function CameraPick:TEntity( cam:TCamera,x:Float,y:Float ) ' same as method in TCamera
 	
-		Local inst:Byte Ptr=CameraPick_( TCamera.GetInstance(cam),x,cam.vheight[0]-y ) ' inverted y
+		Local inst:Byte Ptr=CameraPick_( TCamera.GetInstance(cam),x,GraphicsHeight()-y ) ' inverted y
 		Return TCamera.GetObject(inst)
 		
 	End Function
@@ -126,6 +140,7 @@ Type TPick
 	Function PickedEntity:TEntity()
 	
 		Local inst:Byte Ptr=PickedEntity_()
+		TPick.picked_ent=TEntity.GetObject( StaticEntity_( PICK_class,PICK_picked_ent ) )
 		Return TEntity.GetObject(inst)
 		
 	End Function
@@ -133,9 +148,8 @@ Type TPick
 	Function PickedSurface:TSurface()
 	
 		Local inst:Byte Ptr=PickedSurface_()
-		Local surf:TSurface=TSurface.GetObject(inst)
-		If surf=Null And inst<>Null Then surf=TSurface.CreateObject(inst)
-		Return surf
+		TPick.picked_surface=TSurface.GetObject( StaticSurface_( PICK_class,PICK_picked_surface ) )
+		Return TSurface.GetObject(inst) ' no CreateObject
 		
 	End Function
 	

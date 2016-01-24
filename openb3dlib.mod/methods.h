@@ -12,7 +12,7 @@ void VertexDeform(Mesh* ent);
 AnimationKeys* AnimationKeysCopy( AnimationKeys* obj );
 
 // Brush
-Brush* CopyBrush( Brush* obj );
+Brush* BrushCopy( Brush* obj );
 int CompareBrushes( Brush* brush1,Brush* brush2 );
 
 // Camera
@@ -154,6 +154,7 @@ void TerrainUpdateNormals( Terrain* obj );
 void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 
 // Texture
+Texture* TextureCopy( Texture* obj );
 Texture* TexInList( Texture* obj );
 void FilterFlags( Texture* obj );
 //static string Strip(string filename);

@@ -51,7 +51,7 @@ Type TEntity
 	Field box_x:Float Ptr,box_y:Float Ptr,box_z:Float Ptr ' set in EntityBox - -1.0/-1.0/-1.0
 	Field box_w:Float Ptr,box_h:Float Ptr,box_d:Float Ptr ' set in EntityBox - 2.0/2.0/2.0
 	Field no_collisions:Int Ptr ' returned by CountCollisions - 0
-	Field collision:TList=CreateList() ' CollisionImpact vector used in CollisionX/Y/Z/NX/NY/NZ/Time/Entity/Surface/Triangle
+	'Field collision:TList=CreateList() ' CollisionImpact vector - used in CollisionX/Y/Z/NX/NY/NZ/Time/Entity/Surface/Triangle
 	Field old_x:Float Ptr,old_y:Float Ptr,old_z:Float Ptr ' used by Collisions - 0.0/0.0/0.0
 	Field old_pitch:Float Ptr,old_yaw:Float Ptr,old_roll:Float Ptr ' openb3d
 	Field new_x:Float Ptr,new_y:Float Ptr,new_z:Float Ptr ' openb3d - 0.0/0.0/0.0
@@ -79,19 +79,16 @@ Type TEntity
 	Global ent_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
-	'Method CopyEntity:TEntity( parent_ent:TEntity=Null ) Abstract ' these conflicted with CreateObject
-	'Method Update() Abstract
+	Global entity_list_id:Int=0
+	Global animate_list_id:Int=0
+	Field child_list_id:Int=0
+	Field exists:Int=0 ' FreeEntity
+	Global child_list_queue:TList=CreateList()
 	
-	Function CreateObject:TEntity( inst:Byte Ptr ) ' Create and map object from C++ instance
+	Method CopyEntity:TEntity( parent_ent:TEntity=Null ) Abstract
+	Method Update() Abstract
 	
-		If inst=Null Then Return Null
-		Local obj:TEntity=New TEntity
-		ent_map.Insert( String(Long(inst)),obj )
-		obj.instance=inst
-		obj.InitFields()
-		Return obj
-		
-	End Function
+	'Function CreateObject:TEntity( inst:Byte Ptr ) ' Not needed
 	
 	Function FreeObject( inst:Byte Ptr )
 	
@@ -191,8 +188,7 @@ Type TEntity
 		
 		' entity
 		Local inst:Byte Ptr=EntityEntity_( GetInstance(Self),ENTITY_parent )
-		parent=GetObject(inst)
-		If parent=Null And inst<>Null Then parent=CreateObject(inst)
+		parent=GetObject(inst) ' no CreateObject
 		
 		' matrix
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_mat )
@@ -210,55 +206,125 @@ Type TEntity
 		brush=TBrush.GetObject(inst)
 		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
+		AddList_(entity_list)
+		CopyList(child_list)
+		AddList_(animate_list)
+		If TGlobal.root_ent AddList(TGlobal.root_ent.child_list) ' list of all non-child ents
+		exists=1
+		
 	End Method
+	
+	Method AddList( list:TList ) ' Field list
+	
+		Select list
+			Case child_list
+				If EntityListSize_( GetInstance(Self),ENTITY_child_list )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr(child_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+			Case TGlobal.root_ent.child_list
+				If EntityListSize_( GetInstance(TGlobal.root_ent),ENTITY_child_list )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr(TGlobal.root_ent.child_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Method
+	
+	Function AddList_( list:TList ) ' Global list
+	
+		Select list
+			Case entity_list
+				If StaticListSize_( ENTITY_class,ENTITY_entity_list )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr(entity_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+			Case animate_list
+				If StaticListSize_( ENTITY_class,ENTITY_animate_list )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr(animate_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
 	
 	Method CopyList( list:TList ) ' Field list
 	
-		Local inst:Byte Ptr
 		ClearList list
+		Local created:Int=0
 		
 		Select list
 			Case child_list
+				child_list_id=0
 				For Local id:Int=0 To EntityListSize_( GetInstance(Self),ENTITY_child_list )-1
-					inst=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list )
-					Local obj:TEntity=GetObject(inst)
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr(child_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj=Null And inst<>Null And ListContains( child_list_queue,Self )=0
+						ListAddLast( child_list_queue,Self ) ' store in queue
+					EndIf
+					If obj Then ListAddLast( list,obj )
 				Next
-			Case collision
-				For Local id:Int=0 To EntityListSize_( GetInstance(Self),ENTITY_collision )-1
-					inst=EntityIterVectorCollisionImpact_( GetInstance(Self),ENTITY_collision )
-					Local obj:TCollisionImpact=TCollisionImpact.GetObject(inst)
-					If obj=Null And inst<>Null Then obj=TCollisionImpact.CreateObject(inst)
-					ListAddLast list,obj
+				For Local ent:TEntity=EachIn child_list_queue
+					child_list_id=0 ; created=1
+					For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
+						Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(child_list_id) )
+						Local obj:TEntity=GetObject(inst)
+						If obj=Null Then created=0 ; Exit ' list not fully created yet
+					Next
+					If created
+						child_list_id=0
+						ListRemove( child_list_queue,ent )
+						For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
+							Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(child_list_id) )
+							Local obj:TEntity=GetObject(inst)
+							If obj Then ListAddLast( ent.child_list,obj )
+						Next
+					EndIf
 				Next
 			End Select
 			
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function CopyList_( list:TList ) ' Global list (unused)
 	
-		Local inst:Byte Ptr
 		ClearList list
 		
 		Select list
 			Case entity_list
+				entity_list_id=0
 				For Local id:Int=0 To StaticListSize_( ENTITY_class,ENTITY_entity_list )-1
-					inst=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list )
-					Local obj:TEntity=GetObject(inst)
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr(entity_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 			Case animate_list
+				animate_list_id=0
 				For Local id:Int=0 To StaticListSize_( ENTITY_class,ENTITY_animate_list )-1
-					inst=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list )
-					Local obj:TEntity=GetObject(inst)
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr(animate_list_id) )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
 	End Function
+	
+	Method ListPushBack( list:TList,value:Object ) ' Field list value
+	
+		Local ent:TEntity=TEntity(value)
+		
+		Select list
+			Case child_list
+				If ent
+					EntityListPushBackEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
+					AddList(list)
+				EndIf
+		End Select
+		
+	End Method
 	
 	' Openb3d
 	
@@ -301,11 +367,39 @@ Type TEntity
 	
 	Method FreeEntity()
 	
-		FreeObject( GetInstance(Self) )
+		If Not exists Then Return
+		FreeEntityList()
+		
 		FreeEntity_( GetInstance(Self) )
+		exists=0
 		
 	End Method
-
+	
+	' recursively free entity lists
+	Method FreeEntityList()
+	
+		ListRemove( entity_list,Self ) ; entity_list_id:-1
+		
+		If anim_update[0] Then ListRemove( animate_list,Self ) ; animate_list_id:-1
+		
+		If pick_mode[0] Then ListRemove( TPick.ent_list,Self ) ; TPick.ent_list_id:-1
+		
+		If parent
+			ListRemove( parent.child_list,Self ) ; parent.child_list_id:-1
+		ElseIf ListContains( TGlobal.root_ent.child_list,Self )
+			ListRemove( TGlobal.root_ent.child_list,Self ) ; TGlobal.root_ent.child_list_id:-1
+		EndIf
+		
+		FreeObject( GetInstance(Self) ) ' no FreeEntity_
+		
+		For Local ent:TEntity=EachIn child_list
+			If ent Then ent.FreeEntityList()
+		Next
+		
+		ClearList(child_list) ; child_list_id=0
+		
+	End Method
+	
 	' Entity movement (position)
 	
 	Method PositionEntity( x:Float,y:Float,z:Float,glob:Int=False )
@@ -370,6 +464,8 @@ Type TEntity
 	
 	Method Animate( Mode:Int=1,speed:Float=1,seq:Int=0,trans:Int=0 )
 	
+		If anim_list[0]=0 Then ListAddLast( animate_list,Self ) ; animate_list_id:+1
+		
 		Animate_( GetInstance(Self),Mode,speed,seq,trans )
 		
 	End Method
@@ -378,7 +474,7 @@ Type TEntity
 	' 30/01/06 - updated to make anim_time return wrapped value
 	Method SetAnimTime( time:Float,seq:Int=0 )
 	
-		If time<>0.0 Then SetAnimTime_( GetInstance(Self),time,seq ) ' munch: if zero crash fix
+		If time<>0.0 Then SetAnimTime_( GetInstance(Self),time,seq ) ' if zero crash fix
 		
 	End Method
 	
@@ -469,6 +565,7 @@ Type TEntity
 	
 	Method ShowEntity()
 	
+		If TCamera(Self) Then TGlobal.camera_in_use=TCamera(Self)
 		ShowEntity_( GetInstance(Self) )
 		
 	End Method
@@ -500,9 +597,7 @@ Type TEntity
 	Method GetParent:TEntity()
 	
 		Local inst:Byte Ptr=GetParentEntity_( GetInstance(Self) )
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -569,9 +664,7 @@ Type TEntity
 	Method GetChild:TEntity( child_no:Int )
 	
 		Local inst:Byte Ptr=GetChild_( GetInstance(Self),child_no )
-		Local child:TEntity=GetObject(inst)
-		If child=Null And inst<>Null Then child=CreateObject(inst)
-		Return child
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -579,10 +672,8 @@ Type TEntity
 	
 		Local cString:Byte Ptr=child_name.ToCString()
 		Local inst:Byte Ptr=FindChild_( GetInstance(Self),cString )
-		Local child:TEntity=GetObject(inst)
-		If child=Null And inst<>Null Then child=CreateObject(inst)
 		MemFree cString
-		Return child
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -591,9 +682,7 @@ Type TEntity
 	Method EntityPick:TEntity( Range:Float ) ' same as function in TPick
 	
 		Local inst:Byte Ptr=EntityPick_( GetInstance(Self),Range )
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -601,9 +690,7 @@ Type TEntity
 	Method LinePick:TEntity( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,radius:Float=0 )
 	
 		Local inst:Byte Ptr=LinePick_( x,y,z,dx,dy,dz,radius )
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -674,6 +761,7 @@ Type TEntity
 	Method GetMatElement:Float( row:Int,col:Int )
 	
 		'Return GetMatElement_( GetInstance(Self),row,col )
+		
 		Return mat.grid[(4*row)+col]
 		
 	End Method
@@ -699,17 +787,34 @@ Type TEntity
 	End Method
 	
 	Method EntityType( type_no:Int,recursive:Int=False )
-	
+			
+		EntityTypeList( type_no,recursive )
+		
 		EntityType_( GetInstance(Self),type_no,recursive )
+		
+	End Method
+	
+	Method EntityTypeList( type_no:Int,recursive:Int=False )
+	
+		If type_no<0 Then type_no=-type_no
+		
+		If recursive
+			For Local ent:TEntity=EachIn child_list
+				ent.EntityTypeList( type_no,True )
+			Next
+		EndIf
 		
 	End Method
 	
 	' picking
 	
-	Method EntityPickMode( pick_mode:Int,obscurer:Int=True )
+	Method EntityPickMode( pick_mode_no:Int,obscurer:Int=True )
 	
-		EntityPickMode_( GetInstance(Self),pick_mode,obscurer )
-			
+		EntityPickMode_( GetInstance(Self),pick_mode_no,obscurer )
+		
+		If pick_mode_no Then TPick.AddList_(TPick.ent_list)
+		If pick_mode_no=0 Then ListRemove( TPick.ent_list,Self ) ; TPick.ent_list_id:-1
+		
 	End Method
 	
 	' collisions
@@ -717,9 +822,7 @@ Type TEntity
 	Method EntityCollided:TEntity( type_no:Int )
 	
 		Local inst:Byte Ptr=EntityCollided_( GetInstance(Self),type_no )
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -774,18 +877,14 @@ Type TEntity
 	Method CollisionEntity:TEntity( index:Int )
 	
 		Local inst:Byte Ptr=CollisionEntity_( GetInstance(Self),index )
-		Local ent:TEntity=GetObject(inst)
-		If ent=Null And inst<>Null Then ent=CreateObject(inst)
-		Return ent
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
 	Method CollisionSurface:TSurface( index:Int )
 	
 		Local inst:Byte Ptr=CollisionSurface_( GetInstance(Self),index )
-		Local surf:TSurface=TSurface.GetObject(inst)
-		If surf=Null And inst<>Null Then surf=TSurface.CreateObject(inst)
-		Return surf
+		Return TSurface.GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -830,18 +929,8 @@ Type TEntity
 	
 	' Internal - not recommended for general use (helper funcs)
 	
-	Method CopyEntity:TEntity( parent:TEntity=Null )
-	
-		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
-		
-	End Method
-	
-	Method Update() ' empty
-	
-		
-		
-	End Method
+	'Method CopyEntity:TEntity( parent:TEntity=Null )
+	'Method Update() ' empty
 	
 	' Returns if an entity or it's parent is hidden
 	Method Hidden:Int()
@@ -861,42 +950,18 @@ Type TEntity
 	Method GetChildFromAll:TEntity( child_no:Int,no_children:Int Var,ent:TEntity=Null )
 	
 		Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr(no_children),GetInstance(ent) )
-		Local ent2:TEntity=GetObject(inst)
-		If ent2=Null And inst<>Null Then ent2=CreateObject(inst)
-		Return ent2
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
-	Function CountAllChildren2:Int( ent:TEntity,no_children:Int=0 ) ' bmx version
+	' recursively adds all parents of ent to list, ent.ListParents(list)
+	Method ListParents( list:TList )
 	
-		Local children:Int=ent.CountChildren()
-		
-		For Local id:Int=1 To children
-			no_children=no_children+1
-			no_children=CountAllChildren( ent.GetChild(id),no_children )
-		Next
-		
-		Return no_children
-		
-	End Function
-	
-	Method GetChildFromAll2:TEntity( child_no:Int,no_children:Int Var,ent:TEntity=Null ) ' bmx version
-	
-		If ent=Null Then ent=Self
-		
-		Local ent2:TEntity=Null
-		Local children:Int=ent.CountChildren()
-		
-		For Local id:Int=1 To children
-			no_children=no_children+1
-			If no_children=child_no Then Return ent.GetChild(id)
-			
-			If ent2=Null
-				ent2=GetChildFromAll( child_no,no_children,ent.GetChild(id) )
-			EndIf
-		Next
-		
-		Return ent2
+		Local parent:TEntity=GetParent()
+		If parent
+			ListAddLast( list,parent )
+			ListParents(list)
+		EndIf
 		
 	End Method
 	

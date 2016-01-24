@@ -55,7 +55,7 @@ Extern
 	Function AnimationKeysCopy_:Byte Ptr( obj:Byte Ptr ) = "AnimationKeysCopy"
 	
 	' Brush
-	Function CopyBrush_:Byte Ptr( obj:Byte Ptr ) = "CopyBrush"
+	Function BrushCopy_:Byte Ptr( obj:Byte Ptr ) = "BrushCopy"
 	Function CompareBrushes_:Int( brush1:Byte Ptr,brush2:Byte Ptr ) = "CompareBrushes"
 	
 	' Camera
@@ -185,6 +185,7 @@ Extern
 	Function col_tree_sub_( obj:Byte Ptr,l:Int,v0:Float Ptr,v1:Float Ptr,v2:Float Ptr ) = "col_tree_sub"
 	
 	' Texture
+	Function TextureCopy_:Byte Ptr( obj:Byte Ptr ) = "TextureCopy"
 	Function TexInList_:Byte Ptr( obj:Byte Ptr ) = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr ) = "FilterFlags"
 	
@@ -202,17 +203,16 @@ Extern
 	Function StaticPivot_:Byte Ptr( classid:Int,varid:Int ) = "StaticPivot"
 	Function StaticSurface_:Byte Ptr( classid:Int,varid:Int ) = "StaticSurface"
 	Function StaticListSize_:Int( classid:Int,varid:Int ) = "StaticListSize"
-	Function StaticListSizeArray_:Int( classid:Int,varid:Int,index:Int ) = "StaticListSizeArray"
-	
-	Function StaticIterListCamera_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListCamera"
-	Function StaticIterListCollisionPair_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListCollisionPair"
-	Function StaticIterListEntity_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListEntity"
-	Function StaticIterListEntityArray_:Byte Ptr( classid:Int,varid:Int,index:Int ) = "StaticIterListEntityArray"
-	Function StaticIterListMesh_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListMesh"
-	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListShadowObject"
-	Function StaticIterListTerrain_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListTerrain"
-	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterListTexture"
-	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int ) = "StaticIterVectorLight"
+	Function StaticListArraySize_:Int( classid:Int,varid:Int,index:Int ) = "StaticListArraySize"
+	Function StaticIterListCamera_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListCamera"
+	Function StaticIterListCollisionPair_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListCollisionPair"
+	Function StaticIterListEntity_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListEntity"
+	Function StaticIterListArrayEntity_:Byte Ptr( classid:Int,varid:Int,index:Int,id:Int Ptr ) = "StaticIterListArrayEntity"
+	Function StaticIterListMesh_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListMesh"
+	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListShadowObject"
+	Function StaticIterListTerrain_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListTerrain"
+	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterListTexture"
+	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr ) = "StaticIterVectorLight"
 	
 	' AnimationKeys
 	Function AnimationKeysInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysInt"
@@ -235,15 +235,6 @@ Extern
 	Function CameraInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "CameraInt"
 	Function CameraFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "CameraFloat"
 	
-	' CollisionPair
-	Function CollisionPairInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "CollisionPairInt"
-	
-	' CollisionImpact
-	Function CollisionImpactInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "CollisionImpactInt"
-	Function CollisionImpactFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "CollisionImpactFloat"
-	Function CollisionImpactEntity_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "CollisionImpactEntity"
-	Function CollisionImpactSurface_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "CollisionImpactSurface"
-	
 	' Entity
 	Function EntityInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "EntityInt"
 	Function EntityFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "EntityFloat"
@@ -252,8 +243,8 @@ Extern
 	Function EntityBrush_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityBrush"
 	Function EntityMatrix_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityMatrix"
 	Function EntityListSize_:Int( obj:Byte Ptr,varid:Int ) = "EntityListSize"
-	Function EntityIterListEntity_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityIterListEntity"
-	Function EntityIterVectorCollisionImpact_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "EntityIterVectorCollisionImpact"
+	Function EntityIterListEntity_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr ) = "EntityIterListEntity"
+	Function EntityListPushBackEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr ) = "EntityListPushBackEntity"
 	
 	' Light
 	Function LightChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"
@@ -267,9 +258,11 @@ Extern
 	Function MeshFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "MeshFloat"
 	Function MeshMatrix_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshMatrix"
 	Function MeshListSize_:Int( obj:Byte Ptr,varid:Int ) = "MeshListSize"
-	Function MeshIterListSurface_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshIterListSurface"
-	Function MeshIterVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshIterVectorBone"
+	Function MeshIterListSurface_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr ) = "MeshIterListSurface"
+	Function MeshIterVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr ) = "MeshIterVectorBone"
 	Function MeshVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshVectorBone"
+	Function MeshListPushBackSurface_( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "MeshListPushBackSurface"
+	Function MeshListPushBackBone_( obj:Byte Ptr,varid:Int,bone:Byte Ptr ) = "MeshListPushBackBone"
 	
 	' ShadowObject
 	Function ShadowObjectChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectChar"

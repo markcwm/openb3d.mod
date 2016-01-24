@@ -1,26 +1,5 @@
 ' functions.bmx
 
-Rem
-bbdoc: undocumented
-End Rem
-Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
-	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 ) ''
-	BrushGLColor_( TBrush.GetInstance(brush),r,g,b,a )
-End Function
-
-Rem
-bbdoc: undocumented
-End Rem
-Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int ) ''
-	BrushGLBlendFunc_( TBrush.GetInstance(brush),sfactor,dfactor )
-End Function
-
 ' *** Minib3d only
 
 Rem
@@ -648,7 +627,8 @@ Function EntityTexture( ent:TEntity,tex:TTexture,frame:Int=0,index:Int=0 )
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>.
+about: If type_no is negative, collision checking is dynamic, if zero entity is removed.
 End Rem
 Function EntityType( ent:TEntity,type_no:Int,recursive:Int=False )
 	ent.EntityType( type_no,recursive )
@@ -728,25 +708,25 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a>
 End Rem
 Function FreeBrush( brush:TBrush )
-	brush.FreeBrush()
+	If brush Then brush.FreeBrush()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeEntity">Online doc</a>
 End Rem
 Function FreeEntity( ent:TEntity )
-	ent.FreeEntity()
+	If ent Then ent.FreeEntity()
 End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
 End Rem
 Function FreeTexture( tex:TTexture )
-	tex.FreeTexture()
+	If tex Then tex.FreeTexture()
 End Function
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>
+bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.
 End Rem
 Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 )	
 	Return brush.GetBrushTexture( index )
@@ -1536,14 +1516,14 @@ Function CameraToTex( tex:TTexture,cam:TCamera,frame:Int=0 )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Create a bone.
 End Rem
 Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
 	Return TBone.CreateBone( mesh,parent_ent )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Create a flat quad.
 End Rem
 Function CreateQuad:TMesh( parent:TEntity=Null )
 	Return TMesh.CreateQuad( parent )
@@ -2080,9 +2060,10 @@ Function ShaderMaterial( material:TShader,tex:TMaterial,name:String,index:Int=0 
 End Function
 
 Rem
-bbdoc: Set shader to be used for all surfaces
+bbdoc: Set default shader for surfaces.
 End Rem
 Function AmbientShader( material:TShader )
+	TGlobal.ambient_shader=material
 	AmbientShader_( TShader.GetInstance(material) )
 End Function
 
@@ -2099,7 +2080,7 @@ Rem
 bbdoc: Frees stencil shadow
 End Rem
 Function FreeShadow( shad:TShadowObject )
-	shad.FreeShadow()
+	If shad Then shad.FreeShadow()
 End Function
 
 Rem
@@ -2162,7 +2143,7 @@ Function StencilMode( stencil:TStencil,m:Int,o:Int=1 )
 End Function
 
 Rem
-bbdoc: stencil to use, set to Null to disable stencil
+bbdoc: Stencil to use, set to Null to disable stencil.
 End Rem
 Function UseStencil( stencil:TStencil )
 	UseStencil_( TStencil.GetInstance(stencil) )

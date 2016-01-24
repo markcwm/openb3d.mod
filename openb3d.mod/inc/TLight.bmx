@@ -33,6 +33,8 @@ Type TLight Extends TEntity
 	Global linearAtt#[8,1] ' [0.0/0.001]
 	Global quadraticAtt#[8,1] ' [0.0]
 	
+	Global light_list_id:Int=0
+	
 	Function CreateObject:TLight( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -68,21 +70,37 @@ Type TLight Extends TEntity
 		blue=LightFloat_( GetInstance(Self),LIGHT_blue )
 		inner_ang=LightFloat_( GetInstance(Self),LIGHT_inner_ang )
 		outer_ang=LightFloat_( GetInstance(Self),LIGHT_outer_ang )
-				
+		
+		AddList_(light_list)
+		
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
-		ClearList list
+		Super.AddList_(list)
 		
 		Select list
 			Case light_list
+				If StaticListSize_( LIGHT_class,LIGHT_light_list )
+					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr(light_list_id) )
+					Local obj:TLight=TLight( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
+		Super.CopyList_(list) ' calls ClearList
+		
+		Select list
+			Case light_list
+				light_list_id=0
 				For Local id:Int=0 To StaticListSize_( LIGHT_class,LIGHT_light_list )-1
-					inst=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list )
-					Local obj:TLight=TLight( GetObject(inst) )
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr(light_list_id) )
+					Local obj:TLight=TLight( GetObject(inst) ) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
@@ -108,6 +126,8 @@ Type TLight Extends TEntity
 	
 	Method FreeEntity()
 	
+		If Not exists Then Return
+		ListRemove( light_list,Self ) ; light_list_id:-1
 		Super.FreeEntity()
 		
 	End Method
@@ -142,7 +162,9 @@ Type TLight Extends TEntity
 	Method CopyEntity:TLight( parent:TEntity=Null )
 
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local light:TLight=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return light
 		
 	End Method
 	

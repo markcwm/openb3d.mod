@@ -77,7 +77,7 @@ Type TBone Extends TEntity
 	
 	' Openb3d
 	
-	Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
+	Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null ) ' same as method in TMesh
 	
 		Local inst:Byte Ptr=CreateBone_( GetInstance(mesh),GetInstance(parent_ent) )
 		Return CreateObject(inst)

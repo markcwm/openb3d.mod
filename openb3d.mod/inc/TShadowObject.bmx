@@ -38,6 +38,9 @@ Type TShadowObject
 	Global shad_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
+	Global shadow_list_id:Int=0
+	Field exists:Int=0 ' FreeShadow
+	
 	Function CreateObject:TShadowObject( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -96,8 +99,7 @@ Type TShadowObject
 		
 		' mesh
 		Local inst:Byte Ptr=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_Parent )
-		Parent=TMesh( TEntity.GetObject(inst) )
-		If Parent=Null And inst<>Null Then Parent=TMesh.CreateObject(inst)
+		Parent=TMesh( TEntity.GetObject(inst) ) ' no CreateObject
 		
 		inst=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_ShadowMesh )
 		ShadowMesh=TMesh( TEntity.GetObject(inst) )
@@ -108,20 +110,35 @@ Type TShadowObject
 		ShadowVolume=TSurface.GetObject(inst)
 		If ShadowVolume=Null And inst<>Null Then ShadowVolume=TSurface.CreateObject(inst)
 		
+		AddList_(shadow_list)
+		exists=1
+		
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
+		Select list
+			Case shadow_list
+				If StaticListSize_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )
+					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr(shadow_list_id) )
+					Local obj:TShadowObject=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
 		ClearList list
 		
 		Select list
 			Case shadow_list
+				shadow_list_id=0
 				For Local id:Int=0 To StaticListSize_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )-1
-					inst=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )
-					Local obj:TShadowObject=GetObject(inst)
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr(shadow_list_id) )
+					Local obj:TShadowObject=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
@@ -138,8 +155,15 @@ Type TShadowObject
 	
 	Method FreeShadow()
 	
+		If Not exists Then Return
+		ListRemove( shadow_list,Self ) ; shadow_list_id:-1
+		FreeObject( TMesh.GetInstance(ShadowMesh) ) ' no FreeEntity_
+		ListRemove( TEntity.entity_list,ShadowMesh ) ; TEntity.entity_list_id:-1
+		If CountList(shadow_list)=0 Then TGlobal.Shadows_enabled[0]=0
+		
 		FreeObject( GetInstance(Self) )
 		FreeShadow_( GetInstance(Self) )
+		exists=0
 		
 	End Method
 	

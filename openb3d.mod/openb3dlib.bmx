@@ -390,58 +390,70 @@ Function EndMax2D()
 End Function
 
 Rem
-bbdoc: Global list and listarray. Call this before accessing lists.
-EndRem
-Function CopyList( list:TList,listarray:TList[]=Null ) ' list should be Null if accessing listarray
+bbdoc: Copy a list or vector. To copy a field list use as a method.
+about: Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
+End Rem
+Function CopyList( list:TList )
+	TGlobal.CopyList( list )
+End Function
 
-	Select list
-	
-		Case TCamera.cam_list
-			TCamera.CopyList_( TCamera.cam_list )
-		Case TCamera.render_list
-			TCamera.CopyList_( TCamera.render_list )
-			
-		Case TCollisionPair.cp_list
-			TCollisionPair.CopyList_( TCollisionPair.cp_list )
-		Case Null
-			Select listarray
-				Case TCollisionPair.ent_lists
-					TCollisionPair.CopyList_( Null,TCollisionPair.ent_lists )
-			End Select
-			
-		'Case ent.child_list ' For reference
-			'ent.CopyList( ent.child_list )
-		'Case ent.collision
-			'ent.CopyList( ent.collision )
-		Case TEntity.entity_list
-			TEntity.CopyList_( TEntity.entity_list )
-		Case TEntity.animate_list
-			TEntity.CopyList_( TEntity.animate_list )
-			
-		Case TLight.light_list
-			TLight.CopyList_( TLight.light_list )
-			
-		'Case mesh.surf_list ' For reference
-			'mesh.CopyList( mesh.surf_list )
-		'Case mesh.anim_surf_list
-			'mesh.CopyList( mesh.anim_surf_list )
-		'Case mesh.bones
-			'mesh.CopyList( mesh.bones )
-		
-		Case TPick.ent_list
-			TPick.CopyList_( TPick.ent_list )
-		
-		Case TShadowObject.shadow_list
-			TShadowObject.CopyList_( TShadowObject.shadow_list )
-		
-		Case TTerrain.terrain_list
-			TTerrain.CopyList_( TTerrain.terrain_list )
-			
-		Case TTexture.tex_list
-			TTexture.CopyList_( TTexture.tex_list )
-			
-	End Select
-	
+Rem
+bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter.
+about: Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
+EndRem
+Function ListPushBack( list:TList,value:Object,ent:TEntity )
+	TGlobal.ListPushBack( list,value,ent )
+End Function
+
+Rem
+bbdoc: GL equivalent.
+End Rem
+Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
+	BrushGLColor_( TBrush.GetInstance(brush),r,g,b,a )
+End Function
+
+Rem
+bbdoc: GL equivalent.
+End Rem
+Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )
+	BrushGLBlendFunc_( TBrush.GetInstance(brush),sfactor,dfactor )
+End Function
+
+Rem
+bbdoc: GL equivalent.
+End Rem
+Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
+	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
+End Function
+
+Rem
+bbdoc: Copy brush to a surface. Frees existing brush.
+End Rem
+Function CopyBrush:TBrush( brush:TBrush,surf:TSurface )
+	Local brush2:TBrush=brush.Copy()
+	If surf.brush Then surf.brush.FreeBrush()
+	surf.brush=brush2
+	Return brush2
+End Function
+
+Rem
+bbdoc: Copy surface to a mesh.
+End Rem
+Function CopySurface:TSurface( surf:TSurface,mesh:TMesh )
+	Local surf2:TSurface=surf.Copy()
+	mesh.ListPushBack( mesh.surf_list,surf2 )
+	Return surf2
+End Function
+
+Rem
+bbdoc: Copy texture to a brush.
+about: Like GetBrushTexture in B3D, this creates a new texture. Frees existing texture.
+End Rem
+Function CopyTexture:TTexture( tex:TTexture,brush:TBrush,index:Int=0 )
+	Local tex2:TTexture=tex.Copy()
+	If brush.tex[index] Then brush.tex[index].FreeTexture()
+	brush.tex[index]=tex2
+	Return tex2
 End Function
 
 ' *** Includes
@@ -468,7 +480,7 @@ Include "inc/TAnimation.bmx"
 ' picking/collision
 'Include "inc/TColTree.bmx"
 Include "inc/TPick.bmx"
-Include "inc/TCollision.bmx"
+'Include "inc/TCollision.bmx"
 
 ' geom
 Include "inc/TVector.bmx"
@@ -482,7 +494,7 @@ Include "inc/BoxSphere.bmx"
 Include "inc/THardwareInfo.bmx"
 Include "inc/TBlitz2D.bmx"
 Include "inc/TUtility.bmx"
-'Include "inc/TDebug.bmx"
+Include "inc/TDebug.bmx"
 
 ' data
 'Include "inc/data.bmx"
@@ -500,7 +512,6 @@ Include "inc/TGLShader.bmx"
 Include "inc/TAction.bmx"
 Include "inc/TConstraint.bmx"
 Include "inc/TParticleBatch.bmx"
-
 
 ' functions
 Include "inc/functions.bmx"

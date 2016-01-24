@@ -99,7 +99,9 @@ Type TParticleEmitter Extends TEntity
 	Method CopyEntity:TParticleEmitter( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local particle:TParticleEmitter=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return particle
 		
 	End Method
 	

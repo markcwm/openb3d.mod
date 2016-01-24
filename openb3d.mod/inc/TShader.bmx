@@ -55,7 +55,7 @@ Type TShader
 		
 	End Function
 	
-	Function DeleteObject( inst:Byte Ptr )
+	Function FreeObject( inst:Byte Ptr )
 	
 		shader_map.Remove( String(Long(inst)) )
 		

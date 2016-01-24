@@ -57,7 +57,9 @@ Type TPivot Extends TEntity
 	Method CopyEntity:TPivot( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local pivot:TPivot=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return pivot
 		
 	End Method
 	

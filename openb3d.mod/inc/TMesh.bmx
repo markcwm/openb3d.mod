@@ -26,6 +26,11 @@ Type TMesh Extends TEntity
 	'Field no_bones:Int=0
 	'Field col_tree:TColTree=New TColTree
 	
+	' wrapper
+	Field surf_list_id:Int=0
+	Field anim_surf_list_id:Int=0
+	Field bones_id:Int=0
+	
 	Function CreateObject:TMesh( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -39,7 +44,11 @@ Type TMesh Extends TEntity
 	
 	Method InitFields() ' Once per CreateObject
 	
-		Super.InitFields()
+		CopyList(surf_list)
+		CopyList(anim_surf_list)
+		CopyList(bones)
+		
+		Super.InitFields() ' after bones CreateObjects for child_list
 		
 		' int
 		no_surfs=MeshInt_( GetInstance(Self),MESH_no_surfs )
@@ -61,45 +70,106 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	Method CopyList( list:TList ) ' Field list
+	Method AddList( list:TList ) ' Field list
 	
-		Local inst:Byte Ptr
-		ClearList list
+		Super.AddList(list)
 		
 		Select list
 			Case surf_list
-				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_surf_list )-1
-					inst=MeshIterListSurface_( GetInstance(Self),MESH_surf_list )
+				If MeshListSize_( GetInstance(Self),MESH_surf_list )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr(surf_list_id) )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
-					ListAddLast list,obj
-				Next
+					If obj Then ListAddLast( list,obj )
+				EndIf
 			Case anim_surf_list
-				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_anim_surf_list )-1
-					inst=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list )
+				If MeshListSize_( GetInstance(Self),MESH_anim_surf_list )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr(anim_surf_list_id) )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
-					ListAddLast list,obj
-				Next
+					If obj Then ListAddLast( list,obj )
+				EndIf
 			Case bones
-				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_bones )-1
-					inst=MeshIterVectorBone_( GetInstance(Self),MESH_bones )
+				If MeshListSize_( GetInstance(Self),MESH_bones )
+					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr(bones_id) )
 					Local obj:TBone=TBone( TEntity.GetObject(inst) )
 					If obj=Null And inst<>Null Then obj=TBone.CreateObject(inst)
-					ListAddLast list,obj
+					If obj Then ListAddLast( list,obj )
+				EndIf
+			End Select
+						
+	End Method
+	
+	Method CopyList( list:TList ) ' Field list
+	
+		Super.CopyList(list) ' calls ClearList
+		
+		Select list
+			Case surf_list
+				surf_list_id=0
+				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_surf_list )-1
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr(surf_list_id) )
+					Local obj:TSurface=TSurface.GetObject(inst)
+					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
+					If obj Then ListAddLast( list,obj )
+				Next
+			Case anim_surf_list
+				anim_surf_list_id=0
+				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_anim_surf_list )-1
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr(anim_surf_list_id) )
+					Local obj:TSurface=TSurface.GetObject(inst)
+					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
+					If obj Then ListAddLast( list,obj )
+				Next
+			Case bones
+				bones_id=0
+				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_bones )-1
+					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr(bones_id) )
+					Local obj:TBone=TBone( TEntity.GetObject(inst) )
+					If obj=Null And inst<>Null Then obj=TBone.CreateObject(inst)
+					If obj Then ListAddLast( list,obj )
 				Next
 			End Select
 			
 	End Method
 	
+	Method ListPushBack( list:TList,value:Object ) ' Field list value
+	
+		Super.ListPushBack( list,value )
+		
+		Local surf:TSurface=TSurface(value)
+		Local bone:TBone=TBone(value)
+		
+		Select list
+			Case surf_list
+				If surf
+					MeshListPushBackSurface_( GetInstance(Self),MESH_surf_list,TSurface.GetInstance(surf) )
+					AddList(list)
+					no_surfs[0]:+1
+				EndIf
+			Case anim_surf_list
+				If surf
+					MeshListPushBackSurface_( GetInstance(Self),MESH_anim_surf_list,TSurface.GetInstance(surf) )
+					AddList(list)
+					no_surfs[0]:+1
+				EndIf
+			Case bones
+				If bone
+					MeshListPushBackBone_( GetInstance(Self),MESH_bones,TBone.GetInstance(bone) )
+					AddList(list)
+				EndIf
+		End Select
+		
+	End Method
+	
 	' Openb3d
 	
-	Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )
+	Method CreateBone:TBone( parent_ent:TEntity=Null ) ' same as function in TBone
 	
-		Local inst:Byte Ptr=CreateBone_( GetInstance(mesh),GetInstance(parent_ent) )
+		Local inst:Byte Ptr=CreateBone_( GetInstance(Self),GetInstance(parent_ent) )
 		Return TBone.CreateObject(inst)
 		
-	End Function
+	End Method
 	
 	' unlike B3d divisions can be more than 16
 	Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
@@ -107,7 +177,6 @@ Type TMesh Extends TEntity
 		'Local inst:Byte Ptr=CreatePlane_( divisions,GetInstance(parent) )
 		'Return CreateObject(inst)
 		
-		' currently unfinished in Openb3d
 		Local mesh:TMesh=CreateMesh(parent)
 		Local surf:TSurface=mesh.CreateSurface()
 		
@@ -136,7 +205,7 @@ Type TMesh Extends TEntity
 			Next
 		Next
 		
-		RotateMesh mesh,0,-90,0 ' just to match CreatePlane rotation
+		mesh.RotateMesh(0,-90,0) ' just to match CreatePlane rotation
 		Return mesh
 		
 	End Function
@@ -164,7 +233,9 @@ Type TMesh Extends TEntity
 	Method RepeatMesh:TMesh( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=RepeatMesh_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local mesh:TMesh=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return mesh
 		
 	End Method
 	
@@ -194,6 +265,10 @@ Type TMesh Extends TEntity
 	
 	Method FreeEntity()
 	
+		If Not exists Then Return
+		ClearList(surf_list) ; surf_list_id=0
+		ClearList(anim_surf_list) ; anim_surf_list_id=0
+		ClearList(bones) ; bones_id=0
 		Super.FreeEntity()
 		
 	End Method
@@ -342,23 +417,16 @@ Type TMesh Extends TEntity
 	Method GetSurface:TSurface( surf_no:Int )
 	
 		Local inst:Byte Ptr=GetSurface_( GetInstance(Self),surf_no )
-		Local surf:TSurface=TSurface.GetObject(inst)
-		If surf=Null And inst<>Null Then surf=TSurface.CreateObject(inst)
-		Return surf
+		Return TSurface.GetObject(inst) ' no CreateObject
 		
 	End Method
 	
 	' *** note: unlike B3D version, this will find a surface with no brush, if a null brush is supplied
 	Method FindSurface:TSurface( brush:TBrush )
 	
-		CopyList( surf_list )
-		
 		For Local surf:TSurface=EachIn surf_list
-			If TBrush.CompareBrushes( brush,surf.brush )=True
-				Return surf
-			EndIf
+			If TBrush.CompareBrushes( brush,surf.brush )=True Then Return surf
 		Next
-		
 		Return Null
 		
 	End Method
@@ -368,7 +436,9 @@ Type TMesh Extends TEntity
 	Method CopyEntity:TMesh( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CopyEntity_( GetInstance(Self),GetInstance(parent) )
-		Return CreateObject(inst)
+		Local mesh:TMesh=CreateObject(inst)
+		If pick_mode[0] Then TPick.AddList_(TPick.ent_list)
+		Return mesh
 		
 	End Method
 	
@@ -426,7 +496,7 @@ Type TMesh Extends TEntity
 	End Method
 	
 	' used by CollapseAnimMesh
-	' has to be function(?) as we need to use this function with all entities and not just meshes
+	' has to be function as we need to use this function with all entities and not just meshes(?)
 	Method CollapseChildren:TMesh( ent0:TEntity,mesh:TMesh=Null )
 	
 		Local inst:Byte Ptr=CollapseChildren_( GetInstance(Self),GetInstance(ent0),GetInstance(mesh) )

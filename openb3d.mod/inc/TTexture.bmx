@@ -30,6 +30,9 @@ Type TTexture
 	Global tex_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
+	Global tex_list_id:Int=0
+	Field exists:Int=0 ' FreeTexture
+	
 	Function CreateObject:TTexture( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -88,20 +91,35 @@ Type TTexture
 		file=TextureString_( GetInstance(Self),TEXTURE_file )
 		file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
 		
+		AddList_(tex_list)
+		exists=1
+		
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list
+	Function AddList_( list:TList ) ' Global list
 	
-		Local inst:Byte Ptr
+		Select list
+			Case tex_list
+				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local obj:TTexture=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list (unused)
+	
 		ClearList list
 		
 		Select list
 			Case tex_list
+				tex_list_id=0
 				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list )-1
-					inst=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list )
-					Local obj:TTexture=GetObject(inst)
-					If obj=Null And inst<>Null Then obj=CreateObject(inst)
-					ListAddLast list,obj
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local obj:TTexture=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
 				Next
 		End Select
 		
@@ -162,8 +180,11 @@ Type TTexture
 	' SMALLFIXES New function from www.blitzbasic.com/Community/posts.php?topic=88263#1002039
 	Method FreeTexture()
 	
+		If Not exists Then Return
+		ListRemove( tex_list,Self ) ; tex_list_id:-1
 		FreeObject( GetInstance(Self) )
 		FreeTexture_( GetInstance(Self) )
+		exists=0
 		
 	End Method
 	
@@ -245,9 +266,7 @@ Type TTexture
 	Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 ) ' same as method in TBrush
 	
 		Local inst:Byte Ptr=GetBrushTexture_( TBrush.GetInstance(brush),index )
-		Local tex:TTexture=GetObject(inst)
-		If tex=Null And inst<>Null Then tex=CreateObject(inst)
-		Return tex
+		Return GetObject(inst) ' no CreateObject
 		
 	End Function
 	
@@ -283,15 +302,20 @@ Type TTexture
 		
 	End Method
 	
-	' Internal - not recommended for general use	
+	' Internal - not recommended for general use
+	
+	Method Copy:TTexture()
+		
+		Local inst:Byte Ptr=TextureCopy_( GetInstance(Self) )
+		Return CreateObject(inst)
+		
+	End Method	
 	
 	' check if tex already exists in tex_list and if so return it
 	Method TexInList:TTexture()
 	
 		Local inst:Byte Ptr=TexInList_( GetInstance(Self) )
-		Local tex:TTexture=GetObject(inst)
-		If tex=Null And inst<>Null Then tex=CreateObject(inst)
-		Return tex
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	

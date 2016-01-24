@@ -1,9 +1,9 @@
 
-' Minib3d
-
 Type TMatrix
 
 	Field grid#[4,4]
+	
+	' Minib3d
 	
 	Method New()
 	

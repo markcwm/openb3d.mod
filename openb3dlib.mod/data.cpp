@@ -413,6 +413,7 @@ char* StaticChar( int classid,int varid ){
 			switch (varid){
 				case SHADOWOBJECT_top_caps : return &ShadowObject::top_caps;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -435,6 +436,7 @@ int* StaticInt( int classid,int varid ){
 				case GLOBAL_fx1 : return &Global::fx1;
 				case GLOBAL_fx2 : return &Global::fx2;
 			}
+			break;
 		case LIGHT_class :
 			switch (varid){
 				case LIGHT_light_no : return &Light::light_no;
@@ -442,19 +444,23 @@ int* StaticInt( int classid,int varid ){
 				case LIGHT_max_lights : return &Light::max_lights;
 				case LIGHT_gl_light : return &Light::gl_light[0];
 			}
+			break;
 		case PICK_class :
 			switch (varid){
 				case PICK_picked_triangle : return &Pick::picked_triangle;
 			}
+			break;
 		case SHADOWOBJECT_class :
 			switch (varid){
 				case SHADOWOBJECT_parallel : return &ShadowObject::parallel;
 				case SHADOWOBJECT_midStencilVal : return &ShadowObject::midStencilVal;
 			}
+			break;
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_triangleindex : return &Terrain::triangleindex;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -467,12 +473,14 @@ float* StaticFloat( int classid,int varid ){
 				case CAMERA_projected_y : return &Camera::projected_y;
 				case CAMERA_projected_z : return &Camera::projected_z;
 			}
+			break;
 		case ENTITY_class :
 			switch (varid){
 				case ENTITY_tformed_x : return &Entity::tformed_x;
 				case ENTITY_tformed_y : return &Entity::tformed_y;
 				case ENTITY_tformed_z : return &Entity::tformed_z;
 			}
+			break;
 		case GLOBAL_class :
 			switch (varid){
 				case GLOBAL_ambient_red : return &Global::ambient_red;
@@ -480,6 +488,7 @@ float* StaticFloat( int classid,int varid ){
 				case GLOBAL_ambient_blue : return &Global::ambient_blue;
 				case GLOBAL_anim_speed : return &Global::anim_speed;
 			}
+			break;
 		case PICK_class :
 			switch (varid){
 				case PICK_picked_x : return &Pick::picked_x;
@@ -490,6 +499,7 @@ float* StaticFloat( int classid,int varid ){
 				case PICK_picked_nz : return &Pick::picked_nz;
 				case PICK_picked_time : return &Pick::picked_time;
 			}
+			break;
 		case SHADOWOBJECT_class :
 			switch (varid){
 				case SHADOWOBJECT_VolumeLength : return &ShadowObject::VolumeLength;
@@ -501,6 +511,7 @@ float* StaticFloat( int classid,int varid ){
 				case SHADOWOBJECT_ShadowBlue : return &ShadowObject::ShadowBlue;
 				case SHADOWOBJECT_ShadowAlpha : return &ShadowObject::ShadowAlpha;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -511,6 +522,7 @@ Camera* StaticCamera( int classid,int varid ){
 			switch (varid){
 				case GLOBAL_camera_in_use : return Global::camera_in_use;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -521,6 +533,7 @@ Entity* StaticEntity( int classid,int varid ){
 			switch (varid){
 				case PICK_picked_ent : return Pick::picked_ent;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -531,6 +544,7 @@ Pivot* StaticPivot( int classid,int varid ){
 			switch (varid){
 				case GLOBAL_root_ent : return Global::root_ent;
 			}
+			break;
 	}
 	return NULL;
 }
@@ -541,252 +555,296 @@ Surface* StaticSurface( int classid,int varid ){
 			switch (varid){
 				case PICK_picked_surface : return Pick::picked_surface;
 			}
+			break;
 	}
 	return NULL;
 }
 
 int StaticListSize( int classid,int varid ){
+	
 	switch (classid){
 		case CAMERA_class :
 			switch (varid){
 				case CAMERA_cam_list : return Camera::cam_list.size();
 				case CAMERA_render_list : return Camera::render_list.size();
 			}
+			break;
 		case COLLISIONPAIR_class :
 			switch (varid){
 				case COLLISIONPAIR_cp_list : return CollisionPair::cp_list.size();
 			}
+			break;
 		case ENTITY_class :
 			switch (varid){
 				case ENTITY_entity_list : return Entity::entity_list.size();
 				case ENTITY_animate_list : return Entity::animate_list.size();
 			}
+			break;
 		case LIGHT_class :
 			switch (varid){
 				case LIGHT_light_list : return Light::light_list.size();
 			}
+			break;
 		case PICK_class :
 			switch (varid){
 				case PICK_ent_list : return Pick::ent_list.size();
 			}
+			break;
 		case SHADOWOBJECT_class :
 			switch (varid){
 				case SHADOWOBJECT_shadow_list : return ShadowObject::shadow_list.size();
 			}
+			break;
 		case TEXTURE_class :
 			switch (varid){
 				case TEXTURE_tex_list : return Texture::tex_list.size();
-			}			
+			}
+			break;
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_terrain_list : return Terrain::terrain_list.size();
 			}
-
+			break;
 	}
 	return 0;
 }
 
-int StaticListSizeArray( int classid,int varid,int index ){
+int StaticListArraySize( int classid,int varid,int index ){
+	
 	switch (classid){
 		case COLLISIONPAIR_class :
 			switch (varid){
 				case COLLISIONPAIR_ent_lists : return CollisionPair::ent_lists[index].size();
 			}
+			break;
 	}
 	return 0;
 }
 
-Camera* StaticIterListCamera( int classid,int varid ){
-	static int id=0;
-	static list<Camera*> objlist;
-	static list<Camera*>::iterator it;
-	static Camera* obj;
+Camera* StaticIterListCamera( int classid,int varid,int &id ){
+	int count=0;
+	list<Camera*>::iterator it;
+	Camera* obj;
 	
 	switch (classid){
 		case CAMERA_class :
 			switch (varid){
-				case CAMERA_cam_list : objlist=Camera::cam_list; break;
+				case CAMERA_cam_list :
+					for(it=Camera::cam_list.begin(); it!=Camera::cam_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
-	
-CollisionPair* StaticIterListCollisionPair( int classid,int varid ){
-	static int id=0;
-	static list<CollisionPair*> objlist;
-	static list<CollisionPair*>::iterator it;
-	static CollisionPair* obj;
+
+CollisionPair* StaticIterListCollisionPair( int classid,int varid,int &id ){
+	int count=0;
+	list<CollisionPair*>::iterator it;
+	CollisionPair* obj;
 	
 	switch (classid){
 		case COLLISIONPAIR_class :
 			switch (varid){
-				case COLLISIONPAIR_cp_list : objlist=CollisionPair::cp_list; break;
+				case COLLISIONPAIR_cp_list :
+					for(it=CollisionPair::cp_list.begin(); it!=CollisionPair::cp_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Entity* StaticIterListEntity( int classid,int varid ){
-	static int id=0;
-	static list<Entity*> objlist;
-	static list<Entity*>::iterator it;
-	static Entity* obj;
+Entity* StaticIterListEntity( int classid,int varid,int &id ){
+	int count=0;
+	list<Entity*>::iterator it;
+	Entity* obj;
 	
 	switch (classid){
 		case ENTITY_class :
 			switch (varid){
-				case ENTITY_entity_list : objlist=Entity::entity_list; break;
-				case ENTITY_animate_list : objlist=Entity::animate_list; break;
+				case ENTITY_entity_list :
+					for(it=Entity::entity_list.begin(); it!=Entity::entity_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
+				case ENTITY_animate_list :
+					for(it=Entity::animate_list.begin(); it!=Entity::animate_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 		case PICK_class :
 			switch (varid){
-				case PICK_ent_list : objlist=Pick::ent_list; break;
+				case PICK_ent_list :
+					for(it=Pick::ent_list.begin(); it!=Pick::ent_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Entity* StaticIterListEntityArray( int classid,int varid,int index ){
-	static int id=0;
-	static list<Entity*> objlist;
-	static list<Entity*>::iterator it;
-	static Entity* obj;
+Entity* StaticIterListArrayEntity( int classid,int varid,int index,int &id ){
+	int count=0;
+	list<Entity*>::iterator it;
+	Entity* obj;
 	
 	switch (classid){
 		case COLLISIONPAIR_class :
 			switch (varid){
-				case COLLISIONPAIR_ent_lists : objlist=CollisionPair::ent_lists[index]; break;
+				case COLLISIONPAIR_ent_lists :
+					for(it=CollisionPair::ent_lists[index].begin(); it!=CollisionPair::ent_lists[index].end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Mesh* StaticIterListMesh( int classid,int varid ){
-	static int id=0;
-	static list<Mesh*> objlist;
-	static list<Mesh*>::iterator it;
-	static Mesh* obj;
+Mesh* StaticIterListMesh( int classid,int varid,int &id ){
+	int count=0;
+	list<Mesh*>::iterator it;
+	Mesh* obj;
 	
 	switch (classid){
 		case CAMERA_class :
 			switch (varid){
-				case CAMERA_render_list : objlist=Camera::render_list; break;
+				case CAMERA_render_list :
+					for(it=Camera::render_list.begin(); it!=Camera::render_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-ShadowObject* StaticIterListShadowObject( int classid,int varid ){
-	static int id=0;
-	static list<ShadowObject*> objlist;
-	static list<ShadowObject*>::iterator it;
-	static ShadowObject* obj;
+ShadowObject* StaticIterListShadowObject( int classid,int varid,int &id ){
+	int count=0;
+	list<ShadowObject*>::iterator it;
+	ShadowObject* obj;
 	
 	switch (classid){
 		case SHADOWOBJECT_class :
 			switch (varid){
-				case SHADOWOBJECT_shadow_list : objlist=ShadowObject::shadow_list; break;
+				case SHADOWOBJECT_shadow_list :
+					for(it=ShadowObject::shadow_list.begin(); it!=ShadowObject::shadow_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Terrain* StaticIterListTerrain( int classid,int varid ){
-	static int id=0;
-	static list<Terrain*> objlist;
-	static list<Terrain*>::iterator it;
-	static Terrain* obj;
+Terrain* StaticIterListTerrain( int classid,int varid,int &id ){
+	int count=0;
+	list<Terrain*>::iterator it;
+	Terrain* obj;
 	
 	switch (classid){
 		case TERRAIN_class :
 			switch (varid){
-				case TERRAIN_terrain_list : objlist=Terrain::terrain_list; break;
+				case TERRAIN_terrain_list :
+					for(it=Terrain::terrain_list.begin(); it!=Terrain::terrain_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Texture* StaticIterListTexture( int classid,int varid ){
-	static int id=0;
-	static list<Texture*> objlist;
-	static list<Texture*>::iterator it;
-	static Texture* obj;
+Texture* StaticIterListTexture( int classid,int varid,int &id ){
+	int count=0;
+	list<Texture*>::iterator it;
+	Texture* obj;
 	
 	switch (classid){
 		case TEXTURE_class :
 			switch (varid){
-				case TEXTURE_tex_list : objlist=Texture::tex_list; break;
+				case TEXTURE_tex_list :
+					for(it=Texture::tex_list.begin(); it!=Texture::tex_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
-Light* StaticIterVectorLight( int classid,int varid ){
-	static int id=0;
-	static vector<Light*> objlist;
-	static vector<Light*>::iterator it;
-	static Light* obj;
+Light* StaticIterVectorLight( int classid,int varid,int &id ){
+	int count=0;
+	vector<Light*>::iterator it;
+	Light* obj;
 	
 	switch (classid){
 		case LIGHT_class :
 			switch (varid){
-				case LIGHT_light_list : objlist=Light::light_list; break;
+				case LIGHT_light_list :
+					for(it=Light::light_list.begin(); it!=Light::light_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
 			}
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj;
 }
 
@@ -947,54 +1005,6 @@ float* CameraFloat( Camera* obj,int varid ){
 	return NULL;
 }
 
-// CollisionPair
-
-int* CollisionPairInt( CollisionPair* obj,int varid ){
-	switch (varid){
-		case COLLISIONPAIR_src_type : return &obj->src_type;
-		case COLLISIONPAIR_des_type : return &obj->des_type;
-		case COLLISIONPAIR_col_method : return &obj->col_method;
-		case COLLISIONPAIR_response : return &obj->response;
-	}
-	return NULL;
-}
-
-// CollisionImpact
-
-int* CollisionImpactInt( CollisionImpact* obj,int varid ){
-	switch (varid){
-		case COLLISIONIMPACT_tri : return &obj->tri;
-	}
-	return NULL;
-}
-
-float* CollisionImpactFloat( CollisionImpact* obj,int varid ){
-	switch (varid){
-		case COLLISIONIMPACT_x : return &obj->x;
-		case COLLISIONIMPACT_y : return &obj->y;
-		case COLLISIONIMPACT_z : return &obj->z;
-		case COLLISIONIMPACT_nx : return &obj->nx;
-		case COLLISIONIMPACT_ny : return &obj->ny;
-		case COLLISIONIMPACT_nz : return &obj->nz;
-		case COLLISIONIMPACT_time : return &obj->time;
-	}
-	return NULL;
-}
-
-Entity* CollisionImpactEntity( CollisionImpact* obj,int varid ){
-	switch (varid){
-		case COLLISIONIMPACT_ent : return obj->ent;
-	}
-	return NULL;
-}
-
-Surface* CollisionImpactSurface( CollisionImpact* obj,int varid ){
-	switch (varid){
-		case COLLISIONIMPACT_surf : return obj->surf;
-	}
-	return NULL;
-}
-
 // Entity
 
 int* EntityInt( Entity* obj,int varid ){
@@ -1100,6 +1110,7 @@ Matrix* EntityMatrix( Entity* obj,int varid ){
 }
 
 int EntityListSize( Entity* obj,int varid ){
+	
 	switch (varid){
 		case ENTITY_child_list : return obj->child_list.size();
 		case ENTITY_collision : return obj->collision.size();
@@ -1107,40 +1118,30 @@ int EntityListSize( Entity* obj,int varid ){
 	return 0;
 }
 
-Entity* EntityIterListEntity( Entity* obj,int varid ){
-	static int id=0;
-	static list<Entity*> objlist;
-	static list<Entity*>::iterator it;
-	static Entity* obj2;
+Entity* EntityIterListEntity( Entity* obj,int varid,int &id ){
+	int count=0;
+	list<Entity*>::iterator it;
+	Entity* obj2;
 	
 	switch (varid){
-		case ENTITY_child_list : objlist=obj->child_list; break;
+		case ENTITY_child_list :
+			for(it=obj->child_list.begin(); it!=obj->child_list.end(); it++){
+				obj2=*it;
+				if (id == count) break;
+				count++;
+			}
+			id++;
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj2;
 }
 
-CollisionImpact* EntityIterVectorCollisionImpact( Entity* obj,int varid ){
-	static int id=0;
-	static vector<CollisionImpact*> objlist;
-	static vector<CollisionImpact*>::iterator it;
-	static CollisionImpact* obj2;
-	
+void EntityListPushBackEntity( Entity* obj,int varid,Entity* ent ){
 	switch (varid){
-		case ENTITY_collision : objlist=obj->collision; break;
+		case ENTITY_child_list : obj->child_list.push_back(ent);
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
-	return obj2;
 }
 
 // Light
@@ -1205,6 +1206,7 @@ Matrix* MeshMatrix( Mesh* obj,int varid ){
 }
 
 int MeshListSize( Mesh* obj,int varid ){
+	
 	switch (varid){
 		case MESH_surf_list : return obj->surf_list.size();
 		case MESH_anim_surf_list : return obj->anim_surf_list.size();
@@ -1213,40 +1215,48 @@ int MeshListSize( Mesh* obj,int varid ){
 	return 0;
 }
 
-Surface* MeshIterListSurface( Mesh* obj,int varid ){
-	static int id=0;
-	static list<Surface*> objlist;
-	static list<Surface*>::iterator it;
-	static Surface* obj2;
+Surface* MeshIterListSurface( Mesh* obj,int varid,int &id ){
+	int count=0;
+	list<Surface*>::iterator it;
+	Surface* obj2;
 	
 	switch (varid){
-		case MESH_surf_list : objlist=obj->surf_list; break;
-		case MESH_anim_surf_list : objlist=obj->anim_surf_list; break;
+		case MESH_surf_list :
+			for(it=obj->surf_list.begin(); it!=obj->surf_list.end(); it++){
+				obj2=*it;
+				if (id == count) break;
+				count++;
+			}
+			id++;
+			break;
+		case MESH_anim_surf_list :
+			for(it=obj->anim_surf_list.begin(); it!=obj->anim_surf_list.end(); it++){
+				obj2=*it;
+				if (id == count) break;
+				count++;
+			}
+			id++;
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
 	return obj2;
 }
 
-Bone* MeshIterVectorBone( Mesh* obj,int varid ){
-	static int id=0;
-	static vector<Bone*> objlist;
-	static vector<Bone*>::iterator it;
-	static Bone* obj2;
+Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id ){
+	int count=0;
+	vector<Bone*>::iterator it;
+	Bone* obj2;
 	
 	switch (varid){
-		case MESH_bones : objlist=obj->bones; break;
+		case MESH_bones :
+			for(it=obj->bones.begin(); it!=obj->bones.end(); it++){
+				obj2=*it;
+				if (id == count) break;
+				count++;
+			}
+			id++;
+			break;
 	}
-	if (objlist.size() == 0) return NULL;
-	if (id == 0) it=objlist.begin();
-	obj2=*it;
-	it++;
-	id++;
-	if (id == objlist.size()) id=0;
+	
 	return obj2;
 }
 
@@ -1255,6 +1265,22 @@ vector<Bone*>* MeshVectorBone( Mesh* obj,int varid ){
 		case MESH_bones : return &obj->bones;
 	}
 	return NULL;
+}
+
+void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf ){
+	switch (varid){
+		case MESH_surf_list : obj->surf_list.push_back(surf);
+			break;
+		case MESH_anim_surf_list : obj->anim_surf_list.push_back(surf);
+			break;
+	}
+}
+
+void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone ){
+	switch (varid){
+		case MESH_bones : obj->bones.push_back(bone);
+			break;
+	}
 }
 
 // ShadowObject

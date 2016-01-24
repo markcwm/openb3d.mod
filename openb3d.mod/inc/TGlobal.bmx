@@ -13,7 +13,7 @@ Type TGlobal
 	Global ambient_red:Float Ptr ' 0.5
 	Global ambient_green:Float Ptr ' 0.5
 	Global ambient_blue:Float Ptr ' 0.5
-	'Global ambient_shader:TShader ' openb3d
+	Global ambient_shader:TShader ' openb3d - set in AmbientShader
 	
 	' vbo_enabled is set in GraphicsInit - set to true if USE_VBO is true and the hardware supports vbos
 	Global vbo_enabled:Int Ptr ' true
@@ -28,7 +28,7 @@ Type TGlobal
 	
 	Global root_ent:TPivot ' new
 	
-	Global camera_in_use:TCamera
+	Global camera_in_use:TCamera ' set in CreateCamera/ShowEntity
 	
 	Global alpha_enable:Int Ptr ' -1
 	Global blend_mode:Int Ptr ' -1
@@ -64,8 +64,6 @@ Type TGlobal
 	
 		root_ent=TPivot.CreateObject( StaticPivot_( GLOBAL_class,GLOBAL_root_ent ) )
 		
-		camera_in_use=TCamera.CreateObject( StaticCamera_( GLOBAL_class,GLOBAL_camera_in_use ) )
-		
 		alpha_enable=StaticInt_( GLOBAL_class,GLOBAL_alpha_enable )
 		blend_mode=StaticInt_( GLOBAL_class,GLOBAL_blend_mode )
 		fx1=StaticInt_( GLOBAL_class,GLOBAL_fx1 )
@@ -73,12 +71,45 @@ Type TGlobal
 		
 		' all other InitGlobals
 		TCamera.InitGlobals()
-		TCollisionPair.InitGlobals()
 		TEntity.InitGlobals()
 		TLight.InitGlobals()
 		TPick.InitGlobals()
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
+				
+	End Function
+	
+	Function CopyList( list:TList )
+	
+		Select list
+			Case TCamera.cam_list
+				TCamera.CopyList_( TCamera.cam_list )
+			Case TEntity.entity_list
+				TEntity.CopyList_( TEntity.entity_list )
+			Case TEntity.animate_list
+				TEntity.CopyList_( TEntity.animate_list )
+			Case TLight.light_list
+				TLight.CopyList_( TLight.light_list )
+			Case TPick.ent_list
+				TPick.CopyList_( TPick.ent_list )
+			Case TShadowObject.shadow_list
+				TShadowObject.CopyList_( TShadowObject.shadow_list )
+			Case TTerrain.terrain_list
+				TTerrain.CopyList_( TTerrain.terrain_list )
+			Case TTexture.tex_list
+				TTexture.CopyList_( TTexture.tex_list )
+		End Select
+		
+	End Function
+	
+	Function ListPushBack( list:TList,value:Object,ent:TEntity )
+	
+		Local mesh:TMesh=TMesh(ent)
+		If mesh
+			mesh.ListPushBack( list,value )
+		Else
+			ent.ListPushBack( list,value )
+		EndIf
 		
 	End Function
 	
@@ -194,11 +225,26 @@ Type TGlobal
 	Function Collisions( src_no:Int,dest_no:Int,method_no:Int,response_no:Int=0 )
 	
 		Collisions_( src_no,dest_no,method_no,response_no )
-	
+		
 	End Function
 	
 	Function ClearWorld( entities:Int=True,brushes:Int=True,textures:Int=True )
 	
+		If entities
+			ClearList(TGlobal.root_ent.child_list) ; TGlobal.root_ent.child_list_id=0
+			ClearList(TEntity.entity_list) ; TEntity.entity_list_id=0
+			ClearList(TEntity.animate_list) ; TEntity.animate_list_id=0
+			ClearList(TCamera.cam_list) ; TCamera.cam_list_id=0
+			ClearList(TPick.ent_list) ; TPick.ent_list_id=0
+		EndIf
+		
+		If textures
+			For Local tex:TTexture=EachIn TTexture.tex_list
+				TTexture.FreeObject( TTexture.GetInstance(tex) ) ' no FreeEntity
+			Next
+			ClearList(TTexture.tex_list) ; TTexture.tex_list_id=0
+		EndIf
+		
 		ClearWorld_( entities,brushes,textures )
 		
 	End Function
@@ -217,7 +263,7 @@ Type TGlobal
 	
 	' Internal
 	
-	' Render camera - renders all meshes camera can see (same as method in TCamera)
+	' renders all meshes camera can see (same as method in TCamera)
 	Function RenderCamera( cam:TCamera )
 	
 		CameraRender_( TCamera.GetInstance(cam) )

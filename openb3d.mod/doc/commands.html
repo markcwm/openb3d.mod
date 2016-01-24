@@ -63,7 +63,7 @@ undocumented.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#AmbientShader>AmbientShader</a></td><td class=docright>
-Set shader to be used for all surfaces.
+Set default shader for surfaces.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Animate>Animate</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a>
@@ -100,6 +100,12 @@ Begin using Max2D functions.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushFX>BrushFX</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushFX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushGLBlendFunc>BrushGLBlendFunc</a></td><td class=docright>
+GL equivalent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushGLColor>BrushGLColor</a></td><td class=docright>
+GL equivalent.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushShininess>BrushShininess</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushShininess">Online doc</a>
@@ -191,14 +197,23 @@ Copy a rendered camera view to texture.
 <tr><td class=docleft width=1%><a href=#CollisionZ>CollisionZ</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CopyBrush>CopyBrush</a></td><td class=docright>
+Copy brush to a surface. Frees existing brush.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CopyEntity>CopyEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyList>CopyList</a></td><td class=docright>
-Global list and listarray. Call this before accessing lists.
+Copy a list or vector. To copy a field list use as a method.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyMesh>CopyMesh</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CopySurface>CopySurface</a></td><td class=docright>
+Copy surface to a mesh.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
+Copy texture to a brush.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CountChildren>CountChildren</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online doc</a>
@@ -219,7 +234,7 @@ Global list and listarray. Call this before accessing lists.
 undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBone>CreateBone</a></td><td class=docright>
-undocumented.
+Create a bone.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBrush>CreateBrush</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
@@ -264,7 +279,7 @@ undocumented.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateQuad>CreateQuad</a></td><td class=docright>
-undocumented.
+Create a flat quad.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateRigidBody>CreateRigidBody</a></td><td class=docright>
 undocumented.
@@ -393,7 +408,7 @@ undocumented.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityType>EntityType</a></td><td class=docright>
-<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityVisible>EntityVisible</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityVisible">Online doc</a>
@@ -450,7 +465,7 @@ Frees stencil shadow.
 undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetBrushTexture>GetBrushTexture</a></td><td class=docright>
-<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetChild>GetChild</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetChild">Online doc</a>
@@ -490,6 +505,9 @@ undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LinePick>LinePick</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ListPushBack>ListPushBack</a></td><td class=docright>
+Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
@@ -770,6 +788,9 @@ Copy a texture to a pixmap buffer, buffer must be a byte ptr.
 <tr><td class=docleft width=1%><a href=#TextureFilter>TextureFilter</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TextureGLTexEnv>TextureGLTexEnv</a></td><td class=docright>
+GL equivalent.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TextureHeight>TextureHeight</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online doc</a>
 </td></tr>
@@ -843,7 +864,7 @@ Bind 4 integer variables to a shader variable name of a uniform ivec4 type.
 Sends matrix data to a shader variable name of a uniform mat4 type.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseStencil>UseStencil</a></td><td class=docright>
-stencil to use, set to Null to disable stencil.
+Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 undocumented.
@@ -934,6 +955,9 @@ Camera entity.
 <tr><td class=docleft width=1%><a href=#TConstraint>TConstraint</a></td><td class=docright>
 Constraint.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TDebug>TDebug</a></td><td class=docright>
+Debug functions.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TEntity>TEntity</a></td><td class=docright>
 Entity.
 </td></tr>
@@ -957,6 +981,9 @@ Light entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TMaterial>TMaterial</a></td><td class=docright>
 Material texture.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TMatrix2>TMatrix2</a></td><td class=docright>
+Matrix functions.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TMesh>TMesh</a></td><td class=docright>
 Mesh entity.
@@ -1094,7 +1121,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=AmbientShader>
 <tr><td class=doctop colspan=2>Function AmbientShader( material:TShader )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set shader to be used for all surfaces.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set default shader for surfaces.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=Animate>
@@ -1155,6 +1182,16 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=BrushFX>
 <tr><td class=doctop colspan=2>Function BrushFX( brush:TBrush,fx:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushFX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushGLBlendFunc>
+<tr><td class=doctop colspan=2>Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushGLColor>
+<tr><td class=doctop colspan=2>Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushShininess>
@@ -1307,19 +1344,36 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CopyBrush>
+<tr><td class=doctop colspan=2>Function CopyBrush:TBrush( brush:TBrush,surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy brush to a surface. Frees existing brush.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CopyEntity>
 <tr><td class=doctop colspan=2>Function CopyEntity:TEntity( ent:TEntity,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a></td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyList>
-<tr><td class=doctop colspan=2>Function CopyList( list:TList,listarray:TList[]=Null ) ' list should be Null if accessing listarray</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Global list and listarray. Call this before accessing lists.</td></tr>
+<tr><td class=doctop colspan=2>Function CopyList( list:TList )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a list or vector. To copy a field list use as a method.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyMesh>
 <tr><td class=doctop colspan=2>Function CopyMesh:TMesh( mesh:TMesh,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CopySurface>
+<tr><td class=doctop colspan=2>Function CopySurface:TSurface( surf:TSurface,mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy surface to a mesh.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CopyTexture>
+<tr><td class=doctop colspan=2>Function CopyTexture:TTexture( tex:TTexture,brush:TBrush,index:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy texture to a brush.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Like GetBrushTexture in B3D, this creates a new texture. Frees existing texture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CountChildren>
@@ -1354,7 +1408,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateBone>
 <tr><td class=doctop colspan=2>Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a bone.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateBrush>
@@ -1429,7 +1483,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateQuad>
 <tr><td class=doctop colspan=2>Function CreateQuad:TMesh( parent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a flat quad.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateRigidBody>
@@ -1644,7 +1698,8 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityType>
 <tr><td class=doctop colspan=2>Function EntityType( ent:TEntity,type_no:Int,recursive:Int=False )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a></td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>If type_no is negative, collision checking is dynamic, if zero entity is removed.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityVisible>
@@ -1739,7 +1794,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=GetBrushTexture>
 <tr><td class=doctop colspan=2>Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a></td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetChild>
@@ -1805,6 +1860,12 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=LinePick>
 <tr><td class=doctop colspan=2>Function LinePick:TEntity( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,radius:Float=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ListPushBack>
+<tr><td class=doctop colspan=2>Function ListPushBack( list:TList,value:Object,ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Like using ListAddLast(list,value) in Minib3d, except ent parameter.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
@@ -2272,6 +2333,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TextureGLTexEnv>
+<tr><td class=doctop colspan=2>Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TextureHeight>
 <tr><td class=doctop colspan=2>Function TextureHeight:Int( tex:TTexture )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online doc</a></td></tr>
@@ -2394,7 +2460,7 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=UseStencil>
 <tr><td class=doctop colspan=2>Function UseStencil( stencil:TStencil )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>stencil to use, set to Null to disable stencil.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Stencil to use, set to Null to disable stencil.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseSurface>
@@ -2545,6 +2611,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright>Constraint.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TDebug>
+<tr><td class=doctop colspan=2>Type TDebug</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Debug functions.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TEntity>
 <tr><td class=doctop colspan=2>Type TEntity</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Entity.</td></tr>
@@ -2572,7 +2643,7 @@ Voxelsprite mesh entity.
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=THardwareInfo>
-<tr><td class=doctop colspan=2>Type THardwareInfo ' Code by klepto2</td></tr>
+<tr><td class=doctop colspan=2>Type THardwareInfo ' by klepto2</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Hardware info.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Contains <b>Function GetInfo()</b> And <b>DisplayInfo(LogFile:Int=False)</b>.</td></tr>
 </table>
@@ -2585,6 +2656,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=TMaterial>
 <tr><td class=doctop colspan=2>Type TMaterial Extends TTexture</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Material texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TMatrix2>
+<tr><td class=doctop colspan=2>Type TMatrix2</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Matrix functions.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TMesh>

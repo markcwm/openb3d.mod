@@ -16,19 +16,19 @@ int* StaticInt( int classid,int varid );
 float* StaticFloat( int classid,int varid );
 Entity* StaticEntity( int classid,int varid );
 Camera* StaticCamera( int classid,int varid );
-CollisionPair* StaticIterListCollisionPair( int classid,int varid );
 Pivot* StaticPivot( int classid,int varid );
 Surface* StaticSurface( int classid,int varid );
 int StaticListSize( int classid,int varid );
-int StaticListSizeArray( int classid,int varid,int index );
-Camera* StaticIterListCamera( int classid,int varid );
-Entity* StaticIterListEntity( int classid,int varid );
-Entity* StaticIterListEntityArray( int classid,int varid,int index );
-Mesh* StaticIterListMesh( int classid,int varid );
-ShadowObject* StaticIterListShadowObject( int classid,int varid );
-Terrain* StaticIterListTerrain( int classid,int varid );
-Texture* StaticIterListTexture( int classid,int varid );
-Light* StaticIterVectorLight( int classid,int varid );
+int StaticListArraySize( int classid,int varid,int index );
+Camera* StaticIterListCamera( int classid,int varid,int &id );
+CollisionPair* StaticIterListCollisionPair( int classid,int varid,int &id );
+Entity* StaticIterListEntity( int classid,int varid,int &id );
+Entity* StaticIterListArrayEntity( int classid,int varid,int index,int &id );
+Mesh* StaticIterListMesh( int classid,int varid,int &id );
+ShadowObject* StaticIterListShadowObject( int classid,int varid,int &id );
+Terrain* StaticIterListTerrain( int classid,int varid,int &id );
+Texture* StaticIterListTexture( int classid,int varid,int &id );
+Light* StaticIterVectorLight( int classid,int varid,int &id );
 
 // AnimationKeys
 int* AnimationKeysInt( AnimationKeys* obj,int varid );
@@ -51,15 +51,6 @@ bool* CameraBool( Camera* obj,int varid );
 int* CameraInt( Camera* obj,int varid );
 float* CameraFloat( Camera* obj,int varid );
 
-// CollisionPair
-int* CollisionPairInt( CollisionPair* obj,int varid );
-
-// CollisionImpact
-int* CollisionImpactInt( CollisionImpact* obj,int varid );
-float* CollisionImpactFloat( CollisionImpact* obj,int varid );
-Entity* CollisionImpactEntity( CollisionImpact* obj,int varid );
-Surface* CollisionImpactSurface( CollisionImpact* obj,int varid );
-
 // Entity
 int* EntityInt( Entity* obj,int varid );
 float* EntityFloat( Entity* obj,int varid );
@@ -68,8 +59,8 @@ Entity* EntityEntity( Entity* obj,int varid );
 Matrix* EntityMatrix( Entity* obj,int varid );
 Brush* EntityBrush( Entity* obj,int varid );
 int EntityListSize( Entity* obj,int varid );
-Entity* EntityIterListEntity( Entity* obj,int varid );
-CollisionImpact* EntityIterVectorCollisionImpact( Entity* obj,int varid );
+Entity* EntityIterListEntity( Entity* obj,int varid,int &id );
+void EntityListPushBackEntity( Entity* obj,int varid,Entity* ent );
 
 // Light
 char* LightChar( Light* obj,int varid );
@@ -83,9 +74,11 @@ int* MeshInt( Mesh* obj,int varid );
 float* MeshFloat( Mesh* obj,int varid );
 Matrix* MeshMatrix( Mesh* obj,int varid );
 int MeshListSize( Mesh* obj,int varid );
-Surface* MeshIterListSurface( Mesh* obj,int varid );
-Bone* MeshIterVectorBone( Mesh* obj,int varid );
+Surface* MeshIterListSurface( Mesh* obj,int varid,int &id );
+Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id );
 vector<Bone*>* MeshVectorBone( Mesh* obj,int varid );
+void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf );
+void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone );
 
 // ShadowObject
 char* ShadowObjectChar( ShadowObject* obj,int varid );

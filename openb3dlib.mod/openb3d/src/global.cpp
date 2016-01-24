@@ -145,7 +145,8 @@ void Global::ClearWorld(int entities,int brushes,int textures){
 		//	Entity* ent=*it;
 		//	ent->FreeEntity();
 		//}
-		Global::root_ent->FreeEntity();
+		//Global::root_ent->FreeEntity();
+		Global::root_ent->child_list.clear();//
 		Entity::entity_list.clear();
 		Entity::animate_list.clear();
 		Camera::cam_list.clear();

@@ -121,8 +121,7 @@ Type TSurface
 		
 		' shader
 		inst=SurfaceShader_( GetInstance(Self),SURFACE_ShaderMat )
-		ShaderMat=TShader.GetObject(inst)
-		If ShaderMat=Null And inst<>Null Then ShaderMat=TShader.CreateObject(inst)
+		ShaderMat=TShader.GetObject(inst) ' no CreateObject
 		
 	End Method
 	

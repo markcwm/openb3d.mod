@@ -1,4 +1,7 @@
 
+Rem
+bbdoc: Matrix functions
+End Rem
 Type TMatrix2
 
 	Field grid:Float Ptr ' array [4,4] - LoadIdentity
@@ -18,7 +21,7 @@ Type TMatrix2
 		
 	End Function
 	
-	Function DeleteObject( inst:Byte Ptr )
+	Function FreeObject( inst:Byte Ptr )
 	
 		matrix_map.Remove( String(Long(inst)) )
 		
@@ -87,9 +90,7 @@ Type TMatrix2
 	Method GetInverse:TMatrix2( mat:TMatrix2 )
 	
 		Local inst:Byte Ptr=MatrixGetInverse_( GetInstance(Self),GetInstance(mat) )	
-		Local mat2:TMatrix2=GetObject(inst)
-		If mat2=Null And inst<>Null Then mat2=CreateObject(inst)
-		Return mat2
+		Return GetObject(inst) ' no CreateObject
 		
 	End Method
 	
