@@ -71,14 +71,6 @@ Extern
 	Function UpdateProjMatrix_( obj:Byte Ptr ) = "UpdateProjMatrix"
 	Function CameraUpdateEntityRender_( ent:Byte Ptr,cam:Byte Ptr ) = "CameraUpdateEntityRender"
 	
-	' Collision
-	Function CollisionUpdateCollisions_() = "CollisionUpdateCollisions"
-	Function CollisionUpdateStaticCollisions_() = "CollisionUpdateStaticCollisions"
-	Function CollisionUpdateDynamicCollisions_() = "CollisionUpdateDynamicCollisions"
-	Function CollisionclearCollisions_() = "CollisionclearCollisions"
-	Function CollisionPositionEntities_:Int( update_old:Int,add_to_new:Int ) = "CollisionPositionEntities"
-	Function CollisionQuickCheck_:Int( ent:Byte Ptr,ent2:Byte Ptr ) = "CollisionQuickCheck"
-	
 	' Global
 	Function UpdateEntityAnim_( mesh:Byte Ptr ) = "UpdateEntityAnim"
 	

@@ -157,9 +157,8 @@ Type TShadowObject
 	
 		If Not exists Then Return
 		ListRemove( shadow_list,Self ) ; shadow_list_id:-1
-		FreeObject( TMesh.GetInstance(ShadowMesh) ) ' no FreeEntity_
+		FreeObject( TMesh.GetInstance(ShadowMesh) ) ' no FreeEntity
 		ListRemove( TEntity.entity_list,ShadowMesh ) ; TEntity.entity_list_id:-1
-		If CountList(shadow_list)=0 Then TGlobal.Shadows_enabled[0]=0
 		
 		FreeObject( GetInstance(Self) )
 		FreeShadow_( GetInstance(Self) )

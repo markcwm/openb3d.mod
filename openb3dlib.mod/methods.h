@@ -28,14 +28,6 @@ void accFrustum( Camera* obj,float left_,float right_,float bottom,float top,flo
 void UpdateProjMatrix( Camera* obj );
 void CameraUpdateEntityRender( Entity* ent,Entity* cam );
 
-// Collision
-void CollisionUpdateCollisions();
-void CollisionUpdateStaticCollisions();
-void CollisionUpdateDynamicCollisions();
-void CollisionclearCollisions();
-int CollisionPositionEntities( int update_old,int add_to_new );
-int CollisionQuickCheck( Entity& ent,Entity& ent2 );
-
 // Entity
 int CountAllChildren( Entity* obj,int no_children );
 Entity* GetChildFromAll( Entity* obj,int child_no,int &no_children,Entity* ent );

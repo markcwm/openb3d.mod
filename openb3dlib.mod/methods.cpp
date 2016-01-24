@@ -88,32 +88,6 @@ void CameraUpdateEntityRender( Entity* ent,Entity* cam ){
 	UpdateEntityRender( ent,cam );
 }
 
-// Collision
-
-void CollisionUpdateCollisions(){
-	UpdateCollisions();
-}
-
-void CollisionUpdateStaticCollisions(){
-	UpdateStaticCollisions();
-}
-
-void CollisionUpdateDynamicCollisions(){
-	UpdateDynamicCollisions();
-}
-
-void CollisionclearCollisions(){
-	clearCollisions();
-}
-
-int CollisionPositionEntities( int update_old,int add_to_new ){
-	return PositionEntities( update_old,add_to_new );
-}
-
-int CollisionQuickCheck( Entity& ent,Entity& ent2 ){
-	return QuickCheck( ent,ent2 );
-}
-
 // Entity
 
 int CountAllChildren( Entity* obj,int no_children ){

@@ -787,22 +787,8 @@ Type TEntity
 	End Method
 	
 	Method EntityType( type_no:Int,recursive:Int=False )
-			
-		EntityTypeList( type_no,recursive )
-		
+	
 		EntityType_( GetInstance(Self),type_no,recursive )
-		
-	End Method
-	
-	Method EntityTypeList( type_no:Int,recursive:Int=False )
-	
-		If type_no<0 Then type_no=-type_no
-		
-		If recursive
-			For Local ent:TEntity=EachIn child_list
-				ent.EntityTypeList( type_no,True )
-			Next
-		EndIf
 		
 	End Method
 	
