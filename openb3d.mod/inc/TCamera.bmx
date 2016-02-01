@@ -142,9 +142,10 @@ Type TCamera Extends TEntity
 	
 	Method FreeEntity()
 	
-		If Not exists Then Return
-		ListRemove( cam_list,Self ) ; cam_list_id:-1
-		Super.FreeEntity()
+		If exists
+			ListRemove( cam_list,Self ) ; cam_list_id:-1
+			Super.FreeEntity()
+		EndIf
 		
 	End Method
 	

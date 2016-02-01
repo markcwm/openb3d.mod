@@ -18,8 +18,9 @@ ACT_NEWTONIAN
 };
 
 class Action{
-	static list<Action*> action_list;
+
 public:
+	static list<Action*> action_list;
 
 	int act;
 

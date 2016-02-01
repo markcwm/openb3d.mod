@@ -111,10 +111,11 @@ Type TBrush
 	
 	Method FreeBrush()
 	
-		If Not exists Then Return
-		FreeObject( GetInstance(Self) )
-		FreeBrush_( GetInstance(Self) )
-		exists=0
+		If exists
+			FreeObject( GetInstance(Self) )
+			FreeBrush_( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

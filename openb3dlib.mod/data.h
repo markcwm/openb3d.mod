@@ -1,5 +1,6 @@
 // data.h
 
+#include "openb3d/src/actions.h"
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
@@ -19,16 +20,16 @@ Camera* StaticCamera( int classid,int varid );
 Pivot* StaticPivot( int classid,int varid );
 Surface* StaticSurface( int classid,int varid );
 int StaticListSize( int classid,int varid );
-int StaticListArraySize( int classid,int varid,int index );
+Action* StaticIterListAction( int classid,int varid,int &id );
 Camera* StaticIterListCamera( int classid,int varid,int &id );
-CollisionPair* StaticIterListCollisionPair( int classid,int varid,int &id );
 Entity* StaticIterListEntity( int classid,int varid,int &id );
-Entity* StaticIterListArrayEntity( int classid,int varid,int index,int &id );
-Mesh* StaticIterListMesh( int classid,int varid,int &id );
 ShadowObject* StaticIterListShadowObject( int classid,int varid,int &id );
 Terrain* StaticIterListTerrain( int classid,int varid,int &id );
 Texture* StaticIterListTexture( int classid,int varid,int &id );
 Light* StaticIterVectorLight( int classid,int varid,int &id );
+
+// Action
+int* ActionInt( Action* obj,int varid );
 
 // AnimationKeys
 int* AnimationKeysInt( AnimationKeys* obj,int varid );

@@ -282,6 +282,7 @@ Extern
 	Function ActTrackByDistance_:Byte Ptr( ent:Byte Ptr,target:Byte Ptr,a:Float,rate:Float ) = "ActTrackByDistance"
 	Function ActNewtonian_:Byte Ptr( ent:Byte Ptr,rate:Float ) = "ActNewtonian"
 	Function AppendAction_( act1:Byte Ptr,act2:Byte Ptr ) = "AppendAction"
+	Function FreeAction_( act:Byte Ptr ) = "FreeAction"
 	
 	' *** Constraint
 	Function CreateConstraint_:Byte Ptr( p1:Byte Ptr,p2:Byte Ptr,l:Float ) = "CreateConstraint"
@@ -354,7 +355,7 @@ Extern
 	Function CreateStencil_:Byte Ptr() = "CreateStencil"
 	Function StencilAlpha_( stencil:Byte Ptr,a:Float ) = "StencilAlpha"
 	Function StencilClsColor_( stencil:Byte Ptr,r:Float,g:Float,b:Float ) = "StencilClsColor"
-	Function StencilClsMode_( stencil:Byte Ptr,cls_depth:Int,cls_zbuffer:Int ) = "StencilClsMode"
+	Function StencilClsMode_( stencil:Byte Ptr,cls_color:Int,cls_zbuffer:Int ) = "StencilClsMode"
 	Function StencilMesh_( stencil:Byte Ptr,mesh:Byte Ptr,Mode:Int ) = "StencilMesh"
 	Function StencilMode_( stencil:Byte Ptr,m:Int,o:Int ) = "StencilMode"
 	Function UseStencil_( stencil:Byte Ptr ) = "UseStencil"

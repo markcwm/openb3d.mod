@@ -23,7 +23,7 @@ Local t_sphere:TMesh=CreateSphere(8)
 EntityShininess t_sphere,0.2
 
 Local lastsphere:TEntity
-For Local t%=0 To 359 Step 36
+For Local t%=0 To 359 Step 60
 	Local sphere:TEntity=CopyEntity(t_sphere,pivot)
 	EntityColor sphere,Rnd(255),Rnd(255),Rnd(255)
 	TurnEntity sphere,0,t,0
@@ -31,11 +31,6 @@ For Local t%=0 To 359 Step 36
 	lastsphere=sphere
 Next
 FreeEntity t_sphere
-
-Local cube:TMesh=CreateCube()
-PositionEntity cube,0,7,0
-ScaleEntity cube,2,2,2
-EntityColor cube,Rnd(255),Rnd(255),Rnd(255)
 
 'Local ground:TMesh=CreatePlane(128)
 Local ground:TMesh=CreateCube()
@@ -45,7 +40,7 @@ ScaleTexture ground_tex,0.01,0.01 ' scale uvs
 EntityTexture ground,ground_tex
 
 Local cone:TMesh=CreateCone()
-PositionEntity cone,25,3,25
+PositionEntity cone,0,3,0
 
 Local sprite:TSprite=CreateSprite()
 EntityColor sprite,250,250,150
@@ -55,19 +50,22 @@ Local noisetex:TTexture=LoadTexture("media/smoke.png",1+2)
 'Local noisetex:TTexture=CreateTexture(1,1)
 EntityTexture sprite,noisetex
 
-'SpriteRenderMode sprite,3 ' 1: normal, 2: sprite batch, 3: particle batch?
-'ParticleTrail sprite,20 ' particle trail for particle
-'ParticleColor sprite,1.0,0,0,1.0 ' vertex color?
+'SpriteRenderMode sprite,3
+'ParticleTrail sprite,20
+'ParticleColor sprite,1.0,0,0,0.0
 
 Local p:TParticleEmitter=CreateParticleEmitter(sprite)
-MoveEntity p,25,5,25
-EmitterRate p,1.0 ' rate between each emission (1.0/r) smaller is less
-EmitterParticleLife p,175 ' lifespan of particle, in frames
-EmitterVariance p,0.07 ' randomness of emission, direction and speed
-EmitterParticleSpeed p,0.01 ' initial speed?
-EmitterVector p,0.001,0.001,0 ' emission direction and speed?
+MoveEntity p,0,5,0
+TurnEntity p,-90,0,0
 
-Local p2:TParticleEmitter=TParticleEmitter( CopyEntity(p) )
+EmitterRate p,1.0
+EmitterParticleLife p,100
+EmitterVariance p,0.07
+EmitterParticleSpeed p,0.1
+EmitterVector p,0.003,0.001,0
+
+Local p2:TParticleEmitter=TParticleEmitter( p.CopyEntity() )
+TurnEntity p2,-90,0,0 ' rotate up
 
 PositionEntity sprite,-25,6,25
 PositionEntity camera,0,7,0
@@ -80,14 +78,17 @@ While Not KeyHit(KEY_ESCAPE)
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
-	TurnEntity cube,0.1,0.2,0.3
+	If KeyDown(KEY_N) Then TurnEntity p,0,1,0
+	If KeyDown(KEY_M) Then TurnEntity p,0,-1,0
+	
 	TurnEntity pivot,0,1,0
 	
 	PositionEntity p2,EntityX(lastsphere,1),5,EntityZ(lastsphere,1)
 	
 	UpdateWorld ' update particles
-	
 	RenderWorld
+	
+	Text 0,0,"WSAD/Arrows: move camera, NM: rotate emitter"
 	
 	Flip
 Wend

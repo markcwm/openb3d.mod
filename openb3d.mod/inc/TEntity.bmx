@@ -367,11 +367,12 @@ Type TEntity
 	
 	Method FreeEntity()
 	
-		If Not exists Then Return
-		FreeEntityList()
-		
-		FreeEntity_( GetInstance(Self) )
-		exists=0
+		If exists
+			FreeEntityList()
+			
+			FreeEntity_( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

@@ -180,11 +180,13 @@ Type TTexture
 	' SMALLFIXES New function from www.blitzbasic.com/Community/posts.php?topic=88263#1002039
 	Method FreeTexture()
 	
-		If Not exists Then Return
-		ListRemove( tex_list,Self ) ; tex_list_id:-1
-		FreeObject( GetInstance(Self) )
-		FreeTexture_( GetInstance(Self) )
-		exists=0
+		If exists
+			ListRemove( tex_list,Self ) ; tex_list_id:-1
+			
+			FreeObject( GetInstance(Self) )
+			FreeTexture_( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

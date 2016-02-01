@@ -126,9 +126,10 @@ Type TLight Extends TEntity
 	
 	Method FreeEntity()
 	
-		If Not exists Then Return
-		ListRemove( light_list,Self ) ; light_list_id:-1
-		Super.FreeEntity()
+		If exists
+			ListRemove( light_list,Self ) ; light_list_id:-1
+			Super.FreeEntity()
+		EndIf
 		
 	End Method
 	

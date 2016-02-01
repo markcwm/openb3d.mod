@@ -265,11 +265,12 @@ Type TMesh Extends TEntity
 	
 	Method FreeEntity()
 	
-		If Not exists Then Return
-		ClearList(surf_list) ; surf_list_id=0
-		ClearList(anim_surf_list) ; anim_surf_list_id=0
-		ClearList(bones) ; bones_id=0
-		Super.FreeEntity()
+		If exists
+			ClearList(surf_list) ; surf_list_id=0
+			ClearList(anim_surf_list) ; anim_surf_list_id=0
+			ClearList(bones) ; bones_id=0
+			Super.FreeEntity()
+		EndIf
 		
 	End Method
 	

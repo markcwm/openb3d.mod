@@ -12,7 +12,7 @@ Local camera:TCamera=CreateCamera()
 CameraRange camera,0.00001,100
 MoveEntity camera,0,0,-23
 
-Local x:TTerrain=LoadGeosphere("media/srtm_ramp2.world.jpg") ' heightmap
+Local x:TGeosphere=LoadGeosphere("media/srtm_ramp2.world.jpg") ' heightmap
 'Local x:TTerrain=CreateGeosphere(2700)
 ScaleEntity x,0.01,0.01,0.01
 

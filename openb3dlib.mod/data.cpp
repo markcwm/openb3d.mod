@@ -6,60 +6,68 @@
 #include <string.h>
 
 // Classid - used with static data fields
-const int ANIMATION_class=		1;
-const int ANIMATIONKEYS_class=	2;
-const int BONE_class=			3;
-const int BRUSH_class=			4;
-const int CAMERA_class=			5;
-const int COLLISION_class=		6; // collision.h
-const int COLLISIONINFO_class=	7;
-const int COLLISIONPAIR_class=	8; // collision2.h
-const int COLLISIONIMPACT_class=9;
-const int CSGTRIANGLE_class=	10; // csg.h
-const int ENTITY_class=			11;
-const int VECTOR_class=			12; // geom.h
-const int LINE_class=			13;
-const int PLANE_class=			14;
-const int QUAT_class=			15;
-const int MMATRIX_class=		16;
-const int BOX_class=			17;
-const int TRANSFORM_class=		18;
-const int GEOSPHERE_class=		19;
-const int GLOBAL_class=			20;
-const int FLUID_class=			21; // isosurface.h
-const int BLOB_class=			22;
-const int FIELDARRAY_class=		23;
-const int LIGHT_class=			24;
-const int MATERIALPLUGIN_class=	25; // material.h
-const int MATRIX_class=			26;
-const int MESH_class=			27;
-const int OCTREE_class=			28; // octree.h
-const int OCTREECHILD_class=	29;
-const int PARTICLEBATCH_class=	30; // particle.h
-const int PICK_class=			31;
-const int PIVOT_class=			32;
-const int QUATERNION_class=		33;
-const int SHADERDATA_class=		34; // shadermat.h
-const int SAMPLER_class=		35;
-const int MATERIAL_class=		36;
-const int SHADER_class=			37;
-const int SHADEROBJECT_class=	38; // shaderobject.h
-const int PROGRAMOBJECT_class=	39;
-const int SHADOWTRIANGLE_class=	40; // shadow.h
-const int EDGE_class=			41;
-const int SHADOWOBJECT_class=	42;
-const int SPRITE_class=			43;
-const int SPRITEBATCH_class=	44;
-const int STENCIL_class=		45;
-const int SURFACE_class=		46;
-const int TERRAIN_class=		47;
-const int TEXTURE_class=		48;
-const int TEXTUREFILTER_class=	49;
-const int TILT_class=			50;
-const int TOUCH_class=			51;
-const int MESHCOLLIDER_class=	52; // tree.h
-const int MESHINFO_class=		53;
-const int VOXELSPRITE_class=	54; // voxel.h
+const int ACTION_class=			1;
+const int ANIMATION_class=		2;
+const int ANIMATIONKEYS_class=	3;
+const int BONE_class=			4;
+const int BRUSH_class=			5;
+const int CAMERA_class=			6;
+const int COLLISION_class=		7; // collision.h
+const int COLLISIONINFO_class=	8;
+const int COLLISIONPAIR_class=	9; // collision2.h
+const int COLLISIONIMPACT_class=10;
+const int CSGTRIANGLE_class=	11; // csg.h
+const int ENTITY_class=			12;
+const int VECTOR_class=			13; // geom.h
+const int LINE_class=			14;
+const int PLANE_class=			15;
+const int QUAT_class=			16;
+const int MMATRIX_class=		17;
+const int BOX_class=			18;
+const int TRANSFORM_class=		19;
+const int GEOSPHERE_class=		20;
+const int GLOBAL_class=			21;
+const int FLUID_class=			22; // isosurface.h
+const int BLOB_class=			23;
+const int FIELDARRAY_class=		24;
+const int LIGHT_class=			25;
+const int MATERIALPLUGIN_class=	26; // material.h
+const int MATRIX_class=			27;
+const int MESH_class=			28;
+const int OCTREE_class=			29; // octree.h
+const int OCTREECHILD_class=	30;
+const int PARTICLEBATCH_class=	31; // particle.h
+const int PARTICLEEMITTER_class=32;
+const int CONSTRAINT_class=		33; // physics.h
+const int RIGIDBODY_class=		34;
+const int PICK_class=			35;
+const int PIVOT_class=			36;
+const int QUATERNION_class=		37;
+const int SHADERDATA_class=		38; // shadermat.h
+const int SAMPLER_class=		39;
+const int MATERIAL_class=		40;
+const int SHADER_class=			41;
+const int SHADEROBJECT_class=	42; // shaderobject.h
+const int PROGRAMOBJECT_class=	43;
+const int SHADOWTRIANGLE_class=	44; // shadow.h
+const int EDGE_class=			45;
+const int SHADOWOBJECT_class=	46;
+const int SPRITE_class=			47;
+const int SPRITEBATCH_class=	48;
+const int STENCIL_class=		49;
+const int SURFACE_class=		50;
+const int TERRAIN_class=		51;
+const int TEXTURE_class=		52;
+const int TEXTUREFILTER_class=	53;
+const int TILT_class=			54;
+const int TOUCH_class=			55;
+const int MESHCOLLIDER_class=	56; // tree.h
+const int MESHINFO_class=		57;
+const int VOXELSPRITE_class=	58;
+
+// Action varid
+const int ACTION_action_list=	1;
+const int ACTION_act=			2;
 
 // AnimationKeys varid
 const int ANIMATIONKEYS_frames=	1;
@@ -563,15 +571,16 @@ Surface* StaticSurface( int classid,int varid ){
 int StaticListSize( int classid,int varid ){
 	
 	switch (classid){
+		
+		case ACTION_class :
+			switch (varid){
+				case ACTION_action_list : return Action::action_list.size();
+			}
+			break;
 		case CAMERA_class :
 			switch (varid){
 				case CAMERA_cam_list : return Camera::cam_list.size();
-				case CAMERA_render_list : return Camera::render_list.size();
-			}
-			break;
-		case COLLISIONPAIR_class :
-			switch (varid){
-				case COLLISIONPAIR_cp_list : return CollisionPair::cp_list.size();
+				//case CAMERA_render_list : return Camera::render_list.size();
 			}
 			break;
 		case ENTITY_class :
@@ -609,28 +618,16 @@ int StaticListSize( int classid,int varid ){
 	return 0;
 }
 
-int StaticListArraySize( int classid,int varid,int index ){
-	
-	switch (classid){
-		case COLLISIONPAIR_class :
-			switch (varid){
-				case COLLISIONPAIR_ent_lists : return CollisionPair::ent_lists[index].size();
-			}
-			break;
-	}
-	return 0;
-}
-
-Camera* StaticIterListCamera( int classid,int varid,int &id ){
+Action* StaticIterListAction( int classid,int varid,int &id ){
 	int count=0;
-	list<Camera*>::iterator it;
-	Camera* obj;
+	list<Action*>::iterator it;
+	Action* obj;
 	
 	switch (classid){
-		case CAMERA_class :
+		case ACTION_class :
 			switch (varid){
-				case CAMERA_cam_list :
-					for(it=Camera::cam_list.begin(); it!=Camera::cam_list.end(); it++){
+				case ACTION_action_list :
+					for(it=Action::action_list.begin(); it!=Action::action_list.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;
@@ -644,16 +641,16 @@ Camera* StaticIterListCamera( int classid,int varid,int &id ){
 	return obj;
 }
 
-CollisionPair* StaticIterListCollisionPair( int classid,int varid,int &id ){
+Camera* StaticIterListCamera( int classid,int varid,int &id ){
 	int count=0;
-	list<CollisionPair*>::iterator it;
-	CollisionPair* obj;
+	list<Camera*>::iterator it;
+	Camera* obj;
 	
 	switch (classid){
-		case COLLISIONPAIR_class :
+		case CAMERA_class :
 			switch (varid){
-				case COLLISIONPAIR_cp_list :
-					for(it=CollisionPair::cp_list.begin(); it!=CollisionPair::cp_list.end(); it++){
+				case CAMERA_cam_list :
+					for(it=Camera::cam_list.begin(); it!=Camera::cam_list.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;
@@ -697,52 +694,6 @@ Entity* StaticIterListEntity( int classid,int varid,int &id ){
 			switch (varid){
 				case PICK_ent_list :
 					for(it=Pick::ent_list.begin(); it!=Pick::ent_list.end(); it++){
-						obj=*it;
-						if (id == count) break;
-						count++;
-					}
-					id++;
-					break;
-			}
-			break;
-	}
-	
-	return obj;
-}
-
-Entity* StaticIterListArrayEntity( int classid,int varid,int index,int &id ){
-	int count=0;
-	list<Entity*>::iterator it;
-	Entity* obj;
-	
-	switch (classid){
-		case COLLISIONPAIR_class :
-			switch (varid){
-				case COLLISIONPAIR_ent_lists :
-					for(it=CollisionPair::ent_lists[index].begin(); it!=CollisionPair::ent_lists[index].end(); it++){
-						obj=*it;
-						if (id == count) break;
-						count++;
-					}
-					id++;
-					break;
-			}
-			break;
-	}
-	
-	return obj;
-}
-
-Mesh* StaticIterListMesh( int classid,int varid,int &id ){
-	int count=0;
-	list<Mesh*>::iterator it;
-	Mesh* obj;
-	
-	switch (classid){
-		case CAMERA_class :
-			switch (varid){
-				case CAMERA_render_list :
-					for(it=Camera::render_list.begin(); it!=Camera::render_list.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;
@@ -846,6 +797,15 @@ Light* StaticIterVectorLight( int classid,int varid,int &id ){
 	}
 	
 	return obj;
+}
+
+// Action
+
+int* ActionInt( Action* obj,int varid ){
+	switch (varid){
+		case ACTION_act : return &obj->act;
+	}
+	return NULL;
 }
 
 // AnimationKeys
@@ -1113,7 +1073,7 @@ int EntityListSize( Entity* obj,int varid ){
 	
 	switch (varid){
 		case ENTITY_child_list : return obj->child_list.size();
-		case ENTITY_collision : return obj->collision.size();
+		//case ENTITY_collision : return obj->collision.size();
 	}
 	return 0;
 }

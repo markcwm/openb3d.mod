@@ -43,9 +43,9 @@ Type TStencil
 		
 	End Method
 	
-	Method StencilClsMode( cls_depth:Int,cls_zbuffer:Int )
+	Method StencilClsMode( cls_color:Int,cls_zbuffer:Int )
 	
-		StencilClsMode_( GetInstance(Self),cls_depth,cls_zbuffer )
+		StencilClsMode_( GetInstance(Self),cls_color,cls_zbuffer )
 		
 	End Method
 	
