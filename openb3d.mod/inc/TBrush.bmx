@@ -112,8 +112,12 @@ Type TBrush
 	Method FreeBrush()
 	
 		If exists
-			FreeObject( GetInstance(Self) )
+			For Local id:Int=0 To 7
+				TTexture.FreeObject( TTexture.GetInstance(tex[id]) ) ; tex[id]=Null
+			Next
+			
 			FreeBrush_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
 			exists=0
 		EndIf
 		

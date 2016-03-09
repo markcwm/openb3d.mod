@@ -266,9 +266,24 @@ Type TMesh Extends TEntity
 	Method FreeEntity()
 	
 		If exists
+			TMatrix.FreeObject( TMatrix.GetInstance(mat_sp) ) ; mat_sp=Null
+			
+			For Local surf:TSurface=EachIn surf_list
+				TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
+				TSurface.FreeObject( TSurface.GetInstance(surf) ) ; surf=Null
+			Next
+			For Local anim_surf:TSurface=EachIn anim_surf_list
+				TBrush.FreeObject( TBrush.GetInstance(anim_surf.brush) ) ; anim_surf.brush=Null
+				TSurface.FreeObject( TSurface.GetInstance(anim_surf) ) ; anim_surf=Null
+			Next
+			For Local bone:TBone=EachIn bones
+				bone.FreeEntity()
+			Next
+			
 			ClearList(surf_list) ; surf_list_id=0
 			ClearList(anim_surf_list) ; anim_surf_list_id=0
 			ClearList(bones) ; bones_id=0
+			
 			Super.FreeEntity()
 		EndIf
 		

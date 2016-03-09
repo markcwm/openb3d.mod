@@ -96,6 +96,7 @@ Type TTerrain Extends TEntity
 	
 		If exists
 			ListRemove( terrain_list,Self ) ; terrain_list_id:-1
+			
 			Super.FreeEntity()
 		EndIf
 		

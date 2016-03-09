@@ -368,21 +368,24 @@ Type TEntity
 	Method FreeEntity()
 	
 		If exists
+			Local inst:Byte Ptr=GetInstance(Self)
 			FreeEntityList()
-			
-			FreeEntity_( GetInstance(Self) )
+			FreeEntity_(inst)
 			exists=0
 		EndIf
 		
 	End Method
 	
-	' recursively free entity lists
+	' recursively free entity lists and objects
 	Method FreeEntityList()
 	
+		TMatrix.FreeObject( TMatrix.GetInstance(mat) ) ; mat=Null
+		TMatrix.FreeObject( TMatrix.GetInstance(rotmat) ) ; rotmat=Null
+		TMatrix.FreeObject( TMatrix.GetInstance(old_mat) ) ; old_mat=Null
+		TBrush.FreeObject( TBrush.GetInstance(brush) ) ; brush=Null
+		
 		ListRemove( entity_list,Self ) ; entity_list_id:-1
-		
 		If anim_update[0] Then ListRemove( animate_list,Self ) ; animate_list_id:-1
-		
 		If pick_mode[0] Then ListRemove( TPick.ent_list,Self ) ; TPick.ent_list_id:-1
 		
 		If parent
@@ -391,13 +394,12 @@ Type TEntity
 			ListRemove( TGlobal.root_ent.child_list,Self ) ; TGlobal.root_ent.child_list_id:-1
 		EndIf
 		
-		FreeObject( GetInstance(Self) ) ' no FreeEntity_
-		
 		For Local ent:TEntity=EachIn child_list
 			If ent Then ent.FreeEntityList()
 		Next
 		
 		ClearList(child_list) ; child_list_id=0
+		FreeObject( GetInstance(Self) ) ' no FreeEntity_
 		
 	End Method
 	

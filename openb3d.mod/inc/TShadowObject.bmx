@@ -156,12 +156,15 @@ Type TShadowObject
 	Method FreeShadow()
 	
 		If exists
+			TMesh.FreeObject( TMesh.GetInstance(ShadowMesh) ) ; ShadowMesh=Null		
+			TSurface.FreeObject( TSurface.GetInstance(ShadowVolume) ) ; ShadowVolume=Null
+			
 			ListRemove( shadow_list,Self ) ; shadow_list_id:-1
 			FreeObject( TMesh.GetInstance(ShadowMesh) ) ' no FreeEntity
 			ListRemove( TEntity.entity_list,ShadowMesh ) ; TEntity.entity_list_id:-1
 			
-			FreeObject( GetInstance(Self) )
 			FreeShadow_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
 			exists=0
 		EndIf
 		

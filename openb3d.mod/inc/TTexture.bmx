@@ -183,8 +183,8 @@ Type TTexture
 		If exists
 			ListRemove( tex_list,Self ) ; tex_list_id:-1
 			
-			FreeObject( GetInstance(Self) )
 			FreeTexture_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
 			exists=0
 		EndIf
 		
