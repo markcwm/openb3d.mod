@@ -531,8 +531,14 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 		}else if(tag_id==VRTS){
 
-			if(v_mesh!=NULL) v_mesh=NULL;
-			if(v_surf!=NULL) v_surf=NULL;
+			if(v_mesh!=NULL) {
+				v_mesh->FreeEntity();
+				v_mesh=NULL;
+			}
+			if(v_surf!=NULL) {
+				//delete v_surf;
+				v_surf=NULL;
+			}
 
 			v_mesh=new Mesh;
 			v_surf=v_mesh->CreateSurface();
@@ -818,6 +824,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				Matrix* new_mat=bo_bone->parent->mat.Copy();
 				new_mat->Multiply(bo_bone->mat);
 				bo_bone->mat.Overwrite(*new_mat);
+				delete new_mat;
 			}
 
 			bo_bone->mat.GetInverse(bo_bone->inv_mat);
@@ -905,6 +912,16 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 	file->CloseFile();
 
+	vector<Brush*>::iterator it;
+
+	for(it=brush.begin();it!=brush.end();it++){
+		Brush* b=*it;
+		delete b;
+	}
+
+	if(v_mesh!=NULL) {
+		v_mesh->FreeEntity();
+	}
 	//ChangeDir(cd); // ***todo***
 
 	//cout << endl << "Finished loading b3d" << endl;

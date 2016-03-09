@@ -93,6 +93,10 @@ Bone* Bone::CopyEntity(Entity* parent_ent){
 
 void Bone::FreeEntity(){
 
+	if (keys){
+		delete keys;
+	}
+
 	Entity::FreeEntity();
 	
 	delete this;

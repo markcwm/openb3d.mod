@@ -106,7 +106,21 @@ Surface* Surface::Copy(){
 	surf->vert_weight3=vert_weight3;
 	surf->vert_weight4=vert_weight4;
 
-	surf->brush=brush->Copy();
+	//surf->brush=brush->Copy();
+	surf->brush->no_texs=brush->no_texs;
+	surf->brush->name=brush->name;
+	surf->brush->red=brush->red;
+	surf->brush->green=brush->green;
+	surf->brush->blue=brush->blue;
+	surf->brush->alpha=brush->alpha;
+	surf->brush->shine=brush->shine;
+	surf->brush->blend=brush->blend;
+	surf->brush->fx=brush->fx;
+	for(int i=0;i<=7;i++){
+		surf->brush->tex[i]=brush->tex[i];
+		surf->brush->cache_frame[i]=brush->cache_frame[i];
+	}
+
 
 	surf->vert_array_size=vert_array_size;
 	surf->tri_array_size=tri_array_size;

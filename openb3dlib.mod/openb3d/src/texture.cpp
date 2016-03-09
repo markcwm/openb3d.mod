@@ -89,6 +89,7 @@ Texture* Texture::LoadTexture(string filename,int flags){
 		// check to see if texture with same properties exists already, if so return existing texture
 		Texture* old_tex=tex->TexInList();
 		if(old_tex){
+			delete tex;
 			return old_tex;
 		}else{
 			tex_list.push_back(tex);
@@ -168,6 +169,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	// check to see if texture with same properties exists already, if so return existing texture
 	Texture* old_tex=tex->TexInList();
 	if(old_tex){
+		delete tex;
 		return old_tex;
 	}else{
 		tex_list.push_back(tex);
@@ -424,6 +426,7 @@ void Texture::CameraToTex(Camera* cam, int frame){
 		target=GL_TEXTURE_2D;
 	}
 	
+
 	glBindTexture (target, texture);
 
 	if (framebuffer==0){
@@ -498,9 +501,9 @@ void Texture::CameraToTex(Camera* cam, int frame){
 	if (Global::Shadows_enabled==true)
 		ShadowObject::Update(cam);
 
-	//glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
 
-	glBindTexture (target, texture);//
+	glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
+
 	glGenerateMipmap(target);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -517,39 +520,30 @@ void Texture::TexToBuffer(unsigned char* buffer, int frame){
 
 
 void Texture::DepthBufferToTex(Camera* cam=0 ){
-
 	glBindTexture(GL_TEXTURE_2D,texture);
 	if (cam==0){
 		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,Global::height-height,width,height,0);
 		glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
 	}else{
 		Global::camera_in_use=cam;
-		
 		if (framebuffer==0){
 			framebuffer=new unsigned int[1];
 			glGenFramebuffers(1, &framebuffer[0]);
 			glGenRenderbuffers(1, &framebuffer[1]);
-			//glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);//
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 		}
-		
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]);
-		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);//
-		
+
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 		glBindRenderbuffer(GL_RENDERBUFFER, framebuffer[1]);
-		glRenderbufferStorage( GL_RENDERBUFFER, GL_DEPTH_STENCIL, width, height);//
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
-		glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1]);//
-		glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, framebuffer[1]);//
 
 		cam->Render();
-		
-		//glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
+		glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
 
-		glBindTexture(GL_TEXTURE_2D,texture);//
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
 	}
 }
 

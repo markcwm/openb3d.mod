@@ -1,3 +1,14 @@
+V1.12
+Fixed:
+-Bug in planet rendering that caused irregularities in textures
+-Bug in terrains that set wrong height in corners
+-Bug that made particles crash
+-many memory leaks
+-wrong declaraion in basic header for PositionTexture
+
+Deprecated:
+The file 2d.bi isn't included anymore
+
 V1.1
 Added:
 -3d actions: ActMoveBy, ActTurnBy, ActMoveTo, ActTurnTo, and many more

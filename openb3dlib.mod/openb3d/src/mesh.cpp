@@ -177,6 +177,7 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 		new_surf->tris=surf->tris;
 
 		// copy brush
+		delete new_surf->brush;
 		new_surf->brush=surf->brush->Copy();
 
 		new_surf->vert_array_size=surf->vert_array_size;

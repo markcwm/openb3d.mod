@@ -1427,7 +1427,7 @@ void Fluid::Render(){
 			glDisable(GL_TEXTURE_GEN_S);
 			glDisable(GL_TEXTURE_GEN_T);
 			glDisable(GL_TEXTURE_GEN_R);
-			DisableCubeSphereMapping=0;
+			//DisableCubeSphereMapping=0;
 		}
 
 	}
