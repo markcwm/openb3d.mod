@@ -75,12 +75,12 @@ Select status
 		DebugLog "FBO unsuccessful: "+status
 EndSelect
 
-' screen sprite (by BlitzSupport)
+' screen sprite - by BlitzSupport
 Local screensprite:TSprite=CreateSprite()
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite,-1
 EntityParent screensprite,camera
-MoveEntity screensprite,0,0,0.99 ' just under 1.0, instead of clamping uvs
+MoveEntity screensprite,0,0,1.0 ' set z to 1.0
 
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25

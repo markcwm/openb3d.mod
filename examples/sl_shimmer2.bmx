@@ -1,5 +1,5 @@
-' sl_shimmer.bmx
-' render framebuffer to texture - shimmer/heat haze
+' sl_shimmer2.bmx
+' render framebuffer twice per render
 
 Strict
 
@@ -54,6 +54,7 @@ Next
 FreeEntity t_cylinder
 
 Local colortex:TTexture=CreateTexture(800,600,1+256)
+Local colortex2:TTexture=CreateTexture(800,600,1+256)
 
 Local noisew%=width/4, noiseh%=height/4
 Local noisetex:TTexture=CreateTexture(noisew,noiseh)
@@ -68,6 +69,7 @@ BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
 
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
+CameraToTex colortex2,camera
 Local status:Int=glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
 Select status
 	Case GL_FRAMEBUFFER_COMPLETE_EXT
@@ -94,8 +96,15 @@ EndSelect
 Local screensprite:TSprite=CreateSprite()
 EntityOrder screensprite,-1
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
-MoveEntity screensprite,0,0,0.99 ' set z to 0.99 - instead of clamping uvs
+MoveEntity screensprite,0,0,1.0 ' set z to 0.99 - instead of clamping uvs
 EntityParent screensprite,camera
+HideEntity screensprite
+
+Local screensprite2:TSprite=CreateSprite()
+ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
+EntityOrder screensprite2,-1
+EntityParent screensprite2,camera
+MoveEntity screensprite2,0,0,1.0
 
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
@@ -112,8 +121,12 @@ SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of th
 SetFloat(shader,"riseFactor",0.007) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
+Local shader2:TShader=LoadShader("","shaders/default.vert.glsl", "shaders/greyscale2.frag.glsl")
+ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
+ShadeEntity(screensprite2, shader2)
+
 Local postprocess%=1
-Local time#=0, framerate#=60.0, animspeed#=10
+Local time#=0, framerate#=60.0, animspeed#=10, time2#=0
 Local timer:TTimer=CreateTimer(framerate)
 UseFloat(shader,"time",time) ' Time used to scroll the distortion map
 
@@ -134,16 +147,20 @@ While Not KeyHit(KEY_ESCAPE)
 	TurnEntity cube,0.1,0.2,0.3
 	TurnEntity cube2,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
-	
-	UpdateWorld
-	
+		
+	HideEntity screensprite2
 	HideEntity screensprite
+	UpdateWorld
 	RenderWorld
 	
 	If postprocess=1
 		CameraToTex colortex,camera
-		
 		ShowEntity screensprite
+		RenderWorld
+		
+		CameraToTex colortex2,camera
+		HideEntity screensprite
+		ShowEntity screensprite2
 		RenderWorld
 	EndIf
 	

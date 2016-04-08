@@ -22,6 +22,7 @@ extern "C" {
 void FreeSurface(Surface* surf){
 	surf->FreeVBO();
 	delete surf->brush;
+	delete surf;
 }
 
 void TextureGLTexEnv(Texture* tex, int target, int pname, int param){
