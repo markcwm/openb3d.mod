@@ -50,6 +50,9 @@ Positions entity according the given x y z vector.
 <tr><td class=docleft width=1%><a href=#AddMesh>AddMesh</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddMesh">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#AddSurface>AddSurface</a></td><td class=docright>
+Add an existing surface to a mesh.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#AddTriangle>AddTriangle</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddTriangle">Online doc</a>
 </td></tr>
@@ -198,7 +201,7 @@ Copy rendered camera view to texture.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyBrush>CopyBrush</a></td><td class=docright>
-Copy brush to a surface. Frees existing brush.
+Returns a copy of the new brush.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyEntity>CopyEntity</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a>
@@ -210,10 +213,10 @@ Copy a list or vector. To copy a field list use as a method.
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopySurface>CopySurface</a></td><td class=docright>
-Copy surface to a mesh.
+Returns a copy of the new surface.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
-Copy texture to a brush.
+Returns a copy of the new texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CountChildren>CountChildren</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online doc</a>
@@ -460,6 +463,9 @@ Frees action from memory.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeShadow>FreeShadow</a></td><td class=docright>
 Free stencil shadow.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FreeSurface>FreeSurface</a></td><td class=docright>
+Frees VBO data and brush.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeTexture>FreeTexture</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
@@ -1102,6 +1108,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddMesh">Online doc</a></td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=AddSurface>
+<tr><td class=doctop colspan=2>Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add an existing surface to a mesh.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=AddTriangle>
 <tr><td class=doctop colspan=2>Function AddTriangle:Int( surf:TSurface,v0:Int,v1:Int,v2:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddTriangle">Online doc</a></td></tr>
@@ -1352,8 +1363,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyBrush>
-<tr><td class=doctop colspan=2>Function CopyBrush:TBrush( brush:TBrush,surf:TSurface )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy brush to a surface. Frees existing brush.</td></tr>
+<tr><td class=doctop colspan=2>Function CopyBrush:TBrush( brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new brush.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyEntity>
@@ -1373,14 +1384,13 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopySurface>
-<tr><td class=doctop colspan=2>Function CopySurface:TSurface( surf:TSurface,mesh:TMesh )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy surface to a mesh.</td></tr>
+<tr><td class=doctop colspan=2>Function CopySurface:TSurface( surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new surface.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyTexture>
-<tr><td class=doctop colspan=2>Function CopyTexture:TTexture( tex:TTexture,brush:TBrush,index:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy texture to a brush.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Like GetBrushTexture in B3D, this creates a new texture. Frees existing texture.</td></tr>
+<tr><td class=doctop colspan=2>Function CopyTexture:TTexture( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new texture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CountChildren>
@@ -1795,6 +1805,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=FreeShadow>
 <tr><td class=doctop colspan=2>Function FreeShadow( shad:TShadowObject )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Free stencil shadow.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FreeSurface>
+<tr><td class=doctop colspan=2>Function FreeSurface( surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Frees VBO data and brush.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeTexture>
@@ -2673,7 +2688,7 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TGLShader>
-<tr><td class=doctop colspan=2>Type TGLShader ' Code by AdamStrange</td></tr>
+<tr><td class=doctop colspan=2>Type TGLShader ' by AdamStrange</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shader methods.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Used for reporting errors.</td></tr>
 </table>

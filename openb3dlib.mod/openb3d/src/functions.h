@@ -16,12 +16,16 @@
 extern "C" {
 #endif
 
-void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);//
-void DLL_EXPORT BrushGLColor(Brush* brush, float r, float g, float b, float a);//
-void DLL_EXPORT BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor);//
+// extra
+void DLL_EXPORT FreeSurface(Surface* surf);
+void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);
+void DLL_EXPORT BrushGLColor(Brush* brush, float r, float g, float b, float a);
+void DLL_EXPORT BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor);
 
+// rendering
 void DLL_EXPORT BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT BackBufferToTex(Texture* tex,int frame);
+void DLL_EXPORT CameraToTex(Texture* tex, Camera* cam, int frame);
 void DLL_EXPORT TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
 
 

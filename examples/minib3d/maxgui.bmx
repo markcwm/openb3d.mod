@@ -64,16 +64,14 @@ While Not KeyDown(KEY_ESCAPE)
 			End
 			
 		Case EVENT_WINDOWSIZE
-			TResize.PopResize()
 			
-		Case EVENT_WINDOWACTIVATE
-			TResize.PopResize() ' needed in Linux, due to no initial EVENT_WINDOWSIZE
+		Case EVENT_WINDOWACTIVATE ' note: in Linux there is no initial EVENT_WINDOWSIZE
 			
 		Case EVENT_TIMERTICK
 			RedrawGadget can
 			
 		Case EVENT_GADGETPAINT
-			TResize.DoResize(win,can,cam) ' update viewport
+			UpdateCanvas(can,cam) ' update viewport
 			
 			left_mouse=0
 			If MouseDown(1) Then left_mouse=1
@@ -111,32 +109,16 @@ While Not KeyDown(KEY_ESCAPE)
 	
 Wend
 
-
-' Simplifies using max2d with a resizable canvas
-Type TResize
-
-	Global resized%=False
-	
-	Function PopResize()
-	
-		resized=True
-		BeginMax2D() ' pop old values
+' Simplifies using max2d with a resizable canvas - by Hezkore
+Function UpdateCanvas(can:TGadget, cam:TCamera)
+	SetGraphics(CanvasGraphics(can))
+	If TGlobal.width[0] <> ClientWidth(can) Or TGlobal.height[0] <> ClientHeight(can)
+		BeginMax2D()
+		SetViewport(0, 0, ClientWidth(can), ClientHeight(can))
+		EndMax2D()
 		
-	End Function
-	
-	Function DoResize(win:TGadget,can:TGadget,cam:TCamera)
-	
-		If resized=True
-			SetGraphics CanvasGraphics(can)
-			SetViewport 0,0,ClientWidth(win),ClientHeight(win)
-			EndMax2D() ' push new values
-			
-			CameraViewport cam,0,0,ClientWidth(win),ClientHeight(win)
-			TGlobal.width[0]=ClientWidth(win) ' values used in texture rendering
-			TGlobal.height[0]=ClientHeight(win)
-			resized=False
-		EndIf
-		
-	End Function
-	
-End Type
+		CameraViewport(cam, 0, 0, ClientWidth(can), ClientHeight(can))
+		TGlobal.width[0] = ClientWidth(can) ' values used in texture rendering
+		TGlobal.height[0] = ClientHeight(can)
+	EndIf
+EndFunction

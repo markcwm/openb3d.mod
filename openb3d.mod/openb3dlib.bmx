@@ -28,14 +28,16 @@ Import BRL.BMPLoader		' imports BRL.Pixmap, BRL.EndianStream
 Import BRL.PNGLoader		' imports BRL.Pixmap, PUB.LibPNG
 Import BRL.JPGLoader		' imports BRL.Pixmap, PUB.LibJPEG
 Import BRL.Retro			' imports BRL.Basic
-Import BRL.Map
+Import BRL.map
 
 ' functions.cpp
 Extern
 
-	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv" ''
-	Function BrushGLColor_( brush:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "BrushGLColor" ''
-	Function BrushGLBlendFunc_( brush:Byte Ptr,sfactor:Int,dfactor:Int ) = "BrushGLBlendFunc" ''
+	' extra
+	Function FreeSurface_( surf:Byte Ptr ) = "FreeSurface"
+	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv"
+	Function BrushGLColor_( brush:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "BrushGLColor"
+	Function BrushGLBlendFunc_( brush:Byte Ptr,sfactor:Int,dfactor:Int ) = "BrushGLBlendFunc"
 	
 	' *** Minib3d only
 	Function BackBufferToTex_( tex:Byte Ptr,frame:Int ) = "BackBufferToTex"
@@ -428,33 +430,42 @@ Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
 End Function
 
 Rem
-bbdoc: Copy brush to a surface. Frees existing brush.
+bbdoc: Frees VBO data and brush.
 End Rem
-Function CopyBrush:TBrush( brush:TBrush,surf:TSurface )
-	Local brush2:TBrush=brush.Copy()
-	If surf.brush Then surf.brush.FreeBrush()
-	surf.brush=brush2
-	Return brush2
+Function FreeSurface( surf:TSurface )
+	Return surf.FreeSurface()
 End Function
 
 Rem
-bbdoc: Copy surface to a mesh.
+bbdoc: Add an existing surface to a mesh.
 End Rem
-Function CopySurface:TSurface( surf:TSurface,mesh:TMesh )
-	Local surf2:TSurface=surf.Copy()
-	mesh.ListPushBack( mesh.surf_list,surf2 )
-	Return surf2
+Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
+	if anim_surf=False
+		mesh.ListPushBack( mesh.surf_list,surf )
+	else
+		mesh.ListPushBack( mesh.anim_surf_list,surf )
+	endif
 End Function
 
 Rem
-bbdoc: Copy texture to a brush.
-about: Like GetBrushTexture in B3D, this creates a new texture. Frees existing texture.
+bbdoc: Returns a copy of the new brush.
 End Rem
-Function CopyTexture:TTexture( tex:TTexture,brush:TBrush,index:Int=0 )
-	Local tex2:TTexture=tex.Copy()
-	If brush.tex[index] Then brush.tex[index].FreeTexture()
-	brush.tex[index]=tex2
-	Return tex2
+Function CopyBrush:TBrush( brush:TBrush )
+	Return brush.Copy()
+End Function
+
+Rem
+bbdoc: Returns a copy of the new surface.
+End Rem
+Function CopySurface:TSurface( surf:TSurface )
+	Return surf.Copy()
+End Function
+
+Rem
+bbdoc: Returns a copy of the new texture.
+End Rem
+Function CopyTexture:TTexture( tex:TTexture )
+	Return tex.Copy()
 End Function
 
 ' *** Includes

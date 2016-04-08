@@ -406,6 +406,12 @@ Type TSurface
 	
 	End Method
 	
+	Method FreeSurface()
+	
+		FreeSurface_( GetInstance(self) )
+		
+	End Method
+	
 	Rem
 	' todo - used to sort surfaces into alpha order. used by TMesh.Update
 	Method Compare:Int(other:Object)

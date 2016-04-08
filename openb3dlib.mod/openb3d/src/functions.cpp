@@ -18,7 +18,13 @@
 
 extern "C" {
 
-void TextureGLTexEnv(Texture* tex, int target, int pname, int param){//
+// extra
+void FreeSurface(Surface* surf){
+	surf->FreeVBO();
+	delete surf->brush;
+}
+
+void TextureGLTexEnv(Texture* tex, int target, int pname, int param){
 	if(target==0) tex->glTexEnv_count=0;
 	tex->glTexEnv[0][tex->glTexEnv_count] = target;
 	tex->glTexEnv[1][tex->glTexEnv_count] = pname;
@@ -27,19 +33,20 @@ void TextureGLTexEnv(Texture* tex, int target, int pname, int param){//
 	if(tex->glTexEnv_count<12) tex->glTexEnv_count++;
 }
 
-void BrushGLColor(Brush* brush, float r, float g, float b, float a){//
+void BrushGLColor(Brush* brush, float r, float g, float b, float a){
 	brush->red = r;
 	brush->green = g;
 	brush->blue = b;
 	brush->alpha = a;
 }
 
-void BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor){//
+void BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor){
 	brush->glBlendFunc[0] = sfactor;
 	brush->glBlendFunc[1] = dfactor;
 	brush->BrushBlend(6);
 }
 
+// rendering
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
 }
