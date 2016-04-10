@@ -1,4 +1,4 @@
-' sl_shimmer2.bmx
+' sl_2pass.bmx
 ' render framebuffer twice per render
 
 Strict
@@ -17,6 +17,7 @@ ClearTextureFilters
 Local camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
+CameraViewport camera,0,0,width,height
 
 Local light:TLight=CreateLight()
 TurnEntity light,45,45,0
@@ -55,6 +56,8 @@ FreeEntity t_cylinder
 
 Local colortex:TTexture=CreateTexture(800,600,1+256)
 Local colortex2:TTexture=CreateTexture(800,600,1+256)
+'ScaleTexture colortex,1.0,-1.0
+'ScaleTexture colortex2,1.0,-1.0
 
 Local noisew%=width/4, noiseh%=height/4
 Local noisetex:TTexture=CreateTexture(noisew,noiseh)
@@ -117,16 +120,16 @@ EntityTexture ground,ground_tex
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.007) ' Factor used to control how fast air rises
+SetFloat(shader,"distortionFactor",0.003)' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.003) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","shaders/default.vert.glsl", "shaders/greyscale2.frag.glsl")
+Local shader2:TShader=LoadShader("","shaders/default.vert.glsl", "shaders/greyscale.frag.glsl")
 ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
 ShadeEntity(screensprite2, shader2)
 
 Local postprocess%=1
-Local time#=0, framerate#=60.0, animspeed#=10, time2#=0
+Local time#=0, framerate#=60.0, animspeed#=10
 Local timer:TTimer=CreateTimer(framerate)
 UseFloat(shader,"time",time) ' Time used to scroll the distortion map
 

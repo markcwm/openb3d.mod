@@ -17,6 +17,7 @@ ClearTextureFilters
 Local camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
+CameraViewport camera,0,0,width,height
 
 Local light:TLight=CreateLight()
 TurnEntity light,45,45,0
@@ -54,6 +55,7 @@ Next
 FreeEntity t_cylinder
 
 Local colortex:TTexture=CreateTexture(800,600,1+256)
+ScaleTexture colortex,1.0,-1.0
 
 Local noisew%=width/4, noiseh%=height/4
 Local noisetex:TTexture=CreateTexture(noisew,noiseh)
@@ -108,8 +110,8 @@ EntityTexture ground,ground_tex
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.007) ' Factor used to control how fast air rises
+SetFloat(shader,"distortionFactor",0.003)' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.003) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
 Local postprocess%=1

@@ -1,14 +1,14 @@
 // from Minib3dPFXNewton0.40.tar.gz by klepto2
 
-varying vec2 texCoords;
-uniform sampler2D colortex;
+varying vec4 texCoord0;
+varying vec4 texCoord1;
+uniform sampler2D colortex; // tex0
 uniform sampler2D depthtex;
 uniform float blursize; // 0.002
 
 void main(void)
 {
-	vec2 coords = vec2(texCoords.s, -texCoords.t); // flip texture
-	vec4 blurFactor = texture2D(depthtex, coords) * blursize;
+	vec4 blurFactor = texture2D(depthtex, texCoord1.st) * blursize;
 	float bf = blurFactor.r;
 	vec4 blurSample = vec4(0.0,0.0,0.0,0.0);
 	int lo = 3; // 2
@@ -17,7 +17,7 @@ void main(void)
     {
 		for(int ty =-lo; ty<hi; ty++)
 		{
-			vec2 uv = coords;
+			vec2 uv = texCoord0.st;
 			uv.x = uv.x + float(tx) * bf;
 			uv.y = uv.y + float(ty) * bf;
 			blurSample = blurSample + texture2D(colortex, uv);

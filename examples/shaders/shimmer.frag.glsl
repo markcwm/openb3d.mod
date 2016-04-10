@@ -9,7 +9,8 @@ uniform float riseFactor; // Factor used to control how fast air rises
 
 void main()
 {
-	vec2 coords = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t); // flip texture
+	vec2 coords = gl_TexCoord[0].st;
+	//vec2 coords = vec2(gl_TexCoord[0].s, -gl_TexCoord[0].t); // flip texture
     vec2 distortionMapCoordinate = coords;
 
     // We use the time value to scroll our distortion texture upwards

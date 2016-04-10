@@ -408,7 +408,8 @@ Type TSurface
 	
 	Method FreeSurface()
 	
-		FreeSurface_( GetInstance(self) )
+		FreeSurface_( GetInstance(Self) )
+		FreeObject( GetInstance(Self) )
 		
 	End Method
 	

@@ -160,7 +160,7 @@ Type TCamera Extends TEntity
 	
 	Method CameraViewport( x:Int,y:Int,width:Int,height:Int )
 	
-		CameraViewport_( GetInstance(Self),x,GraphicsHeight()-y-height,width,height ) ' inverted y
+		CameraViewport_( GetInstance(Self),x,y,width,height ) ' was inverted y
 		
 	End Method
 	

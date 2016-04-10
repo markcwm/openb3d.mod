@@ -388,28 +388,28 @@ void Texture::BackBufferToTex(int frame){
 		glBindTexture (GL_TEXTURE_CUBE_MAP,texture);
 		switch (cube_face){
 		case 0:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,0,GL_RGBA,0,0,width,height,0); //Global::height-height
 			break;
 		case 1:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0,GL_RGBA,0,0,width,height,0);
 			break;
 		case 2:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,GL_RGBA,0,0,width,height,0);
 			break;
 		case 3:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,0,GL_RGBA,0,0,width,height,0);
 			break;
 		case 4:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,0,GL_RGBA,0,0,width,height,0);
 			break;
 		case 5:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,0,GL_RGBA,0,Global::height-height,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,0,GL_RGBA,0,0,width,height,0); //...
 			break;
 		}
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 	}else{
 		glBindTexture (GL_TEXTURE_2D,texture);
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0);
+		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,0,width,height,0); //Global::height-height
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 	}
 }
@@ -522,7 +522,7 @@ void Texture::TexToBuffer(unsigned char* buffer, int frame){
 void Texture::DepthBufferToTex(Camera* cam=0 ){
 	glBindTexture(GL_TEXTURE_2D,texture);
 	if (cam==0){
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,Global::height-height,width,height,0);
+		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,0,width,height,0); //Global::height-height
 		glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
 	}else{
 		Global::camera_in_use=cam;

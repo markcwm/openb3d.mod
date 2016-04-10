@@ -44,7 +44,9 @@ Function Graphics3D( width:Int,height:Int,depth:Int=0,Mode:Int=0,rate:Int=60,fla
 	TGlobal.Graphics3D( width,height,depth,Mode,rate,flags,usecanvas )
 End Function
 
-'bbdoc: Draw text, does not need Max2D.
+Rem
+'bbdoc: Draw text, doesn't need Max2D.
+EndRem
 Function Text( x:Int,y:Int,Text:String )
 	TBlitz2D.Text( x,y,Text )
 End Function

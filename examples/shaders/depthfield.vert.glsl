@@ -1,8 +1,10 @@
-varying vec2 texCoords;
+varying vec4 texCoord0;
+varying vec4 texCoord1;
 
 void main()
 {	
-	texCoords = gl_MultiTexCoord0.st; // gl_TexCoord[0]
+	texCoord0 = gl_TextureMatrix[0] * gl_MultiTexCoord0;
+	texCoord1 = gl_TextureMatrix[1] * gl_MultiTexCoord1;
 	
 	gl_Position = ftransform();
 }

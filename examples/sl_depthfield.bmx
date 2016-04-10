@@ -16,6 +16,7 @@ ClearTextureFilters
 Local camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
+CameraViewport camera,0,0,width,height
 
 Local light:TLight=CreateLight()
 PositionEntity light,5,5,5
@@ -47,8 +48,10 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
-Local colortex:TTexture=CreateTexture(width,height)
-Local depthtex:TTexture=CreateTexture(width,height)
+Local colortex:TTexture=CreateTexture(width,height,1+256)
+Local depthtex:TTexture=CreateTexture(width,height,1+256)
+ScaleTexture colortex,1.0,-1.0
+ScaleTexture depthtex,1.0,-1.0
 
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
@@ -82,6 +85,13 @@ EntityOrder screensprite,-1
 EntityParent screensprite,camera
 MoveEntity screensprite,0,0,1.0 ' set z to 1.0
 
+Local screensprite2:TSprite=CreateSprite()
+ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
+EntityOrder screensprite2,-1
+EntityParent screensprite2,camera
+MoveEntity screensprite2,0,0,1.0 ' set z to 1.0
+EntityTexture screensprite2,depthtex
+
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
@@ -95,7 +105,7 @@ ShaderTexture(shader,depthtex,"depthtex",1) ' Our distortion map texture
 ShadeEntity(screensprite,shader)
 
 Local postprocess%=1
-Local blursize#=0.002
+Local blursize#=0.0014
 UseFloat(shader,"blursize",blursize)
 
 ' fps code
@@ -104,7 +114,7 @@ Local renders%, fps%
 
 While Not KeyDown(KEY_ESCAPE)
 	
-	If KeyHit(KEY_SPACE) Then postprocess=Not postprocess
+	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>2 Then postprocess=0
 	If KeyDown(KEY_EQUALS) And blursize<0.004 Then blursize:+0.0001
 	If KeyDown(KEY_MINUS) And blursize>0.0004 Then blursize:-0.0001
 	
@@ -115,16 +125,24 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cube,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
 	
-	UpdateWorld
-	
 	HideEntity screensprite
+	HideEntity screensprite2
+	UpdateWorld
+	RenderWorld
+	
 	If postprocess=1
 		CameraToTex colortex,camera
 		DepthBufferToTex depthtex,camera
 		
 		ShowEntity screensprite
+		RenderWorld
+	ElseIf postprocess=2
+		DepthBufferToTex depthtex,camera
+		
+		ShowEntity screensprite2
+		RenderWorld
 	EndIf
-	RenderWorld
+	
 	
 	' calculate fps
 	renders=renders+1
