@@ -568,7 +568,13 @@ Type TTexture
 		EndIf
 		
 	End Method
-
+	
+	Method TextureFlags( flags:Int )
+	
+		TextureFlags_( GetInstance(Self),flags )
+		
+	End Method
+	
 	Rem
 	Function CreateCubeMapTexture:TTexture(width:Int,height:Int,flags:Int,tex:TTexture=Null)
 		

@@ -529,6 +529,11 @@ Type TEntity
 	
 		EntityTexture_( GetInstance(Self),TTexture.GetInstance(tex),frame,index )
 		
+		brush.InitFields()
+		For Local ent:TEntity=EachIn child_list
+			ent.brush.InitFields()
+		Next
+		
 	End Method
 	
 	Method EntityBlend( blend:Int )
@@ -543,9 +548,11 @@ Type TEntity
 		
 	End Method
 	
-	Method PaintEntity( brush:TBrush )
+	Method PaintEntity( bru:TBrush )
 	
-		PaintEntity_( GetInstance(Self),TBrush.GetInstance(brush) )
+		PaintEntity_( GetInstance(Self),TBrush.GetInstance(bru) )
+		
+		brush.InitFields()
 		
 	End Method
 	

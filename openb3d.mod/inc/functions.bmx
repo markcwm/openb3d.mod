@@ -738,6 +738,7 @@ End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.
+about: Unlike Blitz3D, you don't need to free the returned texture as it is not a copy.
 End Rem
 Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 )	
 	Return brush.GetBrushTexture( index )

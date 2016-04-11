@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 // extra
+void DLL_EXPORT TextureFlags(Texture* tex, int flags);
 void DLL_EXPORT FreeSurface(Surface* surf);
 void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);
 void DLL_EXPORT BrushGLColor(Brush* brush, float r, float g, float b, float a);

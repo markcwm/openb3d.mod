@@ -169,9 +169,11 @@ Type TSurface
 			
 	End Method
 	
-	Method PaintSurface( brush:TBrush )
+	Method PaintSurface( bru:TBrush )
 	
-		PaintSurface_( GetInstance(Self),TBrush.GetInstance(brush) )
+		PaintSurface_( GetInstance(Self),TBrush.GetInstance(bru) )
+		
+		brush.InitFields()
 		
 	End Method
 	

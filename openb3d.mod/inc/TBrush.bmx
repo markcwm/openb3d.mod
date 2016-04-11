@@ -162,6 +162,8 @@ Type TBrush
 	
 		BrushTexture_( GetInstance(Self),TTexture.GetInstance(tex),frame,index )
 		
+		InitFields()
+		
 	End Method
 	
 	Method BrushBlend( blend:Int )

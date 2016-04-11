@@ -797,6 +797,9 @@ Copy texture to a pixmap buffer, buffer must be a byte ptr.
 <tr><td class=docleft width=1%><a href=#TextureFilter>TextureFilter</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TextureFlags>TextureFlags</a></td><td class=docright>
+Set texture flags, see LoadTexture for values.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TextureGLTexEnv>TextureGLTexEnv</a></td><td class=docright>
 GL equivalent.
 </td></tr>
@@ -1825,6 +1828,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=GetBrushTexture>
 <tr><td class=doctop colspan=2>Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Unlike Blitz3D, you don't need to free the returned texture as it is not a copy.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetChild>
@@ -2380,6 +2384,11 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <table class=doc width=100% cellspacing=3 id=TextureFilter>
 <tr><td class=doctop colspan=2>Function TextureFilter( match_text:String,flags:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureFlags>
+<tr><td class=doctop colspan=2>Function TextureFlags( tex:TTexture,flags:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set texture flags, see LoadTexture for values.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TextureGLTexEnv>

@@ -363,9 +363,13 @@ Type TMesh Extends TEntity
 		
 	EndMethod
 	
-	Method PaintMesh( brush:TBrush )
+	Method PaintMesh( bru:TBrush )
 	
-		PaintMesh_( GetInstance(Self),TBrush.GetInstance(brush) )
+		PaintMesh_( GetInstance(Self),TBrush.GetInstance(bru) )
+		
+		For Local surf:TSurface=EachIn surf_list
+			surf.brush.InitFields()
+		Next
 		
 	End Method
 	

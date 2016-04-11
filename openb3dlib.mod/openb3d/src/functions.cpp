@@ -19,6 +19,10 @@
 extern "C" {
 
 // extra
+void TextureFlags(Texture* tex, int flags){
+	tex->flags=flags;
+}
+
 void FreeSurface(Surface* surf){
 	surf->FreeVBO();
 	delete surf->brush;

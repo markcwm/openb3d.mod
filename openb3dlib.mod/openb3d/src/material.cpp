@@ -580,6 +580,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 			tex_coords=Shader_Tex[ix]->texture->coords;
 			tex_u_scale=Shader_Tex[ix]->texture->u_scale;
 			tex_v_scale=Shader_Tex[ix]->texture->v_scale;
+			//if(Shader_Tex[ix]->texture->invert_v != 0) tex_v_scale=-tex_v_scale;
 			tex_u_pos=Shader_Tex[ix]->texture->u_pos;
 			tex_v_pos=Shader_Tex[ix]->texture->v_pos;
 			tex_ang=Shader_Tex[ix]->texture->angle;
@@ -596,8 +597,8 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				}else{
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //GL_LINEAR
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //GL_LINEAR
 				}
 			}else{
 				glEnable(GL_TEXTURE_3D);
