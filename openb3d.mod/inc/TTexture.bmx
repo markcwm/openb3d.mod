@@ -197,7 +197,7 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=1 )
+	Function LoadTexture:TTexture( file:String,flags:Int=9 )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadTexture_( cString,flags )

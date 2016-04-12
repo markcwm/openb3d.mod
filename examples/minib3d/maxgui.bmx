@@ -114,6 +114,7 @@ Function UpdateCanvas(can:TGadget, cam:TCamera)
 	SetGraphics(CanvasGraphics(can))
 	If TGlobal.width[0] <> ClientWidth(can) Or TGlobal.height[0] <> ClientHeight(can)
 		BeginMax2D()
+		SetGraphics(CanvasGraphics(can))
 		SetViewport(0, 0, ClientWidth(can), ClientHeight(can))
 		EndMax2D()
 		

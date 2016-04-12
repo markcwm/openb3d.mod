@@ -854,7 +854,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a>
 End Rem
-Function LoadBrush:TBrush( file:String,flags:Int=1,u_scale:Float=1,v_scale:Float=1 )
+Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float=1 )
 	Return TBrush.LoadBrush( file,flags,u_scale,v_scale )
 End Function
 

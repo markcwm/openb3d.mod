@@ -173,7 +173,7 @@ Type TSurface
 	
 		PaintSurface_( GetInstance(Self),TBrush.GetInstance(bru) )
 		
-		brush.InitFields()
+		If brush<>Null Then brush.InitFields()
 		
 	End Method
 	

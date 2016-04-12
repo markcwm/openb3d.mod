@@ -368,7 +368,7 @@ Type TMesh Extends TEntity
 		PaintMesh_( GetInstance(Self),TBrush.GetInstance(bru) )
 		
 		For Local surf:TSurface=EachIn surf_list
-			surf.brush.InitFields()
+			If surf.brush<>Null Then surf.brush.InitFields()
 		Next
 		
 	End Method

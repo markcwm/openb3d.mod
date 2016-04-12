@@ -1,5 +1,5 @@
 ' sl_alphamap.bmx
-' using alpha maps for transparency
+' using alpha maps for transparency - note more than one visible surface is needed for alpha to work
 
 Strict
 
@@ -27,7 +27,6 @@ ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
-' note: more than one visible surface is needed for alpha to work
 Local shader:TShader=LoadShader("","shaders/alphamap.vert.glsl","shaders/alphamap.frag.glsl")
 ShaderTexture(shader,LoadTexture("media/colorkey.jpg"),"tex",0)
 ShaderTexture(shader,LoadTexture("media/spark.png"),"alphatex",1)

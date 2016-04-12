@@ -1,4 +1,4 @@
-' sl_2pass.bmx
+' sl_blur2pass.bmx
 ' render framebuffer twice per render
 
 Strict
@@ -113,35 +113,38 @@ PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
 Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp",1+8)
+Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
-ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
-ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.004) ' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.004) ' Factor used to control how fast air rises
+Local shader:TShader=LoadShader("","shaders/blur.vert.glsl", "shaders/blurv.frag.glsl")
+ShaderTexture(shader,colortex,"sceneTex",0)
+SetFloat(shader,"rt_w", width)
+SetFloat(shader,"rt_h", height)
+Local vx_offset#=1.05
+UseFloat(shader,"vx_offset", vx_offset)
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","shaders/default.vert.glsl", "shaders/greyscale.frag.glsl")
-ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
+Local shader2:TShader=LoadShader("","shaders/blur.vert.glsl", "shaders/blurh.frag.glsl")
+ShaderTexture(shader2,colortex2,"sceneTex",0)
+SetFloat(shader2,"rt_w", width)
+SetFloat(shader2,"rt_h", height)
+UseFloat(shader2,"vx_offset", vx_offset)
 ShadeEntity(screensprite2, shader2)
 
 Local postprocess%=1
-Local time#=0, framerate#=60.0, animspeed#=10
-Local timer:TTimer=CreateTimer(framerate)
-UseFloat(shader,"time",time) ' Time used to scroll the distortion map
+Local lflag%=0
 
 ' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
 While Not KeyHit(KEY_ESCAPE)
+		
+	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>3 Then postprocess=0
 	
-	time=Float((TimerTicks(timer) / framerate) * animspeed)
-	
-	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>2 Then postprocess=0
+	If KeyHit(KEY_L) Then lflag=Not lflag
+	If lflag Then vx_offset=Float(MouseX())/width Else vx_offset=1.05
 	
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
@@ -156,7 +159,7 @@ While Not KeyHit(KEY_ESCAPE)
 	UpdateWorld
 	RenderWorld
 	
-	If postprocess=1
+	If postprocess=1 ' 2 pass gaussian blur
 		CameraToTex colortex,camera
 		ShowEntity screensprite
 		RenderWorld
@@ -165,7 +168,11 @@ While Not KeyHit(KEY_ESCAPE)
 		HideEntity screensprite
 		ShowEntity screensprite2
 		RenderWorld
-	ElseIf postprocess=2
+	ElseIf postprocess=2 ' vertical
+		CameraToTex colortex,camera
+		ShowEntity screensprite
+		RenderWorld
+	ElseIf postprocess=3 ' horizontal
 		CameraToTex colortex2,camera
 		ShowEntity screensprite2
 		RenderWorld
@@ -180,7 +187,7 @@ While Not KeyHit(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,0,"FPS: "+fps
-	Text 0,20,"Space: postprocess = "+postprocess
+	Text 0,20,"Space: postprocess = "+postprocess+", L: draw line = "+lflag
 	
 	Flip
 Wend

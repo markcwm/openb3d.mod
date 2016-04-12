@@ -529,9 +529,9 @@ Type TEntity
 	
 		EntityTexture_( GetInstance(Self),TTexture.GetInstance(tex),frame,index )
 		
-		brush.InitFields()
+		If brush<>Null Then brush.InitFields()
 		For Local ent:TEntity=EachIn child_list
-			ent.brush.InitFields()
+			If ent.brush<>Null Then ent.brush.InitFields()
 		Next
 		
 	End Method
@@ -552,7 +552,7 @@ Type TEntity
 	
 		PaintEntity_( GetInstance(Self),TBrush.GetInstance(bru) )
 		
-		brush.InitFields()
+		If brush<>Null Then brush.InitFields()
 		
 	End Method
 	
