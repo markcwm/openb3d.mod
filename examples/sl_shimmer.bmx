@@ -1,5 +1,5 @@
 ' sl_shimmer.bmx
-' render framebuffer to texture - shimmer/heat haze
+' postprocess effect - render framebuffer to texture for shimmer/heat haze
 
 Strict
 
@@ -12,12 +12,16 @@ Graphics3D width,height
 
 
 SeedRnd MilliSecs()
-ClearTextureFilters
+ClearTextureFilters ' remove mipmap flag for postfx texture
 
-Local camera:TCamera=CreateCamera()
+Global camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
-CameraViewport camera,0,0,width,height
+
+Global postfx_cam:TCamera=CreateCamera() ' copy main camera
+CameraRange postfx_cam,0.5,1000.0
+CameraClsColor postfx_cam,150,200,250
+HideEntity postfx_cam
 
 Local light:TLight=CreateLight()
 TurnEntity light,45,45,0
@@ -34,10 +38,11 @@ For Local t%=0 To 359 Step 36
 Next
 FreeEntity t_sphere
 
-Local cube:TMesh=CreateCube()
-PositionEntity cube,0,7,0
-ScaleEntity cube,3,3,3
-EntityColor cube,Rnd(256),Rnd(256),Rnd(256)
+Local cube:TMesh=LoadMesh("media/wcrate.3ds")
+ScaleMesh cube,0.15,0.15,0.15
+PositionEntity cube,0,8,0
+Local cube_tex:TTexture=LoadTexture("media/crate.bmp",1)
+EntityTexture cube,cube_tex
 
 Local cube2:TMesh=CreateCube()
 PositionEntity cube2,0,18,0
@@ -54,7 +59,7 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
-Local colortex:TTexture=CreateTexture(800,600,1+256)
+Global colortex:TTexture=CreateTexture(800,600,1+256)
 ScaleTexture colortex,1.0,-1.0
 
 Local noisew%=width/4, noiseh%=height/4
@@ -93,7 +98,7 @@ Select status
 EndSelect
 
 ' screen sprite - by BlitzSupport
-Local screensprite:TSprite=CreateSprite()
+Global screensprite:TSprite=CreateSprite()
 EntityOrder screensprite,-1
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 MoveEntity screensprite,0,0,0.99 ' set z to 0.99 - instead of clamping uvs
@@ -103,18 +108,18 @@ PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
 Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
+Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp",1+8)
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.003)' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.003) ' Factor used to control how fast air rises
+SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
-Local postprocess%=1
+Global postprocess%=1
 Local time#=0, framerate#=60.0, animspeed#=10
 Local timer:TTimer=CreateTimer(framerate)
 UseFloat(shader,"time",time) ' Time used to scroll the distortion map
@@ -133,21 +138,15 @@ While Not KeyHit(KEY_ESCAPE)
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
+	PositionEntity postfx_cam,EntityX(camera),EntityY(camera),EntityZ(camera)
+	RotateEntity postfx_cam,EntityPitch(camera),EntityYaw(camera),EntityRoll(camera)
+	
 	TurnEntity cube,0.1,0.2,0.3
 	TurnEntity cube2,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
 	
 	UpdateWorld
-	
-	HideEntity screensprite
-	RenderWorld
-	
-	If postprocess=1
-		CameraToTex colortex,camera
-		
-		ShowEntity screensprite
-		RenderWorld
-	EndIf
+	Update1Pass()
 	
 	' calculate fps
 	renders=renders+1
@@ -163,3 +162,27 @@ While Not KeyHit(KEY_ESCAPE)
 	Flip
 Wend
 
+
+Function Update1Pass()
+
+	If postprocess=0
+		HideEntity postfx_cam
+		ShowEntity camera
+		HideEntity screensprite
+		
+		RenderWorld
+	ElseIf postprocess=1
+		ShowEntity postfx_cam
+		HideEntity camera
+		HideEntity screensprite
+		
+		CameraToTex colortex,postfx_cam
+		
+		HideEntity postfx_cam
+		ShowEntity camera
+		ShowEntity screensprite
+		
+		RenderWorld
+	EndIf
+	
+End Function

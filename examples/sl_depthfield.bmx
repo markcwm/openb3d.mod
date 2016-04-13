@@ -1,5 +1,5 @@
 ' sl_depthfield.bmx
-' render framebuffer and depthbuffer to textures attached to shader - depth of field
+' postprocess effect - render framebuffer and depthbuffer to shader textures for depth of field
 
 Strict
 
@@ -11,12 +11,16 @@ Graphics3D width,height
 
 
 SeedRnd MilliSecs()
-ClearTextureFilters
+ClearTextureFilters ' remove mipmap flag for postfx texture
 
-Local camera:TCamera=CreateCamera()
+Global camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
-CameraViewport camera,0,0,width,height
+
+Global postfx_cam:TCamera=CreateCamera() ' copy main camera
+CameraRange postfx_cam,0.5,1000.0
+CameraClsColor postfx_cam,150,200,250
+HideEntity postfx_cam
 
 Local light:TLight=CreateLight()
 PositionEntity light,5,5,5
@@ -33,10 +37,11 @@ For Local t%=0 To 359 Step 36
 Next
 FreeEntity t_sphere
 
-Local cube:TMesh=CreateCube()
-PositionEntity cube,0,7,0
-'ScaleEntity cube,3,3,3
-EntityColor cube,Rnd(256),Rnd(256),Rnd(256)
+Local cube:TMesh=LoadMesh("media/wcrate.3ds")
+ScaleMesh cube,0.15,0.15,0.15
+PositionEntity cube,0,8,0
+Local cube_tex:TTexture=LoadTexture("media/crate.bmp",1+8)
+EntityTexture cube,cube_tex
 
 Local t_cylinder:TMesh=CreateCylinder()
 ScaleEntity t_cylinder,0.5,6,0.5
@@ -48,8 +53,8 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
-Local colortex:TTexture=CreateTexture(width,height,1+256)
-Local depthtex:TTexture=CreateTexture(width,height,1+256)
+Global colortex:TTexture=CreateTexture(width,height,1+256)
+Global depthtex:TTexture=CreateTexture(width,height,1+256)
 ScaleTexture colortex,1.0,-1.0
 ScaleTexture depthtex,1.0,-1.0
 
@@ -79,13 +84,13 @@ Select status
 EndSelect
 
 ' screen sprite - by BlitzSupport
-Local screensprite:TSprite=CreateSprite()
+Global screensprite:TSprite=CreateSprite()
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite,-1
 EntityParent screensprite,camera
 MoveEntity screensprite,0,0,1.0 ' set z to 1.0
 
-Local screensprite2:TSprite=CreateSprite()
+Global screensprite2:TSprite=CreateSprite()
 ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite2,-1
 EntityParent screensprite2,camera
@@ -100,12 +105,12 @@ Local ground_tex:TTexture=LoadTexture("media/Envwall.bmp")
 EntityTexture ground,ground_tex
 
 Local shader:TShader=LoadShader("","shaders/depthfield.vert.glsl","shaders/depthfield.frag.glsl")
-ShaderTexture(shader,colortex,"colortex",0) ' Our render texture
-ShaderTexture(shader,depthtex,"depthtex",1) ' Our distortion map texture
+ShaderTexture(shader,colortex,"colortex",0) ' 0 is render texture
+ShaderTexture(shader,depthtex,"depthtex",1) ' 1 is depth texture
 ShadeEntity(screensprite,shader)
 
-Local postprocess%=1
-Local blursize#=0.0014
+Global postprocess%=1
+Local blursize#=0.0012
 UseFloat(shader,"blursize",blursize)
 
 ' fps code
@@ -122,27 +127,14 @@ While Not KeyDown(KEY_ESCAPE)
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
+	PositionEntity postfx_cam,EntityX(camera),EntityY(camera),EntityZ(camera)
+	RotateEntity postfx_cam,EntityPitch(camera),EntityYaw(camera),EntityRoll(camera)
+	
 	TurnEntity cube,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
 	
-	HideEntity screensprite
-	HideEntity screensprite2
 	UpdateWorld
-	RenderWorld
-	
-	If postprocess=1
-		CameraToTex colortex,camera
-		DepthBufferToTex depthtex,camera
-		
-		ShowEntity screensprite
-		RenderWorld
-	ElseIf postprocess=2
-		DepthBufferToTex depthtex,camera
-		
-		ShowEntity screensprite2
-		RenderWorld
-	EndIf
-	
+	UpdateDepthPass()
 	
 	' calculate fps
 	renders=renders+1
@@ -159,3 +151,46 @@ While Not KeyDown(KEY_ESCAPE)
 
 Wend
 End
+
+
+Function UpdateDepthPass()
+
+	If postprocess=0
+		HideEntity postfx_cam
+		ShowEntity camera
+		HideEntity screensprite2
+		HideEntity screensprite
+		
+		RenderWorld
+	ElseIf postprocess=1 ' 2 pass depth
+		HideEntity camera
+		ShowEntity postfx_cam
+		HideEntity screensprite2
+		HideEntity screensprite
+		
+		CameraToTex colortex,postfx_cam
+		
+		HideEntity postfx_cam
+		ShowEntity camera
+		
+		DepthBufferToTex depthtex,camera
+		
+		ShowEntity screensprite
+		
+		RenderWorld
+	ElseIf postprocess=2 ' depth
+		HideEntity camera
+		ShowEntity postfx_cam
+		HideEntity screensprite2
+		HideEntity screensprite
+				
+		DepthBufferToTex depthtex,postfx_cam
+		
+		ShowEntity screensprite2
+		HideEntity postfx_cam
+		ShowEntity camera
+		
+		RenderWorld
+	EndIf
+
+End Function

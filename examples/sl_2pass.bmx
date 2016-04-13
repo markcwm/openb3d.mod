@@ -1,5 +1,5 @@
 ' sl_2pass.bmx
-' render framebuffer twice per render
+' postprocess effect - how to render framebuffer twice per render
 
 Strict
 
@@ -12,12 +12,16 @@ Graphics3D width,height
 
 
 SeedRnd MilliSecs()
-ClearTextureFilters
+ClearTextureFilters ' remove mipmap flag for postfx texture
 
-Local camera:TCamera=CreateCamera()
+Global camera:TCamera=CreateCamera()
 CameraRange camera,0.5,1000.0 ' near must be closer than screen sprite to prevent clipping
 CameraClsColor camera,150,200,250
-CameraViewport camera,0,0,width,height
+
+Global postfx_cam:TCamera=CreateCamera() ' copy main camera
+CameraRange postfx_cam,0.5,1000.0
+CameraClsColor postfx_cam,150,200,250
+HideEntity postfx_cam
 
 Local light:TLight=CreateLight()
 TurnEntity light,45,45,0
@@ -34,10 +38,11 @@ For Local t%=0 To 359 Step 36
 Next
 FreeEntity t_sphere
 
-Local cube:TMesh=CreateCube()
-PositionEntity cube,0,7,0
-ScaleEntity cube,3,3,3
-EntityColor cube,Rnd(256),Rnd(256),Rnd(256)
+Local cube:TMesh=LoadMesh("media/wcrate.3ds")
+ScaleMesh cube,0.15,0.15,0.15
+PositionEntity cube,0,8,0
+Local cube_tex:TTexture=LoadTexture("media/crate.bmp",1)
+EntityTexture cube,cube_tex
 
 Local cube2:TMesh=CreateCube()
 PositionEntity cube2,0,18,0
@@ -54,8 +59,8 @@ For Local t%=0 To 10
 Next
 FreeEntity t_cylinder
 
-Local colortex:TTexture=CreateTexture(800,600,1+256)
-Local colortex2:TTexture=CreateTexture(800,600,1+256)
+Global colortex:TTexture=CreateTexture(800,600,1+256)
+Global colortex2:TTexture=CreateTexture(800,600,1+256)
 ScaleTexture colortex,1.0,-1.0
 ScaleTexture colortex2,1.0,-1.0
 
@@ -96,14 +101,14 @@ Select status
 EndSelect
 
 ' screen sprite - by BlitzSupport
-Local screensprite:TSprite=CreateSprite()
+Global screensprite:TSprite=CreateSprite()
 EntityOrder screensprite,-1
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 MoveEntity screensprite,0,0,1.0 ' set z to 0.99 - instead of clamping uvs
 EntityParent screensprite,camera
 HideEntity screensprite
 
-Local screensprite2:TSprite=CreateSprite()
+Global screensprite2:TSprite=CreateSprite()
 ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite2,-1
 EntityParent screensprite2,camera
@@ -120,15 +125,15 @@ EntityTexture ground,ground_tex
 Local shader:TShader=LoadShader("","shaders/shimmer.vert.glsl", "shaders/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.004) ' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.004) ' Factor used to control how fast air rises
+SetFloat(shader,"distortionFactor",0.005) ' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
 Local shader2:TShader=LoadShader("","shaders/default.vert.glsl", "shaders/greyscale.frag.glsl")
 ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
 ShadeEntity(screensprite2, shader2)
 
-Local postprocess%=1
+Global postprocess%=1
 Local time#=0, framerate#=60.0, animspeed#=10
 Local timer:TTimer=CreateTimer(framerate)
 UseFloat(shader,"time",time) ' Time used to scroll the distortion map
@@ -141,35 +146,21 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	time=Float((TimerTicks(timer) / framerate) * animspeed)
 	
-	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>2 Then postprocess=0
+	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>3 Then postprocess=0
 	
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
+	PositionEntity postfx_cam,EntityX(camera),EntityY(camera),EntityZ(camera)
+	RotateEntity postfx_cam,EntityPitch(camera),EntityYaw(camera),EntityRoll(camera)
+	
 	TurnEntity cube,0.1,0.2,0.3
 	TurnEntity cube2,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
-		
-	HideEntity screensprite2
-	HideEntity screensprite
-	UpdateWorld
-	RenderWorld
 	
-	If postprocess=1
-		CameraToTex colortex,camera
-		ShowEntity screensprite
-		RenderWorld
-		
-		CameraToTex colortex2,camera
-		HideEntity screensprite
-		ShowEntity screensprite2
-		RenderWorld
-	ElseIf postprocess=2
-		CameraToTex colortex2,camera
-		ShowEntity screensprite2
-		RenderWorld
-	EndIf
+	UpdateWorld
+	Update2Pass()
 	
 	' calculate fps
 	renders=renders+1
@@ -185,3 +176,60 @@ While Not KeyHit(KEY_ESCAPE)
 	Flip
 Wend
 
+
+Function Update2Pass()
+
+	If postprocess=0
+		HideEntity postfx_cam
+		ShowEntity camera
+		HideEntity screensprite2
+		HideEntity screensprite
+		
+		RenderWorld
+	ElseIf postprocess=1 ' 2 pass
+		ShowEntity postfx_cam
+		HideEntity camera
+		HideEntity screensprite2
+		HideEntity screensprite
+		
+		CameraToTex colortex,postfx_cam
+		
+		ShowEntity screensprite
+		HideEntity postfx_cam
+		ShowEntity camera ' note: 2nd pass needs main camera
+		
+		CameraToTex colortex2,camera
+		
+		HideEntity screensprite
+		ShowEntity screensprite2
+		
+		RenderWorld
+	ElseIf postprocess=2 ' shader1
+		HideEntity camera
+		ShowEntity postfx_cam
+		HideEntity screensprite2
+		HideEntity screensprite
+				
+		CameraToTex colortex,postfx_cam
+		
+		ShowEntity screensprite
+		HideEntity postfx_cam
+		ShowEntity camera
+		
+		RenderWorld
+	ElseIf postprocess=3 ' shader2
+		HideEntity camera
+		ShowEntity postfx_cam
+		HideEntity screensprite2
+		HideEntity screensprite
+				
+		CameraToTex colortex2,postfx_cam
+		
+		ShowEntity screensprite2
+		HideEntity postfx_cam
+		ShowEntity camera
+		
+		RenderWorld
+	EndIf
+	
+End Function
