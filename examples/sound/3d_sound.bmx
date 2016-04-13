@@ -4,7 +4,7 @@ SuperStrict
 
 Framework Openb3d.B3dglgraphics
 Import Openb3d.B3dsound
-?Linux
+?Not Win32
 Import Brl.FreeAudioAudio
 ?Win32
 Import Brl.DirectSoundAudio

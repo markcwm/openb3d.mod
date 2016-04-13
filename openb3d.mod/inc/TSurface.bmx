@@ -160,9 +160,7 @@ Type TSurface
 	End Method
 	
 	Method Delete()
-	
-		FreeVBO()
-		
+			
 		If LOG_DEL
 			DebugLog "Del TSurface"
 		EndIf
