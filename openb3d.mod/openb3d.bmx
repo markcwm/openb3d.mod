@@ -22,8 +22,8 @@
 Strict
 
 Rem
-bbdoc: OpenB3D Wrapper
-about: Online Blitz3D doc links.
+bbdoc: OpenB3D Blitz3D functions
+about: Online Blitz3D documentation links.
 End Rem
 Module Openb3d.Openb3d
 
@@ -33,21 +33,20 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 
 ModuleInfo "History: 1.00 Initial Release"
 
-' *** lib
 
 Import Openb3d.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
-Import BRL.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
-Import BRL.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
-Import BRL.BMPLoader		' imports BRL.Pixmap, BRL.EndianStream
-Import BRL.PNGLoader		' imports BRL.Pixmap, PUB.LibPNG
-Import BRL.JPGLoader		' imports BRL.Pixmap, PUB.LibJPEG
-Import BRL.Retro			' imports BRL.Basic
-Import BRL.map
+Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
+Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
+Import Brl.BmpLoader		' imports BRL.Pixmap, BRL.EndianStream
+Import Brl.PngLoader		' imports BRL.Pixmap, PUB.LibPNG
+Import Brl.JpgLoader		' imports BRL.Pixmap, PUB.LibJPEG
+Import Brl.Retro			' imports BRL.Basic
+Import Brl.Map
 
 ' functions.cpp
 Extern
 
-	' *** extra
+	' *** Wrapper only
 	Function TextureFlags_( tex:Byte Ptr,flags:Int ) = "TextureFlags"
 	Function FreeSurface_( surf:Byte Ptr ) = "FreeSurface"
 	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv"
@@ -390,105 +389,6 @@ Const USE_VBO:Int=		True ' true to use vbos if supported by hardware
 Const VBO_MIN_TRIS:Int=	250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
 Const LOG_NEW:Int=		False ' true to write to debuglog when new minib3d object created
 Const LOG_DEL:Int=		False ' true to write to debuglog when minib3d object destroyed
-
-' *** Extra functions
-
-Rem
-bbdoc: Begin using Max2D functions.
-End Rem
-Function BeginMax2D()
-	TBlitz2D.BeginMax2D()
-End Function
-
-Rem
-bbdoc: End using Max2D functions.
-End Rem
-Function EndMax2D()
-	TBlitz2D.EndMax2D()
-End Function
-
-Rem
-bbdoc: Copy a list or vector. To copy a field list use as a method.
-about: Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
-End Rem
-Function CopyList( list:TList )
-	TGlobal.CopyList( list )
-End Function
-
-Rem
-bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter.
-about: Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
-EndRem
-Function ListPushBack( list:TList,value:Object,ent:TEntity )
-	TGlobal.ListPushBack( list,value,ent )
-End Function
-
-Rem
-bbdoc: GL equivalent.
-End Rem
-Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
-	BrushGLColor_( TBrush.GetInstance(brush),r,g,b,a )
-End Function
-
-Rem
-bbdoc: GL equivalent.
-End Rem
-Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )
-	BrushGLBlendFunc_( TBrush.GetInstance(brush),sfactor,dfactor )
-End Function
-
-Rem
-bbdoc: GL equivalent.
-End Rem
-Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
-	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
-End Function
-
-Rem
-bbdoc: Set texture flags, see LoadTexture for values.
-End Rem
-Function TextureFlags( tex:TTexture,flags:Int )
-	tex.TextureFlags(flags)
-End Function
-
-Rem
-bbdoc: Frees VBO data and brush.
-End Rem
-Function FreeSurface( surf:TSurface )
-	Return surf.FreeSurface()
-End Function
-
-Rem
-bbdoc: Add an existing surface to a mesh.
-End Rem
-Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
-	If anim_surf=False
-		mesh.ListPushBack( mesh.surf_list,surf )
-	Else
-		mesh.ListPushBack( mesh.anim_surf_list,surf )
-	EndIf
-End Function
-
-Rem
-bbdoc: Returns a copy of the new brush.
-End Rem
-Function CopyBrush:TBrush( brush:TBrush )
-	Return brush.Copy()
-End Function
-
-Rem
-bbdoc: Returns a copy of the new surface.
-End Rem
-Function CopySurface:TSurface( surf:TSurface )
-	Return surf.Copy()
-End Function
-
-Rem
-bbdoc: Returns a copy of the new texture.
-End Rem
-Function CopyTexture:TTexture( tex:TTexture )
-	Return tex.Copy()
-End Function
 
 ' *** Includes
 

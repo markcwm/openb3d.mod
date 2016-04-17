@@ -33,7 +33,7 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "History: 1.00 Initial Release"
 
 
-Import Openb3d.Openb3d
+Import Openb3d.Openb3dex
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
