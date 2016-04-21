@@ -33,7 +33,6 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 
 ModuleInfo "History: 1.00 Initial Release"
 
-
 Import Openb3d.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
@@ -285,55 +284,6 @@ Extern
 	Function TexToBuffer_( tex:Byte Ptr,buffer:Byte Ptr,frame:Int ) = "TexToBuffer"
 	Function UpdateTexCoords_( surf:Byte Ptr ) = "UpdateTexCoords"
 	
-	' *** Action
-	Function ActMoveBy_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActMoveBy"
-	Function ActTurnBy_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActTurnBy"
-	Function ActVector_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float ) = "ActVector"
-	Function ActMoveTo_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActMoveTo"
-	Function ActTurnTo_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActTurnTo"
-	Function ActScaleTo_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActScaleTo"
-	Function ActFadeTo_:Byte Ptr( ent:Byte Ptr,a:Float,rate:Float ) = "ActFadeTo"
-	Function ActTintTo_:Byte Ptr( ent:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActTintTo"
-	Function ActTrackByPoint_:Byte Ptr( ent:Byte Ptr,target:Byte Ptr,a:Float,b:Float,c:Float,rate:Float ) = "ActTrackByPoint"
-	Function ActTrackByDistance_:Byte Ptr( ent:Byte Ptr,target:Byte Ptr,a:Float,rate:Float ) = "ActTrackByDistance"
-	Function ActNewtonian_:Byte Ptr( ent:Byte Ptr,rate:Float ) = "ActNewtonian"
-	Function AppendAction_( act1:Byte Ptr,act2:Byte Ptr ) = "AppendAction"
-	Function FreeAction_( act:Byte Ptr ) = "FreeAction"
-	
-	' *** Constraint
-	Function CreateConstraint_:Byte Ptr( p1:Byte Ptr,p2:Byte Ptr,l:Float ) = "CreateConstraint"
-	Function CreateRigidBody_:Byte Ptr( body:Byte Ptr,p1:Byte Ptr,p2:Byte Ptr,p3:Byte Ptr,p4:Byte Ptr ) = "CreateRigidBody"
-	
-	' *** Fluid
-	Function CreateBlob_:Byte Ptr( fluid:Byte Ptr,radius:Float,parent_ent:Byte Ptr ) = "CreateBlob"
-	Function CreateFluid_:Byte Ptr() = "CreateFluid"
-	Function FluidArray_( fluid:Byte Ptr,Array:Float Ptr,w:Int,h:Int,d:Int) = "FluidArray"
-	Function FluidFunction_( fluid:Byte Ptr,FieldFunction:Float( x:Float,y:Float,z:Float ) ) = "FluidFunction"
-	Function FluidThreshold_( fluid:Byte Ptr,threshold:Float ) = "FluidThreshold"
-	
-	' *** Geosphere
-	Function CreateGeosphere_:Byte Ptr( size:Int,parent:Byte Ptr ) = "CreateGeosphere"
-	Function GeosphereHeight_( geo:Byte Ptr,h:Float ) = "GeosphereHeight"
-	Function LoadGeosphere_:Byte Ptr( file:Byte Ptr,parent:Byte Ptr ) = "LoadGeosphere"
-	Function ModifyGeosphere_( geo:Byte Ptr,x:Int,z:Int,new_height:Float ) = "ModifyGeosphere"
-	
-	' *** Octree
-	Function CreateOcTree_:Byte Ptr( w:Float,h:Float,d:Float,parent_ent:Byte Ptr ) = "CreateOcTree"
-	Function OctreeBlock_( octree:Byte Ptr,mesh:Byte Ptr,level:Int,X:Float,Y:Float,Z:Float,Near:Float,Far:Float ) = "OctreeBlock"
-	Function OctreeMesh_( octree:Byte Ptr,mesh:Byte Ptr,level:Int,X:Float,Y:Float,Z:Float,Near:Float,Far:Float ) = "OctreeMesh"
-	
-	' *** Particle
-	Function CreateParticleEmitter_:Byte Ptr( particle:Byte Ptr,parent_ent:Byte Ptr ) = "CreateParticleEmitter"
-	Function EmitterVector_( emit:Byte Ptr,x:Float,y:Float,z:Float ) = "EmitterVector"
-	Function EmitterRate_( emit:Byte Ptr,r:Float ) = "EmitterRate"
-	Function EmitterParticleLife_( emit:Byte Ptr,l:Int ) = "EmitterParticleLife"
-	Function EmitterParticleFunction_( emit:Byte Ptr,EmitterFunction( ent:Byte Ptr,life:Int ) ) = "EmitterParticleFunction"
-	Function EmitterParticleSpeed_( emit:Byte Ptr,s:Float ) = "EmitterParticleSpeed"
-	Function EmitterVariance_( emit:Byte Ptr,v:Float ) = "EmitterVariance"
-	Function ParticleColor_( sprite:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "ParticleColor"
-	Function ParticleVector_( sprite:Byte Ptr,x:Float,y:Float,z:Float ) = "ParticleVector"
-	Function ParticleTrail_( sprite:Byte Ptr,length:Int ) = "ParticleTrail"
-	
 	' *** Shader
 	Function LoadShader_:Byte Ptr( ShaderName:Byte Ptr,VshaderFileName:Byte Ptr,FshaderFileName:Byte Ptr ) = "LoadShader"
 	Function CreateShader_:Byte Ptr( ShaderName:Byte Ptr,VshaderString:Byte Ptr,FshaderString:Byte Ptr ) = "CreateShader"
@@ -367,19 +317,6 @@ Extern
 	Function CreateShadow_:Byte Ptr( parent:Byte Ptr,Static:Int ) = "CreateShadow"
 	Function FreeShadow_( shad:Byte Ptr ) = "FreeShadow"
 	
-	' *** Stencil
-	Function CreateStencil_:Byte Ptr() = "CreateStencil"
-	Function StencilAlpha_( stencil:Byte Ptr,a:Float ) = "StencilAlpha"
-	Function StencilClsColor_( stencil:Byte Ptr,r:Float,g:Float,b:Float ) = "StencilClsColor"
-	Function StencilClsMode_( stencil:Byte Ptr,cls_color:Int,cls_zbuffer:Int ) = "StencilClsMode"
-	Function StencilMesh_( stencil:Byte Ptr,mesh:Byte Ptr,Mode:Int ) = "StencilMesh"
-	Function StencilMode_( stencil:Byte Ptr,m:Int,o:Int ) = "StencilMode"
-	Function UseStencil_( stencil:Byte Ptr ) = "UseStencil"
-	
-	' *** VoxelSprite
-	Function CreateVoxelSprite_:Byte Ptr( slices:Int,parent:Byte Ptr ) = "CreateVoxelSprite"
-	Function VoxelSpriteMaterial_( voxelspr:Byte Ptr,mat:Byte Ptr ) = "VoxelSpriteMaterial"
-	
 End Extern
 
 ' *** Constants
@@ -389,6 +326,49 @@ Const USE_VBO:Int=		True ' true to use vbos if supported by hardware
 Const VBO_MIN_TRIS:Int=	250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
 Const LOG_NEW:Int=		False ' true to write to debuglog when new minib3d object created
 Const LOG_DEL:Int=		False ' true to write to debuglog when minib3d object destroyed
+
+' *** Wrapper functions
+
+Rem
+bbdoc: Begin using Max2D functions.
+End Rem
+Function BeginMax2D()
+	TBlitz2D.BeginMax2D()
+End Function
+
+Rem
+bbdoc: End using Max2D functions.
+End Rem
+Function EndMax2D()
+	TBlitz2D.EndMax2D()
+End Function
+
+Rem
+bbdoc: Copy a list or vector. To copy a field list use as a method.
+about: Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
+End Rem
+Function CopyList( list:TList )
+	TGlobal.CopyList( list )
+End Function
+
+Rem
+bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter.
+about: Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
+EndRem
+Function ListPushBack( list:TList,value:Object,ent:TEntity )
+	TGlobal.ListPushBack( list,value,ent )
+End Function
+
+Rem
+bbdoc: Add an existing surface to a mesh.
+End Rem
+Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
+	If anim_surf=False
+		mesh.ListPushBack( mesh.surf_list,surf )
+	Else
+		mesh.ListPushBack( mesh.anim_surf_list,surf )
+	EndIf
+End Function
 
 ' *** Includes
 
@@ -421,27 +401,15 @@ Include "inc/TQuaternion.bmx"
 Include "inc/BoxSphere.bmx"
 
 ' misc
-Include "inc/THardwareInfo.bmx"
 Include "inc/TBlitz2D.bmx"
 Include "inc/TUtility.bmx"
 Include "inc/TDebug.bmx"
 
-' data
-'Include "inc/data.bmx"
-
 ' extra
-Include "inc/TShader.bmx"
 Include "inc/TTerrain.bmx"
+Include "inc/TShader.bmx"
 Include "inc/TShadowObject.bmx"
-Include "inc/TStencil.bmx"
-Include "inc/TFluid.bmx"
-Include "inc/TGeosphere.bmx"
-Include "inc/TOcTree.bmx"
-Include "inc/TVoxelSprite.bmx"
-Include "inc/TGLShader.bmx"
-Include "inc/TAction.bmx"
-Include "inc/TConstraint.bmx"
-Include "inc/TParticleBatch.bmx"
+Include "inc/THardwareInfo.bmx"
 
 ' functions
 Include "inc/functions.bmx"
