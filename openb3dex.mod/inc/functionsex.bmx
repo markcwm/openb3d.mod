@@ -24,6 +24,14 @@ Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
 End Function
 
 Rem
+bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
+about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
+EndRem
+Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	Return TTexture.LoadTextureAlpha( file,flags,alphamask )
+End Function
+
+Rem
 bbdoc: Set texture flags, see LoadTexture for values.
 End Rem
 Function TextureFlags( tex:TTexture,flags:Int )
@@ -1006,7 +1014,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=1 )
+Function LoadTexture:TTexture( file:String,flags:Int=9 )
 	Return TTexture.LoadTexture( file,flags )
 End Function
 
@@ -1919,6 +1927,7 @@ End Function
 
 Rem
 bbdoc: Set custom rendering callback function for particle emitter
+about: This gives access to each particle sprite (as byte ptr) and it's current lifetime left.
 End Rem
 Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )
 	emit.EmitterParticleFunction( EmitterFunction ) ' note: use TEntity.GetInstance(ent)

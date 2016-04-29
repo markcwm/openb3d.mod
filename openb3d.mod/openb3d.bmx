@@ -370,6 +370,14 @@ Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
 	EndIf
 End Function
 
+Rem
+bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
+about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
+EndRem
+Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	Return TTexture.LoadTextureAlpha( file,flags,alphamask )
+End Function
+
 ' *** Includes
 
 ' global

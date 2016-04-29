@@ -199,11 +199,16 @@ Type TTexture
 	
 	Function LoadTexture:TTexture( file:String,flags:Int=9 )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadTexture_( cString,flags )
-		Local tex:TTexture=CreateObject(inst)
-		MemFree cString
-		Return tex
+		Local ext$=ExtractExt(file).ToLower()
+		If ext="jpg" Or ext="jpeg" ' stb doesn't support progressive format, so uses brl.jpgloader
+			Return LoadTextureAlpha( file,flags,0 )
+		Else
+			Local cString:Byte Ptr=file.ToCString()
+			Local inst:Byte Ptr=LoadTexture_( cString,flags )
+			Local tex:TTexture=CreateObject(inst)
+			MemFree cString
+			Return tex
+		EndIf
 		
 	End Function
 	
@@ -568,6 +573,33 @@ Type TTexture
 		EndIf
 		
 	End Method
+	
+	Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	
+		Local map:TPixmap=LoadPixmap(file)
+		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+		If alphamask ' only if alpha mask
+			For Local iy%=0 To PixmapWidth(map)-1
+				For Local ix%=0 To PixmapHeight(map)-1
+					Local rgba%=ReadPixel(map,ix,iy)
+					Local alp%=rgba & alphamask
+					If alp & $FF000000 ' alpha
+						alp=alp Shr 24 ' convert to byte
+					ElseIf alp & $00FF0000 ' blue
+						alp=alp Shr 16
+					ElseIf alp & $0000FF00 ' green
+						alp=alp Shr 8
+					EndIf
+					alp=alp*(Float(alp)/255.0) ' hack to make darker colors less visible
+					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+				Next
+			Next
+		EndIf
+		Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+		BufferToTex tex,PixmapPixelPtr(map,0,0)
+		Return tex
+		
+	End Function
 	
 	Method TextureFlags( flags:Int )
 	

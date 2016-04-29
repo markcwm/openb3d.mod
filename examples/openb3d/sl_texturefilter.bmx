@@ -1,0 +1,78 @@
+' sl_texturefilter.bmx
+' Todo: wrap shader.Shader_Tex[Slot]
+
+Strict
+
+Framework Openb3d.B3dglgraphics
+
+Graphics3D 800,600,0,2
+
+
+Local camera:TCamera=CreateCamera()
+
+Local light:TLight=CreateLight()
+
+ClearTextureFilters
+TextureFilter "crate",1
+
+Local cube:TMesh=CreateCube()
+PositionEntity cube,-1.5,0,3
+
+Local cube2:TMesh=LoadMesh("../media/wcrate.3ds")
+ScaleEntity cube2,0.05,0.05,0.05
+RotateEntity cube2,0,180,0
+PositionEntity cube2,1.5,0,4
+
+Local cone:TMesh=CreateCone()
+PositionEntity cone,0,0,10
+ScaleEntity cone,4,4,4
+
+Local plane:TMesh=CreateCube()
+ScaleEntity plane,10,0.1,10
+MoveEntity plane,0,-1.5,0
+
+Local shader:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
+Local tex1:TTexture=LoadTexture("../media/crate.bmp")
+ShaderTexture(shader,tex1,"texture0",0)
+ShadeEntity(cube,shader)
+
+Local shader2:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
+Local tex2:TTexture=LoadTexture("../media/wcrate.jpg")
+ShaderTexture(shader2,tex2,"texture0",0)
+ShadeEntity(cube2,shader2)
+
+Local tflag%=1
+
+
+While Not KeyDown(KEY_ESCAPE)
+
+	' turn cubes
+	If KeyDown(KEY_LEFT)
+		TurnEntity cube,0,-0.5,0.1
+		TurnEntity cube2,0,0.5,-0.1
+	EndIf
+	If KeyDown(KEY_RIGHT)
+		TurnEntity cube,0,0.5,-0.1
+		TurnEntity cube2,0,-0.5,0.1
+	EndIf
+		
+	' texture filter is nearest (sharp) or linear/mipmap (smooth)
+	If KeyHit(KEY_T)
+		tflag=Not tflag
+		If tflag
+			'TextureFlags shader.Shader_Tex[Slot[0]],1
+			'TextureFlags shader2.Shader_Tex[Slot[0]],1
+		Else
+			'TextureFlags shader.Shader_Tex[Slot[0]],1+8
+			'TextureFlags shader2.Shader_Tex[Slot[0]],1+8
+		EndIf
+	EndIf
+	
+	RenderWorld
+	
+	Text 0,0,"Left/Right: turn cubes"
+	
+	Flip
+
+Wend
+End

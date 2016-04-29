@@ -12,6 +12,7 @@ Type TBlitz2D
 			glClientActiveTextureARB(GL_TEXTURE0)
 		EndIf
 		
+		glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE) ' texture blend 0, do not blend
 		glDisable(GL_LIGHTING)
 		glColor3f(1.0,1.0,1.0)
 		
