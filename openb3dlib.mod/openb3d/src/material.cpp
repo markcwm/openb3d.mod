@@ -912,11 +912,12 @@ void Shader::AddShaderFromString(string _vert, string _frag){
 		'arb_program.ListAttachedShaders()
 	End Method */
 
-void Shader::AddSampler2D(string Name, int Slot, Texture* Tex){
+Texture* Shader::AddSampler2D(string Name, int Slot, Texture* Tex){
 	Shader_Tex[Slot] = Sampler::Create(Name,Slot,Tex);
 	UpdateSampler = 1;
 	Shader_Tex[Slot]->is3D=0;
 	texCount++;
+	return Shader_Tex[Slot]->texture;
 }
 	
 void Shader::AddSampler3D(string Name, int Slot, Texture* Tex){

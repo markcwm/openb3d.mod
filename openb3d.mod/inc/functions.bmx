@@ -1,74 +1,35 @@
 ' functions.bmx
 
-' *** Minib3d only
+' *** Todo
 
 Rem
-bbdoc: Copy the contents of the backbuffer to a texture
-about: OpenB3D does not have the same buffer commands as Blitz3D.
-The region copied from the backbuffer will start at 0,0 and end at the texture's width and height.
-So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size, 
-use RenderWorld to render the camera, then use this command.
+bbdoc: Currently does nothing
 End Rem
-Function BackBufferToTex( tex:TTexture,frame:Int=0 )
-	tex.BackBufferToTex( frame ) ' frame currently does nothing
+Function BackBuffer()
 End Function
 
 Rem
-bbdoc: Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cull sphere'
-about: If the 'cull sphere' is not inside the viewing area, the mesh will not be rendered.
-A mesh's cull radius is set automatically, therefore in most cases you will not have to use this command. 
-One time you may have to use it is for animated meshes where the default cull radius may not take into 
-account all animation positions, resulting in the mesh being wrongly culled at extreme positions.
+bbdoc: Currently does nothing
 End Rem
-Function MeshCullRadius( ent:TEntity,radius:Float )
-	MeshCullRadius_( TEntity.GetInstance(ent),radius )
+Function FrontBuffer()
 End Function
 
 Rem
-bbdoc: Returns the scale for the x axis of an entity set with ScaleEntity
-about: If glob is true then it's relative to any parents.
+bbdoc: Currently does nothing
 End Rem
-Function EntityScaleX:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleX( glob )
+Function ImageBuffer( handle%,frame%=0 )
 End Function
 
 Rem
-bbdoc: Returns the scale for the y axis of an entity set with ScaleEntity
-about: If glob is true then it's relative to any parents.
+bbdoc: Currently does nothing
 End Rem
-Function EntityScaleY:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleY( glob )
+Function SetBuffer( buffer:Int=0 )
 End Function
 
 Rem
-bbdoc: Returns the scale for the z axis of an entity set with ScaleEntity
-about: If glob is true then it's relative to any parents.
+bbdoc: Currently does nothing
 End Rem
-Function EntityScaleZ:Float( ent:TEntity,glob:Int=False )
-	Return ent.EntityScaleZ( glob )
-End Function
-
-' *** Openb3d only
-
-Rem
-bbdoc: Copy pixmap buffer to texture, buffer must be a byte ptr
-End Rem
-Function BufferToTex( tex:TTexture,buffer:Byte Ptr,frame:Int=0 ) ' frame currently does nothing
-	tex.BufferToTex( buffer,frame )
-End Function
-
-Rem
-bbdoc: Copy rendered camera view to texture
-End Rem
-Function CameraToTex( tex:TTexture,cam:TCamera,frame:Int=0 ) ' frame currently does nothing
-	tex.CameraToTex( cam,frame )
-End Function
-
-Rem
-bbdoc: Copy texture to a pixmap buffer, buffer must be a byte ptr
-End Rem
-Function TexToBuffer( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )
-	tex.TexToBuffer( buffer,frame )
+Function CopyRect( src_x%,src_y%,src_width%,src_height%,dest_x%,dest_y%,src_buffer%=0,dest_buffer%=0 )
 End Function
 
 ' *** Blitz3D functions, A-Z (in Minib3d)
@@ -891,7 +852,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=1 )
+Function LoadTexture:TTexture( file:String,flags:Int=9 )
 	Return TTexture.LoadTexture( file,flags )
 End Function
 

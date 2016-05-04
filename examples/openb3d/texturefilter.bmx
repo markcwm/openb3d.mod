@@ -34,7 +34,7 @@ Local plane:TMesh=CreateCube()
 ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
-Local tflag%=1
+Local tflag%=0
 
 
 While Not KeyDown(KEY_ESCAPE)

@@ -3,6 +3,13 @@
 ' *** Wrapper only
 
 Rem
+bbdoc: Free stencil
+End Rem
+Function FreeStencil( stencil:TStencil ) ' Spinduluz
+	stencil.FreeStencil()
+End Function
+
+Rem
 bbdoc: GL equivalent.
 End Rem
 Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
@@ -2008,8 +2015,8 @@ End Function
 Rem
 bbdoc: Load a texture for 2D texture sampling
 End Rem
-Function ShaderTexture( material:TShader,tex:TTexture,name:String,index:Int=0 )
-	material.ShaderTexture( tex,name,index )
+Function ShaderTexture:TTexture( material:TShader,tex:TTexture,name:String,index:Int=0 )
+	Return material.ShaderTexture( tex,name,index )
 End Function
 
 Rem

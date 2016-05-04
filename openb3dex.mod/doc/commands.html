@@ -464,6 +464,9 @@ Frees action from memory.
 <tr><td class=docleft width=1%><a href=#FreeShadow>FreeShadow</a></td><td class=docright>
 Free stencil shadow.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#FreeStencil>FreeStencil</a></td><td class=docright>
+Free stencil.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#FreeSurface>FreeSurface</a></td><td class=docright>
 Frees VBO data and brush.
 </td></tr>
@@ -550,6 +553,9 @@ Load shader from two files, vertex and fragment.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadTexture>LoadTexture</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadTextureAlpha>LoadTextureAlpha</a></td><td class=docright>
+Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -1574,6 +1580,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=EmitterParticleFunction>
 <tr><td class=doctop colspan=2>Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set custom rendering callback function for particle emitter.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>This gives access to each particle sprite (as byte ptr) and it's current lifetime left.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterParticleLife>
@@ -1810,6 +1817,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Free stencil shadow.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=FreeStencil>
+<tr><td class=doctop colspan=2>Function FreeStencil( stencil:TStencil ) ' Spinduluz</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Free stencil.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=FreeSurface>
 <tr><td class=doctop colspan=2>Function FreeSurface( surf:TSurface )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Frees VBO data and brush.</td></tr>
@@ -1955,8 +1967,14 @@ first frame is the index of the slice and frame count is how many slices.</td></
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadTexture>
-<tr><td class=doctop colspan=2>Function LoadTexture:TTexture( file:String,flags:Int=1 )</td></tr>
+<tr><td class=doctop colspan=2>Function LoadTexture:TTexture( file:String,flags:Int=9 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadTextureAlpha>
+<tr><td class=doctop colspan=2>Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load texture and set alpha with alphamask - if set to zero then alpha is not changed.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
@@ -2285,7 +2303,7 @@ if the node is set at a higher range than the camera, its children won't be rend
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShaderTexture>
-<tr><td class=doctop colspan=2>Function ShaderTexture( material:TShader,tex:TTexture,name:String,index:Int=0 )</td></tr>
+<tr><td class=doctop colspan=2>Function ShaderTexture:TTexture( material:TShader,tex:TTexture,name:String,index:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load a texture for 2D texture sampling.</td></tr>
 </table>
 <br>

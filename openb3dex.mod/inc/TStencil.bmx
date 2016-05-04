@@ -67,4 +67,10 @@ Type TStencil
 		
 	End Function
 	
+	Method FreeStencil() ' Spinduluz
+	
+		FreeStencil_( GetInstance(Self) )
+		
+	End Method
+	
 End Type

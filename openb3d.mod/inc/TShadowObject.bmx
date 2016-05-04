@@ -106,9 +106,9 @@ Type TShadowObject
 		If ShadowMesh=Null And inst<>Null Then ShadowMesh=TMesh.CreateObject(inst)
 		
 		' surface
-		inst=ShadowObjectSurface_( GetInstance(Self),SHADOWOBJECT_ShadowVolume )
-		ShadowVolume=TSurface.GetObject(inst)
-		If ShadowVolume=Null And inst<>Null Then ShadowVolume=TSurface.CreateObject(inst)
+		'inst=ShadowObjectSurface_( GetInstance(Self),SHADOWOBJECT_ShadowVolume )
+		'ShadowVolume=TSurface.GetObject(inst)
+		'If ShadowVolume=Null And inst<>Null Then ShadowVolume=TSurface.CreateObject(inst)
 		
 		AddList_(shadow_list)
 		exists=1
@@ -156,12 +156,11 @@ Type TShadowObject
 	Method FreeShadow()
 	
 		If exists
-			TMesh.FreeObject( TMesh.GetInstance(ShadowMesh) ) ; ShadowMesh=Null		
-			TSurface.FreeObject( TSurface.GetInstance(ShadowVolume) ) ; ShadowVolume=Null
-			
 			ListRemove( shadow_list,Self ) ; shadow_list_id:-1
-			FreeObject( TMesh.GetInstance(ShadowMesh) ) ' no FreeEntity
 			ListRemove( TEntity.entity_list,ShadowMesh ) ; TEntity.entity_list_id:-1
+			
+			TMesh.FreeObject( TMesh.GetInstance(ShadowMesh) ) ; ShadowMesh=Null  ' no FreeEntity
+			'TSurface.FreeObject( TSurface.GetInstance(ShadowVolume) ) ; ShadowVolume=Null
 			
 			FreeShadow_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )

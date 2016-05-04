@@ -77,7 +77,7 @@ public:
 	void TurnOff();
 	void AddShader(string _vert, string _frag);
 	void AddShaderFromString(string _vert, string _frag);
-	void AddSampler2D(string Name, int Slot, Texture* Tex);
+	Texture* AddSampler2D(string Name, int Slot, Texture* Tex);
 	void AddSampler3D(string Name, int Slot, Texture* Tex);
 	void ProgramAttriBegin();
 	void ProgramAttriEnd();

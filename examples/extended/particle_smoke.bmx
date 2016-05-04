@@ -89,13 +89,7 @@ While Not KeyHit(KEY_ESCAPE)
 Wend
 
 TParticleFunc.Free(pe) ' free particles
-
-While Not KeyHit(KEY_ESCAPE) ' show memory
-	RenderWorld
-	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Flip
-	GCCollect
-Wend
+DebugLog "Memory: "+GCMemAlloced()
 
 End
 

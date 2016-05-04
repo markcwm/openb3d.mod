@@ -339,7 +339,7 @@ Extern
 	Function ShadeSurface_( surf:Byte Ptr,material:Byte Ptr ) = "ShadeSurface"
 	Function ShadeMesh_( mesh:Byte Ptr,material:Byte Ptr ) = "ShadeMesh"
 	Function ShadeEntity_( ent:Byte Ptr,material:Byte Ptr ) = "ShadeEntity"
-	Function ShaderTexture_( material:Byte Ptr,tex:Byte Ptr,name:Byte Ptr,index:Int ) = "ShaderTexture"
+	Function ShaderTexture_:Byte Ptr( material:Byte Ptr,tex:Byte Ptr,name:Byte Ptr,index:Int ) = "ShaderTexture"
 	Function SetFloat_( material:Byte Ptr,name:Byte Ptr,v1:Float ) = "SetFloat"
 	Function SetFloat2_( material:Byte Ptr,name:Byte Ptr,v1:Float,v2:Float ) = "SetFloat2"
 	Function SetFloat3_( material:Byte Ptr,name:Byte Ptr,v1:Float,v2:Float,v3:Float ) = "SetFloat3"
@@ -374,6 +374,7 @@ Extern
 	Function StencilMesh_( stencil:Byte Ptr,mesh:Byte Ptr,Mode:Int ) = "StencilMesh"
 	Function StencilMode_( stencil:Byte Ptr,m:Int,o:Int ) = "StencilMode"
 	Function UseStencil_( stencil:Byte Ptr ) = "UseStencil"
+	Function FreeStencil_( stencil:Byte Ptr) = "FreeStencil"
 	
 	' *** VoxelSprite
 	Function CreateVoxelSprite_:Byte Ptr( slices:Int,parent:Byte Ptr ) = "CreateVoxelSprite"

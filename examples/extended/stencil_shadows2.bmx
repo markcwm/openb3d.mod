@@ -22,7 +22,13 @@ MoveEntity plane, 0, -1.5, 0
 Local cone:TMesh=CreateCone()
 PositionEntity cone, 0, 0, 8
 ScaleEntity cone, 2, 2, 2
-Local cone_shadow:TShadowObject = CreateShadow(cone)
+Local cone_shadow:TShadowObject
+
+Local cone2:TMesh=CreateCone()
+PositionEntity cone2, 0, 0, 8
+ScaleEntity cone2, 2, 2, 2
+Local cone_shadow2:TShadowObject
+HideEntity cone2
 
 Local cube:TMesh = CreateCube()
 Local tex:TTexture = LoadTexture("../media/alpha_map.png", 2) 'Change this to 0 or 1 for correct depth testing
@@ -37,36 +43,48 @@ Local multipass%=0
 
 While Not KeyDown(KEY_ESCAPE)
 
-	PositionEntity cube, 0, Abs(Sin(MilliSecs() * 0.1) * 5), 1
-	PositionEntity cube2, 0, Abs(Sin(MilliSecs() * 0.1) * 5), -1
+	PositionEntity light, (Sin(MilliSecs() * 0.05) * 5), 1, 16
+	PositionEntity cube, 0, Abs(Sin(MilliSecs() * 0.05) * 5), 1
+	PositionEntity cube2, 0, Abs(Sin(MilliSecs() * 0.05) * 5), -1
 	
-	' multipass mode
+	' Note: to hide/show shadow casters causes a random MAV in GL 2.0 but create/free shadow works
 	If KeyHit(KEY_M) Then multipass=Not multipass
-	If multipass
-		CameraClsMode camera,1,1 ' render scene
+	If multipass ' 2 pass
+		If cone_shadow
+			FreeShadow(cone_shadow) ; cone_shadow=Null ; HideEntity cone
+		EndIf
+		CameraClsMode camera,1,1 ' render scene with shadows
 		HideEntity cube
 		ShowEntity cube2
 		ShowEntity plane
-		ShowEntity cone
-		RenderWorld()
+		ShowEntity cone2
+		cone_shadow2=CreateShadow(cone2)
 		
-		CameraClsMode camera,0,0 ' render alphamaps over scene
+		RenderWorld
+		
+		CameraClsMode camera,0,1 ' render alphamaps over scene without shadows
 		ShowEntity cube
 		HideEntity cube2
 		HideEntity plane
-		HideEntity cone
-		RenderWorld()
-	Else
+		FreeShadow(cone_shadow2)
+		HideEntity cone2
+		
+		RenderWorld
+	Else ' single pass
+		If cone_shadow=Null Then cone_shadow=CreateShadow(cone)
 		CameraClsMode camera,1,1 ' by default alphamaps get blended with shadows
 		ShowEntity cube
 		ShowEntity cube2
 		ShowEntity plane
 		ShowEntity cone
-		RenderWorld()
+		
+		RenderWorld
 	EndIf
 	
-	Text 0,0,"M: multipass mode"
+	Text 0,0,"M: multipass mode, Memory: "+GCMemAlloced()
+	
 	Flip(1)
+	GCCollect
 	
 Wend
 End

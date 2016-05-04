@@ -1,5 +1,4 @@
 ' sl_texturefilter.bmx
-' Todo: wrap shader.Shader_Tex[Slot]
 
 Strict
 
@@ -33,15 +32,15 @@ MoveEntity plane,0,-1.5,0
 
 Local shader:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
 Local tex1:TTexture=LoadTexture("../media/crate.bmp")
-ShaderTexture(shader,tex1,"texture0",0)
+Local shader_tex:TTexture=ShaderTexture(shader,tex1,"texture0",0)
 ShadeEntity(cube,shader)
 
 Local shader2:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
 Local tex2:TTexture=LoadTexture("../media/wcrate.jpg")
-ShaderTexture(shader2,tex2,"texture0",0)
+Local shader2_tex:TTexture=ShaderTexture(shader2,tex2,"texture0",0)
 ShadeEntity(cube2,shader2)
 
-Local tflag%=1
+Local tflag%=0
 
 
 While Not KeyDown(KEY_ESCAPE)
@@ -60,11 +59,11 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyHit(KEY_T)
 		tflag=Not tflag
 		If tflag
-			'TextureFlags shader.Shader_Tex[Slot[0]],1
-			'TextureFlags shader2.Shader_Tex[Slot[0]],1
+			TextureFlags shader_tex,1
+			TextureFlags shader2_tex,1
 		Else
-			'TextureFlags shader.Shader_Tex[Slot[0]],1+8
-			'TextureFlags shader2.Shader_Tex[Slot[0]],1+8
+			TextureFlags shader_tex,1+8
+			TextureFlags shader2_tex,1+8
 		EndIf
 	EndIf
 	

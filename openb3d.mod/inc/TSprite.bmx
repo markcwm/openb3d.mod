@@ -23,6 +23,8 @@ Type TSprite Extends TMesh
 	
 	Method InitFields() ' Once per CreateObject
 	
+		Super.InitFields()
+		
 		' int
 		view_mode=SpriteInt_( GetInstance(Self),SPRITE_view_mode )
 		render_mode=SpriteInt_( GetInstance(Self),SPRITE_render_mode )

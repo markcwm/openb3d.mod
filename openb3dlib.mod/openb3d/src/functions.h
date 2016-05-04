@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 // extra
+void DLL_EXPORT FreeStencil(Stencil *stencil);
 void DLL_EXPORT TextureFlags(Texture* tex, int flags);
 void DLL_EXPORT FreeSurface(Surface* surf);
 void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);
@@ -1148,7 +1149,7 @@ void DLL_EXPORT ShadeMesh(Mesh* mesh, Shader* material);
 
 void DLL_EXPORT ShadeEntity(Entity* ent, Shader* material);
 
-void DLL_EXPORT ShaderTexture(Shader* material, Texture* tex, char* name, int index);
+Texture* DLL_EXPORT ShaderTexture(Shader* material, Texture* tex, char* name, int index);
 
 void DLL_EXPORT SetFloat(Shader* material, char* name, float v1);
 

@@ -19,6 +19,11 @@
 extern "C" {
 
 // extra
+
+void FreeStencil(Stencil *stencil){
+	delete stencil;
+}
+
 void TextureFlags(Texture* tex, int flags){
 	tex->flags=flags;
 }
@@ -1841,8 +1846,8 @@ void ShadeEntity(Entity* ent, Shader* material){
 		ShadeMesh(mesh, material);
 }
 
-void ShaderTexture(Shader* material, Texture* tex, char* name, int index){
-	material->AddSampler2D(name, index, tex);
+Texture* ShaderTexture(Shader* material, Texture* tex, char* name, int index){
+	return material->AddSampler2D(name, index, tex);
 }
 
 void SetFloat(Shader* material, char* name, float v1){

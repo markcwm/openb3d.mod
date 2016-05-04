@@ -122,11 +122,14 @@ Type TShader
 		
 	End Method
 	
-	Method ShaderTexture( tex:TTexture,name:String,index:Int=0 )
+	Method ShaderTexture:TTexture( tex:TTexture,name:String,index:Int=0 )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		ShaderTexture_( GetInstance(Self),TTexture.GetInstance(tex),cString,index )
+		Local inst:Byte Ptr=ShaderTexture_( GetInstance(Self),TTexture.GetInstance(tex),cString,index )
 		MemFree cString
+		Local tex2:TTexture=TTexture.GetObject(inst)
+		If tex2=Null And inst<>Null Then tex2=TTexture.CreateObject(inst)
+		Return tex2
 		
 	End Method
 	

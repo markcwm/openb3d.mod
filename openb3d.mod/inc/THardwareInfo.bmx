@@ -85,8 +85,8 @@ Type THardwareInfo ' by klepto2
 		Local position:Int, Space:Int, stream:TStream
 
 		If LogFile Then
-			stream = WriteStream("MiniB3DLog.txt") 
-			stream.WriteLine("MiniB3D Hardwareinfo:")
+			stream = WriteStream("HardwareInfo.txt") 
+			stream.WriteLine("Hardwareinfo:")
 			stream.WriteLine("")
 			
 			' Display Desktopinfo
@@ -121,7 +121,7 @@ Type THardwareInfo ' by klepto2
 			stream.WriteLine("- Ready -")
 			stream.Close()
 		Else
-			Print("MiniB3D Hardwareinfo:")
+			Print("Hardwareinfo:")
 			Print("")
 			
 			' Display Desktopinfo

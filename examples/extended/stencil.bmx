@@ -141,7 +141,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"FPS: "+fps
+	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
 	Text 0,20,"WSAD: move camera, Arrows: rotate camera, Plus/Minus: move ball, M: stencil mode = "+stmode
 		
 	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
@@ -161,6 +161,11 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 
 	Flip
+	GCCollect
 	
 Wend
+
+FreeStencil stencil
+DebugLog "Memory: "+GCMemAlloced()
+
 End
