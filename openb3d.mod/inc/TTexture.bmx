@@ -596,7 +596,7 @@ Type TTexture
 			Next
 		EndIf
 		Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-		BufferToTex tex,PixmapPixelPtr(map,0,0)
+		tex.BufferToTex PixmapPixelPtr(map,0,0)
 		Return tex
 		
 	End Function
