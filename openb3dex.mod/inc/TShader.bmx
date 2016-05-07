@@ -291,4 +291,11 @@ Type TShader
 		
 	End Method
 	
+	Method FreeShader() ' Spinduluz
+	
+		FreeShader_( GetInstance(Self) )
+		FreeObject( GetInstance(Self) )
+		
+	End Method
+	
 End Type

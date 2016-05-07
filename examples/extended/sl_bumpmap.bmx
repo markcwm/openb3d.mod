@@ -207,7 +207,7 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
+	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
 	Text 0,20,"WSAD: move camera, B: bumpmap mode = "+bumpmode+", L: light mode = "+lightmode
 	Text 0,40,"M: Max2d mode, P: debug light parameters"
 	
@@ -225,8 +225,16 @@ While Not KeyDown(KEY_ESCAPE)
 	TLight.SetLightValues()
 	
 	Flip
+	GCCollect
 	
 Wend
+
+FreeShader shader
+FreeShader shader2
+FreeShader shader3
+GCCollect
+DebugLog "Memory at end: "+GCMemAlloced()
+
 End
 
 

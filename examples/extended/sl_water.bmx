@@ -249,13 +249,22 @@ While Not KeyDown(KEY_ESCAPE)
 		HideEntity camelcopy
 	EndIf
 	
-	Text 0,0,"FPS: "+fps+", WSAD and Arrows: move camera, Space: wireframe"
-	Text 0,20,"B: blending = "+blendmode+", P: pixel light = "+pixellight+", M: stencil mode = "+stmode
-	Text 0,40,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", I/K: waveLength = "+waveLength
+	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,20,"WSAD and Arrows: move camera, Space: wireframe"
+	Text 0,40,"B: blending = "+blendmode+", P: pixel light = "+pixellight+", M: stencil mode = "+stmode
+	Text 0,60,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", I/K: waveLength = "+waveLength
 	
 	Flip
+	GCCollect
 	
 Wend
+
+FreeStencil stencil
+FreeShader shader
+FreeShader shader2
+GCCollect
+DebugLog "Memory at end: "+GCMemAlloced()
+
 End
 
 

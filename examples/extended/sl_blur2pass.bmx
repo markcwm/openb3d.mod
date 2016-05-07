@@ -173,11 +173,20 @@ While Not KeyHit(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
+	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
 	Text 0,20,"Space: postprocess = "+postprocess+", L: draw line = "+lflag
 	
 	Flip
+	GCCollect
+	
 Wend
+
+FreeShader shader
+FreeShader shader2
+GCCollect
+DebugLog "Memory at end: "+GCMemAlloced()
+
+End
 
 
 Function Update2Pass()

@@ -53,7 +53,23 @@ USE_PROJ_MATRIX,
 USE_MODELVIEW_MATRIX
 };
 
-
+void Shader::FreeShader(){
+	if(!arb_program->Program) return;
+	arb_program->DeActivate(); // Ensure the shader is not used
+	
+	list<ShaderObject*>::iterator it;
+	for(it=arb_program->vList.begin();it!=arb_program->vList.end();it++){
+		ShaderObject* obj=*it;
+		obj->DeleteVertShader(obj);
+	}
+	for(it=arb_program->fList.begin();it!=arb_program->fList.end();it++){
+		ShaderObject* obj=*it;
+		obj->DeleteFragShader(obj);
+	}
+	
+	glDeleteProgram(arb_program->Program);
+	delete this;
+}
 
 ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 	// Load the shader and dump it into a Byte Array
@@ -365,7 +381,7 @@ void ShaderObject::DeleteFragShader(ShaderObject* fShader){
 
 	for(it=ProgramObject::ProgramObjectList.begin();it!=ProgramObject::ProgramObjectList.end();it++){
 		ProgramObject* p=*it;
-
+		
 		p->DetachFragShader(fShader);
 	}
 	
@@ -1674,7 +1690,7 @@ void ProgramObject::DetachVertShader(ShaderObject* vShader){
 	for(it=vList.begin();it!=vList.end();it++){
 		if (vShader==*it){
 			glDetachShader(Program, vShader->ShaderObj);
-			vList.remove(vShader);
+			//vList.remove(vShader);
 			vShader->Attached.remove(this);
 			break;
 		}
@@ -1687,10 +1703,10 @@ void ProgramObject::DetachVertShader(ShaderObject* vShader){
 void ProgramObject::DetachFragShader(ShaderObject* fShader){
 	list<ShaderObject*>::iterator it;
 
-	for(it=fList.begin();it!=vList.end();it++){
+	for(it=fList.begin();it!=fList.end();it++){
 		if (fShader==*it){
 			glDetachShader(Program, fShader->ShaderObj);
-			fList.remove(fShader);
+			//fList.remove(fShader);
 			fShader->Attached.remove(this);
 			break;
 		}

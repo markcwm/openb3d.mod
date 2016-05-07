@@ -3,6 +3,13 @@
 ' *** Wrapper only
 
 Rem
+bbdoc: Free shader
+End Rem
+Function FreeShader( shader:TShader ) ' Spinduluz
+	shader.FreeShader()
+End Function
+
+Rem
 bbdoc: Free stencil
 End Rem
 Function FreeStencil( stencil:TStencil ) ' Spinduluz

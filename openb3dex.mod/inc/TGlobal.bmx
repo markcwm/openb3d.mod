@@ -41,6 +41,9 @@ Type TGlobal
 	'Global jitter:Int
 	'Global j#[16,2]
 	
+	' wrapper
+	Global gfx:TGraphics
+	
 	Function InitGlobals() ' Once per Graphics3D
 	
 		width=StaticInt_( GLOBAL_class,GLOBAL_width )
@@ -144,7 +147,7 @@ Type TGlobal
 		
 		SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 		
-		If usecanvas=False Then Graphics( w,h,d,r,flags ) ' create gfx context
+		If usecanvas=False Then gfx=Graphics( w,h,d,r,flags ) ' create gfx context
 		
 		GraphicsInit()
 		

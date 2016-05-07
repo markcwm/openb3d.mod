@@ -20,6 +20,10 @@ extern "C" {
 
 // extra
 
+void FreeShader(Shader *shader){
+	shader->FreeShader();
+}
+
 void FreeStencil(Stencil *stencil){
 	delete stencil;
 }

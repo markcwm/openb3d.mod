@@ -17,6 +17,7 @@ extern "C" {
 #endif
 
 // extra
+void DLL_EXPORT FreeShader(Shader *shader);
 void DLL_EXPORT FreeStencil(Stencil *stencil);
 void DLL_EXPORT TextureFlags(Texture* tex, int flags);
 void DLL_EXPORT FreeSurface(Surface* surf);

@@ -46,6 +46,8 @@ Import Brl.Map
 Extern
 
 	' *** Wrapper only
+	Function FreeShader_( shader:Byte Ptr) = "FreeShader"
+	Function FreeStencil_( stencil:Byte Ptr) = "FreeStencil"
 	Function TextureFlags_( tex:Byte Ptr,flags:Int ) = "TextureFlags"
 	Function FreeSurface_( surf:Byte Ptr ) = "FreeSurface"
 	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv"
@@ -374,7 +376,6 @@ Extern
 	Function StencilMesh_( stencil:Byte Ptr,mesh:Byte Ptr,Mode:Int ) = "StencilMesh"
 	Function StencilMode_( stencil:Byte Ptr,m:Int,o:Int ) = "StencilMode"
 	Function UseStencil_( stencil:Byte Ptr ) = "UseStencil"
-	Function FreeStencil_( stencil:Byte Ptr) = "FreeStencil"
 	
 	' *** VoxelSprite
 	Function CreateVoxelSprite_:Byte Ptr( slices:Int,parent:Byte Ptr ) = "CreateVoxelSprite"
@@ -436,43 +437,44 @@ End Function
 ' *** Includes
 
 ' global
-Include "../openb3d.mod/inc/TGlobal.bmx"
+Include "inc/TGlobal.bmx"
 
 ' entity
-Include "../openb3d.mod/inc/TEntity.bmx"
-Include "../openb3d.mod/inc/TCamera.bmx"
-Include "../openb3d.mod/inc/TLight.bmx"
-Include "../openb3d.mod/inc/TPivot.bmx"
-Include "../openb3d.mod/inc/TMesh.bmx"
-Include "../openb3d.mod/inc/TSprite.bmx"
-Include "../openb3d.mod/inc/TBone.bmx"
+Include "inc/TEntity.bmx"
+Include "inc/TCamera.bmx"
+Include "inc/TLight.bmx"
+Include "inc/TPivot.bmx"
+Include "inc/TMesh.bmx"
+Include "inc/TSprite.bmx"
+Include "inc/TBone.bmx"
 
 ' mesh structure
-Include "../openb3d.mod/inc/TSurface.bmx"
-Include "../openb3d.mod/inc/TTexture.bmx"
-Include "../openb3d.mod/inc/TBrush.bmx"
-Include "../openb3d.mod/inc/TAnimation.bmx"
-'Include "../openb3d.mod/inc/TModel.bmx"
+Include "inc/TSurface.bmx"
+Include "inc/TTexture.bmx"
+Include "inc/TBrush.bmx"
+Include "inc/TAnimation.bmx"
+'Include "inc/TModel.bmx"
 
 ' picking/collision
-Include "../openb3d.mod/inc/TPick.bmx"
+Include "inc/TPick.bmx"
 
 ' geom
-Include "../openb3d.mod/inc/TVector.bmx"
-Include "../openb3d.mod/inc/TMatrix.bmx"
-Include "../openb3d.mod/inc/TQuaternion.bmx"
-Include "../openb3d.mod/inc/BoxSphere.bmx"
+Include "inc/TVector.bmx"
+Include "inc/TMatrix.bmx"
+Include "inc/TQuaternion.bmx"
+Include "inc/BoxSphere.bmx"
 
 ' misc
-Include "../openb3d.mod/inc/TBlitz2D.bmx"
-Include "../openb3d.mod/inc/TUtility.bmx"
-Include "../openb3d.mod/inc/TDebug.bmx"
+Include "inc/TBlitz2D.bmx"
+Include "inc/TUtility.bmx"
+Include "inc/TDebug.bmx"
 
 ' extra
-Include "../openb3d.mod/inc/TTerrain.bmx"
-Include "../openb3d.mod/inc/TShader.bmx"
-Include "../openb3d.mod/inc/TShadowObject.bmx"
-Include "../openb3d.mod/inc/THardwareInfo.bmx"
+'Include "inc/TBuffer.bmx"
+Include "inc/TTerrain.bmx"
+Include "inc/TShader.bmx"
+Include "inc/TShadowObject.bmx"
+Include "inc/THardwareInfo.bmx"
 Include "inc/TGLShader.bmx"
 Include "inc/TStencil.bmx"
 Include "inc/TFluid.bmx"
@@ -484,4 +486,4 @@ Include "inc/TConstraint.bmx"
 Include "inc/TParticleBatch.bmx"
 
 ' functions
-Include "inc/functionsex.bmx"
+Include "inc/functions.bmx"

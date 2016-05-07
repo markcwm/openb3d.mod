@@ -89,7 +89,8 @@ While Not KeyHit(KEY_ESCAPE)
 Wend
 
 TParticleFunc.Free(pe) ' free particles
-DebugLog "Memory: "+GCMemAlloced()
+GCCollect
+DebugLog "Memory at end: "+GCMemAlloced()
 
 End
 

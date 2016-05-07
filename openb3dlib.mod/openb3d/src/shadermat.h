@@ -81,6 +81,7 @@ public:
 	void AddSampler3D(string Name, int Slot, Texture* Tex);
 	void ProgramAttriBegin();
 	void ProgramAttriEnd();
+	void FreeShader();
 
 	void SetFloat(string name, float v1);
 	void SetFloat2(string name, float v1, float v2);
