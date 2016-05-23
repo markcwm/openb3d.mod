@@ -1,0 +1,1665 @@
+<html><head><title>OpenB3D standard Blitz3D functions reference</title>
+<link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
+</head><body>
+<table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
+<td class=small width=1%><b>Openb3d.Openb3dstd:</b></td>
+<td class=small width=1%><a href=#functions class=small>Functions</a></td>
+<td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
+<td class=small width=1%><a href='../../../../mod/openb3d.mod/openb3dstd.mod/openb3dstd.bmx' class=small>Source</a></td>
+<td class=small>&nbsp;</td></tr></table>
+<h1>OpenB3D standard Blitz3D functions</h1>
+Online Blitz3D documentation links.
+<h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#AddAnimSeq>AddAnimSeq</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddAnimSeq">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AddMesh>AddMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AddTriangle>AddTriangle</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddTriangle">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AddVertex>AddVertex</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AlignToVector>AlignToVector</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AmbientLight>AmbientLight</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Animate>Animate</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Animating>Animating</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animating">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AnimLength>AnimLength</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimLength">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AnimSeq>AnimSeq</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimSeq">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AnimTime>AnimTime</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimTime">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushAlpha>BrushAlpha</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushAlpha">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushBlend>BrushBlend</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushBlend">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushColor>BrushColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushFX>BrushFX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushFX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushShininess>BrushShininess</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushShininess">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushTexture>BrushTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraClsColor>CameraClsColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraClsColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraClsMode>CameraClsMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraClsMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraFogColor>CameraFogColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraFogMode>CameraFogMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraFogRange>CameraFogRange</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogRange">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraPick>CameraPick</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraPick">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraProject>CameraProject</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraProject">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraProjMode>CameraProjMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraProjMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraRange>CameraRange</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraRange">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraViewport>CameraViewport</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraViewport">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraZoom>CameraZoom</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraZoom">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ClearCollisions>ClearCollisions</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearCollisions">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ClearSurface>ClearSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ClearTextureFilters>ClearTextureFilters</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearTextureFilters">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ClearWorld>ClearWorld</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionEntity>CollisionEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionNX>CollisionNX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionNY>CollisionNY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionNZ>CollisionNZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Collisions>Collisions</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionSurface>CollisionSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionTime>CollisionTime</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTime">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionTriangle>CollisionTriangle</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTriangle">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionX>CollisionX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionY>CollisionY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CollisionZ>CollisionZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CopyEntity>CopyEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CopyMesh>CopyMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CountChildren>CountChildren</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CountCollisions>CountCollisions</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountCollisions">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CountSurfaces>CountSurfaces</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountSurfaces">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CountTriangles>CountTriangles</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountTriangles">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CountVertices>CountVertices</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountVertices">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateBrush>CreateBrush</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateCamera>CreateCamera</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCamera">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateCone>CreateCone</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateCube>CreateCube</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCube">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateCylinder>CreateCylinder</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateLight>CreateLight</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateLight">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateMesh>CreateMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreatePivot>CreatePivot</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePivot">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreatePlane>CreatePlane</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateSphere>CreateSphere</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateSprite>CreateSprite</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSprite">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateSurface>CreateSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateTerrain>CreateTerrain</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateTexture>CreateTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeltaPitch>DeltaPitch</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaPitch">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeltaYaw>DeltaYaw</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaYaw">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityAlpha>EntityAlpha</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityAlpha">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityBlend>EntityBlend</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBlend">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityBox>EntityBox</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBox">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityClass>EntityClass</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityClass">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityCollided>EntityCollided</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityCollided">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityColor>EntityColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityDistance>EntityDistance</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityDistance">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityFX>EntityFX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityFX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityInView>EntityInView</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityInView">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityName>EntityName</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityName">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityOrder>EntityOrder</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityOrder">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityParent>EntityParent</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityParent">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityPick>EntityPick</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPick">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityPickMode>EntityPickMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPickMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityPitch>EntityPitch</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPitch">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityRadius>EntityRadius</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRadius">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityRoll>EntityRoll</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRoll">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityShininess>EntityShininess</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityShininess">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityTexture>EntityTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityType>EntityType</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityVisible>EntityVisible</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityVisible">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityX>EntityX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityY>EntityY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityYaw>EntityYaw</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityYaw">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityZ>EntityZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ExtractAnimSeq>ExtractAnimSeq</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ExtractAnimSeq">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FindChild>FindChild</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FindChild">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FindSurface>FindSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FindSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FitMesh>FitMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FitMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FlipMesh>FlipMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FlipMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FreeBrush>FreeBrush</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FreeEntity>FreeEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#FreeTexture>FreeTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetBrushTexture>GetBrushTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetChild>GetChild</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetChild">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetEntityBrush>GetEntityBrush</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetEntityBrush">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetEntityType>GetEntityType</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetEntityType">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetMatElement>GetMatElement</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetMatElement">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetParent>GetParent</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetParent">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetSurface>GetSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetSurfaceBrush>GetSurfaceBrush</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetSurfaceBrush">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#HandleSprite>HandleSprite</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#HideEntity>HideEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HideEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LightColor>LightColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LightConeAngles>LightConeAngles</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightConeAngles">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LightRange>LightRange</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightRange">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LinePick>LinePick</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimSeq>LoadAnimSeq</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimTexture>LoadAnimTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadBrush>LoadBrush</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadSprite>LoadSprite</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadTerrain>LoadTerrain</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadTexture>LoadTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MeshDepth>MeshDepth</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshDepth">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MeshesIntersect>MeshesIntersect</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshesIntersect">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MeshHeight>MeshHeight</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshHeight">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MeshWidth>MeshWidth</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshWidth">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ModifyTerrain>ModifyTerrain</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ModifyTerrain">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MoveEntity>MoveEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MoveEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NameEntity>NameEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=NameEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PaintEntity>PaintEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PaintMesh>PaintMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PaintSurface>PaintSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedEntity>PickedEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedNX>PickedNX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedNY>PickedNY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedNZ>PickedNZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedSurface>PickedSurface</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedSurface">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedTime>PickedTime</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTime">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedTriangle>PickedTriangle</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTriangle">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedX>PickedX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedY>PickedY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PickedZ>PickedZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PointEntity>PointEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PointEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PositionEntity>PositionEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PositionMesh>PositionMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PositionTexture>PositionTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ProjectedX>ProjectedX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ProjectedY>ProjectedY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ProjectedZ>ProjectedZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RenderWorld>RenderWorld</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ResetEntity>ResetEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RotateEntity>RotateEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RotateMesh>RotateMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RotateSprite>RotateSprite</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateSprite">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RotateTexture>RotateTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ScaleEntity>ScaleEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ScaleMesh>ScaleMesh</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleMesh">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ScaleSprite>ScaleSprite</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleSprite">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ScaleTexture>ScaleTexture</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleTexture">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetAnimKey>SetAnimKey</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetAnimTime>SetAnimTime</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetCubeFace>SetCubeFace</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetCubeMode>SetCubeMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ShowEntity>ShowEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ShowEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SpriteViewMode>SpriteViewMode</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TerrainHeight>TerrainHeight</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainHeight">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TerrainX>TerrainX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TerrainY>TerrainY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TerrainZ>TerrainZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureBlend>TextureBlend</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureBlend">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureCoords>TextureCoords</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureCoords">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureFilter>TextureFilter</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureHeight>TextureHeight</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureName>TextureName</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureName">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureWidth>TextureWidth</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureWidth">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormedX>TFormedX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormedY>TFormedY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormedZ>TFormedZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormNormal>TFormNormal</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormNormal">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormPoint>TFormPoint</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormPoint">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TFormVector>TFormVector</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormVector">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TranslateEntity>TranslateEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TranslateEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TriangleVertex>TriangleVertex</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TriangleVertex">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TurnEntity>TurnEntity</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TurnEntity">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UpdateNormals>UpdateNormals</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateNormals">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UpdateWorld>UpdateWorld</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VectorPitch>VectorPitch</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorPitch">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VectorYaw>VectorYaw</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorYaw">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexAlpha>VertexAlpha</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexAlpha">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexBlue>VertexBlue</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexBlue">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexColor>VertexColor</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexColor">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexCoords>VertexCoords</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexCoords">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexGreen>VertexGreen</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexGreen">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexNormal>VertexNormal</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNormal">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexNX>VertexNX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexNY>VertexNY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexNZ>VertexNZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexRed>VertexRed</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexRed">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexTexCoords>VertexTexCoords</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexTexCoords">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexU>VertexU</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexU">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexV>VertexV</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexV">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexW>VertexW</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexW">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexX>VertexX</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexX">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexY>VertexY</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexY">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexZ>VertexZ</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexZ">Online doc</a>
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Wireframe>Wireframe</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a>
+</td></tr>
+</table>
+<h2
+ id=functionsdet>Functions
+</h2>
+<table class=doc width=100% cellspacing=3 id=AddAnimSeq>
+<tr><td class=doctop colspan=2>Function AddAnimSeq:Int( ent:TEntity,length:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddAnimSeq">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AddMesh>
+<tr><td class=doctop colspan=2>Function AddMesh( mesh1:TMesh,mesh2:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AddTriangle>
+<tr><td class=doctop colspan=2>Function AddTriangle:Int( surf:TSurface,v0:Int,v1:Int,v2:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddTriangle">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AddVertex>
+<tr><td class=doctop colspan=2>Function AddVertex:Int( surf:TSurface,x:Float,y:Float,z:Float,u:Float=0,v:Float=0,w:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AddVertex">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AlignToVector>
+<tr><td class=doctop colspan=2>Function AlignToVector( entity:TEntity,x:Float,y:Float,z:Float,axis:Int,rate:Int=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AlignToVector">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AmbientLight>
+<tr><td class=doctop colspan=2>Function AmbientLight( r:Float,g:Float,b:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Animate>
+<tr><td class=doctop colspan=2>Function Animate( ent:TEntity,Mode:Int=1,speed:Float=1,seq:Int=0,trans:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animate">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Animating>
+<tr><td class=doctop colspan=2>Function Animating:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Animating">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AnimLength>
+<tr><td class=doctop colspan=2>Function AnimLength:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimLength">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AnimSeq>
+<tr><td class=doctop colspan=2>Function AnimSeq:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimSeq">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AnimTime>
+<tr><td class=doctop colspan=2>Function AnimTime:Float( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AnimTime">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushAlpha>
+<tr><td class=doctop colspan=2>Function BrushAlpha( brush:TBrush,a:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushAlpha">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushBlend>
+<tr><td class=doctop colspan=2>Function BrushBlend( brush:TBrush,blend:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushBlend">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushColor>
+<tr><td class=doctop colspan=2>Function BrushColor( brush:TBrush,r:Float,g:Float,b:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushFX>
+<tr><td class=doctop colspan=2>Function BrushFX( brush:TBrush,fx:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushFX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushShininess>
+<tr><td class=doctop colspan=2>Function BrushShininess( brush:TBrush,s:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushShininess">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushTexture>
+<tr><td class=doctop colspan=2>Function BrushTexture( brush:TBrush,tex:TTexture,frame:Int=0,index:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraClsColor>
+<tr><td class=doctop colspan=2>Function CameraClsColor( cam:TCamera,r:Float,g:Float,b:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraClsColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraClsMode>
+<tr><td class=doctop colspan=2>Function CameraClsMode( cam:TCamera,cls_depth:Int,cls_zbuffer:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraClsMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraFogColor>
+<tr><td class=doctop colspan=2>Function CameraFogColor( cam:TCamera,r:Float,g:Float,b:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraFogMode>
+<tr><td class=doctop colspan=2>Function CameraFogMode( cam:TCamera,Mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraFogRange>
+<tr><td class=doctop colspan=2>Function CameraFogRange( cam:TCamera,nnear:Float,nfar:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraFogRange">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraPick>
+<tr><td class=doctop colspan=2>Function CameraPick:TEntity( cam:TCamera,x:Float,y:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraPick">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraProject>
+<tr><td class=doctop colspan=2>Function CameraProject( cam:TCamera,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraProject">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraProjMode>
+<tr><td class=doctop colspan=2>Function CameraProjMode( cam:TCamera,Mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraProjMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraRange>
+<tr><td class=doctop colspan=2>Function CameraRange( cam:TCamera,nnear:Float,nfar:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraRange">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraViewport>
+<tr><td class=doctop colspan=2>Function CameraViewport( cam:TCamera,x:Int,y:Int,width:Int,height:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraViewport">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraZoom>
+<tr><td class=doctop colspan=2>Function CameraZoom( cam:TCamera,zoom:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CameraZoom">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ClearCollisions>
+<tr><td class=doctop colspan=2>Function ClearCollisions()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearCollisions">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ClearSurface>
+<tr><td class=doctop colspan=2>Function ClearSurface( surf:TSurface,clear_verts:Int=True,clear_tris:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ClearTextureFilters>
+<tr><td class=doctop colspan=2>Function ClearTextureFilters()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearTextureFilters">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ClearWorld>
+<tr><td class=doctop colspan=2>Function ClearWorld( entities:Int=True,brushes:Int=True,textures:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionEntity>
+<tr><td class=doctop colspan=2>Function CollisionEntity:TEntity( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionNX>
+<tr><td class=doctop colspan=2>Function CollisionNX:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionNY>
+<tr><td class=doctop colspan=2>Function CollisionNY:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionNZ>
+<tr><td class=doctop colspan=2>Function CollisionNZ:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionNZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Collisions>
+<tr><td class=doctop colspan=2>Function Collisions( src_no:Int,dest_no:Int,method_no:Int,response_no:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionSurface>
+<tr><td class=doctop colspan=2>Function CollisionSurface:TSurface( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionTime>
+<tr><td class=doctop colspan=2>Function CollisionTime:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTime">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionTriangle>
+<tr><td class=doctop colspan=2>Function CollisionTriangle:Int( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionTriangle">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionX>
+<tr><td class=doctop colspan=2>Function CollisionX:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionY>
+<tr><td class=doctop colspan=2>Function CollisionY:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CollisionZ>
+<tr><td class=doctop colspan=2>Function CollisionZ:Float( ent:TEntity,index:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CollisionZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CopyEntity>
+<tr><td class=doctop colspan=2>Function CopyEntity:TEntity( ent:TEntity,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CopyMesh>
+<tr><td class=doctop colspan=2>Function CopyMesh:TMesh( mesh:TMesh,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CopyMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CountChildren>
+<tr><td class=doctop colspan=2>Function CountChildren:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountChildren">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CountCollisions>
+<tr><td class=doctop colspan=2>Function CountCollisions:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountCollisions">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CountSurfaces>
+<tr><td class=doctop colspan=2>Function CountSurfaces:Int( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountSurfaces">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CountTriangles>
+<tr><td class=doctop colspan=2>Function CountTriangles:Int( surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountTriangles">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CountVertices>
+<tr><td class=doctop colspan=2>Function CountVertices:Int( surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CountVertices">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateBrush>
+<tr><td class=doctop colspan=2>Function CreateBrush:TBrush( r:Float=255,g:Float=255,b:Float=255 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateBrush">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateCamera>
+<tr><td class=doctop colspan=2>Function CreateCamera:TCamera( parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCamera">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateCone>
+<tr><td class=doctop colspan=2>Function CreateCone:TMesh( segments:Int=8,solid:Int=True,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCone">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateCube>
+<tr><td class=doctop colspan=2>Function CreateCube:TMesh( parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCube">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateCylinder>
+<tr><td class=doctop colspan=2>Function CreateCylinder:TMesh( segments:Int=8,solid:Int=True,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateCylinder">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateLight>
+<tr><td class=doctop colspan=2>Function CreateLight:TLight( light_type:Int=1,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateLight">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateMesh>
+<tr><td class=doctop colspan=2>Function CreateMesh:TMesh( parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreatePivot>
+<tr><td class=doctop colspan=2>Function CreatePivot:TPivot( parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePivot">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreatePlane>
+<tr><td class=doctop colspan=2>Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreatePlane">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateSphere>
+<tr><td class=doctop colspan=2>Function CreateSphere:TMesh( segments:Int=8,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSphere">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateSprite>
+<tr><td class=doctop colspan=2>Function CreateSprite:TSprite( parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSprite">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateSurface>
+<tr><td class=doctop colspan=2>Function CreateSurface:TSurface( mesh:TMesh,brush:TBrush=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateTerrain>
+<tr><td class=doctop colspan=2>Function CreateTerrain:TTerrain( size:Int,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTerrain">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateTexture>
+<tr><td class=doctop colspan=2>Function CreateTexture:TTexture( width:Int,height:Int,flags:Int=9,frames:Int=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=CreateTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=DeltaPitch>
+<tr><td class=doctop colspan=2>Function DeltaPitch:Float( ent1:TEntity,ent2:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaPitch">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=DeltaYaw>
+<tr><td class=doctop colspan=2>Function DeltaYaw:Float( ent1:TEntity,ent2:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=DeltaYaw">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityAlpha>
+<tr><td class=doctop colspan=2>Function EntityAlpha( ent:TEntity,alpha:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityAlpha">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityBlend>
+<tr><td class=doctop colspan=2>Function EntityBlend( ent:TEntity,blend:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBlend">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityBox>
+<tr><td class=doctop colspan=2>Function EntityBox( ent:TEntity,x:Float,y:Float,z:Float,w:Float,h:Float,d:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityBox">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityClass>
+<tr><td class=doctop colspan=2>Function EntityClass:String( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityClass">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityCollided>
+<tr><td class=doctop colspan=2>Function EntityCollided:TEntity( ent:TEntity,type_no:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityCollided">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityColor>
+<tr><td class=doctop colspan=2>Function EntityColor( ent:TEntity,red:Float,green:Float,blue:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityDistance>
+<tr><td class=doctop colspan=2>Function EntityDistance:Float( ent1:TEntity,ent2:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityDistance">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityFX>
+<tr><td class=doctop colspan=2>Function EntityFX( ent:TEntity,fx:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityFX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityInView>
+<tr><td class=doctop colspan=2>Function EntityInView:Int( ent:TEntity,cam:TCamera )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityInView">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityName>
+<tr><td class=doctop colspan=2>Function EntityName:String( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityName">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityOrder>
+<tr><td class=doctop colspan=2>Function EntityOrder( ent:TEntity,order:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityOrder">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityParent>
+<tr><td class=doctop colspan=2>Function EntityParent( ent:TEntity,parent_ent:TEntity,glob:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityParent">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityPick>
+<tr><td class=doctop colspan=2>Function EntityPick:TEntity( ent:TEntity,Range:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPick">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityPickMode>
+<tr><td class=doctop colspan=2>Function EntityPickMode( ent:TEntity,pick_mode:Int,obscurer:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPickMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityPitch>
+<tr><td class=doctop colspan=2>Function EntityPitch:Float( ent:TEntity,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityPitch">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityRadius>
+<tr><td class=doctop colspan=2>Function EntityRadius( ent:TEntity,radius_x:Float,radius_y:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRadius">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityRoll>
+<tr><td class=doctop colspan=2>Function EntityRoll:Float( ent:TEntity,glob:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityRoll">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityShininess>
+<tr><td class=doctop colspan=2>Function EntityShininess( ent:TEntity,shine:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityShininess">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityTexture>
+<tr><td class=doctop colspan=2>Function EntityTexture( ent:TEntity,tex:TTexture,frame:Int=0,index:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityType>
+<tr><td class=doctop colspan=2>Function EntityType( ent:TEntity,type_no:Int,recursive:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityType">Online doc</a>.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>If type_no is negative, collision checking is dynamic, if zero entity is removed.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityVisible>
+<tr><td class=doctop colspan=2>Function EntityVisible:Int( src_ent:TEntity,dest_ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityVisible">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityX>
+<tr><td class=doctop colspan=2>Function EntityX:Float( ent:TEntity,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityY>
+<tr><td class=doctop colspan=2>Function EntityY:Float( ent:TEntity,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityYaw>
+<tr><td class=doctop colspan=2>Function EntityYaw:Float( ent:TEntity,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityYaw">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityZ>
+<tr><td class=doctop colspan=2>Function EntityZ:Float( ent:TEntity,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ExtractAnimSeq>
+<tr><td class=doctop colspan=2>Function ExtractAnimSeq:Int( ent:TEntity,first_frame:Int,last_frame:Int,seq:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ExtractAnimSeq">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FindChild>
+<tr><td class=doctop colspan=2>Function FindChild:TEntity( ent:TEntity,child_name:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FindChild">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FindSurface>
+<tr><td class=doctop colspan=2>Function FindSurface:TSurface( mesh:TMesh,brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FindSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FitMesh>
+<tr><td class=doctop colspan=2>Function FitMesh( mesh:TMesh,x:Float,y:Float,z:Float,width:Float,height:Float,depth:Float,uniform:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FitMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FlipMesh>
+<tr><td class=doctop colspan=2>Function FlipMesh( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FlipMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FreeBrush>
+<tr><td class=doctop colspan=2>Function FreeBrush( brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeBrush">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FreeEntity>
+<tr><td class=doctop colspan=2>Function FreeEntity( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FreeTexture>
+<tr><td class=doctop colspan=2>Function FreeTexture( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=FreeTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetBrushTexture>
+<tr><td class=doctop colspan=2>Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetBrushTexture">Online doc</a>.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Unlike Blitz3D, you don't need to free the returned texture as it is not a copy.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetChild>
+<tr><td class=doctop colspan=2>Function GetChild:TEntity( ent:TEntity,child_no:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetChild">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetEntityBrush>
+<tr><td class=doctop colspan=2>Function GetEntityBrush:TBrush( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetEntityBrush">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetEntityType>
+<tr><td class=doctop colspan=2>Function GetEntityType:Int( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetEntityType">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetMatElement>
+<tr><td class=doctop colspan=2>Function GetMatElement:Float( ent:TEntity,row:Int,col:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetMatElement">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetParent>
+<tr><td class=doctop colspan=2>Function GetParent:TEntity( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetParent">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetSurface>
+<tr><td class=doctop colspan=2>Function GetSurface:TSurface( mesh:TMesh,surf_no:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetSurfaceBrush>
+<tr><td class=doctop colspan=2>Function GetSurfaceBrush:TBrush( surf:TSurface )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=GetSurfaceBrush">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=HandleSprite>
+<tr><td class=doctop colspan=2>Function HandleSprite( sprite:TSprite,h_x:Float,h_y:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HandleSprite">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=HideEntity>
+<tr><td class=doctop colspan=2>Function HideEntity( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=HideEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LightColor>
+<tr><td class=doctop colspan=2>Function LightColor( light:TLight,red:Float,green:Float,blue:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LightConeAngles>
+<tr><td class=doctop colspan=2>Function LightConeAngles( light:TLight,inner_ang:Float,outer_ang:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightConeAngles">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LightRange>
+<tr><td class=doctop colspan=2>Function LightRange( light:TLight,Range:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LightRange">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LinePick>
+<tr><td class=doctop colspan=2>Function LinePick:TEntity( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,radius:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LinePick">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
+<tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimSeq>
+<tr><td class=doctop colspan=2>Function LoadAnimSeq:Int( ent:TEntity,file:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimSeq">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimTexture>
+<tr><td class=doctop colspan=2>Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadBrush>
+<tr><td class=doctop colspan=2>Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadBrush">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadMesh>
+<tr><td class=doctop colspan=2>Function LoadMesh:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadSprite>
+<tr><td class=doctop colspan=2>Function LoadSprite:TSprite( tex_file:String,tex_flag:Int=1,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadSprite">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadTerrain>
+<tr><td class=doctop colspan=2>Function LoadTerrain:TTerrain( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTerrain">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadTexture>
+<tr><td class=doctop colspan=2>Function LoadTexture:TTexture( file:String,flags:Int=9 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MeshDepth>
+<tr><td class=doctop colspan=2>Function MeshDepth:Float( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshDepth">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MeshesIntersect>
+<tr><td class=doctop colspan=2>Function MeshesIntersect:Int( mesh1:TMesh,mesh2:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshesIntersect">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MeshHeight>
+<tr><td class=doctop colspan=2>Function MeshHeight:Float( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshHeight">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MeshWidth>
+<tr><td class=doctop colspan=2>Function MeshWidth:Float( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MeshWidth">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ModifyTerrain>
+<tr><td class=doctop colspan=2>Function ModifyTerrain( terr:TTerrain,x:Int,z:Int,new_height:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ModifyTerrain">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MoveEntity>
+<tr><td class=doctop colspan=2>Function MoveEntity( ent:TEntity,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=MoveEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NameEntity>
+<tr><td class=doctop colspan=2>Function NameEntity( ent:TEntity,name:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=NameEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PaintEntity>
+<tr><td class=doctop colspan=2>Function PaintEntity( ent:TEntity,brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PaintMesh>
+<tr><td class=doctop colspan=2>Function PaintMesh( mesh:TMesh,brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PaintSurface>
+<tr><td class=doctop colspan=2>Function PaintSurface( surf:TSurface,brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PaintSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedEntity>
+<tr><td class=doctop colspan=2>Function PickedEntity:TEntity()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedNX>
+<tr><td class=doctop colspan=2>Function PickedNX:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedNY>
+<tr><td class=doctop colspan=2>Function PickedNY:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedNZ>
+<tr><td class=doctop colspan=2>Function PickedNZ:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedNZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedSurface>
+<tr><td class=doctop colspan=2>Function PickedSurface:TSurface()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedSurface">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedTime>
+<tr><td class=doctop colspan=2>Function PickedTime:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTime">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedTriangle>
+<tr><td class=doctop colspan=2>Function PickedTriangle:Int()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedTriangle">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedX>
+<tr><td class=doctop colspan=2>Function PickedX:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedY>
+<tr><td class=doctop colspan=2>Function PickedY:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PickedZ>
+<tr><td class=doctop colspan=2>Function PickedZ:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PickedZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PointEntity>
+<tr><td class=doctop colspan=2>Function PointEntity( ent:TEntity,target_ent:TEntity,roll:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PointEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PositionEntity>
+<tr><td class=doctop colspan=2>Function PositionEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PositionMesh>
+<tr><td class=doctop colspan=2>Function PositionMesh( mesh:TMesh,px:Float,py:Float,pz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PositionTexture>
+<tr><td class=doctop colspan=2>Function PositionTexture( tex:TTexture,u_pos:Float,v_pos:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=PositionTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ProjectedX>
+<tr><td class=doctop colspan=2>Function ProjectedX:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ProjectedY>
+<tr><td class=doctop colspan=2>Function ProjectedY:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ProjectedZ>
+<tr><td class=doctop colspan=2>Function ProjectedZ:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ProjectedZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RenderWorld>
+<tr><td class=doctop colspan=2>Function RenderWorld()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ResetEntity>
+<tr><td class=doctop colspan=2>Function ResetEntity( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ResetEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RotateEntity>
+<tr><td class=doctop colspan=2>Function RotateEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RotateMesh>
+<tr><td class=doctop colspan=2>Function RotateMesh( mesh:TMesh,pitch:Float,yaw:Float,roll:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RotateSprite>
+<tr><td class=doctop colspan=2>Function RotateSprite( sprite:TSprite,ang:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateSprite">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RotateTexture>
+<tr><td class=doctop colspan=2>Function RotateTexture( tex:TTexture,ang:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RotateTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ScaleEntity>
+<tr><td class=doctop colspan=2>Function ScaleEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ScaleMesh>
+<tr><td class=doctop colspan=2>Function ScaleMesh( mesh:TMesh,sx:Float,sy:Float,sz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleMesh">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ScaleSprite>
+<tr><td class=doctop colspan=2>Function ScaleSprite( sprite:TSprite,s_x:Float,s_y:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleSprite">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ScaleTexture>
+<tr><td class=doctop colspan=2>Function ScaleTexture( tex:TTexture,u_scale:Float,v_scale:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ScaleTexture">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetAnimKey>
+<tr><td class=doctop colspan=2>Function SetAnimKey( ent:TEntity,frame:Float,pos_key:Int=True,rot_key:Int=True,scale_key:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimKey">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetAnimTime>
+<tr><td class=doctop colspan=2>Function SetAnimTime( ent:TEntity,time:Float,seq:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetAnimTime">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetCubeFace>
+<tr><td class=doctop colspan=2>Function SetCubeFace( tex:TTexture,face:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeFace">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetCubeMode>
+<tr><td class=doctop colspan=2>Function SetCubeMode( tex:TTexture,Mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SetCubeMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ShowEntity>
+<tr><td class=doctop colspan=2>Function ShowEntity( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ShowEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SpriteViewMode>
+<tr><td class=doctop colspan=2>Function SpriteViewMode( sprite:TSprite,Mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=SpriteViewMode">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TerrainHeight>
+<tr><td class=doctop colspan=2>Function TerrainHeight:Float( terr:TTerrain,x:Int,z:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainHeight">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TerrainX>
+<tr><td class=doctop colspan=2>Function TerrainX:Float( terr:TTerrain,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TerrainY>
+<tr><td class=doctop colspan=2>Function TerrainY:Float( terr:TTerrain,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TerrainZ>
+<tr><td class=doctop colspan=2>Function TerrainZ:Float( terr:TTerrain,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TerrainZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureBlend>
+<tr><td class=doctop colspan=2>Function TextureBlend( tex:TTexture,blend:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureBlend">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureCoords>
+<tr><td class=doctop colspan=2>Function TextureCoords( tex:TTexture,coords:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureCoords">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureFilter>
+<tr><td class=doctop colspan=2>Function TextureFilter( match_text:String,flags:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureFilter">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureHeight>
+<tr><td class=doctop colspan=2>Function TextureHeight:Int( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureHeight">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureName>
+<tr><td class=doctop colspan=2>Function TextureName:String( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureName">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureWidth>
+<tr><td class=doctop colspan=2>Function TextureWidth:Int( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureWidth">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormedX>
+<tr><td class=doctop colspan=2>Function TFormedX:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormedY>
+<tr><td class=doctop colspan=2>Function TFormedY:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormedZ>
+<tr><td class=doctop colspan=2>Function TFormedZ:Float()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormedZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormNormal>
+<tr><td class=doctop colspan=2>Function TFormNormal( x:Float,y:Float,z:Float,src_ent:TEntity,dest_ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormNormal">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormPoint>
+<tr><td class=doctop colspan=2>Function TFormPoint( x:Float,y:Float,z:Float,src_ent:TEntity,dest_ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormPoint">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TFormVector>
+<tr><td class=doctop colspan=2>Function TFormVector( x:Float,y:Float,z:Float,src_ent:TEntity,dest_ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TFormVector">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TranslateEntity>
+<tr><td class=doctop colspan=2>Function TranslateEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TranslateEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TriangleVertex>
+<tr><td class=doctop colspan=2>Function TriangleVertex:Int( surf:TSurface,tri_no:Int,corner:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TriangleVertex">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TurnEntity>
+<tr><td class=doctop colspan=2>Function TurnEntity( ent:TEntity,x:Float,y:Float,z:Float,glob:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TurnEntity">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UpdateNormals>
+<tr><td class=doctop colspan=2>Function UpdateNormals( mesh:TMesh )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateNormals">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UpdateWorld>
+<tr><td class=doctop colspan=2>Function UpdateWorld( anim_speed:Float=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VectorPitch>
+<tr><td class=doctop colspan=2>Function VectorPitch:Float( vx:Float,vy:Float,vz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorPitch">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VectorYaw>
+<tr><td class=doctop colspan=2>Function VectorYaw:Float( vx:Float,vy:Float,vz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorYaw">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexAlpha>
+<tr><td class=doctop colspan=2>Function VertexAlpha:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexAlpha">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexBlue>
+<tr><td class=doctop colspan=2>Function VertexBlue:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexBlue">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexColor>
+<tr><td class=doctop colspan=2>Function VertexColor( surf:TSurface,vid:Int,r:Float,g:Float,b:Float,a:Float=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexColor">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexCoords>
+<tr><td class=doctop colspan=2>Function VertexCoords( surf:TSurface,vid:Int,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexCoords">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexGreen>
+<tr><td class=doctop colspan=2>Function VertexGreen:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexGreen">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexNormal>
+<tr><td class=doctop colspan=2>Function VertexNormal( surf:TSurface,vid:Int,nx:Float,ny:Float,nz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNormal">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexNX>
+<tr><td class=doctop colspan=2>Function VertexNX:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexNY>
+<tr><td class=doctop colspan=2>Function VertexNY:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexNZ>
+<tr><td class=doctop colspan=2>Function VertexNZ:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexNZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexRed>
+<tr><td class=doctop colspan=2>Function VertexRed:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexRed">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexTexCoords>
+<tr><td class=doctop colspan=2>Function VertexTexCoords( surf:TSurface,vid:Int,u:Float,v:Float,w:Float=0,coord_set:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexTexCoords">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexU>
+<tr><td class=doctop colspan=2>Function VertexU:Float( surf:TSurface,vid:Int,coord_set:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexU">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexV>
+<tr><td class=doctop colspan=2>Function VertexV:Float( surf:TSurface,vid:Int,coord_set:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexV">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexW>
+<tr><td class=doctop colspan=2>Function VertexW:Float( surf:TSurface,vid:Int,coord_set:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexW">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexX>
+<tr><td class=doctop colspan=2>Function VertexX:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexX">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexY>
+<tr><td class=doctop colspan=2>Function VertexY:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexY">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexZ>
+<tr><td class=doctop colspan=2>Function VertexZ:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VertexZ">Online doc</a></td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Wireframe>
+<tr><td class=doctop colspan=2>Function Wireframe( enable:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online doc</a></td></tr>
+</table>
+<br>
+<h2 id=modinfo>Module Information</h2>
+<table width=100%>
+<tr><th width=1%>Version</th><td>1.00</td></tr>
+<tr><th width=1%>License</th><td>zlib/libpng</td></tr>
+<tr><th width=1%>Copyright</th><td>2014 Mark Mcvittie, Bruce A Henderson</td></tr>
+<tr><th width=1%>History</th><td>1.00 Initial Release</td></tr>
+</body></html>

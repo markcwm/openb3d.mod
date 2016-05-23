@@ -4,6 +4,7 @@
 <table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
 <td class=small width=1%><b>Openb3d.B3dglgraphics:</b></td>
 <td class=small width=1%><a href=#functions class=small>Functions</a></td>
+<td class=small width=1%><a href=#types class=small>Types</a></td>
 <td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
 <td class=small width=1%><a href='../../../../mod/openb3d.mod/b3dglgraphics.mod/b3dglgraphics.bmx' class=small>Source</a></td>
 <td class=small>&nbsp;</td></tr></table>
@@ -13,14 +14,19 @@
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Text>Text</a></td><td class=docright>
-Draw text, does not need Max2D.
+Draw text, doesn't need Max2D.
+</td></tr>
+</table>
+<h2><a name=types></a>Types Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#TDebug>TDebug</a></td><td class=docright>
+Debug functions.
 </td></tr>
 </table>
 <h2
  id=functionsdet>Functions
 </h2>
 <table class=doc width=100% cellspacing=3 id=Graphics3D>
-<tr><td class=doctop colspan=2>Function Graphics3D( width:Int,height:Int,depth:Int=0,Mode:Int=0,rate:Int=60,flags:Int=-1,usecanvas:Int=False )</td></tr>
+<tr><td class=doctop colspan=2>Function Graphics3D( w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1,usecanvas:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a></td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>The flags argument sets the graphics buffers (back, alpha, depth, stencil and accum).
 Set usecanvas to true if using maxgui with a canvas context.</td></tr>
@@ -28,7 +34,15 @@ Set usecanvas to true if using maxgui with a canvas context.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=Text>
 <tr><td class=doctop colspan=2>Function Text( x:Int,y:Int,Text:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Draw text, does not need Max2D.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Draw text, doesn't need Max2D.</td></tr>
+</table>
+<br>
+<h2
+ id=typesdet>Types
+</h2>
+<table class=doc width=100% cellspacing=3 id=TDebug>
+<tr><td class=doctop colspan=2>Type TDebug</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Debug functions.</td></tr>
 </table>
 <br>
 <h2 id=modinfo>Module Information</h2>

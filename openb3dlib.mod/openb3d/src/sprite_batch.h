@@ -55,7 +55,9 @@ public:
 		// if no sprite batch surface exists, create new sprite batch with new surface
 		sprite_batch=new SpriteBatch;
 		sprite_batch->surf=new Surface;
+#ifndef GLES2
 		sprite_batch->surf->vbo_enabled=false;
+#endif
 		sprite_batch->surf->ShaderMat=Global::ambient_shader;
 		sprite_batch->texture=tex;
 		sprite_batch->blend=blend;

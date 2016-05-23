@@ -22,7 +22,46 @@ public:
 	static int width,height,mode,depth,rate;
 	static float ambient_red,ambient_green,ambient_blue;
 	static Shader* ambient_shader;
+//#ifdef GLES2
+#define GLuint unsigned int
+	struct Program{
+		//static GLuint ambient_current_program;
+		GLuint ambient_program;
 
+		GLuint vposition;
+		GLuint vnormal;
+		GLuint tex_coords;
+		GLuint tex_coords2;
+		GLuint color;
+		GLuint shininess;
+
+		GLuint model;
+		GLuint view;
+		GLuint proj;
+
+		GLuint texflag;
+		GLuint texmat;
+		GLuint tex_coords_set;
+
+		GLuint amblight;
+
+		GLuint lightMat;
+		GLuint lightType;
+		GLuint lightOuterCone;
+		GLuint lightColor;
+
+		GLuint fogRange;
+		GLuint fogColor;
+	};
+
+	static Program shaders[9][9][2];
+	static Program shader_stencil;
+	static Program shader_particle;
+	static Program shader_voxel;
+	static Program* shader;
+
+	static GLuint stencil_vbo;
+//#endif
 	static int vbo_enabled;
 	static int vbo_min_tris;
 

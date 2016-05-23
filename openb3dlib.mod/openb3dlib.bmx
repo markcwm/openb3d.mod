@@ -34,8 +34,11 @@ ModuleInfo "Copyright: Openb3d - Angelo Rosina"
 
 ModuleInfo "History: 1.00 Initial Release"
 
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
+ModuleInfo "CC_OPTS: -UGLES2"
+
 ?Win32
-ModuleInfo "CC_OPTS: -DGLEW_STATIC"
+ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
 ?
 
 Import Pub.Glew ' imports Pub.OpenGL

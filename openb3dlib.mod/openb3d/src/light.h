@@ -19,6 +19,13 @@ using namespace std;
 class Light : public Entity{
  
 public:
+
+#ifdef GLES2
+	static float light_types[8];
+	static float light_matrices[8][4][4];
+	static float light_outercone[8];
+	static float light_color[8][3];
+#endif
  
 	static int light_no;
 	static int no_lights;
