@@ -1,10 +1,24 @@
-#ifdef linux
-#define GL_GLEXT_PROTOTYPES
-#include <GL/gl.h>
-#include <GL/glext.h>
-#include <GL/glu.h>
-#endif
 
+#ifdef OPENB3D_GLEW
+	#include "glew.h"
+#else
+	#ifdef linux
+	#define GL_GLEXT_PROTOTYPES
+	#include <GL/gl.h>
+	#include <GL/glext.h>
+	#include <GL/glu.h>
+	#endif
+
+	#ifdef WIN32
+	#include <gl\GLee.h>
+	#include <GL\glu.h>
+	#endif
+
+	#ifdef __APPLE__
+	#include "GLee.h"
+	#include <OpenGL/glu.h>
+	#endif
+#endif
 
 /*
  *  camera.mm

@@ -29,8 +29,7 @@ public:
 	int blend,fx;
 	unsigned int cache_frame[8];
 	Texture* tex[8];
-	
-	int glBlendFunc[2];//
+	int glBlendFunc[2]; //bmx
 
 	Brush(){
 
@@ -40,7 +39,7 @@ public:
 		red=1.0,green=1.0,blue=1.0,alpha=1.0,shine=0.0;
 		blend=0,fx=0;
 		//tex_frame=0;
-		
+
 		for(int i=0;i<8;i++){
 			tex[i]=NULL;
 		}
