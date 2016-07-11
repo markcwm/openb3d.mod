@@ -7,6 +7,11 @@ The wrapper is object-oriented and also has a procedural interface like Blitz3D,
 
 Several examples are included for testing and extra features include: particles, stencil testing, terrains, stencil shadows, md2 animation, shaders with post processing effects.
 
+Status
+======
+
+As of June 2016 I am no longer supporting this wrapper in any way due to not having enough time.
+
 License
 =======
 
