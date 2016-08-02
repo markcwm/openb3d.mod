@@ -317,7 +317,7 @@ Function Init3DSound(ListeningEntity:TEntity, MaxRange:Float, ExaggerateDopplerS
 	If HearingPoint Then
 		OldListeningEntity = HearingPoint.ListenPoint
 	Else
-		HearingPoint = New HearingPoint
+		HearingPoint = New ListeningPoint
 	End If
 	HearingPoint.ListenPoint = ListeningEntity
 	HearingPoint.SoundFalloffEnd = MaxRange
