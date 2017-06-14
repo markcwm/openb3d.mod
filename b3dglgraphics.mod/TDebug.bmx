@@ -231,7 +231,7 @@ Type TDebug
 		
 		cam.CameraProject(x,y,z)
 		
-		Text ProjectedX(),ProjectedY(),"X"
+		Text Int(ProjectedX()),Int(ProjectedY()),"X"
 		
 		' entity centre marker
 		TEntity.TFormPoint(ent.EntityX(True),ent.EntityY(True),ent.EntityZ(True),ent,Null)
@@ -241,7 +241,7 @@ Type TDebug
 		
 		cam.CameraProject(x,y,z)
 		
-		Text ProjectedX(),ProjectedY(),"O"
+		Text Int(ProjectedX()),Int(ProjectedY()),"O"
 		
 	End Function
 	

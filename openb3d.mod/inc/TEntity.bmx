@@ -653,13 +653,15 @@ Type TEntity
 	
 	Method EntityClass:String()
 	
-		Return String.FromCString( EntityClass_( GetInstance(Self) ) )
+		'Return String.FromCString( EntityClass_( GetInstance(Self) ) )
+		Return String.FromCString( EntityString_( GetInstance(Self),ENTITY_class_name ) )
 		
 	End Method
 	
 	Method EntityName:String()
 		
-		Return String.FromCString( EntityName_( GetInstance(Self) ) )
+		'Return String.FromCString( EntityName_( GetInstance(Self) ) )
+		Return String.FromCString ( EntityString_( GetInstance(Self),ENTITY_name) )
 		
 	End Method
 	
