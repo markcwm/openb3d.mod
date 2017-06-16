@@ -1,25 +1,3 @@
-
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
-
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
-#endif
-
 /*
  *  camera.mm
  *  iminib3d
@@ -28,9 +6,6 @@
  *  Copyright Si Design. All rights reserved.
  *
  */
-
-//#define GLES2
-
 
 #include "global.h"
 #include "entity.h"
@@ -498,48 +473,43 @@ void Camera::Update(){
 	static float fogg=-1.0;
 	static float fogb=-1.0;
 
-#ifndef GLES2
 	if(fog_mode>0){
-
-		glEnable(GL_FOG);
-		glFogf(GL_FOG_MODE,GL_LINEAR); // each render
+		
+		glEnable(GL_FOG); // enable if disabled
+		glFogf(GL_FOG_MODE,GL_LINEAR); // each render when 2d in 3d
 		if(fog!=true){
-			//glEnable(GL_FOG); // enable if disabled
 			//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 			fog=true;
 			Global::fog_enabled=true; // used in mesh render
 		}
-		glFogf(GL_FOG_START,fog_range_near);
+		
+		glFogf(GL_FOG_START,fog_range_near); // also when 2d in 3d
 		if(abs(fog_near-fog_range_near)>0.0001){
-			//glFogf(GL_FOG_START,fog_range_near);
 			fog_near=fog_range_near;
 		}
+		
 		glFogf(GL_FOG_END,fog_range_far);
 		if(abs(fog_far-fog_range_far)>0.0001){
-			//glFogf(GL_FOG_END,fog_range_far);
 			fog_far=fog_range_far;
 		}
+		
 		float rgb[]={fog_r,fog_g,fog_b};
 		glFogfv(GL_FOG_COLOR,rgb);
 		if(abs(fogr-fog_r)>0.0001||abs(fogg-fog_g)>0.0001||abs(fogb-fog_b)>0.0001){
-			//float rgb[]={fog_r,fog_g,fog_b};
-			//glFogfv(GL_FOG_COLOR,rgb);
 			fogr=fog_r;
 			fogg=fog_g;
 			fogb=fog_b;
 		}
 		
 	}else{
-
+		
 		glDisable(GL_FOG);
 		if(fog!=false){
-			//glDisable(GL_FOG);
 			fog=false;
 			Global::fog_enabled=false; // used in mesh render
 		}
 		
 	}
-#endif
 	
 	float ratio=(float(vwidth)/vheight);
 
@@ -551,12 +521,8 @@ void Camera::Update(){
 
 	//glLoadMatrixf(&Camera::InverseMat.grid[0][0]);
 
-#ifndef GLES2
 	glLoadMatrixf(&new_mat.grid[0][0]);
-#else
-	Global::shader=0;
 
-#endif
 	
 	mod_mat[0]=new_mat.grid[0][0];
 	mod_mat[1]=new_mat.grid[0][1];
@@ -1052,7 +1018,6 @@ void Camera::accFrustum(float left_,float right_,float bottom,float top,float zN
 	//dx=(pixdx*xwsize/float(viewport[2])+eyedx*zNear/focus);
 	//dy=-(pixdy*ywsize/float(viewport[3])+eyedy*zNear/focus);
 	
-#ifndef GLES2
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	
@@ -1064,7 +1029,6 @@ void Camera::accFrustum(float left_,float right_,float bottom,float top,float zN
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-#endif
 	
 }
 

@@ -1,25 +1,3 @@
-
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
-
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
-#endif
-
 #include "texture.h"
 #include "entity.h"
 #include "mesh.h"
@@ -40,7 +18,7 @@
 
 extern "C" {
 
-// wrapper
+// extra
 
 void FreeShader(Shader *shader){
 	shader->FreeShader();
@@ -83,7 +61,6 @@ void BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor){
 }
 
 // rendering
-
 void BufferToTex(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
 }

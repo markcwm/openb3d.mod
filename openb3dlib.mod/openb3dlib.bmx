@@ -41,8 +41,8 @@ ModuleInfo "CC_OPTS: -UGLES2"
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
 ?
 
-Import pub.Glew ' imports Pub.OpenGL
-Import pub.OpenGL
+Import Pub.Glew
+Import Pub.OpenGL
 
 Import "source.bmx"
 

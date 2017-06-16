@@ -33,12 +33,11 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 
 ModuleInfo "History: 1.00 Initial Release"
 
-'Import Openb3d.B3d
-Import Openb3d.Openb3dlib
-Import Brl.Graphics			' imports Brl.System, Brl.PolledInput
-Import Brl.Retro			' imports Brl.Basic
+Import Openb3d.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
+Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
+Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
+Import Brl.Retro			' imports BRL.Basic
 Import Brl.Map
-Import Brl.Pixmap
 
 ' functions.cpp
 Extern
@@ -465,6 +464,7 @@ Include "inc/BoxSphere.bmx"
 ' misc
 Include "inc/TBlitz2D.bmx"
 Include "inc/TUtility.bmx"
+'Include "inc/TDebug.bmx"
 
 ' extra
 'Include "inc/TBuffer.bmx"

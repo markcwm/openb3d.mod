@@ -1,25 +1,3 @@
-
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
-
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
-#endif
-
 /*
  *  geosphere.cpp
  *  openb3d
@@ -27,6 +5,23 @@
  *
  */
 
+#include "glew.h"
+
+/*
+#ifdef linux
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#endif
+
+#ifdef WIN32
+#include <gl\GLee.h>
+#endif
+
+#ifdef __APPLE__
+#include "GLee.h"
+#endif
+*/
 
 #include "global.h"
 #include "entity.h"
@@ -41,10 +36,6 @@
 #include "file.h"
 #include "tree.h"
 
-//#define GLES2
-#ifdef GLES2
-#include "light.h"
-#endif
 
 static Line Ray;
 static float radius;
@@ -152,9 +143,6 @@ Geosphere* Geosphere::CopyEntity(Entity* parent_ent){
 
 	terrain_list.push_back(geo);
 
-#ifdef GLES2
-	glGenBuffers(1,&geo->vbo_id);
-#endif
 
 	return geo;
 
@@ -199,26 +187,17 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 
 	}
 
-#ifdef GLES2
-	glGenBuffers(1,&geo->vbo_id);
-#endif
-
 	return geo;
 
 }
 
 void Geosphere::UpdateTerrain(){
 
-#ifndef GLES2
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 
 	RecreateGeoROAM();
 
 	glDisable(GL_ALPHA_TEST);
-#else
-	RecreateGeoROAM();
-	if (triangleindex==0) return;
-#endif
 
 	if (order!=0){
 		glDisable(GL_DEPTH_TEST);
@@ -245,7 +224,6 @@ void Geosphere::UpdateTerrain(){
 
 	float ambient_red,ambient_green,ambient_blue;
 
-#ifndef GLES2
 	// fx flag 1 - full bright ***todo*** disable all lights?
 	if (brush.fx & 1){
 		if(Global::fx1!=true){
@@ -314,74 +292,16 @@ void Geosphere::UpdateTerrain(){
 	glMaterialfv(GL_FRONT_AND_BACK,GL_DIFFUSE,mat_diffuse);
 	glMaterialfv(GL_FRONT_AND_BACK,GL_SPECULAR,mat_specular);
 	glMaterialfv(GL_FRONT_AND_BACK,GL_SHININESS,mat_shininess);
-#else
-	int tex_count=0;
-	tex_count=brush.no_texs;
-	int tblendflags[8][2];
-	float tmatrix[8][9];
-	float tcoords[8];
-
-	if (&Global::shaders[Light::no_lights][tex_count][Global::camera_in_use->fog_mode]!=Global::shader){
-		Global::shader=&Global::shaders[Light::no_lights][tex_count][Global::camera_in_use->fog_mode];
-		glUseProgram(Global::shader->ambient_program);
-		glUniformMatrix4fv(Global::shader->view, 1 , 0, &Global::camera_in_use->mod_mat[0] );
-		glUniformMatrix4fv(Global::shader->proj, 1 , 0, &Global::camera_in_use->proj_mat[0] );
-
-		glUniformMatrix4fv(Global::shader->lightMat, Light::no_lights , 0, Light::light_matrices[0][0] );
-		glUniform1fv(Global::shader->lightType, Light::no_lights , Light::light_types);
-		glUniform1fv(Global::shader->lightOuterCone, Light::no_lights , Light::light_outercone);
-		glUniform3fv(Global::shader->lightColor, Light::no_lights , Light::light_color[0]);
-
-		glUniform3f(Global::shader->fogColor, Global::camera_in_use->fog_r, Global::camera_in_use->fog_g, Global::camera_in_use->fog_b);
-		glUniform2f(Global::shader->fogRange, Global::camera_in_use->fog_range_near, Global::camera_in_use->fog_range_far);
-	}
-
-	if(brush.fx&1){
-		if(Global::fx1!=true){
-			Global::fx1=true;
-		}
-		ambient_red  =1.0;
-		ambient_green=1.0;
-		ambient_blue =1.0;
-	}else{
-		if(Global::fx1!=false){
-			Global::fx1=false;
-		}
-		ambient_red  =Global::ambient_red;
-		ambient_green=Global::ambient_green;
-		ambient_blue =Global::ambient_blue;
-	}
-
-	if(brush.fx&16){
-		glDisable(GL_CULL_FACE);
-	}else{
-		glEnable(GL_CULL_FACE);
-	}
-
-	glUniform3f(Global::shader->amblight, ambient_red,ambient_green,ambient_blue);
-
-	glUniform1f(Global::shader->shininess, brush.shine);
-
-	float mat_ambient[]={brush.red,brush.green,brush.blue,brush.alpha};
-	float mat_diffuse[]={brush.red,brush.green,brush.blue,brush.alpha};
-	float mat_specular[]={brush.shine,brush.shine,brush.shine,brush.shine};
-	float mat_shininess[]={100.0}; // upto 128
-
-#endif
 
 	// textures
 
-#ifndef GLES2
 	int tex_count=0;
-#endif
 
 	if(ShaderMat!=NULL){
 		ShaderMat->TurnOn(mat, 0, &vertices);
 	}
 
-#ifndef GLES2
 	tex_count=brush.no_texs;
-#endif
 
 	int DisableCubeSphereMapping=0;
 	for(int ix=0;ix<tex_count;ix++){
@@ -408,21 +328,17 @@ void Geosphere::UpdateTerrain(){
 			//frame=brush.tex_frame;
 
 			glActiveTexture(GL_TEXTURE0+ix);
-#ifndef GLES2
 			glClientActiveTexture(GL_TEXTURE0+ix);
-#endif
 
 			glEnable(GL_TEXTURE_2D);
 			glBindTexture(GL_TEXTURE_2D,texture); // call before glTexParameteri
 
-#ifndef GLES2
 			// masked texture flag
 			if(tex_flags&4){
 				glEnable(GL_ALPHA_TEST);
 			}else{
 				glDisable(GL_ALPHA_TEST);
 			}
-#endif
 
 			// mipmapping texture flag
 			if(tex_flags&8){
@@ -447,7 +363,6 @@ void Geosphere::UpdateTerrain(){
 				glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
 			}
 
-#ifndef GLES2
 				// ***!ES***
 
 			// spherical environment map texture flag
@@ -582,51 +497,12 @@ void Geosphere::UpdateTerrain(){
 				glMultMatrixf(&new_mat.grid[0][0]);
 
 			}
-#else
-
-					tmatrix[ix][0]= 1.0; tmatrix[ix][1]= 0.0; tmatrix[ix][2]= 0.0;
-					tmatrix[ix][3]= 0.0; tmatrix[ix][4]= 1.0; tmatrix[ix][5]= 0.0;
-					tmatrix[ix][6]= 0.0; tmatrix[ix][7]= 0.0; tmatrix[ix][8]= 1.0;
-
-					if(tex_u_pos!=0.0 || tex_v_pos!=0.0){
-						tmatrix[ix][6]= tex_u_pos; tmatrix[ix][7]= tex_v_pos;
-					}
-					if(tex_ang!=0.0){
-						float cos_ang=cosdeg(tex_ang);
-						float sin_ang=sindeg(tex_ang);
-						tmatrix[ix][0]= cos_ang; tmatrix[ix][1]= sin_ang; 
-						tmatrix[ix][3]=-sin_ang; tmatrix[ix][4]= cos_ang; 
-
-					}
-					if(tex_u_scale!=1.0 || tex_v_scale!=1.0){
-						tmatrix[ix][0]*= tex_u_scale; tmatrix[ix][1]*= tex_v_scale; 
-						tmatrix[ix][3]*= tex_u_scale; tmatrix[ix][4]*= tex_v_scale; 
-					}
-
-					if(tex_flags&128){
-	
-						glEnable(GL_TEXTURE_CUBE_MAP);
-						glBindTexture(GL_TEXTURE_CUBE_MAP,texture); // call before glTexParameteri
-	
-						glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
-						glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
-						glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
-						glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
-						glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_NEAREST);
-						tex_blend+=128;
-					}
-
-					tblendflags[ix][0]=tex_blend;
-					tblendflags[ix][1]=tex_flags&(4|128);
-					tcoords[ix]=0;
-#endif
 
 
 		}
 
 	}
 
-#ifndef GLES2
 	// draw tris
 	glMatrixMode(GL_MODELVIEW);
 
@@ -634,30 +510,8 @@ void Geosphere::UpdateTerrain(){
 	glMultMatrixf(&mat.grid[0][0]);
 	glVertexPointer(3,GL_FLOAT,32,&vertices[0]);
 	glNormalPointer(GL_FLOAT,32,&vertices[3]);
-#else
-	glUniform2iv(Global::shader->texflag, tex_count , tblendflags[0]);
-	glUniformMatrix3fv(Global::shader->texmat, tex_count, 0, tmatrix[0]);
-	glUniform1fv(Global::shader->tex_coords_set, tex_count , tcoords);
-
-	glBindBuffer(GL_ARRAY_BUFFER,vbo_id);
-	glBufferData(GL_ARRAY_BUFFER,(triangleindex*3*8*sizeof(float)),&vertices[0],GL_STREAM_DRAW);
-	glVertexAttribPointer(Global::shader->vposition, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (GLvoid*)0);
-	glEnableVertexAttribArray(Global::shader->vposition);
-	glVertexAttribPointer(Global::shader->vnormal, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), (GLvoid*)(3*sizeof(float)));
-	glEnableVertexAttribArray(Global::shader->vnormal);
-	glVertexAttribPointer(Global::shader->tex_coords, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), (GLvoid*)(6*sizeof(float)));
-	glEnableVertexAttribArray(Global::shader->tex_coords);
-	glDisableVertexAttribArray(Global::shader->tex_coords2);
-
-	glUniformMatrix4fv(Global::shader->model, 1 , 0, &mat.grid[0][0] );
-
-	glDisableVertexAttribArray(Global::shader->color);
-	glVertexAttrib4f(Global::shader->color, brush.red,brush.green,brush.blue,brush.alpha);
-
-#endif
 
 	glDrawArrays(GL_TRIANGLES, 0, triangleindex*3);
-#ifndef GLES2
 	glPopMatrix();
 
 	// disable all texture layers
@@ -692,9 +546,6 @@ void Geosphere::UpdateTerrain(){
 	if(ShaderMat!=NULL){
 		ShaderMat->TurnOff();
 	}
-#else
-	glDisableVertexAttribArray(Global::shader->vposition);
-#endif
 
 
 }

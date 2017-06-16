@@ -1,25 +1,3 @@
-
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
-
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
-#endif
-
 /*
  *  light.mm
  *  iminib3d
@@ -29,8 +7,6 @@
  *
  */
 
-//#define GLES2
-
 #include "light.h"
 #include "pick.h"
 
@@ -38,20 +14,9 @@ int Light::light_no=0;
 int Light::no_lights=0;
 int Light::max_lights=8;
 
-#ifdef GLES2
-	float Light::light_types[8];
-	float Light::light_matrices[8][4][4];
-	float Light::light_outercone[8];
-	float Light::light_color[8][3];
-#endif
-
-
-#ifndef GLES2
 int Light::gl_light[]={GL_LIGHT0,GL_LIGHT1,GL_LIGHT2,GL_LIGHT3,GL_LIGHT4,GL_LIGHT5,GL_LIGHT6,GL_LIGHT7};
-#endif
 
 vector<Light*> Light::light_list;
-
 
 Light* Light::CopyEntity(Entity* parent_ent){
 
@@ -145,7 +110,6 @@ void Light::FreeEntity(){
 
 	Entity::FreeEntity();
 
-#ifndef GLES2
 	int erased=0;
 
 	for (int i=0; i<no_lights;i++){
@@ -156,8 +120,8 @@ void Light::FreeEntity(){
 		}
 	}
 
-#endif
 	no_lights=no_lights-1;
+
 	
 	delete this;
 	
@@ -178,7 +142,6 @@ Light* Light::CreateLight(int l_type,Entity* parent_ent){
 	}
 	light->class_name="Light";
 	
-#ifndef GLES2
 	// no of lights increased, enable additional gl light
 	no_lights=no_lights+1;
 	glEnable(gl_light[no_lights-1]);
@@ -197,9 +160,6 @@ Light* Light::CreateLight(int l_type,Entity* parent_ent){
 		float exponent[]={10.0};
 		glLightfv(gl_light[no_lights-1],GL_SPOT_EXPONENT,exponent);
 	}
-#else
-	no_lights=no_lights+1;
-#endif
 	
 	light_list.push_back(light);
 	light->AddParent(*parent_ent);
@@ -239,11 +199,11 @@ void Light::LightConeAngles(float inner,float outer){
 }
 	
 void Light::Update(){
+
 	light_no=light_no+1;
 	if(light_no>no_lights) light_no=1;
 	
 	
-#ifndef GLES2
 	if(hide==true){
 		glDisable(gl_light[light_no-1]);
 		return;
@@ -291,49 +251,5 @@ void Light::Update(){
 	}
 		
 	glPopMatrix();
-#else
-
-	light_color[light_no-1][0]=red;
-	light_color[light_no-1][1]=green;
-	light_color[light_no-1][2]=blue;
-
-	//Matrix inv;
-	//mat.GetInverse(inv);
-
-	if(light_type==1){
-		for (int x = 0;x < 3; x++){
-			for (int y = 0;y <= 3; y++){
-				light_matrices[light_no-1][x][y] = mat.grid[x][y];
-			}
-		}
-		for (int y = 0;y <= 3; y++){
-			light_matrices[light_no-1][y][3] = 0.0;
-		}
-	}else if (light_type==2){
-		for (int i = 0;i <= 3; i++){
-			light_matrices[light_no-1][3][i] = mat.grid[3][i];
-		}
-	}else if (light_type==3){
-		for (int x = 0;x <= 3; x++){
-			for (int y = 0;y <= 3; y++){
-				light_matrices[light_no-1][x][y] = mat.grid[x][y];
-			}
-		}
-		light_outercone[light_no-1]=cosdeg(outer_ang);
-
-	}
-
-	light_types[light_no-1]=light_type;
-
-	/*if(light_no==no_lights) {
-		for (int t=0;t<=8;t++){
-			glUniformMatrix4fv(Global::ambient_shader_lightMat[no_lights][t], no_lights , 0, light_matrices[0][0] );
-			glUniform1fv(Global::ambient_shader_lightType[no_lights][t], no_lights , light_types);
-			glUniform3fv(Global::ambient_shader_lightColor[no_lights][t], no_lights , light_color[0]);
-		}
-	}*/
-
-#endif
-	
 																	
 }

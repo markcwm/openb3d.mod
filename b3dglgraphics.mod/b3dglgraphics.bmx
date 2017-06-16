@@ -33,10 +33,6 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "History: 1.00 Initial Release"
 
 Import Openb3d.Openb3d
-Import Brl.GLMax2d			' imports Brl.Max2D, Brl.GLGraphics
-Import Brl.BmpLoader		' imports Brl.Pixmap, Brl.EndianStream
-Import Brl.PngLoader		' imports Brl.Pixmap, Pub.LibPng
-Import Brl.JpgLoader		' imports Brl.Pixmap, Pub.LibJpeg
 
 Include "TDebug.bmx"
 
@@ -70,7 +66,6 @@ Function Graphics3D( w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1,usecanvas
 	TGlobal.depth[0]=d
 	TGlobal.Mode[0]=m
 	TGlobal.rate[0]=r
-	TGlobal.usegles=False
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal.gfx=Graphics( w,h,d,r,flags ) ' gfx context

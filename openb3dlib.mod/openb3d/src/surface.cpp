@@ -7,23 +7,23 @@
  *
  */
 
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#endif
+#include "glew.h"
 
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#endif
+/*
+#ifdef linux
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
 
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#endif
 #endif
+#ifdef WIN32
+#include <gl\GLee.h>
+#endif
+
+#ifdef __APPLE__
+#include "GLee.h"
+#endif
+*/
 
 #include "surface.h"
 
@@ -652,30 +652,30 @@ void Surface::UpdateVBO(){
 
 	if(reset_vbo&1){
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[0]);
-		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*sizeof(float)),&vert_coords[0],GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*4),&vert_coords[0],GL_STATIC_DRAW);
 	}
 
 	if(reset_vbo&2){
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[1]);
-		glBufferData(GL_ARRAY_BUFFER,(no_verts*2*sizeof(float)),&vert_tex_coords0[0],GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*2*4),&vert_tex_coords0[0],GL_STATIC_DRAW);
 
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[2]);
-		glBufferData(GL_ARRAY_BUFFER,(no_verts*2*sizeof(float)),&vert_tex_coords1[0],GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*2*4),&vert_tex_coords1[0],GL_STATIC_DRAW);
 	}
 
 	if(reset_vbo&4){
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[3]);
-		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*sizeof(float)),&vert_norm[0],GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*4),&vert_norm[0],GL_STATIC_DRAW);
 	}
 
 	if(reset_vbo&8){
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[4]);
-		glBufferData(GL_ARRAY_BUFFER,(no_verts*4*sizeof(float)),&vert_col[0],GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*4*4),&vert_col[0],GL_STATIC_DRAW);
 	}
 
 	if(reset_vbo&16){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,vbo_id[5]);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER,no_tris*3*sizeof(unsigned short),&tris[0],GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER,no_tris*3*2,&tris[0],GL_STATIC_DRAW);
 	}
 
 	reset_vbo=false;

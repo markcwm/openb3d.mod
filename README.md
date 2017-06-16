@@ -10,7 +10,7 @@ Several examples are included for testing and extra features include: particles,
 Status
 ======
 
-As of June 2016 I am no longer supporting this wrapper in any way due to not having enough time.
+After a year-long break from coding I have returned to work on this wrapper in my spare time. I left this project with a broken latest version which was due to a failed attempt to move to GLES. It has now been reverted to desktop/GL only and will probably stay that way since I am not familiar with GLES. I do intend for it to be compatible with BlitzMax NG, the current version it works with is 0.77. Updates should be small but fairly frequent.
 
 License
 =======

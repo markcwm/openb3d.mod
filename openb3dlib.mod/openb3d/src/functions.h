@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-// wrapper
+// extra
 void DLL_EXPORT FreeShader(Shader *shader);
 void DLL_EXPORT FreeStencil(Stencil *stencil);
 void DLL_EXPORT TextureFlags(Texture* tex, int flags);
@@ -28,8 +28,9 @@ void DLL_EXPORT BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor);
 // rendering
 void DLL_EXPORT BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT BackBufferToTex(Texture* tex,int frame);
-void DLL_EXPORT TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT CameraToTex(Texture* tex, Camera* cam, int frame);
+void DLL_EXPORT TexToBuffer(Texture* tex,unsigned char* buffer, int frame);
+
 
 /*
 bbdoc: Minib3d Only

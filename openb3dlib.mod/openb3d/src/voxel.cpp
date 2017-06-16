@@ -1,30 +1,25 @@
 
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
+#include "glew.h"
 
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
+/*
+#ifdef linux
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
 #endif
+
+#ifdef WIN32
+#include <gl\GLee.h>
+#endif
+
+#ifdef __APPLE__
+#include "GLee.h"
+#endif
+*/
 
 #include "voxel.h"
 #include "global.h"
 #include "camera.h"
-
-//#define GLES2
 
 void Add3DVertex(Surface* surf, float x, float y, float z,float u,float v,float w){
 	surf->no_verts++;
@@ -85,7 +80,6 @@ VoxelSprite* VoxelSprite::CreateVoxelSprite(int slices, Entity* parent_ent){
 
 
 
-#ifndef GLES2
 	Surface* surf;
 	surf=voxelSprite->CreateSurface();
 	
@@ -160,95 +154,14 @@ VoxelSprite* VoxelSprite::CreateVoxelSprite(int slices, Entity* parent_ent){
 			surf->reset_vbo=1|4|8;
 			surf->UpdateVBO();
 			glBindBuffer(GL_ARRAY_BUFFER,surf->vbo_id[2]);
-			glBufferData(GL_ARRAY_BUFFER,(surf->no_verts*3*sizeof(float)),&surf->vert_tex_coords1[0],GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER,(surf->no_verts*3*4),&surf->vert_tex_coords1[0],GL_STATIC_DRAW);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,surf->vbo_id[5]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER,surf->tris.size()*sizeof(unsigned short),&surf->tris[0],GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,surf->tris.size()*2,&surf->tris[0],GL_STATIC_DRAW);
 
 		}
 		surf_number++;
 	}
-#else
-	Surface* surf=voxelSprite->CreateSurface();
-
-	surf->AddVertex(-1.0,-1.0,-1.0);
-	surf->AddVertex(-1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0,-1.0,-1.0);
-
-	surf->AddVertex(-1.0,-1.0, 1.0);
-	surf->AddVertex(-1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0,-1.0, 1.0);
-
-	surf->AddVertex(-1.0,-1.0, 1.0);
-	surf->AddVertex(-1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0,-1.0, 1.0);
-
-	surf->AddVertex(-1.0,-1.0,-1.0);
-	surf->AddVertex(-1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0,-1.0,-1.0);
-
-	surf->AddVertex(-1.0,-1.0, 1.0);
-	surf->AddVertex(-1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0, 1.0, 1.0);
-	surf->AddVertex( 1.0,-1.0, 1.0);
-
-	surf->AddVertex(-1.0,-1.0,-1.0);
-	surf->AddVertex(-1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0, 1.0,-1.0);
-	surf->AddVertex( 1.0,-1.0,-1.0);
-
-	surf->VertexNormal(0,0.0,0.0,-1.0);
-	surf->VertexNormal(1,0.0,0.0,-1.0);
-	surf->VertexNormal(2,0.0,0.0,-1.0);
-	surf->VertexNormal(3,0.0,0.0,-1.0);
-
-	surf->VertexNormal(4,0.0,0.0,1.0);
-	surf->VertexNormal(5,0.0,0.0,1.0);
-	surf->VertexNormal(6,0.0,0.0,1.0);
-	surf->VertexNormal(7,0.0,0.0,1.0);
-
-	surf->VertexNormal(8,0.0,1.0,0.0);
-	surf->VertexNormal(9,0.0,-1.0,0.0);
-	surf->VertexNormal(10,0.0,-1.0,0.0);
-	surf->VertexNormal(11,0.0,1.0,0.0);
-
-	surf->VertexNormal(12,0.0,1.0,0.0);
-	surf->VertexNormal(13,0.0,-1.0,0.0);
-	surf->VertexNormal(14,0.0,-1.0,0.0);
-	surf->VertexNormal(15,0.0,1.0,0.0);
-
-	surf->VertexNormal(16,1.0,0.0,0.0);
-	surf->VertexNormal(17,1.0,0.0,0.0);
-	surf->VertexNormal(18,-1.0,0.0,0.0);
-	surf->VertexNormal(19,-1.0,0.0,0.0);
-
-	surf->VertexNormal(20,1.0,0.0,0.0);
-	surf->VertexNormal(21,1.0,0.0,0.0);
-	surf->VertexNormal(22,-1.0,0.0,0.0);
-	surf->VertexNormal(23,-1.0,0.0,0.0);
-
-
-	surf->AddTriangle(0,1,2); // front
-	surf->AddTriangle(0,2,3);
-	surf->AddTriangle(6,5,4); // back
-	surf->AddTriangle(7,6,4);
-	surf->AddTriangle(6+8,5+8,1+8); // top
-	surf->AddTriangle(2+8,6+8,1+8);
-	surf->AddTriangle(0+8,4+8,7+8); // bottom
-	surf->AddTriangle(0+8,7+8,3+8);
-	surf->AddTriangle(6+16,2+16,3+16); // right
-	surf->AddTriangle(7+16,6+16,3+16);
-	surf->AddTriangle(0+16,1+16,5+16); // left
-	surf->AddTriangle(0+16,5+16,4+16);
-
-	surf->reset_vbo=1|4|16;
-	surf->UpdateVBO();
-
-#endif
 
 	voxelSprite->cull_radius=-sqrt(3);
 
@@ -267,7 +180,6 @@ void VoxelSprite::VoxelSpriteMaterial(Material* mat){
 
 void VoxelSprite::Render(){
 
-#ifndef GLES2
 	glMatrixMode(GL_MODELVIEW);
 	glDisable(GL_CULL_FACE);
 
@@ -426,38 +338,7 @@ void VoxelSprite::Render(){
 	
 		glDisable(GL_TEXTURE_3D);
 	}
-#else
-	if (&Global::shader_voxel!=Global::shader){
-		Global::shader=&Global::shader_voxel;
-		glUseProgram(Global::shader->ambient_program);
-		glUniformMatrix4fv(Global::shader->view, 1 , 0, &Global::camera_in_use->mod_mat[0] );
-		glUniformMatrix4fv(Global::shader->proj, 1 , 0, &Global::camera_in_use->proj_mat[0] );
-
-
-	}
-
-	glActiveTexture(GL_TEXTURE0);
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, material[0]->texture); 
-
-	glUniformMatrix4fv(Global::shader->model, 1 , 0, &mat.grid[0][0] );
-
-	Surface& surf=**surf_list.begin();
-	glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[0]);
-	glVertexAttribPointer(Global::shader->vposition, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(Global::shader->vposition);
-	glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[1]);
-	//glVertexAttribPointer(Global::shader->tex_coords, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	//glEnableVertexAttribArray(Global::shader->tex_coords);
-	glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[3]);
-	glVertexAttribPointer(Global::shader->vnormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
-	glEnableVertexAttribArray(Global::shader->vnormal);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,surf.vbo_id[5]);
-	glDrawElements(GL_TRIANGLES,surf.no_tris*3,GL_UNSIGNED_SHORT,NULL);
-
-#endif
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 }
 
 

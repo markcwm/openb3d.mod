@@ -1,26 +1,26 @@
 #include <iostream>
 #include <string>
 
-#ifdef OPENB3D_GLEW
-	#include "glew.h"
-#else
-	#ifdef linux
-	#define GL_GLEXT_PROTOTYPES
-	#include <GL/gl.h>
-	#include <GL/glext.h>
-	#include <GL/glu.h>
-	#endif
+#include "glew.h"
 
-	#ifdef WIN32
-	#include <gl\GLee.h>
-	#include <GL\glu.h>
-	#endif
-
-	#ifdef __APPLE__
-	#include "GLee.h"
-	#include <OpenGL/glu.h>
-	#endif
+/*
+#ifdef linux
+#define GL_GLEXT_PROTOTYPES
+#include <GL/gl.h>
+#include <GL/glext.h>
+#include <GL/glu.h>
 #endif
+
+#ifdef WIN32
+#include <gl\GLee.h>
+#include <GL\glu.h>
+#endif
+
+#ifdef __APPLE__
+#include "GLee.h"
+#include <OpenGL/glu.h>
+#endif
+*/
 
 #include "surface.h"
 #include "camera.h"
@@ -29,7 +29,6 @@
 #include "global.h"
 #include "stb_image.h"
 
-//#define GLES2
 
 list<ShaderObject*> ShaderObject::ShaderObjectList;
 list<ProgramObject*> ProgramObject::ProgramObjectList;
@@ -382,7 +381,7 @@ void ShaderObject::DeleteFragShader(ShaderObject* fShader){
 
 	for(it=ProgramObject::ProgramObjectList.begin();it!=ProgramObject::ProgramObjectList.end();it++){
 		ProgramObject* p=*it;
-
+		
 		p->DetachFragShader(fShader);
 	}
 	
@@ -613,8 +612,8 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
 				}else{
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //was GL_LINEAR
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //GL_LINEAR
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //GL_LINEAR
 				}
 			}else{
 				glEnable(GL_TEXTURE_3D);
@@ -838,8 +837,8 @@ void Shader::TurnOff(){
 		glMatrixMode(GL_TEXTURE);
 		glLoadIdentity();
 
-		glDisableClientState(GL_TEXTURE_COORD_ARRAY); // Propuke
-		
+		glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				
 		if (Shader_Tex[ix]->is3D==0){
 			glDisable(GL_TEXTURE_2D);
 		}else{
@@ -1779,7 +1778,6 @@ Material* Material::LoadMaterial(string filename,int flags, int frame_width,int 
 
 	unsigned int name;
 
-#ifndef GLES2
 	glGenTextures (1,&name);
 	glBindTexture (GL_TEXTURE_3D,name);
 
@@ -1810,16 +1808,6 @@ Material* Material::LoadMaterial(string filename,int flags, int frame_width,int 
 	tex->width=frame_width;
 	tex->height=frame_height;
 	delete dstbuffer;
-#else
-	glGenTextures (1,&name);
-	glBindTexture (GL_TEXTURE_2D,name);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-	glGenerateMipmap(GL_TEXTURE_2D);
-	tex->texture=name;
-	tex->width=frame_width;
-	tex->height=frame_height;
-#endif
 	stbi_image_free(buffer);
 
 

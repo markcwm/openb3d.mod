@@ -32,7 +32,7 @@ public:
 	vector<float> qz;
 
 	AnimationKeys(){
-		frames=0;
+    frames=0;
 	}
 
 	AnimationKeys* Copy(){
