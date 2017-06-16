@@ -3,30 +3,6 @@ Rem
 bbdoc: Blitz2D
 EndRem
 Type TBlitz2D
-
-	Function Text( x:Int,y:Int,Text:String )
-	
-		' set active texture to texture 0 so gldrawtext will work correctly
-		If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
-			glActiveTextureARB(GL_TEXTURE0)
-			glClientActiveTextureARB(GL_TEXTURE0)
-		EndIf
-		
-		glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE) ' texture blend 0, do not blend
-		glDisable(GL_LIGHTING)
-		glColor3f(1.0,1.0,1.0)
-		
-		' enable blend to hide text background
-		glEnable(GL_BLEND)
-		GLDrawText Text,x,y
-		
-		glDisable(GL_BLEND)
-		glEnable(GL_LIGHTING)
-		
-		' disable texture 2D - needed as gldrawtext enables it, but doesn't disable after use
-		glDisable(GL_TEXTURE_2D)
-		
-	End Function
 	
 	Function BeginMax2D() ' Function by Oddball
 	
