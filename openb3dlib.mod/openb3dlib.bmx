@@ -51,7 +51,7 @@ ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
 ?
 
 Import Pub.Glew
-Import Pub.OpenGL
+Import Pub.OpenGL ' order is important, glew before OpenGL
 
 Import "source.bmx"
 
@@ -191,7 +191,7 @@ Extern
 	
 	' Texture
 	Function TextureCopy_:Byte Ptr( obj:Byte Ptr ) = "TextureCopy"
-	Function TexInList_:Byte Ptr( obj:Byte Ptr ) = "TexInList"
+	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr ) = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr ) = "FilterFlags"
 	
 End Extern
@@ -297,6 +297,7 @@ Extern
 	Function TextureUInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "TextureUInt"
 	Function TextureFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "TextureFloat"
 	Function TextureString_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TextureString"
+	Function TextureListTexture_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TextureListTexture"
 	
 End Extern
 
@@ -702,3 +703,4 @@ Const TEXTURE_no_frames:Int=	16
 Const TEXTURE_framebuffer:Int=	17
 Const TEXTURE_cube_face:Int=	18
 Const TEXTURE_cube_mode:Int=	19
+Const TEXTURE_tex_list_all:Int=	20

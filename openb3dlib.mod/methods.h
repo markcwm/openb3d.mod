@@ -147,7 +147,7 @@ void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 
 // Texture
 Texture* TextureCopy( Texture* obj );
-Texture* TexInList( Texture* obj );
+Texture* TexInList( Texture* obj,list<Texture*>& list_ref );
 void FilterFlags( Texture* obj );
 //static string Strip(string filename);
 

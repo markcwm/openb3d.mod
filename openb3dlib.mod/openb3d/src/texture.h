@@ -39,8 +39,10 @@ public:
 	unsigned int* framebuffer;
 	int cube_face,cube_mode;
 	
-	int glTexEnv[3][12];//
-	int glTexEnv_count;//
+	// extra
+	static list<Texture*> tex_list_all;
+	int glTexEnv[3][12];
+	int glTexEnv_count;
 
 	Texture(){
 
@@ -78,7 +80,7 @@ public:
 	string TextureName();
 	static void ClearTextureFilters();
 	static void AddTextureFilter(string text_match,int flags);
-	Texture* TexInList();
+	Texture* TexInList(list<Texture*>& list_ref);
 	void FilterFlags();
 	//static string Strip(string filename);
 };

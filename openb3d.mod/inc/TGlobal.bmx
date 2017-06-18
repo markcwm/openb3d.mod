@@ -101,6 +101,8 @@ Type TGlobal
 				TTerrain.CopyList_( TTerrain.terrain_list )
 			Case TTexture.tex_list
 				TTexture.CopyList_( TTexture.tex_list )
+			Case TTexture.tex_list_all
+				TTexture.CopyList_( TTexture.tex_list_all )
 		End Select
 		
 	End Function
@@ -209,6 +211,7 @@ Type TGlobal
 				TTexture.FreeObject( TTexture.GetInstance(tex) ) ' no FreeEntity
 			Next
 			ClearList(TTexture.tex_list) ; TTexture.tex_list_id=0
+			ClearList(TTexture.tex_list_all) ; TTexture.tex_list_all_id=0
 		EndIf
 		
 		ClearWorld_( entities,brushes,textures )

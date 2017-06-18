@@ -109,5 +109,7 @@ int* TextureInt( Texture* obj,int varid );
 unsigned int* TextureUInt( Texture* obj,int varid );
 float* TextureFloat( Texture* obj,int varid );
 const char* TextureString( Texture* obj,int varid );
+list<Texture*>* TextureListTexture( Texture* obj,int varid );
+
 
 } // extern "C"

@@ -407,6 +407,7 @@ const int TEXTURE_no_frames=	16;
 const int TEXTURE_framebuffer=	17;
 const int TEXTURE_cube_face=	18;
 const int TEXTURE_cube_mode=	19;
+const int TEXTURE_tex_list_all=	20;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -607,6 +608,7 @@ int StaticListSize( int classid,int varid ){
 		case TEXTURE_class :
 			switch (varid){
 				case TEXTURE_tex_list : return Texture::tex_list.size();
+				case TEXTURE_tex_list_all : return Texture::tex_list_all.size();
 			}
 			break;
 		case TERRAIN_class :
@@ -763,6 +765,14 @@ Texture* StaticIterListTexture( int classid,int varid,int &id ){
 			switch (varid){
 				case TEXTURE_tex_list :
 					for(it=Texture::tex_list.begin(); it!=Texture::tex_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
+				case TEXTURE_tex_list_all :
+					for(it=Texture::tex_list_all.begin(); it!=Texture::tex_list_all.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;
@@ -1427,6 +1437,14 @@ const char* TextureString( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_file : return obj->file.c_str();
 		case TEXTURE_file_abs : return obj->file_abs.c_str();
+	}
+	return NULL;
+}
+
+list<Texture*>* TextureListTexture( Texture* obj,int varid ){
+	switch (varid){
+		case TEXTURE_tex_list : return &obj->tex_list;
+		case TEXTURE_tex_list_all : return &obj->tex_list_all;
 	}
 	return NULL;
 }

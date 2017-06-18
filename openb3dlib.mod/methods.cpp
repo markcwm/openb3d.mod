@@ -453,8 +453,8 @@ Texture* TextureCopy( Texture* obj ){
 	return obj->Copy();
 }
 
-Texture* TexInList( Texture* obj ){
-	return obj->TexInList();
+Texture* TexInList( Texture* obj,list<Texture*>& list_ref ){
+	return obj->TexInList( list_ref );
 }
 
 void FilterFlags( Texture* obj ){

@@ -40,6 +40,7 @@
 #include <string.h>
 
 list<Texture*> Texture::tex_list;
+list<Texture*> Texture::tex_list_all;
 
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
 
@@ -87,13 +88,14 @@ Texture* Texture::LoadTexture(string filename,int flags){
 		tex->FilterFlags();
 
 		// check to see if texture with same properties exists already, if so return existing texture
-		Texture* old_tex=tex->TexInList();
-		if(old_tex){
+		Texture* old_tex=tex->TexInList(tex_list);
+		if(old_tex!=NULL){
 			delete tex;
 			return old_tex;
 		}else{
 			tex_list.push_back(tex);
 		}
+		tex_list_all.push_back(tex);
 
 		string filename_left=Left(filename,Len(filename)-4);
 		string filename_right=Right(filename,3);
@@ -167,13 +169,14 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	tex->FilterFlags();
 
 	// check to see if texture with same properties exists already, if so return existing texture
-	Texture* old_tex=tex->TexInList();
-	if(old_tex){
+	Texture* old_tex=tex->TexInList(tex_list);
+	if(old_tex!=NULL){
 		delete tex;
 		return old_tex;
 	}else{
 		tex_list.push_back(tex);
 	}
+	tex_list_all.push_back(tex);
 
 	string filename_left=Left(filename,Len(filename)-4);
 	string filename_right=Right(filename,3);
@@ -252,8 +255,14 @@ Texture* Texture::CreateTexture(int width,int height,int flags, int frames){
 }
 
 void Texture::FreeTexture(){
-	tex_list.remove(this);
-	delete this;
+	tex_list_all.remove(this);
+	Texture* tex=this->TexInList(tex_list);
+	Texture* tex_all=this->TexInList(tex_list_all);
+	if(tex!=NULL && tex_all==NULL){
+		tex_list.remove(this);
+		delete this;
+	}
+	glDeleteTextures (1, &texture);
 }
 
 void Texture::DrawTexture(int x,int y){
@@ -311,10 +320,10 @@ void Texture::AddTextureFilter(string text_match,int flags){
 	TextureFilter::tex_filter_list.push_back(filter);
 }
 
-Texture* Texture::TexInList(){
+Texture* Texture::TexInList(list<Texture*>& list_ref){
 	// check if tex already exists in list and if so return it
 	list<Texture*>::iterator it;
-	for(it=tex_list.begin();it!=tex_list.end();it++){
+	for(it=list_ref.begin();it!=list_ref.end();it++){
 		Texture* tex=*it;
 		if(file==tex->file && flags==tex->flags){// && blend==tex->blend){
 			//if(u_scale==tex->u_scale && v_scale==tex->v_scale && u_pos==tex->u_pos && v_pos==tex->v_pos && angle==tex->angle){

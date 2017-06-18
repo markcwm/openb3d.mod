@@ -33,10 +33,10 @@ ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
 
 ModuleInfo "History: 1.00 Initial Release"
 
-Import Openb3d.Openb3dlib	' imports PUB.Glew, PUB.OpenGL
+Import Openb3d.Openb3dlib
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
-Import Brl.Retro			' imports BRL.Basic
+Import Brl.Retro				' imports BRL.Basic
 Import Brl.Map
 
 ' functions.cpp

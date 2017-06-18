@@ -26,11 +26,14 @@ Type TTexture
 	'Field cube_pixmap:TPixmap[7]
 	'Field no_mipmaps:Int
 	
+	' extra
+	Global tex_list_all:TList=CreateList()
+	
 	' wrapper
 	Global tex_map:TMap=New TMap
 	Field instance:Byte Ptr
 	
-	Global tex_list_id:Int=0
+	Global tex_list_id:Int=0,tex_list_all_id:Int=0
 	Field exists:Int=0 ' FreeTexture
 	
 	Function CreateObject:TTexture( inst:Byte Ptr ) ' Create and map object from C++ instance
@@ -118,6 +121,13 @@ Type TTexture
 				tex_list_id=0
 				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list )-1
 					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local obj:TTexture=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				Next
+			Case tex_list_all
+				tex_list_all_id=0
+				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )-1
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list_all,Varptr(tex_list_all_id) )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -321,7 +331,8 @@ Type TTexture
 	' check if tex already exists in tex_list and if so return it
 	Method TexInList:TTexture()
 	
-		Local inst:Byte Ptr=TexInList_( GetInstance(Self) )
+		Local list_ref:Byte Ptr=TextureListTexture_( GetInstance(Self),TEXTURE_tex_list )
+		Local inst:Byte Ptr=TexInList_( GetInstance(Self),list_ref )
 		Return GetObject(inst) ' no CreateObject
 		
 	End Method
