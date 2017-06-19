@@ -95,6 +95,7 @@ Type TTexture
 		file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
 		
 		AddList_(tex_list)
+		AddList_(tex_list_all)
 		exists=1
 		
 	End Method
@@ -105,6 +106,12 @@ Type TTexture
 			Case tex_list
 				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list )
 					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local obj:TTexture=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+			Case tex_list_all
+				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_all_id) )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -191,8 +198,10 @@ Type TTexture
 	Method FreeTexture()
 	
 		If exists
+			For Local tex:TTexture=EachIn tex_list_all
+				If tex=Self Then ListRemove( tex_list_all,Self ) ; tex_list_all_id:-1
+			Next
 			ListRemove( tex_list,Self ) ; tex_list_id:-1
-			
 			FreeTexture_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
 			exists=0

@@ -38,6 +38,7 @@
 #include "shadow.h"
 
 #include <string.h>
+#include <stdio.h>
 
 list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
@@ -91,11 +92,12 @@ Texture* Texture::LoadTexture(string filename,int flags){
 		Texture* old_tex=tex->TexInList(tex_list);
 		if(old_tex!=NULL){
 			delete tex;
+			tex_list_all.push_back(old_tex);
 			return old_tex;
 		}else{
+			tex_list_all.push_back(tex);
 			tex_list.push_back(tex);
 		}
-		tex_list_all.push_back(tex);
 
 		string filename_left=Left(filename,Len(filename)-4);
 		string filename_right=Right(filename,3);
@@ -172,11 +174,12 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	Texture* old_tex=tex->TexInList(tex_list);
 	if(old_tex!=NULL){
 		delete tex;
+		tex_list_all.push_back(old_tex);
 		return old_tex;
 	}else{
+		tex_list_all.push_back(tex);
 		tex_list.push_back(tex);
 	}
-	tex_list_all.push_back(tex);
 
 	string filename_left=Left(filename,Len(filename)-4);
 	string filename_right=Right(filename,3);
@@ -258,6 +261,7 @@ void Texture::FreeTexture(){
 	tex_list_all.remove(this);
 	Texture* tex=this->TexInList(tex_list);
 	Texture* tex_all=this->TexInList(tex_list_all);
+	
 	if(tex!=NULL && tex_all==NULL){
 		tex_list.remove(this);
 		delete this;
