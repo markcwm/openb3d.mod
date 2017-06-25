@@ -1,4 +1,5 @@
-![alt text](https://raw.githubusercontent.com/markcwm/openb3d.mod/examples/media/openb3d_logo_512.png)
+
+<img src="examples/media/openb3d_logo_512.png" align="left" />
 
 BlitzMax wrapper for Openb3d library version 1.1, an OpenGL 2.0-capable 3d engine based on Minib3d which is itself based on Blitz3D. As a result the documentation mainly uses the online Blitz3d manual and help can be found at the www.blitzmax.com boards.
 
