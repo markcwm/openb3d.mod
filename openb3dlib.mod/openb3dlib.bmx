@@ -218,6 +218,8 @@ Extern
 	
 	' Action
 	Function ActionInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "ActionInt"
+	Function ActionFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "ActionFloat"
+	Function ActionEntity_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ActionEntity"
 	
 	' AnimationKeys
 	Function AnimationKeysInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysInt"
@@ -364,6 +366,15 @@ Const VOXELSPRITE_class:Int=	58 ' voxel.h
 ' Action varid
 Const ACTION_action_list:Int=	1
 Const ACTION_act:Int=			2
+Const ACTION_ent:Int=			3
+Const ACTION_target:Int=		4
+Const ACTION_rate:Int=			5
+Const ACTION_a:Int=				6
+Const ACTION_b:Int=				7
+Const ACTION_c:Int=				8
+Const ACTION_nextActions:Int=	9
+Const ACTION_delete_list:Int=	10
+Const ACTION_endact:Int=		11
 
 ' AnimationKeys varid
 Const ANIMATIONKEYS_frames:Int=	1

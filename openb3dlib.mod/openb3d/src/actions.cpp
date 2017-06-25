@@ -2,19 +2,21 @@
 #include "pivot.h"
 
 list<Action*> Action::action_list;
+list<Action*> Action::delete_list;
 
 void Action::Update(){
 	list<Action*>::iterator it;
-
+	
 	for(it=Action::action_list.begin();it!=Action::action_list.end();it++){
 		Action* act=*it;
-
+		
 		switch (act->act){
 		case ACT_COMPLETED:	{
 			//completed action
 			action_list.splice(action_list.end(),act->nextActions);
 			it=action_list.erase(it);
-			delete act;
+			delete_list.push_back(act);
+			if (act->endact==0) act->endact=1;
 			break;}
 		case ACT_MOVEBY:	{
 			//MoveBy
@@ -106,7 +108,6 @@ void Action::Update(){
 
 			act->ent->ScaleEntity(sx,sy,sz);
 
-
 			break;}
 		case ACT_FADETO:	{
 			//FadeTo
@@ -120,7 +121,7 @@ void Action::Update(){
 			float a=d/n*act->rate + act->ent->brush.alpha;
 
 			act->ent->EntityAlpha(a);
-
+			
 			break;}
 		case ACT_TINTTO:{
 			//TintTo
@@ -138,7 +139,6 @@ void Action::Update(){
 			float b=db/n*act->rate + act->ent->brush.blue*255.0;
 
 			act->ent->EntityColor(r,g,b);
-
 
 			break;}
 		case ACT_TRACK_BY_POINT:{
@@ -171,7 +171,7 @@ void Action::Update(){
 
 				act->ent->RotateEntity(p,y,r,true);
 			}
-
+			
 			break;}
 		case ACT_TRACK_BY_DISTANCE:{
 			//TrackByDistance
@@ -183,7 +183,7 @@ void Action::Update(){
 			if (n<act->rate) {
 				break;}
 			act->ent->MoveEntity(0,0,act->rate*d/n);
-
+			
 			break;}
 		case ACT_NEWTONIAN:{
 			
@@ -196,9 +196,11 @@ void Action::Update(){
 			act->c=act->ent->EntityZ(true);
 
 			act->ent->TranslateEntity(dx*act->rate,dy*act->rate,dz*act->rate,true);
-
+			
 			break;}
 		}
+		
+	if (act->endact) act->act=ACT_COMPLETED;
 	}
 }
 
@@ -211,6 +213,7 @@ Action* Action::AddAction(Entity* ent, int action, Entity* t, float a, float b, 
 	act->b=b;
 	act->c=c;
 	act->rate=rate;
+	act->endact=false;
 
 	action_list.push_back(act);
 	
@@ -225,5 +228,25 @@ void Action::AppendAction(Action* a){
 void Action::FreeAction(){
 	//The action will be removed at the first update; it cannot be erased immediately, because other actions might point at it
 	act=ACT_COMPLETED;
+	
+	Action* obj=this->ActInList(delete_list);
+	if(obj){
+		delete_list.remove(this);
+		delete this;
+	}
 }
 
+void Action::EndAction(){
+	// if end flag is 1 = automatically ended, 2 = manually ended
+	if (endact==0) endact=2;
+}
+
+Action* Action::ActInList(list<Action*>& list_ref){
+	// check if action already exists in list and if so return it
+	list<Action*>::iterator it;
+	for(it=list_ref.begin();it!=list_ref.end();it++){
+		Action* act=*it;
+		return act;
+	}
+	return NULL;
+}

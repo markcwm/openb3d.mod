@@ -32,6 +32,10 @@ public:
 
 	list<Action*> nextActions;
 	
+	// extra
+	static list<Action*> delete_list;
+	int endact;
+
 	static Action* AddAction(Entity* ent, int action, Entity* t, float a, float b, float c, float rate);
 	static Action* AddAction(Entity* ent, int action, float a, float b, float c, float rate){
 		return AddAction(ent, action, 0, a, b, c, rate);
@@ -42,6 +46,8 @@ public:
 	void AppendAction (Action* a);
 	void FreeAction ();
 	static void Update();
+	void EndAction();
+	Action* ActInList(list<Action*>& list_ref);
 };
 
 

@@ -1791,10 +1791,17 @@ Function AppendAction( act1:TAction,act2:TAction )
 End Function
 
 Rem
-bbdoc: Frees action from memory
+bbdoc: Frees action from memory when it has ended
 End Rem
 Function FreeAction( act:TAction )
 	act.FreeAction()
+End Function
+
+Rem
+bbdoc: Ends action so it can be freed, 1 = automatically ended, 2 = manually ended
+End Rem
+Function EndAction( act:TAction )
+	act.EndAction()
 End Function
 
 ' *** Constraint

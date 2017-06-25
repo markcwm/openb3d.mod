@@ -68,6 +68,15 @@ const int VOXELSPRITE_class=	58;
 // Action varid
 const int ACTION_action_list=	1;
 const int ACTION_act=			2;
+const int ACTION_ent=			3;
+const int ACTION_target=		4;
+const int ACTION_rate=			5;
+const int ACTION_a=				6;
+const int ACTION_b=				7;
+const int ACTION_c=				8;
+const int ACTION_nextActions=	9;
+const int ACTION_delete_list=	10;
+const int ACTION_endact=		11;
 
 // AnimationKeys varid
 const int ANIMATIONKEYS_frames=	1;
@@ -814,6 +823,25 @@ Light* StaticIterVectorLight( int classid,int varid,int &id ){
 int* ActionInt( Action* obj,int varid ){
 	switch (varid){
 		case ACTION_act : return &obj->act;
+		case ACTION_endact : return &obj->endact;
+	}
+	return NULL;
+}
+
+float* ActionFloat( Action* obj,int varid ){
+	switch (varid){
+		case ACTION_rate : return &obj->rate;
+		case ACTION_a : return &obj->a;
+		case ACTION_b : return &obj->b;
+		case ACTION_c : return &obj->c;
+	}
+	return NULL;
+}
+
+Entity* ActionEntity( Action* obj,int varid ){
+	switch (varid){
+		case ACTION_ent : return obj->ent;
+		case ACTION_target : return obj->target;
 	}
 	return NULL;
 }

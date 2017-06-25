@@ -2012,6 +2012,10 @@ void FreeAction(Action* act){
 	act->FreeAction();
 }
 
+void EndAction(Action* act){
+	act->EndAction();
+}
+
 void DepthBufferToTex( Texture* tex, Camera* cam=0 ){
 	tex->DepthBufferToTex(cam);
 }

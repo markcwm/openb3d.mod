@@ -297,6 +297,7 @@ Extern
 	Function ActNewtonian_:Byte Ptr( ent:Byte Ptr,rate:Float ) = "ActNewtonian"
 	Function AppendAction_( act1:Byte Ptr,act2:Byte Ptr ) = "AppendAction"
 	Function FreeAction_( act:Byte Ptr ) = "FreeAction"
+	Function EndAction_( act:Byte Ptr ) = "EndAction"
 	
 	' *** Constraint
 	Function CreateConstraint_:Byte Ptr( p1:Byte Ptr,p2:Byte Ptr,l:Float ) = "CreateConstraint"

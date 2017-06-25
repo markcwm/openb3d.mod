@@ -78,31 +78,52 @@ EntityColor moon2,64,64,64
 Local moon1_act1:TAction=ActTrackByDistance( moon1,cube4,3.0,0.2 ) ' just follow it arbitrarily
 Local moon2_act1:TAction=ActTrackByPoint( moon2,cube4,2.0,2,0,0.2 )' stay above and to the right
 
+Local freetime:Int=0
+
+
 While Not KeyDown(KEY_ESCAPE)
 
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
 	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
+	
+	
 	If KeyHit(KEY_SPACE)
 		For Local a:TAction=EachIn TAction.action_list
-			FreeAction(a)
+			EndAction(a)
+		Next
+		freetime=MilliSecs()
+	EndIf
+	
+	' wait a second for manually ended actions (2) to finish, or it can crash as it is still referenced for a while
+	If MilliSecs()-freetime>1000
+		freetime=0
+		For Local a:TAction=EachIn TAction.action_list
+			If a.endact[0]=2 Then FreeAction(a)
 		Next
 	EndIf
+	
+	' automatically ended actions (1) can be freed immediately
+	For Local a:TAction=EachIn TAction.action_list
+		If a.endact[0]=1 Then FreeAction(a)
+	Next
 	
 	UpdateWorld 1 ' update actions
 	RenderWorld
 	
 	BeginMax2D()
+	DrawText "Space: manually end all actions, freetime="+Int(MilliSecs()-freetime),0,0
 	DrawText "Exploder",50,550
 	DrawText "Bouncer",300,550
 	DrawText "Pusher",450,550
 	DrawText "Orbiter with followers",600,550
-	DrawText "Actions:",0,0
 	
-	Local ty:Int=20
+	Local ty:Int=40
+	Local id:Int=0
 	For Local a:TAction=EachIn TAction.action_list
-		If a.exists And a.act[0]>=0 And a.act[0]<=11 Then DrawText "inst="+Int(TAction.getinstance(a))+" act="+a.act[0],0,ty
+		id:+1
+		If a.exists Then DrawText "id="+id+" inst="+Int(TAction.getinstance(a))+" act="+a.act[0],0,ty
 		ty:+20
 	Next
 	EndMax2D()

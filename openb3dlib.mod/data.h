@@ -30,6 +30,8 @@ Light* StaticIterVectorLight( int classid,int varid,int &id );
 
 // Action
 int* ActionInt( Action* obj,int varid );
+float* ActionFloat( Action* obj,int varid );
+Entity* ActionEntity( Action* obj,int varid );
 
 // AnimationKeys
 int* AnimationKeysInt( AnimationKeys* obj,int varid );

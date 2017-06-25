@@ -22,13 +22,14 @@ Type TAction
 
 	Field act:Int Ptr
 	
-	'Field ent:TEntity
-	'Field target:TEntity ' Optional, target entity for some actions
+	Field ent:TEntity
+	Field target:TEntity ' Optional, target entity for some actions
 	
-	'Field rate:Float Ptr
-	'Field a:Float Ptr,b:Float Ptr,c:Float Ptr
+	Field rate:Float Ptr
+	Field a:Float Ptr,b:Float Ptr,c:Float Ptr
 	
-	'Field nextActions:TList=CreateList() ' Action list
+	' extra
+	Field endact:Int Ptr
 	
 	' wrapper
 	Global action_map:TMap=New TMap
@@ -71,6 +72,19 @@ Type TAction
 	
 		' int
 		act=ActionInt_( GetInstance(Self),ACTION_act )
+		endact=ActionInt_( GetInstance(Self),ACTION_endact )
+		
+		' float
+		rate=ActionFloat_( GetInstance(Self),ACTION_rate )
+		a=ActionFloat_( GetInstance(Self),ACTION_a )
+		b=ActionFloat_( GetInstance(Self),ACTION_b )
+		c=ActionFloat_( GetInstance(Self),ACTION_c )
+		
+		' entity
+		Local inst:Byte Ptr=ActionEntity_( GetInstance(Self),ACTION_ent )
+		ent=TEntity.GetObject(inst) ' no CreateObject
+		inst=ActionEntity_( GetInstance(Self),ACTION_target )
+		target=TEntity.GetObject(inst)
 		
 		AddList_(action_list)
 		exists=1
@@ -116,13 +130,19 @@ Type TAction
 	
 	Method FreeAction()
 	
-		If exists
+		If exists And act[0]=0
 			ListRemove( action_list,Self ) ; action_list_id:-1
 			
-			FreeObject( GetInstance(Self) )
 			FreeAction_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
 			exists=0
 		EndIf
+		
+	End Method
+	
+	Method EndAction()
+	
+		EndAction_( GetInstance(Self) )
 		
 	End Method
 	
