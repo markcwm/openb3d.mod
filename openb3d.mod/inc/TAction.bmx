@@ -29,7 +29,7 @@ Type TAction
 	Field a:Float Ptr,b:Float Ptr,c:Float Ptr
 	
 	' extra
-	Field endact:Int Ptr
+	Field endact:Int Ptr,active:Int Ptr
 	
 	' wrapper
 	Global action_map:TMap=New TMap
@@ -73,6 +73,7 @@ Type TAction
 		' int
 		act=ActionInt_( GetInstance(Self),ACTION_act )
 		endact=ActionInt_( GetInstance(Self),ACTION_endact )
+		active=ActionInt_( GetInstance(Self),ACTION_active )
 		
 		' float
 		rate=ActionFloat_( GetInstance(Self),ACTION_rate )

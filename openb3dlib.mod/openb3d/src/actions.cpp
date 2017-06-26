@@ -9,6 +9,7 @@ void Action::Update(){
 	
 	for(it=Action::action_list.begin();it!=Action::action_list.end();it++){
 		Action* act=*it;
+		act->active++;
 		
 		switch (act->act){
 		case ACT_COMPLETED:	{
@@ -17,6 +18,7 @@ void Action::Update(){
 			it=action_list.erase(it);
 			delete_list.push_back(act);
 			if (act->endact==0) act->endact=1;
+			act->active=0;
 			break;}
 		case ACT_MOVEBY:	{
 			//MoveBy
@@ -213,7 +215,8 @@ Action* Action::AddAction(Entity* ent, int action, Entity* t, float a, float b, 
 	act->b=b;
 	act->c=c;
 	act->rate=rate;
-	act->endact=false;
+	act->endact=0;
+	act->active=0;
 
 	action_list.push_back(act);
 	
