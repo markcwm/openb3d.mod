@@ -608,5 +608,22 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+?bmxng
+	' Operator overloading in bmx-ng allows adding/subtracting meshes,
+	' eg. "mesh3 = mesh1 + mesh2" to produce new mesh with CSG operations
+	
+	Const CSG_SUBTRACT:Int	= 0 ' Method 0 subtracts mesh2 from mesh1
+	Const CSG_ADD:Int		= 1 ' Method 1 adds meshes
+	Const CSG_INTERSECT:Int	= 2 ' Method 2 intersects meshes
+
+	Method Operator+:TMesh (add_mesh:TMesh)
+		Return MeshCSG (Self, add_mesh, CSG_ADD)
+	End Method
+
+	Method Operator-:TMesh (add_mesh:TMesh)
+		Return MeshCSG (Self, add_mesh, CSG_SUBTRACT)
+	End Method
+?
+
 End Type
 

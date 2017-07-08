@@ -42,6 +42,7 @@ void MQ_GetInvMatrix( Entity* obj,Matrix &mat0 );
 void MQ_GetMatrix( Entity* obj,Matrix &mat3 );
 void MQ_GetScaleXYZ( Entity* obj,float &width,float &height,float &depth );
 void MQ_Turn( Entity* obj,float ang,float vx,float vy,float vz,int glob );
+void MQ_ApplyNewtonTransform( Entity* obj,const float* newtonMatrix );
 //void UpdateAllEntities( void(Update)(Entity* ent,Entity* ent2),Entity* ent2=NULL );
 
 // Global

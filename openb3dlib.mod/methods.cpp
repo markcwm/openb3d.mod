@@ -141,6 +141,10 @@ void MQ_Turn( Entity* obj,float ang,float vx,float vy,float vz,int glob ){
 	obj->MQ_Turn( ang,vx,vy,vz,glob );
 }
 
+void MQ_ApplyNewtonTransform( Entity* obj,const float* newtonMatrix ){
+	obj->MQ_ApplyNewtonTransform( newtonMatrix );
+}
+
 // Global
 
 void UpdateEntityAnim( Mesh& mesh ){

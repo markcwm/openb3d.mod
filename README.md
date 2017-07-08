@@ -1,16 +1,16 @@
 
 <img src="examples/media/openb3d_logo_512.png" align="left" />
 
-BlitzMax wrapper for Openb3d library version 1.1, an OpenGL 2.0-capable 3d engine based on Minib3d which is itself based on Blitz3D. As a result the documentation mainly uses the online Blitz3d manual and help can be found at the www.blitzmax.com boards.
+Openb3d library wrapper v1.12 for BlitzMax, an OpenGL 2.0+ 3d engine based on Minib3d which was based on Blitz3D. As a result the documentation partly uses the online Blitz3d manual. Help can be found at the SyntaxBomb <a href="http://www.syntaxbomb.com/index.php/board,20.0.html">MiniB3d board</a>.
 
-The wrapper is object-oriented and also has a procedural interface like Blitz3D, so syntax is not identical but the types are documented and are the same as in Minib3d. The Max2D module is used for 2d-in-3d rendering which replaces the core of the 2d language set in Blitz3d, other modules such as Brl.Math cover the rest. The coordinate system is flipped from the OpenGL orientation to be like Blitz3d so porting code will be easier. Image loading is done by the STB image library instead of Brl image loaders so Pixmaps are not used in textures. Also, Quaternions are used instead of Eulers which prevents gimbal lock.
+The wrapper is object-oriented but has a procedural interface like Blitz3D, syntax is not identical but the types are documented and are the same as Minib3d. Max2D is used for 2d-in-3d rendering which replaces the core of the 2d language in Blitz3d, other modules like Brl.Math cover most of the rest. The coordinate system is flipped from OpenGL orientation to be like Blitz3d so porting code is easier. Image loading is done internally by the STB image library instead of Brl image loaders so Pixmaps are not used in textures. Quaternions are used instead of Eulers which prevents gimbal lock.
 
-Several examples are included for testing and extra features include: particles, stencil tests for shadows and clipping, terrains, B3D and MD2 animation, shaders with post processing.
+Many examples are available for testing and extra features include: shaders, stencils for shadows and mirrors, terrains, MD2 animation, particles.
 
 Status
 ======
 
-After a year-long break from coding I have returned to work on this wrapper in my spare time. I left this project with a broken latest version which was due to a failed attempt to move to GLES. It has now been reverted to desktop/GL only and will probably stay that way since I am not familiar with GLES. I do intend for it to be compatible with BlitzMax NG, the current version it works with is 0.77. Updates should be small but fairly frequent.
+After a year off from coding I decided to return to work on this wrapper in my spare time. I left it in a sort-of broken state due to a failed attempt to move to GLES. It is now desktop/GL-only again but since Angros has a working GLES version I will attempt to add Android support using NG. It should work with the latest NG source and if not then try the latest release (currently v0.87). Updates should be fairly frequent.
 
 License
 =======

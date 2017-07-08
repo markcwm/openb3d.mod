@@ -1450,6 +1450,93 @@ void Entity::MQ_GetScaleXYZ(float &width, float &height, float &depth){
 
 }
 
+void Entity::MQ_ApplyNewtonTransform( const float* newtonMatrix ){
+	
+		/* Overwrite the entity matrix with 'inputMatrix' from Newton.
+		 * Hopefully this works straight away. */
+
+		memcpy( mat.grid, newtonMatrix, 64 );
+		
+		//mat.Overwrite( inputMatrix );
+		//memcpy( mat.grid, &inputMatrix, 64 );
+		
+		/* Update the px,py,pz and sx,sy,sz and rotmat properties.
+		 * We shouldn't use the PositionEntity etc. functions because they call
+		 * for MQ_Update() and it could mess with this overwriting process. */
+		
+		/* px, py, pz.
+		 * These seem to be the local position of the entity, in other words
+		 * the position of the entity considering its parent as the origin. */
+		
+		float tempPX, tempPY, tempPZ;
+		tempPX = mat.grid[3][0];
+		tempPY = mat.grid[3][1];
+		tempPZ = mat.grid[3][2];
+		if ( parent != NULL )
+			parent->mat.TransformVec( tempPX, tempPY, tempPZ, 1 ); // Taken from TFormPoint.
+		px	= tempPX;
+		py	= tempPY;
+		pz	= -tempPZ; // Not sure if the Z flipping is necessary, need to test.
+
+// ----------------------------------------------------------------------------
+// Not needed? Possibly need to re-enable for scaling entities... no FPS change
+// ----------------------------------------------------------------------------
+
+		/* sx, sy, sz.
+		 * Code taken from MQ_GetScaleXYZ.
+		 * Maybe it's not even necessary to retrieve these, since the scale
+		 * of the entity is not expected to change during the game\simulation.
+		 * Later, test commenting this part and seeing if it still works. */
+
+/*
+		float xx=1.0, xy=0.0, xz=0.0;
+		float yx=0.0, yy=1.0, yz=0.0;
+		float zx=0.0, zy=0.0, zz=1.0;
+
+		mat.TransformVec(xx,xy,xz);
+		mat.TransformVec(yx,yy,yz);
+		mat.TransformVec(zx,zy,zz);
+
+		sx = sqrt((xx*xx)+(xy*xy)+(xz*xz));
+		sy = sqrt((yx*yx)+(yy*yy)+(yz*yz));
+		sz = sqrt((zx*zx)+(zy*zy)+(zz*zz));
+*/
+		
+		/* rotmat.
+		 * It seems to be a Matrix object with just rotation vectors (no scale).
+		 * Since we know the scale of the vectors from the previous step we can
+		 * divide the rotation vectors by that to get clean 1.0 length vectors, but
+		 * this might introduce some imprecision. 		
+		 * This part should work even if you comment the previous one out. */
+	
+/*
+		// Pitch (X vector).
+		if ( sx != 0.0 )
+		{
+			rotmat.grid[0][0] = mat.grid[0][0] / sx;
+			rotmat.grid[0][1] = mat.grid[0][1] / sx;
+			rotmat.grid[0][2] = mat.grid[0][2] / sx;
+		}
+		// Yaw (Y vector).
+		if ( sy != 0.0 )
+		{
+			rotmat.grid[1][0] = mat.grid[1][0] / sy;
+			rotmat.grid[1][1] = mat.grid[1][1] / sy;
+			rotmat.grid[1][2] = mat.grid[1][2] / sy;
+		}
+		// Roll (Z vector).
+		if ( sz != 0.0 )
+		{
+			rotmat.grid[2][0] = mat.grid[2][0] / sz;
+			rotmat.grid[2][1] = mat.grid[2][1] / sz;
+			rotmat.grid[2][2] = mat.grid[2][2] / sz;
+		}
+*/
+
+// ----------------------------------------------------------------------------
+
+}
+
 void Entity::MQ_Update(){
 	MQ_GetMatrix(mat);
 

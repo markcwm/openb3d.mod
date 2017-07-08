@@ -44,7 +44,7 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">O
 about: The flags argument sets the graphics buffers (back, alpha, depth, stencil and accum). 
 Set usecanvas to true if using maxgui with a canvas context.
 End Rem
-Function Graphics3D( w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1,usecanvas:Int=False )
+Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanvas%=False )
 
 	Select flags ' back=2|alpha=4|depth=8|stencil=16|accum=32
 		Case -1 ' all
@@ -64,24 +64,30 @@ Function Graphics3D( w:Int,h:Int,d:Int=0,m:Int=0,r:Int=60,flags:Int=-1,usecanvas
 	End Select
 	
 	TGlobal.InitGlobals()
-	TGlobal.width[0]=w
-	TGlobal.height[0]=h
-	TGlobal.depth[0]=d
-	TGlobal.Mode[0]=m
-	TGlobal.rate[0]=r
+	TGlobal.width[0]=width
+	TGlobal.height[0]=height
+	TGlobal.depth[0]=depth
+	TGlobal.mode[0]=mode
+	TGlobal.rate[0]=rate
+	
+	If mode=1 Then depth=0 ' force windowed
+	If mode=2 Then depth=DesktopDepth() ' force fullscreen
+?linux
+	If width=DesktopWidth() And height=DesktopHeight() Then depth=0 ' avoid fullscreen exit random crashes
+?
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
-	If usecanvas=False Then TGlobal.gfx=Graphics( w,h,d,r,flags ) ' gfx context
+	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
 	
 	TGlobal.GraphicsInit()
-	Graphics3D_( w,h,d,m,r )
+	Graphics3D_( width,height,depth,mode,rate )
 	
 End Function
 
 Rem
 bbdoc: Draw text, doesn't need Max2D.
 EndRem
-Function Text( x:Int,y:Int,Text:String )
+Function Text( x%,y%,txt$ )
 
 	' set active texture to texture 0 so gldrawtext will work correctly
 	If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
@@ -95,7 +101,7 @@ Function Text( x:Int,y:Int,Text:String )
 	
 	' enable blend to hide text background
 	glEnable(GL_BLEND)
-	GLDrawText Text,x,y
+	GLDrawText txt,x,y
 	
 	glDisable(GL_BLEND)
 	glEnable(GL_LIGHTING)

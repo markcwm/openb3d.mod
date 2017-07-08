@@ -164,7 +164,7 @@ Extern
 	Function GetParentEntity_:Byte Ptr( ent:Byte Ptr ) = "GetParentEntity"
 	Function GetSurface_:Byte Ptr( mesh:Byte Ptr,surf_no:Int ) = "GetSurface"
 	Function GetSurfaceBrush_:Byte Ptr( surf:Byte Ptr ) = "GetSurfaceBrush"	
-	Function Graphics3D_( width:Int,height:Int,depth:Int,Mode:Int,rate:Int ) = "Graphics3D"
+	Function Graphics3D_( width:Int,height:Int,depth:Int,mode:Int,rate:Int ) = "Graphics3D"
 	Function HandleSprite_( sprite:Byte Ptr,h_x:Float,h_y:Float ) = "HandleSprite"
 	Function HideEntity_( ent:Byte Ptr ) = "HideEntity"
 	Function LightColor_( light:Byte Ptr,red:Float,green:Float,blue:Float ) = "LightColor"

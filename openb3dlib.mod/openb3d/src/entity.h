@@ -271,6 +271,7 @@ public:
 	void MQ_GetMatrix(Matrix &mat3);
 	void MQ_GetScaleXYZ(float &width, float &height, float &depth);
 	void MQ_Turn( float ang, float vx, float vy, float vz, int glob=false);
+	void MQ_ApplyNewtonTransform( const float* newtonMatrix );
 	// virtual
 	virtual void Update() {};
 	virtual void Render() {};

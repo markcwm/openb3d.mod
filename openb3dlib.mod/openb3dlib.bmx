@@ -104,6 +104,7 @@ Extern
 	Function MQ_GetMatrix_( obj:Byte Ptr,mat3:Byte Ptr ) = "MQ_GetMatrix"
 	Function MQ_GetScaleXYZ_( obj:Byte Ptr,width:Float Ptr,height:Float Ptr,depth:Float Ptr ) = "MQ_GetScaleXYZ"
 	Function MQ_Turn_( obj:Byte Ptr,ang:Float,vx:Float,vy:Float,vz:Float,glob:Int ) = "MQ_Turn"
+	Function MQ_ApplyNewtonTransform_:Int( obj:Byte Ptr,newtonMatrix:Byte Ptr ) = "MQ_ApplyNewtonTransform"
 	
 	' Matrix2
 	Function MatrixLoadIdentity_( obj:Byte Ptr ) = "MatrixLoadIdentity"
