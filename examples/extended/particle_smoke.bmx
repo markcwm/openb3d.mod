@@ -6,7 +6,7 @@ Strict
 Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
-Graphics3D 800, 600, 0, 2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 ClearTextureFilters
 SeedRnd MilliSecs()
 
@@ -81,7 +81,7 @@ While Not KeyHit(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
 	
 	Flip
 	GCCollect

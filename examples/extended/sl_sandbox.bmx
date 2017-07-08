@@ -4,9 +4,13 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+?Not bmxng
 Import Brl.Timer
+?bmxng
+Import Brl.TimerDefault
+?
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -53,8 +57,8 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"Left/Right: turn cube, time = "+time
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"Left/Right: turn cube, time = "+time
 	
 	Flip
 

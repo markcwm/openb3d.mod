@@ -292,4 +292,31 @@ Type TGlobal
 	End Function
 	EndRem
 	
+	Function CheckFramebufferStatus( target% )
+	
+		Local status:Int=glCheckFramebufferStatusEXT(target) ' check for framebuffer errors
+		
+		Select status
+			Case GL_FRAMEBUFFER_COMPLETE_EXT
+				DebugLog "FBO created"
+			Case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT
+				DebugLog "Incomplete attachment"
+			Case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT
+				DebugLog "Missing attachment"
+			Case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
+				DebugLog "Incomplete dimensions"
+			Case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
+				DebugLog "Incomplete formats"
+			Case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT
+				DebugLog "Incomplete draw buffer"
+			Case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT
+				DebugLog "Incomplete read buffer"
+			Case GL_FRAMEBUFFER_UNSUPPORTED_EXT
+				DebugLog "Type is not Supported"
+			Default
+				DebugLog "FBO unsuccessful: "+status
+		EndSelect
+		
+	End Function
+	
 End Type

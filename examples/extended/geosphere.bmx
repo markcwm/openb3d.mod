@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -63,8 +63,8 @@ While Not KeyDown(KEY_ESCAPE)
 	UpdateWorld 1
 	RenderWorld
 	
-	Text 0,0,"A/Z: zoom, Arrows: move camera, Space: spin geo, W: wireframe"
-	Text 0,20,"x = "+EntityX(camera)+" y = "+EntityY(camera)+" z = "+EntityZ(camera)
+	Text 0,20,"A/Z: zoom, Arrows: move camera, Space: spin geo, W: wireframe"
+	Text 0,40,"x = "+EntityX(camera)+" y = "+EntityY(camera)+" z = "+EntityZ(camera)
 
 	Flip
 

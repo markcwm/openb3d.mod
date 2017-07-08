@@ -5,7 +5,7 @@ Strict
 
 Framework openb3d.B3dglgraphics
 
-Graphics3D(800, 600, 0, 2)
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera = CreateCamera()
@@ -81,7 +81,7 @@ While Not KeyDown(KEY_ESCAPE)
 		RenderWorld
 	EndIf
 	
-	Text 0,0,"M: multipass mode, Memory: "+GCMemAlloced()
+	Text 0,20,"M: multipass mode, Memory: "+GCMemAlloced()
 	
 	Flip(1)
 	GCCollect

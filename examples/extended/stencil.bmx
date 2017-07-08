@@ -5,7 +5,7 @@ Framework Openb3d.B3dglgraphics
 
 Strict
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local cam:TCamera=CreateCamera()
@@ -141,8 +141,8 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Text 0,20,"WSAD: move camera, Arrows: rotate camera, Plus/Minus: move ball, M: stencil mode = "+stmode
+	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,40,"WSAD: move camera, Arrows: rotate camera, Plus/Minus: move ball, M: stencil mode = "+stmode
 		
 	' enable reflections, don't clear camera buffers so we can draw over rest of the scene
 	If stmode=1

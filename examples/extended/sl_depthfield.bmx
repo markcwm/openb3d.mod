@@ -6,7 +6,7 @@ Strict
 Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
-Local width%=800,height%=600
+Local width%=DesktopWidth(),height%=DesktopHeight()
 Graphics3D width,height
 
 
@@ -61,27 +61,7 @@ ScaleTexture depthtex,1.0,-1.0
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
 DepthBufferToTex depthtex,camera
-Local status:Int=glCheckFramebufferStatusEXT(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
-Select status
-	Case GL_FRAMEBUFFER_COMPLETE_EXT
-		DebugLog "FBO created"
-	Case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT
-	  	DebugLog "Incomplete attachment"
-	Case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT
-	  	DebugLog "Missing attachment"
-	Case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
-	  	DebugLog "Incomplete dimensions"
-	Case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
-	  	DebugLog "Incomplete formats"
-	Case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT
-	 	DebugLog "Incomplete draw buffer"
-	Case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT
-	  	DebugLog "Incomplete read buffer"
-	Case GL_FRAMEBUFFER_UNSUPPORTED_EXT
-		DebugLog "Type is not Supported"
-	Default
-		DebugLog "FBO unsuccessful: "+status
-EndSelect
+TGlobal.CheckFramebufferStatus(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
 
 ' screen sprite - by BlitzSupport
 Global screensprite:TSprite=CreateSprite()
@@ -144,8 +124,8 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"Space: postprocess = "+postprocess+", +/-: blursize = "+blursize
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"Space: postprocess = "+postprocess+", +/-: blursize = "+blursize
 	
 	Flip
 

@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -105,13 +105,13 @@ While Not KeyDown(KEY_ESCAPE)
 	RenderWorld
 	
 	BeginMax2D()
-	DrawText "Space: manually end all actions",0,0
-	DrawText "Exploder",50,550
-	DrawText "Bouncer",300,550
-	DrawText "Pusher",450,550
-	DrawText "Orbiter with followers",600,550
+	DrawText "Space: manually end all actions",0,20
+	DrawText "Exploder",DesktopWidth()*0.1,DesktopHeight()-50
+	DrawText "Bouncer",DesktopWidth()*0.35,DesktopHeight()-50
+	DrawText "Pusher",DesktopWidth()*0.6,DesktopHeight()-50
+	DrawText "Orbiter with followers",DesktopWidth()*0.75,DesktopHeight()-50
 	
-	Local ty:Int=40
+	Local ty:Int=60
 	Local id:Int=0
 	For Local a:TAction=EachIn TAction.action_list
 		id:+1

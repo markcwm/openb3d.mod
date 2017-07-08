@@ -4,9 +4,13 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+?Not bmxng
 Import Brl.Timer
+?bmxng
+Import Brl.TimerDefault
+?
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -249,10 +253,10 @@ While Not KeyDown(KEY_ESCAPE)
 		HideEntity camelcopy
 	EndIf
 	
-	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Text 0,20,"WSAD and Arrows: move camera, Space: wireframe"
-	Text 0,40,"B: blending = "+blendmode+", P: pixel light = "+pixellight+", M: stencil mode = "+stmode
-	Text 0,60,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", I/K: waveLength = "+waveLength
+	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,40,"WSAD and Arrows: move camera, Space: wireframe"
+	Text 0,60,"B: blending = "+blendmode+", P: pixel light = "+pixellight+", M: stencil mode = "+stmode
+	Text 0,80,"Y/H: waveWidth = "+waveWidth+", U/J: waveHeight = "+waveHeight+", I/K: waveLength = "+waveLength
 	
 	Flip
 	GCCollect

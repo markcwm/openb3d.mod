@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local cpivot:TPivot=CreatePivot()
@@ -207,12 +207,12 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Text 0,20,"WSAD: move camera, B: bumpmap mode = "+bumpmode+", L: light mode = "+lightmode
-	Text 0,40,"M: Max2d mode, P: debug light parameters"
+	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,40,"WSAD: move camera, B: bumpmap mode = "+bumpmode+", L: light mode = "+lightmode
+	Text 0,60,"M: Max2d mode, P: debug light parameters"
 	
 	If debuglight
-		DebugLightValues( 80,1 ) ' ypos,light_no
+		DebugLightValues( 100,1 ) ' ypos,light_no
 	EndIf
 	
 	If max2dmode

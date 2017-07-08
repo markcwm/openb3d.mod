@@ -6,7 +6,7 @@ Strict
 Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -254,15 +254,15 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"Arrows: move camera, L: light movement, C: cube/cylinder movement"
-	Text 0,40,"R: reset static shadows, 1/2: hide lights, light mode = "+lightmode
-	Text 0,60,"M: Max2d mode, Q: hide alpha quad, A: anim mode = "+animmode
-	Text 0,80,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"Arrows: move camera, L: light movement, C: cube/cylinder movement"
+	Text 0,60,"R: reset static shadows, 1/2: hide lights, light mode = "+lightmode
+	Text 0,80,"M: Max2d mode, Q: hide alpha quad, A: anim mode = "+animmode
+	Text 0,100,"camera position = "+EntityX(camera)+" "+EntityY(camera)+" "+EntityZ(camera)
 	
 	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,100
+		DrawText "Testing Max2d",0,120
 		EndMax2D()
 	EndIf
 	

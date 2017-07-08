@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 ' Creating by data file
 Incbin "../shaders/vertcolor.frag.glsl"
@@ -35,7 +35,7 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cube,0,0.5,-0.1
 	
 	RenderWorld
-	Text 0,0,"Space: change shader = "+cs
+	Text 0,20,"Space: change shader = "+cs
 	Flip
 
 Wend

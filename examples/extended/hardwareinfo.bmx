@@ -4,7 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=320,height%=240,depth%=0,hertz%=60
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,hertz%=60
 
 SetGraphicsDriver GLMax2DDriver() ' needed before init in Windows
 

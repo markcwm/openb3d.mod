@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -48,7 +48,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"lighttype = "+lighttype+", P: pixellight = "+pixellight
+	Text 0,20,"lighttype = "+lighttype+", P: pixellight = "+pixellight
 	
 	Flip
 

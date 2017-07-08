@@ -5,7 +5,7 @@ Strict
 Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
-Graphics3D 800,600
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 ClearTextureFilters
@@ -88,7 +88,7 @@ While Not KeyHit(KEY_ESCAPE)
 	UpdateWorld ' update particles
 	RenderWorld
 	
-	Text 0,0,"WSAD/Arrows: move camera, NM: rotate emitter"
+	Text 0,20,"WSAD/Arrows: move camera, NM: rotate emitter"
 	
 	Flip
 Wend

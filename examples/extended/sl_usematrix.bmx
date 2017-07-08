@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -41,9 +41,9 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"If less than 5m from camera teapot should be color green otherwise grey"
-	Text 0,20,"M: use camera matrix, Up/Down: move teapot, W/S: move camera"
-	Text 0,40,"Distance: "+Abs(EntityZ(teapot)-EntityZ(camera))
+	Text 0,20,"If less than 5m from camera teapot should be color green otherwise grey"
+	Text 0,40,"M: use camera matrix, Up/Down: move teapot, W/S: move camera"
+	Text 0,60,"Distance: "+Abs(EntityZ(teapot)-EntityZ(camera))
 	
 	Flip
 

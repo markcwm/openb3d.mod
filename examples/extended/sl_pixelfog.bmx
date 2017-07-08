@@ -5,7 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Local camera:TCamera=CreateCamera()
@@ -83,12 +83,12 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"WSAD: move camera, Arrows: turn spheres, M: Max2d mode = "+max2dmode+", F: fog mode = "+fogmode
-	Text 0,20,"density="+density
+	Text 0,20,"WSAD: move camera, Arrows: turn spheres, M: Max2d mode = "+max2dmode+", F: fog mode = "+fogmode
+	Text 0,40,"density="+density
 	
 	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,40
+		DrawText "Testing Max2d",0,60
 		EndMax2D()
 	EndIf
 	
