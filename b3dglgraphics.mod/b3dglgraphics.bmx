@@ -63,18 +63,32 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 			flags=GRAPHICS_BACKBUFFER
 	End Select
 	
+	' change depth values so Graphics3D will behave in the same way as Blitz3D
+	Select mode
+		Case 0 ' 0: windowed in debug mode, fullscreen in non-debug mode 
+		?debug
+			depth=0
+		?
+		?Not debug
+			If depth=0 Then depth=DesktopDepth()
+		?
+		Case 1 ' 1: fullscreen always
+			If depth=0 Then depth=DesktopDepth()
+		Case 2 ' 2: windowed always
+			depth=0
+		Default
+			depth=0
+	End Select
+?linux ' prevent fullscreen if in desktop resolution due to random hangs when exiting (ubuntu)
+	If width=DesktopWidth() And height=DesktopHeight() Then depth=0
+?
+
 	TGlobal.InitGlobals()
 	TGlobal.width[0]=width
 	TGlobal.height[0]=height
 	TGlobal.depth[0]=depth
 	TGlobal.mode[0]=mode
 	TGlobal.rate[0]=rate
-	
-	If mode=1 Then depth=0 ' force windowed
-	If mode=2 Then depth=DesktopDepth() ' force fullscreen
-?linux
-	If width=DesktopWidth() And height=DesktopHeight() Then depth=0 ' avoid fullscreen exit random crashes
-?
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
