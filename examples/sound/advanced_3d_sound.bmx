@@ -3,7 +3,7 @@
 SuperStrict
 
 Framework Openb3d.B3dglgraphics
-Import Openb3dMods.B3dsound
+Import Openb3dSrc.B3dsound
 ?Not Win32
 Import Brl.FreeAudioAudio
 ?Win32
