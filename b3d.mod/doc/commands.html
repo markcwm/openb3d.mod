@@ -1,0 +1,62 @@
+<html><head><title> reference</title>
+<link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
+</head><body>
+<table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
+<td class=small width=1%><b>b3d.b3d:</b></td>
+<td class=small width=1%><a href=#functions class=small>Functions</a></td>
+<td class=small width=1%><a href=#types class=small>Types</a></td>
+<td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
+<td class=small width=1%><a href='../../../../mod/b3d.mod/b3d.mod/b3d.bmx' class=small>Source</a></td>
+<td class=small>&nbsp;</td></tr></table>
+<h1></h1>
+<h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#GetMeshLoader>GetMeshLoader</a></td><td class=docright>
+Returns a mesh loader capable of loading <b>extension</b>.
+</td></tr>
+</table>
+<h2><a name=types></a>Types Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#TMeshLoader>TMeshLoader</a></td><td class=docright>
+&nbsp;
+</td></tr>
+</table>
+<h2
+ id=functionsdet>Functions
+</h2>
+<table class=doc width=100% cellspacing=3 id=GetMeshLoader>
+<tr><td class=doctop colspan=2>Function GetMeshLoader:TMeshLoader(extension:String)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a mesh loader capable of loading <b>extension</b>.</td></tr>
+</table>
+<br>
+<h2
+ id=typesdet>Types
+</h2>
+<table class=doc width=100% cellspacing=3 id=TMeshLoader>
+<tr><td class=doctop colspan=2>Type TMeshLoader</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMeshLoader_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
+Call animated mesh loader implementation.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
+Call mesh loader implementation.
+</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
+<tr><td class=doctop colspan=2>Method LoadAnimMesh:Object(obj:Object, parent:Object = Null) Abstract</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Call animated mesh loader implementation.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright><b>obj</b> could be filename (string) or perhaps TStream, if implementation supports it.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=LoadMesh>
+<tr><td class=doctop colspan=2>Method LoadMesh:Object(obj:Object, parent:Object = Null) Abstract</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Call mesh loader implementation.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright><b>obj</b> could be filename (string) or perhaps TStream, if implementation supports it.</td></tr>
+</table>
+<br>
+<h2 id=modinfo>Module Information</h2>
+<table width=100%>
+<tr><th width=1%>Version</th><td>1.00</td></tr>
+<tr><th width=1%>License</th><td>BSD</td></tr>
+<tr><th width=1%>Copyright</th><td>2015 Bruce A Henderson. All rights reserved</td></tr>
+<tr><th width=1%>History</th><td>1.00</td></tr>
+<tr><th width=1%>History</th><td>Initial Release.</td></tr>
+</body></html>

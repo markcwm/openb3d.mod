@@ -38,6 +38,7 @@ Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import Brl.Retro				' imports BRL.Basic
 Import Brl.Map
+Import B3d.B3d
 
 ' functions.cpp
 Extern

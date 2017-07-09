@@ -44,14 +44,24 @@ ModuleInfo "History: 0.8 Initial Release"
 ModuleInfo "History: Commit on 22 Oct 2014"
 
 ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
-ModuleInfo "CC_OPTS: -UGLES2"
+'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip() replaced by ResourceFilePath()
 
-?Win32
+?win32
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
-?
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
+?macos
+Import Pub.Glew
+Import Pub.OpenGL
+?linux
+Import Pub.Glew
+Import Pub.OpenGL
+?opengles
+ModuleInfo "CC_OPTS: -UGLES2"
+
+Import Pub.OpenGLES
+?
 
 Import "source.bmx"
 
