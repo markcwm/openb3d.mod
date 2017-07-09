@@ -3,7 +3,7 @@
 SuperStrict
 
 Framework Openb3d.B3dglgraphics
-Import Openb3d.B3dsound
+Import Openb3dMods.B3dsound
 ?Not Win32
 Import Brl.FreeAudioAudio
 ?Win32
@@ -12,7 +12,7 @@ Import Brl.DirectSoundAudio
 Import Brl.WavLoader
 Import Brl.OggLoader
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Global Camera:TCamera = CreateCamera()
@@ -40,14 +40,14 @@ Global LoopingSoundPoint:SoundPoint = Que3DSound(SampleSoundLoop, TheBox)
 ' pressing the E key.
 
 
-While Not KeyHit(KEY_Escape)
+While Not KeyHit(KEY_ESCAPE)
 
 	' move camera
 	MoveEntity camera,0,0,KeyDown(KEY_UP)-KeyDown(KEY_DOWN)
 	TurnEntity camera,0,KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	' make TheSphere play the loaded SampleSound
-	If KeyHit(KEY_Space)
+	If KeyHit(KEY_SPACE)
 		Start3DSound(SampleSound, TheSphere)
 	EndIf
 	
@@ -137,16 +137,16 @@ While Not KeyHit(KEY_Escape)
 	
 	RenderWorld
 	
-	Text 0,0,"Arrow keys move and turn"
-	Text 0,15, "Space plays sound from Sphere, currently playing: "+CountList(List3DSounds(TheSphere))+" sounds"
-	Text 0,30, "E to toggle the pause value of the looping sound, currently: "+LoopingSoundPoint.Paused
-	Text 0,45, "L to toggle the loudness of the looping sound between full and half, currently: "+LoopingSoundPoint.Loudness
-	Text 0,60, "P to toggle the panning effect of the looping sound, current panning is: "+LoopingSoundPoint.Pan
-	Text 0,75, "R to toggle the bump to the play rate of the looping sound .."
-	Text 0,90, ".. currently bump is: "+LoopingSoundPoint.RateBump+" and actual rate is "+LoopingSoundPoint.Rate
-	Text 0,105, "X to reset the camera to it's starting point"
-	Text 0,125, "S to stop all sounds that are coming from the sphere using List3DSounds()"
-	Text 0,140, "D to stop all sounds that are coming from the sphere using EntityStop3DSound()"
+	Text 0,20,"Arrow keys move and turn"
+	Text 0,40, "Space plays sound from Sphere, currently playing: "+CountList(List3DSounds(TheSphere))+" sounds"
+	Text 0,60, "E to toggle the pause value of the looping sound, currently: "+LoopingSoundPoint.Paused
+	Text 0,80, "L to toggle the loudness of the looping sound between full and half, currently: "+LoopingSoundPoint.Loudness
+	Text 0,100, "P to toggle the panning effect of the looping sound, current panning is: "+LoopingSoundPoint.Pan
+	Text 0,120, "R to toggle the bump to the play rate of the looping sound .."
+	Text 0,140, ".. currently bump is: "+LoopingSoundPoint.RateBump+" and actual rate is "+LoopingSoundPoint.Rate
+	Text 0,160, "X to reset the camera to it's starting point"
+	Text 0,180, "S to stop all sounds that are coming from the sphere using List3DSounds()"
+	Text 0,200, "D to stop all sounds that are coming from the sphere using EntityStop3DSound()"
 	
 	Flip()
 	

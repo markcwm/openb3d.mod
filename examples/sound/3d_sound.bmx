@@ -3,7 +3,7 @@
 SuperStrict
 
 Framework Openb3d.B3dglgraphics
-Import Openb3d.B3dsound
+Import Openb3dMods.B3dsound
 ?Not Win32
 Import Brl.FreeAudioAudio
 ?Win32
@@ -12,7 +12,7 @@ Import Brl.DirectSoundAudio
 Import Brl.WavLoader
 Import Brl.OggLoader
 
-Graphics3D 800,600,0,2
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 
 Global Camera:TCamera = CreateCamera()
@@ -36,14 +36,14 @@ Init3DSound(Camera, 300)
 ' then a lower Doppler exaggerate value will be needed. A higher value will make the doppler effect more
 ' pronounced. Experiment to find the best results in your movement system.
 
-While Not KeyHit(KEY_Escape)
+While Not KeyHit(KEY_ESCAPE)
 
 	' move camera
 	MoveEntity camera,0,0,KeyDown(KEY_UP)-KeyDown(KEY_DOWN)
 	TurnEntity camera,0,KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 	
 	' make TheBox play the loaded SampleSound
-	If KeyHit(KEY_Space)
+	If KeyHit(KEY_SPACE)
 		Start3DSound(SampleSound, TheBox)
 	EndIf
 	
@@ -53,9 +53,9 @@ While Not KeyHit(KEY_Escape)
 	
 	RenderWorld
 		
-	Text 0,0,"Arrow Keys Move and Turn"
-	Text 0,15,"Space plays sound from box"
-	Text 0,30,"Escape to Exit"
+	Text 0,20,"Arrow Keys Move and Turn"
+	Text 0,40,"Space plays sound from box"
+	Text 0,60,"Escape to Exit"
 	
 	Flip()
 		
