@@ -162,6 +162,7 @@ void Global::ClearWorld(int entities,int brushes,int textures){
 			it--;
 		}
 		Texture::tex_list.clear();
+		Texture::tex_list_all.clear();
 	}
 }
 

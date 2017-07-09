@@ -93,7 +93,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	' free all manually ended actions = 2
 	For Local a:TAction=EachIn TAction.action_list
-		If a.endact[0]=2 And a.active[0]=0 Then FreeAction(a)
+		If a.endact[0]=2 And a.lifetime[0]=0 Then FreeAction(a)
 	Next
 	
 	' free all automatically ended actions = 1
@@ -115,7 +115,7 @@ While Not KeyDown(KEY_ESCAPE)
 	Local id:Int=0
 	For Local a:TAction=EachIn TAction.action_list
 		id:+1
-		If a.exists Then DrawText "id="+id+" inst="+Int(TAction.Getinstance(a))+" act="+a.act[0]+" endact="+a.endact[0]+" active="+a.active[0],0,ty
+		If a.exists Then DrawText "id="+id+" inst="+Int(TAction.Getinstance(a))+" act="+a.act[0]+" endact="+a.endact[0]+" lifetime="+a.lifetime[0],0,ty
 		ty:+20
 	Next
 	EndMax2D()

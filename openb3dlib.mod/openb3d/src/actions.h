@@ -34,7 +34,7 @@ public:
 	
 	// extra
 	static list<Action*> delete_list;
-	int endact,active;
+	int endact,lifetime;
 
 	static Action* AddAction(Entity* ent, int action, Entity* t, float a, float b, float c, float rate);
 	static Action* AddAction(Entity* ent, int action, float a, float b, float c, float rate){

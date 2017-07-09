@@ -77,7 +77,7 @@ const int ACTION_c=				8;
 const int ACTION_nextActions=	9;
 const int ACTION_delete_list=	10;
 const int ACTION_endact=		11;
-const int ACTION_active=		12;
+const int ACTION_lifetime=		12;
 
 // AnimationKeys varid
 const int ANIMATIONKEYS_frames=	1;
@@ -825,7 +825,7 @@ int* ActionInt( Action* obj,int varid ){
 	switch (varid){
 		case ACTION_act : return &obj->act;
 		case ACTION_endact : return &obj->endact;
-		case ACTION_active : return &obj->active;
+		case ACTION_lifetime : return &obj->lifetime;
 	}
 	return NULL;
 }

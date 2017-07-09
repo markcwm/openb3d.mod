@@ -376,7 +376,7 @@ Const ACTION_c:Int=				8
 Const ACTION_nextActions:Int=	9
 Const ACTION_delete_list:Int=	10
 Const ACTION_endact:Int=		11
-Const ACTION_active:Int=		12
+Const ACTION_lifetime:Int=		12
 
 ' AnimationKeys varid
 Const ANIMATIONKEYS_frames:Int=	1
