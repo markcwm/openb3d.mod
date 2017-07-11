@@ -1,98 +1,96 @@
-'
-' A basic example, with force and torque callback.
-'
+' example_01.bmx
+' create a spherical body, apply a force, and track its motion over time.
+
 SuperStrict
 
-Framework Openb3dLibs.NewtonDynamics
+Framework Openb3d.B3dglgraphics
+Import Openb3dLibs.NewtonDynamics
 Import Brl.Standardio
 
+TApp.Main()
 
-' Create a newton world
-Local world:TNWorld = TNWorld.Create()
-
-
-' Create a static body To serve as the Floor.
-Local background:TNBody = CreateBackgroundBody(world)
-Local freeFallBall:TNBody = CreateFreeFallBall(world)
-
-' For deterministic behavior call this method each time you change the world
-world.InvalidateCache()
-
-Local matrix:TNMatrix = New TNMatrix
-' run the simulation loop
-For Local i:Int = 0 Until 300
-	world.Update(1.0/60.0)
-
-	freeFallBall.GetMatrix(matrix)
-	Print "height: " + matrix.positY
-Next
-
-' destroy the newton world
-world.Destroy()
-
-
-Function CreateBackgroundBody:TNBody(world:TNWorld)
-
-	Local points:Float[] = [ ..
-		-100.0, 0.0,  100.0, ..
-		 100.0, 0.0,  100.0, .. 
-		 100.0, 0.0, -100.0, ..
-		-100.0, 0.0, -100.0 ]
-
-	' crate a collision tree
-	Local tree:TNTreeCollision = world.CreateTreeCollision(0)
-
-	' start building the collision mesh
-	tree.BeginBuild()
-
-	' add the face one at a time
-	tree.AddFace(4, points, 12, 0)
-
-	' finish building the collision
-	tree.EndBuild(1)
-
-	' Create a body with a collision And locate at the identity matrix position 
-	Local matrix:TNMatrix = TNMatrix.GetIdentityMatrix()
-	Local body:TNBody = world.CreateDynamicBody(tree, matrix)
-
-	' do no forget To destroy the collision after you Not longer need it
-	tree.Destroy()
+Type TApp
+	' needs to be global if GetMatrix is in the callback
+	Global matrix:TNMatrix = New TNMatrix
 	
-	Return body
-End Function
-
-Function CreateFreeFallBall:TNBody(world:TNWorld)
-	' crate a collision sphere
-	Local sphere:TNCollision = world.CreateSphere(1.0, 0, Null)
-
-	' Create a dynamic body with a sphere shape, And 
-	Local matrix:TNMatrix = TNMatrix.GetIdentityMatrix()
-	matrix.positY = 50.0
-	Local body:TNBody = world.CreateDynamicBody(sphere, matrix)
-
-	' set the force callback For applying the force And torque
-	body.SetForceAndTorqueCallback(ApplyGravity)
-
-	' set the mass For this body
-	Local mass:Float = 1.0
-	body.SetMassProperties(mass, sphere)
-
-	' set the linear damping To zero
-	body.SetLinearDamping(0.0)
-
-	' do no forget To destroy the collision after you no longer need it
-	sphere.Destroy()
-	Return body
-End Function
-
-Function ApplyGravity(body:TNBody, timestep:Float, threadIndex:Int)
-	' apply gravity force To the body
-	Local mass:Float
-	Local Ixx:Float
-	Local Iyy:Float
-	Local Izz:Float
-
-	body.GetMassMatrix(mass, Ixx, Iyy, Izz)
-	body.SetForce(0.0, -9.8 * mass, 0.0, 0.0)
-
-End Function
+	Function Init()
+		Graphics3D DesktopWidth(),DesktopHeight(),0,2
+		
+		Local cam:TCamera = CreateCamera()
+		PositionEntity cam,0,5,-20
+		
+		Local light:TLight = CreateLight()
+	End Function
+	
+	Function Main()
+		Init()
+		
+		Local entity:TMesh = CreateSphere()
+		Local plane:TMesh = CreatePlane()
+		
+		' Create the Newton world.
+		Local world:TNWorld = TNWorld.Create()
+		
+		' Add the sphere.
+		addSphereToSimulation(world)
+		
+		' Step the (empty) world 60 times in increments of 1/60 second.
+		Local timestep:Float = 1.0 / 60
+		
+		Rem
+		For Local inc:Int=0 Until 60 Step 1
+			world.Update(timestep)
+			Print "height: "+matrix.positY
+		Next
+		EndRem
+		
+		While Not KeyHit(KEY_ESCAPE)
+			world.Update(timestep)
+			
+			' update the position of the entity
+			PositionEntity entity,matrix.positX,matrix.positY,matrix.positZ
+			
+			RenderWorld
+			
+			Text 0,20,"Timestep="+timestep+" x="+matrix.positX+" y="+matrix.positY+" z="+matrix.positZ
+			Text 0,40,"Memory: "+GCMemAlloced()
+			
+			Flip
+			GCCollect
+		Wend
+		
+		' Clean up.
+		world.Destroy()
+		'world.DestroyAllBodies() ' wrap this?
+		
+		End
+	End Function
+	
+	Function addSphereToSimulation(world:TNWorld)
+		Local foo:TNMatrix = TNMatrix.GetIdentityMatrix()
+		
+		' Create the sphere, size is radius
+		Local collision:TNCollision = world.CreateSphere(1.0, 0, Null)
+		
+		' Create the rigid body
+		Local body:TNBody = world.CreateDynamicBody(collision,foo,Null)
+		
+		body.SetMassProperties(1.0, collision)
+		'body.SetMassMatrix(1.0, 1, 1, 1) ' wrap this?
+		
+		' Install callback. Newton will call it whenever the object moves.
+		body.SetForceAndTorqueCallback(cb_applyForce)
+		
+		collision.Destroy()
+	End Function
+	
+	Function cb_applyForce(body:TNBody, timestep:Float, threadIndex:Int)
+		' Apply a force to the object.
+		Local force:Float[] = [0, 1.0, 0, 0]
+		body.SetForce(force[0],force[1],force[2],force[3])
+		
+		' Query the state (4x4 matrix) and extract the body's position.
+		body.GetMatrix(matrix)	
+	End Function
+	
+End Type
