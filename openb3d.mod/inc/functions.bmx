@@ -41,8 +41,8 @@ Rem
 bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
 about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
 EndRem
-Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )
-	Return TTexture.LoadTextureAlpha( file,flags,alphamask )
+Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	Return TTexture.LoadAlphaTexture( file,flags,alphamask )
 End Function
 
 Rem
@@ -1028,8 +1028,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=9 )
-	Return TTexture.LoadTexture( file,flags )
+Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=False )
+	Return TTexture.LoadTexture( file,flags,usepixmap )
 End Function
 
 'Rem

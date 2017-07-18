@@ -228,16 +228,24 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=9 )
+	Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=False )
 	
-		Local ext$=ExtractExt(file).ToLower()
-		If ext="jpg" Or ext="jpeg" ' stb doesn't support progressive format, so uses brl.jpgloader
-			Return LoadTextureAlpha( file,flags,0 )
-		Else
+		If usepixmap=False
 			Local cString:Byte Ptr=file.ToCString()
 			Local inst:Byte Ptr=LoadTexture_( cString,flags )
 			Local tex:TTexture=CreateObject(inst)
 			MemFree cString
+			Return tex
+		Else
+			Local map:TPixmap=LoadPixmap(file)
+			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+			For Local iy%=0 To PixmapWidth(map)-1
+				For Local ix%=0 To PixmapHeight(map)-1
+					WritePixel map,ix,iy,ReadPixel(map,ix,iy)
+				Next
+			Next
+			Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+			tex.BufferToTex PixmapPixelPtr(map,0,0)
 			Return tex
 		EndIf
 		
@@ -372,7 +380,8 @@ Type TTexture
 	' from www.blitzmax.com/Community/posts.php?topic=88901#1009408
 	Function FileFind:Int( file:String Var )
 	
-		Local TS:TStream = OpenFile(file$,True,False)
+		'Local TS:TStream = OpenFile(file$,True,False)
+		Local TS:TStream = ReadFile(file$)
 		If Not TS Then
 			Repeat
 				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
@@ -606,7 +615,7 @@ Type TTexture
 		
 	End Method
 	
-	Function LoadTextureAlpha:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
 	
 		Local map:TPixmap=LoadPixmap(file)
 		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
