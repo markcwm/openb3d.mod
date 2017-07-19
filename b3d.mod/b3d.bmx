@@ -31,10 +31,9 @@ Module Openb3d.B3d
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: BSD"
-ModuleInfo "Copyright: 2015 Bruce A Henderson. All rights reserved"
+ModuleInfo "Copyright: 2015 Bruce A Henderson"
 
-ModuleInfo "History: 1.00"
-ModuleInfo "History: Initial Release."
+ModuleInfo "History: 1.00 Initial Release"
 
 
 Private

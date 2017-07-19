@@ -1,4 +1,4 @@
-' Copyright (c) 2014 Mark Mcvittie, Angelo Rosina, Bruce A Henderson
+' Copyright (c) 2014-2017 Mark Mcvittie
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -26,25 +26,19 @@ bbdoc:
 End Rem
 Module Openb3d.Openb3dlib
 
-ModuleInfo "Version: 1.00"
-ModuleInfo "License: Wrapper - zlib/libpng"
-ModuleInfo "License: OpenB3D - LGPL with static linking exception"
-ModuleInfo "Copyright: Wrapper - 2014 Mark Mcvittie, Bruce A Henderson"
-ModuleInfo "Copyright: Openb3d - Angelo Rosina"
+ModuleInfo "Version: 1.12"
+ModuleInfo "License: zlib/libpng (wrapper, library is LGPLv2)"
+ModuleInfo "Copyright: 2014-2017 Mark Mcvittie"
+ModuleInfo "Authors: Mark Mcvittie, Angelo Rosina, Bruce A Henderson"
 
-ModuleInfo "History: 1.12 Release"
-ModuleInfo "History: Commit on 09 Mar 2016"
-ModuleInfo "History: 1.1 Release"
-ModuleInfo "History: Commit on 15 Sep 2015"
-ModuleInfo "History: 1.0 Release"
-ModuleInfo "History: Commit on 12 Jun 2015"
-ModuleInfo "History: 0.9 Release"
-ModuleInfo "History: Commit on 14 Nov 2014"
-ModuleInfo "History: 0.8 Initial Release"
-ModuleInfo "History: Commit on 22 Oct 2014"
+ModuleInfo "History: 1.12 Release - update on Mar 2016"
+ModuleInfo "History: 1.1 Release - update on Sep 2015"
+ModuleInfo "History: 1.0 Release - update on Jun 2015"
+ModuleInfo "History: 0.9 Release - update on Nov 2014"
+ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
 ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
-'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip() replaced by ResourceFilePath()
+'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip (now replaced by ResourceFilePath)
 
 ?win32
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows

@@ -1,4 +1,4 @@
-' Copyright (c) 2014 Mark Mcvittie, Bruce A Henderson
+' Copyright (c) 2014-2017 Mark Mcvittie
 '
 ' This software is provided 'as-is', without any express or implied
 ' warranty. In no event will the authors be held liable for any damages
@@ -26,11 +26,10 @@ bbdoc: SDL GLGraphics backend for B3D.
 End Rem
 Module Openb3d.B3dglsdlgraphics
 
-ModuleInfo "Version: 1.00"
-ModuleInfo "License: zlib/libpng"
-ModuleInfo "Copyright: 2014 Mark Mcvittie, Bruce A Henderson"
-
-ModuleInfo "History: 1.00 Initial Release"
+ModuleInfo "Version: 1.12"
+ModuleInfo "License: zlib/libpng (wrapper, library is LGPLv2)"
+ModuleInfo "Copyright: 2014-2017 Mark Mcvittie"
+ModuleInfo "Authors: Mark Mcvittie, Angelo Rosina, Bruce A Henderson"
 
 Import Openb3d.Openb3d
 ?opengles
