@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Global Shader:TGLShader=New TGLShader
 
 Shader.InitShaders("../shaders/cubemap.vert.glsl","../shaders/cubemap.frag.glsl")

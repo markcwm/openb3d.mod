@@ -4,6 +4,7 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 ?Not bmxng
 Import Brl.Timer
@@ -12,8 +13,8 @@ Import Brl.TimerDefault
 ?
 
 Local width%=DesktopWidth(),height%=DesktopHeight()
-Graphics3D width,height
 
+Graphics3D width,height
 
 SeedRnd MilliSecs()
 ClearTextureFilters ' remove mipmap flag for postfx texture
@@ -112,6 +113,7 @@ UseFloat(shader,"time",time) ' Time used to scroll the distortion map
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
+
 While Not KeyHit(KEY_ESCAPE)
 	
 	time=Float((TimerTicks(timer) / framerate) * animspeed)
@@ -145,6 +147,7 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	Flip
 Wend
+End
 
 
 Function Update1Pass()

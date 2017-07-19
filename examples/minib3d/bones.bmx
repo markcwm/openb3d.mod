@@ -4,10 +4,9 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=800,height%=600,depth%=0,Mode%=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,10,-15
@@ -76,15 +75,15 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"+/- to animate"
-	Text 0,40,"[] to select different child entity (bone)"
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"+/- to animate"
+	Text 0,60,"[] to select different child entity (bone)"
 	If child_ent<>Null
 		'Local t:TEntity=FindChild(child_ent,EntityName(child_ent))
-		Text 0,60,"Child Name: "+EntityName(child_ent)'+", child: "+Int(t)
+		Text 0,80,"Child Name: "+EntityName(child_ent)'+", child: "+Int(t)
 	EndIf
-	Text 0,80,"No children: "+count_children
-
+	Text 0,100,"Children: "+count_children
+	
 	Flip
 	
 Wend

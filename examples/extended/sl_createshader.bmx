@@ -28,9 +28,13 @@ Local shader2:TShader=CreateShader("",VertFunc(),FragFunc())
 ShadeEntity(cube,shader)
 Local cs%
 
+
 While Not KeyDown(KEY_ESCAPE)
 
-	If KeyHit(KEY_SPACE) Then cs=Not cs If cs Then ShadeEntity(cube,shader2) Else ShadeEntity(cube,shader)
+	If KeyHit(KEY_SPACE)
+		cs=Not cs
+		If cs Then ShadeEntity(cube,shader2) Else ShadeEntity(cube,shader)
+	EndIf
 	
 	TurnEntity cube,0,0.5,-0.1
 	

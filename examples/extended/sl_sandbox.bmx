@@ -4,6 +4,7 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 ?Not bmxng
 Import Brl.Timer
 ?bmxng
@@ -11,7 +12,6 @@ Import Brl.TimerDefault
 ?
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
-
 
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,70,180,235

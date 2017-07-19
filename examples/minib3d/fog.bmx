@@ -4,7 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width=800,height=600,depth=0,Mode=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
 
@@ -76,12 +76,12 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"WSAD: move camera, M: Max2d mode = "+max2dmode+", F: fog mode = "+fogmode
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"WSAD: move camera, M: Max2d mode = "+max2dmode+", F: fog mode = "+fogmode
 	
 	If max2dmode
 		BeginMax2D()
-		DrawText "Testing Max2d",0,40
+		DrawText "Testing Max2d",0,60
 		EndMax2D()
 	EndIf
 	

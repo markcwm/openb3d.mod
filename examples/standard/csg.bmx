@@ -5,8 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
-
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 Local cam:TCamera=CreateCamera()
 MoveEntity cam,0,0,-5
@@ -55,7 +54,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"M: meshmethod = "+meshmethod+", F: meshflip = "+meshflip
+	Text 0,20,"M: meshmethod = "+meshmethod+", F: meshflip = "+meshflip
 	
 	Flip
 

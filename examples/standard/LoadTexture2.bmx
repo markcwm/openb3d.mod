@@ -5,8 +5,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600,0,2
-
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 Local camera:TCamera=CreateCamera()
 PositionEntity camera,0,7,0
@@ -48,7 +47,8 @@ While Not KeyHit(KEY_ESCAPE)
 	UpdateWorld
 	RenderWorld
 	
-	Text 0,0,"Left/Right: turn boxes"
+	Text 0,20,"Left/Right: turn boxes"
 	
 	Flip
 Wend
+End

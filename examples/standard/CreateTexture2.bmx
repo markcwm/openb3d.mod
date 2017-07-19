@@ -4,10 +4,10 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 
-Graphics3D 800,600,0,2
-
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,80,160,240
@@ -33,7 +33,7 @@ BufferToTex tex,PixmapPixelPtr(map,0,0)
 EntityTexture cube,tex
 
 
-While Not KeyDown(key_escape)
+While Not KeyDown(KEY_ESCAPE)
 
 	TurnEntity cube,0.0,0.5,-0.1
 	

@@ -7,6 +7,7 @@ Framework Openb3d.B3dglgraphics
 Import Brl.Random
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
+
 ClearTextureFilters
 SeedRnd MilliSecs()
 
@@ -52,6 +53,7 @@ Local efx%=1
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
+
 While Not KeyHit(KEY_ESCAPE)
 
 	PositionEntity pe, Sin(MilliSecs() * 0.2) * 4, 0.1, 5 ' move emitter
@@ -93,6 +95,7 @@ GCCollect
 DebugLog "Memory at end: "+GCMemAlloced()
 
 End
+
 
 Type TParticleData
 	Global map:TMap=CreateMap()

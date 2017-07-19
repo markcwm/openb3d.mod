@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera=CreateCamera()
 
 Local light:TLight=CreateLight()
@@ -54,4 +53,4 @@ While Not KeyDown(KEY_ESCAPE)
 	Flip
 	
 Wend
-
+End

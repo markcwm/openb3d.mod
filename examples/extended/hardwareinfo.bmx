@@ -25,6 +25,7 @@ PositionEntity light,0,1000,-1000
 Local cube:TMesh=CreateCube()
 PositionEntity cube,0,0,3
 
+
 While Not KeyDown(KEY_ESCAPE)		
 
 	RenderWorld

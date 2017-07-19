@@ -4,8 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 640,480
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 Local camera:TCamera=CreateCamera()
 PositionEntity camera,0,0,-10
@@ -33,6 +32,7 @@ AddMesh trunk,tree
 
 ' Free trunk mesh - we don't need it anymore
 FreeEntity trunk
+
 
 While Not KeyDown( KEY_ESCAPE )
 

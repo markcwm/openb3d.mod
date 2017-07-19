@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera=CreateCamera()
 Local fogmode%=1,fogrange#=100
 Local fogr#=94, fogg#=95, fogb#=110

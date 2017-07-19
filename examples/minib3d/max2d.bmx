@@ -3,13 +3,13 @@
 SuperStrict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 Import Brl.PngLoader
 
-Global width%=800,height%=600,depth%=0,Mode%=2
+Global width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 ' Initialise MiniB3D program (spheremap)
 ' --------------------------------------
@@ -50,7 +50,6 @@ Global spark_list:TList=New TList
 Global font:TImageFont=LoadImageFont("Arial.ttf",1)
 SetImageFont font
 
-
 ' Main loop
 ' ---------
 
@@ -76,7 +75,7 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
+	Text 0,20,"FPS: "+fps
 	
 	BeginMax2D() ' MiniB3D function
 	UpdateMax2D() ' your function

@@ -1,12 +1,11 @@
 ' sl_toon.bmx
-' cel or toon shading
+' cel/toon shading
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
-
 
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,70,180,235

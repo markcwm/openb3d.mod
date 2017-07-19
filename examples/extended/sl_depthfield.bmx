@@ -4,11 +4,12 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 
 Local width%=DesktopWidth(),height%=DesktopHeight()
-Graphics3D width,height
 
+Graphics3D width,height
 
 SeedRnd MilliSecs()
 ClearTextureFilters ' remove mipmap flag for postfx texture
@@ -96,6 +97,7 @@ UseFloat(shader,"blursize",blursize)
 ' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%
+
 
 While Not KeyDown(KEY_ESCAPE)
 	

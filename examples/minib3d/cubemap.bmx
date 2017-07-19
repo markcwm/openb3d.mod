@@ -4,10 +4,9 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=800,height%=600,depth%=0,Mode%=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,8,-10
@@ -109,12 +108,13 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"M: cubemode = "+cubemode+", B: blendmode = "+blendmode
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"M: cubemode = "+cubemode+", B: blendmode = "+blendmode
 
 	Flip
 
 Wend
+End
 
 
 Function UpdateCubemap(tex:TTexture,camera:TCamera,entity:TEntity)

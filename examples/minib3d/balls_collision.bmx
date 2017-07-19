@@ -3,11 +3,76 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 
-Local width%=800,height%=600,depth%=0,Mode%=2,hertz%=60
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2,rate%=60
 
-Graphics3D width,height,depth,Mode,hertz
+Graphics3D width,height,depth,Mode,rate
+
+Local cam:TCamera=CreateCamera()
+PositionEntity cam,0,10,-10
+CameraRange cam,.5,500
+
+Local light:TLight=CreateLight(1)
+RotateEntity light,90,0,0
+
+Local mesh:TMesh=LoadMesh("../media/test.b3d")
+
+ScaleMesh mesh,10,10,10
+
+' set collision radius and types
+EntityRadius cam,1,1
+EntityType cam,1
+EntityType mesh,2
+
+' enable collisions
+Collisions 1,2,2,2
+
+' used by fps code
+Local old_ms%=MilliSecs()
+Local renders%, fps%
+
+
+While Not KeyDown(KEY_ESCAPE)		
+
+	' control camera
+	MoveEntity cam,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
+	TurnEntity cam,KeyDown(KEY_DOWN)*2-KeyDown(KEY_UP)*2,KeyDown(KEY_LEFT)*2-KeyDown(KEY_RIGHT)*2,0
+
+	' shoot bullet
+	If KeyHit(KEY_SPACE)
+	
+		TFormNormal 0,0,0.05,cam,Null
+	
+		TBullet.Shoot(EntityX#(cam,True),EntityY#(cam,True),EntityZ#(cam,True),TFormedX(),TFormedY(),TFormedZ())
+
+	EndIf
+	
+	' update bullets
+	For Local bull:TBullet=EachIn TBullet.list
+		bull.Update()
+	Next
+
+	UpdateWorld
+	RenderWorld
+	
+	' calculate fps
+	renders=renders+1
+	If MilliSecs()-old_ms>=1000
+		old_ms=MilliSecs()
+		fps=renders
+		renders=0
+	EndIf
+	
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"Press space to shoot a bullet"
+	Text 0,60,"No. of bullets: "+TBullet.no
+
+	Flip
+	
+Wend
+End
 
 
 ' bullet type
@@ -102,68 +167,3 @@ Type TBullet
 	End Method
 	
 End Type
-
-
-Local cam:TCamera=CreateCamera()
-PositionEntity cam,0,10,-10
-CameraRange cam,.5,500
-
-Local light:TLight=CreateLight(1)
-RotateEntity light,90,0,0
-
-Local mesh:TMesh=LoadMesh("../media/test.b3d")
-
-ScaleMesh mesh,10,10,10
-
-' set collision radius and types
-EntityRadius cam,1,1
-EntityType cam,1
-EntityType mesh,2
-
-' enable collisions
-Collisions 1,2,2,2
-
-' used by fps code
-Local old_ms%=MilliSecs()
-Local renders%, fps%
-
-
-While Not KeyDown(KEY_ESCAPE)		
-
-	' control camera
-	MoveEntity cam,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
-	TurnEntity cam,KeyDown(KEY_DOWN)*2-KeyDown(KEY_UP)*2,KeyDown(KEY_LEFT)*2-KeyDown(KEY_RIGHT)*2,0
-
-	' shoot bullet
-	If KeyHit(KEY_SPACE)
-	
-		TFormNormal 0,0,0.05,cam,Null
-	
-		TBullet.Shoot(EntityX#(cam,True),EntityY#(cam,True),EntityZ#(cam,True),TFormedX(),TFormedY(),TFormedZ())
-
-	EndIf
-	
-	' update bullets
-	For Local bull:TBullet=EachIn TBullet.list
-		bull.Update()
-	Next
-
-	UpdateWorld
-	RenderWorld
-	
-	' calculate fps
-	renders=renders+1
-	If MilliSecs()-old_ms>=1000
-		old_ms=MilliSecs()
-		fps=renders
-		renders=0
-	EndIf
-	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"Press space to shoot a bullet"
-	Text 0,40,"No. of bullets: "+TBullet.no
-
-	Flip
-	
-Wend
-End

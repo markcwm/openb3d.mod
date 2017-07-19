@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,70,180,235
 
@@ -77,8 +76,8 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity tree,0,0.5,-0.1
 	TurnEntity tree2,0,0.5,-0.1
 	
-	'UpdateWorld()
-	RenderWorld()
+	'UpdateWorld
+	RenderWorld
 	
 	Text 0,20,"lighttype = "+lighttype+", P: pixellight = "+pixellight
 	

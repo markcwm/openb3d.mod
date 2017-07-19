@@ -6,7 +6,6 @@ Strict
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local cam:TCamera=CreateCamera()
 MoveEntity cam,0,0,-3
 CameraClsColor cam,70,180,235

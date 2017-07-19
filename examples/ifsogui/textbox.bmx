@@ -20,6 +20,7 @@ Local sample:TSample=New TSample
 sample.Init3D()
 sample.InitGUI()
 
+
 While Not AppTerminate()
 
 	sample.Update3D()
@@ -32,6 +33,7 @@ While Not AppTerminate()
 	Cls
 	
 Wend
+End
 
 
 Type TSample
@@ -45,7 +47,7 @@ Type TSample
 	
 	Method Init3D()
 	
-		Graphics3D 800,600,0,2
+		Graphics3D DesktopWidth(),DesktopHeight(),0,2
 		
 		camera=CreateCamera()
 		CameraClsColor camera,80,160,240
@@ -68,7 +70,7 @@ Type TSample
 	
 	Method InitGUI()
 	
-		GUI.SetResolution(800, 600)
+		GUI.SetResolution(DesktopWidth(), DesktopHeight())
 		GUI.LoadTheme("Skin2")
 		GUI.SetDefaultFont(LoadImageFont("Skin2/fonts/arial.ttf", 12))
 		GUI.SetDrawMouse(True)
@@ -106,7 +108,7 @@ Type TSample
 		
 		RenderWorld
 		
-		Text 0,0,"Left/Right: turn cube"
+		Text 0,20,"Left/Right: turn cube"
 		
 	End Method
 	

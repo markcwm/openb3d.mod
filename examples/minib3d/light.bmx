@@ -4,10 +4,9 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=800,height%=600,depth%=0,Mode%=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 AmbientLight 32,32,32
 
@@ -68,8 +67,8 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
-	Text 0,20,"L: switch off green light, WSAD: move camera"
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"L: switch off green light, WSAD: move camera"
 
 	Flip
 

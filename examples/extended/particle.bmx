@@ -7,7 +7,6 @@ Import Brl.Random
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 ClearTextureFilters
 
 Local camera:TCamera=CreateCamera()
@@ -92,3 +91,4 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	Flip
 Wend
+End

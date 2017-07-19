@@ -3,10 +3,10 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 
-Graphics3D 800,600
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 ClearTextureFilters
 
@@ -72,3 +72,4 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	Flip
 Wend
+End

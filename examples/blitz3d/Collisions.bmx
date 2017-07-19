@@ -4,8 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 640,480
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 ' Set collision type values
 Local type_ground%=1
@@ -86,6 +85,7 @@ Local response%=2
 Local method_info$="ellipsoid-to-polygon"
 Local response_info$="slide1"
 
+
 While Not KeyDown( KEY_ESCAPE )
 	Local x#=0
 	Local y#=0
@@ -130,11 +130,11 @@ While Not KeyDown( KEY_ESCAPE )
 	
 	RenderWorld
 	
-	Text 0,0,"Use cursor keys to move sphere"
-	Text 0,20,"Press M to change collision method (currently: "+method_info$+")"
-	Text 0,40,"Press R to change collision Response (currently: "+response_info$+")"
-	Text 0,60,"Collisions type_character,type_scenery,"+colmethod+","+response
-	Text 0,80,"CountCollisions: "+CountCollisions(sphere)+", CollisionEntity: "+Long(Byte Ptr(CollisionEntity(sphere,1)))
+	Text 0,20,"Use cursor keys to move sphere"
+	Text 0,40,"Press M to change collision method (currently: "+method_info$+")"
+	Text 0,60,"Press R to change collision Response (currently: "+response_info$+")"
+	Text 0,80,"Collisions type_character,type_scenery,"+colmethod+","+response
+	Text 0,100,"CountCollisions: "+CountCollisions(sphere)+", CollisionEntity: "+Long(Byte Ptr(CollisionEntity(sphere,1)))
 	
 	Flip
 Wend

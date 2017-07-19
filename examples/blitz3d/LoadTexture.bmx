@@ -4,8 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 640,480
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 Local camera:TCamera=CreateCamera()
 
@@ -20,6 +19,7 @@ Local tex:TTexture=LoadTexture("../media/b3dlogo.jpg")
 
 ' Texture cube with texture
 EntityTexture cube,tex
+
 
 While Not KeyDown( KEY_ESCAPE )
 

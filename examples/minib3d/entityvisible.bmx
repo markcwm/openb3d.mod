@@ -4,10 +4,9 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=800,height%=600,depth%=0,Mode%=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 Local light:TLight=CreateLight(1)
 RotateEntity light,90,0,0
@@ -39,12 +38,12 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"Use left/right cursor keys to move block"
+	Text 0,20,"Use left/right cursor keys to move block"
 	
 	If visible=True
-		Text 0,20,"Balls can see each other"
+		Text 0,40,"Balls can see each other"
 	Else
-		Text 0,20,"Balls can't see each other" 
+		Text 0,40,"Balls can't see each other" 
 	EndIf
 	
 	Flip

@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,32,32,64
 PositionEntity camera,0,0,6

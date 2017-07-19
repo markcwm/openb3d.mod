@@ -3,12 +3,12 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Timer
 Import Brl.EventQueue
-
-?Linux
+?linux
 Import Bah.Gtkmaxgui
-?Not Linux
+?Not linux
 Import Maxgui.Drivers
 ?
 
@@ -23,8 +23,8 @@ ActivateGadget can ' set focus
 EnablePolledInput can ' to activate mouse and keys
 
 SetGraphics CanvasGraphics(can)
-Graphics3D ClientWidth(win),ClientHeight(win),0,2,60,-1,True ' true if using canvas
 
+Graphics3D ClientWidth(win),ClientHeight(win),0,2,60,-1,True ' true if using canvas
 
 Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,0,-10
@@ -108,10 +108,14 @@ While Not KeyDown(KEY_ESCAPE)
 	EndSelect
 	
 Wend
+End
+
 
 ' Simplifies using max2d with a resizable canvas - by Hezkore
 Function UpdateCanvas(can:TGadget, cam:TCamera)
+
 	SetGraphics(CanvasGraphics(can))
+	
 	If TGlobal.width[0] <> ClientWidth(can) Or TGlobal.height[0] <> ClientHeight(can)
 		BeginMax2D()
 		SetGraphics(CanvasGraphics(can))
@@ -122,4 +126,5 @@ Function UpdateCanvas(can:TGadget, cam:TCamera)
 		TGlobal.width[0] = ClientWidth(can) ' values used in texture rendering
 		TGlobal.height[0] = ClientHeight(can)
 	EndIf
+	
 EndFunction

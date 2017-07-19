@@ -7,7 +7,6 @@ Framework openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera = CreateCamera()
 MoveEntity camera, 0, 15, 0
 RotateEntity camera, 90, 0, 0

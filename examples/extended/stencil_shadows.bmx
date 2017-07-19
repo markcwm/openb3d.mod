@@ -4,10 +4,10 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+
 Import Brl.Random
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
-
 
 Local camera:TCamera=CreateCamera()
 PositionEntity camera,-20,10,0
@@ -269,6 +269,7 @@ While Not KeyHit(KEY_ESCAPE) And Not AppTerminate()
 	Flip
 	
 Wend
+End
 
 
 Function HideStaticLights( light:TLight,light2:TLight,light1hid%,light2hid% )

@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local cpivot:TPivot=CreatePivot()
 Local camera:TCamera=CreateCamera(cpivot)
 PositionEntity cpivot,-1,1,-1

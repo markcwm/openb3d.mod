@@ -7,7 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
-
 Local camera:TCamera=CreateCamera()
 CameraRange camera,0.00001,100
 MoveEntity camera,0,0,-23
@@ -69,3 +68,4 @@ While Not KeyDown(KEY_ESCAPE)
 	Flip
 
 Wend
+End

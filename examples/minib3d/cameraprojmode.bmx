@@ -4,8 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 Local camera:TCamera=CreateCamera()
 PositionEntity camera,0,0,-10
@@ -43,9 +42,9 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,0,"Press spacebar to change the camera project mode"
-	Text 0,20,"CameraProjMode camera,"+Mode
-	Text 0,40,"CameraZoom camera,"+zoom
+	Text 0,20,"Press spacebar to change the camera project mode"
+	Text 0,40,"CameraProjMode camera,"+Mode
+	Text 0,60,"CameraZoom camera,"+zoom
 	
 	Flip
 

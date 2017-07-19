@@ -4,10 +4,9 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Local width%=800,height%=600,depth%=0,Mode%=2
+Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
 Graphics3D width,height,depth,Mode
-
 
 Local cam:TCamera=CreateCamera()
 PositionEntity cam,0,0,-15
@@ -77,12 +76,12 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,0,"FPS: "+fps
+	Text 0,20,"FPS: "+fps
 	
 	If myPick<>Null
-		Text 0,20,"Picked!"
+		Text 0,40,"Picked!"
 	Else
-		Text 0,20,"Not Picked"
+		Text 0,40,"Not Picked"
 	EndIf
 
 	Flip

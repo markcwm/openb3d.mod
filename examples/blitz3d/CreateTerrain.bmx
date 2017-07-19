@@ -4,8 +4,7 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
-Graphics3D 800,600
-
+Graphics3D DesktopWidth(),DesktopHeight()
 
 Local camera:TCamera=CreateCamera()
 PositionEntity camera,130,1,-130
@@ -21,6 +20,7 @@ Local terrain:TTerrain=CreateTerrain(128)
 Local grass_tex:TTexture=LoadTexture( "../media/Moss.bmp" )
 EntityTexture terrain,grass_tex
 
+
 While Not KeyDown( KEY_ESCAPE )
 
 	If KeyDown( KEY_RIGHT )=True Then TurnEntity camera,0,-1,0
@@ -30,7 +30,8 @@ While Not KeyDown( KEY_ESCAPE )
 	
 	RenderWorld
 	
-	Text 0,0,"Use cursor keys to move about the terrain"+EntityX(camera)+" "+EntityZ(camera)
+	Text 0,20,"Use cursor keys to move about the terrain"
+	Text 0,40,"X="+EntityX(camera)+", Z="+EntityZ(camera)
 	
 	Flip
 Wend
