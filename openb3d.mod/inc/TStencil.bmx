@@ -4,41 +4,26 @@ bbdoc: Stencil
 End Rem
 Type TStencil
 
-?bmxng
-	Global stencil_map:TPtrMap=New TPtrMap
-?Not bmxng
 	Global stencil_map:TMap=New TMap
-?
+	
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TStencil( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TStencil=New TStencil
-	?bmxng
-		stencil_map.Insert( inst,obj )
-	?Not bmxng
 		stencil_map.Insert( String(Long(inst)),obj )
-	?
 		obj.instance=inst
 		Return obj
 		
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
-		stencil_map.Remove( inst )
-	?Not bmxng
 		stencil_map.Remove( String(Long(inst)) )
-	?
 	End Function
 	
 	Function GetObject:TStencil( inst:Byte Ptr )
-	?bmxng
-		Return TStencil( stencil_map.ValueForKey( inst ) )
-	?Not bmxng
 		Return TStencil( stencil_map.ValueForKey( String(Long(inst)) ) )
-	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TStencil ) ' Get C++ instance from object

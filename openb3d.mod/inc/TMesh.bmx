@@ -607,7 +607,7 @@ Type TMesh Extends TEntity
 		UpdateShadow_( GetInstance(Self) )
 		
 	End Method
-	
+Rem ' fails to build with -w in NG
 ?bmxng
 	' Operator overloading in bmx-ng allows adding/subtracting meshes,
 	' eg. "mesh3 = mesh1 + mesh2" to produce new mesh with CSG operations
@@ -615,7 +615,7 @@ Type TMesh Extends TEntity
 	Const CSG_SUBTRACT:Int	= 0 ' Method 0 subtracts mesh2 from mesh1
 	Const CSG_ADD:Int		= 1 ' Method 1 adds meshes
 	Const CSG_INTERSECT:Int	= 2 ' Method 2 intersects meshes
-
+	
 	Method Operator+:TMesh (add_mesh:TMesh)
 		Return MeshCSG (Self, add_mesh, CSG_ADD)
 	End Method
@@ -624,6 +624,6 @@ Type TMesh Extends TEntity
 		Return MeshCSG (Self, add_mesh, CSG_SUBTRACT)
 	End Method
 ?
-
+EndRem
 End Type
 

@@ -16,11 +16,8 @@ Type TBrush
 	'Field tex_frame:Int ' 0
 	
 	' wrapper
-?bmxng
-	Global brush_map:TPtrMap=New TPtrMap
-?Not bmxng
 	Global brush_map:TMap=New TMap
-?
+	
 	Field instance:Byte Ptr
 	
 	Field exists:Int=0 ' FreeBrush
@@ -29,11 +26,7 @@ Type TBrush
 	
 		If inst=Null Then Return Null
 		Local obj:TBrush=New TBrush
-	?bmxng
-		brush_map.Insert( inst,obj )
-	?Not bmxng
 		brush_map.Insert( String(Long(inst)),obj )
-	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -41,19 +34,11 @@ Type TBrush
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
-		brush_map.Remove( inst )
-	?Not bmxng
 		brush_map.Remove( String(Long(inst)) )
-	?
 	End Function
 	
 	Function GetObject:TBrush( inst:Byte Ptr )
-	?bmxng
-		Return TBrush( brush_map.ValueForKey( inst ) )
-	?Not bmxng
 		Return TBrush( brush_map.ValueForKey( String(Long(inst)) ) )
-	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TBrush ) ' Get C++ instance from object

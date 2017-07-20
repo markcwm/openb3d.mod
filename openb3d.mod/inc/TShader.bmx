@@ -42,41 +42,26 @@ End Rem
 Type TShader
 
 	' wrapper
-?bmxng
-	Global shader_map:TPtrMap=New TPtrMap
-?Not bmxng
 	Global shader_map:TMap=New TMap
-?
+	
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TShader( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TShader=New TShader
-	?bmxng
-		shader_map.Insert( inst,obj )
-	?Not bmxng
 		shader_map.Insert( String(Long(inst)),obj )
-	?
 		obj.instance=inst
 		Return obj
 		
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
-		shader_map.Remove( inst )
-	?Not bmxng
 		shader_map.Remove( String(Long(inst)) )
-	?
 	End Function
 	
 	Function GetObject:TShader( inst:Byte Ptr )
-	?bmxng
-		Return TShader( shader_map.ValueForKey( inst ) )
-	?Not bmxng
 		Return TShader( shader_map.ValueForKey( String(Long(inst)) ) )
-	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TShader ) ' Get C++ instance from object

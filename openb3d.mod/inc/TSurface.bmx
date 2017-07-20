@@ -47,22 +47,16 @@ Type TSurface
 	Field alpha_enable:Int Ptr ' false
 	
 	' wrapper
-?bmxng
-	Global surf_map:TPtrMap=New TPtrMap
-?Not bmxng
+	
 	Global surf_map:TMap=New TMap
-?
+	
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TSurface( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TSurface=New TSurface
-	?bmxng
-		surf_map.Insert( inst,obj )
-	?Not bmxng
 		surf_map.Insert( String(Long(inst)),obj )
-	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -70,19 +64,11 @@ Type TSurface
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
-		surf_map.Remove( inst )
-	?Not bmxng
 		surf_map.Remove( String(Long(inst)) )
-	?
 	End Function
 	
 	Function GetObject:TSurface( inst:Byte Ptr )
-	?bmxng
-		Return TSurface( surf_map.ValueForKey( inst ) )
-	?Not bmxng
 		Return TSurface( surf_map.ValueForKey( String(Long(inst)) ) )
-	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TSurface ) ' Get C++ instance from object

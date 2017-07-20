@@ -12,6 +12,7 @@ Local cube:TMesh = CreateCube()
 
 Local cube2:TMesh = CreateCube(cube)
 Local cube3:TMesh = CreateCube(cube)
+PositionEntity cube2,2,2,2
 
 NameEntity cam, "MyCamera"
 
@@ -32,10 +33,10 @@ Local test:TEntity
 
 test = FindChild(cube, "MyCube Two")
 If Not test Then Print "No child found"
-Print EntityName(test)
+Print "Entity name: " + EntityName(test)
 
 test = FindChild(cube, "MyCube Three")
 If Not test Then Print "No child found"
-Print EntityName(test)
+Print "Entity name: " + EntityName(test)
 
 End
