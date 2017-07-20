@@ -205,6 +205,7 @@ Type TEntity
 		
 		AddList_(entity_list)
 		CopyList(child_list)
+		If parent<>Null Then parent.CopyList(parent.child_list)
 		AddList_(animate_list)
 		If TGlobal.root_ent AddList(TGlobal.root_ent.child_list) ' list of all non-child ents
 		exists=1

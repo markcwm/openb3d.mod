@@ -1,5 +1,4 @@
-' FindChild.bmx
-' by BlitzSupport
+' GetChild.bmx
 
 SuperStrict
 
@@ -28,9 +27,9 @@ Print "Entity class: " + EntityClass(cube)
 
 Local test:TEntity
 
-test = FindChild(cube, "MyCube Two")
-If Not test Then Print "No child found" Else Print "Child name: " + EntityName(test)
-test = FindChild(cube, "MyCube Three")
-If Not test Then Print "No child found" Else Print "Child name: " + EntityName(test)
+For Local child:Int=1 To CountChildren(cube)
+	test=GetChild(cube, child)
+	If Not test Then Print "No child found" Else Print "Child name: " + EntityName(test)
+Next
 
 End
