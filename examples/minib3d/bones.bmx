@@ -64,7 +64,7 @@ While Not KeyDown(KEY_ESCAPE)
 	If child_ent<>Null
 		PositionEntity marker_ent,EntityX(child_ent,True),EntityY(child_ent,True),EntityZ(child_ent,True)
 	EndIf
-
+	
 	RenderWorld
 	
 	' calculate fps
@@ -79,10 +79,12 @@ While Not KeyDown(KEY_ESCAPE)
 	Text 0,40,"+/- to animate"
 	Text 0,60,"[] to select different child entity (bone)"
 	If child_ent<>Null
-		'Local t:TEntity=FindChild(child_ent,EntityName(child_ent))
-		Text 0,80,"Child Name: "+EntityName(child_ent)'+", child: "+Int(t)
+		Text 0,80,"Child Name: "+EntityName(child_ent)
+		
+		Local test:TEntity=FindChild(ent,EntityName(child_ent))
+		If test<>Null Then Text 0,100,"FindChild: "+EntityName(test)
 	EndIf
-	Text 0,100,"Children: "+count_children
+	Text 0,120,"Children: "+count_children
 	
 	Flip
 	
