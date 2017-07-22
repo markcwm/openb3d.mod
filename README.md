@@ -15,5 +15,5 @@ After a year off from coding I decided to return to work on this wrapper in my s
 License
 =======
 
-OpenB3D is licensed under the GNU LGPLv2 or later, with an exception to allow static linking.
+The library is licensed with the GNU LGPL v2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and one module with the BSD-2-Clause license.
 
