@@ -9,7 +9,8 @@ Module Openb3d.B3d
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "License: BSD-2-Clause"
-ModuleInfo "Copyright: 2015 Bruce A Henderson"
+ModuleInfo "Copyright: Wrapper - 2015 Bruce A Henderson"
+ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
 
 ModuleInfo "History: 1.00 Initial Release"
 

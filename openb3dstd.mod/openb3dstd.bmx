@@ -9,8 +9,9 @@ End Rem
 Module Openb3d.Openb3dstd
 
 ModuleInfo "Version: 1.12"
-ModuleInfo "License: zlib/libpng"
-ModuleInfo "Copyright: 2014-2017 Mark Mcvittie"
+ModuleInfo "License: zlib"
+ModuleInfo "Copyright: Wrapper - 2014-2017 Mark Mcvittie"
+ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
 
 ' *** Types
 
