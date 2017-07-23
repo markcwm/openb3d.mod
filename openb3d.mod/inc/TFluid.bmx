@@ -8,7 +8,11 @@ Type TFluid Extends TMesh
 	
 		If inst=Null Then Return Null
 		Local obj:TFluid=New TFluid
+	?bmxng
+		ent_map.Insert( inst,obj )
+	?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -59,7 +63,11 @@ Type TBlob Extends TEntity
 	
 		If inst=Null Then Return Null
 		Local obj:TBlob=New TBlob
+	?bmxng
+		ent_map.Insert( inst,obj )
+	?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj

@@ -8,7 +8,11 @@ Type TGeosphere Extends TTerrain
 	
 		If inst=Null Then Return Null
 		Local obj:TGeosphere=New TGeosphere
+	?bmxng
+		ent_map.Insert( inst,obj )
+	?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj

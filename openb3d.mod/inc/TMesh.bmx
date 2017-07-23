@@ -35,7 +35,11 @@ Type TMesh Extends TEntity
 	
 		If inst=Null Then Return Null
 		Local obj:TMesh=New TMesh
+	?bmxng
+		ent_map.Insert( inst,obj )
+	?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -607,7 +611,7 @@ Type TMesh Extends TEntity
 		UpdateShadow_( GetInstance(Self) )
 		
 	End Method
-Rem ' fails to build with -w in NG
+Rem
 ?bmxng
 	' Operator overloading in bmx-ng allows adding/subtracting meshes,
 	' eg. "mesh3 = mesh1 + mesh2" to produce new mesh with CSG operations

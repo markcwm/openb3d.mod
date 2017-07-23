@@ -64,15 +64,22 @@ Type TAnimationKeys
 	Field qz:Float Ptr ' vector
 	
 	' wrapper
+?bmxng
+	Global animkeys_map:TPtrMap=New TPtrMap
+?Not bmxng
 	Global animkeys_map:TMap=New TMap
-	
+?
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TAnimationKeys( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TAnimationKeys=New TAnimationKeys
+	?bmxng
+		animkeys_map.Insert( inst,obj )
+	?Not bmxng
 		animkeys_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -80,11 +87,19 @@ Type TAnimationKeys
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
+	?bmxng
+		animkeys_map.Remove( inst )
+	?Not bmxng
 		animkeys_map.Remove( String(Long(inst)) )
+	?
 	End Function
 	
 	Function GetObject:TAnimationKeys( inst:Byte Ptr )
+	?bmxng
+		Return TAnimationKeys( animkeys_map.ValueForKey( inst ) )
+	?Not bmxng
 		Return TAnimationKeys( animkeys_map.ValueForKey( String(Long(inst)) ) )
+	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TAnimationKeys ) ' Get C++ instance from object

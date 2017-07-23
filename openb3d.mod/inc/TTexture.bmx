@@ -30,8 +30,11 @@ Type TTexture
 	Global tex_list_all:TList=CreateList()
 	
 	' wrapper
+?bmxng
+	Global tex_map:TPtrMap=New TPtrMap
+?Not bmxng
 	Global tex_map:TMap=New TMap
-	
+?
 	Field instance:Byte Ptr
 	
 	Global tex_list_id:Int=0,tex_list_all_id:Int=0
@@ -41,7 +44,11 @@ Type TTexture
 	
 		If inst=Null Then Return Null
 		Local obj:TTexture=New TTexture
+	?bmxng
+		tex_map.Insert( inst,obj )
+	?Not bmxng
 		tex_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -49,11 +56,19 @@ Type TTexture
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
+	?bmxng
+		tex_map.Remove( inst )
+	?Not bmxng
 		tex_map.Remove( String(Long(inst)) )
+	?
 	End Function
 	
 	Function GetObject:TTexture( inst:Byte Ptr )
+	?bmxng
+		Return TTexture( tex_map.ValueForKey( inst ) )
+	?Not bmxng
 		Return TTexture( tex_map.ValueForKey( String(Long(inst)) ) )
+	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TTexture ) ' Get C++ instance from object

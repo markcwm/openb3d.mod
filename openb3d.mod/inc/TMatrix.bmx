@@ -7,15 +7,22 @@ Type TMatrix
 	Field grid:Float Ptr ' array [4,4] - LoadIdentity
 	
 	' wrapper
+?bmxng
+	Global matrix_map:TPtrMap=New TPtrMap
+?Not bmxng
 	Global matrix_map:TMap=New TMap
-	
+?
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TMatrix( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TMatrix=New TMatrix
+	?bmxng
+		matrix_map.Insert( inst,obj )
+	?Not bmxng
 		matrix_map.Insert( String(Long(inst)),obj )
+	?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -23,11 +30,19 @@ Type TMatrix
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
+	?bmxng
+		matrix_map.Remove( inst )
+	?Not bmxng
 		matrix_map.Remove( String(Long(inst)) )
+	?
 	End Function
 	
 	Function GetObject:TMatrix( inst:Byte Ptr )
+	?bmxng
+		Return TMatrix( matrix_map.ValueForKey( inst ) )
+	?Not bmxng
 		Return TMatrix( matrix_map.ValueForKey( String(Long(inst)) ) )
+	?
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TMatrix ) ' Get C++ instance from object
