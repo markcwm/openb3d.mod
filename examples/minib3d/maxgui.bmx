@@ -4,7 +4,11 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
+?Not bmxng
 Import Brl.Timer
+?bmxng
+Import Brl.TimerDefault
+?
 Import Brl.EventQueue
 ?linux
 Import Bah.Gtkmaxgui
