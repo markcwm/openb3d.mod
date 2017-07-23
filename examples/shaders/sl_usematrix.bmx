@@ -14,7 +14,7 @@ Local light:TLight=CreateLight()
 
 Local teapot:TMesh=LoadMesh("../media/teapot.b3d")
 
-Local shader:TShader=LoadShader("","../shaders/usematrix.vert.glsl","../shaders/usematrix.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/usematrix.vert.glsl","../glsl/usematrix.frag.glsl")
 ShadeEntity(teapot,shader)
 
 Local camz#, tz#=5.5

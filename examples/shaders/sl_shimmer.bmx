@@ -97,7 +97,7 @@ Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../shaders/shimmer.vert.glsl", "../shaders/shimmer.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
 SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect

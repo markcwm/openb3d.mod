@@ -85,7 +85,7 @@ Local ground:TMesh=CreatePlane(128)
 Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp")
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../shaders/depthfield.vert.glsl","../shaders/depthfield.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/depthfield.vert.glsl","../glsl/depthfield.frag.glsl")
 ShaderTexture(shader,colortex,"colortex",0) ' 0 is render texture
 ShaderTexture(shader,depthtex,"depthtex",1) ' 1 is depth texture
 ShadeEntity(screensprite,shader)

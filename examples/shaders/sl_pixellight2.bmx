@@ -43,10 +43,10 @@ ScaleTexture grass,0.25,0.25
 Local brush:TBrush=LoadBrush(bark$)
 PaintSurface tree.GetSurface(1),brush ' trunk
 
-Local shader:TShader=LoadShader("","../shaders/alphamap.vert.glsl","../shaders/alphamap2.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/alphamap.vert.glsl","../glsl/alphamap2.frag.glsl")
 ShaderTexture(shader,LoadTexture(leaves$),"tex",0)
 
-Local shader2:TShader=LoadShader("","../shaders/pixellight2.vert.glsl","../shaders/pixellight2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/pixellight2.vert.glsl","../glsl/pixellight2.frag.glsl")
 SetInteger(shader2,"lighttype",lighttype)
 ShaderTexture(shader2,LoadTexture(leaves$),"tex",0)
 

@@ -107,7 +107,7 @@ Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp")
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../shaders/blur.vert.glsl", "../shaders/blurv.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurv.frag.glsl")
 ShaderTexture(shader,colortex,"sceneTex",0)
 SetFloat(shader,"rt_w", width)
 SetFloat(shader,"rt_h", height)
@@ -115,7 +115,7 @@ Local vx_offset#=1.05
 UseFloat(shader,"vx_offset", vx_offset)
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","../shaders/blur.vert.glsl", "../shaders/blurh.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurh.frag.glsl")
 ShaderTexture(shader2,colortex2,"sceneTex",0)
 SetFloat(shader2,"rt_w", width)
 SetFloat(shader2,"rt_h", height)

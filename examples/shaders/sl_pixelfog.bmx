@@ -38,7 +38,7 @@ MoveEntity plane,0,-1.5,0
 Local tex0:TTexture=LoadTexture("../media/07_DIFFUSE.jpg",1)
 EntityTexture sphere,tex0
 
-Local shader:TShader=LoadShader("","../shaders/pixelfog.vert.glsl","../shaders/pixelfog.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/pixelfog.vert.glsl","../glsl/pixelfog.frag.glsl")
 ShaderTexture(shader,tex0,"tex",0)
 SetInteger(shader,"lighttype",lighttype)
 SetFloat4(shader,"fogColor", fogr/255, fogg/255, fogb/255, 1.0)

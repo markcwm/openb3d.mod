@@ -26,14 +26,14 @@ ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
-Local shader:TShader=LoadShader("","../shaders/alphamap.vert.glsl","../shaders/alphamap.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/alphamap.vert.glsl","../glsl/alphamap.frag.glsl")
 ShaderTexture(shader,LoadTexture("../media/colorkey.jpg"),"tex",0)
 ShaderTexture(shader,LoadTexture("../media/spark.png"),"alphatex",1)
 ShadeEntity(cube,shader)
 EntityFX(cube,32)
 
 ' tranlucency - from single image with alpha channel
-Local shader2:TShader=LoadShader("","../shaders/alphamap.vert.glsl","../shaders/alphamap2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/alphamap.vert.glsl","../glsl/alphamap2.frag.glsl")
 ShaderTexture(shader2,LoadTexture("../media/alpha_map.png"),"tex",0)
 ShadeEntity(cube2,shader2)
 EntityFX(cube2,32)

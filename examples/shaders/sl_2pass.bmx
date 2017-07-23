@@ -107,14 +107,14 @@ Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../shaders/shimmer.vert.glsl", "../shaders/shimmer.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
 ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
 ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
 SetFloat(shader,"distortionFactor",0.005) ' Factor used to control severity of the effect
 SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","../shaders/default.vert.glsl", "../shaders/greyscale.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/greyscale.frag.glsl")
 ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
 ShadeEntity(screensprite2, shader2)
 

@@ -8,11 +8,11 @@ Framework Openb3d.B3dglgraphics
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 ' Creating by data file
-Incbin "../shaders/vertcolor.frag.glsl"
-Incbin "../shaders/vertcolor.vert.glsl"
+Incbin "../glsl/vertcolor.frag.glsl"
+Incbin "../glsl/vertcolor.vert.glsl"
 
-Local frag$=String.FromBytes(IncbinPtr("../shaders/vertcolor.frag.glsl"),IncbinLen("../shaders/vertcolor.frag.glsl"))
-Local vert$=String.FromBytes(IncbinPtr("../shaders/vertcolor.vert.glsl"),IncbinLen("../shaders/vertcolor.vert.glsl"))
+Local frag$=String.FromBytes(IncbinPtr("../glsl/vertcolor.frag.glsl"),IncbinLen("../glsl/vertcolor.frag.glsl"))
+Local vert$=String.FromBytes(IncbinPtr("../glsl/vertcolor.vert.glsl"),IncbinLen("../glsl/vertcolor.vert.glsl"))
 
 Local camera:TCamera=CreateCamera()
 CameraClsColor camera,100,100,100

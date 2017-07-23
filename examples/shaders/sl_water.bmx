@@ -110,7 +110,7 @@ Local tex:TTexture=LoadTexture("../media/water.bmp")
 Local cubetex:TTexture=CreateTexture(256,256,1+2+128)
 
 ' non lit/ambient shader
-Local shader:TShader=LoadShader("","../shaders/water.vert.glsl","../shaders/water.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/water.vert.glsl","../glsl/water.frag.glsl")
 ShaderTexture(shader,tex,"color_texture",0)
 ShaderTexture(shader,cubetex,"Env",1)
 UseFloat(shader,"alpha",waveAlpha)
@@ -123,7 +123,7 @@ UseFloat(shader,"waveLength",waveLength)
 SetFloat4(shader,"texmix",0.8,0.2,0,0) ' multi-texturing (cubemap,tex) value between 0..1
 
 ' pixel lit shader
-Local shader2:TShader=LoadShader("","../shaders/water2.vert.glsl","../shaders/water2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/water2.vert.glsl","../glsl/water2.frag.glsl")
 ShaderTexture(shader2,tex,"color_texture",0)
 ShaderTexture(shader2,cubetex,"Env",1)
 UseFloat(shader2,"alpha",waveAlpha)

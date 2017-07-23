@@ -78,7 +78,7 @@ Local normaltex:TTexture=LoadTexture("../media/07_NORMAL.jpg")
 Local spectex:TTexture=LoadTexture("../media/07_DISP.jpg")
 
 ' bumpmap 1 - one light, directional or point
-Local shader:TShader=LoadShader("","../shaders/bumpmap.vert.glsl","../shaders/bumpmap.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/bumpmap.vert.glsl","../glsl/bumpmap.frag.glsl")
 ShaderTexture(shader,colortex,"colorMap",0)
 ShaderTexture(shader,normaltex,"normalMap",1)
 
@@ -86,7 +86,7 @@ SetFloat3(shader,"vTangent",0.1,0.1,0.1)
 SetFloat(shader,"invRadius",0.01)
 
 ' bumpmap 2 - no directional, multiple point lights
-Local shader2:TShader=LoadShader("","../shaders/bumpmap2.vert.glsl","../shaders/bumpmap2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/bumpmap2.vert.glsl","../glsl/bumpmap2.frag.glsl")
 ShaderTexture(shader2,colortex,"colorMap",0)
 ShaderTexture(shader2,normaltex,"normalMap",1)
 
@@ -95,7 +95,7 @@ SetFloat3(shader2,"emission",0.0015,0.0015,0.0015)
 SetFloat(shader2,"attspec",0.01)
 
 ' bumpmap 3 - multiple lights, directional or point
-Local shader3:TShader=LoadShader("","../shaders/bumpmap3.vert.glsl","../shaders/bumpmap3.frag.glsl")
+Local shader3:TShader=LoadShader("","../glsl/bumpmap3.vert.glsl","../glsl/bumpmap3.frag.glsl")
 ShaderTexture(shader3,colortex,"colorMap",0)
 ShaderTexture(shader3,normaltex,"normalMap",1)
 ShaderTexture(shader3,spectex,"specularMap",2)

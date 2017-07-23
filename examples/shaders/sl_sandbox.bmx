@@ -23,7 +23,7 @@ PositionEntity light,5,5,5
 Local cube:TMesh=CreateCube()
 PositionEntity cube,0,0,3
 
-Local shader:TShader=LoadShader("","../shaders/sandbox.vert.glsl","../shaders/sandbox.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/sandbox.vert.glsl","../glsl/sandbox.frag.glsl")
 Local tex:TTexture=CreateTexture(64,64)
 ShaderTexture(shader,tex,"tex0",0)
 ShadeEntity(cube,shader)

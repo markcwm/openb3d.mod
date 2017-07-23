@@ -23,7 +23,7 @@ Local teapot2:TMesh=LoadMesh("../media/teapot.b3d")
 PositionEntity teapot2,0,0,3
 HideEntity teapot2
 
-Local shader:TShader=LoadShader("","../shaders/pixellight.vert.glsl","../shaders/pixellight.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/pixellight.vert.glsl","../glsl/pixellight.frag.glsl")
 SetInteger(shader,"lighttype",lighttype)
 ShadeEntity(teapot,shader)
 

@@ -25,12 +25,12 @@ Local plane:TMesh=CreateCube()
 ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
-Local shader:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/greyscale.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/greyscale.frag.glsl")
 ShaderTexture(shader,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube,shader)
 EntityFX(cube,32)
 
-Local shader2:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/default.frag.glsl")
 ShaderTexture(shader2,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube2,shader2)
 EntityFX(cube2,32)

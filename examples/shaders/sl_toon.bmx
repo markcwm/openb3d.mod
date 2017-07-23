@@ -28,9 +28,9 @@ Local mesh3:TMesh=LoadMesh("../media/teapot.b3d")
 PositionEntity mesh3,0,0,3
 HideEntity mesh3
 
-Local shader:TShader=LoadShader("","../shaders/toon.vert.glsl","../shaders/toon.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/toon.vert.glsl","../glsl/toon.frag.glsl")
 
-Local shader2:TShader=LoadShader("","../shaders/toon2.vert.glsl","../shaders/toon2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/toon2.vert.glsl","../glsl/toon2.frag.glsl")
 
 PositionEntity light,EntityX(camera),EntityY(camera),EntityZ(camera)
 PointEntity light,mesh

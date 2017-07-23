@@ -29,12 +29,12 @@ Local plane:TMesh=CreateCube()
 ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
-Local shader:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/default.frag.glsl")
 Local tex1:TTexture=LoadTexture("../media/crate.bmp")
 Local shader_tex:TTexture=ShaderTexture(shader,tex1,"texture0",0)
 ShadeEntity(cube,shader)
 
-Local shader2:TShader=LoadShader("","../shaders/default.vert.glsl","../shaders/default.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/default.frag.glsl")
 Local tex2:TTexture=LoadTexture("../media/wcrate.jpg")
 Local shader2_tex:TTexture=ShaderTexture(shader2,tex2,"texture0",0)
 ShadeEntity(cube2,shader2)

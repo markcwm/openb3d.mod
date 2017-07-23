@@ -60,24 +60,24 @@ Local cubetex:TTexture=CreateTexture(256,256,1+2+128)
 Local lighttype%=1, alpha#=0.7
 
 ' non lit/ambient specular cubemap
-Local shader:TShader=LoadShader("","../shaders/cubemap.vert.glsl","../shaders/cubemap.frag.glsl")
+Local shader:TShader=LoadShader("","../glsl/cubemap.vert.glsl","../glsl/cubemap.frag.glsl")
 ShaderTexture(shader,cubetex,"Env",0)
 ShadeEntity(teapot,shader)
 SetFloat(shader,"alpha",alpha)
 
 ' non lit/ambient diffuse cubemap
-Local shader2:TShader=LoadShader("","../shaders/cubemap2.vert.glsl","../shaders/cubemap2.frag.glsl")
+Local shader2:TShader=LoadShader("","../glsl/cubemap2.vert.glsl","../glsl/cubemap2.frag.glsl")
 ShaderTexture(shader2,cubetex,"Env",0)
 SetFloat(shader2,"alpha",alpha)
 
 ' pixel lit specular cubemap
-Local shader3:TShader=LoadShader("","../shaders/cubemap3.vert.glsl","../shaders/cubemap3.frag.glsl")
+Local shader3:TShader=LoadShader("","../glsl/cubemap3.vert.glsl","../glsl/cubemap3.frag.glsl")
 ShaderTexture(shader3,cubetex,"Env",0)
 SetFloat(shader3,"alpha",alpha)
 SetInteger(shader3,"lighttype",lighttype)
 
 ' pixel lit diffuse cubemap
-Local shader4:TShader=LoadShader("","../shaders/cubemap4.vert.glsl","../shaders/cubemap4.frag.glsl")
+Local shader4:TShader=LoadShader("","../glsl/cubemap4.vert.glsl","../glsl/cubemap4.frag.glsl")
 ShaderTexture(shader4,cubetex,"Env",0)
 SetFloat(shader4,"alpha",alpha)
 SetInteger(shader4,"lighttype",lighttype)
