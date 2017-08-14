@@ -7,12 +7,12 @@ uniform sampler2D depthtex;
 uniform float blursize; // 0.002
 
 void main(void)
-{
+{	
 	vec4 blurFactor = texture2D(depthtex, texCoord1.st) * blursize;
 	float bf = blurFactor.r;
 	vec4 blurSample = vec4(0.0,0.0,0.0,0.0);
-	int lo = 3; // 2
-	int hi = 2; // 3
+	int lo = 1; // 2
+	int hi = 1; // 3
 	for(int tx =-lo; tx<hi; tx++)
     {
 		for(int ty =-lo; ty<hi; ty++)
@@ -23,9 +23,7 @@ void main(void)
 			blurSample = blurSample + texture2D(colortex, uv);
 		}	
     }
-	float darken = 25.0; // 23
+	float darken = 4.0 * float(hi * lo); // 23
 	blurSample = blurSample / darken;
-	vec4 texel = blurSample;
-	texel.a = 1.0;
-	gl_FragColor = texel;
+	gl_FragColor = vec4(vec3(blurSample), 1.0);
 }

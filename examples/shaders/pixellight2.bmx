@@ -1,4 +1,4 @@
-' sl_pixellight2.bmx
+' pixellight2.bmx
 ' per pixel lighting with alpha maps
 
 Strict

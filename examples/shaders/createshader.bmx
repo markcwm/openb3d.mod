@@ -1,4 +1,4 @@
-' sl_createshader.bmx
+' createshader.bmx
 ' using strings instead of loading text files
 
 Strict

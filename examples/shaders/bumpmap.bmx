@@ -1,4 +1,4 @@
-' sl_bumpmap.bmx
+' bumpmap.bmx
 ' bumpmapping
 
 Strict

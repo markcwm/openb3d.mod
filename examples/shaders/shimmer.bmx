@@ -1,5 +1,5 @@
-' sl_blur2pass.bmx
-' postprocess effect - render framebuffer twice per render for gaussian blur
+' shimmer.bmx
+' postprocess effect - render framebuffer to texture for shimmer/heat haze
 
 Strict
 
@@ -46,7 +46,7 @@ FreeEntity t_sphere
 Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
 ScaleMesh cube,0.15,0.15,0.15
 PositionEntity cube,0,8,0
-Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1+8)
+Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1)
 EntityTexture cube,cube_tex
 
 Local cube2:TMesh=CreateCube()
@@ -65,9 +65,7 @@ Next
 FreeEntity t_cylinder
 
 Global colortex:TTexture=CreateTexture(width,height,1+256)
-Global colortex2:TTexture=CreateTexture(width,height,1+256)
 ScaleTexture colortex,1.0,-1.0
-ScaleTexture colortex2,1.0,-1.0
 
 Local noisew%=width/4, noiseh%=height/4
 Local noisetex:TTexture=CreateTexture(noisew,noiseh)
@@ -82,48 +80,34 @@ BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
 
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
-CameraToTex colortex2,camera
 TGlobal.CheckFramebufferStatus(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
 
 ' screen sprite - by BlitzSupport
 Global screensprite:TSprite=CreateSprite()
 EntityOrder screensprite,-1
 ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
-MoveEntity screensprite,0,0,1.0 ' set z to 0.99 - instead of clamping uvs
+MoveEntity screensprite,0,0,0.99 ' set z to 0.99 - instead of clamping uvs
 EntityParent screensprite,camera
-HideEntity screensprite
-
-Global screensprite2:TSprite=CreateSprite()
-ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
-EntityOrder screensprite2,-1
-EntityParent screensprite2,camera
-MoveEntity screensprite2,0,0,1.0
 
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
 Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp")
+Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurv.frag.glsl")
-ShaderTexture(shader,colortex,"sceneTex",0)
-SetFloat(shader,"rt_w", width)
-SetFloat(shader,"rt_h", height)
-Local vx_offset#=1.05
-UseFloat(shader,"vx_offset", vx_offset)
+Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
+ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
+ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
+SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurh.frag.glsl")
-ShaderTexture(shader2,colortex2,"sceneTex",0)
-SetFloat(shader2,"rt_w", width)
-SetFloat(shader2,"rt_h", height)
-UseFloat(shader2,"vx_offset", vx_offset)
-ShadeEntity(screensprite2, shader2)
-
 Global postprocess%=1
-Local lflag%=0
+Local time#=0, framerate#=60.0, animspeed#=10
+Local timer:TTimer=CreateTimer(framerate)
+UseFloat(shader,"time",time) ' Time used to scroll the distortion map
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -131,11 +115,10 @@ Local renders%, fps%
 
 
 While Not KeyHit(KEY_ESCAPE)
-		
-	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>3 Then postprocess=0
 	
-	If KeyHit(KEY_L) Then lflag=Not lflag
-	If lflag Then vx_offset=Float(MouseX())/width Else vx_offset=1.05
+	time=Float((TimerTicks(timer) / framerate) * animspeed)
+	
+	If KeyHit(KEY_SPACE) Then postprocess=Not postprocess
 	
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
@@ -149,7 +132,7 @@ While Not KeyHit(KEY_ESCAPE)
 	TurnEntity pivot,0,1,0
 	
 	UpdateWorld
-	Update2Pass()
+	Update1Pass()
 	
 	' calculate fps
 	renders=renders+1
@@ -159,73 +142,32 @@ While Not KeyHit(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Text 0,40,"Space: postprocess = "+postprocess+", L: draw line = "+lflag
+	Text 0,20,"FPS: "+fps
+	Text 0,40,"Space: postprocess = "+postprocess
 	
 	Flip
-	GCCollect
-	
 Wend
-
-FreeShader shader
-FreeShader shader2
-GCCollect
-DebugLog "Memory at end: "+GCMemAlloced()
-
 End
 
 
-Function Update2Pass()
+Function Update1Pass()
 
 	If postprocess=0
 		HideEntity postfx_cam
 		ShowEntity camera
-		HideEntity screensprite2
 		HideEntity screensprite
 		
 		RenderWorld
-	ElseIf postprocess=1 ' 2 pass
+	ElseIf postprocess=1
 		ShowEntity postfx_cam
 		HideEntity camera
-		HideEntity screensprite2
 		HideEntity screensprite
 		
 		CameraToTex colortex,postfx_cam
 		
-		ShowEntity screensprite
-		HideEntity postfx_cam
-		ShowEntity camera ' note: 2nd pass needs main camera
-		
-		CameraToTex colortex2,camera
-		
-		HideEntity screensprite
-		ShowEntity screensprite2
-		
-		RenderWorld
-	ElseIf postprocess=2 ' shader1
-		HideEntity camera
-		ShowEntity postfx_cam
-		HideEntity screensprite2
-		HideEntity screensprite
-				
-		CameraToTex colortex,postfx_cam
-		
-		ShowEntity screensprite
 		HideEntity postfx_cam
 		ShowEntity camera
-		
-		RenderWorld
-	ElseIf postprocess=3 ' shader2
-		HideEntity camera
-		ShowEntity postfx_cam
-		HideEntity screensprite2
-		HideEntity screensprite
-				
-		CameraToTex colortex2,postfx_cam
-		
-		ShowEntity screensprite2
-		HideEntity postfx_cam
-		ShowEntity camera
+		ShowEntity screensprite
 		
 		RenderWorld
 	EndIf

@@ -1,4 +1,4 @@
-' sl_cubemap.bmx
+' cubemap.bmx
 ' cubemapping with per-pixel lighting
 
 Strict

@@ -1,4 +1,4 @@
-' sl_water.bmx
+' water.bmx
 ' simple water effect, with cubemap and stencil reflections
 
 Strict

@@ -1,4 +1,4 @@
-' sl_multitex.bmx
+' multitex.bmx
 ' multitexturing
 
 Strict

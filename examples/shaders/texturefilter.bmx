@@ -1,4 +1,4 @@
-' sl_texturefilter.bmx
+' texturefilter.bmx
 
 Strict
 

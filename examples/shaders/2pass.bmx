@@ -1,11 +1,16 @@
-' sl_depthfield.bmx
-' postprocess effect - render framebuffer and depthbuffer to shader textures for depth of field
+' 2pass.bmx
+' postprocess effect - how to render framebuffer twice per render
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 
 Import Brl.Random
+?Not bmxng
+Import Brl.Timer
+?bmxng
+Import Brl.TimerDefault
+?
 
 Local width%=DesktopWidth(),height%=DesktopHeight()
 
@@ -24,7 +29,7 @@ CameraClsColor postfx_cam,150,200,250
 HideEntity postfx_cam
 
 Local light:TLight=CreateLight()
-PositionEntity light,5,5,5
+TurnEntity light,45,45,0
 
 Local pivot:TPivot=CreatePivot()
 PositionEntity pivot,0,2,0
@@ -41,8 +46,13 @@ FreeEntity t_sphere
 Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
 ScaleMesh cube,0.15,0.15,0.15
 PositionEntity cube,0,8,0
-Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1+8)
+Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1)
 EntityTexture cube,cube_tex
+
+Local cube2:TMesh=CreateCube()
+PositionEntity cube2,0,18,0
+ScaleEntity cube2,2,2,2
+EntityColor cube2,Rnd(256),Rnd(256),Rnd(256)
 
 Local t_cylinder:TMesh=CreateCylinder()
 ScaleEntity t_cylinder,0.5,6,0.5
@@ -55,55 +65,74 @@ Next
 FreeEntity t_cylinder
 
 Global colortex:TTexture=CreateTexture(width,height,1+256)
-Global depthtex:TTexture=CreateTexture(width,height,1+256)
+Global colortex2:TTexture=CreateTexture(width,height,1+256)
 ScaleTexture colortex,1.0,-1.0
-ScaleTexture depthtex,1.0,-1.0
+ScaleTexture colortex2,1.0,-1.0
+
+Local noisew%=width/4, noiseh%=height/4
+Local noisetex:TTexture=CreateTexture(noisew,noiseh)
+Local noisemap:TPixmap=CreatePixmap(noisew,noiseh,PF_RGBA8888)
+For Local i%=0 To PixmapWidth(noisemap)-1
+	For Local j%=0 To PixmapHeight(noisemap)-1
+		Local rgb%=Rand(0,255)+(Rand(0,255) Shl 8)+(Rand(0,255) Shl 16)
+		WritePixel noisemap,i,j,rgb|$ff000000
+	Next
+Next
+BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
 
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
-DepthBufferToTex depthtex,camera
+CameraToTex colortex2,camera
 TGlobal.CheckFramebufferStatus(GL_FRAMEBUFFER_EXT) ' check for framebuffer errors
 
 ' screen sprite - by BlitzSupport
 Global screensprite:TSprite=CreateSprite()
-ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite,-1
+ScaleSprite screensprite,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
+MoveEntity screensprite,0,0,1.0 ' set z to 0.99 - instead of clamping uvs
 EntityParent screensprite,camera
-MoveEntity screensprite,0,0,1.0 ' set z to 1.0
+HideEntity screensprite
 
 Global screensprite2:TSprite=CreateSprite()
 ScaleSprite screensprite2,1.0,Float( GraphicsHeight() ) / GraphicsWidth() ' 0.75
 EntityOrder screensprite2,-1
 EntityParent screensprite2,camera
-MoveEntity screensprite2,0,0,1.0 ' set z to 1.0
-EntityTexture screensprite2,depthtex
+MoveEntity screensprite2,0,0,1.0
 
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
 Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp")
+Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
+ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../glsl/depthfield.vert.glsl","../glsl/depthfield.frag.glsl")
-ShaderTexture(shader,colortex,"colortex",0) ' 0 is render texture
-ShaderTexture(shader,depthtex,"depthtex",1) ' 1 is depth texture
-ShadeEntity(screensprite,shader)
+Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
+ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
+ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
+SetFloat(shader,"distortionFactor",0.005) ' Factor used to control severity of the effect
+SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
+ShadeEntity(screensprite, shader)
+
+Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/greyscale.frag.glsl")
+ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
+ShadeEntity(screensprite2, shader2)
 
 Global postprocess%=1
-Local blursize#=0.0012
-UseFloat(shader,"blursize",blursize)
+Local time#=0, framerate#=60.0, animspeed#=10
+Local timer:TTimer=CreateTimer(framerate)
+UseFloat(shader,"time",time) ' Time used to scroll the distortion map
 
 ' fps code
 Local old_ms%=MilliSecs()
 Local renders%, fps%
 
 
-While Not KeyDown(KEY_ESCAPE)
+While Not KeyHit(KEY_ESCAPE)
 	
-	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>2 Then postprocess=0
-	If KeyDown(KEY_EQUALS) And blursize<0.004 Then blursize:+0.0001
-	If KeyDown(KEY_MINUS) And blursize>0.0004 Then blursize:-0.0001
+	time=Float((TimerTicks(timer) / framerate) * animspeed)
+	
+	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>3 Then postprocess=0
 	
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
@@ -113,10 +142,11 @@ While Not KeyDown(KEY_ESCAPE)
 	RotateEntity postfx_cam,EntityPitch(camera),EntityYaw(camera),EntityRoll(camera)
 	
 	TurnEntity cube,0.1,0.2,0.3
+	TurnEntity cube2,0.1,0.2,0.3
 	TurnEntity pivot,0,1,0
 	
 	UpdateWorld
-	UpdateDepthPass()
+	Update2Pass()
 	
 	' calculate fps
 	renders=renders+1
@@ -127,15 +157,14 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"Space: postprocess = "+postprocess+", +/-: blursize = "+blursize
+	Text 0,40,"Space: postprocess = "+postprocess
 	
 	Flip
-
 Wend
 End
 
 
-Function UpdateDepthPass()
+Function Update2Pass()
 
 	If postprocess=0
 		HideEntity postfx_cam
@@ -144,29 +173,44 @@ Function UpdateDepthPass()
 		HideEntity screensprite
 		
 		RenderWorld
-	ElseIf postprocess=1 ' 2 pass depth
-		HideEntity camera
+	ElseIf postprocess=1 ' 2 pass
 		ShowEntity postfx_cam
+		HideEntity camera
 		HideEntity screensprite2
 		HideEntity screensprite
 		
 		CameraToTex colortex,postfx_cam
 		
-		HideEntity postfx_cam
-		ShowEntity camera
-		
-		DepthBufferToTex depthtex,camera
-		
 		ShowEntity screensprite
+		HideEntity postfx_cam
+		ShowEntity camera ' note: 2nd pass needs main camera
+		
+		CameraToTex colortex2,camera
+		
+		HideEntity screensprite
+		ShowEntity screensprite2
 		
 		RenderWorld
-	ElseIf postprocess=2 ' depth
+	ElseIf postprocess=2 ' shader1
 		HideEntity camera
 		ShowEntity postfx_cam
 		HideEntity screensprite2
 		HideEntity screensprite
 				
-		DepthBufferToTex depthtex,postfx_cam
+		CameraToTex colortex,postfx_cam
+		
+		ShowEntity screensprite
+		HideEntity postfx_cam
+		ShowEntity camera
+		
+		RenderWorld
+	ElseIf postprocess=3 ' shader2
+		HideEntity camera
+		ShowEntity postfx_cam
+		HideEntity screensprite2
+		HideEntity screensprite
+				
+		CameraToTex colortex2,postfx_cam
 		
 		ShowEntity screensprite2
 		HideEntity postfx_cam
@@ -174,5 +218,5 @@ Function UpdateDepthPass()
 		
 		RenderWorld
 	EndIf
-
+	
 End Function

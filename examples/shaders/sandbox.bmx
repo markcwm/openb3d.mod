@@ -1,4 +1,4 @@
-' sl_sandbox.bmx
+' sandbox.bmx
 ' transforming glsl sandbox to 3d
 
 Strict

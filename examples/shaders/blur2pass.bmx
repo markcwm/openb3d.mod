@@ -1,5 +1,5 @@
-' sl_2pass.bmx
-' postprocess effect - how to render framebuffer twice per render
+' blur2pass.bmx
+' postprocess effect - render framebuffer twice per render for gaussian blur
 
 Strict
 
@@ -46,7 +46,7 @@ FreeEntity t_sphere
 Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
 ScaleMesh cube,0.15,0.15,0.15
 PositionEntity cube,0,8,0
-Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1)
+Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1+8)
 EntityTexture cube,cube_tex
 
 Local cube2:TMesh=CreateCube()
@@ -103,25 +103,27 @@ PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
 Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
+Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp")
 ScaleTexture ground_tex,2,2
 EntityTexture ground,ground_tex
 
-Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
-ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
-ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.005) ' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
+Local shader:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurv.frag.glsl")
+ShaderTexture(shader,colortex,"sceneTex",0)
+SetFloat(shader,"rt_w", width)
+SetFloat(shader,"rt_h", height)
+Local vx_offset#=1.05
+UseFloat(shader,"vx_offset", vx_offset)
 ShadeEntity(screensprite, shader)
 
-Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/greyscale.frag.glsl")
-ShaderTexture(shader2,colortex2,"texture0",0) ' render texture
+Local shader2:TShader=LoadShader("","../glsl/blur.vert.glsl", "../glsl/blurh.frag.glsl")
+ShaderTexture(shader2,colortex2,"sceneTex",0)
+SetFloat(shader2,"rt_w", width)
+SetFloat(shader2,"rt_h", height)
+UseFloat(shader2,"vx_offset", vx_offset)
 ShadeEntity(screensprite2, shader2)
 
 Global postprocess%=1
-Local time#=0, framerate#=60.0, animspeed#=10
-Local timer:TTimer=CreateTimer(framerate)
-UseFloat(shader,"time",time) ' Time used to scroll the distortion map
+Local lflag%=0
 
 ' fps code
 Local old_ms%=MilliSecs()
@@ -129,10 +131,11 @@ Local renders%, fps%
 
 
 While Not KeyHit(KEY_ESCAPE)
-	
-	time=Float((TimerTicks(timer) / framerate) * animspeed)
-	
+		
 	If KeyHit(KEY_SPACE) Then postprocess:+1 ; If postprocess>3 Then postprocess=0
+	
+	If KeyHit(KEY_L) Then lflag=Not lflag
+	If lflag Then vx_offset=Float(MouseX())/width Else vx_offset=1.05
 	
 	' control camera
 	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
@@ -156,11 +159,19 @@ While Not KeyHit(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps
-	Text 0,40,"Space: postprocess = "+postprocess
+	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
+	Text 0,40,"Space: postprocess = "+postprocess+", L: draw line = "+lflag
 	
 	Flip
+	GCCollect
+	
 Wend
+
+FreeShader shader
+FreeShader shader2
+GCCollect
+DebugLog "Memory at end: "+GCMemAlloced()
+
 End
 
 

@@ -1,10 +1,9 @@
-' sl_shimmer.bmx
-' postprocess effect - render framebuffer to texture for shimmer/heat haze
+' pixelate.bmx
+' postprocess effect - render framebuffer to texture for pixeled/voxel style
 
 Strict
 
 Framework Openb3d.B3dglgraphics
-
 Import Brl.Random
 ?Not bmxng
 Import Brl.Timer
@@ -31,52 +30,42 @@ HideEntity postfx_cam
 Local light:TLight=CreateLight()
 TurnEntity light,45,45,0
 
-Local pivot:TPivot=CreatePivot()
-PositionEntity pivot,0,2,0
-Local t_sphere:TMesh=CreateSphere( 8 )
-EntityShininess t_sphere,0.2
-For Local t%=0 To 359 Step 36
-	Local sphere:TEntity=CopyEntity(t_sphere,pivot)
-	EntityColor sphere,Rnd(256),Rnd(256),Rnd(256)
-	TurnEntity sphere,0,t,0
-	MoveEntity sphere,0,0,15
+Local size:Int=256, vsize:Float=30, maxheight:Float=10
+Local terrain:TTerrain=CreateTerrain(size)
+
+Local map:TPixmap=LoadPixmap("../media/heightmap_256.bmp")
+For Local iy%=0 To PixmapWidth(map)-1
+	For Local ix%=0 To PixmapHeight(map)-1
+		Local height:Float=ReadPixel(map,ix,iy) & $FF
+		height=height/255 ' 255 to 1, 1=30M
+		ModifyTerrain terrain,ix,iy,(height/vsize)*maxheight
+	Next
 Next
-FreeEntity t_sphere
+
+terrain.UpdateNormals()
+PositionEntity terrain,-size/2,-10,size/2
+
+Local pivot:TPivot=CreatePivot()
+PositionEntity pivot,0,0,0
+Local anim_time:Float
+Local anim_ent:TMesh=LoadAnimMesh("../media/zombie.b3d",pivot)
+PositionEntity anim_ent,0,0,12
+TurnEntity anim_ent,0,-90,0
+
+' Texture terrain
+Local grass_tex:TTexture=LoadTexture( "../media/terrain-1.jpg" )
+EntityTexture terrain,grass_tex
+ScaleTexture grass_tex,10,10
 
 Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
 ScaleMesh cube,0.15,0.15,0.15
-PositionEntity cube,0,8,0
+PositionEntity cube,0,3,0
 Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1)
 EntityTexture cube,cube_tex
-
-Local cube2:TMesh=CreateCube()
-PositionEntity cube2,0,18,0
-ScaleEntity cube2,2,2,2
-EntityColor cube2,Rnd(256),Rnd(256),Rnd(256)
-
-Local t_cylinder:TMesh=CreateCylinder()
-ScaleEntity t_cylinder,0.5,6,0.5
-MoveEntity t_cylinder,5,0,-25
-For Local t%=0 To 10
-	MoveEntity t_cylinder,2,0,9
-	Local cylinder:TEntity=CopyEntity(t_cylinder)
-	EntityColor cylinder,Rnd(256),Rnd(256),Rnd(256)
-Next
-FreeEntity t_cylinder
+TurnEntity cube,0,45,0
 
 Global colortex:TTexture=CreateTexture(width,height,1+256)
 ScaleTexture colortex,1.0,-1.0
-
-Local noisew%=width/4, noiseh%=height/4
-Local noisetex:TTexture=CreateTexture(noisew,noiseh)
-Local noisemap:TPixmap=CreatePixmap(noisew,noiseh,PF_RGBA8888)
-For Local i%=0 To PixmapWidth(noisemap)-1
-	For Local j%=0 To PixmapHeight(noisemap)-1
-		Local rgb%=Rand(0,255)+(Rand(0,255) Shl 8)+(Rand(0,255) Shl 16)
-		WritePixel noisemap,i,j,rgb|$ff000000
-	Next
-Next
-BufferToTex noisetex,PixmapPixelPtr(noisemap,0,0)
 
 ' in GL 2.0 render textures need attached before other textures (EntityTexture)
 CameraToTex colortex,camera
@@ -92,16 +81,12 @@ EntityParent screensprite,camera
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
-Local ground:TMesh=CreatePlane(128)
-Local ground_tex:TTexture=LoadTexture("../media/Envwall.bmp",1+8)
-ScaleTexture ground_tex,2,2
-EntityTexture ground,ground_tex
-
-Local shader:TShader=LoadShader("","../glsl/shimmer.vert.glsl", "../glsl/shimmer.frag.glsl")
-ShaderTexture(shader,colortex,"currentTexture",0) ' Our render texture
-ShaderTexture(shader,noisetex,"distortionMapTexture",1) ' Our distortion map texture
-SetFloat(shader,"distortionFactor",0.005)' Factor used to control severity of the effect
-SetFloat(shader,"riseFactor",0.002) ' Factor used to control how fast air rises
+Local shader:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/pixelate.frag.glsl")
+ShaderTexture(shader,colortex,"sceneTex",0) ' Our render texture
+SetFloat(shader,"rt_w", width)
+SetFloat(shader,"rt_h", height)
+SetFloat(shader,"pixel_w", 3.0)
+SetFloat(shader,"pixel_h", 3.0)
 ShadeEntity(screensprite, shader)
 
 Global postprocess%=1
@@ -118,19 +103,25 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	time=Float((TimerTicks(timer) / framerate) * animspeed)
 	
+	If KeyDown(KEY_MINUS) Then anim_time#=anim_time#-0.1
+	If KeyDown(KEY_EQUALS) Then anim_time#=anim_time#+0.1
+	
+	anim_time:+0.5
+	If anim_time>20 Then anim_time=2
+	SetAnimTime(anim_ent,anim_time)
+	TurnEntity pivot,0,1,0
+	
 	If KeyHit(KEY_SPACE) Then postprocess=Not postprocess
 	
 	' control camera
-	MoveEntity camera,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
-	TurnEntity camera,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
+	If KeyDown( KEY_RIGHT )=True Then TurnEntity camera,0,-1,0
+	If KeyDown( KEY_LEFT )=True Then TurnEntity camera,0,1,0
+	If KeyDown( KEY_DOWN )=True Then MoveEntity camera,0,0,-0.5
+	If KeyDown( KEY_UP )=True Then MoveEntity camera,0,0,0.5
 	
 	PositionEntity postfx_cam,EntityX(camera),EntityY(camera),EntityZ(camera)
 	RotateEntity postfx_cam,EntityPitch(camera),EntityYaw(camera),EntityRoll(camera)
-	
-	TurnEntity cube,0.1,0.2,0.3
-	TurnEntity cube2,0.1,0.2,0.3
-	TurnEntity pivot,0,1,0
-	
+		
 	UpdateWorld
 	Update1Pass()
 	
@@ -142,7 +133,7 @@ While Not KeyHit(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps
+	Text 0,20,"FPS: "+fps+" anim_time="+anim_time
 	Text 0,40,"Space: postprocess = "+postprocess
 	
 	Flip

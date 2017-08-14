@@ -1,4 +1,4 @@
-' sl_pixellight.bmx
+' pixellight.bmx
 ' per pixel lighting
 
 Strict

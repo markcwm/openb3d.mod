@@ -1,4 +1,4 @@
-' sl_error.bmx
+' error.bmx
 ' shader error reports
 
 Strict

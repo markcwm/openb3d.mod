@@ -1,4 +1,4 @@
-' sl_toon.bmx
+' toon.bmx
 ' cel/toon shading
 
 Strict

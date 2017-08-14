@@ -1,4 +1,4 @@
-' sl_pixelfog.bmx
+' pixelfog.bmx
 ' per pixel lighting and per pixel fog
 
 Strict

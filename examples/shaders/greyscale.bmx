@@ -1,5 +1,4 @@
-' sl_alphamap.bmx
-' using alpha maps for transparency - note more than one visible surface is needed for alpha to work
+' greyscale.bmx
 
 Strict
 
@@ -8,6 +7,7 @@ Framework Openb3d.B3dglgraphics
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 Local camera:TCamera=CreateCamera()
+CameraClsColor camera,0,125,250
 
 Local light:TLight=CreateLight()
 
@@ -25,16 +25,13 @@ Local plane:TMesh=CreateCube()
 ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
-' transparency - from two images
-Local shader:TShader=LoadShader("","../glsl/alphamap.vert.glsl","../glsl/alphamap.frag.glsl")
-ShaderTexture(shader,LoadTexture("../media/colorkey.jpg"),"tex",0)
-ShaderTexture(shader,LoadTexture("../media/spark.png"),"alphatex",1)
+Local shader:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/greyscale.frag.glsl")
+ShaderTexture(shader,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube,shader)
 EntityFX(cube,32)
 
-' tranlucency - from single image with alpha channel
-Local shader2:TShader=LoadShader("","../glsl/alphamap.vert.glsl","../glsl/alphamap2.frag.glsl")
-ShaderTexture(shader2,LoadTexture("../media/alpha_map.png"),"tex",0)
+Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/default.frag.glsl")
+ShaderTexture(shader2,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube2,shader2)
 EntityFX(cube2,32)
 
