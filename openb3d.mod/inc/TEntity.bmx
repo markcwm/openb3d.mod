@@ -486,7 +486,8 @@ Type TEntity
 	' 30/01/06 - updated to make anim_time return wrapped value
 	Method SetAnimTime( time:Float,seq:Int=0 )
 	
-		If time<>0.0 Then SetAnimTime_( GetInstance(Self),time,seq ) ' if zero crash fix
+		' hack to fix MD2 if zero immediate crash and if near-zero error on exit
+		If time<-0.01 Or time>0.01 Then SetAnimTime_( GetInstance(Self),time,seq )
 		
 	End Method
 	

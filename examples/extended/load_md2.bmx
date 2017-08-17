@@ -38,6 +38,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	SetAnimTime(ent,anim_time)
 	
+	'UpdateWorld
 	RenderWorld
 	
 	' calculate fps
