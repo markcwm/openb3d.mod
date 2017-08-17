@@ -36,6 +36,7 @@
 #include "file.h"
 #include "global.h"
 #include "shadow.h"
+#include "dds.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -72,9 +73,47 @@ Texture* Texture::Copy(){
 }
 
 Texture* Texture::LoadTexture(string filename,int flags){
+	filename=File::ResourceFilePath(filename);
+	if(filename.empty()) return NULL;
+	
+	// Try to load DDS file first
+	if(Right(filename,4)==".dds"){
+		Texture* tex=new Texture();
+		tex->file=filename;
+		
+		// set tex.flags before TexInList
+		tex->flags=flags;
+		tex->FilterFlags();
+		
+		// check to see if texture with same properties exists already, if so return existing texture
+		Texture* old_tex=tex->TexInList(tex_list);
+		if(old_tex!=NULL){
+			delete tex;
+			tex_list_all.push_back(old_tex);
+			return old_tex;
+		}else{
+			tex_list_all.push_back(tex);
+			tex_list.push_back(tex);
+		}
+		
+		DirectDrawSurface *dds=DirectDrawSurface::LoadSurface(filename,false);
+		if(!dds) return NULL;
+		
+		unsigned int name;
+		glGenTextures (1,&name);
+		glBindTexture(dds->target,name);
+		
+		// uses glTexImage2D or glCompressedTexImage2D
+		dds->UploadTexture(tex);
+		dds->FreeDirectDrawSurface();
+		
+		tex->texture=name;
+		return tex;
+	}
+	
 	if (flags&128) {
 		//filename=Strip(filename); // get rid of path info
-		filename=File::ResourceFilePath(filename);
+		//filename=File::ResourceFilePath(filename);
 
 		/*if (filename==""){
 			cout << "Error: Cannot Find Texture: " << filename << endl;

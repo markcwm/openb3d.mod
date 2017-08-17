@@ -51,8 +51,12 @@ public:
 	
 	void SeekFile(int pos);
 	int FilePos();
-	
 	int Eof();
+	
+	// dds
+	int FileSize();
+	
+	size_t Read(void *buffer,size_t size,size_t count);
 
 };
  

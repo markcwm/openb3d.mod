@@ -355,3 +355,20 @@ int File::Eof(){
 	return endof;
 
 }
+
+int File::FileSize(){
+	
+	int l,p;
+	p=ftell(pFile);
+	fseek(pFile,0,SEEK_END);
+	l=ftell(pFile);
+	fseek(pFile,p,SEEK_SET);
+	return l;
+	
+}
+
+size_t File::Read(void *buffer,size_t size,size_t count){
+	
+	return fread(buffer,size,count,pFile);
+	
+}

@@ -38,11 +38,13 @@ public:
 	int no_frames;
 	unsigned int* framebuffer;
 	int cube_face,cube_mode;
-	
+
 	// extra
 	static list<Texture*> tex_list_all;
 	int glTexEnv[3][12];
 	int glTexEnv_count;
+	
+	int format; // Added can be GL_RGBA or one of the DXT compressed ones
 
 	Texture(){
 
