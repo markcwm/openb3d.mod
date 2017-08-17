@@ -2,6 +2,7 @@
 #include "dds.h"
 #include <GL/glew.h>
 #include "string_helper.h"
+#include <strings.h>
 
 #include <algorithm>
 
