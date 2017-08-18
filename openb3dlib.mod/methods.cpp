@@ -5,6 +5,7 @@
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
+#include <string.h>
 
 extern "C" {
 
@@ -40,6 +41,11 @@ Brush* BrushCopy( Brush* obj ){
 
 int CompareBrushes( Brush* brush1,Brush* brush2 ){
 	return Brush::CompareBrushes( brush1,brush2 );
+}
+
+void NameBrush( Brush* obj,char* b_name ){
+	string name(b_name);
+	obj->NameBrush( name );
 }
 
 // Camera
@@ -100,6 +106,11 @@ Entity* GetChildFromAll( Entity* obj,int child_no,int &no_children,Entity* ent )
 
 int Hidden( Entity* obj ){
 	return obj->Hidden();
+}
+
+void NameClass( Entity* obj,char* c_name ){
+	string name(c_name);
+	obj->NameClass( name );
 }
 
 void AlignToVector( Entity* obj,float x,float y,float z,int axis,float rate ){

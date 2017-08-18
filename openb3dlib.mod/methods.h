@@ -14,6 +14,7 @@ AnimationKeys* AnimationKeysCopy( AnimationKeys* obj );
 // Brush
 Brush* BrushCopy( Brush* obj );
 int CompareBrushes( Brush* brush1,Brush* brush2 );
+void NameBrush( Brush* obj,char* b_name );
 
 // Camera
 void ExtractFrustum( Camera* obj );
@@ -32,6 +33,7 @@ void CameraUpdateEntityRender( Entity* ent,Entity* cam );
 int CountAllChildren( Entity* obj,int no_children );
 Entity* GetChildFromAll( Entity* obj,int child_no,int &no_children,Entity* ent );
 int Hidden( Entity* obj );
+void NameClass( Entity* obj,char* c_name );
 void AlignToVector( Entity* obj,float x,float y,float z,int axis,float rate );
 void UpdateMat( Entity* obj,bool load_identity );
 void AddParent( Entity* obj,Entity &parent_ent );

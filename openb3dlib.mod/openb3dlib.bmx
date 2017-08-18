@@ -55,6 +55,7 @@ Extern
 	' Brush
 	Function BrushCopy_:Byte Ptr( obj:Byte Ptr ) = "BrushCopy"
 	Function CompareBrushes_:Int( brush1:Byte Ptr,brush2:Byte Ptr ) = "CompareBrushes"
+	Function NameBrush_( obj:Byte Ptr,b_name:Byte Ptr ) = "NameBrush"
 	
 	' Camera
 	Function ExtractFrustum_( obj:Byte Ptr ) = "ExtractFrustum"
@@ -79,6 +80,8 @@ Extern
 	Function CountAllChildren_:Int( obj:Byte Ptr,no_children:Int ) = "CountAllChildren"
 	Function GetChildFromAll_:Byte Ptr( obj:Byte Ptr,child_no:Int,no_children:Int Ptr,ent:Byte Ptr ) = "GetChildFromAll"
 	Function Hidden_:Int( obj:Byte Ptr ) = "Hidden"
+	Function NameClass_( obj:Byte Ptr,c_name:Byte Ptr ) = "NameClass"
+	
 	Function AlignToVector_( obj:Byte Ptr,x:Float,y:Float,z:Float,axis:Int,rate:Float ) = "AlignToVector"
 	Function UpdateMat_( obj:Byte Ptr,load_identity:Byte ) = "UpdateMat"
 	Function AddParent_( obj:Byte Ptr,parent_ent:Byte Ptr ) = "AddParent"

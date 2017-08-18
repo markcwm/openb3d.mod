@@ -219,6 +219,7 @@ public:
 	void NameEntity(string e_name);
 	string EntityName();
 	string EntityClass();
+	void NameClass(string c_name);
 	// anim
 	void Animate(int mode=1,float speed=1.0,int seq=0,int trans=0);
 	void SetAnimTime(float time,int seq=0);

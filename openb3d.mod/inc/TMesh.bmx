@@ -612,6 +612,16 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+	' Minib3d mesh loader
+	Function mbLoadMesh:TMesh( file:String,parent_ent:TEntity=Null )
+	
+		If Right(Lower(file), 4) = ".3ds"
+			Local Loader:T3DS = New T3DS
+			Return Loader.Load( file,parent_ent )
+		EndIf
+		
+	End Function
+	
 	' Note: operator overloads not added as build breaks on NG older than v0.87
 Rem
 ?bmxng
@@ -631,4 +641,5 @@ Rem
 	End Method
 ?
 EndRem
+	
 End Type

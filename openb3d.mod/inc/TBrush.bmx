@@ -224,4 +224,12 @@ Type TBrush
 		
 	End Function
 	
+	Method NameBrush( b_name:String )
+	
+		Local cString:Byte Ptr=b_name.ToCString()
+		NameBrush_( GetInstance(Self),cString )
+		MemFree cString
+		
+	End Method
+	
 End Type

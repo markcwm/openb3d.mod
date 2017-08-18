@@ -14,6 +14,7 @@
 #include "animation.h"
 #include "pick.h"
 #include "maths_helper.h"
+#include <string.h>
 
 list<Entity*> Entity::entity_list;
 list<Entity*> Entity::animate_list;
@@ -649,6 +650,10 @@ string Entity::EntityName(){
 
 string Entity::EntityClass(){
 	return class_name;
+}
+
+void Entity::NameClass(string c_name){
+	class_name=c_name;
 }
 
 // anim

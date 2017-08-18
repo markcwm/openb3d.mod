@@ -1025,6 +1025,13 @@ Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadMesh( file,parent )
 End Function
 
+Rem
+bbdoc: Minib3d mesh loader
+End Rem
+Function mbLoadMesh:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.mbLoadMesh( file,parent )
+End Function
+
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem

@@ -945,6 +945,14 @@ Type TEntity
 		
 	End Method
 	
+	Method NameClass( c_name:String )
+		
+		Local cString:Byte Ptr=c_name.ToCString()
+		NameClass_( GetInstance(Self),cString )
+		MemFree cString
+		
+	End Method
+	
 	' Recursively counts all children of an entity
 	Function CountAllChildren:Int( ent:TEntity,no_children:Int=0 )
 	
