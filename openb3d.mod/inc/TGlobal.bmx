@@ -123,9 +123,9 @@ Type TGlobal
 	Function GraphicsInit()
 	
 		TextureFilter("",9)
-	?Not opengles
+		?Not opengles
 		glewInit() ' required for ARB funcs
-	?
+		?
 		' get hardware info and set vbo_enabled accordingly
 		THardwareInfo.GetInfo()
 		vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects

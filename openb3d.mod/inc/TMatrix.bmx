@@ -7,22 +7,22 @@ Type TMatrix
 	Field grid:Float Ptr ' array [4,4] - LoadIdentity
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global matrix_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global matrix_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TMatrix( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TMatrix=New TMatrix
-	?bmxng
+		?bmxng
 		matrix_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		matrix_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -30,19 +30,23 @@ Type TMatrix
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		matrix_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		matrix_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TMatrix( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TMatrix( matrix_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TMatrix( matrix_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TMatrix ) ' Get C++ instance from object
@@ -58,18 +62,36 @@ Type TMatrix
 		
 	End Method
 	
+	Function NewMatrix:TMatrix()
+	
+		Local inst:Byte Ptr=NewMatrix_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	' Minib3d
 	
 	Method New()
 	
+		Local inst:Byte Ptr=NewMatrix_()
+		If inst<>Null
+			?bmxng
+			matrix_map.Insert( inst,Self )
+			?Not bmxng
+			matrix_map.Insert( String(Long(inst)),Self )
+			?
+			instance=inst
+			InitFields()
+		EndIf
 		If LOG_NEW
 			DebugLog "New TMatrix"
 		EndIf
-
+		
 	End Method
 	
 	Method Delete()
 	
+		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TMatrix"
 		EndIf
@@ -274,27 +296,31 @@ Type TMatrix
 		
 	End Method
 	
+	Function Magnitude:Float( x:Float,y:Float,z:Float )
+	
+		Return Sqr( x*x + y*y + z*z )
+		
+	End Function
+	
+	' Creates a quaternion from an angle and an axis
+	Function Quaternion_FromAngleAxis( angle:Float,ax:Float,ay:Float,az:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
+	
+		MatrixQuaternion_FromAngleAxis( angle,ax,ay,az,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
+		
+	End Function
+	
+	' Multiplies a quaternion
+	Function Quaternion_MultiplyQuat( x1:Float,y1:Float,z1:Float,w1:Float,x2:Float,y2:Float,z2:Float,w2:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
+	
+		MatrixQuaternion_MultiplyQuat( x1,y1,z1,w1,x2,y2,z2,w2,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
+			
+	End Function
+	
+	' interpolates two matrices at a relative value - called in AlignToVector
+	Function InterpolateMatrix( m:TMatrix,a:TMatrix,alpha:Float )
+	
+		MatrixInterpolateMatrix( TMatrix.GetInstance(m),TMatrix.GetInstance(a),alpha )
+		
+	End Function
+	
 End Type
-
-' Openb3d
-
-' Creates a quaternion from an angle and an axis
-Function Quaternion_FromAngleAxis( angle:Float,ax:Float,ay:Float,az:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
-
-	MatrixQuaternion_FromAngleAxis( angle,ax,ay,az,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
-	
-End Function
-
-' Multiplies a quaternion
-Function Quaternion_MultiplyQuat( x1:Float,y1:Float,z1:Float,w1:Float,x2:Float,y2:Float,z2:Float,w2:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
-
-	MatrixQuaternion_MultiplyQuat( x1,y1,z1,w1,x2,y2,z2,w2,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
-	
-End Function
-
-' interpolates two matrices at a relative value - called in AlignToVector
-Function InterpolateMatrix( m:TMatrix,a:TMatrix,alpha:Float )
-
-	MatrixInterpolateMatrix( TMatrix.GetInstance(m),TMatrix.GetInstance(a),alpha )
-	
-End Function

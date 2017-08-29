@@ -36,6 +36,7 @@ Entity* ActionEntity( Action* obj,int varid );
 // AnimationKeys
 int* AnimationKeysInt( AnimationKeys* obj,int varid );
 float* AnimationKeysFloat( AnimationKeys* obj,int varid );
+AnimationKeys* NewAnimationKeys();
 
 // Bone
 float* BoneFloat( Bone* obj,int varid );
@@ -71,6 +72,7 @@ float* LightFloat( Light* obj,int varid );
 
 // Matrix
 float* MatrixFloat( Matrix* obj,int varid );
+Matrix* NewMatrix();
 
 // Mesh
 int* MeshInt( Mesh* obj,int varid );

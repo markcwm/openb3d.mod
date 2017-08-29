@@ -8,11 +8,11 @@ Type TParticleBatch Extends TMesh
 	
 		If inst=Null Then Return Null
 		Local obj:TParticleBatch=New TParticleBatch
-	?bmxng
+		?bmxng
 		ent_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -40,11 +40,11 @@ Type TParticleEmitter Extends TEntity
 	
 		If inst=Null Then Return Null
 		Local obj:TParticleEmitter=New TParticleEmitter
-	?bmxng
+		?bmxng
 		ent_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj

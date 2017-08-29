@@ -24,11 +24,11 @@ Type TBone Extends TEntity
 	
 		If inst=Null Then Return Null
 		Local obj:TBone=New TBone
-	?bmxng
+		?bmxng
 		ent_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -84,6 +84,26 @@ Type TBone Extends TEntity
 	Function CreateBone:TBone( mesh:TMesh,parent_ent:TEntity=Null ) ' same as method in TMesh
 	
 		Local inst:Byte Ptr=CreateBone_( GetInstance(mesh),GetInstance(parent_ent) )
+		CopyList(mesh.bones)
+		If mesh.is_anim=0
+			mesh.is_anim=1
+			CopyList(mesh.surf_list)
+			CopyList(mesh.anim_surf_list)
+			For Local surf:TSurface=EachIn mesh.anim_surf_list
+				surf.no_verts=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_no_verts )
+				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
+				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
+				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
+				surf.vert_bone3_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone3_no )
+				surf.vert_bone4_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone4_no )
+				surf.vert_weight1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight1 )
+				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
+				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
+				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
+				surf.vmin=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmin )
+				surf.vmax=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmax )
+			Next
+		EndIf
 		Return CreateObject(inst)
 		
 	End Function
@@ -95,7 +115,7 @@ Type TBone Extends TEntity
 		If LOG_NEW
 			DebugLog "New TBone"
 		EndIf
-	
+		
 	End Method
 	
 	Method Delete()
@@ -113,7 +133,6 @@ Type TBone Extends TEntity
 			TMatrix.FreeObject( TMatrix.GetInstance(mat2) ) ; mat2=Null
 			TMatrix.FreeObject( TMatrix.GetInstance(inv_mat) ) ; inv_mat=Null
 			TMatrix.FreeObject( TMatrix.GetInstance(tform_mat) ) ; tform_mat=Null
-			
 			Super.FreeEntity()
 		EndIf
 		

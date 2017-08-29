@@ -76,17 +76,18 @@ Type TEntity
 	'Field link:TLink ' entity_list tlink, for quick removal of entity from list (not used)
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global ent_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global ent_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Global entity_list_id:Int=0
 	Global animate_list_id:Int=0
 	Field child_list_id:Int=0
 	Field exists:Int=0 ' FreeEntity
+	Field is_anim:Int=0
 	Global child_list_queue:TList=CreateList()
 	
 	Method CopyEntity:TEntity( parent_ent:TEntity=Null ) Abstract
@@ -95,19 +96,23 @@ Type TEntity
 	'Function CreateObject:TEntity( inst:Byte Ptr ) ' Not needed
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		ent_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TEntity( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TEntity( ent_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TEntity( ent_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TEntity ) ' Get C++ instance from object

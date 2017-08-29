@@ -32,11 +32,11 @@ Type TAction
 	Field endact:Int Ptr,lifetime:Int Ptr
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global action_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global action_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Global action_list_id:Int=0
@@ -46,11 +46,11 @@ Type TAction
 	
 		If inst=Null Then Return Null
 		Local obj:TAction=New TAction
-	?bmxng
+		?bmxng
 		action_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		action_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -58,19 +58,23 @@ Type TAction
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		action_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		action_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TAction( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TAction( action_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TAction( action_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TAction ) ' Get C++ instance from object

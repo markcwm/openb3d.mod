@@ -94,7 +94,7 @@ Extern
 	Function MQ_Turn_( obj:Byte Ptr,ang:Float,vx:Float,vy:Float,vz:Float,glob:Int ) = "MQ_Turn"
 	Function MQ_ApplyNewtonTransform_:Int( obj:Byte Ptr,newtonMatrix:Byte Ptr ) = "MQ_ApplyNewtonTransform"
 	
-	' Matrix2
+	' Matrix
 	Function MatrixLoadIdentity_( obj:Byte Ptr ) = "MatrixLoadIdentity"
 	Function MatrixCopy_:Byte Ptr( obj:Byte Ptr ) = "MatrixCopy"
 	Function MatrixOverwrite_( obj:Byte Ptr,mat:Byte Ptr ) = "MatrixOverwrite"
@@ -213,6 +213,7 @@ Extern
 	' AnimationKeys
 	Function AnimationKeysInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysInt"
 	Function AnimationKeysFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysFloat"
+	Function NewAnimationKeys_:Byte Ptr() = "NewAnimationKeys"
 	
 	' Bone
 	Function BoneFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "BoneFloat"
@@ -248,6 +249,7 @@ Extern
 	
 	' Matrix
 	Function MatrixFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "MatrixFloat"
+	Function NewMatrix_:Byte Ptr() = "NewMatrix"
 	
 	' Mesh
 	Function MeshInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "MeshInt"

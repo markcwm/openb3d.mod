@@ -874,6 +874,11 @@ float* AnimationKeysFloat( AnimationKeys* obj,int varid ){
 	return NULL;
 }
 
+AnimationKeys* NewAnimationKeys(){
+	AnimationKeys* keys=new AnimationKeys();
+	return keys;
+}
+
 // Bone
 
 float* BoneFloat( Bone* obj,int varid ){
@@ -1173,6 +1178,11 @@ float* MatrixFloat( Matrix* obj,int varid ){
 		case MATRIX_grid : return &obj->grid[0][0];
 	}
 	return NULL;
+}
+
+Matrix* NewMatrix(){
+	Matrix* mat=new Matrix();
+	return mat;
 }
 
 // Mesh

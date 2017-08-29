@@ -35,11 +35,11 @@ Type TMesh Extends TEntity
 	
 		If inst=Null Then Return Null
 		Local obj:TMesh=New TMesh
-	?bmxng
+		?bmxng
 		ent_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -171,6 +171,26 @@ Type TMesh Extends TEntity
 	Method CreateBone:TBone( parent_ent:TEntity=Null ) ' same as function in TBone
 	
 		Local inst:Byte Ptr=CreateBone_( GetInstance(Self),GetInstance(parent_ent) )
+		CopyList(bones)
+		If is_anim=0
+			is_anim=1
+			CopyList(surf_list)
+			CopyList(anim_surf_list)
+			For Local surf:TSurface=EachIn anim_surf_list
+				surf.no_verts=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_no_verts )
+				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
+				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
+				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
+				surf.vert_bone3_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone3_no )
+				surf.vert_bone4_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone4_no )
+				surf.vert_weight1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight1 )
+				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
+				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
+				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
+				surf.vmin=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmin )
+				surf.vmax=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmax )
+			Next
+		EndIf
 		Return TBone.CreateObject(inst)
 		
 	End Method
@@ -253,6 +273,16 @@ Type TMesh Extends TEntity
 	
 	Method New()
 	
+		Local inst:Byte Ptr=CreateMesh_( GetInstance(parent) )
+		If inst<>Null
+			?bmxng
+			ent_map.Insert( inst,Self )
+			?Not bmxng
+			ent_map.Insert( String(Long(inst)),Self )
+			?
+			instance=inst
+			InitFields()
+		EndIf
 		If LOG_NEW
 			DebugLog "New TMesh"
 		EndIf

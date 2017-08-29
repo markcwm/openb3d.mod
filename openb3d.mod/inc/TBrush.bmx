@@ -16,11 +16,11 @@ Type TBrush
 	'Field tex_frame:Int ' 0
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global brush_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global brush_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Field exists:Int=0 ' FreeBrush
@@ -29,11 +29,11 @@ Type TBrush
 	
 		If inst=Null Then Return Null
 		Local obj:TBrush=New TBrush
-	?bmxng
+		?bmxng
 		brush_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		brush_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -41,19 +41,23 @@ Type TBrush
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		brush_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		brush_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TBrush( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TBrush( brush_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TBrush( brush_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TBrush ) ' Get C++ instance from object
@@ -107,6 +111,16 @@ Type TBrush
 	
 	Method New()
 	
+		Local inst:Byte Ptr=CreateBrush_( 255,255,255 )
+		If inst<>Null
+			?bmxng
+			brush_map.Insert( inst,Self )
+			?Not bmxng
+			brush_map.Insert( String(Long(inst)),Self )
+			?
+			instance=inst
+			InitFields()
+		EndIf
 		If LOG_NEW
 			DebugLog "New TBrush"
 		EndIf
@@ -115,10 +129,11 @@ Type TBrush
 	
 	Method Delete()
 	
+		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TBrush"
 		EndIf
-	
+		
 	End Method
 	
 	Method FreeBrush()

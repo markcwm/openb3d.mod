@@ -14,11 +14,11 @@ Type TSprite Extends TMesh
 	
 		If inst=Null Then Return Null
 		Local obj:TSprite=New TSprite
-	?bmxng
+		?bmxng
 		ent_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		ent_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -54,14 +54,25 @@ Type TSprite Extends TMesh
 	
 	Method New()
 	
+		Local inst:Byte Ptr=CreateSprite_( GetInstance(parent) )
+		If inst<>Null
+			?bmxng
+			ent_map.Insert( inst,Self )
+			?Not bmxng
+			ent_map.Insert( String(Long(inst)),Self )
+			?
+			instance=inst
+			InitFields()
+		EndIf
 		If LOG_NEW
 			DebugLog "New TSprite"
 		EndIf
-	
+		
 	End Method
 	
 	Method Delete()
 	
+		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TSprite"
 		EndIf

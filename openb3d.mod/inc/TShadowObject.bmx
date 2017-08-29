@@ -35,11 +35,11 @@ Type TShadowObject
 	Global ShadowAlpha:Float Ptr ' 0.5
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global shad_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global shad_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Global shadow_list_id:Int=0
@@ -49,11 +49,11 @@ Type TShadowObject
 	
 		If inst=Null Then Return Null
 		Local obj:TShadowObject=New TShadowObject
-	?bmxng
+		?bmxng
 		shad_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		shad_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -61,19 +61,23 @@ Type TShadowObject
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		shad_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		shad_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TShadowObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TShadowObject( shad_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TShadowObject( shad_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TShadowObject ) ' ' Get C++ instance from object

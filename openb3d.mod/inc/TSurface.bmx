@@ -47,22 +47,22 @@ Type TSurface
 	Field alpha_enable:Int Ptr ' false
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global surf_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global surf_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TSurface( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TSurface=New TSurface
-	?bmxng
+		?bmxng
 		surf_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		surf_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -70,19 +70,23 @@ Type TSurface
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		surf_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		surf_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TSurface( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TSurface( surf_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TSurface( surf_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TSurface ) ' Get C++ instance from object
@@ -142,6 +146,7 @@ Type TSurface
 	Method UpdateTexCoords()
 	
 		UpdateTexCoords_( GetInstance(Self) )
+		vert_tex_coords1=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords1 )
 		
 	End Method
 	
@@ -168,11 +173,11 @@ Type TSurface
 		If LOG_NEW
 			DebugLog "New TSurface"
 		EndIf
-	
+		
 	End Method
 	
 	Method Delete()
-			
+		
 		If LOG_DEL
 			DebugLog "Del TSurface"
 		EndIf
@@ -182,7 +187,6 @@ Type TSurface
 	Method PaintSurface( bru:TBrush )
 	
 		PaintSurface_( GetInstance(Self),TBrush.GetInstance(bru) )
-		
 		If brush<>Null Then brush.InitFields()
 		
 	End Method
@@ -195,13 +199,21 @@ Type TSurface
 	
 	Method AddVertex:Int( x:Float,y:Float,z:Float,u:Float=0,v:Float=0,w:Float=0 )
 	
-		Return AddVertex_( GetInstance(Self),x,y,z,u,v,w )
+		Local no:Int=AddVertex_( GetInstance(Self),x,y,z,u,v,w )
+		vert_coords=SurfaceFloat_( GetInstance(Self),SURFACE_vert_coords )
+		vert_norm=SurfaceFloat_( GetInstance(Self),SURFACE_vert_norm )
+		vert_tex_coords0=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords0 )
+		vert_tex_coords1=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords1 )
+		vert_col=SurfaceFloat_( GetInstance(Self),SURFACE_vert_col )
+		Return no
 		
 	End Method
 	
 	Method AddTriangle:Int( v0:Int,v1:Int,v2:Int )
 	
-		Return AddTriangle_( GetInstance(Self),v0,v1,v2 )
+		Local no:Int=AddTriangle_( GetInstance(Self),v0,v1,v2 )
+		tris=SurfaceUShort_( GetInstance(Self),SURFACE_tris )
+		Return no
 		
 	End Method
 	

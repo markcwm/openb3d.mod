@@ -64,22 +64,22 @@ Type TAnimationKeys
 	Field qz:Float Ptr ' vector
 	
 	' wrapper
-?bmxng
+	?bmxng
 	Global animkeys_map:TPtrMap=New TPtrMap
-?Not bmxng
+	?Not bmxng
 	Global animkeys_map:TMap=New TMap
-?
+	?
 	Field instance:Byte Ptr
 	
 	Function CreateObject:TAnimationKeys( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
 		Local obj:TAnimationKeys=New TAnimationKeys
-	?bmxng
+		?bmxng
 		animkeys_map.Insert( inst,obj )
-	?Not bmxng
+		?Not bmxng
 		animkeys_map.Insert( String(Long(inst)),obj )
-	?
+		?
 		obj.instance=inst
 		obj.InitFields()
 		Return obj
@@ -87,19 +87,23 @@ Type TAnimationKeys
 	End Function
 	
 	Function FreeObject( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		animkeys_map.Remove( inst )
-	?Not bmxng
+		?Not bmxng
 		animkeys_map.Remove( String(Long(inst)) )
-	?
+		?
+		
 	End Function
 	
 	Function GetObject:TAnimationKeys( inst:Byte Ptr )
-	?bmxng
+	
+		?bmxng
 		Return TAnimationKeys( animkeys_map.ValueForKey( inst ) )
-	?Not bmxng
+		?Not bmxng
 		Return TAnimationKeys( animkeys_map.ValueForKey( String(Long(inst)) ) )
-	?
+		?
+		
 	End Function
 	
 	Function GetInstance:Byte Ptr( obj:TAnimationKeys ) ' Get C++ instance from object
@@ -129,18 +133,36 @@ Type TAnimationKeys
 		
 	End Method
 	
+	Function NewAnimationKeys:TAnimationKeys()
+	
+		Local inst:Byte Ptr=NewAnimationKeys_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	' Minib3d
 	
 	Method New()
 	
+		Local inst:Byte Ptr=NewAnimationKeys_()
+		If inst<>Null
+			?bmxng
+			animkeys_map.Insert( inst,Self )
+			?Not bmxng
+			animkeys_map.Insert( String(Long(inst)),Self )
+			?
+			instance=inst
+			InitFields()
+		EndIf
 		If LOG_NEW
 			DebugLog "New TAnimationKeys"
 		EndIf
-	
+		
 	End Method
 	
 	Method Delete()
 	
+		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TAnimationKeys"
 		EndIf
