@@ -111,16 +111,6 @@ Type TBrush
 	
 	Method New()
 	
-		Local inst:Byte Ptr=CreateBrush_( 255,255,255 )
-		If inst<>Null
-			?bmxng
-			brush_map.Insert( inst,Self )
-			?Not bmxng
-			brush_map.Insert( String(Long(inst)),Self )
-			?
-			instance=inst
-			InitFields()
-		EndIf
 		If LOG_NEW
 			DebugLog "New TBrush"
 		EndIf
@@ -129,7 +119,6 @@ Type TBrush
 	
 	Method Delete()
 	
-		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TBrush"
 		EndIf

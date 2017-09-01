@@ -162,7 +162,9 @@ Type TSurface
 	Function CreateSurface:TSurface( mesh:TMesh,brush:TBrush=Null ) ' same as method in TSurface
 	
 		Local inst:Byte Ptr=CreateSurface_( TMesh.GetInstance(mesh),TBrush.GetInstance(brush) )
-		Return CreateObject(inst)
+		Local surf:TSurface=CreateObject(inst)
+		mesh.CopyList(mesh.surf_list)
+		Return surf
 		
 	End Function
 	

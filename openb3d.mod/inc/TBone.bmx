@@ -87,10 +87,8 @@ Type TBone Extends TEntity
 		CopyList(mesh.bones)
 		If mesh.is_anim=0
 			mesh.is_anim=1
-			CopyList(mesh.surf_list)
 			CopyList(mesh.anim_surf_list)
 			For Local surf:TSurface=EachIn mesh.anim_surf_list
-				surf.no_verts=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_no_verts )
 				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
 				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
 				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
@@ -100,8 +98,6 @@ Type TBone Extends TEntity
 				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
 				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
 				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
-				surf.vmin=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmin )
-				surf.vmax=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmax )
 			Next
 		EndIf
 		Return CreateObject(inst)

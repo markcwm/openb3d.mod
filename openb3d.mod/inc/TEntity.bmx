@@ -344,7 +344,42 @@ Type TEntity
 	
 	Method AddAnimSeq:Int( length:Int )
 	
-		Return AddAnimSeq_( GetInstance(Self),length )
+		Local seq:Int=AddAnimSeq_( GetInstance(Self),length )
+		Local mesh:TMesh=TMesh(Self)
+		If mesh<>Null
+			If anim[0]=0
+				CopyList(mesh.surf_list)
+				CopyList(mesh.anim_surf_list)
+				For Local surf:TSurface=EachIn mesh.surf_list
+					surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
+				Next
+				For Local surf:TSurface=EachIn mesh.anim_surf_list
+					surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
+					surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
+				Next
+			ElseIf anim[0]=1
+				anim_seqs_first=EntityInt_( GetInstance(Self),ENTITY_anim_seqs_first )
+				anim_seqs_last=EntityInt_( GetInstance(Self),ENTITY_anim_seqs_last )
+				For Local bone:TBone=EachIn mesh.bones
+					bone.keys.flags=AnimationKeysInt_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_flags )
+					bone.keys.px=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_px )
+					bone.keys.py=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_py )
+					bone.keys.pz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_pz )
+					bone.keys.sx=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_sx )
+					bone.keys.sy=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_sy )
+					bone.keys.sz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_sz )
+					bone.keys.qw=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_qw )
+					bone.keys.qx=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_qx )
+					bone.keys.qy=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_qy )
+					bone.keys.qz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bone.keys),ANIMATIONKEYS_qz )
+				Next
+			ElseIf anim[0]=2
+				For Local surf:TSurface=EachIn mesh.anim_surf_list
+					surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
+				Next
+			EndIf
+		EndIf
+		Return seq
 		
 	End Method
 	

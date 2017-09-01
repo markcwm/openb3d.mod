@@ -29,16 +29,6 @@ Type TPivot Extends TEntity
 	
 	Method New()
 	
-		Local inst:Byte Ptr=CreatePivot_( GetInstance(parent) )
-		If inst<>Null
-			?bmxng
-			ent_map.Insert( inst,Self )
-			?Not bmxng
-			ent_map.Insert( String(Long(inst)),Self )
-			?
-			instance=inst
-			InitFields()
-		EndIf
 		If LOG_NEW
 			DebugLog "New TPivot"
 		EndIf
@@ -47,7 +37,6 @@ Type TPivot Extends TEntity
 	
 	Method Delete()
 	
-		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TPivot"
 		EndIf

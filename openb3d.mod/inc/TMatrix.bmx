@@ -73,16 +73,6 @@ Type TMatrix
 	
 	Method New()
 	
-		Local inst:Byte Ptr=NewMatrix_()
-		If inst<>Null
-			?bmxng
-			matrix_map.Insert( inst,Self )
-			?Not bmxng
-			matrix_map.Insert( String(Long(inst)),Self )
-			?
-			instance=inst
-			InitFields()
-		EndIf
 		If LOG_NEW
 			DebugLog "New TMatrix"
 		EndIf
@@ -91,7 +81,6 @@ Type TMatrix
 	
 	Method Delete()
 	
-		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TMatrix"
 		EndIf

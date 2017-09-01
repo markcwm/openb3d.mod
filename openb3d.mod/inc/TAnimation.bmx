@@ -144,16 +144,6 @@ Type TAnimationKeys
 	
 	Method New()
 	
-		Local inst:Byte Ptr=NewAnimationKeys_()
-		If inst<>Null
-			?bmxng
-			animkeys_map.Insert( inst,Self )
-			?Not bmxng
-			animkeys_map.Insert( String(Long(inst)),Self )
-			?
-			instance=inst
-			InitFields()
-		EndIf
 		If LOG_NEW
 			DebugLog "New TAnimationKeys"
 		EndIf
@@ -162,7 +152,6 @@ Type TAnimationKeys
 	
 	Method Delete()
 	
-		FreeObject( GetInstance(Self) )
 		If LOG_DEL
 			DebugLog "Del TAnimationKeys"
 		EndIf

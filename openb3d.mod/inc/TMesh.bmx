@@ -174,10 +174,8 @@ Type TMesh Extends TEntity
 		CopyList(bones)
 		If is_anim=0
 			is_anim=1
-			CopyList(surf_list)
 			CopyList(anim_surf_list)
 			For Local surf:TSurface=EachIn anim_surf_list
-				surf.no_verts=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_no_verts )
 				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
 				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
 				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
@@ -187,8 +185,6 @@ Type TMesh Extends TEntity
 				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
 				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
 				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
-				surf.vmin=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmin )
-				surf.vmax=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vmax )
 			Next
 		EndIf
 		Return TBone.CreateObject(inst)
@@ -272,17 +268,7 @@ Type TMesh Extends TEntity
 	' Minib3d
 	
 	Method New()
-	
-		Local inst:Byte Ptr=CreateMesh_( GetInstance(parent) )
-		If inst<>Null
-			?bmxng
-			ent_map.Insert( inst,Self )
-			?Not bmxng
-			ent_map.Insert( String(Long(inst)),Self )
-			?
-			instance=inst
-			InitFields()
-		EndIf
+		
 		If LOG_NEW
 			DebugLog "New TMesh"
 		EndIf
@@ -440,7 +426,9 @@ Type TMesh Extends TEntity
 	Method CreateSurface:TSurface( brush:TBrush=Null ) ' same as function in TSurface
 	
 		Local inst:Byte Ptr=CreateSurface_( GetInstance(Self),TBrush.GetInstance(brush) )
-		Return TSurface.CreateObject(inst)
+		Local surf:TSurface=TSurface.CreateObject(inst)
+		CopyList(surf_list)
+		Return surf
 		
 	End Method
 	
@@ -653,8 +641,8 @@ Type TMesh Extends TEntity
 	End Function
 	
 	' Note: operator overloads not added as build breaks on NG older than v0.87
-Rem
-?bmxng
+	Rem
+	?bmxng
 	Const CSG_SUBTRACT:Int	= 0 ' Method 0 subtracts mesh2 from mesh1
 	Const CSG_ADD:Int		= 1 ' Method 1 adds meshes
 	Const CSG_INTERSECT:Int	= 2 ' Method 2 intersects meshes
@@ -669,7 +657,7 @@ Rem
 	Method Operator-:TMesh( add_mesh:TMesh )
 		Return MeshCSG( Self,add_mesh,CSG_SUBTRACT )
 	End Method
-?
-EndRem
+	?
+	EndRem
 	
 End Type
