@@ -197,11 +197,11 @@ Load geodesic sphere terrain from heightmap image.
 <tr><td class=docleft width=1%><a href=#LoadMaterial>LoadMaterial</a></td><td class=docright>
 Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMesh3DS>LoadMesh3DS</a></td><td class=docright>
+3DS mesh loader, supports incbin and zipstream.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#mbLoadMesh>mbLoadMesh</a></td><td class=docright>
-Minib3d mesh loader.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -766,14 +766,14 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 first frame is the index of the slice and frame count is how many slices.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=LoadMesh3DS>
+<tr><td class=doctop colspan=2>Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>3DS mesh loader, supports incbin and zipstream.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=LoadShader>
 <tr><td class=doctop colspan=2>Function LoadShader:TShader( ShaderName:String,VshaderFileName:String,FshaderFileName:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from two files, vertex and fragment.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=mbLoadMesh>
-<tr><td class=doctop colspan=2>Function mbLoadMesh:TMesh( file:String,parent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Minib3d mesh loader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>

@@ -242,6 +242,7 @@ Extern
 	Function EntityListSize_:Int( obj:Byte Ptr,varid:Int ) = "EntityListSize"
 	Function EntityIterListEntity_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr ) = "EntityIterListEntity"
 	Function EntityListPushBackEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr ) = "EntityListPushBackEntity"
+	Function EntityListRemoveEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr ) = "EntityListRemoveEntity"
 	
 	' Light
 	Function LightChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"

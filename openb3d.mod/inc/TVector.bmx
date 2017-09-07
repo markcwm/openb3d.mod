@@ -22,7 +22,13 @@ Type TVector
 		EndIf
 	
 	End Method
-
+	
+	Function Magnitude:Float( v0:Float,v1:Float,v2:Float )
+	
+		Return Sqr(v0*v0 + v1*v1 + v2*v2)
+		
+	End Function
+	
 	Function Create:TVector(x#,y#,z#)
 	
 		Local vec:TVector=New TVector

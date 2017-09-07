@@ -340,6 +340,20 @@ Type TEntity
 		
 	End Method
 	
+	Method EntityListRemove( list:TList,value:Object )
+	
+		Local ent:TEntity=TEntity(value)
+		
+		Select list
+			Case child_list
+				If ent
+					EntityListRemoveEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
+					AddList(list)
+				EndIf
+		End Select
+		
+	End Method
+	
 	' Openb3d
 	
 	Method AddAnimSeq:Int( length:Int )
@@ -449,6 +463,18 @@ Type TEntity
 		
 		ClearList(child_list) ; child_list_id=0
 		FreeObject( GetInstance(Self) ) ' no FreeEntity_
+		
+	End Method
+	
+	' replace parent with new_par
+	Method SetParent( new_par:TEntity )
+	
+		If parent <> Null
+			parent.EntityListRemove( parent.child_list,Self )
+			parent = Null
+		End If
+		parent = new_par
+		parent.ListPushBack( parent.child_list,Self )
 		
 	End Method
 	

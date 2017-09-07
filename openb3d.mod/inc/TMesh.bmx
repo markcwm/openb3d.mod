@@ -283,6 +283,89 @@ Type TMesh Extends TEntity
 	
 	End Method
 	
+	Method SetMatrix( matrix:TMatrix )
+	
+		If parent <> Null
+			Local invpar:TMatrix = TMatrix.NewMatrix()
+			parent.mat.GetInverse(invpar)
+			invpar.Multiply(matrix)
+		EndIf
+		
+		'Local pos:TVector=New TVector
+		'pos.x = matrix.grid[(4*3)+0]
+		'pos.y = matrix.grid[(4*3)+1]
+		'pos.z = matrix.grid[(4*3)+2]
+		'PositionMesh(pos.x, pos.y, pos.z) ' makes a mess
+		'DebugLog "pos: "+pos.x+","+pos.y+","+pos.z
+		
+		Local rot:TQuaternion = New TQuaternion
+		matrix.ToQuat(rot.x, rot.y, rot.z, rot.w)
+		RotateMesh(rot.x, rot.y, rot.z)
+		Local size:TVector = matrix.GetMatrixScale()
+		ScaleMesh(size.x, size.y, size.z)
+		'DebugLog "rot:"+rot.x+","+rot.y+","+rot.z+","+rot.w
+		
+	End Method
+	
+	Method PositionAnimMesh( px#,py#,pz# )
+	
+		Local count_children% = TEntity.CountAllChildren(Self)
+		Local pos:TVector = New TVector
+		For Local child_no% = 1 To count_children
+			Local count%=0
+			Local child_ent:TEntity = GetChildFromAll(child_no, count)
+			TMesh(child_ent).PositionMesh(px, py, pz)
+		Next
+		
+	End Method
+	
+	Method RotateAnimMesh( rx#,ry#,rz# )
+	
+		Local count_children% = TEntity.CountAllChildren(Self)
+		For Local child_no% = 1 To count_children
+			Local count%=0
+			Local child_ent:TEntity = GetChildFromAll(child_no, count)
+			TMesh(child_ent).RotateMesh(rx, ry, rz)
+		Next
+		
+	End Method
+	
+	Method ScaleAnimMesh( sx#,sy#,sz# )
+	
+		Local count_children% = TEntity.CountAllChildren(Self)
+		For Local child_no% = 1 To count_children
+			Local count%=0
+			Local child_ent:TEntity = GetChildFromAll(child_no, count)
+			TMesh(child_ent).ScaleMesh(sx, sy, sz)
+		Next
+		
+	End Method
+	
+	Method TransformVertices( matrix:TMatrix )
+	
+		Local pos:TVector = New TVector
+		For Local surf:TSurface = EachIn surf_list
+			For Local v% = 0 To surf.no_verts[0]-1
+				pos.x = surf.vert_coords[v*3 + 0]
+				pos.y = surf.vert_coords[v*3 + 1]
+				pos.z = surf.vert_coords[v*3 + 2]
+				matrix.TransformVec(pos.x, pos.y, pos.z, 1)
+				surf.vert_coords[v*3 + 0] = pos.x
+				surf.vert_coords[v*3 + 1] = pos.y
+				surf.vert_coords[v*3 + 2] = pos.z
+			Next
+		Next
+		
+	End Method
+	
+	' 3DS mesh loader
+	Function LoadMesh3DS:TMesh( file:String,parent_ent:TEntity=Null )
+	
+		Local loader:T3DS = New T3DS
+		Return loader.Load( file,parent_ent )
+		
+	End Function
+	
 	Method FreeEntity()
 	
 		If exists
@@ -629,16 +712,6 @@ Type TMesh Extends TEntity
 		UpdateShadow_( GetInstance(Self) )
 		
 	End Method
-	
-	' Minib3d mesh loader
-	Function mbLoadMesh:TMesh( file:String,parent_ent:TEntity=Null )
-	
-		If Right(Lower(file), 4) = ".3ds"
-			Local Loader:T3DS = New T3DS
-			Return Loader.Load( file,parent_ent )
-		EndIf
-		
-	End Function
 	
 	' Note: operator overloads not added as build breaks on NG older than v0.87
 	Rem

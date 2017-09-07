@@ -1149,6 +1149,13 @@ void EntityListPushBackEntity( Entity* obj,int varid,Entity* ent ){
 	}
 }
 
+void EntityListRemoveEntity( Entity* obj,int varid,Entity* ent ){
+	switch (varid){
+		case ENTITY_child_list : obj->child_list.remove(ent);
+			break;
+	}
+}
+
 // Light
 
 char* LightChar( Light* obj,int varid ){
@@ -1182,6 +1189,7 @@ float* MatrixFloat( Matrix* obj,int varid ){
 
 Matrix* NewMatrix(){
 	Matrix* mat=new Matrix();
+	mat->LoadIdentity();
 	return mat;
 }
 

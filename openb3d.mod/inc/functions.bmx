@@ -1026,10 +1026,10 @@ Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: Minib3d mesh loader
+bbdoc: 3DS mesh loader, supports incbin and zipstream
 End Rem
-Function mbLoadMesh:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.mbLoadMesh( file,parent )
+Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMesh3DS( file,parent )
 End Function
 
 'Rem
@@ -1072,13 +1072,6 @@ End Function
 'End Rem
 Function MoveEntity( ent:TEntity,x:Float,y:Float,z:Float )
 	ent.MoveEntity( x,y,z )
-End Function
-
-'Rem
-'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=NameEntity">Online doc</a>
-'End Rem
-Function NameEntity( ent:TEntity,name:String )
-	ent.NameEntity( name )
 End Function
 
 'Rem
