@@ -434,7 +434,6 @@ Include "inc/TBrush.bmx"
 Include "inc/TAnimation.bmx"
 Include "inc/T3DS.bmx"
 'Include "inc/TB3D.bmx"
-'Include "inc/TMD2.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"

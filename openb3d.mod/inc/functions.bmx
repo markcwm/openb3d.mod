@@ -1035,7 +1035,7 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=False )
+Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=0 )
 	Return TTexture.LoadTexture( file,flags,usepixmap )
 End Function
 

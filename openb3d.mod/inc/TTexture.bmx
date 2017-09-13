@@ -232,9 +232,9 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=False )
+	Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=0 )
 	
-		If usepixmap=False
+		If usepixmap=0
 			Local cString:Byte Ptr=file.ToCString()
 			Local inst:Byte Ptr=LoadTexture_( cString,flags )
 			Local tex:TTexture=CreateObject(inst)
@@ -242,6 +242,7 @@ Type TTexture
 			Return tex
 		Else
 			Local map:TPixmap=LoadPixmap(file)
+			If map=Null Then Return Null
 			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
 			For Local iy%=0 To PixmapWidth(map)-1
 				For Local ix%=0 To PixmapHeight(map)-1

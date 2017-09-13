@@ -16,7 +16,7 @@ Local size:Int=256, vsize:Float=30, maxheight:Float=10
 Local camx:Float=size/2, camz:Float=-size/2
 
 Local camera:TCamera=CreateCamera()
-PositionEntity camera,camx,maxheight+5,camz-25
+PositionEntity camera,camx,maxheight+5,camz-30
 
 Local light:TLight=CreateLight()
 RotateEntity light,45,45,0
@@ -32,15 +32,15 @@ ScaleTexture grass_tex,10,10
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local minib3d:Int=1 ' set 0..5
-Select minib3d
+Local loader:Int=1 ' set 0..5
+Select loader
 
 	Case 1 ' load rallycar1 mesh
 		oldtime=MilliSecs()
 		mesh=LoadMesh3DS("../media/rallycar1.3ds")
 		
 		PositionEntity mesh,camx,maxheight,camz
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="3DS time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load mak_robotic mesh
 		oldtime=MilliSecs()
@@ -50,7 +50,7 @@ Select minib3d
 		mesh.ScaleAnimMesh(0.5,0.5,0.5)
 		
 		PositionEntity mesh,camx,maxheight,camz
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="3DS time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load phineas4 mesh
 		oldtime=MilliSecs()
@@ -60,7 +60,7 @@ Select minib3d
 		mesh.PositionAnimMesh(0,10,0)
 		
 		PositionEntity mesh,camx,maxheight,camz
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="3DS time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh (and texture as file not found)
 		oldtime=MilliSecs()
@@ -74,7 +74,7 @@ Select minib3d
 		Next
 		
 		PositionEntity mesh,camx,maxheight,camz
-		debug="incbin time="+(MilliSecs()-oldtime)
+		debug="3DS incbin time="+(MilliSecs()-oldtime)
 		
 	Case 5 ' load zip mesh (and texture as file not found)
 		oldtime=MilliSecs()
@@ -89,7 +89,7 @@ Select minib3d
 		Next
 		
 		PositionEntity mesh,camx,maxheight,camz
-		debug="zip time="+(MilliSecs()-oldtime)
+		debug="3DS zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load openb3d mesh
 		oldtime=MilliSecs()
