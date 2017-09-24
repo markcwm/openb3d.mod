@@ -1,14 +1,14 @@
-' load_3ds.bmx
-' 3DS loader from Warner engine (by Bramdenhond)
-' loads meshes with single surface, pretransforms vertices but may need reorientation
+' load_b3d.bmx
+' B3D loader from Minib3d (by Simon Harrison)
+' loads meshes with multiple surfaces, reorientation should not be needed
 
 Strict
 
 Framework Openb3d.B3dglgraphics
 Import Koriolis.Zipstream
 
-Incbin "../media/rallycar1.3ds"
-Incbin "../media/RALLYCAR.JPG"
+Incbin "../media/zombie.b3d"
+Incbin "../media/Zombie.jpg"
 
 Graphics3D DesktopWidth(),DesktopHeight()
 
@@ -20,66 +20,53 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local loader:Int=2 ' set 0..5
-Select loader
+Local minib3d:Int=3 ' set 0..5
+Select minib3d
 
-	Case 1 ' load rallycar1 mesh
+	Case 1 ' load zombie mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh3DS("../media/rallycar1.3ds")
+		mesh=LoadMeshB3D("../media/zombie.b3d")
 		
-		debug="3DS time="+(MilliSecs()-oldtime)
+		debug="minib3d time="+(MilliSecs()-oldtime)
 		
-	Case 2 ' load mak_robotic mesh
+	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh3DS("../media/mak_robotic.3ds")
+		mesh=LoadMeshB3D("../media/Bird.b3d")
 		
-		mesh.RotateAnimMesh(0,-90,0)
-		mesh.ScaleAnimMesh(0.5,0.5,0.5)
+		debug="minib3d time="+(MilliSecs()-oldtime)
 		
-		debug="3DS time="+(MilliSecs()-oldtime)
-		
-	Case 3 ' load phineas4 mesh
+	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh3DS("../media/phineas4.3ds")
+		mesh=LoadMeshB3D("../media/castle1.b3d")
 		
-		mesh.RotateAnimMesh(0,-90,-45)
-		mesh.PositionAnimMesh(0,10,0)
-		
-		debug="3DS time="+(MilliSecs()-oldtime)
+		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh (texture must be applied manually)
 		oldtime=MilliSecs()
-		Local file:String = "incbin::../media/rallycar1.3ds"
-		mesh=LoadMesh3DS(file)
-		file = "incbin::../media/RALLYCAR.JPG"
+		Local file:String = "incbin::../media/zombie.b3d"
+		mesh=LoadMeshB3D(file)
+		file = "incbin::../media/Zombie.jpg"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
-		For Local child:Int=1 To CountChildren(mesh)
-			EntityTexture TMesh(GetChild(mesh, child)),tex
-		Next
+		EntityTexture mesh,tex
 		
-		debug="3DS incbin time="+(MilliSecs()-oldtime)
+		debug="incbin time="+(MilliSecs()-oldtime)
 		
 	Case 5 ' load zip mesh (texture must be applied manually)
 		oldtime=MilliSecs()
-		Local zipfile:String = "../media/rallycar.zip"
-		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
-		mesh=LoadMesh3DS(file)
-		file = "zip::"+zipfile+"//RALLYCAR.JPG"
+		Local zipfile:String = "../media/zombie.zip"
+		Local file:String = "zip::"+zipfile+"//zombie.b3d"
+		mesh=LoadMeshB3D(file)
+		file = "zip::"+zipfile+"//Zombie.jpg"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
-		For Local child:Int=1 To CountChildren(mesh)
-			EntityTexture TMesh(GetChild(mesh, child)),tex
-		Next
+		EntityTexture mesh,tex
 		
-		debug="3DS zip time="+(MilliSecs()-oldtime)
+		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load openb3d mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/rallycar1.3ds")
-		
-		mesh.RotateMesh(-90,0,0)
-		mesh.ScaleMesh(0.05, 0.05, 0.05)
+		mesh=LoadMesh("../media/zombie.b3d")
 		
 		debug="openb3d time="+(MilliSecs()-oldtime)
 EndSelect

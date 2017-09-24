@@ -98,16 +98,19 @@ void MeshRender( Mesh* obj );
 void UpdateShadow( Mesh* obj );
 
 // Model
-
-/*Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext=NULL);
-string b3dReadString(File* file);
-string ReadTag(File* file);
-int NewTag(string tag);
-int TagID(string tag);
-void TrimVerts(Surface* surf);*/
+void ModelTrimVerts( Surface* obj );
+void ModelCopyTrisArrays( Surface* surf,Surface* v_surf );
+void ModelResizeAnimArrays( Surface* anim_surf,Surface* surf );
+void ModelResizeAnimationKeysArrays( AnimationKeys* keys,int a_frames );
+void ModelResizeBonesArrays( Mesh* mesh,Bone* bo_bone,int bo_no_bones );
 
 // Pick
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius );
+
+// Quaternion
+void QuaternionToMat( float w,float x,float y,float z,Matrix& mat );
+void QuaternionToEuler( float w,float x,float y,float z,float &pitch,float &yaw,float &roll );
+void QuaternionSlerp( float Ax,float Ay,float Az,float Aw,float Bx,float By,float Bz,float Bw,float& Cx,float& Cy,float& Cz,float& Cw,float t );
 
 // ShadowObject
 void SetShadowColor( int R,int G,int B,int A );

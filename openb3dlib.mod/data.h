@@ -4,6 +4,7 @@
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
+#include "openb3d/src/quaternion.h"
 
 #include <vector>
 #include <list>
@@ -85,6 +86,10 @@ Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id );
 vector<Bone*>* MeshVectorBone( Mesh* obj,int varid );
 void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf );
 void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone );
+
+// Quaternion
+float* QuaternionFloat( Quaternion* obj,int varid );
+Quaternion* NewQuaternion();
 
 // ShadowObject
 char* ShadowObjectChar( ShadowObject* obj,int varid );

@@ -107,6 +107,12 @@ Type TBrush
 		
 	End Method
 	
+	Method BrushName:String()
+	
+		Return String.FromCString( BrushString_( GetInstance(Self),BRUSH_name ) )
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()

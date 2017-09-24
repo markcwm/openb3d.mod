@@ -137,8 +137,20 @@ Extern
 	Function MeshRender_( obj:Byte Ptr ) = "MeshRender"
 	Function UpdateShadow_( obj:Byte Ptr ) = "UpdateShadow"
 	
+	' Model
+	Function ModelTrimVerts_( obj:Byte Ptr ) = "ModelTrimVerts"
+	Function ModelCopyTrisArrays_( surf:Byte Ptr,v_surf:Byte Ptr ) = "ModelCopyTrisArrays"
+	Function ModelResizeAnimArrays_( anim_surf:Byte Ptr,surf:Byte Ptr ) = "ModelResizeAnimArrays"
+	Function ModelResizeAnimationKeysArrays_( keys:Byte Ptr,a_frames:Int ) = "ModelResizeAnimationKeysArrays"
+	Function ModelResizeBonesArrays_( mesh:Byte Ptr,bo_bone:Byte Ptr,bo_no_bones:Int ) = "ModelResizeBonesArrays"
+	
 	' Pick
 	Function PickMain_:Byte Ptr( ax:Float,ay:Float,az:Float,bx:Float,by:Float,bz:Float,radius:Float ) = "PickMain"
+	
+	' Quaternion
+	Function QuaternionToMat_( w:Float,x:Float,y:Float,z:Float,mat:Byte Ptr ) = "QuaternionToMat"
+	Function QuaternionToEuler_( w:Float,x:Float,y:Float,z:Float,pitch:Float Ptr,yaw:Float Ptr,roll:Float Ptr ) = "QuaternionToEuler"
+	Function QuaternionSlerp_( Ax:Float,Ay:Float,Az:Float,Aw:Float,Bx:Float,By:Float,Bz:Float,Bw:Float,Cx:Float Ptr,Cy:Float Ptr,Cz:Float Ptr,Cw:Float Ptr,t:Float ) = "QuaternionSlerp"
 	
 	' ShadowObject
 	Function SetShadowColor_( R:Int,G:Int,B:Int,A:Int ) = "SetShadowColor"
@@ -262,6 +274,10 @@ Extern
 	Function MeshVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshVectorBone"
 	Function MeshListPushBackSurface_( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "MeshListPushBackSurface"
 	Function MeshListPushBackBone_( obj:Byte Ptr,varid:Int,bone:Byte Ptr ) = "MeshListPushBackBone"
+	
+	' Quaternion
+	Function QuaternionFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "QuaternionFloat"
+	Function NewQuaternion_:Byte Ptr() = "NewQuaternion"
 	
 	' ShadowObject
 	Function ShadowObjectChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "ShadowObjectChar"
@@ -616,6 +632,12 @@ Const PICK_picked_time:Int=		8
 Const PICK_picked_ent:Int=		9
 Const PICK_picked_surface:Int=	10
 Const PICK_picked_triangle:Int=	11
+
+' Quaternion
+Const QUATERNION_x:Int=1
+Const QUATERNION_y:Int=2
+Const QUATERNION_z:Int=3
+Const QUATERNION_w:Int=4
 
 ' ShadowObject varid
 Const SHADOWOBJECT_shadow_list:Int=		1

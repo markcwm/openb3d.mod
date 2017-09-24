@@ -3,20 +3,6 @@
 ' *** Wrapper only
 
 Rem
-bbdoc: Free shader
-End Rem
-Function FreeShader( shader:TShader ) ' Spinduluz
-	shader.FreeShader()
-End Function
-
-Rem
-bbdoc: Free stencil
-End Rem
-Function FreeStencil( stencil:TStencil ) ' Spinduluz
-	stencil.FreeStencil()
-End Function
-
-Rem
 bbdoc: GL equivalent.
 End Rem
 Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
@@ -38,28 +24,6 @@ Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
 End Function
 
 Rem
-bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
-about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
-EndRem
-Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
-	Return TTexture.LoadAlphaTexture( file,flags,alphamask )
-End Function
-
-Rem
-bbdoc: Set texture flags, see LoadTexture for values.
-End Rem
-Function TextureFlags( tex:TTexture,flags:Int )
-	tex.TextureFlags(flags)
-End Function
-
-Rem
-bbdoc: Frees VBO data and brush.
-End Rem
-Function FreeSurface( surf:TSurface )
-	Return surf.FreeSurface()
-End Function
-
-Rem
 bbdoc: Returns a copy of the new brush.
 End Rem
 Function CopyBrush:TBrush( brush:TBrush )
@@ -78,6 +42,77 @@ bbdoc: Returns a copy of the new texture.
 End Rem
 Function CopyTexture:TTexture( tex:TTexture )
 	Return tex.Copy()
+End Function
+
+Rem
+bbdoc: Returns a new TAnimationKeys object.
+End Rem
+Function CreateAnimationKeys:TAnimationKeys()
+	Return TAnimationKeys.CreateAnimationKeys()
+End Function
+
+Rem
+bbdoc: Returns a new TMatrix object.
+End Rem
+Function CreateMatrix:TMatrix()
+	Return TMatrix.CreateMatrix()
+End Function
+
+Rem
+bbdoc: Returns a new TQuaternion object.
+End Rem
+Function CreateQuaternion:TQuaternion()
+	Return TQuaternion.CreateQuaternion()
+End Function
+
+Rem
+bbdoc: Free shader
+End Rem
+Function FreeShader( shader:TShader ) ' Spinduluz
+	shader.FreeShader()
+End Function
+
+Rem
+bbdoc: Free stencil
+End Rem
+Function FreeStencil( stencil:TStencil ) ' Spinduluz
+	stencil.FreeStencil()
+End Function
+
+Rem
+bbdoc: Frees VBO data and brush.
+End Rem
+Function FreeSurface( surf:TSurface )
+	Return surf.FreeSurface()
+End Function
+
+Rem
+bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
+about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
+EndRem
+Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	Return TTexture.LoadAlphaTexture( file,flags,alphamask )
+End Function
+
+Rem
+bbdoc: 3DS mesh loader, supports incbin and zipstream
+End Rem
+Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMesh3DS( file,parent )
+End Function
+
+Rem
+bbdoc: B3D mesh loader, supports incbin and zipstream
+End Rem
+Function LoadMeshB3D:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMeshB3D( file,parent )
+End Function
+
+Rem
+bbdoc: Set texture flags, see LoadTexture for values.
+End Rem
+Function TextureFlags( tex:TTexture,flags:Int )
+	tex.TextureFlags(flags)
 End Function
 
 ' *** Minib3d only
@@ -1025,18 +1060,11 @@ Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadMesh( file,parent )
 End Function
 
-Rem
-bbdoc: 3DS mesh loader, supports incbin and zipstream
-End Rem
-Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMesh3DS( file,parent )
-End Function
-
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=0 )
-	Return TTexture.LoadTexture( file,flags,usepixmap )
+Function LoadTexture:TTexture( file:String,flags:Int=9 )
+	Return TTexture.LoadTexture( file,flags )
 End Function
 
 'Rem
@@ -1072,6 +1100,13 @@ End Function
 'End Rem
 Function MoveEntity( ent:TEntity,x:Float,y:Float,z:Float )
 	ent.MoveEntity( x,y,z )
+End Function
+
+'Rem
+'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=NameEntity">Online doc</a>
+'End Rem
+Function NameEntity( ent:TEntity,name:String )
+	ent.NameEntity( name )
 End Function
 
 'Rem

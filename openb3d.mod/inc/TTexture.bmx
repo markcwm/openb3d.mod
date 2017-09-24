@@ -232,27 +232,34 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=0 )
+	Function LoadTexture:TTexture( file:String,flags:Int=9 )
 	
-		If usepixmap=0
+		Local tex:TTexture=Null, map:TPixmap=Null, name:Int
+		If Not (flags & 4096) ' no streams flag
 			Local cString:Byte Ptr=file.ToCString()
 			Local inst:Byte Ptr=LoadTexture_( cString,flags )
-			Local tex:TTexture=CreateObject(inst)
+			tex=CreateObject(inst)
 			MemFree cString
-			Return tex
-		Else
-			Local map:TPixmap=LoadPixmap(file)
-			If map=Null Then Return Null
+			If tex=Null Then Return Null
+			If tex.width[0]=0 ' stbimage failed, use pixmap
+				map=LoadPixmap(file)
+				If map=Null Then Return tex
+				If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+				tex.width[0]=PixmapWidth(map) ' CreateTexture
+				tex.height[0]=PixmapHeight(map)
+				glGenTextures(1, Varptr(name))
+				tex.texture[0]=name
+				tex.InitFields()
+				tex.BufferToTex PixmapPixelPtr(map,0,0)
+			EndIf
+		Else ' streams flag
+			map=LoadPixmap(file)
+			If map=Null Then Return tex
 			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-			For Local iy%=0 To PixmapWidth(map)-1
-				For Local ix%=0 To PixmapHeight(map)-1
-					WritePixel map,ix,iy,ReadPixel(map,ix,iy)
-				Next
-			Next
-			Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
 			tex.BufferToTex PixmapPixelPtr(map,0,0)
-			Return tex
 		EndIf
+		Return tex
 		
 	End Function
 	

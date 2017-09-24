@@ -5,6 +5,9 @@
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
+#include "openb3d/src/quaternion.h"
+#include "openb3d/src/model.h"
+
 #include <string.h>
 
 extern "C" {
@@ -292,6 +295,53 @@ void MeshAlpha( Mesh* obj,float a ){
 	obj->MeshAlpha( a );
 }
 
+// Model
+
+void ModelTrimVerts( Surface* obj ){
+	TrimVerts( obj );
+}
+
+void ModelCopyTrisArrays( Surface* surf,Surface* v_surf ){
+	surf->vert_coords=v_surf->vert_coords;
+	surf->vert_col=v_surf->vert_col;
+	surf->vert_norm=v_surf->vert_norm;
+	surf->vert_tex_coords0=v_surf->vert_tex_coords0;
+	surf->vert_tex_coords1=v_surf->vert_tex_coords1;
+	//surf->no_verts=v_surf->no_verts;
+}
+
+void ModelResizeAnimArrays( Surface* anim_surf,Surface* surf ){
+	anim_surf->vert_coords=surf->vert_coords;
+	anim_surf->vert_bone1_no.resize(surf->no_verts+1);
+	anim_surf->vert_bone2_no.resize(surf->no_verts+1);
+	anim_surf->vert_bone3_no.resize(surf->no_verts+1);
+	anim_surf->vert_bone4_no.resize(surf->no_verts+1);
+	anim_surf->vert_weight1.resize(surf->no_verts+1);
+	anim_surf->vert_weight2.resize(surf->no_verts+1);
+	anim_surf->vert_weight3.resize(surf->no_verts+1);
+	anim_surf->vert_weight4.resize(surf->no_verts+1);
+}
+
+void ModelResizeAnimationKeysArrays( AnimationKeys* keys,int a_frames ){
+	keys->flags.resize(a_frames+1);
+	keys->px.resize(a_frames+1);
+	keys->py.resize(a_frames+1);
+	keys->pz.resize(a_frames+1);
+	keys->sx.resize(a_frames+1);
+	keys->sy.resize(a_frames+1);
+	keys->sz.resize(a_frames+1);
+	keys->qw.resize(a_frames+1);
+	keys->qx.resize(a_frames+1);
+	keys->qy.resize(a_frames+1);
+	keys->qz.resize(a_frames+1);
+}
+
+void ModelResizeBonesArrays( Mesh* mesh,Bone* bo_bone,int bo_no_bones ){
+	Entity::entity_list.push_back(bo_bone);
+	mesh->bones.resize(bo_no_bones);
+	mesh->bones[bo_no_bones-1]=bo_bone;
+}
+
 void CopyBonesList( Entity* ent,vector<Bone*>& bones ){
 	Mesh::CopyBonesList( ent,bones );
 }
@@ -332,6 +382,18 @@ void UpdateShadow( Mesh* obj ){
 
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius ){
 	return Pick::PickMain( ax,ay,az,bx,by,bz,radius );
+}
+
+// Quaternion
+
+void QuaternionToMat( float w,float x,float y,float z,Matrix& mat ){
+	QuatToMat( w,x,y,z,mat );
+}
+void QuaternionToEuler( float w,float x,float y,float z,float &pitch,float &yaw,float &roll ){
+	QuatToEuler( w,x,y,z,pitch,yaw,roll );
+}
+void QuaternionSlerp( float Ax,float Ay,float Az,float Aw,float Bx,float By,float Bz,float Bw,float& Cx,float& Cy,float& Cz,float& Cw,float t ){
+	Slerp( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Cx,Cy,Cz,Cw,t );
 }
 
 // ShadowObject

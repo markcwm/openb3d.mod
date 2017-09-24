@@ -10,11 +10,11 @@ Type TEntity
 	
 	' transform
 	Field mat:TMatrix ' returned by EntityX/Y/Z (global) - LoadIdentity
-	Field rotmat:TMatrix ' openb3d: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
+	Field rotmat:TMatrix ' rotation matrix: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
 	Field px:Float Ptr,py:Float Ptr,pz:Float Ptr ' returned by EntityX/Y/Z (local) - 0.0/0.0/0.0
 	Field sx:Float Ptr,sy:Float Ptr,sz:Float Ptr ' returned by EntityScaleX/Y/Z (local) - 1.0/1.0/1.0
-	Field rx:Float Ptr,ry:Float Ptr,rz:Float Ptr ' rotation - 0.0/0.0/0.0
-	Field qw:Float Ptr,qx:Float Ptr,qy:Float Ptr,qz:Float Ptr ' quaternion - 1.0/0.0/0.0/0.0
+	Field rx:Float Ptr,ry:Float Ptr,rz:Float Ptr ' rotation euler (unused) - 0.0/0.0/0.0
+	Field qw:Float Ptr,qx:Float Ptr,qy:Float Ptr,qz:Float Ptr ' quaternion (unused) - 1.0/0.0/0.0/0.0
 	
 	' material
 	Field brush:TBrush

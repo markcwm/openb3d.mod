@@ -62,7 +62,7 @@ Type TMatrix
 		
 	End Method
 	
-	Function NewMatrix:TMatrix()
+	Function CreateMatrix:TMatrix()
 	
 		Local inst:Byte Ptr=NewMatrix_()
 		Return CreateObject(inst)
@@ -130,7 +130,7 @@ Type TMatrix
 	' minib3d
 	Method Inverse:TMatrix()
 	
-		Local mat:TMatrix=New TMatrix
+		Local mat:TMatrix=CreateMatrix()
 		Local tx#=0, ty#=0, tz#=0
 		
 	  	' The rotational part of the matrix is simply the transpose of the original matrix.

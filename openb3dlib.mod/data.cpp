@@ -327,6 +327,12 @@ const int PICK_picked_ent=		9;
 const int PICK_picked_surface=	10;
 const int PICK_picked_triangle=	11;
 
+// Quaternion
+const int QUATERNION_x=1;
+const int QUATERNION_y=2;
+const int QUATERNION_z=3;
+const int QUATERNION_w=4;
+
 // ShadowObject varid
 const int SHADOWOBJECT_shadow_list=		1;
 const int SHADOWOBJECT_Parent=			2;
@@ -1299,6 +1305,23 @@ void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone ){
 		case MESH_bones : obj->bones.push_back(bone);
 			break;
 	}
+}
+
+// Quaternion
+
+float* QuaternionFloat( Quaternion* obj,int varid ){
+	switch (varid){
+		case QUATERNION_x : return &obj->x;
+		case QUATERNION_y : return &obj->y;
+		case QUATERNION_z : return &obj->z;
+		case QUATERNION_w : return &obj->w;
+	}
+	return NULL;
+}
+
+Quaternion* NewQuaternion(){
+	Quaternion* quat=new Quaternion();
+	return quat;
 }
 
 // ShadowObject

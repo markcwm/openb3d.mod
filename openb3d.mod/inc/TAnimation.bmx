@@ -48,6 +48,9 @@ Type TAnimation
 End Type
 
 ' called by LoadAnimB3D (in LoadAnimMesh) and LoadAnimSeq
+Rem
+bbdoc: AnimationKeys data
+End Rem
 Type TAnimationKeys
 
 	Field frames:Int Ptr ' 0
@@ -133,7 +136,7 @@ Type TAnimationKeys
 		
 	End Method
 	
-	Function NewAnimationKeys:TAnimationKeys()
+	Function CreateAnimationKeys:TAnimationKeys()
 	
 		Local inst:Byte Ptr=NewAnimationKeys_()
 		Return CreateObject(inst)

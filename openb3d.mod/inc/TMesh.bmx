@@ -286,21 +286,21 @@ Type TMesh Extends TEntity
 	Method SetMatrix( matrix:TMatrix )
 	
 		If parent <> Null
-			Local invpar:TMatrix = TMatrix.NewMatrix()
+			Local invpar:TMatrix = CreateMatrix()
 			parent.mat.GetInverse(invpar)
 			invpar.Multiply(matrix)
 		EndIf
 		
-		'Local pos:TVector=New TVector
-		'pos.x = matrix.grid[(4*3)+0]
-		'pos.y = matrix.grid[(4*3)+1]
-		'pos.z = matrix.grid[(4*3)+2]
-		'PositionMesh(pos.x, pos.y, pos.z) ' makes a mess
-		'DebugLog "pos: "+pos.x+","+pos.y+","+pos.z
+		'Local pos_x# = matrix.grid[(4*3)+0]
+		'Local pos_y# = matrix.grid[(4*3)+1]
+		'Local pos_z# = matrix.grid[(4*3)+2]
+		'PositionMesh(pos_x, pos_y, pos_z) ' makes a mess
+		'DebugLog "pos: "+pos_x+","+pos_y+","+pos_z
 		
-		Local rot:TQuaternion = New TQuaternion
-		matrix.ToQuat(rot.x, rot.y, rot.z, rot.w)
-		RotateMesh(rot.x, rot.y, rot.z)
+		Local rot:TQuaternion = CreateQuaternion()
+		matrix.ToQuat(rot.x[0], rot.y[0], rot.z[0], rot.w[0])
+		RotateMesh(rot.x[0], rot.y[0], rot.z[0])
+		
 		Local size:TVector = matrix.GetMatrixScale()
 		ScaleMesh(size.x, size.y, size.z)
 		'DebugLog "rot:"+rot.x+","+rot.y+","+rot.z+","+rot.w
@@ -363,6 +363,13 @@ Type TMesh Extends TEntity
 	
 		Local loader:T3DS = New T3DS
 		Return loader.Load( file,parent_ent )
+		
+	End Function
+	
+	' B3D mesh loader
+	Function LoadMeshB3D:TMesh( file:String,parent_ent:TEntity=Null )
+	
+		Return TB3D.LoadAnimB3D( file,parent_ent )
 		
 	End Function
 	

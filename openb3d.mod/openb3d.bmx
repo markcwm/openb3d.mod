@@ -370,6 +370,20 @@ Const VBO_MIN_TRIS:Int=	250	' if USE_VBO=True and vbos are supported by hardware
 Const LOG_NEW:Int=		False ' true to write to debuglog when new minib3d object created
 Const LOG_DEL:Int=		False ' true to write to debuglog when minib3d object destroyed
 
+' Texture flags, also Brush
+Const TEX_COLOR:Int=1
+Const TEX_ALPHA:Int=2
+Const TEX_MASKED:Int=4
+Const TEX_MIPMAP:Int=8
+Const TEX_CLAMPU:Int=16
+Const TEX_CLAMPV:Int=32
+Const TEX_SPHEREMAP:Int=64
+Const TEX_CUBEMAP:Int=128
+Const TEX_VRAM:Int=256
+Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,8192,16384 unassigned
+Const TEX_STREAM:Int=4096 ' load texture from stream
+Const TEX_SECONDUV:Int=65536
+
 ' *** Wrapper functions
 
 Rem
@@ -433,7 +447,7 @@ Include "inc/TTexture.bmx"
 Include "inc/TBrush.bmx"
 Include "inc/TAnimation.bmx"
 Include "inc/T3DS.bmx"
-'Include "inc/TB3D.bmx"
+Include "inc/TB3D.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"

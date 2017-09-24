@@ -1,10 +1,79 @@
 
-' Minib3d
-
+Rem
+bbdoc: Quaternion functions
+End Rem
 Type TQuaternion
 
-	Field w#,x#,y#,z#
-
+	Field x:Float Ptr, y:Float Ptr, z:Float Ptr, w:Float Ptr
+	
+	' wrapper
+	?bmxng
+	Global quaternion_map:TPtrMap=New TPtrMap
+	?Not bmxng
+	Global quaternion_map:TMap=New TMap
+	?
+	Field instance:Byte Ptr
+	
+	Function CreateObject:TQuaternion( inst:Byte Ptr ) ' Create and map object from C++ instance
+	
+		If inst=Null Then Return Null
+		Local obj:TQuaternion=New TQuaternion
+		?bmxng
+		quaternion_map.Insert( inst,obj )
+		?Not bmxng
+		quaternion_map.Insert( String(Long(inst)),obj )
+		?
+		obj.instance=inst
+		obj.InitFields()
+		Return obj
+		
+	End Function
+	
+	Function FreeObject( inst:Byte Ptr )
+	
+		?bmxng
+		quaternion_map.Remove( inst )
+		?Not bmxng
+		quaternion_map.Remove( String(Long(inst)) )
+		?
+		
+	End Function
+	
+	Function GetObject:TQuaternion( inst:Byte Ptr )
+	
+		?bmxng
+		Return TQuaternion( quaternion_map.ValueForKey( inst ) )
+		?Not bmxng
+		Return TQuaternion( quaternion_map.ValueForKey( String(Long(inst)) ) )
+		?
+		
+	End Function
+	
+	Function GetInstance:Byte Ptr( obj:TQuaternion ) ' Get C++ instance from object
+	
+		If obj=Null Then Return Null ' Attempt to pass null object to function
+		Return obj.instance
+		
+	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		x=QuaternionFloat_( GetInstance(Self),QUATERNION_x )
+		y=QuaternionFloat_( GetInstance(Self),QUATERNION_y )
+		z=QuaternionFloat_( GetInstance(Self),QUATERNION_z )
+		w=QuaternionFloat_( GetInstance(Self),QUATERNION_w )
+		
+	End Method
+	
+	Function CreateQuaternion:TQuaternion()
+	
+		Local inst:Byte Ptr=NewQuaternion_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	' Minib3d
+	
 	Method New()
 	
 		If LOG_NEW
@@ -21,47 +90,17 @@ Type TQuaternion
 	
 	End Method
 
-	Function QuatToMat(w#,x#,y#,z#,mat:TMatrix Var)
+	Function QuatToMat( w:Float,x:Float,y:Float,z:Float,mat:TMatrix )
 	
-		Local q:Float[4]
-		q[0]=w
-		q[1]=x
-		q[2]=y
-		q[3]=z
+		QuaternionToMat_( w,x,y,z,TMatrix.GetInstance(mat) )
 		
-		Local xx#=q[1]*q[1]
-		Local yy#=q[2]*q[2]
-		Local zz#=q[3]*q[3]
-		Local xy#=q[1]*q[2]
-		Local xz#=q[1]*q[3]
-		Local yz#=q[2]*q[3]
-		Local wx#=q[0]*q[1]
-		Local wy#=q[0]*q[2]
-		Local wz#=q[0]*q[3]
-	
-		mat.grid[(4*0)+0]=1-2*(yy+zz)
-		mat.grid[(4*0)+1]=  2*(xy-wz)
-		mat.grid[(4*0)+2]=  2*(xz+wy)
-		mat.grid[(4*1)+0]=  2*(xy+wz)
-		mat.grid[(4*1)+1]=1-2*(xx+zz)
-		mat.grid[(4*1)+2]=  2*(yz-wx)
-		mat.grid[(4*2)+0]=  2*(xz-wy)
-		mat.grid[(4*2)+1]=  2*(yz+wx)
-		mat.grid[(4*2)+2]=1-2*(xx+yy)
-		mat.grid[(4*3)+3]=1
-	
-		For Local iy:Int=0 To 3
-			For Local ix:Int=0 To 3
-				xx#=mat.grid[(4*ix)+iy]
-				If xx#<0.0001 And xx#>-0.0001 Then xx#=0
-				mat.grid[(4*ix)+iy]=xx#
-			Next
-		Next
-	
 	End Function
 	
-	Function QuatToEuler(w#,x#,y#,z#,pitch# Var,yaw# Var,roll# Var)
+	Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
 	
+		QuaternionToEuler_( w,x,y,z,Varptr(pitch),Varptr(yaw),Varptr(roll) )
+		
+		Rem
 		Local q:Float[4]
 		q[0]=w
 		q[1]=x
@@ -106,11 +145,14 @@ Type TQuaternion
 		'If pitch#=nan# Then pitch#=0
 		'If yaw#  =nan# Then yaw#  =0
 		'If roll# =nan# Then roll# =0
-	
+		EndRem
 	End Function
-			
-	Function Slerp:Int(Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx# Var,Cy# Var,Cz# Var,Cw# Var,t#)
 	
+	Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )
+	
+		QuaternionSlerp_( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Varptr(Cx),Varptr(Cy),Varptr(Cz),Varptr(Cw),t )
+		
+		Rem
 		If Abs(ax-bx)<0.001 And Abs(ay-by)<0.001 And Abs(az-bz)<0.001 And Abs(aw-bw)<0.001
 			cx#=ax
 			cy#=ay
@@ -155,7 +197,7 @@ Type TQuaternion
 		cx#=scale0#*Ax#+scale1#*scaler_x#
 		cy#=scale0#*Ay#+scale1#*scaler_y#
 		cz#=scale0#*Az#+scale1#*scaler_z#
-		
+		EndRem
 	End Function
 		
 End Type
