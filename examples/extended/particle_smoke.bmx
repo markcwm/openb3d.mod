@@ -33,7 +33,7 @@ TParticleFunc.Life(40,60) ' set life min/max
 Local sprite:TSprite=CreateSprite()
 EntityColor sprite,250,250,150
 ScaleSprite sprite,TParticleFunc.scalex,TParticleFunc.scaley
-Local noisetex:TTexture=LoadTextureAlpha("../media/Smoke2.png",1+2,$0000FF00)
+Local noisetex:TTexture=LoadAlphaTexture("../media/Smoke2.png",1+2,$0000FF00)
 EntityTexture sprite,noisetex
 HideEntity sprite
 

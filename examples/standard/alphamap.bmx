@@ -27,8 +27,8 @@ MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
 ' this works in Blitz3d but not Openb3d so use LoadTextureAlpha, which sets alpha channel from another color
-Local tex0:TTexture=LoadTextureAlpha("../media/colorkey.jpg",1,$FF)
-Local tex1:TTexture=LoadTextureAlpha("../media/spark.png",1,$FF)
+Local tex0:TTexture=LoadAlphaTexture("../media/colorkey.jpg",1,$FF)
+Local tex1:TTexture=LoadAlphaTexture("../media/spark.png",1,$FF)
 EntityTexture cube,tex0,0,0
 EntityTexture cube,tex1,0,1
 TextureBlend tex0,1

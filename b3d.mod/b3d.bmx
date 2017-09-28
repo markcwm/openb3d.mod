@@ -42,8 +42,8 @@ Type TMeshLoader
 	Field _succ:TMeshLoader
 	
 	Method New()
-		_succ=mesh_loaders
-		mesh_loaders=Self
+		_succ = mesh_loaders
+		mesh_loaders = Self
 	End Method
 	
 	Method CanLoadMesh:Int(extension:String) Abstract

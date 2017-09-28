@@ -20,7 +20,7 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local minib3d:Int=3 ' set 0..5
+Local minib3d:Int=1 ' set 0..5
 Select minib3d
 
 	Case 1 ' load zombie mesh

@@ -1,19 +1,44 @@
 
-<img src="examples/media/openb3d_logo_512.png" align="left" />
+![Openb3d](./examples/media/openb3d_logo_512.png)
 
-Openb3d library wrapper v1.12 for BlitzMax, an OpenGL 2.0+ 3d engine based on Minib3d which was based on Blitz3D. As a result the documentation partly uses the online Blitz3d manual but this will soon be an offline reference. Help can be found at the SyntaxBomb <a href="http://www.syntaxbomb.com/index.php/board,20.0.html">MiniB3d board</a>.
+##Introduction
 
-The wrapper is object-oriented but has a procedural interface like Blitz3D, syntax is not identical but the types are documented and are the same as Minib3d. Max2D is used for 2d-in-3d rendering which replaces the core of the 2d language in Blitz3d, other modules like BRL.Math cover most of the rest. The coordinate system is flipped from OpenGL orientation to be like Blitz3d so porting code is easier. Image loading is done internally by the STB image library instead of BRL image loaders so Pixmaps are not used in textures. Quaternions are used instead of Eulers which prevents gimbal lock.
+Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which is based on Blitz3D. Since the standard commands are the same the Blitz3d manual can be used as a reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
 
-Many examples are available for testing and extra features include: shaders, stencils for shadows and mirrors, terrains, MD2 animation, particles and DDS textures.
+##Features 
 
-Status
-======
+* Works with BlitzMax NG in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
+* The wrapper is object-oriented with a procedural interface as in Minib3d
+* Minib3d types are the same but all fields are pointers apart from lists, also variable names may not be the same
+* Since entities are objects not integer handles like Blitz3D you need to specify their type at creation
+* The coordinate system is flipped from OpenGL orientation to left-handed like Blitz3d and Minib3d
+* Works with BRL.MaxGUI as in Minib3d, for control of application windows
+* BRL.Max2D is used for 2D-in-3D rendering which along with BRL.Graphics is like Blitz3d's Graphics module
+* Image loading is done by the STB image library which supports JPG, PNG, TGA, BMP, GIF and others
+* The wrapper loads DDS files with mipmaps or compressed textures
+* The wrapper supports streams like Incbin and Zipstream with BRL image loaders and BlitzMax model loaders (currently WIP)
+* Model formats include 3DS (currently no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
+* Several more formats can be loaded by using the Assimp library wrapper (currently no animation)
+* Collision detection like Minib3d and consisting of Blitz3d's ellipsoid-to-something collisions
+* Dynamic textures created with BackBufferToTex (cubemapping) or CameraToTex for use in post-processing effects
+* Quaternions are used for rotations instead of Eulers in Minib3d, this avoids gimbal lock
+* Terrains are much like Blitz3D's but UpdateNormals replaces TerrainShading and TerrainDetail is a constant
+* Vertex and Fragment shaders are supported with examples written to comply with GLSL 1.10 (GL 2.0) syntax
+* Shader effects currently include bump mapping, toon shading, blur and water
+* Dynamic lighting and linear fog either with fixed function or programmable graphics pipelines (ie. shaders)
+* Realtime volumetric stencil shadows with self-shadowing from multiple lights
+* Stencil commands for rendering mirror or portal effects
+* Particle emitter system with support for custom effects by using a callback function
+* CSG (constructive solid geometry) creates new meshes from existing ones using combine, subtract or intersect methods
+* Actions are an event-based entity control system that are triggered once and then automatically updated
+* Physics system consisting of constraints and rigid bodies
+* Also includes geospheres (spherical terrains) and metaballs (fluids)
 
-After a year off from coding I decided to return to work on this wrapper in my spare time. I left it in a sort-of broken state due to a failed attempt to move to GLES. It is now desktop/GL-only again but since Angros has a working GLES version I will attempt to add Android support using NG. It should work with the latest NG source and if not then try the latest release (currently v0.87). Updates should be fairly frequent.
+##Status
 
-License
-=======
+After giving up coding for a year (due to lack of time and enthusiasm) I returned to work on this wrapper in my spare time with the goal of getting it into a finished, bug-free state. When I left it, the last commit was sort-of broken due to a failed attempt to move to GLES. Since Angros now has a working WebGL/GLES2 version I will try to add Android support using NG. It should work with the latest NG source, if not then try the latest release (currently 0.87).
 
-The library is licensed with the GNU LGPL v2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and one module with the BSD-2-Clause license.
+##License
+
+The library is licensed with the GNU LGPL 2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and one module with the BSD-2-Clause license.
 

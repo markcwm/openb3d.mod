@@ -484,22 +484,22 @@ Include "inc/functions.bmx"
 
 
 Type TOpenB3DMeshLoader Extends TMeshLoader
-	
+
 	Method CanLoadMesh:Int(extension:String)
 		Select extension.ToLower()
 			Case "b3d"
 				Return True
 		End Select
 	End Method
-
+	
 	Method LoadMesh:Object(obj:Object, parent:Object = Null)
-		Local instance:Byte Ptr = LoadMesh_(String(obj), TEntity.GetInstance( TEntity(parent) ) )
-		Return TMesh.CreateObject( instance )
+		Local instance:Byte Ptr = LoadMesh_( String(obj), TEntity.GetInstance(TEntity(parent)) )
+		Return TMesh.CreateObject(instance)
 	End Method
-
+	
 	Method LoadAnimMesh:Object(obj:Object, parent:Object = Null)
-		Local instance:Byte Ptr = LoadAnimMesh_(String(obj), TEntity.GetInstance(TEntity(parent) ) )
-		Return TMesh.CreateObject( instance )
+		Local instance:Byte Ptr = LoadAnimMesh_( String(obj), TEntity.GetInstance(TEntity(parent)) )
+		Return TMesh.CreateObject(instance)
 	End Method
 	
 End Type

@@ -20,7 +20,7 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local loader:Int=2 ' set 0..5
+Local loader:Int=5 ' set 0..5
 Select loader
 
 	Case 1 ' load rallycar1 mesh

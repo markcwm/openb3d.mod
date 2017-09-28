@@ -248,6 +248,8 @@ Type TTexture
 				tex.width[0]=PixmapWidth(map) ' CreateTexture
 				tex.height[0]=PixmapHeight(map)
 				glGenTextures(1, Varptr(name))
+				glBindTexture(GL_TEXTURE_2D,name)
+				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
 				tex.texture[0]=name
 				tex.InitFields()
 				tex.BufferToTex PixmapPixelPtr(map,0,0)
@@ -257,6 +259,8 @@ Type TTexture
 			If map=Null Then Return tex
 			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
 			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+			glBindTexture(GL_TEXTURE_2D,tex.texture[0])
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
 			tex.BufferToTex PixmapPixelPtr(map,0,0)
 		EndIf
 		Return tex

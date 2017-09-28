@@ -16,7 +16,7 @@ TextureFilter "crate",1
 Local cube:TMesh=CreateCube()
 PositionEntity cube,-1.5,0,3
 
-Local cube2:TMesh=LoadMesh("../media/wcrate.3ds")
+Local cube2:TMesh=LoadMesh("../media/wcrate1.3ds")
 ScaleEntity cube2,0.05,0.05,0.05
 RotateEntity cube2,0,180,0
 PositionEntity cube2,1.5,0,4
@@ -35,7 +35,7 @@ Local shader_tex:TTexture=ShaderTexture(shader,tex1,"texture0",0)
 ShadeEntity(cube,shader)
 
 Local shader2:TShader=LoadShader("","../glsl/default.vert.glsl","../glsl/default.frag.glsl")
-Local tex2:TTexture=LoadTexture("../media/wcrate.jpg")
+Local tex2:TTexture=LoadTexture("../media/WCRATE.JPG")
 Local shader2_tex:TTexture=ShaderTexture(shader2,tex2,"texture0",0)
 ShadeEntity(cube2,shader2)
 

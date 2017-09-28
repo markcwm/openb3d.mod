@@ -43,7 +43,7 @@ For Local t%=0 To 359 Step 36
 Next
 FreeEntity t_sphere
 
-Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
+Local cube:TMesh=LoadMesh("../media/wcrate1.3ds")
 ScaleMesh cube,0.15,0.15,0.15
 PositionEntity cube,0,8,0
 Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1)

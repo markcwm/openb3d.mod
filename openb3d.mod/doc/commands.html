@@ -83,6 +83,9 @@ Returns a copy of the new surface.
 <tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
 Returns a copy of the new texture.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateAnimationKeys>CreateAnimationKeys</a></td><td class=docright>
+Returns a new TAnimationKeys object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
 Create blob from a fluid mesh where radius is the size of the blob.
 </td></tr>
@@ -98,6 +101,9 @@ Create fluid mesh for blobs to use.
 <tr><td class=docleft width=1%><a href=#CreateGeosphere>CreateGeosphere</a></td><td class=docright>
 Create geodesic sphere and set terrain size.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateMatrix>CreateMatrix</a></td><td class=docright>
+Returns a new TMatrix object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateOcTree>CreateOcTree</a></td><td class=docright>
 Create octree and set its width, height and depth.
 </td></tr>
@@ -106,6 +112,9 @@ Create particle emitter from sprite.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateQuad>CreateQuad</a></td><td class=docright>
 Create flat quad.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateQuaternion>CreateQuaternion</a></td><td class=docright>
+Returns a new TQuaternion object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateRigidBody>CreateRigidBody</a></td><td class=docright>
 Create rigid physics body attached to four entities.
@@ -199,6 +208,9 @@ Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadMesh3DS>LoadMesh3DS</a></td><td class=docright>
 3DS mesh loader, supports incbin and zipstream.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMeshB3D>LoadMeshB3D</a></td><td class=docright>
+B3D mesh loader, supports incbin and zipstream.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
@@ -349,6 +361,9 @@ Set material for voxel sprite.
 <tr><td class=docleft width=1%><a href=#TAction>TAction</a></td><td class=docright>
 Action.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TAnimationKeys>TAnimationKeys</a></td><td class=docright>
+AnimationKeys data.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TBlitz2D>TBlitz2D</a></td><td class=docright>
 Blitz2D.
 </td></tr>
@@ -411,6 +426,9 @@ Pick.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TPivot>TPivot</a></td><td class=docright>
 Pivot entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TQuaternion>TQuaternion</a></td><td class=docright>
+Quaternion functions.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TRigidBody>TRigidBody</a></td><td class=docright>
 Rigid Body.
@@ -568,6 +586,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new texture.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateAnimationKeys>
+<tr><td class=doctop colspan=2>Function CreateAnimationKeys:TAnimationKeys()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TAnimationKeys object.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateBlob>
 <tr><td class=doctop colspan=2>Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create blob from a fluid mesh where radius is the size of the blob.</td></tr>
@@ -593,6 +616,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create geodesic sphere and set terrain size.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateMatrix>
+<tr><td class=doctop colspan=2>Function CreateMatrix:TMatrix()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMatrix object.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateOcTree>
 <tr><td class=doctop colspan=2>Function CreateOcTree:TOcTree( w:Float,h:Float,d:Float,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create octree and set its width, height and depth.</td></tr>
@@ -606,6 +634,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=CreateQuad>
 <tr><td class=doctop colspan=2>Function CreateQuad:TMesh( parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create flat quad.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateQuaternion>
+<tr><td class=doctop colspan=2>Function CreateQuaternion:TQuaternion()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuaternion object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateRigidBody>
@@ -769,6 +802,11 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <table class=doc width=100% cellspacing=3 id=LoadMesh3DS>
 <tr><td class=doctop colspan=2>Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>3DS mesh loader, supports incbin and zipstream.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadMeshB3D>
+<tr><td class=doctop colspan=2>Function LoadMeshB3D:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>B3D mesh loader, supports incbin and zipstream.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadShader>
@@ -1038,6 +1076,11 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <tr><td class=docleft width=1%>Description</td><td class=docright>Action.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=TAnimationKeys>
+<tr><td class=doctop colspan=2>Type TAnimationKeys</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>AnimationKeys data.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TBlitz2D>
 <tr><td class=doctop colspan=2>Type TBlitz2D</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Blitz2D.</td></tr>
@@ -1143,6 +1186,11 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <table class=doc width=100% cellspacing=3 id=TPivot>
 <tr><td class=doctop colspan=2>Type TPivot Extends TEntity</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Pivot entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TQuaternion>
+<tr><td class=doctop colspan=2>Type TQuaternion</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Quaternion functions.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TRigidBody>

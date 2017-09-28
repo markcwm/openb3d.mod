@@ -39,7 +39,7 @@ For Local r:Int=0 To 6
 	Next
 Next
 
-Local cube:TMesh=LoadMesh("../media/wcrate.3ds")
+Local cube:TMesh=LoadMesh("../media/wcrate1.3ds")
 ScaleMesh cube,0.15,0.15,0.15
 PositionEntity cube,0,8,40
 Local cube_tex:TTexture=LoadTexture("../media/crate.bmp",1+8)
