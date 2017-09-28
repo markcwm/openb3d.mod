@@ -10,18 +10,18 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which 
 * Works with BlitzMax NG in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
 * The wrapper is object-oriented with a procedural interface as in Minib3d
 * Minib3d types are the same but all fields are pointers apart from lists, also variable names may not be the same
-* Since entities are objects not integer handles like Blitz3D you need to specify their type at creation
-* The coordinate system is flipped from OpenGL orientation to left-handed like Blitz3d and Minib3d
+* Since entities are objects not integer handles as in Blitz3D you need to specify their type at creation
+* The coordinate system is flipped from OpenGL orientation to be left-handed as in Blitz3d and Minib3d
 * Works with BRL.MaxGUI as in Minib3d, for control of application windows
-* BRL.Max2D is used for 2D-in-3D rendering which along with BRL.Graphics is like Blitz3d's Graphics module
+* BRL.Max2D is used for 2D-in-3D rendering which along with BRL.Graphics is like Blitz3d's graphics commands
 * Image loading is done by the STB image library which supports JPG, PNG, TGA, BMP, GIF and others
 * The wrapper loads DDS files with mipmaps or compressed textures
 * The wrapper supports streams like Incbin and Zipstream with BRL image loaders and BlitzMax model loaders (WIP)
 * Model formats include 3DS (currently no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
-* Several more formats can be loaded by using the Assimp library wrapper (currently no animation)
-* Collision detection like Minib3d and consisting of Blitz3d's ellipsoid-to-something collisions
-* Dynamic textures created with BackBufferToTex (cubemapping) or CameraToTex for use in post-processing effects
-* Quaternions are used for rotations instead of Eulers in Minib3d, this avoids gimbal lock
+* Several more formats can be loaded using the Assimp library wrapper (currently no animation)
+* Collision detection is as in Minib3d and consists of Blitz3d's ellipsoid-to-something collisions
+* Dynamic textures are created with BackBufferToTex (cubemapping) or CameraToTex for use in post-processing effects
+* Quaternions are used for rotations instead of Eulers as in Minib3d, this avoids gimbal lock
 * Terrains are much like Blitz3D's but UpdateNormals replaces TerrainShading and TerrainDetail is a constant
 * Vertex and Fragment shaders are supported with examples written to comply with GLSL 1.10 (GL 2.0) syntax
 * Shader effects currently include bump mapping, toon shading, blur and water
@@ -29,8 +29,8 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which 
 * Realtime volumetric stencil shadows with self-shadowing from multiple lights
 * Stencil commands for rendering mirror or portal effects
 * Particle emitter system with support for custom effects by using a callback function
-* CSG (constructive solid geometry) creates new meshes from existing ones (combine, subtract or intersect)
-* Actions are an event-based entity control system that are triggered once and then automatically updated
+* CSG (constructive solid geometry) creates a new mesh from existing ones (combine, subtract or intersect)
+* Actions are an event-based entity control system, they are triggered once and then automatically updated
 * Physics system consisting of constraints and rigid bodies
 * Also includes geospheres (spherical terrains) and metaballs (fluids)
 
