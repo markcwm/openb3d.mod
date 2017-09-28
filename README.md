@@ -1,11 +1,11 @@
 
 ![Openb3d](./examples/media/openb3d_logo_512.png)
 
-##Introduction
+## Introduction
 
 Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which is based on Blitz3D. Since the standard commands are the same the Blitz3d manual can be used as a reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
 
-##Features 
+## Features 
 
 * Works with BlitzMax NG in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
 * The wrapper is object-oriented with a procedural interface as in Minib3d
@@ -16,7 +16,7 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which 
 * BRL.Max2D is used for 2D-in-3D rendering which along with BRL.Graphics is like Blitz3d's Graphics module
 * Image loading is done by the STB image library which supports JPG, PNG, TGA, BMP, GIF and others
 * The wrapper loads DDS files with mipmaps or compressed textures
-* The wrapper supports streams like Incbin and Zipstream with BRL image loaders and BlitzMax model loaders (currently WIP)
+* The wrapper supports streams like Incbin and Zipstream with BRL image loaders and BlitzMax model loaders (WIP)
 * Model formats include 3DS (currently no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
 * Several more formats can be loaded by using the Assimp library wrapper (currently no animation)
 * Collision detection like Minib3d and consisting of Blitz3d's ellipsoid-to-something collisions
@@ -29,16 +29,16 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which 
 * Realtime volumetric stencil shadows with self-shadowing from multiple lights
 * Stencil commands for rendering mirror or portal effects
 * Particle emitter system with support for custom effects by using a callback function
-* CSG (constructive solid geometry) creates new meshes from existing ones using combine, subtract or intersect methods
+* CSG (constructive solid geometry) creates new meshes from existing ones (combine, subtract or intersect)
 * Actions are an event-based entity control system that are triggered once and then automatically updated
 * Physics system consisting of constraints and rigid bodies
 * Also includes geospheres (spherical terrains) and metaballs (fluids)
 
-##Status
+## Status
 
 After giving up coding for a year (due to lack of time and enthusiasm) I returned to work on this wrapper in my spare time with the goal of getting it into a finished, bug-free state. When I left it, the last commit was sort-of broken due to a failed attempt to move to GLES. Since Angros now has a working WebGL/GLES2 version I will try to add Android support using NG. It should work with the latest NG source, if not then try the latest release (currently 0.87).
 
-##License
+## License
 
 The library is licensed with the GNU LGPL 2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and one module with the BSD-2-Clause license.
 
