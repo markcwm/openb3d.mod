@@ -1,4 +1,5 @@
 ' load_md2.bmx
+' vertex interpolated animations
 
 Strict
 
@@ -13,9 +14,8 @@ PositionEntity cam,0,10,-60
 
 Local light:TLight=CreateLight()
 
-Local ent:TMesh=LoadMesh("../media/tris.md2",Null,False) ' disable usenative
+Local ent:TMesh=LoadAnimMesh("../media/tris.md2")
 RotateEntity ent,-90,180,0
-ScaleEntity ent,0.01,0.01,0.01
 
 Local tex:TTexture=LoadTexture("../media/skin.jpg")
 EntityTexture ent,tex
@@ -37,7 +37,7 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
 	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
-	'SetAnimTime(ent,anim_time)
+	SetAnimTime(ent,anim_time)
 	
 	'UpdateWorld
 	RenderWorld

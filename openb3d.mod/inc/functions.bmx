@@ -1043,7 +1043,7 @@ End Function
 'bbdoc: The new parameter usenative uses native B3D and 3DS model loaders which support incbin and zipstream
 'End Rem
 Function LoadMesh:TMesh( file:String,parent:TEntity=Null,usenative:Int=True )
-	Return TMesh.LoadMesh( file,parent )
+	Return TMesh.LoadMesh( file,parent,usenative )
 End Function
 
 'Rem

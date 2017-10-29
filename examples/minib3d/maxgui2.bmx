@@ -46,7 +46,7 @@ Global Font:TImageFont = LoadImageFont("../media/arial.ttf", 24)
 
 ' 3D
 SetGraphics CanvasGraphics(can2)
-Graphics3D ClientWidth(win2),ClientHeight(win2),0,2,60,-1,True ' true if using canvas
+Graphics3D ClientWidth(win),ClientHeight(win),0,2,60,flags,True ' true if using canvas
 
 Global pivot:TPivot=CreatePivot()
 Global cam:TCamera=CreateCamera(pivot)
@@ -70,6 +70,10 @@ EntityTexture cube,tex
 EntityTexture sphere,tex
 EntityTexture cylinder,tex
 EntityTexture cone,tex
+
+' needed at init on Windows
+UpdateCanvas(can, cam)
+UpdateCanvas(can2, cam)
 
 
 Repeat
@@ -175,7 +179,7 @@ Function LoopHook:Object(id:Int, data:Object, context:Object)
 		Case EVENT_MOUSEDOWN
 			Select Event.data
 				Case 1
-					If click_canvas=0 Then left_mouse=1 ' no movement on selecting canvas
+					left_mouse=1 ' no movement on selecting canvas
 			End Select
 			
 		Case EVENT_MOUSEMOVE
@@ -187,7 +191,7 @@ Function LoopHook:Object(id:Int, data:Object, context:Object)
 		Case EVENT_GADGETPAINT
 			Select Event.source
 				Case can
-					If currcan=can And left_mouse=1
+					If currcan=can And left_mouse=1 And click_canvas=0
 						camxp:+Float(last_x-mouse_x)/10
 						camyp:+Float(mouse_y-last_y)/10
 					EndIf
@@ -197,7 +201,7 @@ Function LoopHook:Object(id:Int, data:Object, context:Object)
 					RenderScene(can,win)
 					
 				Case can2
-					If currcan=can2 And left_mouse=1
+					If currcan=can2 And left_mouse=1 And click_canvas=0
 						camxr2:+Float(mouse_y-last_y)/2
 						camyr2:+Float(last_x-mouse_x)/2
 					EndIf
@@ -235,9 +239,9 @@ Function RenderScene(canvas:TGadget, window:TGadget)
 	
 	' call after Max2d
 	Text 20,20,"Left mouse: rotate/position camera, Space: toggle Max2d"
-	Text 20,40,"left_mouse:"+left_mouse
-	Text 20,60,"mouse_x:"+mouse_x
-	Text 20,80,"mouse_y:"+mouse_y
+	Text 20,40,"left_mouse: "+left_mouse+", click_canvas: "+click_canvas
+	Text 20,60,"mouse_x: "+mouse_x
+	Text 20,80,"mouse_y: "+mouse_y
 	
 	Flip -1
 	
