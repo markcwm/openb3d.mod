@@ -517,8 +517,8 @@ Type TB3D
 						
 					Wend
 					
-					If m_brush_id<>-1 Then mesh.PaintEntity(brush[m_brush_id])
-					If tr_brush_id<>-1 Then surf.PaintSurface(brush[tr_brush_id])
+					If m_brush_id>-1 Then mesh.PaintEntity(brush[m_brush_id])
+					If tr_brush_id>-1 Then surf.PaintSurface(brush[tr_brush_id])
 					
 					' if no normal data supplied and no further tri data then update normals
 					If (v_flags & 1)=0 And new_tag<>"TRIS" Then mesh.UpdateNormals()
