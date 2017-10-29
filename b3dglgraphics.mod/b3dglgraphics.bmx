@@ -31,16 +31,6 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 			flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_STENCILBUFFER|GRAPHICS_ACCUMBUFFER
 		Case -2 ' all except accum
 			flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER|GRAPHICS_DEPTHBUFFER|GRAPHICS_STENCILBUFFER
-		Case -3 ' alpha
-			flags=GRAPHICS_BACKBUFFER|GRAPHICS_ALPHABUFFER
-		Case -4 ' depth
-			flags=GRAPHICS_BACKBUFFER|GRAPHICS_DEPTHBUFFER
-		Case -5 ' stencil
-			flags=GRAPHICS_BACKBUFFER|GRAPHICS_STENCILBUFFER
-		Case -6 ' accum
-			flags=GRAPHICS_BACKBUFFER|GRAPHICS_ACCUMBUFFER
-		Default ' none
-			flags=GRAPHICS_BACKBUFFER
 	End Select
 	
 	' change depth values so Graphics3D will behave in the same way as Blitz3D

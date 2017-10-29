@@ -95,20 +95,6 @@ Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
 End Function
 
 Rem
-bbdoc: 3DS mesh loader, supports incbin and zipstream
-End Rem
-Function LoadMesh3DS:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMesh3DS( file,parent )
-End Function
-
-Rem
-bbdoc: B3D mesh loader, supports incbin and zipstream
-End Rem
-Function LoadMeshB3D:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMeshB3D( file,parent )
-End Function
-
-Rem
 bbdoc: Set texture flags, see LoadTexture for values.
 End Rem
 Function TextureFlags( tex:TTexture,flags:Int )
@@ -1054,9 +1040,9 @@ Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float
 End Function
 
 'Rem
-'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
+'bbdoc: The new parameter usenative uses native B3D and 3DS model loaders which support incbin and zipstream
 'End Rem
-Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+Function LoadMesh:TMesh( file:String,parent:TEntity=Null,usenative:Int=True )
 	Return TMesh.LoadMesh( file,parent )
 End Function
 

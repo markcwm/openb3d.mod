@@ -387,17 +387,31 @@ Const TEX_SECONDUV:Int=65536
 ' *** Wrapper functions
 
 Rem
-bbdoc: Begin using Max2D functions.
+bbdoc: New begin using Max2D, allows instant resolution switch.
 End Rem
 Function BeginMax2D()
 	TBlitz2D.BeginMax2D()
 End Function
 
 Rem
-bbdoc: End using Max2D functions.
+bbdoc: New end using Max2D, allows instant resolution switch.
 End Rem
 Function EndMax2D()
 	TBlitz2D.EndMax2D()
+End Function
+
+Rem
+bbdoc: Old Minib3d begin using Max2d.
+End Rem
+Function BeginMini2D()
+	TBlitz2D.BeginMini2D()
+End Function
+
+Rem
+bbdoc: Old Minib3d end using Max2d.
+End Rem
+Function EndMini2D()
+	TBlitz2D.EndMini2D()
 End Function
 
 Rem

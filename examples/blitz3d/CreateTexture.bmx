@@ -4,6 +4,8 @@ Strict
 
 Framework Openb3d.B3dglgraphics
 
+Import Brl.FreetypeFont
+
 Graphics3D DesktopWidth(),DesktopHeight()
 
 Local camera:TCamera=CreateCamera()
@@ -24,17 +26,17 @@ SetClsColor 255,255,255
 Cls
 
 ' Draw text on texture
-Local font:TImageFont=LoadImageFont("arial",24)
+Local font:TImageFont=LoadImageFont("../media/arial.ttf",20)
 SetImageFont font
 SetColor 0,0,0
 DrawText "This texture",0,0
 DrawText "was created using",0,40
 SetColor 0,0,255
-DrawText "CreateTexture()",0,80
+DrawText "CreateTexture",0,80
 SetColor 0,0,0
 DrawText "and drawn to using",0,120
 SetColor 0,0,255
-DrawText "GrabPixmap() and BufferToTex()",0,160
+DrawText "GrabPixmap & BufferToTex",0,160
 
 EndMax2D()
 

@@ -358,21 +358,6 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	' 3DS mesh loader
-	Function LoadMesh3DS:TMesh( file:String,parent_ent:TEntity=Null )
-	
-		Local loader:T3DS = New T3DS
-		Return loader.Load( file,parent_ent )
-		
-	End Function
-	
-	' B3D mesh loader
-	Function LoadMeshB3D:TMesh( file:String,parent_ent:TEntity=Null )
-	
-		Return TB3D.LoadAnimB3D( file,parent_ent )
-		
-	End Function
-	
 	Method FreeEntity()
 	
 		If exists
@@ -406,13 +391,26 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,usenative:Int=True )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
-		Local mesh:TMesh=CreateObject(inst)
-		MemFree cString
-		Return mesh
+		If usenative
+			If ExtractExt(file).ToLower()="3ds" ' animation todo!
+				Local loader:T3DS = New T3DS
+				Return loader.Load( file,parent )
+			EndIf
+			
+			If ExtractExt(file).ToLower()="b3d" ' animation todo!
+				Return TB3D.LoadAnimB3D( file,parent )
+			EndIf
+			
+			' md2 mesh and animation todo!
+		Else
+			Local cString:Byte Ptr=file.ToCString()
+			Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
+			Local mesh:TMesh=CreateObject(inst)
+			MemFree cString
+			Return mesh
+		EndIf
 		
 	End Function
 	

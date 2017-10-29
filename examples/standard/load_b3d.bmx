@@ -25,26 +25,26 @@ Select minib3d
 
 	Case 1 ' load zombie mesh
 		oldtime=MilliSecs()
-		mesh=LoadMeshB3D("../media/zombie.b3d")
+		mesh=LoadMesh("../media/zombie.b3d")
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadMeshB3D("../media/Bird.b3d")
+		mesh=LoadMesh("../media/Bird.b3d")
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadMeshB3D("../media/castle1.b3d")
+		mesh=LoadMesh("../media/castle1.b3d")
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh (texture must be applied manually)
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/zombie.b3d"
-		mesh=LoadMeshB3D(file)
+		mesh=LoadMesh(file)
 		file = "incbin::../media/Zombie.jpg"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
@@ -56,7 +56,7 @@ Select minib3d
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/zombie.zip"
 		Local file:String = "zip::"+zipfile+"//zombie.b3d"
-		mesh=LoadMeshB3D(file)
+		mesh=LoadMesh(file)
 		file = "zip::"+zipfile+"//Zombie.jpg"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
@@ -66,7 +66,7 @@ Select minib3d
 		
 	Default ' load openb3d mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/zombie.b3d")
+		mesh=LoadMesh("../media/zombie.b3d",Null,False) ' disable usenative
 		
 		debug="openb3d time="+(MilliSecs()-oldtime)
 EndSelect
