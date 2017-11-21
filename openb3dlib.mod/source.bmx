@@ -5,6 +5,7 @@ SuperStrict
 Import "../../pub.mod/glew.mod/GL/*.h"
 
 Import "openb3d/src/*.h"
+Import "*.h"
 
 Import "openb3d/src/3ds.cpp"
 Import "openb3d/src/actions.cpp" ' 1.1
