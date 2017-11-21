@@ -636,8 +636,8 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 			}
 
-			if(m_brush_id!=-1) mesh->PaintEntity(*brush[m_brush_id]);
-			if(tr_brush_id!=-1) surf->PaintSurface(brush[tr_brush_id]);
+			if(m_brush_id>-1) mesh->PaintEntity(*brush[m_brush_id]); // negative is invalid brush id
+			if(tr_brush_id>-1) surf->PaintSurface(brush[tr_brush_id]);
 
 			if( ( (v_flags & 1)==0) && (new_tag!="TRIS")) mesh->UpdateNormals(); // if no normal data supplied and no further tri data then update normals
 
