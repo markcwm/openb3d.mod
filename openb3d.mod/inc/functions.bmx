@@ -1040,10 +1040,10 @@ Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float
 End Function
 
 'Rem
-'bbdoc: The new parameter usenative uses native B3D and 3DS model loaders which support incbin and zipstream
+'bbdoc: The new parameter uselibrary is to choose between library or native loaders (which support incbin and zipstream)
 'End Rem
-Function LoadMesh:TMesh( file:String,parent:TEntity=Null,usenative:Int=True )
-	Return TMesh.LoadMesh( file,parent,usenative )
+Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
+	Return TMesh.LoadMesh( file,parent,uselibrary )
 End Function
 
 'Rem

@@ -19,18 +19,18 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local loader:Int=5 ' set 0..5
+Local loader:Int=1 ' set 0 to 5
 Select loader
 
 	Case 1 ' load rallycar1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/rallycar1.3ds")
+		mesh=LoadMesh("../media/rallycar1.3ds",Null,0) ' use native=0
 		
 		debug="3DS time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load mak_robotic mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/mak_robotic.3ds")
+		mesh=LoadMesh("../media/mak_robotic.3ds",Null,0) ' use native=0
 		
 		mesh.RotateAnimMesh(0,-90,0)
 		mesh.ScaleAnimMesh(0.5,0.5,0.5)
@@ -39,7 +39,7 @@ Select loader
 		
 	Case 3 ' load phineas4 mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/phineas4.3ds")
+		mesh=LoadMesh("../media/phineas4.3ds",Null,0) ' use native=0
 		
 		mesh.RotateAnimMesh(0,-90,-45)
 		mesh.PositionAnimMesh(0,10,0)
@@ -49,7 +49,7 @@ Select loader
 	Case 4 ' load incbin mesh (texture must be applied manually)
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/rallycar1.3ds"
-		mesh=LoadMesh(file)
+		mesh=LoadMesh(file,Null,0) ' use native=0
 		file = "incbin::../media/RALLYCAR.JPG"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
@@ -63,7 +63,7 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/rallycar.zip"
 		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
-		mesh=LoadMesh(file)
+		mesh=LoadMesh(file,Null,0) ' use native=0
 		file = "zip::"+zipfile+"//RALLYCAR.JPG"
 		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
 		
@@ -75,7 +75,7 @@ Select loader
 		
 	Default ' load openb3d mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/rallycar1.3ds",Null,False) ' disable usenative
+		mesh=LoadMesh("../media/rallycar1.3ds")
 		
 		mesh.RotateMesh(-90,0,0)
 		mesh.ScaleMesh(0.05, 0.05, 0.05)
@@ -101,6 +101,11 @@ While Not KeyDown( KEY_ESCAPE )
 	If KeyDown(KEY_J) Then TurnEntity mesh,0,2.5,0
 	If KeyDown(KEY_L) Then TurnEntity mesh,0,-2.5,0
 	
+	If KeyHit(KEY_F) And mesh
+		FreeEntity(mesh) 
+		mesh=Null
+	EndIf
+	
 	RenderWorld
 	
 	' calculate fps
@@ -112,9 +117,11 @@ While Not KeyDown( KEY_ESCAPE )
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"WSAD/Arrows: move camera, IKJL: turn mesh"
-	Text 0,60,"mesh depth="+MeshDepth(mesh)+" height="+MeshHeight(mesh)
-	Text 0,80,"mesh rot="+EntityPitch(mesh)+","+EntityYaw(mesh)+","+EntityRoll(mesh)
+	Text 0,40,"WSAD/Arrows: move camera, IKJL: turn mesh, F: free entity"
+	If mesh
+		Text 0,60,"mesh depth="+MeshDepth(mesh)+" height="+MeshHeight(mesh)
+		Text 0,80,"mesh rot="+EntityPitch(mesh)+","+EntityYaw(mesh)+","+EntityRoll(mesh)
+	EndIf
 	
 	Flip
 Wend

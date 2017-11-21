@@ -391,19 +391,19 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,usenative:Int=True )
+	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
 	
-		If usenative
-			If ExtractExt(file).ToLower()="3ds" ' animation todo!
+		If uselibrary = 0
+			If ExtractExt(file).ToLower()="3ds" ' animation todo
 				Local loader:T3DS = New T3DS
 				Return loader.Load( file,parent )
 			EndIf
 			
-			If ExtractExt(file).ToLower()="b3d" ' animation todo!
+			If ExtractExt(file).ToLower()="b3d" ' animation todo
 				Return TB3D.LoadAnimB3D( file,parent )
 			EndIf
 			
-			' md2 mesh and animation todo!
+			' md2 mesh and animation todo
 		Else
 			Local cString:Byte Ptr=file.ToCString()
 			Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )

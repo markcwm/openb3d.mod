@@ -27,7 +27,7 @@ Local old_ms%=MilliSecs()
 Local renders%=0, fps%=0
 
 
-While Not KeyDown(KEY_ESCAPE)		
+While Not KeyDown(KEY_ESCAPE)
 
 	' control camera
 	MoveEntity cam,KeyDown(KEY_D)-KeyDown(KEY_A),0,KeyDown(KEY_W)-KeyDown(KEY_S)
@@ -37,9 +37,14 @@ While Not KeyDown(KEY_ESCAPE)
 	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
 	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
-	SetAnimTime(ent,anim_time)
+	If ent Then SetAnimTime(ent,anim_time)
 	
-	'UpdateWorld
+	If KeyHit(KEY_F) And ent
+		FreeEntity(ent) 
+		ent=Null
+	EndIf
+	
+	UpdateWorld
 	RenderWorld
 	
 	' calculate fps
@@ -51,7 +56,7 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"+/- to animate"
+	Text 0,40,"+/-: animate, F: free entity"
 	Text 0,60,"Arrows: turn camera, WSAD: move camera"
 	
 	Flip

@@ -527,7 +527,7 @@ Type TB3D
 					If new_tag<>"TRIS" Then TrimVerts(surf)
 					
 				Case "ANIM"
-					'SeekStream file,StreamPos(file)+size ; Continue
+					SeekStream file,StreamPos(file)+size ; Continue
 					
 					a_flags=ReadInt(file)
 					a_frames=ReadInt(file)
@@ -567,7 +567,8 @@ Type TB3D
 					EndIf
 					
 				Case "BONE"
-				
+					SeekStream file,StreamPos(file)+size ; Continue
+					
 					Local ix:Int=0
 					old_tag=new_tag
 					new_tag=ReadTag(file)
@@ -714,7 +715,8 @@ Type TB3D
 					EndIf
 					
 				Case "KEYS"
-				
+					SeekStream file,StreamPos(file)+size ; Continue
+					
 					old_tag=new_tag
 					k_flags=ReadInt(file)
 					new_tag=ReadTag(file)

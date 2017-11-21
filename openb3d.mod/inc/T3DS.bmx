@@ -567,7 +567,7 @@ Type T3DS
 	
 	Method ParseMaterial( parent:TEntity, endchunk% )
 		Local matname$, texname$, layer:Int[] = [0]
-		Local col:Byte[] = [255:Byte, 255:Byte, 255:Byte]
+		Local col:Byte[] = [Byte(255), Byte(255), Byte(255)]
 		Local shine:Float[] = [1.0]
 		
 		While StreamPos(stream) < endchunk

@@ -94,9 +94,20 @@ Bone* Bone::CopyEntity(Entity* parent_ent){
 void Bone::FreeEntity(){
 
 	if (keys){
+		keys->flags.clear();
+		keys->px.clear();
+		keys->py.clear();
+		keys->pz.clear();
+		keys->sx.clear();
+		keys->sy.clear();
+		keys->sz.clear();
+		keys->qw.clear();
+		keys->qx.clear();
+		keys->qy.clear();
+		keys->qz.clear();
 		delete keys;
 	}
-
+	
 	Entity::FreeEntity();
 	
 	delete this;

@@ -28,7 +28,10 @@ void Entity::FreeEntity(void){
 	entity_list.remove(this);
 
 	// remove from animate list
-	if(anim_update) animate_list.remove(this);
+	if(anim_update){
+		animate_list.remove(this);
+		anim_update=false;
+	}
 
 	// remove from collision entity lists
 	if(collision_type!=0) CollisionPair::ent_lists[collision_type].remove(this);
