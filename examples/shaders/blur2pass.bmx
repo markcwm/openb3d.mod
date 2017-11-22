@@ -160,7 +160,7 @@ While Not KeyHit(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps+", Memory: "+GCMemAlloced()
-	Text 0,40,"Space: postprocess = "+postprocess+", L: draw line = "+lflag
+	Text 0,40,"WSAD & Arrows: move camera, Space: postprocess = "+postprocess+", L: draw line = "+lflag
 	
 	Flip
 	GCCollect

@@ -120,7 +120,7 @@ While Not KeyDown(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"Space: postprocess = "+postprocess+", +/-: blursize = "+blursize
+	Text 0,40,"WSAD & Arrows: move camera, Space: postprocess = "+postprocess+", +/-: blursize = "+blursize
 	
 	Flip
 

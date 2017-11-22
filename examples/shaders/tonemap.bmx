@@ -1,5 +1,5 @@
-' pixelate.bmx
-' postprocess effect - render framebuffer to texture for pixeled/voxel style
+' tonemap.bmx
+' postprocess effect - render framebuffer to texture for Uncharted 2 tonemap effect
 
 Strict
 
@@ -74,12 +74,11 @@ EntityParent screensprite,camera
 PositionEntity camera,0,7,0 ' move camera now sprite is parented to it
 MoveEntity camera,0,0,-25
 
-Local shader:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/pixelate.frag.glsl")
-ShaderTexture(shader,colortex,"sceneTex",0) ' Our render texture
-SetFloat(shader,"rt_w", width)
-SetFloat(shader,"rt_h", height)
-SetFloat(shader,"pixel_w", 3.0)
-SetFloat(shader,"pixel_h", 3.0)
+Local shader:TShader=LoadShader("","../glsl/default.vert.glsl", "../glsl/tonemap.frag.glsl")
+ShaderTexture(shader,colortex,"texture0",0) ' Our render texture
+Local bias#=1.0, maxwhite#=1.0
+UseFloat(shader,"ExposureBias", bias)
+UseFloat(shader,"MaxWhite", maxwhite)
 ShadeEntity(screensprite, shader)
 
 Global postprocess%=1
@@ -98,6 +97,12 @@ While Not KeyHit(KEY_ESCAPE)
 	
 	If KeyDown(KEY_MINUS) Then anim_time#=anim_time#-0.1
 	If KeyDown(KEY_EQUALS) Then anim_time#=anim_time#+0.1
+	
+	If KeyHit(KEY_B) Then bias#=bias#+0.1
+	If KeyHit(KEY_V) Then bias#=bias#-0.1
+	
+	If KeyHit(KEY_M) Then maxwhite#=maxwhite#+0.1
+	If KeyHit(KEY_N) Then maxwhite#=maxwhite#-0.1
 	
 	anim_time:+0.5
 	If anim_time>20 Then anim_time=2
@@ -127,8 +132,9 @@ While Not KeyHit(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"Arrows: move camera, Space: postprocess = "+postprocess
-	Text 0,60,"anim_time="+anim_time
+	Text 0,40,"B/V: exposure bias = "+bias+", M/N: Max white = "+maxwhite
+	Text 0,60,"Arrows: move camera, Space: postprocess = "+postprocess
+	Text 0,80,"anim_time="+anim_time
 	
 	Flip
 Wend

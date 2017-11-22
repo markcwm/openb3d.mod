@@ -157,7 +157,7 @@ While Not KeyHit(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"Space: postprocess = "+postprocess
+	Text 0,40,"WSAD & Arrows: move camera, Space: postprocess = "+postprocess
 	
 	Flip
 Wend

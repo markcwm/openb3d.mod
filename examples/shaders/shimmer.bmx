@@ -37,7 +37,7 @@ Local t_sphere:TMesh=CreateSphere( 8 )
 EntityShininess t_sphere,0.2
 For Local t%=0 To 359 Step 36
 	Local sphere:TEntity=CopyEntity(t_sphere,pivot)
-	EntityColor sphere,Rnd(256),Rnd(256),Rnd(256)
+	EntityColor sphere,Float(Rnd(256)),Float(Rnd(256)),Float(Rnd(256))
 	TurnEntity sphere,0,t,0
 	MoveEntity sphere,0,0,15
 Next
@@ -52,7 +52,7 @@ EntityTexture cube,cube_tex
 Local cube2:TMesh=CreateCube()
 PositionEntity cube2,0,18,0
 ScaleEntity cube2,2,2,2
-EntityColor cube2,Rnd(256),Rnd(256),Rnd(256)
+EntityColor cube2,Float(Rnd(256)),Float(Rnd(256)),Float(Rnd(256))
 
 Local t_cylinder:TMesh=CreateCylinder()
 ScaleEntity t_cylinder,0.5,6,0.5
@@ -60,7 +60,7 @@ MoveEntity t_cylinder,5,0,-25
 For Local t%=0 To 10
 	MoveEntity t_cylinder,2,0,9
 	Local cylinder:TEntity=CopyEntity(t_cylinder)
-	EntityColor cylinder,Rnd(256),Rnd(256),Rnd(256)
+	EntityColor cylinder,Float(Rnd(256)),Float(Rnd(256)),Float(Rnd(256))
 Next
 FreeEntity t_cylinder
 
@@ -143,7 +143,7 @@ While Not KeyHit(KEY_ESCAPE)
 	EndIf
 	
 	Text 0,20,"FPS: "+fps
-	Text 0,40,"Space: postprocess = "+postprocess
+	Text 0,40,"WSAD & Arrows: move camera, Space: postprocess = "+postprocess
 	
 	Flip
 Wend
