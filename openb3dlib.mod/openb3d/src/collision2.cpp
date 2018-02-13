@@ -94,6 +94,7 @@ void clearCollisions(){
 
 void UpdateStaticCollisions(){
 	list<CollisionPair*>::iterator cp_it;
+	int once=0;
 	for(cp_it=CollisionPair::cp_list.begin();cp_it!=CollisionPair::cp_list.end();cp_it++){
 		CollisionPair col_pair=**cp_it;
 
@@ -106,11 +107,14 @@ void UpdateStaticCollisions(){
 		for(src_ent_it=CollisionPair::ent_lists[col_pair.src_type].begin();src_ent_it!=CollisionPair::ent_lists[col_pair.src_type].end();src_ent_it++){
 			Entity& ent=**src_ent_it;
 			// clear collisions
-			ent.no_collisions=0;
-			for(unsigned int ix=0;ix<ent.collision.size();ix++){
-				delete ent.collision[ix];
+			if(once==0){ // MULTIPLE COLLISIONS FIX
+				ent.no_collisions=0;
+				for(unsigned int ix=0;ix<ent.collision.size();ix++){
+					delete ent.collision[ix];
+				}
+				ent.collision.clear();
 			}
-			ent.collision.clear();
+			once++;
 
 			// if src entity is hidden or it's parent is hidden then do not check for collision
 			if(ent.Hidden()==true) continue;
@@ -193,6 +197,7 @@ void UpdateStaticCollisions(){
 
 				if(ent2_hit){
 
+					int x=C_CollisionResponse(c_col_info,c_coll,response); // SMALLFIXES topic=87446
 					ent.no_collisions=ent.no_collisions+1;
 
 					//int i=ent.no_collisions-1;
@@ -215,7 +220,7 @@ void UpdateStaticCollisions(){
 
 					eci->tri=C_CollisionTriangle();
 
-					if(C_CollisionResponse(c_col_info,c_coll,response)==false) break;
+					if(x==false) break; // SMALLFIXES
 
 				}else{
 
@@ -521,9 +526,9 @@ int QuickCheck(Entity& ent,Entity& ent2){
 }
 
 
-/*
+
  // dynamic to static
-void UpdateStaticCollisions(){
+/*void UpdateStaticCollisions2(){
 
 	static Vector* c_vec_a=C_CreateVecObject(0.0,0.0,0.0);
 	static Vector* c_vec_b=C_CreateVecObject(0.0,0.0,0.0);
@@ -642,7 +647,8 @@ void UpdateStaticCollisions(){
 				}
 
 				if(ent2_hit!=NULL){
-
+					int x=C_CollisionResponse(c_col_info,c_coll,response);
+					
 					ent.no_collisions=ent.no_collisions+1;
 
 					//int i=ent.no_collisions-1;
@@ -665,7 +671,7 @@ void UpdateStaticCollisions(){
 
 					eci->tri=C_CollisionTriangle();
 
-					if(C_CollisionResponse(c_col_info,c_coll,response)==false) break;
+					if(x==false) break;
 
 				}else{
 
@@ -701,5 +707,5 @@ void UpdateStaticCollisions(){
 
 	}
 
-}
-*/
+}*/
+

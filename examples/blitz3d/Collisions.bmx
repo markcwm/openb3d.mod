@@ -3,8 +3,9 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+'Framework sidesign.minib3d
 
-Graphics3D DesktopWidth(),DesktopHeight()
+Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
 ' Set collision type values
 Local type_ground%=1
@@ -81,10 +82,9 @@ PositionEntity pyramid,4,7,4
 ' set collision method and response values
 Local colmethod%=2
 Local response%=2
-
+Local col_id%
 Local method_info$="ellipsoid-to-polygon"
 Local response_info$="slide1"
-
 
 While Not KeyDown( KEY_ESCAPE )
 	Local x#=0
@@ -123,9 +123,9 @@ While Not KeyDown( KEY_ESCAPE )
 	' perform collision checking
 	UpdateWorld
 	
-	For Local id%=1 To CountCollisions(sphere)
-		PositionEntity sphere2,EntityX(CollisionEntity(sphere,id)),10,EntityZ(CollisionEntity(sphere,id))
-		Exit ' first entity
+	For col_id=1 To CountCollisions(sphere)
+		PositionEntity sphere2,EntityX(CollisionEntity(sphere,col_id)),10,EntityZ(CollisionEntity(sphere,col_id))
+		'Exit ' first entity in Minib3d, last in Openb3d
 	Next
 	
 	RenderWorld
@@ -134,7 +134,8 @@ While Not KeyDown( KEY_ESCAPE )
 	Text 0,40,"Press M to change collision method (currently: "+method_info$+")"
 	Text 0,60,"Press R to change collision Response (currently: "+response_info$+")"
 	Text 0,80,"Collisions type_character,type_scenery,"+colmethod+","+response
-	Text 0,100,"CountCollisions: "+CountCollisions(sphere)+", CollisionEntity: "+Long(Byte Ptr(CollisionEntity(sphere,1)))
+	Text 0,100,"CountCollisions: "+CountCollisions(sphere)+", CollisionEntity="+Byte Ptr(CollisionEntity(sphere,col_id-1))
+	Text 0,120,"cube="+Byte Ptr(cube)+", cylinder="+Byte Ptr(cylinder)+", cone="+Byte Ptr(cone)+", prism="+Byte Ptr(prism)+", pyramid="+Byte Ptr(pyramid)
 	
 	Flip
 Wend
