@@ -85,6 +85,7 @@ Local response%=2
 Local col_id%
 Local method_info$="ellipsoid-to-polygon"
 Local response_info$="slide1"
+Local col_ent:TEntity
 
 While Not KeyDown( KEY_ESCAPE )
 	Local x#=0
@@ -117,6 +118,11 @@ While Not KeyDown( KEY_ESCAPE )
 		If response=3 Then response_info$="slide2"
 	EndIf
 	
+	' drop character if it gets stuck
+	If KeyHit( KEY_D )=True
+		PositionEntity sphere,0,8,0
+	EndIf
+	
 	' enable collisions between type_character and type_scenery
 	Collisions type_character,type_scenery,colmethod,response
 	
@@ -125,17 +131,18 @@ While Not KeyDown( KEY_ESCAPE )
 	
 	For col_id=1 To CountCollisions(sphere)
 		PositionEntity sphere2,EntityX(CollisionEntity(sphere,col_id)),10,EntityZ(CollisionEntity(sphere,col_id))
-		'Exit ' first entity in Minib3d, last in Openb3d
+		Exit ' get first entity in collision list
 	Next
+	If CountCollisions(sphere)>0 Then col_ent=CollisionEntity(sphere,1) Else col_ent=Null
 	
 	RenderWorld
 	
-	Text 0,20,"Use cursor keys to move sphere"
+	Text 0,20,"Use cursor keys to move sphere, D to drop"
 	Text 0,40,"Press M to change collision method (currently: "+method_info$+")"
-	Text 0,60,"Press R to change collision Response (currently: "+response_info$+")"
+	Text 0,60,"Press R to change collision response (currently: "+response_info$+")"
 	Text 0,80,"Collisions type_character,type_scenery,"+colmethod+","+response
-	Text 0,100,"CountCollisions: "+CountCollisions(sphere)+", CollisionEntity="+Byte Ptr(CollisionEntity(sphere,col_id-1))
-	Text 0,120,"cube="+Byte Ptr(cube)+", cylinder="+Byte Ptr(cylinder)+", cone="+Byte Ptr(cone)+", prism="+Byte Ptr(prism)+", pyramid="+Byte Ptr(pyramid)
+	Text 0,100,"CountCollisions="+CountCollisions(sphere)+", CollisionEntity="+Byte Ptr(col_ent)+", ground ent="+Byte Ptr(cube)
+	Text 0,120,"cylinder="+Byte Ptr(cylinder)+", cone="+Byte Ptr(cone)+", prism="+Byte Ptr(prism)+", pyramid="+Byte Ptr(pyramid)
 	
 	Flip
 Wend

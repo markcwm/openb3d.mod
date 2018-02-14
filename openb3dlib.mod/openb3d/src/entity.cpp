@@ -1113,71 +1113,81 @@ int Entity::CountCollisions(){
 }
 
 float Entity::CollisionX(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->x;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->x;
+		return collision[no_collisions-index]->x; // INVERT COLLISION INDEX (to be same order as in B3D)
 	}
 	return 0.0;
 }
 
 float Entity::CollisionY(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->y;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->y;
+		return collision[no_collisions-index]->y;
 	}
 	return 0.0;
 }
 
 float Entity::CollisionZ(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->z;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->z;
+		return collision[no_collisions-index]->z;
 	}
 	return 0.0;
 }
 
 float Entity::CollisionNX(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->nx;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->nx;
+		return collision[no_collisions-index]->nx;
 	}
 	return 0.0;
 }
 
 float Entity::CollisionNY(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->ny;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->ny;
+		return collision[no_collisions-index]->ny;
 	}
 	return 0.0;
 }
 
 float Entity::CollisionNZ(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->nz;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->nz;
+		return collision[no_collisions-index]->nz;
   }
 	return 0.0;
 }
 
 float Entity::CollisionTime(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->time;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->time;
+		return collision[no_collisions-index]->time;
 	}
 	return 0.0;
 }
 
 Entity* Entity::CollisionEntity(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->ent;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->ent;
+		return collision[no_collisions-index]->ent;
 	}
 	return NULL;
 }
 
 Surface* Entity::CollisionSurface(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->surf;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->surf;
+		return collision[no_collisions-index]->surf;
 	}
 	return NULL;
 }
 
 int Entity::CollisionTriangle(int index){
-	if(index>0 && index<=no_collisions){
-		return collision[index-1]->tri;
+	if(index>0 && index<=no_collisions && no_collisions>0){
+		//return collision[index-1]->tri;
+		return collision[no_collisions-index]->tri;
 	}
 	return 0;
 }
