@@ -95,6 +95,7 @@ void clearCollisions(){
 void UpdateStaticCollisions(){
 	list<CollisionPair*>::iterator cp_it;
 	int once=0;
+	
 	for(cp_it=CollisionPair::cp_list.begin();cp_it!=CollisionPair::cp_list.end();cp_it++){
 		CollisionPair col_pair=**cp_it;
 
@@ -202,7 +203,8 @@ void UpdateStaticCollisions(){
 
 					//int i=ent.no_collisions-1;
 					CollisionImpact* eci=new CollisionImpact;
-					ent.collision.push_back(eci);
+					//ent.collision.push_back(eci);
+					ent.collision.insert(ent.collision.begin(),eci); // INVERT COLLISION ORDER (as in B3D)
 
 					eci->x=C_CollisionX();
 					eci->y=C_CollisionY();
