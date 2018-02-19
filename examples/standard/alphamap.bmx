@@ -67,7 +67,13 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 0,20,"Left/Right: turn cubes"+", B: alpha blending = "+efx
+	Text 20,TGlobal.height[0]-40,"Left/Right: turn cubes"+", B: alpha blending = "+efx
+	
+	BeginMax2D()
+	SetBlend ALPHABLEND
+	SetColor 0,255,0
+	GLDrawText "Testing Max2d",TGlobal.width[0]-TextWidth("Testing Max2d  "),TGlobal.height[0]-40
+	EndMax2D()
 	
 	Flip
 	

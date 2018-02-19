@@ -72,17 +72,24 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 End Function
 
 Rem
-bbdoc: Draw text, doesn't need Max2D.
+bbdoc: Draw text, doesn't need Max2D. Updated to work with DrawText.
 EndRem
 Function Text( x%,y%,txt$ )
 
 	' set active texture to texture 0 so gldrawtext will work correctly
-	If THardwareInfo.VBOSupport 'SMALLFIXES hack to keep non vbo GFX from crashing
+	If THardwareInfo.VBOSupport 'SMALLFIXES hack to prevent crash when vbo is not supported by GFX
 		glActiveTextureARB(GL_TEXTURE0)
 		glClientActiveTextureARB(GL_TEXTURE0)
 	EndIf
 	
-	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE) ' texture blend 0, do not blend
+	' Tell OpenGL you want to use texture combiners (non vbo)
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE)
+	' Tell OpenGL which combiner you want to use (Modulate for RGB values)
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE)
+	' Tell OpenGL To use texture unit 0's color values for Arg0
+	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE0)
+	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR)
+	
 	glDisable(GL_LIGHTING)
 	glColor3f(1.0,1.0,1.0)
 	
