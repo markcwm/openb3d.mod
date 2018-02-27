@@ -6,7 +6,7 @@ Framework Openb3d.B3dglgraphics
 
 Import Brl.FreeTypeFont
 
-Import Ifsogui.Gui
+Import Ifsogui.GUI
 Import Ifsogui.Panel
 Import Ifsogui.Window
 Import Ifsogui.Label
@@ -20,8 +20,7 @@ Local sample:TSample=New TSample
 sample.Init3D()
 sample.InitGUI()
 
-
-While Not AppTerminate()
+While Not KeyDown(KEY_ESCAPE)
 
 	sample.Update3D()
 	
@@ -44,6 +43,7 @@ Type TSample
 	Field cone:TMesh, tex2:TTexture
 	
 	Field iFPSCounter:Int, iFPSTime:Int, iFPS:Int ' FPS Counter
+	Field efx%=1
 	
 	Method Init3D()
 	
@@ -105,10 +105,14 @@ Type TSample
 		If KeyDown(KEY_RIGHT)
 			TurnEntity cube,0,0.5,-0.1
 		EndIf
+		If KeyHit(KEY_B)
+			efx=Not efx
+			If efx Then EntityFX(cube,32) Else EntityFX(cube,0)
+		EndIf
 		
 		RenderWorld
 		
-		Text 0,20,"Left/Right: turn cube"
+		Text DesktopWidth()-380,20,"Left/Right: turn cube"+", B: alpha blending = "+efx
 		
 	End Method
 	
