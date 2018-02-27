@@ -20,6 +20,22 @@ extern "C" {
 
 // extra
 
+Texture* NewTexture(){
+	return Texture::NewTexture();
+}
+
+Mesh* NewMesh(){
+	return Mesh::NewMesh();
+}
+
+Surface* NewSurface(Mesh* mesh){
+	return mesh->NewSurface();
+}
+
+Bone* NewBone(Mesh* mesh){
+	return mesh->NewBone();
+}
+
 void FreeShader(Shader *shader){
 	shader->FreeShader();
 }
@@ -1031,8 +1047,8 @@ int LoadAnimSeq(Entity* ent, char* file){
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online Help</a>
 */
-Texture* LoadAnimTexture(char* file,int flags,int frame_width,int frame_height,int first_frame,int frame_count){
-	return Texture::LoadAnimTexture(file,flags,frame_width,frame_height,first_frame,frame_count);
+Texture* LoadAnimTexture(char* file,int flags,int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
+	return Texture::LoadAnimTexture(file,flags,frame_width,frame_height,first_frame,frame_count,tex);
 }
 
 /*
@@ -1062,8 +1078,8 @@ Terrain* LoadTerrain(char* file,Entity* parent){
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online Help</a>
 */
-Texture* LoadTexture(char* file,int flags){
-	return Texture::LoadTexture(file,flags);
+Texture* LoadTexture(char* file,int flags,Texture* tex){
+	return Texture::LoadTexture(file,flags,tex);
 }
 
 /*

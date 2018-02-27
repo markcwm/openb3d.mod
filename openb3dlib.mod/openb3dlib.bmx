@@ -255,6 +255,7 @@ Extern
 	Function EntityIterListEntity_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr ) = "EntityIterListEntity"
 	Function EntityListPushBackEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr ) = "EntityListPushBackEntity"
 	Function EntityListRemoveEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr ) = "EntityListRemoveEntity"
+	Function GlobalListPushBackEntity_( varid:Int,obj:Byte Ptr ) = "GlobalListPushBackEntity"
 	
 	' Light
 	Function LightChar_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "LightChar"

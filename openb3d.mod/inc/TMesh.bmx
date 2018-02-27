@@ -391,6 +391,27 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
+	Function NewMesh:TMesh()
+	
+		Local inst:Byte Ptr=NewMesh_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	Method NewSurface:TSurface() ' use ListPushBack(list,value)
+	
+		Local inst:Byte Ptr=NewSurface_( GetInstance(Self) )
+		Return TSurface.CreateObject(inst)
+				
+	End Method
+	
+	Method NewBone:TBone()
+	
+		Local inst:Byte Ptr=NewBone_( GetInstance(Self) )
+		Return TBone.CreateObject(inst)
+		
+	End Method
+	
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
 	
 		If uselibrary = 0

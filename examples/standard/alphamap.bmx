@@ -4,6 +4,7 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+'Framework Sidesign.Minib3d
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 
@@ -26,9 +27,8 @@ ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
 ' transparency - from two images
-' this works in Blitz3d but not Openb3d so use LoadTextureAlpha, which sets alpha channel from another color
-Local tex0:TTexture=LoadAlphaTexture("../media/colorkey.jpg",1,$FF)
-Local tex1:TTexture=LoadAlphaTexture("../media/spark.png",1,$FF)
+Local tex0:TTexture=LoadTexture("../media/colorkey.jpg",1+2)
+Local tex1:TTexture=LoadTexture("../media/spark.png",1)
 EntityTexture cube,tex0,0,0
 EntityTexture cube,tex1,0,1
 TextureBlend tex0,1
@@ -67,12 +67,12 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	RenderWorld
 	
-	Text 20,TGlobal.height[0]-40,"Left/Right: turn cubes"+", B: alpha blending = "+efx
+	Text 20,DesktopHeight()-40,"Left/Right: turn cubes"+", B: alpha blending = "+efx
 	
 	BeginMax2D()
 	SetBlend ALPHABLEND
 	SetColor 0,255,0
-	GLDrawText "Testing Max2d",TGlobal.width[0]-TextWidth("Testing Max2d  "),TGlobal.height[0]-40
+	GLDrawText "Testing Max2d",DesktopWidth()-TextWidth("Testing Max2d  "),DesktopHeight()-40
 	EndMax2D()
 	
 	Flip

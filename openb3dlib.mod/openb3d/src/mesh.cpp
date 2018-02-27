@@ -46,6 +46,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <stdio.h>
 using namespace std;
 
 Mesh* Mesh::CopyEntity(Entity* parent_ent){
@@ -403,6 +404,21 @@ Bone* Mesh::CreateBone(Entity* parent_ent){
 	return bone;
 }
 
+Mesh* Mesh::NewMesh(){
+	Mesh* mesh=new Mesh();
+	return mesh;
+}
+
+Surface* Mesh::NewSurface(){
+	Surface* surf=new Surface();
+	return surf;
+}
+
+Bone* Mesh::NewBone(){
+	Bone* bone=new Bone;
+	bone->keys=new AnimationKeys();
+	return bone;
+}
 
 Mesh* Mesh::LoadMesh(string filename,Entity* parent_ent){
 
@@ -1986,7 +2002,6 @@ int Mesh::Alpha(){
 
 
 
-
 	}else{
 
 		// tex 0 alpha flag
@@ -2019,7 +2034,6 @@ int Mesh::Alpha(){
 				if(surf.brush->tex[0]){
 					if(surf.brush->tex[0]->flags&2){
 						alpha=true;
-
 
 					}
 				}
@@ -2620,10 +2634,11 @@ void Mesh::Render(){
 					switch(tex_blend){
 						case 0: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 						break;
-						case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+						//case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
+						case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 						break;
 						case 2: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-						//case 2 glTexEnvf(GL_TEXTURE_ENV,GL_COMBINE_RGB_EXT,GL_MODULATE);
+						//case 2: glTexEnvf(GL_TEXTURE_ENV,GL_COMBINE_RGB_EXT,GL_MODULATE);
 						break;
 						case 3: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_ADD);
 						break;

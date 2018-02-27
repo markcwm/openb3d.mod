@@ -67,6 +67,7 @@ int EntityListSize( Entity* obj,int varid );
 Entity* EntityIterListEntity( Entity* obj,int varid,int &id );
 void EntityListPushBackEntity( Entity* obj,int varid,Entity* ent );
 void EntityListRemoveEntity( Entity* obj,int varid,Entity* ent );
+void GlobalListPushBackEntity( int varid,Entity* obj );
 
 // Light
 char* LightChar( Light* obj,int varid );

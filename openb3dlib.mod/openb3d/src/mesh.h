@@ -81,6 +81,9 @@ public:
 	static Mesh* CreateSphere(int segments=8,Entity* parent_ent=NULL);
 	static Mesh* CreateCylinder(int verticalsegments=8,int solid=true,Entity* parent_ent=NULL);
 	static Mesh* CreateCone(int segments=8,int solid=true,Entity* parent_ent=NULL);
+	static Mesh* NewMesh();
+	Surface* NewSurface();
+	Bone* NewBone();
 	Mesh* CopyMesh(Entity* parent_ent=NULL);
 	Mesh* RepeatMesh(Entity* parent_ent=NULL);
 	void AddMesh(Mesh* mesh2);

@@ -45,6 +45,8 @@ list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
+void ApplyAlpha (Texture* tex, unsigned char *src);
+void ApplyMask (Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu);
 
 Texture* Texture::Copy(){
 	Texture *tex=new Texture();
@@ -72,13 +74,13 @@ Texture* Texture::Copy(){
 	return tex;
 }
 
-Texture* Texture::LoadTexture(string filename,int flags){
+Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 	filename=File::ResourceFilePath(filename);
 	if(filename.empty()) return NULL;
 	
 	// Try to load DDS file first
 	if(Right(filename,4)==".dds"){
-		Texture* tex=new Texture();
+		if(tex==NULL) tex=new Texture();
 		tex->file=filename;
 		
 		// set tex.flags before TexInList
@@ -98,6 +100,9 @@ Texture* Texture::LoadTexture(string filename,int flags){
 		
 		DirectDrawSurface *dds=DirectDrawSurface::LoadSurface(filename,false);
 		if(!dds) return NULL;
+		
+		if(flags&2) ApplyAlpha(tex,dds->buffer);
+		if(flags&4) ApplyMask(tex,dds->buffer,10,10,10);
 		
 		unsigned int name;
 		glGenTextures (1,&name);
@@ -120,7 +125,7 @@ Texture* Texture::LoadTexture(string filename,int flags){
 			return NULL;
 		}*/
 
-		Texture* tex=new Texture();
+		if(tex==NULL) tex=new Texture();
 		tex->file=filename;
 
 		// set tex.flags before TexInList
@@ -186,12 +191,12 @@ Texture* Texture::LoadTexture(string filename,int flags){
 	}
 	else
 	{
-	  return Texture::LoadAnimTexture(filename,flags,0,0,0,1);
+	  return Texture::LoadAnimTexture(filename,flags,0,0,0,1,tex);
 	}
 }
 
 
-Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
+Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
 
 	//filename=Strip(filename); // get rid of path info
 
@@ -202,7 +207,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		return NULL;
 	}*/
 
-	Texture* tex=new Texture();
+	if(tex==NULL) tex=new Texture();
 	tex->file=filename;
 
 	// set tex.flags before TexInList
@@ -231,6 +236,9 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	unsigned char* buffer;
 
 	buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
+
+	if(flags&2) ApplyAlpha(tex,buffer);
+	if(flags&4) ApplyMask(tex,buffer,10,10,10);
 
 	unsigned int name;
 	if (frame_count<=2){
@@ -286,7 +294,7 @@ Texture* Texture::CreateTexture(int width,int height,int flags, int frames){
 	tex->FilterFlags();
 	tex->width=width;
 	tex->height=height;
-
+	
 	unsigned int name;
 	glGenTextures (1,&name);
 	tex->texture=name;
@@ -294,6 +302,11 @@ Texture* Texture::CreateTexture(int width,int height,int flags, int frames){
 
 	return tex;
 
+}
+
+Texture* Texture::NewTexture(){
+	Texture* tex=new Texture();
+	return tex;
 }
 
 void Texture::FreeTexture(){
@@ -368,7 +381,7 @@ Texture* Texture::TexInList(list<Texture*>& list_ref){
 	list<Texture*>::iterator it;
 	for(it=list_ref.begin();it!=list_ref.end();it++){
 		Texture* tex=*it;
-		if(file==tex->file && flags==tex->flags){// && blend==tex->blend){
+		if(file==tex->file && flags==tex->flags && blend==tex->blend){
 			//if(u_scale==tex->u_scale && v_scale==tex->v_scale && u_pos==tex->u_pos && v_pos==tex->v_pos && angle==tex->angle){
 				return tex;
 			//}
@@ -599,11 +612,44 @@ void Texture::DepthBufferToTex(Camera* cam=0 ){
 	}
 }
 
-
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel) {
   // Copy image data line by line
   unsigned int y;
   for (y = 0; y < dstHeight; y++)
     memcpy (dst + y * dstWidth * bytesPerPixel, src + ((y + srcY) * srcWidth + srcX) * bytesPerPixel, dstWidth * bytesPerPixel);
+}
+
+void ApplyAlpha(Texture* tex, unsigned char *src) {
+	unsigned int scanline, scanlength, x, y, bpp = 4;
+	unsigned char red, grn, blu;
+	
+	for (y = 0; y < tex->height; y++) {
+		for (x = 0; x < tex->width; x++) {
+			scanline = y * bpp * tex->width;
+			scanlength = x * bpp;
+			red = src[scanline + scanlength];
+			grn = src[scanline + scanlength + 1];
+			blu = src[scanline + scanlength + 2];
+			src[scanline + scanlength + 3] = (red + grn + blu) / 3.0;
+		}
+	}
+}
+
+void ApplyMask(Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu) {
+	unsigned int scanline, scanlength, x, y, bpp = 4;
+	unsigned char red, grn, blu;
+	
+	for (y = 0; y < tex->height; y++) {
+		for (x = 0; x < tex->width; x++) {
+			scanline = y * bpp * tex->width;
+			scanlength = x * bpp;
+			red = src[scanline + scanlength];
+			grn = src[scanline + scanlength + 1];
+			blu = src[scanline + scanlength + 2];
+			if (red < maskred && grn < maskgrn && blu < maskblu){
+				src[scanline + scanlength + 3] = 0;
+			}
+		}
+	}
 }
 

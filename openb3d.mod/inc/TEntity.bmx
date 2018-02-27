@@ -354,6 +354,23 @@ Type TEntity
 		
 	End Method
 	
+	Method EntityListAdd( list:TList ) ' Global list
+	
+		Select list
+			Case entity_list
+				GlobalListPushBackEntity_( ENTITY_entity_list,GetInstance(Self) )
+				AddList_(list)
+			Case animate_list
+				GlobalListPushBackEntity_( ENTITY_animate_list,GetInstance(Self) )
+				AddList_(list)
+				If TGlobal.root_ent AddList(TGlobal.root_ent.child_list) ' list of all non-child ents
+			Case TCamera.cam_list
+				GlobalListPushBackEntity_( CAMERA_cam_list,GetInstance(Self) )
+				AddList_(list)
+		End Select
+		
+	End Method
+	
 	' Openb3d
 	
 	Method AddAnimSeq:Int( length:Int )

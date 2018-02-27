@@ -232,46 +232,169 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=9 )
+	Function NewTexture:TTexture()
 	
-		Local tex:TTexture=Null, map:TPixmap=Null, name:Int
-		If Not (flags & 4096) ' no streams flag
-			Local cString:Byte Ptr=file.ToCString()
-			Local inst:Byte Ptr=LoadTexture_( cString,flags )
-			tex=CreateObject(inst)
-			MemFree cString
-			If tex=Null Then Return Null
-			If tex.width[0]=0 ' stbimage failed, use pixmap
-				map=LoadPixmap(file)
-				If map=Null Then Return tex
-				If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-				tex.width[0]=PixmapWidth(map) ' CreateTexture
-				tex.height[0]=PixmapHeight(map)
-				glGenTextures(1, Varptr(name))
-				glBindTexture(GL_TEXTURE_2D,name)
-				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-				tex.texture[0]=name
-				tex.InitFields()
-				tex.BufferToTex PixmapPixelPtr(map,0,0)
-			EndIf
-		Else ' streams flag
-			map=LoadPixmap(file)
-			If map=Null Then Return tex
-			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-			glBindTexture(GL_TEXTURE_2D,tex.texture[0])
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-			tex.BufferToTex PixmapPixelPtr(map,0,0)
-		EndIf
-		Return tex
+		Local inst:Byte Ptr=NewTexture_()
+		Return CreateObject(inst)
 		
 	End Function
 	
-	Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int )
+	Rem
+	Function LoadCubeMapTexture:TTexture(file$,flags%=1,tex:TTexture=Null)
+		
+		If tex=Null Then tex:TTexture=New TTexture
+		
+		If FileFind(file$)=False Then Return Null
+		
+		tex.file$=file$
+		tex.file_abs$=FileAbs$(file$)
+		
+		' set tex.flags before TexInList
+		tex.flags=flags
+		tex.FilterFlags()
+		
+		' check to see if texture with same properties exists already, if so return existing texture
+		Local old_tex:TTexture
+		old_tex=tex.TexInList()
+		If old_tex<>Null And old_tex<>tex
+			Return old_tex
+		Else
+			If old_tex<>tex
+				ListAddLast(tex_list,tex)
+			EndIf
+		EndIf
+
+		' load pixmap
+		tex.pixmap=LoadPixmap(file$)
+		
+		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
+		Local alpha_present:Int=False
+		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
+
+		' convert pixmap to appropriate format
+		If tex.pixmap.format<>PF_RGBA8888
+			tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
+		EndIf
+		
+		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+		If tex.flags&2 And alpha_present=False
+			tex.pixmap=ApplyAlpha(tex.pixmap)
+		EndIf		
+
+		' if mask flag is true, mask pixmap
+		If tex.flags&4
+			tex.pixmap=MaskPixmap(tex.pixmap,0,0,0)
+		EndIf
+		
+		' ---
+						
+		tex.no_frames=1'frame_count
+		'tex.gltex=tex.gltex[..tex.no_frames]
+		
+		' ---
+		
+		' pixmap -> tex
+			
+		Local name:Int
+		glGenTextures 1,Varptr name
+		glBindtexture GL_TEXTURE_CUBE_MAP,name
+	
+		Local pixmap:TPixmap
+	
+		For Local i:Int=0 To 5
+		
+			pixmap=tex.pixmap.Window((tex.pixmap.width/6)*i,0,tex.pixmap.width/6,tex.pixmap.height)
+
+			' ---
+		
+			pixmap=AdjustPixmap(pixmap)
+			tex.width=pixmap.width
+			tex.height=pixmap.height
+			Local width:Int=pixmap.width
+			Local height:Int=pixmap.height
+
+			Local mipmap:Int
+			'If tex.flags&8 Then mipmap=True ***note*** prevent mipmaps being created for cubemaps - they are not used by TMesh.Update, so we don't need to create them
+			Local mip_level:Int=0
+			Repeat
+				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
+				Select i
+					Case 0 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_X,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+					Case 1 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_Z,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+					Case 2 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_X,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+					Case 3 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+					Case 4 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_Y,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+					Case 5 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
+				End Select
+				If Not mipmap Then Exit
+				If width=1 And height=1 Exit
+				If width>1 width:/2
+				If height>1 height:/2
+
+				pixmap=ResizePixmap(pixmap,width,height)
+				mip_level:+1
+			Forever
+			tex.no_mipmaps=mip_level
+			
+		Next
+		
+		tex.gltex[0]=name
+	
+		Return tex
+
+	End Function
+	EndRem
+	
+	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+		Local map:TPixmap=Null, name%
+		
+		If file.Find("endian::")>-1 Or file.StartsWith("incbin::") Or file.StartsWith("zip::")
+			'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
+			map=LoadPixmap(file) ' load from streams
+			If map=Null Then Return tex
+			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+			
+			If (flags & 2) Then map=ApplyAlpha(map)
+			If (flags & 4) Then map=ApplyMask(map,10,10,10)
+			
+			glBindTexture(GL_TEXTURE_2D,tex.texture[0])
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
+			
+			tex.BufferToTex PixmapPixelPtr(map,0,0)
+		Else
+			Local cString:Byte Ptr=file.ToCString()
+			Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
+			If tex=Null Then tex=CreateObject(inst)
+			MemFree cString
+			If tex=Null Then Return Null
+			
+			' TODO - mysterious memory corruption with Brl tga loader
+			If tex.width[0]=0 Or tex.width[0]=1 ' Stbimage failed try pixmap, progressive jpgs
+				'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
+				map=LoadPixmap(file)
+				If map=Null Then Return tex
+				tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+				If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+				
+				If (flags & 2) Then ApplyAlpha(map)
+				If (flags & 4) Then ApplyMask(map,10,10,10)
+				
+				glBindTexture(GL_TEXTURE_2D,tex.texture[0])
+				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
+				
+				tex.BufferToTex PixmapPixelPtr(map,0,0)
+			EndIf
+		EndIf
+		
+		Return tex
+	End Function
+	
+	Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count )
-		Local tex:TTexture=CreateObject(inst)
+		Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
+		If tex=Null Then tex=CreateObject(inst)
 		MemFree cString
 		Return tex
 		
@@ -480,29 +603,36 @@ Type TTexture
 	End Function
 	
 	' applys alpha to a pixmap based on average of colour values
-	Function ApplyAlpha:TPixmap( pixmap:TPixmap ) NoDebug
-	
-		Local tmp:TPixmap=pixmap
-		If tmp.format<>PF_RGBA8888 tmp=tmp.Convert( PF_RGBA8888 )
+	Function ApplyAlpha:TPixmap( map:TPixmap Var )
+		Local rgba%,red%,grn%,blu%,alp%
 		
-		Local out:TPixmap=CreatePixmap( tmp.width,tmp.height,PF_RGBA8888 )
-		
-		For Local y:Int=0 Until pixmap.height
-			Local t:Byte Ptr=tmp.PixelPtr( 0,y )
-			Local o:Byte Ptr=out.PixelPtr( 0,y )
-			For Local x:Int=0 Until pixmap.width
-			
-				o[0]=t[0]
-				o[1]=t[1]
-				o[2]=t[2]
-				o[3]=(o[0]+o[1]+o[2])/3.0
-				
-				t:+4
-				o:+4
+		For Local iy%=0 To PixmapWidth(map)-1
+			For Local ix%=0 To PixmapHeight(map)-1
+				rgba=ReadPixel(map,ix,iy)
+				red%=rgba & $000000FF
+				grn%=(rgba & $0000FF00) Shr 8
+				blu%=(rgba & $00FF0000) Shr 16
+				alp%=(red + grn + blu) / 3.0
+				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
 			Next
 		Next
-		Return out
+	End Function
+	
+	' like MaskPixmap
+	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu% )
+		Local rgba%,red%,grn%,blu%
 		
+		For Local iy%=0 To PixmapWidth(map)-1
+			For Local ix%=0 To PixmapHeight(map)-1
+				rgba=ReadPixel(map,ix,iy)
+				red=rgba & $000000FF
+				grn=(rgba & $0000FF00) Shr 8
+				blu=(rgba & $00FF0000) Shr 16
+				If red < maskred And grn < maskgrn And blu < maskblu
+					WritePixel map,ix,iy,(rgba & $00FFFFFF)
+				EndIf
+			Next
+		Next
 	End Function
 	
 	' GL 2.0 support

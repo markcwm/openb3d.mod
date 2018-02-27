@@ -1162,6 +1162,13 @@ void EntityListRemoveEntity( Entity* obj,int varid,Entity* ent ){
 	}
 }
 
+void GlobalListPushBackEntity( int varid,Entity* obj ){
+	switch (varid){
+		case ENTITY_entity_list : Entity::entity_list.push_back(obj);
+			break;
+	}
+}
+
 // Light
 
 char* LightChar( Light* obj,int varid ){

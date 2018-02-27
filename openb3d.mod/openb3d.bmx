@@ -24,6 +24,10 @@ Import Brl.Map
 Extern
 
 	' *** Wrapper only
+	Function NewTexture_:Byte Ptr() = "NewTexture"
+	Function NewMesh_:Byte Ptr() = "NewMesh"
+	Function NewSurface_:Byte Ptr( mesh:Byte Ptr ) = "NewSurface"
+	Function NewBone_:Byte Ptr( mesh:Byte Ptr ) = "NewBone"
 	Function FreeShader_( shader:Byte Ptr) = "FreeShader"
 	Function FreeStencil_( stencil:Byte Ptr) = "FreeStencil"
 	Function TextureFlags_( tex:Byte Ptr,flags:Int ) = "TextureFlags"
@@ -153,10 +157,10 @@ Extern
 	Function LightRange_( light:Byte Ptr,Range:Float ) = "LightRange"
 	Function LinePick_:Byte Ptr( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,radius:Float ) = "LinePick"
 	Function LoadAnimMesh_:Byte Ptr( file:Byte Ptr,parent:Byte Ptr ) = "LoadAnimMesh"
-	Function LoadAnimTexture_:Byte Ptr( file:Byte Ptr,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int ) = "LoadAnimTexture"
+	Function LoadAnimTexture_:Byte Ptr( file:Byte Ptr,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:Byte Ptr ) = "LoadAnimTexture"
 	Function LoadBrush_:Byte Ptr( file:Byte Ptr,flags:Int,u_scale:Float,v_scale:Float ) = "LoadBrush"
 	Function LoadMesh_:Byte Ptr( file:Byte Ptr,parent:Byte Ptr ) = "LoadMesh"
-	Function LoadTexture_:Byte Ptr( file:Byte Ptr,flags:Int ) = "LoadTexture"
+	Function LoadTexture_:Byte Ptr( file:Byte Ptr,flags:Int,tex:Byte Ptr ) = "LoadTexture"
 	Function LoadSprite_:Byte Ptr( tex_file:Byte Ptr,tex_flag:Int,parent:Byte Ptr ) = "LoadSprite"
 	Function MeshDepth_:Float( mesh:Byte Ptr ) = "MeshDepth"
 	Function MeshHeight_:Float( mesh:Byte Ptr ) = "MeshHeight"
@@ -381,7 +385,7 @@ Const TEX_SPHEREMAP:Int=64
 Const TEX_CUBEMAP:Int=128
 Const TEX_VRAM:Int=256
 Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,8192,16384 unassigned
-Const TEX_STREAM:Int=4096 ' load texture from stream
+'Const TEX_STREAM:Int=4096 ' load texture from stream
 Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions

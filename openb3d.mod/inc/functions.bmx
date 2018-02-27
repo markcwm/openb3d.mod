@@ -3,6 +3,34 @@
 ' *** Wrapper only
 
 Rem
+bbdoc: New object only
+End Rem
+Function NewTexture:TTexture()
+	Return TTexture.NewTexture()
+End Function
+
+Rem
+bbdoc: New object only
+End Rem
+Function NewMesh:TMesh()
+	Return TMesh.NewMesh()
+End Function
+
+Rem
+bbdoc: New object only
+End Rem
+Function NewSurface:TSurface( mesh:TMesh )
+	Return mesh.NewSurface()
+End Function
+
+Rem
+bbdoc: New object only
+End Rem
+Function NewBone:TBone( mesh:TMesh )
+	Return mesh.NewBone()
+End Function
+
+Rem
 bbdoc: GL equivalent.
 End Rem
 Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
@@ -1028,8 +1056,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 'End Rem
-Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int )
-	Return TTexture.LoadAnimTexture( file,flags,frame_width,frame_height,first_frame,frame_count )
+Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
+	Return TTexture.LoadAnimTexture( file,flags,frame_width,frame_height,first_frame,frame_count,tex )
 End Function
 
 'Rem
@@ -1049,8 +1077,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=9 )
-	Return TTexture.LoadTexture( file,flags )
+Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	Return TTexture.LoadTexture( file,flags,tex )
 End Function
 
 'Rem
