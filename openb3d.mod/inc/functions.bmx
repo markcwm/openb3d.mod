@@ -3,119 +3,182 @@
 ' *** Wrapper only
 
 Rem
-bbdoc: New object only
+bbdoc: New empty object
 End Rem
 Function NewTexture:TTexture()
 	Return TTexture.NewTexture()
 End Function
 
 Rem
-bbdoc: New object only
+bbdoc: New empty object
 End Rem
 Function NewMesh:TMesh()
 	Return TMesh.NewMesh()
 End Function
 
 Rem
-bbdoc: New object only
+bbdoc: New empty object
 End Rem
 Function NewSurface:TSurface( mesh:TMesh )
 	Return mesh.NewSurface()
 End Function
 
 Rem
-bbdoc: New object only
+bbdoc: New empty object
 End Rem
 Function NewBone:TBone( mesh:TMesh )
 	Return mesh.NewBone()
 End Function
 
 Rem
-bbdoc: GL equivalent.
+bbdoc: GL equivalent, experimental
 End Rem
 Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )
 	BrushGLColor_( TBrush.GetInstance(brush),r,g,b,a )
 End Function
 
 Rem
-bbdoc: GL equivalent.
+bbdoc: GL equivalent, experimental
 End Rem
 Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )
 	BrushGLBlendFunc_( TBrush.GetInstance(brush),sfactor,dfactor )
 End Function
 
 Rem
-bbdoc: GL equivalent.
+bbdoc: GL equivalent, experimental
 End Rem
 Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
 	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
 End Function
 
 Rem
-bbdoc: Returns a copy of the new brush.
+bbdoc: Returns a copy of the new brush
 End Rem
 Function CopyBrush:TBrush( brush:TBrush )
 	Return brush.Copy()
 End Function
 
 Rem
-bbdoc: Returns a copy of the new surface.
+bbdoc: Returns a copy of the new surface
 End Rem
 Function CopySurface:TSurface( surf:TSurface )
 	Return surf.Copy()
 End Function
 
 Rem
-bbdoc: Returns a copy of the new texture.
+bbdoc: Returns a copy of the new texture
 End Rem
 Function CopyTexture:TTexture( tex:TTexture )
 	Return tex.Copy()
 End Function
 
 Rem
-bbdoc: Returns a new TAnimationKeys object.
+bbdoc: Returns a new TAnimationKeys object
 End Rem
 Function CreateAnimationKeys:TAnimationKeys()
 	Return TAnimationKeys.CreateAnimationKeys()
 End Function
 
 Rem
-bbdoc: Returns a new TMatrix object.
+bbdoc: Returns a new TMatrix object
 End Rem
 Function CreateMatrix:TMatrix()
 	Return TMatrix.CreateMatrix()
 End Function
 
 Rem
-bbdoc: Returns a new TQuaternion object.
+bbdoc: Returns a new TQuaternion object
 End Rem
 Function CreateQuaternion:TQuaternion()
 	Return TQuaternion.CreateQuaternion()
 End Function
 
 Rem
-bbdoc: Free shader
+bbdoc: Returns a new shader material without creating any shader objects
+End Rem
+Function CreateShaderMaterial:TShader( ShaderName:String )
+	Return TShader.CreateShaderMaterial( ShaderName )
+End Function
+
+Rem
+bbdoc: Returns a new frag shader object from file
+End Rem
+Function CreateFragShader:TShaderObject( shader:TShader,shaderFileName:String )
+	Return TShaderObject.CreateFragShader( shader,shaderFileName )
+End Function
+
+Rem
+bbdoc: Returns a new frag shader object from string
+End Rem
+Function CreateFragShaderFromString:TShaderObject( shader:TShader,shadercode:String )
+	Return TShaderObject.CreateFragShaderFromString( shader,shadercode )
+End Function
+
+Rem
+bbdoc: Returns a new vert shader object from file
+End Rem
+Function CreateVertShader:TShaderObject( shader:TShader,shaderFileName:String )
+	Return TShaderObject.CreateVertShader( shader,shaderFileName )
+End Function
+
+Rem
+bbdoc: Returns a new vert shader object from string
+End Rem
+Function CreateVertShaderFromString:TShaderObject( shader:TShader,shadercode:String )
+	Return TShaderObject.CreateVertShaderFromString( shader,shadercode )
+End Function
+
+Rem
+bbdoc: Attaches a frag shader object to a program object
+End Rem
+Function AttachFragShader:Int( shader:TShader,myShader:TShaderObject )
+	Return myShader.AttachFragShader( shader )
+End Function
+
+Rem
+bbdoc: Attaches a vert shader object to a program object
+End Rem
+Function AttachVertShader:Int( shader:TShader,myShader:TShaderObject )
+	Return myShader.AttachVertShader( shader )
+End Function
+
+Rem
+bbdoc: Deletes a frag shader object from a program object
+End Rem
+Function DeleteFragShader( myShader:TShaderObject )
+	myShader.DeleteFragShader()
+End Function
+
+Rem
+bbdoc: Deletes a vert shader object from a program object
+End Rem
+Function DeleteVertShader( myShader:TShaderObject )
+	myShader.DeleteVertShader()
+End Function
+
+Rem
+bbdoc: Frees a shader material
 End Rem
 Function FreeShader( shader:TShader ) ' Spinduluz
 	shader.FreeShader()
 End Function
 
 Rem
-bbdoc: Free stencil
+bbdoc: Frees a stencil object
 End Rem
 Function FreeStencil( stencil:TStencil ) ' Spinduluz
 	stencil.FreeStencil()
 End Function
 
 Rem
-bbdoc: Frees VBO data and brush.
+bbdoc: Frees VBO data and brush
 End Rem
 Function FreeSurface( surf:TSurface )
 	Return surf.FreeSurface()
 End Function
 
 Rem
-bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
+bbdoc: Load texture and set alpha with alphamask - if set to zero then alpha is not changed
 about: Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.
 EndRem
 Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
@@ -123,7 +186,7 @@ Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
 End Function
 
 Rem
-bbdoc: Set texture flags, see LoadTexture for values.
+bbdoc: Set texture flags, see LoadTexture for values
 End Rem
 Function TextureFlags( tex:TTexture,flags:Int )
 	tex.TextureFlags(flags)

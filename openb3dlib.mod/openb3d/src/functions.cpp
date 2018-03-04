@@ -36,7 +36,68 @@ Bone* NewBone(Mesh* mesh){
 	return mesh->NewBone();
 }
 
-void FreeShader(Shader *shader){
+Shader* CreateShaderMaterial(char* ShaderName){
+	return Shader::CreateShaderMaterial(ShaderName);
+}
+
+ShaderObject* CreateFragShader(Shader* shader, char* shaderFileName){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shaderFileName != ""){
+		return ShaderObject::CreateFragShader(shaderFileName);
+	}
+	return NULL;
+}
+
+ShaderObject* CreateFragShaderFromString(Shader* shader, char* shadercode){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shadercode != ""){
+		return ShaderObject::CreateFragShaderFromString(shadercode);
+	}
+}
+
+ShaderObject* CreateVertShader(Shader* shader, char* shaderFileName){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shaderFileName != ""){
+		return ShaderObject::CreateVertShader(shaderFileName);
+	}
+	return NULL;
+}
+
+ShaderObject* CreateVertShaderFromString(Shader* shader, char* shadercode){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shadercode != ""){
+		return ShaderObject::CreateVertShaderFromString(shadercode);
+	}
+	return NULL;
+}
+
+int AttachFragShader(Shader* shader, ShaderObject* myShader){
+	if (myShader!=0) {
+		return shader->arb_program->AttachFragShader(myShader);
+	}
+	return 0;
+}
+
+int AttachVertShader(Shader* shader, ShaderObject* myShader){
+	if (myShader!=0) {
+		return shader->arb_program->AttachVertShader(myShader);
+	}
+	return 0;
+}
+
+void DeleteFragShader(ShaderObject* myShader){
+	myShader->DeleteFragShader(myShader);
+}
+
+void DeleteVertShader(ShaderObject* myShader){
+	myShader->DeleteVertShader(myShader);
+}
+
+void FreeShader(Shader* shader){
 	shader->FreeShader();
 }
 

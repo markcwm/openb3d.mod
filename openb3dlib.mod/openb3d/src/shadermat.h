@@ -54,6 +54,7 @@ public:
 
 
 class Shader {//: public MaterialPlugin{
+public:
 	static int ShaderIDCount;
 
 	int texCount;
@@ -71,7 +72,7 @@ class Shader {//: public MaterialPlugin{
 	//void UpdateData(Surface* surf);
 	
 	// internal 
-public:
+//public:
 	static Shader* CreateShaderMaterial(string Name = "");
 	void TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices=0);
 	void TurnOff();

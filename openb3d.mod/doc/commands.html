@@ -53,6 +53,12 @@ Set default shader for surfaces.
 <tr><td class=docleft width=1%><a href=#AppendAction>AppendAction</a></td><td class=docright>
 Adds action to the end of another one, where act1 happens before act2.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#AttachFragShader>AttachFragShader</a></td><td class=docright>
+Attaches a frag shader object to a program object.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#AttachVertShader>AttachVertShader</a></td><td class=docright>
+Attaches a vert shader object to a program object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#BackBufferToTex>BackBufferToTex</a></td><td class=docright>
 Copy the contents of the backbuffer to a texture.
 </td></tr>
@@ -63,10 +69,10 @@ New begin using Max2D, allows instant resolution switch.
 Old Minib3d begin using Max2d.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLBlendFunc>BrushGLBlendFunc</a></td><td class=docright>
-GL equivalent.
+GL equivalent, experimental.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLColor>BrushGLColor</a></td><td class=docright>
-GL equivalent.
+GL equivalent, experimental.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BufferToTex>BufferToTex</a></td><td class=docright>
 Copy pixmap buffer to texture, buffer must be a byte ptr.
@@ -101,6 +107,12 @@ Create constraint force between two entities of given length, doesn't affect rot
 <tr><td class=docleft width=1%><a href=#CreateFluid>CreateFluid</a></td><td class=docright>
 Create fluid mesh for blobs to use.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateFragShader>CreateFragShader</a></td><td class=docright>
+Returns a new frag shader object from file.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateFragShaderFromString>CreateFragShaderFromString</a></td><td class=docright>
+Returns a new frag shader object from string.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateGeosphere>CreateGeosphere</a></td><td class=docright>
 Create geodesic sphere and set terrain size.
 </td></tr>
@@ -125,14 +137,29 @@ Create rigid physics body attached to four entities.
 <tr><td class=docleft width=1%><a href=#CreateShader>CreateShader</a></td><td class=docright>
 Load shader from two strings, vertex and fragment.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateShaderMaterial>CreateShaderMaterial</a></td><td class=docright>
+Returns a new shader material without creating any shader objects.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateShadow>CreateShadow</a></td><td class=docright>
 Create stencil shadow, static is for static or dynamic shadows.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateStencil>CreateStencil</a></td><td class=docright>
 Create stencil object.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateVertShader>CreateVertShader</a></td><td class=docright>
+Returns a new vert shader object from file.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateVertShaderFromString>CreateVertShaderFromString</a></td><td class=docright>
+Returns a new vert shader object from string.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateVoxelSprite>CreateVoxelSprite</a></td><td class=docright>
 Create voxel sprite where slices is the number of sprites.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeleteFragShader>DeleteFragShader</a></td><td class=docright>
+Deletes a frag shader object from a program object.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#DeleteVertShader>DeleteVertShader</a></td><td class=docright>
+Deletes a vert shader object from a program object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#DepthBufferToTex>DepthBufferToTex</a></td><td class=docright>
 Copy the contents of the depth buffer to a texture.
@@ -186,13 +213,13 @@ Set threshold value used in fluid rendering algorithm, 0.5 is default.
 Frees action from memory when it has ended.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeShader>FreeShader</a></td><td class=docright>
-Free shader.
+Frees a shader material.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeShadow>FreeShadow</a></td><td class=docright>
 Free stencil shadow.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeStencil>FreeStencil</a></td><td class=docright>
-Free stencil.
+Frees a stencil object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FreeSurface>FreeSurface</a></td><td class=docright>
 Frees VBO data and brush.
@@ -225,16 +252,16 @@ Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cul
 Set height of a given point, like ModifyTerrain.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewBone>NewBone</a></td><td class=docright>
-New object only.
+New empty object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewMesh>NewMesh</a></td><td class=docright>
-New object only.
+New empty object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewSurface>NewSurface</a></td><td class=docright>
-New object only.
+New empty object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewTexture>NewTexture</a></td><td class=docright>
-New object only.
+New empty object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#OctreeBlock>OctreeBlock</a></td><td class=docright>
 Place mesh into a node of an octree, the mesh can be duplicated using no more memory.
@@ -327,7 +354,7 @@ Copy texture to a pixmap buffer, buffer must be a byte ptr.
 Set texture flags, see LoadTexture for values.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TextureGLTexEnv>TextureGLTexEnv</a></td><td class=docright>
-GL equivalent.
+GL equivalent, experimental.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UpdateTexCoords>UpdateTexCoords</a></td><td class=docright>
 Recalculates the surface's uvw coord set 1 based on vertices.
@@ -448,6 +475,9 @@ Rigid Body.
 <tr><td class=docleft width=1%><a href=#TShader>TShader</a></td><td class=docright>
 Shader.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TShaderObject>TShaderObject</a></td><td class=docright>
+Shader object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TShadowObject>TShadowObject</a></td><td class=docright>
 Shadow object.
 </td></tr>
@@ -543,6 +573,16 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright>Adds action to the end of another one, where act1 happens before act2.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=AttachFragShader>
+<tr><td class=doctop colspan=2>Function AttachFragShader:Int( shader:TShader,myShader:TShaderObject )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a frag shader object to a program object.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AttachVertShader>
+<tr><td class=doctop colspan=2>Function AttachVertShader:Int( shader:TShader,myShader:TShaderObject )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a vert shader object to a program object.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=BackBufferToTex>
 <tr><td class=doctop colspan=2>Function BackBufferToTex( tex:TTexture,frame:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy the contents of the backbuffer to a texture.</td></tr>
@@ -564,12 +604,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushGLBlendFunc>
 <tr><td class=doctop colspan=2>Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushGLColor>
 <tr><td class=doctop colspan=2>Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BufferToTex>
@@ -628,6 +668,16 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create fluid mesh for blobs to use.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateFragShader>
+<tr><td class=doctop colspan=2>Function CreateFragShader:TShaderObject( shader:TShader,shaderFileName:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new frag shader object from file.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateFragShaderFromString>
+<tr><td class=doctop colspan=2>Function CreateFragShaderFromString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new frag shader object from string.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateGeosphere>
 <tr><td class=doctop colspan=2>Function CreateGeosphere:TGeosphere( size:Int,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create geodesic sphere and set terrain size.</td></tr>
@@ -668,6 +718,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from two strings, vertex and fragment.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateShaderMaterial>
+<tr><td class=doctop colspan=2>Function CreateShaderMaterial:TShader( ShaderName:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new shader material without creating any shader objects.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateShadow>
 <tr><td class=doctop colspan=2>Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create stencil shadow, static is for static or dynamic shadows.</td></tr>
@@ -678,9 +733,29 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create stencil object.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateVertShader>
+<tr><td class=doctop colspan=2>Function CreateVertShader:TShaderObject( shader:TShader,shaderFileName:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new vert shader object from file.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateVertShaderFromString>
+<tr><td class=doctop colspan=2>Function CreateVertShaderFromString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new vert shader object from string.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateVoxelSprite>
 <tr><td class=doctop colspan=2>Function CreateVoxelSprite:TVoxelSprite( slices:Int=64,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create voxel sprite where slices is the number of sprites.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=DeleteFragShader>
+<tr><td class=doctop colspan=2>Function DeleteFragShader( myShader:TShaderObject )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Deletes a frag shader object from a program object.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=DeleteVertShader>
+<tr><td class=doctop colspan=2>Function DeleteVertShader( myShader:TShaderObject )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Deletes a vert shader object from a program object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=DepthBufferToTex>
@@ -774,7 +849,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeShader>
 <tr><td class=doctop colspan=2>Function FreeShader( shader:TShader ) ' Spinduluz</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Free shader.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Frees a shader material.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeShadow>
@@ -784,7 +859,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeStencil>
 <tr><td class=doctop colspan=2>Function FreeStencil( stencil:TStencil ) ' Spinduluz</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Free stencil.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Frees a stencil object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeSurface>
@@ -847,22 +922,22 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <br>
 <table class=doc width=100% cellspacing=3 id=NewBone>
 <tr><td class=doctop colspan=2>Function NewBone:TBone( mesh:TMesh )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New object only.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewMesh>
 <tr><td class=doctop colspan=2>Function NewMesh:TMesh()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New object only.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewSurface>
 <tr><td class=doctop colspan=2>Function NewSurface:TSurface( mesh:TMesh )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New object only.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewTexture>
 <tr><td class=doctop colspan=2>Function NewTexture:TTexture()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New object only.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=OctreeBlock>
@@ -1030,7 +1105,7 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <br>
 <table class=doc width=100% cellspacing=3 id=TextureGLTexEnv>
 <tr><td class=doctop colspan=2>Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UpdateTexCoords>
@@ -1233,6 +1308,11 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <table class=doc width=100% cellspacing=3 id=TShader>
 <tr><td class=doctop colspan=2>Type TShader</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Shader.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TShaderObject>
+<tr><td class=doctop colspan=2>Type TShaderObject</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Shader object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TShadowObject>
