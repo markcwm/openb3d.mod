@@ -2634,8 +2634,7 @@ void Mesh::Render(){
 					switch(tex_blend){
 						case 0: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 						break;
-						//case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
-						case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+						case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
 						break;
 						case 2: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 						//case 2: glTexEnvf(GL_TEXTURE_ENV,GL_COMBINE_RGB_EXT,GL_MODULATE);
@@ -2651,7 +2650,7 @@ void Mesh::Render(){
 							glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_MODULATE);
 							glTexEnvi(GL_TEXTURE_ENV,GL_RGB_SCALE,2.0);
 							break;
-						case 6:// custom
+						case 6:// custom						
 						for(int itexenv=0;itexenv<surf.brush->tex[ix]->glTexEnv_count;itexenv++){
 							glTexEnvi(	surf.brush->tex[ix]->glTexEnv[0][itexenv],
 										surf.brush->tex[ix]->glTexEnv[1][itexenv],
