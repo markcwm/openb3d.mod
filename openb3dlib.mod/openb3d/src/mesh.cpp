@@ -1993,21 +1993,19 @@ int Mesh::Alpha(){
 
 	// check master brush (check alpha value, blend value, force vertex alpha flag)
 	if(brush.alpha<1.0 || brush.blend==2 || brush.blend==3 || brush.fx&32){
-
-		alpha=true;
-
-
-
-
-
-
-
-	}else{
-
-		// tex 0 alpha flag
+		
 		if(brush.tex[0]){
-
-			if(brush.tex[0]->flags&2){
+			if(brush.tex[0]->blend!=0){ // no blend if 0
+				alpha=true;
+			}
+		}
+		
+	}else if(brush.blend==0 || (brush.fx&32)==0){ // override alpha flag
+		
+	}else{
+		
+		if(brush.tex[0]){
+			if(brush.tex[0]->flags&2){ // tex 0 alpha flag
 				alpha=true;
 			}
 		}
@@ -2026,15 +2024,20 @@ int Mesh::Alpha(){
 		//if(surf.brush){
 
 			if(surf.brush->alpha<1.0 || surf.brush->blend==2 || surf.brush->blend==3 || surf.brush->fx&32){
-
-				alpha=true;
-
+				
+				if(surf.brush->tex[0]){
+					if(surf.brush->tex[0]->blend!=0){ // no blend if 0
+						alpha=true;
+					}
+				}
+				
+			}else if(surf.brush->blend==0 || (surf.brush->fx&32)==0){ // override alpha flag
+				
 			}else{
 
 				if(surf.brush->tex[0]){
 					if(surf.brush->tex[0]->flags&2){
 						alpha=true;
-
 					}
 				}
 

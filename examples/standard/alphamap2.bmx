@@ -1,5 +1,5 @@
 ' alphamap2.bmx
-' using BrushGLBlendFunc
+' using BrushGLBlendFunc, experimental
 
 Strict
 
