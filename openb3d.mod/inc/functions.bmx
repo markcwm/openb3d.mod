@@ -3,6 +3,13 @@
 ' *** Wrapper only
 
 Rem
+bbdoc: Number of triangles currently rendered
+End Rem
+Function TrisRendered:Int()
+	Return TrisRendered_()
+End Function
+
+Rem
 bbdoc: New empty object
 End Rem
 Function NewTexture:TTexture()

@@ -149,13 +149,11 @@ Type TMesh Extends TEntity
 				If surf
 					MeshListPushBackSurface_( GetInstance(Self),MESH_surf_list,TSurface.GetInstance(surf) )
 					AddList(list)
-					no_surfs[0]:+1
 				EndIf
 			Case anim_surf_list
 				If surf
 					MeshListPushBackSurface_( GetInstance(Self),MESH_anim_surf_list,TSurface.GetInstance(surf) )
 					AddList(list)
-					no_surfs[0]:+1
 				EndIf
 			Case bones
 				If bone

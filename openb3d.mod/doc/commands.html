@@ -356,6 +356,9 @@ Set texture flags, see LoadTexture for values.
 <tr><td class=docleft width=1%><a href=#TextureGLTexEnv>TextureGLTexEnv</a></td><td class=docright>
 GL equivalent, experimental.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TrisRendered>TrisRendered</a></td><td class=docright>
+Number of triangles currently rendered.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#UpdateTexCoords>UpdateTexCoords</a></td><td class=docright>
 Recalculates the surface's uvw coord set 1 based on vertices.
 </td></tr>
@@ -1106,6 +1109,11 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <table class=doc width=100% cellspacing=3 id=TextureGLTexEnv>
 <tr><td class=doctop colspan=2>Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TrisRendered>
+<tr><td class=doctop colspan=2>Function TrisRendered:Int()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Number of triangles currently rendered.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UpdateTexCoords>

@@ -24,6 +24,7 @@ Import Brl.Map
 Extern
 
 	' *** Wrapper only
+	Function TrisRendered_:Int() = "TrisRendered"
 	Function NewTexture_:Byte Ptr() = "NewTexture"
 	Function NewMesh_:Byte Ptr() = "NewMesh"
 	Function NewSurface_:Byte Ptr( mesh:Byte Ptr ) = "NewSurface"

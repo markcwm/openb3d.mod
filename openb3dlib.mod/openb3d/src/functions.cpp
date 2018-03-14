@@ -19,6 +19,9 @@
 extern "C" {
 
 // extra
+int TrisRendered(){
+	return Global::TrisRendered();
+}
 
 Texture* NewTexture(){
 	return Texture::NewTexture();

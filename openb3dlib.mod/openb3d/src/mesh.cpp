@@ -1995,12 +1995,12 @@ int Mesh::Alpha(){
 	if(brush.alpha<1.0 || brush.blend==2 || brush.blend==3 || brush.fx&32){
 		
 		if(brush.tex[0]){
-			if(brush.tex[0]->blend!=0){ // no blend if 0
+			if(brush.tex[0]->blend!=0){ // no alpha if blend 0 fix
 				alpha=true;
 			}
 		}
 		
-	}else if(brush.blend==0 || (brush.fx&32)==0){ // override alpha flag
+	}else if(brush.blend==0 || (brush.fx&32)==0){ // override alpha flag fix
 		
 	}else{
 		
@@ -2026,12 +2026,12 @@ int Mesh::Alpha(){
 			if(surf.brush->alpha<1.0 || surf.brush->blend==2 || surf.brush->blend==3 || surf.brush->fx&32){
 				
 				if(surf.brush->tex[0]){
-					if(surf.brush->tex[0]->blend!=0){ // no blend if 0
+					if(surf.brush->tex[0]->blend!=0){ // no alpha if blend 0 fix
 						alpha=true;
 					}
 				}
 				
-			}else if(surf.brush->blend==0 || (surf.brush->fx&32)==0){ // override alpha flag
+			}else if(surf.brush->blend==0 || (surf.brush->fx&32)==0){ // override alpha flag fix
 				
 			}else{
 
@@ -2287,7 +2287,9 @@ void Mesh::Render(){
 			}
 
 		}
-
+		
+		Global::rendered_tris=Global::rendered_tris+surf.tris.size(); // TrisRendered
+		
 		float red,green,blue,alpha,shine;
 		int blend,fx;
 		float ambient_red,ambient_green,ambient_blue;

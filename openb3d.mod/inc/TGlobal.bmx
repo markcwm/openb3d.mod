@@ -319,4 +319,10 @@ Type TGlobal
 		
 	End Function
 	
+	Function TrisRendered:Int()
+	
+		Return TrisRendered_()
+		
+	End Function
+	
 End Type

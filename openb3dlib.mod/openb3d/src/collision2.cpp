@@ -108,7 +108,7 @@ void UpdateStaticCollisions(){
 		for(src_ent_it=CollisionPair::ent_lists[col_pair.src_type].begin();src_ent_it!=CollisionPair::ent_lists[col_pair.src_type].end();src_ent_it++){
 			Entity& ent=**src_ent_it;
 			// clear collisions
-			if(once==0){ // MULTIPLE COLLISIONS FIX
+			if(once==0){ // multiple collisions fix
 				ent.no_collisions=0;
 				for(unsigned int ix=0;ix<ent.collision.size();ix++){
 					delete ent.collision[ix];

@@ -46,12 +46,13 @@ public:
 	static void UpdateWorld(float anim_speed=1.0);
 	static void RenderWorld();
 	static void UpdateEntityAnim(Mesh& mesh);
+	static int TrisRendered();
 
 	static int alpha_enable;
 	static int blend_mode;
 	static int fx1;
 	static int fx2;
-
+	static int rendered_tris;
 
 	
 };
