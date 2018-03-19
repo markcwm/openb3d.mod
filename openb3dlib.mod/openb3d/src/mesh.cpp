@@ -1995,9 +1995,9 @@ int Mesh::Alpha(){
 	if(brush.alpha<1.0 || brush.blend==2 || brush.blend==3 || brush.fx&32){
 		
 		if(brush.tex[0]){
-			if(brush.tex[0]->blend!=0){ // no alpha if blend 0 fix
-				alpha=true;
-			}
+			if(brush.tex[0]->blend!=0) alpha=true; // no alpha if blend 0 fix
+		}else{
+			alpha=true;
 		}
 		
 	}else if(brush.blend==0 || (brush.fx&32)==0){ // override alpha flag fix
@@ -2026,9 +2026,9 @@ int Mesh::Alpha(){
 			if(surf.brush->alpha<1.0 || surf.brush->blend==2 || surf.brush->blend==3 || surf.brush->fx&32){
 				
 				if(surf.brush->tex[0]){
-					if(surf.brush->tex[0]->blend!=0){ // no alpha if blend 0 fix
-						alpha=true;
-					}
+					if(surf.brush->tex[0]->blend!=0) alpha=true; // no alpha if blend 0 fix
+				}else{
+					alpha=true;
 				}
 				
 			}else if(surf.brush->blend==0 || (surf.brush->fx&32)==0){ // override alpha flag fix
