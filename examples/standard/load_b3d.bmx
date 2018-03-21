@@ -1,6 +1,5 @@
 ' load_b3d.bmx
-' B3D loader from Minib3d (by Simon Harrison)
-' loads meshes with multiple surfaces, reorientation should not be needed
+' loads meshes with multiple surfaces, set LoadAnimMesh uselibrary=0 to use native loader (default=1)
 
 Strict
 
@@ -20,34 +19,34 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
-Local loader:Int=1 ' set -1 to 5
+Local loader:Int=5 ' 0 to 5
 Select loader
 
 	Case 1 ' load zombie mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/zombie.b3d",Null,0) ' use native=0
+		mesh=LoadAnimMesh("../media/zombie.b3d",Null,0)
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/Bird.b3d",Null,0) ' use native=0
+		mesh=LoadAnimMesh("../media/Bird.b3d",Null,0)
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/castle1.b3d",Null,0) ' use native=0
+		mesh=LoadMesh("../media/castle1.b3d",Null,0)
 		
 		debug="minib3d time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh (texture must be applied manually)
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/zombie.b3d"
-		mesh=LoadMesh(file,Null,0) ' use native=0
-		file = "incbin::../media/Zombie.jpg"
-		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
+		mesh=LoadAnimMesh(file,Null,0)
 		
+		file = "incbin::../media/Zombie.jpg"
+		Local tex:TTexture=LoadTexture(file,9)
 		EntityTexture mesh,tex
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
@@ -56,23 +55,17 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/zombie.zip"
 		Local file:String = "zip::"+zipfile+"//zombie.b3d"
-		mesh=LoadMesh(file,Null,0) ' use native=0
-		file = "zip::"+zipfile+"//Zombie.jpg"
-		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
+		mesh=LoadAnimMesh(file,Null,0)
 		
+		file = "zip::"+zipfile+"//Zombie.jpg"
+		Local tex:TTexture=LoadTexture(file,9)
 		EntityTexture mesh,tex
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
-	Case -1 ' load openb3d anim mesh
+	Default ' load library/default mesh
 		oldtime=MilliSecs()
 		mesh=LoadAnimMesh("../media/zombie.b3d")
-		
-		debug="openb3d time="+(MilliSecs()-oldtime)
-		
-	Default ' load openb3d mesh
-		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/zombie.b3d")
 		
 		debug="openb3d time="+(MilliSecs()-oldtime)
 EndSelect
@@ -101,7 +94,7 @@ While Not KeyDown( KEY_ESCAPE )
 	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
 	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
-	If mesh And loader=-1 Then SetAnimTime(mesh,anim_time)
+	If mesh Then SetAnimTime(mesh,anim_time)
 	
 	If KeyHit(KEY_F) And mesh
 		FreeEntity(mesh) 

@@ -51,7 +51,7 @@ Select loader
 		Local file:String = "incbin::../media/rallycar1.3ds"
 		mesh=LoadMesh(file,Null,0) ' use native=0
 		file = "incbin::../media/RALLYCAR.JPG"
-		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
+		Local tex:TTexture=LoadTexture(file,9)
 		
 		For Local child:Int=1 To CountChildren(mesh)
 			EntityTexture TMesh(GetChild(mesh, child)),tex
@@ -65,7 +65,7 @@ Select loader
 		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
 		mesh=LoadMesh(file,Null,0) ' use native=0
 		file = "zip::"+zipfile+"//RALLYCAR.JPG"
-		Local tex:TTexture=LoadTexture(file,9|TEX_STREAM)
+		Local tex:TTexture=LoadTexture(file,9)
 		
 		For Local child:Int=1 To CountChildren(mesh)
 			EntityTexture TMesh(GetChild(mesh, child)),tex

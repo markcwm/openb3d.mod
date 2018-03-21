@@ -880,9 +880,14 @@ float* AnimationKeysFloat( AnimationKeys* obj,int varid ){
 	return NULL;
 }
 
-AnimationKeys* NewAnimationKeys(){
-	AnimationKeys* keys=new AnimationKeys();
-	return keys;
+AnimationKeys* NewAnimationKeys( Bone* obj ){
+	if (obj==NULL){
+		AnimationKeys* keys=new AnimationKeys();
+		return keys;
+	}else{
+		obj->keys=new AnimationKeys();
+		return obj->keys;
+	}
 }
 
 // Bone
@@ -1312,6 +1317,69 @@ void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone ){
 		case MESH_bones : obj->bones.push_back(bone);
 			break;
 	}
+}
+
+// Model
+
+float* SurfaceCopyFloatArray( Surface* obj,int varid,Surface* surf ){
+	switch (varid){
+		case SURFACE_vert_coords : obj->vert_coords=surf->vert_coords; return &obj->vert_coords[0];
+		case SURFACE_vert_col : obj->vert_col=surf->vert_col; return &obj->vert_col[0];
+		case SURFACE_vert_norm : obj->vert_norm=surf->vert_norm; return &obj->vert_norm[0];
+		case SURFACE_vert_tex_coords0 : obj->vert_tex_coords0=surf->vert_tex_coords0; return &obj->vert_tex_coords0[0];
+		case SURFACE_vert_tex_coords1 : obj->vert_tex_coords1=surf->vert_tex_coords1; return &obj->vert_tex_coords1[0];
+	}
+	return NULL;
+}
+
+float* SurfaceResizeFloatArray( Surface* obj,int varid,Surface* surf ){
+	switch (varid){
+		case SURFACE_vert_coords : obj->vert_coords=surf->vert_coords; return &obj->vert_coords[0];
+		case SURFACE_vert_weight1 : obj->vert_weight1.resize(surf->no_verts+1); return &obj->vert_weight1[0];
+		case SURFACE_vert_weight2 : obj->vert_weight2.resize(surf->no_verts+1); return &obj->vert_weight2[0];
+		case SURFACE_vert_weight3 : obj->vert_weight3.resize(surf->no_verts+1); return &obj->vert_weight3[0];
+		case SURFACE_vert_weight4 : obj->vert_weight4.resize(surf->no_verts+1); return &obj->vert_weight4[0];
+	}
+	return NULL;
+}
+
+int* SurfaceResizeIntArray( Surface* obj,int varid,Surface* surf ){
+	switch (varid){
+		case SURFACE_vert_bone1_no : obj->vert_bone1_no.resize(surf->no_verts+1); return &obj->vert_bone1_no[0];
+		case SURFACE_vert_bone2_no : obj->vert_bone2_no.resize(surf->no_verts+1); return &obj->vert_bone2_no[0];
+		case SURFACE_vert_bone3_no : obj->vert_bone3_no.resize(surf->no_verts+1); return &obj->vert_bone3_no[0];
+		case SURFACE_vert_bone4_no : obj->vert_bone4_no.resize(surf->no_verts+1); return &obj->vert_bone4_no[0];
+	}
+	return NULL;
+}
+
+float* AnimationKeysResizeFloatArray( AnimationKeys* obj,int varid,int a_frames ){
+	switch (varid){
+		case ANIMATIONKEYS_px : obj->px.resize(a_frames+1); return &obj->px[0];
+		case ANIMATIONKEYS_py : obj->py.resize(a_frames+1); return &obj->py[0];
+		case ANIMATIONKEYS_pz : obj->pz.resize(a_frames+1); return &obj->pz[0];
+		case ANIMATIONKEYS_sx : obj->sx.resize(a_frames+1); return &obj->sx[0];
+		case ANIMATIONKEYS_sy : obj->sy.resize(a_frames+1); return &obj->sy[0];
+		case ANIMATIONKEYS_sz : obj->sz.resize(a_frames+1); return &obj->sz[0];
+		case ANIMATIONKEYS_qw : obj->qw.resize(a_frames+1); return &obj->qw[0];
+		case ANIMATIONKEYS_qx : obj->qx.resize(a_frames+1); return &obj->qx[0];
+		case ANIMATIONKEYS_qy : obj->qy.resize(a_frames+1); return &obj->qy[0];
+		case ANIMATIONKEYS_qz : obj->qz.resize(a_frames+1);	return &obj->qz[0];
+	}
+	return NULL;
+}
+
+int* AnimationKeysResizeIntArray( AnimationKeys* obj,int varid,int a_frames ){
+	switch (varid){
+		case ANIMATIONKEYS_flags : obj->flags.resize(a_frames+1); return &obj->flags[0];
+	}
+	return NULL;
+}
+
+vector<Bone*>* MeshResizeBoneVector( Mesh* obj,Bone* bo_bone,int bo_no_bones ){
+	obj->bones.resize(bo_no_bones);
+	obj->bones[bo_no_bones-1]=bo_bone; // store last bone
+	return &obj->bones;
 }
 
 // Quaternion

@@ -92,9 +92,6 @@ Returns a copy of the new surface.
 <tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
 Returns a copy of the new texture.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CreateAnimationKeys>CreateAnimationKeys</a></td><td class=docright>
-Returns a new TAnimationKeys object.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
 Create blob from a fluid mesh where radius is the size of the blob.
 </td></tr>
@@ -116,9 +113,6 @@ Returns a new frag shader object from string.
 <tr><td class=docleft width=1%><a href=#CreateGeosphere>CreateGeosphere</a></td><td class=docright>
 Create geodesic sphere and set terrain size.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CreateMatrix>CreateMatrix</a></td><td class=docright>
-Returns a new TMatrix object.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateOcTree>CreateOcTree</a></td><td class=docright>
 Create octree and set its width, height and depth.
 </td></tr>
@@ -127,9 +121,6 @@ Create particle emitter from sprite.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateQuad>CreateQuad</a></td><td class=docright>
 Create flat quad.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#CreateQuaternion>CreateQuaternion</a></td><td class=docright>
-Returns a new TQuaternion object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateRigidBody>CreateRigidBody</a></td><td class=docright>
 Create rigid physics body attached to four entities.
@@ -251,17 +242,26 @@ Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cul
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#NewAnimationKeys>NewAnimationKeys</a></td><td class=docright>
+Returns a new TAnimationKeys object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#NewBone>NewBone</a></td><td class=docright>
-New empty object.
+Returns a new TBone object.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NewMatrix>NewMatrix</a></td><td class=docright>
+Returns a new TMatrix object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewMesh>NewMesh</a></td><td class=docright>
-New empty object.
+Returns a new TMesh object.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NewQuaternion>NewQuaternion</a></td><td class=docright>
+Returns a new TQuaternion object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewSurface>NewSurface</a></td><td class=docright>
-New empty object.
+Returns a new TSurface object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewTexture>NewTexture</a></td><td class=docright>
-New empty object.
+Returns a new TTexture object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#OctreeBlock>OctreeBlock</a></td><td class=docright>
 Place mesh into a node of an octree, the mesh can be duplicated using no more memory.
@@ -646,11 +646,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new texture.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CreateAnimationKeys>
-<tr><td class=doctop colspan=2>Function CreateAnimationKeys:TAnimationKeys()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TAnimationKeys object.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=CreateBlob>
 <tr><td class=doctop colspan=2>Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create blob from a fluid mesh where radius is the size of the blob.</td></tr>
@@ -686,11 +681,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create geodesic sphere and set terrain size.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CreateMatrix>
-<tr><td class=doctop colspan=2>Function CreateMatrix:TMatrix()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMatrix object.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=CreateOcTree>
 <tr><td class=doctop colspan=2>Function CreateOcTree:TOcTree( w:Float,h:Float,d:Float,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create octree and set its width, height and depth.</td></tr>
@@ -704,11 +694,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=CreateQuad>
 <tr><td class=doctop colspan=2>Function CreateQuad:TMesh( parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create flat quad.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=CreateQuaternion>
-<tr><td class=doctop colspan=2>Function CreateQuaternion:TQuaternion()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuaternion object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateRigidBody>
@@ -923,24 +908,39 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set height of a given point, like ModifyTerrain.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=NewAnimationKeys>
+<tr><td class=doctop colspan=2>Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TAnimationKeys object.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=NewBone>
 <tr><td class=doctop colspan=2>Function NewBone:TBone( mesh:TMesh )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TBone object.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NewMatrix>
+<tr><td class=doctop colspan=2>Function NewMatrix:TMatrix()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMatrix object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewMesh>
 <tr><td class=doctop colspan=2>Function NewMesh:TMesh()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMesh object.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NewQuaternion>
+<tr><td class=doctop colspan=2>Function NewQuaternion:TQuaternion()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuaternion object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewSurface>
 <tr><td class=doctop colspan=2>Function NewSurface:TSurface( mesh:TMesh )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TSurface object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewTexture>
 <tr><td class=doctop colspan=2>Function NewTexture:TTexture()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New empty object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TTexture object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=OctreeBlock>

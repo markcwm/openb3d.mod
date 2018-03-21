@@ -139,10 +139,6 @@ Extern
 	
 	' Model
 	Function ModelTrimVerts_( obj:Byte Ptr ) = "ModelTrimVerts"
-	Function ModelCopyTrisArrays_( surf:Byte Ptr,v_surf:Byte Ptr ) = "ModelCopyTrisArrays"
-	Function ModelResizeAnimArrays_( anim_surf:Byte Ptr,surf:Byte Ptr ) = "ModelResizeAnimArrays"
-	Function ModelResizeAnimationKeysArrays_( keys:Byte Ptr,a_frames:Int ) = "ModelResizeAnimationKeysArrays"
-	Function ModelResizeBonesArrays_( mesh:Byte Ptr,bo_bone:Byte Ptr,bo_no_bones:Int ) = "ModelResizeBonesArrays"
 	
 	' Pick
 	Function PickMain_:Byte Ptr( ax:Float,ay:Float,az:Float,bx:Float,by:Float,bz:Float,radius:Float ) = "PickMain"
@@ -225,7 +221,7 @@ Extern
 	' AnimationKeys
 	Function AnimationKeysInt_:Int Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysInt"
 	Function AnimationKeysFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "AnimationKeysFloat"
-	Function NewAnimationKeys_:Byte Ptr() = "NewAnimationKeys"
+	Function NewAnimationKeys_:Byte Ptr( obj:Byte Ptr ) = "NewAnimationKeys"
 	
 	' Bone
 	Function BoneFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "BoneFloat"
@@ -275,6 +271,14 @@ Extern
 	Function MeshVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "MeshVectorBone"
 	Function MeshListPushBackSurface_( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "MeshListPushBackSurface"
 	Function MeshListPushBackBone_( obj:Byte Ptr,varid:Int,bone:Byte Ptr ) = "MeshListPushBackBone"
+	
+	' Model
+	Function SurfaceCopyFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "SurfaceCopyFloatArray"
+	Function SurfaceResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "SurfaceResizeFloatArray"
+	Function SurfaceResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr ) = "SurfaceResizeIntArray"
+	Function AnimationKeysResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,a_frames:Int ) = "AnimationKeysResizeFloatArray"
+	Function AnimationKeysResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,a_frames:Int ) = "AnimationKeysResizeIntArray"
+	Function MeshResizeBoneVector_:Byte Ptr( obj:Byte Ptr,bo_bone:Byte Ptr,bo_no_bones:Int ) = "MeshResizeBoneVector"
 	
 	' Quaternion
 	Function QuaternionFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "QuaternionFloat"

@@ -284,7 +284,7 @@ Type TMesh Extends TEntity
 	Method SetMatrix( matrix:TMatrix )
 	
 		If parent <> Null
-			Local invpar:TMatrix = CreateMatrix()
+			Local invpar:TMatrix = NewMatrix()
 			parent.mat.GetInverse(invpar)
 			invpar.Multiply(matrix)
 		EndIf
@@ -295,7 +295,7 @@ Type TMesh Extends TEntity
 		'PositionMesh(pos_x, pos_y, pos_z) ' makes a mess
 		'DebugLog "pos: "+pos_x+","+pos_y+","+pos_z
 		
-		Local rot:TQuaternion = CreateQuaternion()
+		Local rot:TQuaternion = NewQuaternion()
 		matrix.ToQuat(rot.x[0], rot.y[0], rot.z[0], rot.w[0])
 		RotateMesh(rot.x[0], rot.y[0], rot.z[0])
 		
@@ -412,17 +412,16 @@ Type TMesh Extends TEntity
 	
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
 	
-		If uselibrary = 0
-			If ExtractExt(file).ToLower()="3ds" ' animation todo
+		If uselibrary=False
+			If ExtractExt(file).ToLower()="3ds" ' add hierarchy animation?
 				Local loader:T3DS = New T3DS
 				Return loader.Load( file,parent )
 			EndIf
-			
-			If ExtractExt(file).ToLower()="b3d" ' animation todo
+			If ExtractExt(file).ToLower()="b3d"
 				Return TB3D.LoadAnimB3D( file,parent )
 			EndIf
-			
-			' md2 mesh and animation todo
+			If ExtractExt(file).ToLower()="md2" ' mesh and animation todo
+			EndIf
 		Else
 			Local cString:Byte Ptr=file.ToCString()
 			Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
@@ -433,13 +432,21 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
-		Local mesh:TMesh=CreateObject(inst)
-		MemFree cString
-		Return mesh
+		If uselibrary=False
+			If ExtractExt(file).ToLower()="b3d" ' skeletal/boned animation
+				Return TB3D.LoadAnimB3D( file,parent )
+			EndIf
+			If ExtractExt(file).ToLower()="md2" ' vertex-interpolated animation
+			EndIf
+		Else
+			Local cString:Byte Ptr=file.ToCString()
+			Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
+			Local mesh:TMesh=CreateObject(inst)
+			MemFree cString
+			Return mesh
+		EndIf
 		
 	End Function
 	

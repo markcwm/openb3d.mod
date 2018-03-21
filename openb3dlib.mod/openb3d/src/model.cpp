@@ -314,7 +314,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				// convert tex angle from rad to deg
 				te_angle=te_angle*(180.0/PI);
 
-				/* ***todo*** - load tex after setting values
+				//todo*** - load tex after setting values
 				// create texture object so we can set texture values (blend etc) before loading texture
 				Texture* new_tex=new Texture();
 
@@ -330,18 +330,17 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				// load texture, providing texture we created above as parameter.
 				// if a texture exists with all the same values as above (blend etc), the existing texture will be returned.
 				// if not then the texture created above (supplied as param below) will be returned
-				new_tex=Texture::LoadTexture(te_file,te_flags);//,tex[tex_no]); ***todo***
-				*/
+				new_tex=Texture::LoadTexture(te_file,te_flags,new_tex); //***todo***
 
-				Texture* new_tex=Texture::LoadTexture(te_file,te_flags);
+				//Texture* new_tex=Texture::LoadTexture(te_file,te_flags);
 
-				new_tex->blend=te_blend;
+				/*new_tex->blend=te_blend;
 				new_tex->coords=te_coords;
 				new_tex->u_pos=te_u_pos;
 				new_tex->v_pos=te_v_pos;
 				new_tex->u_scale=te_u_scale;
 				new_tex->v_scale=te_v_scale;
-				new_tex->angle=te_angle;
+				new_tex->angle=te_angle;*/
 
 				tex_no=tex_no+1;
 

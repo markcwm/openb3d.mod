@@ -65,7 +65,7 @@ Type TQuaternion
 		
 	End Method
 	
-	Function CreateQuaternion:TQuaternion()
+	Function NewQuaternion:TQuaternion()
 	
 		Local inst:Byte Ptr=NewQuaternion_()
 		Return CreateObject(inst)

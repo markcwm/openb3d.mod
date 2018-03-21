@@ -221,9 +221,11 @@ Type TEntity
 		
 		AddList_(entity_list)
 		CopyList(child_list)
-		If parent<>Null Then parent.CopyList(parent.child_list)
-		AddList_(animate_list)
-		If TGlobal.root_ent AddList(TGlobal.root_ent.child_list) ' list of all non-child ents
+		If parent<>Null
+			parent.CopyList(parent.child_list)
+		Else
+			If TGlobal.root_ent Then AddList(TGlobal.root_ent.child_list) ' list of all non-child entities
+		EndIf
 		exists=1
 		
 	End Method
@@ -363,7 +365,6 @@ Type TEntity
 			Case animate_list
 				GlobalListPushBackEntity_( ENTITY_animate_list,GetInstance(Self) )
 				AddList_(list)
-				If TGlobal.root_ent AddList(TGlobal.root_ent.child_list) ' list of all non-child ents
 			Case TCamera.cam_list
 				GlobalListPushBackEntity_( CAMERA_cam_list,GetInstance(Self) )
 				AddList_(list)
@@ -1070,6 +1071,10 @@ Type TEntity
 	Method AddParent( parent_ent:TEntity )
 	
 		AddParent_( GetInstance(Self),GetInstance(parent_ent) )
+		
+		Local inst:Byte Ptr=EntityEntity_( GetInstance(Self),ENTITY_parent )
+		parent=GetObject(inst) ' no CreateObject
+		If parent<>Null Then parent.CopyList(parent.child_list)
 		
 	End Method
 	

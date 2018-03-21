@@ -37,7 +37,7 @@ Entity* ActionEntity( Action* obj,int varid );
 // AnimationKeys
 int* AnimationKeysInt( AnimationKeys* obj,int varid );
 float* AnimationKeysFloat( AnimationKeys* obj,int varid );
-AnimationKeys* NewAnimationKeys();
+AnimationKeys* NewAnimationKeys( Bone* obj );
 
 // Bone
 float* BoneFloat( Bone* obj,int varid );
@@ -87,6 +87,14 @@ Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id );
 vector<Bone*>* MeshVectorBone( Mesh* obj,int varid );
 void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf );
 void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone );
+
+// Model
+float* SurfaceCopyFloatArray( Surface* obj,int varid,Surface* surf );
+float* SurfaceResizeFloatArray( Surface* obj,int varid,Surface* surf );
+int* SurfaceResizeIntArray( Surface* obj,int varid,Surface* surf );
+float* AnimationKeysResizeFloatArray( AnimationKeys* obj,int varid,int a_frames );
+int* AnimationKeysResizeIntArray( AnimationKeys* obj,int varid,int a_frames );
+vector<Bone*>* MeshResizeBoneVector( Mesh* obj,Bone* bo_bone,int bo_no_bones );
 
 // Quaternion
 float* QuaternionFloat( Quaternion* obj,int varid );

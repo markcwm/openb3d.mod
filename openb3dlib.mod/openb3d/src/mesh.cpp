@@ -415,8 +415,8 @@ Surface* Mesh::NewSurface(){
 }
 
 Bone* Mesh::NewBone(){
-	Bone* bone=new Bone;
-	bone->keys=new AnimationKeys();
+	Bone* bone=new Bone();
+	//bone->keys=new AnimationKeys();
 	return bone;
 }
 

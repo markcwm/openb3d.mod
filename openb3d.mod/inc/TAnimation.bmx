@@ -136,10 +136,16 @@ Type TAnimationKeys
 		
 	End Method
 	
-	Function CreateAnimationKeys:TAnimationKeys()
+	Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
 	
-		Local inst:Byte Ptr=NewAnimationKeys_()
-		Return CreateObject(inst)
+		Local inst:Byte Ptr=NewAnimationKeys_( TBone.GetInstance(bone) )
+		Local animkeys:TAnimationKeys=CreateObject(inst)
+		
+		If bone<>Null
+			inst=BoneAnimationKeys_( TBone.GetInstance(bone),BONE_keys )
+			bone.keys=GetObject(inst)
+		EndIf
+		Return animkeys
 		
 	End Function
 	

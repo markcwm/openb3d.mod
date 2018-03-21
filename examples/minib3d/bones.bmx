@@ -1,4 +1,5 @@
 ' bones.bmx
+' B3D skeletal/boned animation, set LoadAnimMesh uselibrary=0 to use native loader (default=1)
 
 Strict
 
@@ -14,7 +15,23 @@ PositionEntity cam,0,10,-15
 Local light:TLight=CreateLight()
 
 ' load anim mesh
-Local ent:TMesh=LoadAnimMesh("../media/zombie.b3d")
+Local ent:TMesh=Null
+Local loader%=2
+Select loader
+	Case 0
+		ent=LoadAnimMesh("../media/zombie.b3d",Null,0)
+		MoveEntity ent,0,0,5
+		
+	Case 1
+		ent=LoadAnimMesh("../media/ninja.b3d",Null,0)
+		MoveEntity ent,0,5,0
+		TurnEntity ent,0,180,0
+		
+	Case 2
+		ent=LoadAnimMesh("../media/dwarf.b3d",Null,0)
+		MoveEntity ent,0,-25,60
+		TurnEntity ent,0,180,0
+EndSelect
 
 ' child entity variables
 Local child_ent:TEntity ' this will store child entity of anim mesh
@@ -44,11 +61,11 @@ While Not KeyDown(KEY_ESCAPE)
 	TurnEntity cam,KeyDown(KEY_DOWN)-KeyDown(KEY_UP),KeyDown(KEY_LEFT)-KeyDown(KEY_RIGHT),0
 
 	' change anim time values
-	If KeyDown(KEY_MINUS) Then anim_time#=anim_time#-0.1
-	If KeyDown(KEY_EQUALS) Then anim_time#=anim_time#+0.1
+	If KeyDown(KEY_MINUS) Then anim_time=anim_time-0.1
+	If KeyDown(KEY_EQUALS) Then anim_time=anim_time+0.1
 	
 	' animte entity
-	SetAnimTime(ent,anim_time#)
+	SetAnimTime(ent,anim_time)
 
 	' select child entity
 	If KeyHit(KEY_OPENBRACKET) Then child_no=child_no-1

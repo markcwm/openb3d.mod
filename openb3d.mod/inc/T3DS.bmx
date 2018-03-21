@@ -304,7 +304,7 @@ Type T3DS
 					If Log_Chunks Then DebugLog "- - - - CHUNK_MAPLIST"
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
-					matrix = CreateMatrix()
+					matrix = NewMatrix()
 					For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
 						For Local y% = 0 To 2
 							matrix.grid[(4*x)+y] = stream.ReadFloat()
@@ -369,7 +369,7 @@ Type T3DS
 					x = stream.ReadFloat()
 					y = stream.ReadFloat() 'some cases:::  1.swap y and z  2.negate new z
 					z = stream.ReadFloat()
-					'Local q1:Float[] = CreateQuaternion(ang, x, y, z)
+					'Local q1:Float[] = NewQuaternion(ang, x, y, z)
 					'Local ll# = VectorMagnitude([x, y, z])
 					
 					'Local test:Float[,] = BuildMatrix([0.0,0.0,0.0],q1,[1.0,1.0,1.0])
@@ -400,7 +400,7 @@ Type T3DS
 		Local id% = -1, parid% = -1, mesh:TMesh
 		Local piv_x#=0.0, piv_y#=0.0, piv_z#=0.0
 		Local animkeys:TAnimKey[] = New TAnimKey[0]
-		'Local animkeys:TAnimationKeys = CreateAnimationKeys()
+		'Local animkeys:TAnimationKeys = NewAnimationKeys()
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
@@ -736,7 +736,7 @@ Type T3DS
 			
 			If matrix <> Null
 				If Transform_Verts
-					Local invmat:TMatrix = CreateMatrix()
+					Local invmat:TMatrix = NewMatrix()
 					matrix.GetInverse(invmat)
 					mesh.TransformVertices(invmat)
 					mesh.cull_radius[0] = 0.0

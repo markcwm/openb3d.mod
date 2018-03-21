@@ -99,10 +99,6 @@ void UpdateShadow( Mesh* obj );
 
 // Model
 void ModelTrimVerts( Surface* obj );
-void ModelCopyTrisArrays( Surface* surf,Surface* v_surf );
-void ModelResizeAnimArrays( Surface* anim_surf,Surface* surf );
-void ModelResizeAnimationKeysArrays( AnimationKeys* keys,int a_frames );
-void ModelResizeBonesArrays( Mesh* mesh,Bone* bo_bone,int bo_no_bones );
 
 // Pick
 Entity* PickMain( float ax,float ay,float az,float bx,float by,float bz,float radius );

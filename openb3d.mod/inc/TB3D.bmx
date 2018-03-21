@@ -199,7 +199,7 @@ Type TB3D
 						te_v_scale=ReadFloat(file)
 						te_angle=ReadFloat(file)
 						
-						If LOG_CHUNKS Then DebugLog tab+old_tag+" file="+te_file+" flags="+te_flags+" blend="+te_blend
+						If LOG_CHUNKS Then DebugLog tab+old_tag+" file="+te_file+" flags="+te_flags+" blend="+te_blend+" tex_no="+tex_no
 						
 						' hidden tex coords 1 flag
 						If (te_flags & 65536)
@@ -214,16 +214,16 @@ Type TB3D
 						
 						' *todo* - Load tex after setting values
 						' create texture object so we can set texture values before loading texture
-						'tex[tex_no]=CreateTexture() 'New TTexture
+						tex[tex_no]=NewTexture()
 						
 						' .flags and .file set in LoadTexture
-						'tex[tex_no].blend[0]=te_blend
-						'tex[tex_no].coords[0]=te_coords
-						'tex[tex_no].u_pos[0]=te_u_pos
-						'tex[tex_no].v_pos[0]=te_v_pos
-						'tex[tex_no].u_scale[0]=te_u_scale
-						'tex[tex_no].v_scale[0]=te_v_scale
-						'tex[tex_no].angle[0]=te_angle
+						tex[tex_no].blend[0]=te_blend
+						tex[tex_no].coords[0]=te_coords
+						tex[tex_no].u_pos[0]=te_u_pos
+						tex[tex_no].v_pos[0]=te_v_pos
+						tex[tex_no].u_scale[0]=te_u_scale
+						tex[tex_no].v_scale[0]=te_v_scale
+						tex[tex_no].angle[0]=te_angle
 						
 						' load texture, providing texture we created above as parameter.
 						' if a texture exists with all the same values as above (blend etc)
@@ -231,7 +231,7 @@ Type TB3D
 						' created above (supplied as param below) will be returned
 						Local tex_name$=filepath+"/"+StripDir(te_file)
 						If LOG_CHUNKS Then DebugLog "tex_name="+tex_name
-						tex[tex_no]=LoadTexture(tex_name,te_flags) ',tex[tex_no]
+						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
 						
@@ -317,7 +317,7 @@ Type TB3D
 					If new_tag="NODE" Or new_tag="ANIM"
 					
 						' make 'piv' entity a mesh, not a pivot, as B3D does
-						Local piv:TMesh=CreateMesh() 'New TMesh
+						Local piv:TMesh=NewMesh()
 						piv.NameClass("Mesh")
 						piv.NameEntity(n_name)
 						piv.px[0]=n_px
@@ -335,6 +335,7 @@ Type TB3D
 						piv.qz[0]=n_qz
 						
 						'piv.UpdateMat(True)
+						piv.EntityListAdd(TEntity.entity_list)
 						last_ent=piv
 						
 						' root ent?
@@ -357,7 +358,7 @@ Type TB3D
 						If piv.parent<>Null
 							Local new_mat:TMatrix=piv.parent.mat.Copy()
 							new_mat.Multiply(piv.mat)
-							piv.mat.Overwrite(new_mat)'.Multiply(mat)
+							piv.mat.Overwrite(new_mat)
 						EndIf				
 						
 					EndIf
@@ -368,7 +369,7 @@ Type TB3D
 					
 					If LOG_CHUNKS Then DebugLog tab+new_tag+" brush_id="+m_brush_id
 					
-					mesh=CreateMesh() 'New TMesh
+					mesh=NewMesh()
 					mesh.NameClass("Mesh")
 					mesh.NameEntity(n_name)
 					mesh.px[0]=n_px
@@ -385,6 +386,7 @@ Type TB3D
 					mesh.qy[0]=n_qy
 					mesh.qz[0]=n_qz
 					
+					mesh.EntityListAdd(TEntity.entity_list)
 					last_ent=mesh
 					
 					' root ent?
@@ -407,7 +409,7 @@ Type TB3D
 					If mesh.parent<>Null
 						Local new_mat:TMatrix=mesh.parent.mat.Copy()
 						new_mat.Multiply(mesh.mat)
-						mesh.mat.Overwrite(new_mat)'.Multiply(mat)
+						mesh.mat.Overwrite(new_mat)
 					EndIf				
 					
 				Case "VRTS"
@@ -415,7 +417,7 @@ Type TB3D
 					If v_mesh<>Null Then v_mesh=Null
 					If v_surf<>Null Then v_surf=Null
 					
-					v_mesh=CreateMesh() 'New TMesh
+					v_mesh=NewMesh()
 					v_surf=v_mesh.CreateSurface()
 					v_flags=ReadInt(file)
 					v_tc_sets=ReadInt(file)
@@ -481,12 +483,11 @@ Type TB3D
 						' new surf - copy arrays
 						surf=mesh.CreateSurface()
 						
-						ModelCopyTrisArrays_( TSurface.GetInstance(surf),TSurface.GetInstance(v_surf) )
-						surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
-						surf.vert_norm=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_norm )
-						surf.vert_tex_coords0=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords0 )
-						surf.vert_tex_coords1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords1 )
-						surf.vert_col=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_col )
+						surf.vert_coords=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_coords,TSurface.GetInstance(v_surf) )
+						surf.vert_norm=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_norm,TSurface.GetInstance(v_surf) )
+						surf.vert_tex_coords0=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords0,TSurface.GetInstance(v_surf) )
+						surf.vert_tex_coords1=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords1,TSurface.GetInstance(v_surf) )
+						surf.vert_col=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_col,TSurface.GetInstance(v_surf) )
 						
 						surf.no_verts[0]=v_surf.no_verts[0]
 					EndIf
@@ -501,7 +502,7 @@ Type TB3D
 						tr_vid1=ReadInt(file)
 						tr_vid2=ReadInt(file)
 						
-						' Find out minimum and maximum vertex indices - used for TrimVerts func after
+						' find out minimum and maximum vertex indices - used for TrimVerts func after
 						' (TrimVerts used due to .b3d format not being an exact fit with Blitz3D itself)
 						If tr_vid0<surf.vmin[0] Then surf.vmin[0]=tr_vid0
 						If tr_vid1<surf.vmin[0] Then surf.vmin[0]=tr_vid1
@@ -519,7 +520,7 @@ Type TB3D
 					
 					If m_brush_id>-1 Then mesh.PaintEntity(brush[m_brush_id])
 					If tr_brush_id>-1 Then surf.PaintSurface(brush[tr_brush_id])
-					
+										
 					' if no normal data supplied and no further tri data then update normals
 					If (v_flags & 1)=0 And new_tag<>"TRIS" Then mesh.UpdateNormals()
 					
@@ -527,7 +528,6 @@ Type TB3D
 					If new_tag<>"TRIS" Then TrimVerts(surf)
 					
 				Case "ANIM"
-					SeekStream file,StreamPos(file)+size ; Continue
 					
 					a_flags=ReadInt(file)
 					a_frames=ReadInt(file)
@@ -536,7 +536,7 @@ Type TB3D
 					If LOG_CHUNKS Then DebugLog tab+new_tag+" flags="+a_flags+" frames="+a_frames+" fps="+a_fps
 					
 					If mesh<>Null
-						'mesh.anim[0]=1 ' crash
+						mesh.anim[0]=1
 						
 						'mesh.frames[0]=a_frames
 						mesh.anim_seqs_first[0]=0
@@ -544,20 +544,20 @@ Type TB3D
 						
 						' create anim surfs, copy vertex coords array, add to anim_surf_list
 						For Local surf:TSurface=EachIn mesh.surf_list
-							Local anim_surf:TSurface=mesh.CreateSurface() 'New TSurface
-							mesh.CopyList(mesh.anim_surf_list)
+							Local anim_surf:TSurface=mesh.NewSurface()
+							mesh.ListPushBack( mesh.anim_surf_list,anim_surf )
 							
-							ModelResizeAnimArrays_( TSurface.GetInstance(anim_surf),TSurface.GetInstance(surf) )
 							anim_surf.no_verts[0]=surf.no_verts[0]
-							anim_surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(anim_surf),SURFACE_vert_coords )
-							anim_surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone1_no )
-							anim_surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone2_no )
-							anim_surf.vert_bone3_no=SurfaceInt_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone3_no )
-							anim_surf.vert_bone4_no=SurfaceInt_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone4_no )
-							anim_surf.vert_weight1=SurfaceFloat_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight1 )
-							anim_surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight2 )
-							anim_surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight3 )
-							anim_surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight4 )
+							
+							anim_surf.vert_coords=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_coords,TSurface.GetInstance(surf) )
+							anim_surf.vert_bone1_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone1_no,TSurface.GetInstance(surf) )
+							anim_surf.vert_bone2_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone2_no,TSurface.GetInstance(surf) )
+							anim_surf.vert_bone3_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone3_no,TSurface.GetInstance(surf) )
+							anim_surf.vert_bone4_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone4_no,TSurface.GetInstance(surf) )
+							anim_surf.vert_weight1=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight1,TSurface.GetInstance(surf) )
+							anim_surf.vert_weight2=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight2,TSurface.GetInstance(surf) )
+							anim_surf.vert_weight3=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight3,TSurface.GetInstance(surf) )
+							anim_surf.vert_weight4=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight4,TSurface.GetInstance(surf) )
 							
 							' transfer vmin/vmax values for using with TrimVerts func after
 							anim_surf.vmin[0]=surf.vmin[0]
@@ -567,13 +567,12 @@ Type TB3D
 					EndIf
 					
 				Case "BONE"
-					SeekStream file,StreamPos(file)+size ; Continue
 					
 					Local ix:Int=0
 					old_tag=new_tag
 					new_tag=ReadTag(file)
 					
-					bo_bone:TBone=mesh.CreateBone() 'New TBone
+					bo_bone:TBone=mesh.NewBone()
 					bo_no_bones=bo_no_bones+1
 					
 					While NewTag(new_tag)<>True And Eof(file)=0
@@ -581,20 +580,17 @@ Type TB3D
 						bo_vert_id=ReadInt(file)
 						bo_vert_w=ReadFloat(file)
 						
-						'If LOG_CHUNKS Then DebugLog tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w
+						If LOG_CHUNKS Then DebugLog tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w
 						
-						' assign weight values
-						' with the strongest weight in vert_weight[1], and weakest in vert_weight[4]
-						Local anim_surf:TSurface			
+						' assign weight values, with the strongest weight in vert_weight[1], and weakest in vert_weight[4]
+						Local anim_surf:TSurface
 						For anim_surf:TSurface=EachIn mesh.anim_surf_list
-						
 							If bo_vert_id>=anim_surf.vmin[0] And bo_vert_id<=anim_surf.vmax[0]
 								If anim_surf<>Null
 									Local vid:Int=bo_vert_id-anim_surf.vmin[0]
 									
 									If bo_vert_w>anim_surf.vert_weight1[vid]
 									
-										' fixme?
 										anim_surf.vert_bone4_no[vid]=anim_surf.vert_bone3_no[vid]
 										anim_surf.vert_weight4[vid]=anim_surf.vert_weight3[vid]
 										
@@ -617,7 +613,7 @@ Type TB3D
 										
 										anim_surf.vert_bone2_no[vid]=bo_no_bones
 										anim_surf.vert_weight2[vid]=bo_vert_w
-																							
+																						
 									Else If bo_vert_w>anim_surf.vert_weight3[vid]
 									
 										anim_surf.vert_bone4_no[vid]=anim_surf.vert_bone3_no[vid]
@@ -625,7 +621,7 @@ Type TB3D
 						
 										anim_surf.vert_bone3_no[vid]=bo_no_bones
 										anim_surf.vert_weight3[vid]=bo_vert_w
-							
+																	
 									Else If bo_vert_w>anim_surf.vert_weight4[vid]
 									
 										anim_surf.vert_bone4_no[vid]=bo_no_bones
@@ -639,7 +635,7 @@ Type TB3D
 						
 						new_tag=ReadTag(file)
 					Wend
-					
+										
 					bo_bone.NameClass("Bone")
 					bo_bone.NameEntity(n_name)
 					bo_bone.px[0]=n_px
@@ -670,22 +666,20 @@ Type TB3D
 					bo_bone.n_qy[0]=n_qy
 					bo_bone.n_qz[0]=n_qz
 					
-					bo_bone.keys=CreateAnimationKeys() 'New TAnimationKeys
+					bo_bone.keys=NewAnimationKeys(bo_bone)
 					bo_bone.keys.frames[0]=a_frames
 					
-					ModelResizeAnimationKeysArrays_( TAnimationKeys.GetInstance(bo_bone.keys),a_frames )
-					
-					bo_bone.keys.flags=AnimationKeysInt_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_flags )
-					bo_bone.keys.px=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_px )
-					bo_bone.keys.py=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_py )
-					bo_bone.keys.pz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_pz )
-					bo_bone.keys.sx=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sx )
-					bo_bone.keys.sy=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sy )
-					bo_bone.keys.sz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sz )
-					bo_bone.keys.qw=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qw )
-					bo_bone.keys.qx=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qx )
-					bo_bone.keys.qy=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qy )
-					bo_bone.keys.qz=AnimationKeysFloat_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qz )
+					bo_bone.keys.flags=AnimationKeysResizeIntArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_flags,a_frames )
+					bo_bone.keys.px=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_px,a_frames )
+					bo_bone.keys.py=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_py,a_frames )
+					bo_bone.keys.pz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_pz,a_frames )
+					bo_bone.keys.sx=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sx,a_frames )
+					bo_bone.keys.sy=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sy,a_frames )
+					bo_bone.keys.sz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sz,a_frames )
+					bo_bone.keys.qw=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qw,a_frames )
+					bo_bone.keys.qx=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qx,a_frames )
+					bo_bone.keys.qy=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qy,a_frames )
+					bo_bone.keys.qz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qz,a_frames )
 					
 					' root ent?
 					If root_ent=Null Then root_ent=bo_bone
@@ -699,24 +693,25 @@ Type TB3D
 					bo_bone.mat.grid[(4*3)+1]=bo_bone.n_py[0]
 					bo_bone.mat.grid[(4*3)+2]=bo_bone.n_pz[0]
 					
-					If bo_bone.parent<>Null And TBone(bo_bone.parent)<>Null ' And... onwards needed to prevent inv_mat being incorrect if external parent supplied
+					' And... onwards needed to prevent inv_mat being incorrect if external parent supplied
+					If bo_bone.parent<>Null And TBone(bo_bone.parent)<>Null
 						Local new_mat:TMatrix=bo_bone.parent.mat.Copy()
 						new_mat.Multiply(bo_bone.mat)
 						bo_bone.mat.Overwrite(new_mat)
+						new_mat=Null
 					EndIf
 					
-					bo_bone.mat.GetInverse(bo_bone.inv_mat) 'bo_bone.inv_mat=bo_bone.mat.Inverse()
+					bo_bone.mat.GetInverse(bo_bone.inv_mat)
 					
 					If new_tag<>"KEYS"
-						ModelResizeBonesArrays_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
-						
+						bo_bone.EntityListAdd(TEntity.entity_list)
+						MeshResizeBoneVector_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
 						mesh.CopyList(mesh.bones)
 						last_ent=bo_bone
 					EndIf
 					
 				Case "KEYS"
-					SeekStream file,StreamPos(file)+size ; Continue
-					
+				
 					old_tag=new_tag
 					k_flags=ReadInt(file)
 					new_tag=ReadTag(file)
@@ -724,7 +719,7 @@ Type TB3D
 					While NewTag(new_tag)<>True And Eof(file)=0
 						k_frame=ReadInt(file)
 						
-						'If LOG_CHUNKS Then DebugLog tab+old_tag+" flags="+k_flags+" frame="+k_frame
+						If LOG_CHUNKS Then DebugLog tab+old_tag+" flags="+k_flags+" frame="+k_frame
 						
 						If (k_flags & 1)
 							k_px=ReadFloat(file)
@@ -746,7 +741,6 @@ Type TB3D
 						' check if bo_bone exists - it won't for non-boned, keyframe anims
 						If bo_bone<>Null
 						
-							' fixme??
 							bo_bone.keys.flags[k_frame]=bo_bone.keys.flags[k_frame]+k_flags
 							If (k_flags & 1)
 								bo_bone.keys.px[k_frame]=k_px
@@ -774,8 +768,8 @@ Type TB3D
 					
 						' check if bo_bone exists - it won't for non-boned, keyframe anims
 						If bo_bone<>Null
-							ModelResizeBonesArrays_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
-							
+							bo_bone.EntityListAdd(TEntity.entity_list)
+							MeshResizeBoneVector_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
 							mesh.CopyList(mesh.bones)
 							last_ent=bo_bone
 						EndIf
@@ -801,9 +795,9 @@ Type TB3D
 			Next
 			
 			For Local child_mesh:TMesh=EachIn temp_list
-				DebugLog "Mesh name="+child_mesh.EntityName()
+				DebugLog "MESH name="+child_mesh.EntityName()
 				For Local surf:TSurface = EachIn child_mesh.surf_list
-					DebugLog "Tris no_verts="+surf.no_verts[0]+" no_tris="+surf.no_tris[0]
+					DebugLog "TRIS no_verts="+surf.no_verts[0]+" no_tris="+surf.no_tris[0]
 				Next
 			Next
 		EndIf
@@ -832,11 +826,11 @@ Type TB3D
 	Function b3dReadString:String( file:TStream Var )
 	
 		Local t$=""
-		For Local i:Int=0 To 127
+		Repeat
 			Local ch:Int=ReadByte(file)
 			If ch=0 Then Return t
 			t=t+Chr(ch)
-		Next
+		Forever
 		
 	End Function
 	

@@ -10,28 +10,28 @@ Function TrisRendered:Int()
 End Function
 
 Rem
-bbdoc: New empty object
+bbdoc: Returns a new TTexture object
 End Rem
 Function NewTexture:TTexture()
 	Return TTexture.NewTexture()
 End Function
 
 Rem
-bbdoc: New empty object
+bbdoc: Returns a new TMesh object
 End Rem
 Function NewMesh:TMesh()
 	Return TMesh.NewMesh()
 End Function
 
 Rem
-bbdoc: New empty object
+bbdoc: Returns a new TSurface object
 End Rem
 Function NewSurface:TSurface( mesh:TMesh )
 	Return mesh.NewSurface()
 End Function
 
 Rem
-bbdoc: New empty object
+bbdoc: Returns a new TBone object
 End Rem
 Function NewBone:TBone( mesh:TMesh )
 	Return mesh.NewBone()
@@ -82,22 +82,22 @@ End Function
 Rem
 bbdoc: Returns a new TAnimationKeys object
 End Rem
-Function CreateAnimationKeys:TAnimationKeys()
-	Return TAnimationKeys.CreateAnimationKeys()
+Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
+	Return TAnimationKeys.NewAnimationKeys( bone )
 End Function
 
 Rem
 bbdoc: Returns a new TMatrix object
 End Rem
-Function CreateMatrix:TMatrix()
-	Return TMatrix.CreateMatrix()
+Function NewMatrix:TMatrix()
+	Return TMatrix.NewMatrix()
 End Function
 
 Rem
 bbdoc: Returns a new TQuaternion object
 End Rem
-Function CreateQuaternion:TQuaternion()
-	Return TQuaternion.CreateQuaternion()
+Function NewQuaternion:TQuaternion()
+	Return TQuaternion.NewQuaternion()
 End Function
 
 Rem
@@ -1119,8 +1119,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 'End Rem
-Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadAnimMesh( file,parent )
+Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
+	Return TMesh.LoadAnimMesh( file,parent,uselibrary )
 End Function
 
 'Rem
