@@ -410,43 +410,40 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
+	Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
 	
-		If uselibrary=False
-			If ExtractExt(file).ToLower()="3ds" ' add hierarchy animation?
-				Local loader:T3DS = New T3DS
-				Return loader.Load( file,parent )
-			EndIf
-			If ExtractExt(file).ToLower()="b3d"
-				Return TB3D.LoadAnimB3D( file,parent )
-			EndIf
-			If ExtractExt(file).ToLower()="md2" ' mesh and animation todo
-			EndIf
-		Else
-			Local cString:Byte Ptr=file.ToCString()
-			Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
-			Local mesh:TMesh=CreateObject(inst)
-			MemFree cString
-			Return mesh
-		EndIf
+		Return TB3D.LoadAnimB3D( file,parent )
 		
 	End Function
 	
-	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
+	Function Load3DS:TMesh( file:String,parent:TEntity=Null )
 	
-		If uselibrary=False
-			If ExtractExt(file).ToLower()="b3d" ' skeletal/boned animation
-				Return TB3D.LoadAnimB3D( file,parent )
-			EndIf
-			If ExtractExt(file).ToLower()="md2" ' vertex-interpolated animation
-			EndIf
-		Else
-			Local cString:Byte Ptr=file.ToCString()
-			Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
-			Local mesh:TMesh=CreateObject(inst)
-			MemFree cString
-			Return mesh
-		EndIf
+		Local loader:T3DS = New T3DS ' hierarchy animation todo
+		Return loader.LoadMesh3DS( file,parent )
+		
+	End Function
+	
+	'Function LoadMD2:TMesh( file:String,parent:TEntity=Null )
+	' todo
+	'End Function
+	
+	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+	
+		Local cString:Byte Ptr=file.ToCString()
+		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
+		Local mesh:TMesh=CreateObject(inst)
+		MemFree cString
+		Return mesh
+		
+	End Function
+	
+	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+	
+		Local cString:Byte Ptr=file.ToCString()
+		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
+		Local mesh:TMesh=CreateObject(inst)
+		MemFree cString
+		Return mesh
 		
 	End Function
 	

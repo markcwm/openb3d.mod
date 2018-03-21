@@ -221,8 +221,14 @@ Set terrain height normalizing value, 0.05 is default.
 <tr><td class=docleft width=1%><a href=#ListPushBack>ListPushBack</a></td><td class=docright>
 Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#Load3DS>Load3DS</a></td><td class=docright>
+Loads a 3DS file and returns the new TMesh, currently no animations.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAlphaTexture>LoadAlphaTexture</a></td><td class=docright>
 Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadB3D>LoadB3D</a></td><td class=docright>
+Loads a B3D file and returns the new TMesh, supports skeletal/boned animations.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
@@ -866,10 +872,20 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=Load3DS>
+<tr><td class=doctop colspan=2>Function Load3DS:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a 3DS file and returns the new TMesh, currently no animations.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=LoadAlphaTexture>
 <tr><td class=doctop colspan=2>Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load texture and set alpha with alphamask - if set to zero then alpha is not changed.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadB3D>
+<tr><td class=doctop colspan=2>Function LoadB3D:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D file and returns the new TMesh, supports skeletal/boned animations.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>

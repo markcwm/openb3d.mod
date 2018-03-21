@@ -1,5 +1,5 @@
 ' bones.bmx
-' B3D skeletal/boned animation, set LoadAnimMesh uselibrary=0 to use native loader (default=1)
+' B3D skeletal animation, use LoadB3D to load from streams
 
 Strict
 
@@ -19,18 +19,22 @@ Local ent:TMesh=Null
 Local loader%=2
 Select loader
 	Case 0
-		ent=LoadAnimMesh("../media/zombie.b3d",Null,0)
+		ent=LoadB3D("../media/zombie.b3d")
 		MoveEntity ent,0,0,5
 		
 	Case 1
-		ent=LoadAnimMesh("../media/ninja.b3d",Null,0)
+		ent=LoadB3D("../media/ninja.b3d")
 		MoveEntity ent,0,5,0
 		TurnEntity ent,0,180,0
 		
 	Case 2
-		ent=LoadAnimMesh("../media/dwarf.b3d",Null,0)
+		ent=LoadB3D("../media/dwarf.b3d")
 		MoveEntity ent,0,-25,60
 		TurnEntity ent,0,180,0
+		
+	Default ' load library mesh
+		ent=LoadAnimMesh("../media/zombie.b3d")
+		MoveEntity ent,0,0,5
 EndSelect
 
 ' child entity variables

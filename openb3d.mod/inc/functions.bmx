@@ -3,6 +3,21 @@
 ' *** Wrapper only
 
 Rem
+bbdoc: Loads a B3D file and returns the new TMesh, supports skeletal/boned animations
+End Rem
+Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
+	Return TB3D.LoadAnimB3D( file,parent )	
+End Function
+
+Rem
+bbdoc: Loads a 3DS file and returns the new TMesh, currently no animations
+End Rem
+Function Load3DS:TMesh( file:String,parent:TEntity=Null )
+	Local loader:T3DS = New T3DS ' hierarchy animation todo
+	Return loader.LoadMesh3DS( file,parent )
+End Function
+
+Rem
 bbdoc: Number of triangles currently rendered
 End Rem
 Function TrisRendered:Int()
@@ -1119,8 +1134,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 'End Rem
-Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
-	Return TMesh.LoadAnimMesh( file,parent,uselibrary )
+Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadAnimMesh( file,parent )
 End Function
 
 'Rem
@@ -1138,10 +1153,10 @@ Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float
 End Function
 
 'Rem
-'bbdoc: The new parameter uselibrary is to choose between library or native loaders (which support incbin and zipstream)
+'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 'End Rem
-Function LoadMesh:TMesh( file:String,parent:TEntity=Null,uselibrary:Int=True )
-	Return TMesh.LoadMesh( file,parent,uselibrary )
+Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMesh( file,parent )
 End Function
 
 'Rem

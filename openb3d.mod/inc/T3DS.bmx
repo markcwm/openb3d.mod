@@ -703,7 +703,7 @@ Type T3DS
 		Return parent
 	End Method
 	
-	Method Load:TMesh( url:Object, parent_ent:TEntity=Null )
+	Method LoadMesh3DS:TMesh( url:Object, parent_ent:TEntity=Null )
 		Local size:Int, oldDir:String
 		
 		stream = LittleEndianStream(ReadFile(url))
