@@ -156,7 +156,7 @@ int Brush::CompareBrushes(Brush* brush1,Brush* brush2){
 		if(brush1->shine!=brush2->shine) return false;
 		if(brush1->blend!=brush2->blend) return false;
 		if(brush1->fx!=brush2->fx) return false;
-		for(int i=0;i<7;i++){
+		for(int i=0;i<=7;i++){
 			if(brush1->tex[i]==NULL && brush2->tex[i]!=NULL) return false;
 			if(brush1->tex[i]!=NULL && brush2->tex[i]==NULL) return false;
 			if(brush1->tex[i]!=NULL && brush2->tex[i]!=NULL){

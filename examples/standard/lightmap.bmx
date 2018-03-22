@@ -1,5 +1,5 @@
-' bones.bmx
-' B3D skeletal animation, use LoadB3D to load from streams
+' lightmap.bmx
+' lightmapped B3D, use LoadB3D to load from streams
 
 Strict
 
@@ -16,25 +16,13 @@ Local light:TLight=CreateLight()
 
 ' load anim mesh
 Local ent:TMesh=Null
-Local loader%=3
+Local loader%=1
 Select loader
 	Case 1
-		ent=LoadB3D("../media/zombie.b3d")
-		MoveEntity ent,0,0,5
-		
-	Case 2
-		ent=LoadB3D("../media/ninja.b3d")
-		MoveEntity ent,0,5,0
-		TurnEntity ent,0,180,0
-		
-	Case 3
-		ent=LoadB3D("../media/dwarf.b3d")
-		MoveEntity ent,0,-25,60
-		TurnEntity ent,0,180,0
+		ent=LoadB3D("../media/bath/RomanBath.b3d")
 		
 	Default ' load library mesh
-		ent=LoadAnimMesh("../media/zombie.b3d")
-		MoveEntity ent,0,0,10
+		ent=LoadAnimMesh("../media/bath/RomanBath.b3d")
 EndSelect
 
 ' child entity variables

@@ -397,7 +397,7 @@ void Surface::PaintSurface(Brush* bru){
 	brush->shine=bru->shine;
 	brush->blend=bru->blend;
 	brush->fx=bru->fx;
-	for(int i=0;i<7;i++){
+	for(int i=0;i<=7;i++){
 		brush->tex[i]=bru->tex[i];
 		brush->cache_frame[i]=bru->cache_frame[i];
 	}
