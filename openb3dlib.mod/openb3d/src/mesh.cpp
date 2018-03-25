@@ -2370,7 +2370,7 @@ void Mesh::Render(){
 		if(fx&1){
 			if(Global::fx1!=true){
 				Global::fx1=true;
-				glDisableClientState(GL_NORMAL_ARRAY);
+				//glDisableClientState(GL_NORMAL_ARRAY); // always use normals data fix
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2378,7 +2378,7 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
-				glEnableClientState(GL_NORMAL_ARRAY);
+				//glEnableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;
@@ -2435,11 +2435,11 @@ void Mesh::Render(){
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,surf.vbo_id[5]);
 
-			if(fx&1){ // if full-bright flag, don't use normal data
-			}else{
+			//if(fx&1){ // if full-bright flag, don't use normal data
+			//}else{ // always use normals data fix
 				glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[3]);
 				glNormalPointer(GL_FLOAT,0,NULL);
-			}
+			//}
 
 			if(fx&2){ // if vertex colours flag - use colour data
 				glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[4]);
@@ -2457,11 +2457,11 @@ void Mesh::Render(){
 				glVertexPointer(3,GL_FLOAT,0,&surf.vert_coords[0]);
 			}
 
-			if(fx&1){ // if full-bright flag, don't use normal data
-				glNormalPointer(GL_FLOAT,0,NULL);
-			}else{
+			//if(fx&1){ // if full-bright flag, don't use normal data
+				//glNormalPointer(GL_FLOAT,0,NULL); // always use normals data fix
+			//}else{
 				glNormalPointer(GL_FLOAT,0,&surf.vert_norm[0]);
-			}
+			//}
 
 			if(fx&2){ // if vertex colours flag - use colour data
 				glColorPointer(4,GL_FLOAT,0,&surf.vert_col[0]);
