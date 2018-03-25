@@ -14,11 +14,12 @@ ModuleInfo "Copyright: Wrapper - 2014-2017 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
 
 Import Openb3d.Openb3dlib
-Import Openb3d.B3d
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import Brl.Retro				' imports BRL.Basic
 Import Brl.Map
+
+Include "TMeshLoader.bmx" ' see below
 
 ' functions.cpp
 Extern
@@ -511,7 +512,7 @@ Include "inc/TParticleBatch.bmx"
 Include "inc/functions.bmx"
 
 
-Type TOpenB3DMeshLoader Extends TMeshLoader
+Type TOpenB3DMeshLoader Extends TMeshLoader ' not implemented
 
 	Method CanLoadMesh:Int(extension:String)
 		Select extension.ToLower()

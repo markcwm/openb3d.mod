@@ -14,7 +14,7 @@ PositionEntity cam,0,10,-15
 
 Local light:TLight=CreateLight()
 
-' load mesh
+' load anim mesh
 Local ent:TMesh=Null
 Local loader%=1
 Select loader
@@ -26,7 +26,7 @@ Select loader
 EndSelect
 
 ' child entity variables
-Local child_ent:TEntity ' this will store child entity of mesh
+Local child_ent:TEntity ' this will store child entity of anim mesh
 Local child_no%=1 ' used to select child entity
 Local count_children%=TEntity.CountAllChildren(ent) ' total no. of children belonging to entity
 

@@ -230,7 +230,7 @@ Type TB3D
 						' the existing texture will be returned. if not then the texture
 						' created above (supplied as param below) will be returned
 						Local tex_name$=filepath+"/"+StripDir(te_file)
-						If LOG_CHUNKS Then DebugLog "tex_name="+tex_name
+						If LOG_CHUNKS Then DebugLog tab+new_tag+" tex_name="+tex_name
 						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
@@ -256,8 +256,6 @@ Type TB3D
 						b_blend=ReadInt(file)
 						b_fx=ReadInt(file)
 						
-						If LOG_CHUNKS Then DebugLog tab+old_tag+" no_texs="+b_no_texs+" blend="+b_blend+" fx="+b_fx
-						
 						brush[brush_no]=CreateBrush()
 						brush[brush_no].no_texs[0]=b_no_texs
 						brush[brush_no].NameBrush(b_name)
@@ -269,11 +267,14 @@ Type TB3D
 						brush[brush_no].blend[0]=b_blend
 						brush[brush_no].fx[0]=b_fx
 						
+						If LOG_CHUNKS Then DebugLog tab+old_tag+" name="+b_name+" blend="+b_blend+" fx="+b_fx
+						
 						For Local ix:Int=0 To b_no_texs-1
 							b_tex_id=ReadInt(file)
 							
 							If b_tex_id>=0 And tex[b_tex_id]<>Null ' valid id and texture
 								brush[brush_no].BrushTexture(tex[b_tex_id],0,ix)
+								If LOG_CHUNKS Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id
 							Else
 								brush[brush_no].tex[ix]=Null
 							EndIf
@@ -359,7 +360,7 @@ Type TB3D
 							Local new_mat:TMatrix=piv.parent.mat.Copy()
 							new_mat.Multiply(piv.mat)
 							piv.mat.Overwrite(new_mat)
-						EndIf				
+						EndIf
 						
 					EndIf
 					
@@ -410,7 +411,7 @@ Type TB3D
 						Local new_mat:TMatrix=mesh.parent.mat.Copy()
 						new_mat.Multiply(mesh.mat)
 						mesh.mat.Overwrite(new_mat)
-					EndIf				
+					EndIf
 					
 				Case "VRTS"
 				
@@ -448,12 +449,13 @@ Type TB3D
 							v_g=ReadFloat(file)*255.0
 							v_b=ReadFloat(file)*255.0
 							v_a=ReadFloat(file)
+							If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" r="+v_r+" g="+v_g+" b="+v_b+" a="+v_a
 						EndIf
 						
 						v_id=v_surf.AddVertex(v_x,v_y,v_z)
 						v_surf.VertexColor(v_id,v_r,v_g,v_b,v_a)
 						v_surf.VertexNormal(v_id,v_nx,v_ny,v_nz)
-												
+						
 						' read texture coords per vertex: 1 for simple uv, 8 max
 						For Local j:Int=0 To v_tc_sets-1
 							For Local k:Int=1 To v_tc_size ' components per set: 2 for simple uv, 4 max
@@ -461,7 +463,11 @@ Type TB3D
 								If k=2 Then v_v=ReadFloat(file)
 								If k=3 Then v_w=ReadFloat(file)
 							Next
-							If j=0 Or j=1 Then v_surf.VertexTexCoords(v_id,v_u,v_v,v_w,j)
+							
+							If j=0 Or j=1
+								v_surf.VertexTexCoords(v_id,v_u,v_v,v_w,j)
+								If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" u="+v_u+" v="+v_v+" j="+j+" tcsets="+v_tc_sets
+							EndIf
 						Next
 						
 						new_tag=ReadTag(file)
@@ -520,7 +526,7 @@ Type TB3D
 					
 					If m_brush_id>-1 Then mesh.PaintEntity(brush[m_brush_id])
 					If tr_brush_id>-1 Then surf.PaintSurface(brush[tr_brush_id])
-										
+					
 					' if no normal data supplied and no further tri data then update normals
 					If (v_flags & 1)=0 And new_tag<>"TRIS" Then mesh.UpdateNormals()
 					
@@ -613,15 +619,15 @@ Type TB3D
 										
 										anim_surf.vert_bone2_no[vid]=bo_no_bones
 										anim_surf.vert_weight2[vid]=bo_vert_w
-																						
+										
 									Else If bo_vert_w>anim_surf.vert_weight3[vid]
 									
 										anim_surf.vert_bone4_no[vid]=anim_surf.vert_bone3_no[vid]
 										anim_surf.vert_weight4[vid]=anim_surf.vert_weight3[vid]
-						
+										
 										anim_surf.vert_bone3_no[vid]=bo_no_bones
 										anim_surf.vert_weight3[vid]=bo_vert_w
-																	
+										
 									Else If bo_vert_w>anim_surf.vert_weight4[vid]
 									
 										anim_surf.vert_bone4_no[vid]=bo_no_bones
@@ -635,7 +641,7 @@ Type TB3D
 						
 						new_tag=ReadTag(file)
 					Wend
-										
+					
 					bo_bone.NameClass("Bone")
 					bo_bone.NameEntity(n_name)
 					bo_bone.px[0]=n_px
@@ -737,7 +743,7 @@ Type TB3D
 							k_qy=ReadFloat(file)
 							k_qz=-ReadFloat(file)
 						EndIf
-										
+						
 						' check if bo_bone exists - it won't for non-boned, keyframe anims
 						If bo_bone<>Null
 						
@@ -761,7 +767,7 @@ Type TB3D
 							
 						EndIf
 						
-						new_tag=ReadTag(file)	
+						new_tag=ReadTag(file)
 					Wend
 					
 					If new_tag<>"KEYS"
@@ -849,7 +855,7 @@ Type TB3D
 		SeekStream(file,pos)
 		Return tag
 		
-	End Function	
+	End Function
 	
 	Function NewTag:Int( tag$ )
 	
