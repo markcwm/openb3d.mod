@@ -449,7 +449,7 @@ Type TB3D
 							v_g=ReadFloat(file)*255.0
 							v_b=ReadFloat(file)*255.0
 							v_a=ReadFloat(file)
-							If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" r="+v_r+" g="+v_g+" b="+v_b+" a="+v_a
+							'If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" r="+v_r+" g="+v_g+" b="+v_b+" a="+v_a
 						EndIf
 						
 						v_id=v_surf.AddVertex(v_x,v_y,v_z)
@@ -466,7 +466,7 @@ Type TB3D
 							
 							If j=0 Or j=1
 								v_surf.VertexTexCoords(v_id,v_u,v_v,v_w,j)
-								If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" u="+v_u+" v="+v_v+" j="+j+" tcsets="+v_tc_sets
+								'If LOG_CHUNKS Then DebugLog "VRTS id="+v_id+" u="+v_u+" v="+v_v+" j="+j+" tcsets="+v_tc_sets
 							EndIf
 						Next
 						

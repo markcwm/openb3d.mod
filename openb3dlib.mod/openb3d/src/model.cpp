@@ -330,8 +330,8 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				// load texture, providing texture we created above as parameter.
 				// if a texture exists with all the same values as above (blend etc), the existing texture will be returned.
 				// if not then the texture created above (supplied as param below) will be returned
-				new_tex=Texture::LoadTexture(te_file,te_flags,new_tex); //***todo***
-
+				Texture* temp_tex=Texture::LoadTexture(te_file,te_flags,new_tex); //***todo***
+				if(temp_tex!=NULL) new_tex=temp_tex; // crash if can't find texture fix
 				//Texture* new_tex=Texture::LoadTexture(te_file,te_flags);
 
 				/*new_tex->blend=te_blend;

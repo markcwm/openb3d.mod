@@ -132,6 +132,8 @@ Type TEntity
 	
 	Method InitFields() ' Once per CreateObject
 	
+		CopyList(child_list)
+		
 		' int
 		order=EntityInt_( GetInstance(Self),ENTITY_order )
 		hide=EntityInt_( GetInstance(Self),ENTITY_hide )
@@ -203,6 +205,8 @@ Type TEntity
 		Local inst:Byte Ptr=EntityEntity_( GetInstance(Self),ENTITY_parent )
 		parent=GetObject(inst) ' no CreateObject
 		
+		If parent<>Null Then parent.CopyList(parent.child_list)
+		
 		' matrix
 		inst=EntityMatrix_( GetInstance(Self),ENTITY_mat )
 		mat=TMatrix.GetObject(inst)
@@ -220,12 +224,7 @@ Type TEntity
 		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
 		AddList_(entity_list)
-		CopyList(child_list)
-		If parent<>Null
-			parent.CopyList(parent.child_list)
-		Else
-			If TGlobal.root_ent Then AddList(TGlobal.root_ent.child_list) ' list of all non-child entities
-		EndIf
+		If parent=Null And TGlobal.root_ent Then AddList(TGlobal.root_ent.child_list) ' list of all non-child/root entities
 		exists=1
 		
 	End Method

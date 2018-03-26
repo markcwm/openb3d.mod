@@ -48,11 +48,11 @@ Type TMesh Extends TEntity
 	
 	Method InitFields() ' Once per CreateObject
 	
-		CopyList(surf_list)
+		CopyList(surf_list) ' CopyList should be called before InitFields
 		CopyList(anim_surf_list)
 		CopyList(bones)
 		
-		Super.InitFields() ' after bones CreateObjects for child_list
+		Super.InitFields()
 		
 		' int
 		no_surfs=MeshInt_( GetInstance(Self),MESH_no_surfs )
@@ -71,7 +71,7 @@ Type TMesh Extends TEntity
 		Local inst:Byte Ptr=MeshMatrix_( GetInstance(Self),MESH_mat_sp )
 		mat_sp=TMatrix.GetObject(inst)
 		If mat_sp=Null And inst<>Null Then mat_sp=TMatrix.CreateObject(inst)
-		
+				
 	End Method
 	
 	Method AddList( list:TList ) ' Field list
@@ -161,6 +161,42 @@ Type TMesh Extends TEntity
 					AddList(list)
 				EndIf
 		End Select
+		
+	End Method
+	
+	Function NewMesh:TMesh()
+	
+		Local inst:Byte Ptr=NewMesh_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	Method NewSurface:TSurface() ' use ListPushBack(list,value)
+	
+		Local inst:Byte Ptr=NewSurface_( GetInstance(Self) )
+		Return TSurface.CreateObject(inst)
+				
+	End Method
+	
+	Method NewBone:TBone()
+	
+		Local inst:Byte Ptr=NewBone_( GetInstance(Self) )
+		Return TBone.CreateObject(inst)
+		
+	End Method
+	
+	Method CreateAllChildren()
+	
+		Local child_ent:TEntity=Null ' this will store child entity of anim mesh
+		Local child_no%=1 ' used to select child entity
+		Local count_children%=CountAllChildren(Self) ' total no. of children belonging to entity
+		
+		For Local child_no% = 1 To count_children
+			Local count%=0
+			Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr(count),Null )
+			child_ent=GetObject(inst)
+			If child_ent=Null And inst<>Null Then child_ent=CreateObject(inst)
+		Next
 		
 	End Method
 	
@@ -263,23 +299,26 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	' Minib3d
+	' Extra
 	
-	Method New()
+	Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
+	
+		Return TB3D.LoadAnimB3D( file,parent )
 		
-		If LOG_NEW
-			DebugLog "New TMesh"
-		EndIf
+	End Function
 	
-	End Method
+	Function Load3DS:TMesh( file:String,parent:TEntity=Null )
 	
-	Method Delete()
+		Local loader:T3DS = New T3DS ' hierarchy animation todo
+		Return loader.LoadMesh3DS( file,parent )
+		
+	End Function
 	
-		If LOG_DEL
-			DebugLog "Del TMesh"
-		EndIf
+	Function LoadMD2:TMesh( file:String,parent:TEntity=Null )
+	' todo
+	End Function
 	
-	End Method
+	' Warner
 	
 	Method SetMatrix( matrix:TMatrix )
 	
@@ -293,7 +332,6 @@ Type TMesh Extends TEntity
 		'Local pos_y# = matrix.grid[(4*3)+1]
 		'Local pos_z# = matrix.grid[(4*3)+2]
 		'PositionMesh(pos_x, pos_y, pos_z) ' makes a mess
-		'DebugLog "pos: "+pos_x+","+pos_y+","+pos_z
 		
 		Local rot:TQuaternion = NewQuaternion()
 		matrix.ToQuat(rot.x[0], rot.y[0], rot.z[0], rot.w[0])
@@ -301,7 +339,6 @@ Type TMesh Extends TEntity
 		
 		Local size:TVector = matrix.GetMatrixScale()
 		ScaleMesh(size.x, size.y, size.z)
-		'DebugLog "rot:"+rot.x+","+rot.y+","+rot.z+","+rot.w
 		
 	End Method
 	
@@ -356,6 +393,24 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+	' Minib3d
+	
+	Method New()
+		
+		If LOG_NEW
+			DebugLog "New TMesh"
+		EndIf
+	
+	End Method
+	
+	Method Delete()
+	
+		If LOG_DEL
+			DebugLog "Del TMesh"
+		EndIf
+	
+	End Method
+	
 	Method FreeEntity()
 	
 		If exists
@@ -389,51 +444,13 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function NewMesh:TMesh()
-	
-		Local inst:Byte Ptr=NewMesh_()
-		Return CreateObject(inst)
-		
-	End Function
-	
-	Method NewSurface:TSurface() ' use ListPushBack(list,value)
-	
-		Local inst:Byte Ptr=NewSurface_( GetInstance(Self) )
-		Return TSurface.CreateObject(inst)
-				
-	End Method
-	
-	Method NewBone:TBone()
-	
-		Local inst:Byte Ptr=NewBone_( GetInstance(Self) )
-		Return TBone.CreateObject(inst)
-		
-	End Method
-	
-	Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
-	
-		Return TB3D.LoadAnimB3D( file,parent )
-		
-	End Function
-	
-	Function Load3DS:TMesh( file:String,parent:TEntity=Null )
-	
-		Local loader:T3DS = New T3DS ' hierarchy animation todo
-		Return loader.LoadMesh3DS( file,parent )
-		
-	End Function
-	
-	'Function LoadMD2:TMesh( file:String,parent:TEntity=Null )
-	' todo
-	'End Function
-	
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
 		Local mesh:TMesh=CreateObject(inst)
 		MemFree cString
-		Return mesh
+		Return mesh ' no children as mesh is collapsed
 		
 	End Function
 	
@@ -443,6 +460,7 @@ Type TMesh Extends TEntity
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
 		Local mesh:TMesh=CreateObject(inst)
 		MemFree cString
+		mesh.CreateAllChildren() ' create all child mesh objects
 		Return mesh
 		
 	End Function
