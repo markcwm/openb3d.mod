@@ -301,21 +301,39 @@ Type TMesh Extends TEntity
 	
 	' Extra
 	
-	Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
+	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Return TB3D.LoadAnimB3D( file,parent )
+		Local ent:TMesh=LoadAnimMesh(file)
+		ent.HideEntity()
+		Local mesh:TMesh=ent.CollapseAnimMesh()
+		ent.FreeEntity()
+		
+		mesh.NameClass("Mesh")
+		mesh.AddParent(parent)
+		mesh.EntityListAdd(entity_list)
+		
+		' update matrix
+		If mesh.parent<>Null
+			mesh.mat.Overwrite(mesh.parent.mat)
+			mesh.UpdateMat()
+		Else
+			mesh.UpdateMat(True)
+		EndIf
+		Return mesh
 		
 	End Function
 	
-	Function Load3DS:TMesh( file:String,parent:TEntity=Null )
+	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Local loader:T3DS = New T3DS ' hierarchy animation todo
-		Return loader.LoadMesh3DS( file,parent )
+		If ExtractExt(file)="b3d"
+			Return TB3D.LoadAnimB3D( file,parent )
+		ElseIf ExtractExt(file)="md2"
+			' todo
+		ElseIf ExtractExt(file)="3ds"
+			Local loader:T3DS = New T3DS ' hierarchy animation todo
+			Return loader.LoadMesh3DS( file,parent )
+		EndIf
 		
-	End Function
-	
-	Function LoadMD2:TMesh( file:String,parent:TEntity=Null )
-	' todo
 	End Function
 	
 	' Warner
@@ -444,23 +462,23 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadMeshLib:TMesh( file:String,parent:TEntity=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
 		Local mesh:TMesh=CreateObject(inst)
 		MemFree cString
-		Return mesh ' no children as mesh is collapsed
+		Return mesh ' no children, mesh is collapsed
 		
 	End Function
 	
-	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadAnimMeshLib:TMesh( file:String,parent:TEntity=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
 		Local mesh:TMesh=CreateObject(inst)
 		MemFree cString
-		mesh.CreateAllChildren() ' create all child mesh objects
+		mesh.CreateAllChildren() ' create child mesh objects
 		Return mesh
 		
 	End Function

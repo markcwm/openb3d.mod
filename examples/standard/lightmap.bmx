@@ -19,10 +19,10 @@ Local ent:TMesh=Null
 Local loader%=1
 Select loader
 	Case 1
-		ent=LoadB3D("../media/bath/RomanBath.b3d")
+		ent=LoadAnimMesh("../media/bath/RomanBath.b3d")
 		
 	Default ' load library mesh
-		ent=LoadAnimMesh("../media/bath/RomanBath.b3d")
+		ent=LoadAnimMeshLib("../media/bath/RomanBath.b3d")
 EndSelect
 
 ' child entity variables

@@ -1,5 +1,5 @@
 ' load_b3d.bmx
-' loads meshes with multiple surfaces, use LoadB3D to load from streams
+' loads meshes with multiple surfaces
 
 Strict
 
@@ -24,50 +24,42 @@ Select loader
 
 	Case 1 ' load zombie mesh
 		oldtime=MilliSecs()
-		mesh=LoadB3D("../media/zombie.b3d")
+		mesh=LoadAnimMesh("../media/zombie.b3d")
 		
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadB3D("../media/Bird.b3d")
+		mesh=LoadAnimMesh("../media/Bird.b3d")
 		
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadB3D("../media/castle1.b3d")
+		mesh=LoadAnimMesh("../media/castle1.b3d")
 		
-		debug="minib3d time="+(MilliSecs()-oldtime)
+		debug="b3d time="+(MilliSecs()-oldtime)
 		
-	Case 4 ' load incbin mesh (texture must be applied manually)
+	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/zombie.b3d"
-		mesh=LoadB3D(file)
-		
-		file = "incbin::../media/Zombie.jpg"
-		Local tex:TTexture=LoadTexture(file,9)
-		EntityTexture mesh,tex
+		mesh=LoadAnimMesh(file)
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
-	Case 5 ' load zip mesh (texture must be applied manually)
+	Case 5 ' load zip mesh
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/zombie.zip"
 		Local file:String = "zip::"+zipfile+"//zombie.b3d"
-		mesh=LoadB3D(file)
-		
-		file = "zip::"+zipfile+"//Zombie.jpg"
-		Local tex:TTexture=LoadTexture(file,9)
-		EntityTexture mesh,tex
+		mesh=LoadAnimMesh(file)
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/zombie.b3d")
+		mesh=LoadAnimMeshLib("../media/zombie.b3d")
 		
-		debug="openb3d time="+(MilliSecs()-oldtime)
+		debug="lib time="+(MilliSecs()-oldtime)
 EndSelect
 
 Local anim_time#=0.0

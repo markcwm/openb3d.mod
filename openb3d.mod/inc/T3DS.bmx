@@ -611,9 +611,8 @@ Type T3DS
 		Wend
 		
 		Local name$ = filepath+"/"+StripDir(texname)
-		If FileType(name) = 0 Then name = name.ToLower() ' try all lowercase
-		If FileType(name) = 0 Then name = name.ToUpper() ' try all uppercase
-		Local tex:TTexture = TTexture.LoadTexture(name, Tex_Flags)
+		Local tex:TTexture = LoadTexture(name, Tex_Flags)
+		If Log_Chunks Then DebugLog " LoadTexture name="+name+" matname="+matname
 		
 		MapInsert materialmap, matname, tex
 		MapInsert materialcolormap, matname, col

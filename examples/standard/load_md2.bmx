@@ -14,7 +14,7 @@ PositionEntity cam,0,10,-60
 
 Local light:TLight=CreateLight()
 
-Local ent:TMesh=LoadAnimMesh("../media/tris.md2")
+Local ent:TMesh=LoadAnimMeshLib("../media/tris.md2")
 RotateEntity ent,-90,180,0
 
 Local tex:TTexture=LoadTexture("../media/skin.jpg")

@@ -346,46 +346,54 @@ Type TTexture
 	EndRem
 	
 	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-		Local map:TPixmap=Null, name%
+	
+		' TODO mysterious memory corruption with Brl tga loader
+		'If file.Find("endian::")>-1 Or file.StartsWith("incbin::") Or file.StartsWith("zip::")
 		
-		If file.Find("endian::")>-1 Or file.StartsWith("incbin::") Or file.StartsWith("zip::")
+		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
+		Local map:TPixmap=Null, name%
+		map=LoadPixmap(file) ' load from streams
+		If map=Null Then Return tex
+		tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+		
+		If (flags & 2) Then map=ApplyAlpha(map)
+		If (flags & 4) Then map=ApplyMask(map,10,10,10)
+		
+		glBindTexture(GL_TEXTURE_2D,tex.texture[0])
+		gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
+		
+		tex.BufferToTex PixmapPixelPtr(map,0,0)
+		
+		Return tex
+	End Function
+	
+	Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	
+		Local map:TPixmap=Null, name%
+		Local cString:Byte Ptr=file.ToCString()
+		Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
+		If tex=Null Then tex=CreateObject(inst)
+		MemFree cString
+		
+		Rem
+		If tex=Null Then Return Null
+		If tex.width[0]=0 ' Stbimage failed try pixmap - for progressive jpgs
 			'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
-			map=LoadPixmap(file) ' load from streams
+			map=LoadPixmap(file)
 			If map=Null Then Return tex
 			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
 			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
 			
-			If (flags & 2) Then map=ApplyAlpha(map)
-			If (flags & 4) Then map=ApplyMask(map,10,10,10)
+			If (flags & 2) Then ApplyAlpha(map)
+			If (flags & 4) Then ApplyMask(map,10,10,10)
 			
 			glBindTexture(GL_TEXTURE_2D,tex.texture[0])
 			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
 			
 			tex.BufferToTex PixmapPixelPtr(map,0,0)
-		Else
-			Local cString:Byte Ptr=file.ToCString()
-			Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
-			If tex=Null Then tex=CreateObject(inst)
-			MemFree cString
-			If tex=Null Then Return Null
-			
-			' TODO - mysterious memory corruption with Brl tga loader
-			If tex.width[0]=0 Or tex.width[0]=1 ' Stbimage failed try pixmap, progressive jpgs
-				'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
-				map=LoadPixmap(file)
-				If map=Null Then Return tex
-				tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-				If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-				
-				If (flags & 2) Then ApplyAlpha(map)
-				If (flags & 4) Then ApplyMask(map,10,10,10)
-				
-				glBindTexture(GL_TEXTURE_2D,tex.texture[0])
-				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-				
-				tex.BufferToTex PixmapPixelPtr(map,0,0)
-			EndIf
 		EndIf
+		EndRem
 		
 		Return tex
 	End Function

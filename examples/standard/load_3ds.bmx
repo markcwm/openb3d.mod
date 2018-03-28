@@ -1,5 +1,5 @@
 ' load_3ds.bmx
-' loads meshes with single surface and pretransforms vertices, use Load3DS to load from streams
+' loads meshes with single surface and pretransforms vertices
 
 Strict
 
@@ -24,63 +24,51 @@ Select loader
 
 	Case 1 ' load rallycar1 mesh
 		oldtime=MilliSecs()
-		mesh=Load3DS("../media/rallycar1.3ds")
+		mesh=LoadAnimMesh("../media/rallycar1.3ds")
 		
-		debug="3DS time="+(MilliSecs()-oldtime)
+		debug="3ds time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load mak_robotic mesh
 		oldtime=MilliSecs()
-		mesh=Load3DS("../media/mak_robotic.3ds")
+		mesh=LoadAnimMesh("../media/mak_robotic.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,0)
 		mesh.ScaleAnimMesh(0.5,0.5,0.5)
 		
-		debug="3DS time="+(MilliSecs()-oldtime)
+		debug="3ds time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load phineas4 mesh
 		oldtime=MilliSecs()
-		mesh=Load3DS("../media/phineas4.3ds")
+		mesh=LoadAnimMesh("../media/phineas4.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,-45)
 		mesh.PositionAnimMesh(0,10,0)
 		
-		debug="3DS time="+(MilliSecs()-oldtime)
+		debug="3ds time="+(MilliSecs()-oldtime)
 		
-	Case 4 ' load incbin mesh (texture must be applied manually)
+	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/rallycar1.3ds"
-		mesh=Load3DS(file)
-		file = "incbin::../media/RALLYCAR.JPG"
-		Local tex:TTexture=LoadTexture(file,9)
+		mesh=LoadAnimMesh(file)
 		
-		For Local child:Int=1 To CountChildren(mesh)
-			EntityTexture TMesh(GetChild(mesh, child)),tex
-		Next
+		debug="incbin time="+(MilliSecs()-oldtime)
 		
-		debug="3DS incbin time="+(MilliSecs()-oldtime)
-		
-	Case 5 ' load zip mesh (texture must be applied manually)
+	Case 5 ' load zip mesh
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/rallycar.zip"
 		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
-		mesh=Load3DS(file)
-		file = "zip::"+zipfile+"//RALLYCAR.JPG"
-		Local tex:TTexture=LoadTexture(file,9)
+		mesh=LoadAnimMesh(file)
 		
-		For Local child:Int=1 To CountChildren(mesh)
-			EntityTexture TMesh(GetChild(mesh, child)),tex
-		Next
-		
-		debug="3DS zip time="+(MilliSecs()-oldtime)
+		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
 		oldtime=MilliSecs()
-		mesh=LoadMesh("../media/rallycar1.3ds")
+		mesh=LoadMeshLib("../media/rallycar1.3ds")
 		
 		mesh.RotateMesh(-90,0,0)
 		mesh.ScaleMesh(0.05, 0.05, 0.05)
 		
-		debug="openb3d time="+(MilliSecs()-oldtime)
+		debug="lib time="+(MilliSecs()-oldtime)
 EndSelect
 
 ' used by fps code

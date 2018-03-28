@@ -19,21 +19,21 @@ Local ent:TMesh=Null
 Local loader%=3
 Select loader
 	Case 1
-		ent=LoadB3D("../media/zombie.b3d")
+		ent=LoadAnimMesh("../media/zombie.b3d")
 		MoveEntity ent,0,0,5
 		
 	Case 2
-		ent=LoadB3D("../media/ninja.b3d")
+		ent=LoadAnimMesh("../media/ninja.b3d")
 		MoveEntity ent,0,5,0
 		TurnEntity ent,0,180,0
 		
 	Case 3
-		ent=LoadB3D("../media/dwarf.b3d")
+		ent=LoadAnimMesh("../media/dwarf.b3d")
 		MoveEntity ent,0,-25,60
 		TurnEntity ent,0,180,0
 		
 	Default ' load library mesh
-		ent=LoadAnimMesh("../media/zombie.b3d")
+		ent=LoadAnimMeshLib("../media/zombie.b3d")
 		MoveEntity ent,0,0,10
 EndSelect
 
