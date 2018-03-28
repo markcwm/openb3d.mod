@@ -347,8 +347,10 @@ Type TTexture
 	
 	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	
-		' TODO mysterious memory corruption with Brl tga loader
-		'If file.Find("endian::")>-1 Or file.StartsWith("incbin::") Or file.StartsWith("zip::")
+		' Brl.Tgaloader is deprecated in NG, replaced with Brl.Stbimageloader (currently doesn't load tga)
+		If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
+			Return LoadTextureLib( file,flags,tex )
+		EndIf
 		
 		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
 		Local map:TPixmap=Null, name%
