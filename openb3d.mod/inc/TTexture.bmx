@@ -349,7 +349,7 @@ Type TTexture
 	
 		' Brl.Tgaloader is deprecated in NG, replaced with Brl.Stbimageloader (currently doesn't load tga)
 		If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
-			Return LoadTextureLib( file,flags,tex )
+			If ExtractExt(file)="tga" Then Return LoadTextureLib( file,flags,tex )
 		EndIf
 		
 		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
