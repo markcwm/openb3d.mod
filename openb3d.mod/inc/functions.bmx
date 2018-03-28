@@ -3,21 +3,6 @@
 ' *** Wrapper only
 
 Rem
-bbdoc: Loads a B3D file and returns the new TMesh, supports skeletal/boned animations
-End Rem
-Function LoadB3D:TMesh( file:String,parent:TEntity=Null )
-	Return TB3D.LoadAnimB3D( file,parent )	
-End Function
-
-Rem
-bbdoc: Loads a 3DS file and returns the new TMesh, currently no animations
-End Rem
-Function Load3DS:TMesh( file:String,parent:TEntity=Null )
-	Local loader:T3DS = New T3DS ' hierarchy animation todo
-	Return loader.LoadMesh3DS( file,parent )
-End Function
-
-Rem
 bbdoc: Number of triangles currently rendered
 End Rem
 Function TrisRendered:Int()
@@ -1138,6 +1123,14 @@ Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadAnimMesh( file,parent )
 End Function
 
+Rem
+bbdoc: Loads a B3D or 3DS file and returns a new TMesh
+about: Uses the library function, the returned mesh will have children and animations.
+End Rem
+Function LoadAnimMeshLib:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadAnimMeshLib( file,parent )
+End Function
+
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 'End Rem
@@ -1159,11 +1152,27 @@ Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadMesh( file,parent )
 End Function
 
+Rem
+bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
+about: Uses the library function, the returned mesh is collapsed so has no children.
+End Rem
+Function LoadMeshLib:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMeshLib( file,parent )
+End Function
+
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
 'End Rem
 Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	Return TTexture.LoadTexture( file,flags,tex )
+End Function
+
+Rem
+bbdoc: Loads an STB image and returns a new TTexture
+about: Uses the library function
+End Rem
+Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	Return TTexture.LoadTextureLib( file,flags,tex )
 End Function
 
 'Rem
