@@ -30,8 +30,9 @@ public:
 	unsigned int cache_frame[8];
 	Texture* tex[8];
 	
-	int glBlendFunc[2];//
-
+	// extra
+	int glBlendFunc[2];
+	
 	Brush(){
 
 		no_texs=0;

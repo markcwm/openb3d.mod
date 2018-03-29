@@ -1,6 +1,13 @@
 ' functions.bmx
 
-' *** Wrapper only
+' *** Extra
+
+Rem
+bbdoc: Set texture multitex factor, used in interpolate and custom TexBlend options
+End Rem
+Function TextureMultitex( tex:TTexture,f:Float )
+	TextureMultitex_( TTexture.GetInstance(tex),f )
+End Function
 
 Rem
 bbdoc: Number of triangles currently rendered
@@ -52,10 +59,17 @@ Function BrushGLBlendFunc( brush:TBrush,sfactor:Int,dfactor:Int )
 End Function
 
 Rem
-bbdoc: GL equivalent, experimental
+bbdoc: GL equivalent, param is a const, limited to 12 calls per texture, experimental
 End Rem
-Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )
-	TextureGLTexEnv_( TTexture.GetInstance(tex),target,pname,param )
+Function TextureGLTexEnvi( tex:TTexture,target:Int,pname:Int,param:Int )
+	TextureGLTexEnvi_( TTexture.GetInstance(tex),target,pname,param )
+End Function
+
+Rem
+bbdoc: GL equivalent, param is a float, limited to 12 calls per texture, experimental
+End Rem
+Function TextureGLTexEnvf( tex:TTexture,target:Int,pname:Int,param:Float )
+	TextureGLTexEnvf_( TTexture.GetInstance(tex),target,pname,param )
 End Function
 
 Rem

@@ -113,6 +113,20 @@ Type TBrush
 		
 	End Method
 	
+	' Extra
+	
+	Method BrushGLColor( r:Float,g:Float,b:Float,a:Float=1.0 )
+	
+		BrushGLColor_( GetInstance(Self),r,g,b,a )
+		
+	End Method
+	
+	Method BrushGLBlendFunc( sfactor:Int,dfactor:Int )
+	
+		BrushGLBlendFunc_( GetInstance(Self),sfactor,dfactor )
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()

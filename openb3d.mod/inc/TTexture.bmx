@@ -192,6 +192,28 @@ Type TTexture
 		
 	End Method
 	
+	' Extra
+	
+	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
+	
+		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
+		
+	End Method
+	
+	Method TextureGLTexEnvf( target:Int,pname:Int,param:Float )
+	
+		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
+		
+	End Method
+	
+	' Extra
+	
+	Method TextureMultitex( f:Float )
+	
+		TextureMultitex_( GetInstance(Self),f )
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()
@@ -362,12 +384,14 @@ Type TTexture
 		If (flags & 2) Then map=ApplyAlpha(map)
 		If (flags & 4) Then map=ApplyMask(map,10,10,10)
 		
-		glBindTexture(GL_TEXTURE_2D,tex.texture[0])
+		glGenTextures(1,Varptr(name))
+		glBindtexture(GL_TEXTURE_2D,name)
 		gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
+		tex.texture[0]=name
 		
 		tex.BufferToTex PixmapPixelPtr(map,0,0)
-		
 		Return tex
+		
 	End Function
 	
 	Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
@@ -626,6 +650,8 @@ Type TTexture
 				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
 			Next
 		Next
+		
+		Return map
 	End Function
 	
 	' like MaskPixmap
@@ -643,6 +669,8 @@ Type TTexture
 				EndIf
 			Next
 		Next
+		
+		Return map
 	End Function
 	
 	' GL 2.0 support

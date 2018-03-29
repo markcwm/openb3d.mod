@@ -85,7 +85,7 @@ Function Text( x%,y%,txt$ )
 	' Tell OpenGL you want to use texture combiners (non vbo)
 	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE)
 	' Tell OpenGL which combiner you want to use (Modulate for RGB values)
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_MODULATE)
+	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_DECAL) 'GL_MODULATE
 	' Tell OpenGL To use texture unit 0's color values for Arg0
 	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE0)
 	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR)

@@ -18,7 +18,12 @@
 
 extern "C" {
 
-// extra
+// Extra
+
+void TextureMultitex(Texture* tex, float f){
+	tex->TextureMultitex(f);
+}
+
 int TrisRendered(){
 	return Global::TrisRendered();
 }
@@ -118,13 +123,52 @@ void FreeSurface(Surface* surf){
 	delete surf;
 }
 
-void TextureGLTexEnv(Texture* tex, int target, int pname, int param){
-	if(target==0) tex->glTexEnv_count=0;
-	tex->glTexEnv[0][tex->glTexEnv_count] = target;
-	tex->glTexEnv[1][tex->glTexEnv_count] = pname;
-	tex->glTexEnv[2][tex->glTexEnv_count] = param;
-	tex->TextureBlend(6);
-	if(tex->glTexEnv_count<12) tex->glTexEnv_count++;
+void TextureGLTexEnvi(Texture* tex, int target, int pname, int param){
+	if(tex==NULL) return;
+	int tec=tex->TexEnv_count;
+	
+	if(target==0 || pname==0){ // clear all
+		tex->TexEnv_count=0;
+		for(int ite=1;ite<12;ite++){
+			tex->TexEnvi[0][ite]=0;
+			tex->TexEnvi[1][ite]=0;
+			tex->TexEnvi[2][ite]=0;
+			tex->TexEnvf[ite]=0;
+		}
+	}else{
+		if(tec>=0 && tec<12){
+			tex->TexEnvi[0][tec]=target;
+			tex->TexEnvi[1][tec]=pname;
+			tex->TexEnvi[2][tec]=param;
+			tex->TextureBlend(9);
+			tex->TexEnv_count++;			
+		}
+	}
+}
+
+void TextureGLTexEnvf(Texture* tex, int target, int pname, float param){
+	if(tex==NULL) return;
+	int tec=tex->TexEnv_count;
+	
+	if(target==0 || pname==0){ // clear all
+		tex->TexEnv_count=0;
+		for(int ite=1;ite<12;ite++){
+			tex->TexEnvi[0][ite]=0;
+			tex->TexEnvi[1][ite]=0;
+			tex->TexEnvi[2][ite]=0;
+			tex->TexEnvf[ite]=0;
+		}
+	}else{
+		if(tec>=0 && tec<12){
+			tex->TexEnvi[0][tec]=target;
+			tex->TexEnvi[1][tec]=pname;
+			tex->TexEnvi[2][tec]=0;
+			tex->TexEnvf[tec]=param;
+			tex->multitex_factor=param;
+			tex->TextureBlend(9);
+			tex->TexEnv_count++;
+		}
+	}
 }
 
 void BrushGLColor(Brush* brush, float r, float g, float b, float a){

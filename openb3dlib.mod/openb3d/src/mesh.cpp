@@ -2290,7 +2290,7 @@ void Mesh::Render(){
 		
 		Global::rendered_tris=Global::rendered_tris+surf.tris.size(); // TrisRendered
 		
-		float red,green,blue,alpha,shine;
+		float red,green,blue,alpha,shine,texenv_color[4];
 		int blend,fx;
 		float ambient_red,ambient_green,ambient_blue;
 
@@ -2317,7 +2317,6 @@ void Mesh::Render(){
 			if(shine!=0.0 && shine2!=0.0) shine=shine*shine2;
 			if(blend==0) blend=surf.brush->blend; // overwrite master brush if master brush blend=0
 			fx=fx|surf.brush->fx;
-
 		//}
 
 		if(surf.alpha_enable==true){
@@ -2353,11 +2352,11 @@ void Mesh::Render(){
 				case 3:
 					glBlendFunc(GL_SRC_ALPHA,GL_ONE); // additive and alpha
 					break;
-				case 4:// dot3
+				case 4: // dot3
 					break;
-				case 5:// multiply 2
+				case 5: // multiply 2
 					break;
-				case 6:// custom
+				case 6: // custom
 					glBlendFunc(surf.brush->glBlendFunc[0],surf.brush->glBlendFunc[1]);
 					break;
 			}
@@ -2512,8 +2511,9 @@ void Mesh::Render(){
 					int tex_flags=0,tex_blend=0,tex_coords=0;
 					float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 					int tex_cube_mode=0;
+					Texture* bte=NULL;
 					//int frame=0;
-	
+					
 					if(brush.tex[ix]){
 						texture=brush.cache_frame[ix];//brush.tex[ix]->texture;
 						tex_flags=brush.tex[ix]->flags;
@@ -2526,6 +2526,8 @@ void Mesh::Render(){
 						tex_ang=brush.tex[ix]->angle;
 						tex_cube_mode=brush.tex[ix]->cube_mode;
 						//frame=brush.tex_frame;
+						bte=brush.tex[ix];
+						texenv_color[3]=brush.tex[ix]->multitex_factor;
 					}else{
 						texture=surf.brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
 						tex_flags=surf.brush->tex[ix]->flags;
@@ -2538,6 +2540,8 @@ void Mesh::Render(){
 						tex_ang=surf.brush->tex[ix]->angle;
 						tex_cube_mode=surf.brush->tex[ix]->cube_mode;
 						//frame=surf.brush.tex_frame;
+						bte=surf.brush->tex[ix];
+						texenv_color[3]=surf.brush->tex[ix]->multitex_factor;
 					}
 	
 					glActiveTexture(GL_TEXTURE0+ix);
@@ -2634,15 +2638,14 @@ void Mesh::Render(){
 						//glDisable(GL_TEXTURE_GEN_Q)
 	
 					}
-	
-	
+					
 					switch(tex_blend){
 						case 0: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 						break;
 						case 1: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_DECAL);
 						break;
 						case 2: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
-						//case 2: glTexEnvf(GL_TEXTURE_ENV,GL_COMBINE_RGB_EXT,GL_MODULATE);
+						//case 2: glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB_EXT,GL_MODULATE);
 						break;
 						case 3: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_ADD);
 						break;
@@ -2655,12 +2658,40 @@ void Mesh::Render(){
 							glTexEnvi(GL_TEXTURE_ENV,GL_COMBINE_RGB,GL_MODULATE);
 							glTexEnvi(GL_TEXTURE_ENV,GL_RGB_SCALE,2.0);
 							break;
-						case 6:// custom						
-						for(int itexenv=0;itexenv<surf.brush->tex[ix]->glTexEnv_count;itexenv++){
-							glTexEnvi(	surf.brush->tex[ix]->glTexEnv[0][itexenv],
-										surf.brush->tex[ix]->glTexEnv[1][itexenv],
-										surf.brush->tex[ix]->glTexEnv[2][itexenv]);
-						}
+						case 6: // blend (invert)
+							glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_BLEND);
+							break;
+						case 7: // subtract
+							glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+							glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_SUBTRACT);
+							glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_PREVIOUS);
+							glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_TEXTURE);
+							break;
+						case 8: // interpolate
+							glTexEnvfv(GL_TEXTURE_ENV, GL_TEXTURE_ENV_COLOR, texenv_color);
+							glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE);
+							glTexEnvf(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_INTERPOLATE);
+							glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE);
+							glTexEnvf(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR);
+							glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE1_RGB, GL_PREVIOUS);
+							glTexEnvf(GL_TEXTURE_ENV, GL_OPERAND1_RGB, GL_SRC_COLOR);
+							glTexEnvf(GL_TEXTURE_ENV, GL_SOURCE2_RGB, GL_CONSTANT);
+							glTexEnvf(GL_TEXTURE_ENV, GL_OPERAND2_RGB, GL_SRC_ALPHA);
+							break;
+						case 9: // custom, up to 12 slots
+							for(int ite=0;ite<bte->TexEnv_count;ite++){
+								if(bte->TexEnvi[1][ite]==GL_TEXTURE_ENV_COLOR){
+									glTexEnvfv(bte->TexEnvi[0][ite], bte->TexEnvi[1][ite], texenv_color);
+									continue;
+								}
+								if(bte->TexEnvi[1][ite]==GL_RGB_SCALE || bte->TexEnvi[1][ite]==GL_ALPHA_SCALE){
+									glTexEnvf(bte->TexEnvi[0][ite], bte->TexEnvi[1][ite], bte->TexEnvf[ite]);
+									continue;
+								}
+								if(bte->TexEnvi[1][ite]!=0){
+									glTexEnvf(bte->TexEnvi[0][ite], bte->TexEnvi[1][ite], bte->TexEnvi[2][ite]);
+								}
+							}
 							break;
 						default: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_MODULATE);
 					}

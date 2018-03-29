@@ -38,13 +38,15 @@ public:
 	int no_frames;
 	unsigned int* framebuffer;
 	int cube_face,cube_mode;
-
+	
 	// extra
 	static list<Texture*> tex_list_all;
-	int glTexEnv[3][12];
-	int glTexEnv_count;
+	int TexEnvi[3][12];
+	float TexEnvf[12];
+	int TexEnv_count;
+	float multitex_factor;
 	
-	int format; // Added can be GL_RGBA or one of the DXT compressed ones
+	int format; // can be GL_RGBA or one of the DXT compressed ones
 
 	Texture(){
 
@@ -58,8 +60,7 @@ public:
 		framebuffer=0;
 		cube_face=0,cube_mode=1;
 		
-		glTexEnv_count=0;//
-
+		TexEnv_count=0,multitex_factor=0.5;
 	};
 
 	static Texture* LoadTexture(string filename,int flags=0,Texture* tex=NULL);
@@ -81,6 +82,7 @@ public:
 	void CameraToTex(Camera* cam, int frames=0);
 	void DepthBufferToTex(Camera* cam);
 	string TextureName();
+	void TextureMultitex(float f);
 	static void ClearTextureFilters();
 	static void AddTextureFilter(string text_match,int flags);
 	Texture* TexInList(list<Texture*>& list_ref);

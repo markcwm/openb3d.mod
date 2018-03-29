@@ -22,7 +22,8 @@ Import Brl.Map
 ' functions.cpp
 Extern
 
-	' *** Wrapper only
+	' *** Extra
+	Function TextureMultitex_( tex:Byte Ptr,f:Float ) = "TextureMultitex"
 	Function TrisRendered_:Int() = "TrisRendered"
 	Function NewTexture_:Byte Ptr() = "NewTexture"
 	Function NewMesh_:Byte Ptr() = "NewMesh"
@@ -41,7 +42,8 @@ Extern
 	Function FreeStencil_( stencil:Byte Ptr ) = "FreeStencil"
 	Function TextureFlags_( tex:Byte Ptr,flags:Int ) = "TextureFlags"
 	Function FreeSurface_( surf:Byte Ptr ) = "FreeSurface"
-	Function TextureGLTexEnv_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnv"
+	Function TextureGLTexEnvi_( tex:Byte Ptr,target:Int,pname:Int,param:Int ) = "TextureGLTexEnvi"
+	Function TextureGLTexEnvf_( tex:Byte Ptr,target:Int,pname:Int,param:Float ) = "TextureGLTexEnvf"
 	Function BrushGLColor_( brush:Byte Ptr,r:Float,g:Float,b:Float,a:Float ) = "BrushGLColor"
 	Function BrushGLBlendFunc_( brush:Byte Ptr,sfactor:Int,dfactor:Int ) = "BrushGLBlendFunc"
 	

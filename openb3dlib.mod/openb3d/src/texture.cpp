@@ -653,3 +653,6 @@ void ApplyMask(Texture* tex, unsigned char *src, unsigned char maskred, unsigned
 	}
 }
 
+void Texture::TextureMultitex(float f){
+	multitex_factor = f;
+}

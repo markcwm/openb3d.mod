@@ -16,15 +16,6 @@
 extern "C" {
 #endif
 
-// extra
-void DLL_EXPORT FreeShader(Shader *shader);
-void DLL_EXPORT FreeStencil(Stencil *stencil);
-void DLL_EXPORT TextureFlags(Texture* tex, int flags);
-void DLL_EXPORT FreeSurface(Surface* surf);
-void DLL_EXPORT TextureGLTexEnv(Texture* tex, int target, int pname, int param);
-void DLL_EXPORT BrushGLColor(Brush* brush, float r, float g, float b, float a);
-void DLL_EXPORT BrushGLBlendFunc(Brush* brush, int sfactor, int dfactor);
-
 // rendering
 void DLL_EXPORT BufferToTex(Texture* tex,unsigned char* buffer, int frame);
 void DLL_EXPORT BackBufferToTex(Texture* tex,int frame);

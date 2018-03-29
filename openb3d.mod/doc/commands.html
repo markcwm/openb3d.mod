@@ -362,8 +362,14 @@ Copy texture to a pixmap buffer, buffer must be a byte ptr.
 <tr><td class=docleft width=1%><a href=#TextureFlags>TextureFlags</a></td><td class=docright>
 Set texture flags, see LoadTexture for values.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TextureGLTexEnv>TextureGLTexEnv</a></td><td class=docright>
-GL equivalent, experimental.
+<tr><td class=docleft width=1%><a href=#TextureGLTexEnvf>TextureGLTexEnvf</a></td><td class=docright>
+GL equivalent, param is a float, limited to 12 calls per texture, experimental.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureGLTexEnvi>TextureGLTexEnvi</a></td><td class=docright>
+GL equivalent, param is a const, limited to 12 calls per texture, experimental.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TextureMultitex>TextureMultitex</a></td><td class=docright>
+Set texture multitex factor, used in interpolate and custom TexBlend options.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TrisRendered>TrisRendered</a></td><td class=docright>
 Number of triangles currently rendered.
@@ -1133,9 +1139,19 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set texture flags, see LoadTexture for values.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=TextureGLTexEnv>
-<tr><td class=doctop colspan=2>Function TextureGLTexEnv( tex:TTexture,target:Int=0,pname:Int=0,param:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
+<table class=doc width=100% cellspacing=3 id=TextureGLTexEnvf>
+<tr><td class=doctop colspan=2>Function TextureGLTexEnvf( tex:TTexture,target:Int,pname:Int,param:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, param is a float, limited to 12 calls per texture, experimental.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureGLTexEnvi>
+<tr><td class=doctop colspan=2>Function TextureGLTexEnvi( tex:TTexture,target:Int,pname:Int,param:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, param is a const, limited to 12 calls per texture, experimental.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TextureMultitex>
+<tr><td class=doctop colspan=2>Function TextureMultitex( tex:TTexture,f:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set texture multitex factor, used in interpolate and custom TexBlend options.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TrisRendered>
