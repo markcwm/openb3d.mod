@@ -21,6 +21,8 @@ ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
 'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip (now replaced by ResourceFilePath)
 
+ModuleInfo "CC_OPTS: -std=c++11"
+
 ?win32
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
 

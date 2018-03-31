@@ -7,7 +7,7 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on Minib3d which 
 
 ## Features 
 
-* Works with BlitzMax NG in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
+* Works with [BlitzMax NG](https://github.com/bmx-ng/bmx-ng/releases) in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
 * The wrapper is object-oriented with a procedural interface as in Minib3d
 * Minib3d types are the same but all fields are pointers apart from lists, also variable names may not be the same
 * Since entities are objects not integer handles as in Blitz3D you need to specify their type at creation

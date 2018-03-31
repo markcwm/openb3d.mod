@@ -436,7 +436,7 @@ char* StaticChar( int classid,int varid ){
 	switch (classid){
 		case SHADOWOBJECT_class :
 			switch (varid){
-				case SHADOWOBJECT_top_caps : return &ShadowObject::top_caps;
+				case SHADOWOBJECT_top_caps : return (char*)&ShadowObject::top_caps;
 			}
 			break;
 	}
@@ -1178,8 +1178,8 @@ void GlobalListPushBackEntity( int varid,Entity* obj ){
 
 char* LightChar( Light* obj,int varid ){
 	switch (varid){
-		case LIGHT_cast_shadow : return &obj->cast_shadow;
-		case LIGHT_light_type : return &obj->light_type;
+		case LIGHT_cast_shadow : return (char*)&obj->cast_shadow;
+		case LIGHT_light_type : return (char*)&obj->light_type;
 	}
 	return NULL;
 }
@@ -1403,9 +1403,9 @@ Quaternion* NewQuaternion(){
 
 char* ShadowObjectChar( ShadowObject* obj,int varid ){
 	switch (varid){
-		case SHADOWOBJECT_Render : return &obj->Render;
-		case SHADOWOBJECT_Static : return &obj->Static;
-		case SHADOWOBJECT_VCreated : return &obj->VCreated;
+		case SHADOWOBJECT_Render : return (char*)&obj->Render;
+		case SHADOWOBJECT_Static : return (char*)&obj->Static;
+		case SHADOWOBJECT_VCreated : return (char*)&obj->VCreated;
 	}
 	return NULL;
 }

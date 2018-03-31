@@ -1,6 +1,9 @@
-// methods.h
+#ifndef methods_h
+#define methods_h
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 // Animation
 void AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_frame);
@@ -153,5 +156,8 @@ Texture* TexInList( Texture* obj,list<Texture*>& list_ref );
 void FilterFlags( Texture* obj );
 //static string Strip(string filename);
 
+#ifdef __cplusplus
 } // extern "C"
+#endif
 
+#endif

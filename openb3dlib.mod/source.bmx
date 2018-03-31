@@ -20,7 +20,6 @@ Import "openb3d/src/collision2.cpp"
 Import "openb3d/src/csg.cpp"
 Import "openb3d/src/entity.cpp"
 Import "openb3d/src/file.cpp"
-Import "openb3d/src/functions.cpp"
 Import "openb3d/src/geom.cpp"
 Import "openb3d/src/geosphere.cpp" ' 0.8
 Import "openb3d/src/global.cpp"
@@ -48,13 +47,14 @@ Import "openb3d/src/surface.cpp"
 Import "openb3d/src/terrain.cpp"
 Import "openb3d/src/texture.cpp"
 Import "openb3d/src/texture_filter.cpp"
-Import "openb3d/src/tilt.cpp"
-Import "openb3d/src/touch.cpp"
+'Import "openb3d/src/tilt.cpp" ' deprecated
+'Import "openb3d/src/touch.cpp" ' deprecated
 Import "openb3d/src/tree.cpp"
 'Import "openb3d/src/turn.cpp" ' deprecated
 Import "openb3d/src/voxel.cpp"
 Import "openb3d/src/x.cpp"
 Import "openb3d/src/dds.cpp" ' 1.2
+Import "openb3d/src/functions.cpp"
 
 Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"

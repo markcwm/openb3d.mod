@@ -49,6 +49,33 @@
 #include <stdio.h>
 using namespace std;
 
+// Extra
+
+Mesh* Mesh::NewMesh(){
+	Mesh* mesh=new Mesh();
+	return mesh;
+}
+
+Surface* Mesh::NewSurface(){
+	Surface* surf=new Surface();
+	return surf;
+}
+
+Bone* Mesh::NewBone(){
+	Bone* bone=new Bone();
+	//bone->keys=new AnimationKeys();
+	return bone;
+}
+
+void Mesh::ShadeMesh(Shader* material){
+	for(int s=1;s<=CountSurfaces();s++){
+
+		Surface* surf=GetSurface(s);
+		surf->ShaderMat = material;
+	}
+}
+
+
 Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
 	// new mesh
@@ -401,22 +428,6 @@ Bone* Mesh::CreateBone(Entity* parent_ent){
 	}
 
 
-	return bone;
-}
-
-Mesh* Mesh::NewMesh(){
-	Mesh* mesh=new Mesh();
-	return mesh;
-}
-
-Surface* Mesh::NewSurface(){
-	Surface* surf=new Surface();
-	return surf;
-}
-
-Bone* Mesh::NewBone(){
-	Bone* bone=new Bone();
-	//bone->keys=new AnimationKeys();
 	return bone;
 }
 

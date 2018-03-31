@@ -1,4 +1,5 @@
-// data.h
+#ifndef data_h
+#define data_h
 
 #include "openb3d/src/actions.h"
 #include "openb3d/src/pick.h"
@@ -8,9 +9,10 @@
 
 #include <vector>
 #include <list>
-//using namespace std;
 
+#ifdef __cplusplus
 extern "C" {
+#endif
 
 // Static
 char* StaticChar( int classid,int varid );
@@ -130,5 +132,8 @@ float* TextureFloat( Texture* obj,int varid );
 const char* TextureString( Texture* obj,int varid );
 list<Texture*>* TextureListTexture( Texture* obj,int varid );
 
-
+#ifdef __cplusplus
 } // extern "C"
+#endif
+
+#endif
