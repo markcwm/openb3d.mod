@@ -157,7 +157,7 @@ void FilterFlags( Texture* obj );
 //static string Strip(string filename);
 
 #ifdef __cplusplus
-} // extern "C"
+}; // extern "C"
 #endif
 
 #endif

@@ -29,6 +29,7 @@
 #include "global.h"
 #include "stb_image.h"
 
+#include "bmaxdebug.h"
 
 list<ShaderObject*> ShaderObject::ShaderObjectList;
 list<ProgramObject*> ProgramObject::ProgramObjectList;
@@ -119,6 +120,16 @@ ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
+#endif
+		myShader->DeleteVertShader(myShader); // don't leak the shader
+		
 		delete [] shaderSrc;
 		delete myShader;
 		return 0;
@@ -195,6 +206,16 @@ ShaderObject* ShaderObject::CreateFragShader(string shaderFileName){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
+#endif
+		myShader->DeleteFragShader(myShader); // don't leak the shader
+		
 		delete [] shaderSrc;
 		delete myShader;
 		return 0;
@@ -211,7 +232,7 @@ ShaderObject* ShaderObject::CreateFragShader(string shaderFileName){
 /*
 
 '-----------------------------------------------------------
-'CreateVertShader:tShaderObject(shaderFileName:String)
+'CreateVertShader:tShaderObject(Shader* shader, shaderFileName:String)
 '
 'Creates a Vertex Shader Object from a File
 '
@@ -266,6 +287,16 @@ ShaderObject* ShaderObject::CreateVertShaderFromString(string shadercode){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
+#endif
+		myShader->DeleteVertShader(myShader); // don't leak the shader
+		
 		delete [] shaderSrc;
 		delete myShader;
 		return 0;
@@ -337,6 +368,16 @@ ShaderObject* ShaderObject::CreateFragShaderFromString(string shadercode){
 	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
+#endif
+		myShader->DeleteFragShader(myShader); // don't leak the shader
+		
 		delete [] shaderSrc;
 		delete myShader;
 		return 0;
@@ -1638,6 +1679,16 @@ int ProgramObject::AttachVertShader(ShaderObject* myShader){
 	glGetProgramiv(Program,GL_LINK_STATUS, &linked);
 	
 	if (linked==0){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetProgramiv(Program, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetProgramInfoLog(Program, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",myShader->shaderName.c_str(),&infoLog[0]);
+#endif
+		glDeleteProgram(Program); // The program is useless now
+		
 		return 0;
 	}
 
@@ -1669,6 +1720,16 @@ int ProgramObject::AttachFragShader(ShaderObject* myShader){
 	glGetProgramiv(Program,GL_LINK_STATUS, &linked);
 
 	if (linked==0){
+		int maxLength = 0; // maxLength includes the NULL character
+		glGetProgramiv(Program, GL_INFO_LOG_LENGTH, &maxLength);
+		
+		vector<char> infoLog(maxLength);
+		glGetProgramInfoLog(Program, maxLength, &maxLength, &infoLog[0]);
+#ifdef BLITZMAX_DEBUG
+DebugLog("%s; %s",myShader->shaderName.c_str(),&infoLog[0]);
+#endif
+		glDeleteProgram(Program); // The program is useless now
+		
 		return 0;
 	}
 

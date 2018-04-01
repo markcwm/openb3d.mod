@@ -133,7 +133,7 @@ const char* TextureString( Texture* obj,int varid );
 list<Texture*>* TextureListTexture( Texture* obj,int varid );
 
 #ifdef __cplusplus
-} // extern "C"
+}; // extern "C"
 #endif
 
 #endif

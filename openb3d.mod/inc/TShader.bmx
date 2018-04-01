@@ -170,6 +170,8 @@ Type TShader
 	?
 	Field instance:Byte Ptr
 	
+	Field exists:Int=0
+	
 	Function CreateObject:TShader( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -180,6 +182,7 @@ Type TShader
 		shader_map.Insert( String(Long(inst)),obj )
 		?
 		obj.instance=inst
+		obj.InitFields()
 		Return obj
 		
 	End Function
@@ -210,6 +213,12 @@ Type TShader
 		Return obj.instance
 		
 	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		exists=1
+		
+	End Method
 	
 	' Openb3d
 	
@@ -440,8 +449,11 @@ Type TShader
 	
 	Method FreeShader() ' Spinduluz
 	
-		FreeShader_( GetInstance(Self) )
-		FreeObject( GetInstance(Self) )
+		If exists
+			FreeShader_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

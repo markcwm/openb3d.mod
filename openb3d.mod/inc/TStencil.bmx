@@ -12,6 +12,8 @@ Type TStencil
 	?
 	Field instance:Byte Ptr
 	
+	Field exists:Int=0
+	
 	Function CreateObject:TStencil( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -22,6 +24,7 @@ Type TStencil
 		stencil_map.Insert( String(Long(inst)),obj )
 		?
 		obj.instance=inst
+		obj.InitFields()
 		Return obj
 		
 	End Function
@@ -52,6 +55,12 @@ Type TStencil
 		Return obj.instance
 		
 	End Function
+	
+	Method InitFields() ' Once per CreateObject
+	
+		exists=1
+		
+	End Method
 	
 	' Openb3d
 	
@@ -100,8 +109,11 @@ Type TStencil
 	
 	Method FreeStencil() ' Spinduluz
 	
-		FreeStencil_( GetInstance(Self) )
-		FreeObject( GetInstance(Self) )
+		If exists
+			FreeStencil_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

@@ -1,6 +1,5 @@
-#ifndef SHADER_MAT_H
-#define SHADER_MAT_H
-
+#ifndef SHADERMAT_H
+#define SHADERMAT_H
 
 //#include "global.h"
 #include "matrix.h"

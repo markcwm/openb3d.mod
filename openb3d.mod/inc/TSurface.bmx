@@ -54,6 +54,8 @@ Type TSurface
 	?
 	Field instance:Byte Ptr
 	
+	Field exists:Int=0
+	
 	Function CreateObject:TSurface( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
@@ -138,6 +140,8 @@ Type TSurface
 		' shader
 		inst=SurfaceShader_( GetInstance(Self),SURFACE_ShaderMat )
 		ShaderMat=TShader.GetObject(inst) ' no CreateObject
+		
+		exists=1
 		
 	End Method
 	
@@ -434,8 +438,11 @@ Type TSurface
 	
 	Method FreeSurface()
 	
-		FreeSurface_( GetInstance(Self) )
-		FreeObject( GetInstance(Self) )
+		If exists
+			FreeSurface_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	

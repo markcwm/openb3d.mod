@@ -749,7 +749,7 @@ Type TEntity
 	
 	Method EntityName:String()
 	
-		Return String.FromCString ( EntityString_( GetInstance(Self),ENTITY_name) )
+		Return String.FromCString( EntityString_( GetInstance(Self),ENTITY_name ) )
 		
 	End Method
 	

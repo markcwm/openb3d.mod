@@ -22,7 +22,9 @@ ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
 'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip (now replaced by ResourceFilePath)
 
 ModuleInfo "CC_OPTS: -std=c++11"
-
+?debug
+ModuleInfo "CC_OPTS: -DBLITZMAX_DEBUG" ' Spinduluz
+?
 ?win32
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
 

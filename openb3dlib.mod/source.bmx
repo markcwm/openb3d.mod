@@ -53,7 +53,8 @@ Import "openb3d/src/tree.cpp"
 'Import "openb3d/src/turn.cpp" ' deprecated
 Import "openb3d/src/voxel.cpp"
 Import "openb3d/src/x.cpp"
-Import "openb3d/src/dds.cpp" ' 1.2
+Import "openb3d/src/dds.cpp" ' Spinduluz
+Import "openb3d/src/bmaxdebug.cpp" ' Spinduluz
 Import "openb3d/src/functions.cpp"
 
 Import "openb3d/src/collidetri.c"
