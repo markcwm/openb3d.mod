@@ -18,24 +18,22 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-?bmxng
-ModuleInfo "CC_OPTS: -std=c++11" ' enforce C++11 standard (need on modern compilers)
-ModuleInfo "CC_OPTS: -DOPENB3D_NG" ' older compilers don't recognize C++11, if using NG just comment this out
+'ModuleInfo "CC_OPTS: -std=c++11" ' if we enforce C++11 standard then won't build on older compilers
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' true if in debug mode (by Spinduluz)
 ?win32
-'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use GLee
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' GLee or Glew in Win
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' true if building static .a otherwise .dll (in Windows only)
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
 ?macos
-'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glee
+'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' GLee in MacOS
 
 Import Pub.Glew
 Import Pub.OpenGL
 ?linux
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glew
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in linux
 
 Import Pub.Glew
 Import Pub.OpenGL

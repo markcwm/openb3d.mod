@@ -56,7 +56,7 @@ GLboolean __GLeeInited=GL_FALSE;
 
 void * __GLeeGetProcAddress(const char *extname)
 {
-#ifdef WIN32
+#ifdef _WIN32
 	return (void*)wglGetProcAddress(extname);
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
     CFBundleRef bundle;
@@ -9934,7 +9934,7 @@ int __GLeeGLNumExtensions=322;
 
 /* WGL */
 
-#ifdef WIN32
+#ifdef _WIN32
 
 /* Extension querying variables */
 
@@ -15059,7 +15059,7 @@ void initGLLoadFunctions(void)
     __GLeeGLLoadFunction[321]=__GLeeLink_GL_SGIX_texture_range;
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 GLuint __GLeeLink_WGL_ARB_buffer_region(void)
 {
     GLint nLinked=0;
@@ -15927,7 +15927,7 @@ void __GLeeExtList_add(ExtensionList *extList, const char * extName)
 
 const char *__GLeeGetExtStrPlat( void )
 {
-#ifdef WIN32
+#ifdef _WIN32
 	if (!_GLEE_WGL_ARB_extensions_string)
 		wglGetExtensionsStringARB = (GLEEPFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
 
@@ -16056,7 +16056,7 @@ GLEE_EXTERN GLint __GLeeGetExtensionNumber(const char *extensionName, int type)
 		for (a=0;a<__GLeeGLNumExtensions;a++)
 			if (strcmp(extensionName,__GLeeGLExtensionNames[a])==0)	return a;
 		return -1;
-#ifdef WIN32
+#ifdef _WIN32
 	case 1:
 		for (a=0;a<__GLeeWGLNumExtensions;a++)
 			if (strcmp(extensionName,__GLeeWGLExtensionNames[a])==0) return a;
@@ -16076,7 +16076,7 @@ GLEE_EXTERN GLint __GLeeGetExtensionNumber(const char *extensionName, int type)
  * GLee external functions 
  *****************************************************************/
 
-#ifdef WIN32
+#ifdef _WIN32
 GLEE_EXTERN const char * GLeeGetExtStrWGL( void )
 {
 	return __GLeeGetExtStrPlat();
@@ -16111,7 +16111,7 @@ GLEE_EXTERN GLint GLeeForceLink(const char * extensionName)
 	{
 		if (!__GLeeInited) GLeeInit();
 		initGLLoadFunctions();
-#ifdef WIN32
+#ifdef _WIN32
 		initWGLLoadFunctions();
 #elif defined(__APPLE__) || defined(__APPLE_CC__)
 #else
@@ -16124,7 +16124,7 @@ GLEE_EXTERN GLint GLeeForceLink(const char * extensionName)
 	extNum=__GLeeGetExtensionNumber(extensionName,type);
 	if (extNum==-1) return GLEE_LINK_FAIL;
 	if (type==0) return __GLeeGLLoadFunction[extNum]();
-#ifdef WIN32
+#ifdef _WIN32
 	if (type==1) return __GLeeWGLLoadFunction[extNum]();
 #elif defined(__APPLE__) || defined(__APPLE_CC__)	
 #else
@@ -17775,7 +17775,7 @@ GLEE_EXTERN GLboolean GLeeInit( void )
         _GLEE_SGIX_texture_range = GL_TRUE;
         __GLeeLink_GL_SGIX_texture_range();
     }
-#ifdef WIN32
+#ifdef _WIN32
     if (__GLeeCheckExtension("WGL_ARB_buffer_region", &extensionNames) )
     {
         _GLEE_WGL_ARB_buffer_region = GL_TRUE;

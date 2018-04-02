@@ -29,11 +29,9 @@ class Pick{
 public:
 
 	//EntityPickMode in TEntity
-#ifdef OPENB3D_NG // using C++11
-	static constexpr float EPSILON=0.0001;
-#else // older compiler
-	static const float EPSILON=0.0001;
-#endif
+
+	//static const float EPSILON=0.0001; // not used, causes constexpr error in c++11
+
 	static list<Entity*> ent_list; // list containing pickable entities
 
 	static float picked_x;
