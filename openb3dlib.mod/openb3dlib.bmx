@@ -18,7 +18,9 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
+?bmxng
 ModuleInfo "CC_OPTS: -std=c++11" ' enforce C++11 standard (need on modern compilers)
+ModuleInfo "CC_OPTS: -DOPENB3D_NG" ' older compilers don't recognize C++11, if using NG just comment this out
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' true if in debug mode (by Spinduluz)
 ?win32
