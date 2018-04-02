@@ -1,26 +1,7 @@
 #include <iostream>
 #include <string>
 
-#include "glew.h"
-
-/*
-#ifdef linux
-#define GL_GLEXT_PROTOTYPES
-#include <GL/gl.h>
-#include <GL/glext.h>
-#include <GL/glu.h>
-#endif
-
-#ifdef WIN32
-#include <gl\GLee.h>
-#include <GL\glu.h>
-#endif
-
-#ifdef __APPLE__
-#include "GLee.h"
-#include <OpenGL/glu.h>
-#endif
-*/
+#include "glew_glee.h" // glee or glew
 
 #include "surface.h"
 #include "camera.h"
@@ -125,7 +106,7 @@ ShaderObject* ShaderObject::CreateVertShader(string shaderFileName){
 		
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
 #endif
 		myShader->DeleteVertShader(myShader); // don't leak the shader
@@ -211,7 +192,7 @@ ShaderObject* ShaderObject::CreateFragShader(string shaderFileName){
 		
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
 #endif
 		myShader->DeleteFragShader(myShader); // don't leak the shader
@@ -292,7 +273,7 @@ ShaderObject* ShaderObject::CreateVertShaderFromString(string shadercode){
 		
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
 #endif
 		myShader->DeleteVertShader(myShader); // don't leak the shader
@@ -373,7 +354,7 @@ ShaderObject* ShaderObject::CreateFragShaderFromString(string shadercode){
 		
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
 #endif
 		myShader->DeleteFragShader(myShader); // don't leak the shader
@@ -1684,7 +1665,7 @@ int ProgramObject::AttachVertShader(ShaderObject* myShader){
 		
 		vector<char> infoLog(maxLength);
 		glGetProgramInfoLog(Program, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",myShader->shaderName.c_str(),&infoLog[0]);
 #endif
 		glDeleteProgram(Program); // The program is useless now
@@ -1725,7 +1706,7 @@ int ProgramObject::AttachFragShader(ShaderObject* myShader){
 		
 		vector<char> infoLog(maxLength);
 		glGetProgramInfoLog(Program, maxLength, &maxLength, &infoLog[0]);
-#ifdef BLITZMAX_DEBUG
+#ifdef OPENB3D_DEBUG
 DebugLog("%s; %s",myShader->shaderName.c_str(),&infoLog[0]);
 #endif
 		glDeleteProgram(Program); // The program is useless now

@@ -1,4 +1,4 @@
-' greyscale.bmx
+' loadshader.bmx
 
 Strict
 

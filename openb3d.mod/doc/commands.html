@@ -107,7 +107,7 @@ Create fluid mesh for blobs to use.
 <tr><td class=docleft width=1%><a href=#CreateFragShader>CreateFragShader</a></td><td class=docright>
 Returns a new frag shader object from file.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CreateFragShaderFromString>CreateFragShaderFromString</a></td><td class=docright>
+<tr><td class=docleft width=1%><a href=#CreateFragShaderString>CreateFragShaderString</a></td><td class=docright>
 Returns a new frag shader object from string.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateGeosphere>CreateGeosphere</a></td><td class=docright>
@@ -140,7 +140,7 @@ Create stencil object.
 <tr><td class=docleft width=1%><a href=#CreateVertShader>CreateVertShader</a></td><td class=docright>
 Returns a new vert shader object from file.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CreateVertShaderFromString>CreateVertShaderFromString</a></td><td class=docright>
+<tr><td class=docleft width=1%><a href=#CreateVertShaderString>CreateVertShaderString</a></td><td class=docright>
 Returns a new vert shader object from string.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateVoxelSprite>CreateVoxelSprite</a></td><td class=docright>
@@ -451,9 +451,6 @@ Geosphere terrain entity.
 <tr><td class=docleft width=1%><a href=#TGlobal>TGlobal</a></td><td class=docright>
 Global.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TGLShader>TGLShader</a></td><td class=docright>
-Shader methods.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#THardwareInfo>THardwareInfo</a></td><td class=docright>
 Hardware info.
 </td></tr>
@@ -686,8 +683,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new frag shader object from file.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CreateFragShaderFromString>
-<tr><td class=doctop colspan=2>Function CreateFragShaderFromString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
+<table class=doc width=100% cellspacing=3 id=CreateFragShaderString>
+<tr><td class=doctop colspan=2>Function CreateFragShaderString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new frag shader object from string.</td></tr>
 </table>
 <br>
@@ -741,8 +738,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new vert shader object from file.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CreateVertShaderFromString>
-<tr><td class=doctop colspan=2>Function CreateVertShaderFromString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
+<table class=doc width=100% cellspacing=3 id=CreateVertShaderString>
+<tr><td class=doctop colspan=2>Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new vert shader object from string.</td></tr>
 </table>
 <br>
@@ -1289,12 +1286,6 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <tr><td class=docleft width=1%>Description</td><td class=docright>Global.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=TGLShader>
-<tr><td class=doctop colspan=2>Type TGLShader ' by AdamStrange</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Shader methods.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Used for reporting errors.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=THardwareInfo>
 <tr><td class=doctop colspan=2>Type THardwareInfo ' by klepto2</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Hardware info.</td></tr>
@@ -1405,6 +1396,6 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <table width=100%>
 <tr><th width=1%>Version</th><td>1.12</td></tr>
 <tr><th width=1%>License</th><td>zlib</td></tr>
-<tr><th width=1%>Copyright</th><td>Wrapper - 2014-2017 Mark Mcvittie, Bruce A Henderson</td></tr>
-<tr><th width=1%>Copyright</th><td>Library - 2010-2017 Angelo Rosina</td></tr>
+<tr><th width=1%>Copyright</th><td>Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson</td></tr>
+<tr><th width=1%>Copyright</th><td>Library - 2010-2018 Angelo Rosina</td></tr>
 </body></html>

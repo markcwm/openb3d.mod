@@ -9,8 +9,8 @@ Module Openb3d.Openb3dlib
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2017 Mark Mcvittie"
-ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie"
+ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
 ModuleInfo "History: 1.12 Release - update on Mar 2016"
 ModuleInfo "History: 1.1 Release - update on Sep 2015"
@@ -18,22 +18,23 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW"
-'ModuleInfo "CC_OPTS: -DOPENB3D_BMX" ' was for Strip (now replaced by ResourceFilePath)
-
-ModuleInfo "CC_OPTS: -std=c++11"
+ModuleInfo "CC_OPTS: -std=c++11" ' enforce C++11 standard (need on modern compilers)
 ?debug
-ModuleInfo "CC_OPTS: -DBLITZMAX_DEBUG" ' Spinduluz
-?
+ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' true if in debug mode (by Spinduluz)
 ?win32
-ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' needed in Windows
+'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use GLee
+ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' true if building static .a otherwise .dll (in Windows only)
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
 ?macos
+'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glee
+
 Import Pub.Glew
 Import Pub.OpenGL
 ?linux
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glew
+
 Import Pub.Glew
 Import Pub.OpenGL
 ?opengles

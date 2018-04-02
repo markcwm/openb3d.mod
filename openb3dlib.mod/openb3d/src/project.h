@@ -21,12 +21,19 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#include "glew.h"
-
-/*
+//#include "glew.h"
 //#import <OpenGLES/ES1/gl.h>
+//#include <GL/gl.h>
+
+#ifdef __linux__ // operating system type using compiler predefined macros
 #include <GL/gl.h>
-*/
+#endif
+#ifdef _WIN32
+#include <GL\gl.h>
+#endif
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#endif
 
 #ifdef PC_HEADER
 #include "all.h"

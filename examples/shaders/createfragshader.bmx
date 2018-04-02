@@ -1,4 +1,4 @@
-' greyscale2.bmx
+' createfragshader.bmx
 ' using advanced shader functions with shader files
 
 Strict

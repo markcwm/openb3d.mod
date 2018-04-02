@@ -1,4 +1,4 @@
-' createshader2.bmx
+' createfragshaderstring.bmx
 ' using advanced shader functions with shader strings
 
 Strict
@@ -24,14 +24,14 @@ Local cube:TMesh=CreateCube()
 PositionEntity cube,0,0,3
 
 Local shader:TShader=CreateShaderMaterial("")
-Local fragshader:TShaderObject=CreateFragShaderFromString(shader,frag)
-Local vertshader:TShaderObject=CreateVertShaderFromString(shader,vert)
+Local fragshader:TShaderObject=CreateFragShaderString(shader,frag)
+Local vertshader:TShaderObject=CreateVertShaderString(shader,vert)
 AttachFragShader(shader,fragshader)
 AttachVertShader(shader,vertshader)
 
 Local shader2:TShader=CreateShaderMaterial("")
-Local fragshader2:TShaderObject=CreateFragShaderFromString(shader2,FragFunc())
-Local vertshader2:TShaderObject=CreateVertShaderFromString(shader2,VertFunc())
+Local fragshader2:TShaderObject=CreateFragShaderString(shader2,FragFunc())
+Local vertshader2:TShaderObject=CreateVertShaderString(shader2,VertFunc())
 AttachFragShader(shader2,fragshader)
 AttachVertShader(shader2,vertshader2)
 

@@ -1,22 +1,6 @@
 #include <stdlib.h> 
 
-#include "glew.h"
-
-/*
-#ifdef linux
-#define GL_GLEXT_PROTOTYPES
-#include <GL/gl.h>
-#include <GL/glext.h>
-#endif
-
-#ifdef WIN32
-#include <gl\GLee.h>
-#endif
-
-#ifdef __APPLE__
-#include "GLee.h"
-#endif
-*/
+#include "glew_glee.h" // glee or glew
 
 #include "camera.h"
 #include "particle.h"

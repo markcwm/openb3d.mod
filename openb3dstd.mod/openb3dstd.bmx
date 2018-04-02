@@ -10,8 +10,8 @@ Module Openb3d.Openb3dstd
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2017 Mark Mcvittie"
-ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie"
+ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
 ' *** Types
 

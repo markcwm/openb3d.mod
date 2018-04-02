@@ -131,8 +131,8 @@ End Function
 Rem
 bbdoc: Returns a new frag shader object from string
 End Rem
-Function CreateFragShaderFromString:TShaderObject( shader:TShader,shadercode:String )
-	Return TShaderObject.CreateFragShaderFromString( shader,shadercode )
+Function CreateFragShaderString:TShaderObject( shader:TShader,shadercode:String )
+	Return TShaderObject.CreateFragShaderString( shader,shadercode )
 End Function
 
 Rem
@@ -145,8 +145,8 @@ End Function
 Rem
 bbdoc: Returns a new vert shader object from string
 End Rem
-Function CreateVertShaderFromString:TShaderObject( shader:TShader,shadercode:String )
-	Return TShaderObject.CreateVertShaderFromString( shader,shadercode )
+Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String )
+	Return TShaderObject.CreateVertShaderString( shader,shadercode )
 End Function
 
 Rem

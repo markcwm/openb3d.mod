@@ -66,7 +66,7 @@ Type TShaderObject
 		
 	End Function
 	
-	Function CreateFragShaderFromString:TShaderObject( shader:TShader,shadercode:String )
+	Function CreateFragShaderString:TShaderObject( shader:TShader,shadercode:String )
 	
 		Local cString:Byte Ptr=shadercode.ToCString()
 		Local inst:Byte Ptr=CreateFragShaderFromString_( TShader.GetInstance(shader),cString )
@@ -86,7 +86,7 @@ Type TShaderObject
 		
 	End Function
 	
-	Function CreateVertShaderFromString:TShaderObject( shader:TShader,shadercode:String )
+	Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String )
 	
 		Local cString:Byte Ptr=shadercode.ToCString()
 		Local inst:Byte Ptr=CreateVertShaderFromString_( TShader.GetInstance(shader),cString )

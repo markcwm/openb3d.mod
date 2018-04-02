@@ -9,8 +9,8 @@ Module Openb3d.B3dglgraphics
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2017 Mark Mcvittie, Bruce A Henderson"
-ModuleInfo "Copyright: Library - 2010-2017 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
+ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
 Import Openb3d.Openb3d
 Import Brl.BmpLoader		' imports Brl.Pixmap, Brl.EndianStream
