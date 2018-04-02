@@ -301,7 +301,7 @@ Type TMesh Extends TEntity
 	
 	' Extra
 	
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
 	
 		Local ent:TMesh=LoadAnimMesh(file)
 		ent.HideEntity()
@@ -323,7 +323,7 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+	Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
 	
 		If ExtractExt(file)="b3d"
 			Return TB3D.LoadAnimB3D( file,parent )
@@ -462,7 +462,7 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadMeshLib:TMesh( file:String,parent:TEntity=Null )
+	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
@@ -472,7 +472,7 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Function LoadAnimMeshLib:TMesh( file:String,parent:TEntity=Null )
+	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )

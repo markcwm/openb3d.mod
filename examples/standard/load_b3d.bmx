@@ -24,26 +24,26 @@ Select loader
 
 	Case 1 ' load zombie mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/zombie.b3d")
+		mesh=LoadAnimMeshStream("../media/zombie.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/Bird.b3d")
+		mesh=LoadAnimMeshStream("../media/Bird.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/castle1.b3d")
+		mesh=LoadAnimMeshStream("../media/castle1.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/zombie.b3d"
-		mesh=LoadAnimMesh(file)
+		mesh=LoadAnimMeshStream(file)
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
@@ -51,13 +51,13 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/zombie.zip"
 		Local file:String = "zip::"+zipfile+"//zombie.b3d"
-		mesh=LoadAnimMesh(file)
+		mesh=LoadAnimMeshStream(file)
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshLib("../media/zombie.b3d")
+		mesh=LoadAnimMesh("../media/zombie.b3d")
 		
 		debug="lib time="+(MilliSecs()-oldtime)
 EndSelect

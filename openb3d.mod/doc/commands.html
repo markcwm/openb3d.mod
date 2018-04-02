@@ -224,8 +224,8 @@ Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 <tr><td class=docleft width=1%><a href=#LoadAlphaTexture>LoadAlphaTexture</a></td><td class=docright>
 Load texture and set alpha with alphamask - if set to zero then alpha is not changed.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadAnimMeshLib>LoadAnimMeshLib</a></td><td class=docright>
-Loads a B3D or 3DS file and returns a new TMesh.
+<tr><td class=docleft width=1%><a href=#LoadAnimMeshStream>LoadAnimMeshStream</a></td><td class=docright>
+Loads a B3D or 3DS file and returns a New TMesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
@@ -233,7 +233,7 @@ Load geodesic sphere terrain from heightmap image.
 <tr><td class=docleft width=1%><a href=#LoadMaterial>LoadMaterial</a></td><td class=docright>
 Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadMeshLib>LoadMeshLib</a></td><td class=docright>
+<tr><td class=docleft width=1%><a href=#LoadMeshStream>LoadMeshStream</a></td><td class=docright>
 Loads a B3D, MD2 or 3DS file and returns a new TMesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
@@ -884,9 +884,9 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Selects color channel to use as alpha by bit masking, default is zero eg. for green use hex $FF00.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadAnimMeshLib>
-<tr><td class=doctop colspan=2>Function LoadAnimMeshLib:TMesh( file:String,parent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D or 3DS file and returns a new TMesh.</td></tr>
+<table class=doc width=100% cellspacing=3 id=LoadAnimMeshStream>
+<tr><td class=doctop colspan=2>Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D or 3DS file and returns a New TMesh.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function, the returned mesh will have children and animations.</td></tr>
 </table>
 <br>
@@ -902,8 +902,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 first frame is the index of the slice and frame count is how many slices.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadMeshLib>
-<tr><td class=doctop colspan=2>Function LoadMeshLib:TMesh( file:String,parent:TEntity=Null )</td></tr>
+<table class=doc width=100% cellspacing=3 id=LoadMeshStream>
+<tr><td class=doctop colspan=2>Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D, MD2 or 3DS file and returns a new TMesh.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function, the returned mesh is collapsed so has no children.</td></tr>
 </table>

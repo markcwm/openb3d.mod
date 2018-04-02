@@ -24,13 +24,13 @@ Select loader
 
 	Case 1 ' load rallycar1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/rallycar1.3ds")
+		mesh=LoadAnimMeshStream("../media/rallycar1.3ds")
 		
 		debug="3ds time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load mak_robotic mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/mak_robotic.3ds")
+		mesh=LoadAnimMeshStream("../media/mak_robotic.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,0)
 		mesh.ScaleAnimMesh(0.5,0.5,0.5)
@@ -39,7 +39,7 @@ Select loader
 		
 	Case 3 ' load phineas4 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMesh("../media/phineas4.3ds")
+		mesh=LoadAnimMeshStream("../media/phineas4.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,-45)
 		mesh.PositionAnimMesh(0,10,0)
@@ -49,7 +49,7 @@ Select loader
 	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/rallycar1.3ds"
-		mesh=LoadAnimMesh(file)
+		mesh=LoadAnimMeshStream(file)
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
@@ -57,13 +57,13 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/rallycar.zip"
 		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
-		mesh=LoadAnimMesh(file)
+		mesh=LoadAnimMeshStream(file)
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
 		oldtime=MilliSecs()
-		mesh=LoadMeshLib("../media/rallycar1.3ds")
+		mesh=LoadMesh("../media/rallycar1.3ds")
 		
 		mesh.RotateMesh(-90,0,0)
 		mesh.ScaleMesh(0.05, 0.05, 0.05)

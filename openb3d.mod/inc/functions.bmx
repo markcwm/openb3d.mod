@@ -1130,19 +1130,19 @@ Function LinePick:TEntity( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,ra
 	Return TPick.LinePick( x,y,z,dx,dy,dz,radius )
 End Function
 
+Rem
+bbdoc: Loads a B3D or 3DS file and returns a New TMesh
+about: Uses the library function, the returned mesh will have children and animations.
+End Rem
+Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadAnimMeshStream( file,parent )
+End Function
+
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 'End Rem
 Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadAnimMesh( file,parent )
-End Function
-
-Rem
-bbdoc: Loads a B3D or 3DS file and returns a new TMesh
-about: Uses the library function, the returned mesh will have children and animations.
-End Rem
-Function LoadAnimMeshLib:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadAnimMeshLib( file,parent )
 End Function
 
 'Rem
@@ -1159,19 +1159,19 @@ Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float
 	Return TBrush.LoadBrush( file,flags,u_scale,v_scale )
 End Function
 
+Rem
+bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
+about: Uses the library function, the returned mesh is collapsed so has no children.
+End Rem
+Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMeshStream( file,parent )
+End Function
+
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 'End Rem
 Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	Return TMesh.LoadMesh( file,parent )
-End Function
-
-Rem
-bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
-about: Uses the library function, the returned mesh is collapsed so has no children.
-End Rem
-Function LoadMeshLib:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMeshLib( file,parent )
 End Function
 
 'Rem
