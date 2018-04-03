@@ -60,9 +60,9 @@ Import "openb3d/src/functions.cpp"
 Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
 ?win32
-Import "openb3d/src/GLee.c" ' 5.4
+Import "openb3d/src/GLee.cpp" ' 5.4
 ?macos
-Import "openb3d/src/GLee.c" ' 5.4
+Import "openb3d/src/GLee.cpp" ' 5.4
 ?
 Import "methods.cpp" ' thse must be imported in source.bmx on Mac
 Import "data.cpp"
