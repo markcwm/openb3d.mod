@@ -107,13 +107,13 @@ Type TBrush
 		
 	End Method
 	
+	' Extra
+	
 	Method BrushName:String()
 	
 		Return String.FromCString( BrushString_( GetInstance(Self),BRUSH_name ) )
 		
 	End Method
-	
-	' Extra
 	
 	Method NameBrush( b_name:String )
 	

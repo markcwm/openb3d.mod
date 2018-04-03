@@ -3,6 +3,54 @@
 ' *** Extra
 
 Rem
+bbdoc: Loads a B3D or 3DS file and returns a New TMesh
+about: Uses the library function, the returned mesh will have children and animations.
+End Rem
+Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadAnimMeshStream( file,parent )
+End Function
+
+Rem
+bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
+about: Uses the library function, the returned mesh is collapsed so has no children.
+End Rem
+Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
+	Return TMesh.LoadMeshStream( file,parent )
+End Function
+
+Rem
+bbdoc: Loads an image and returns a new TTexture
+End Rem
+Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	Return TTexture.LoadTextureStream( file,flags,tex )
+End Function
+
+Rem
+bbdoc: Sets an entity's class name
+End Rem
+Function NameClass( ent:TEntity,c_name:String )	
+	Local cString:Byte Ptr=c_name.ToCString()
+	NameClass_( TEntity.GetInstance(ent),cString )
+	MemFree cString
+End Function
+
+Rem
+bbdoc: Gets a brush's name
+End Rem
+Function BrushName:String( brush:TBrush )
+	Return String.FromCString( BrushString_( TBrush.GetInstance(brush),BRUSH_name ) )
+End Function
+
+Rem
+bbdoc: Sets a brush's name
+End Rem
+Function NameBrush( brush:TBrush,b_name:String )
+	Local cString:Byte Ptr=b_name.ToCString()
+	NameBrush_( TBrush.GetInstance(brush),cString )
+	MemFree cString
+End Function
+
+Rem
 bbdoc: Set texture multitex factor, used in interpolate and custom TexBlend options
 End Rem
 Function TextureMultitex( tex:TTexture,f:Float )
@@ -1130,14 +1178,6 @@ Function LinePick:TEntity( x:Float,y:Float,z:Float,dx:Float,dy:Float,dz:Float,ra
 	Return TPick.LinePick( x,y,z,dx,dy,dz,radius )
 End Function
 
-Rem
-bbdoc: Loads a B3D or 3DS file and returns a New TMesh
-about: Uses the library function, the returned mesh will have children and animations.
-End Rem
-Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadAnimMeshStream( file,parent )
-End Function
-
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 'End Rem
@@ -1159,14 +1199,6 @@ Function LoadBrush:TBrush( file:String,flags:Int=9,u_scale:Float=1,v_scale:Float
 	Return TBrush.LoadBrush( file,flags,u_scale,v_scale )
 End Function
 
-Rem
-bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
-about: Uses the library function, the returned mesh is collapsed so has no children.
-End Rem
-Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMeshStream( file,parent )
-End Function
-
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 'End Rem
@@ -1179,14 +1211,6 @@ End Function
 'End Rem
 Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	Return TTexture.LoadTexture( file,flags,tex )
-End Function
-
-Rem
-bbdoc: Loads an STB image and returns a new TTexture
-about: Uses the library function
-End Rem
-Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	Return TTexture.LoadTextureLib( file,flags,tex )
 End Function
 
 'Rem
