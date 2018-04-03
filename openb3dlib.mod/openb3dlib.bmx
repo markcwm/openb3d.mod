@@ -18,12 +18,12 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-'ModuleInfo "CC_OPTS: -std=c++11" ' if we enforce C++11 standard then won't build on older compilers
+'ModuleInfo "CC_OPTS: -std=c++11" ' don't use, if we enforce C++11 standard it won't build on older compilers
 ?debug
-ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' true if in debug mode (by Spinduluz)
+ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' C++ debug mode (by Spinduluz)
 ?win32
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' GLee or Glew in Win
-ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' true if building static .a otherwise .dll (in Windows only)
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew or GLee in Win, comment to use GLee
+ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
@@ -33,7 +33,7 @@ Import Pub.OpenGL ' order is important, glew before OpenGL
 Import Pub.Glew
 Import Pub.OpenGL
 ?linux
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in linux
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in Linux
 
 Import Pub.Glew
 Import Pub.OpenGL

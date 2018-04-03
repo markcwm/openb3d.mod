@@ -11,11 +11,9 @@ class OcTreeChild{
 public:
 	OcTreeChild* child[8];
 	int isBlock;
-	float x,y,z, width, height, depth;
-	float near,far;
-
+	float x, y, z, width, height, depth;
+	float node_near, node_far;
 	Mesh* mesh;
-
 
 
 	void AddToOctree(Mesh* mesh1, int level, float X, float Y, float Z, float Near, float Far, int block);

@@ -51,16 +51,16 @@ void OcTreeChild::AddToOctree(Mesh* mesh1, int level, float X, float Y, float Z,
 			}
 			mesh->Alpha();
 		}
-		/*mesh->GetBounds();
-		if ((mesh->max_x>width	|| mesh->min_x<-width)	||
-		    (mesh->max_y>height	|| mesh->min_y<-height)	||
-		    (mesh->max_z>depth	|| mesh->min_z<-depth))	{
-			mesh->FitMesh(-width, -height, -depth, width*2, height*2, depth*2,1);
-		}*/
+		mesh->GetBounds();
+		//if ((mesh->max_x>width	|| mesh->min_x<-width)	||
+		//    (mesh->max_y>height	|| mesh->min_y<-height)	||
+		//    (mesh->max_z>depth	|| mesh->min_z<-depth))	{
+		//	mesh->FitMesh(-width, -height, -depth, width*2, height*2, depth*2,1);
+		//}
 
 
-		near=Near*Near;
-		far=Far*Far;
+		node_near=Near*Near;
+		node_far=Far*Far;
 
 		isBlock=block;
 
@@ -77,7 +77,7 @@ void OcTreeChild::AddToOctree(Mesh* mesh1, int level, float X, float Y, float Z,
 			child[i]->depth=depth/2;
 			child[i]->child[0]=0;
 			child[i]->mesh=0;
-			child[i]->far=1000000;
+			child[i]->node_far=1000000;
 
 
 			switch(i){
@@ -145,8 +145,8 @@ OcTreeChild* OcTreeChild::CopyChild(){
 	newchild->y=y;
 	newchild->z=z;
 
-	newchild->near=near;
-	newchild->far=far;
+	newchild->node_near=node_near;
+	newchild->node_far=node_far;
 
 	newchild->isBlock=isBlock;
 	if (isBlock!=0) 
@@ -179,17 +179,17 @@ void OcTreeChild::FreeChild(){
 
 	}
 
-	/*if (isBlock==0 && mesh!=0){
+	//if (isBlock==0 && mesh!=0){
 		//mesh->EntityParent(Global::root_ent);
 		//mesh->FreeEntity();
-	}*/
+	//}
 
 	delete this;
 
 }
 
-/*void OcTreeChild::FreeOctreeNode(int level, float X, float Y, float Z){
-}*/
+//void OcTreeChild::FreeOctreeNode(int level, float X, float Y, float Z){
+//}
 
 void OcTree::OctreeMesh(Mesh* mesh, int level, float X, float Y, float Z, float Near, float Far){
 	mesh->EntityParent(this);
@@ -226,7 +226,7 @@ OcTree* OcTree::CreateOcTree(float w, float h, float d, Entity* parent_ent){
 
 	oct->child.child[0]=0;
 	oct->child.mesh=0;
-	oct->child.far=1000000;
+	oct->child.node_far=1000000;
 
 	//oct->Rotation=&oct->rotmat;
 
@@ -294,19 +294,18 @@ void OcTreeChild::RenderChild(){
 
 	float rd=radius*width;
 
-	/*if(width>=height && width>=depth){
-		rd=width*radius;
-	}else{
-		if(height>=width && height>=depth){
-			rd=height*radius;
-		}else{
-			rd=depth*radius;
-		}
-	}
+	//if(width>=height && width>=depth){
+		//rd=width*radius;
+	//}else{
+		//if(height>=width && height>=depth){
+			//rd=height*radius;
+		//}else{
+			//rd=depth*radius;
+		//}
+	//}
 
-	float crs=rd*rd;
-	rd=sqrt(crs+crs+crs);
-	*/
+	//float crs=rd*rd;
+	//rd=sqrt(crs+crs+crs);
 
 	Mat->TransformVec(vcx, vcy, vcz, 1);
 
@@ -320,7 +319,7 @@ void OcTreeChild::RenderChild(){
 	float dx,dy,dz;	
 	float rc;	
 
-	/* compute distance from node To camera (squared) */
+	// compute distance from node To camera (squared)
 	dx = x - Xcf;
 	dy = y - Ycf;
 	dz = -z - Zcf;
@@ -329,15 +328,15 @@ void OcTreeChild::RenderChild(){
 
 
 
-	if (rc>near && mesh!=0){
+	if (rc>node_near && mesh!=0){
 		Matrix mat2;
 		mat2.LoadIdentity();
 
 
 		if (isBlock==0){
-			/*mat2.SetTranslate(x+mesh->px, y+mesh->py, -z-mesh->pz);
-			mat2.Multiply2(*Mat);
-			mesh->mat=mat2;*/
+			//mat2.SetTranslate(x+mesh->px, y+mesh->py, -z-mesh->pz);
+			//mat2.Multiply2(*Mat);
+			//mesh->mat=mat2;
 			if(mesh->Alpha()){
 				mesh->alpha_order=EyePoint->EntityDistanceSquared(mesh);
 			}
@@ -375,7 +374,7 @@ void OcTreeChild::RenderChild(){
 		}
 
 	}
-	if (child[0]!=0 && rc<far){
+	if (child[0]!=0 && rc<node_far){
 	
 		for(int i=0;i<=7;i++){
 			//child[i]->mat=mat;
@@ -459,20 +458,20 @@ void OcTreeChild::Coll_Child(){
 	float vcz=z;
 
 	float rd=radius*width;
-	/*float rd;
+	//float rd;
 
-	if(width>=height && width>=depth){
-		rd=width;
-	}else{
-		if(height>=width && height>=depth){
-			rd=height;
-		}else{
-			rd=depth;
-		}
-	}
+	//if(width>=height && width>=depth){
+		//rd=width;
+	//}else{
+		//if(height>=width && height>=depth){
+			//rd=height;
+		//}else{
+			//rd=depth;
+		//}
+	//}
 
-	float crs=rd*rd;
-	rd=sqrt(crs+crs+crs)*radius;*/
+	//float crs=rd*rd;
+	//rd=sqrt(crs+crs+crs)*radius;
 
 	Mat->TransformVec(vcx, vcy, vcz, 1);
 
@@ -499,20 +498,20 @@ void OcTreeChild::Coll_Child(){
 
 
 
-	if (mesh!=0 && near <.0000001){
-		/*Matrix mat2;
-		mat2.LoadIdentity();
-		mat2.SetTranslate(x, y, -z);
+	if (mesh!=0 && node_near<0.0000001){
+		//Matrix mat2;
+		//mat2.LoadIdentity();
+		//mat2.SetTranslate(x, y, -z);
 
-		mat2.Multiply2(*Mat);
+		//mat2.Multiply2(*Mat);
 
-		mesh->mat=mat2;*/
+		//mesh->mat=mat2;
 
 
 
-		/*for(int s=1;s<=mesh->CountSurfaces();s++){
+		//for(int s=1;s<=mesh->CountSurfaces();s++){
 
-			Surface* surf=mesh->GetSurface(s);*/
+			//Surface* surf=mesh->GetSurface(s);
 		if (isBlock==1){
 			list<Surface*>::iterator surf_it;
 
@@ -556,9 +555,9 @@ void OcTreeChild::Coll_Child(){
 					}
 
 					// negate z vert coords
-					/*for(int i=0;i<=no_verts-1;i++){
-						verts[i*3+2]=-verts[i*3+2];
-					}*/
+					//for(int i=0;i<=no_verts-1;i++){
+						//verts[i*3+2]=-verts[i*3+2];
+					//}
 
 					C_AddSurface(Mesh_info,no_tris,no_verts,tris,verts,0);
 
@@ -716,8 +715,8 @@ OcTree* OcTree::CopyEntity(Entity* parent_ent){
 		{oct->child.mesh=child.mesh;}
 	else
 		{oct->child.mesh=0;}
-	oct->child.far=child.far;
-	oct->child.near=child.near;
+	oct->child.node_far=child.node_far;
+	oct->child.node_near=child.node_near;
 	oct->child.isBlock=child.isBlock;
 
 	if (child.child[0]!=0){
