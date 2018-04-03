@@ -231,7 +231,7 @@ Type TB3D
 						' created above (supplied as param below) will be returned
 						Local tex_name$=filepath+"/"+StripDir(te_file)
 						If LOG_CHUNKS Then DebugLog tab+new_tag+" tex_name="+tex_name
-						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
+						tex[tex_no]=LoadTextureStream(tex_name,te_flags,tex[tex_no])
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
 						

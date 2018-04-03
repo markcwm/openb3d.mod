@@ -160,6 +160,15 @@ Type TShadowObject
 		
 	End Function
 	
+	' Extra
+	
+	' reset flag to update static shadow
+	Method ResetShadow()
+	
+		VCreated[0]=0
+		
+	End Method
+	
 	' Openb3d
 	
 	Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )
@@ -249,12 +258,5 @@ Type TShadowObject
 		ShadowRenderWorldZFail_()
 		
 	End Function
-	
-	' reset flag to update static shadow
-	Method ResetShadow()
-	
-		VCreated[0]=0
-		
-	End Method
 	
 End Type

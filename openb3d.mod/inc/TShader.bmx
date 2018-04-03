@@ -54,7 +54,7 @@ Type TShaderObject
 		
 	End Function
 	
-	' Openb3d
+	' Extra
 	
 	Function CreateFragShader:TShaderObject( shader:TShader,shaderFileName:String )
 	
@@ -217,6 +217,18 @@ Type TShader
 	Method InitFields() ' Once per CreateObject
 	
 		exists=1
+		
+	End Method
+	
+	' Extra
+	
+	Method FreeShader() ' Spinduluz
+	
+		If exists
+			FreeShader_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
+			exists=0
+		EndIf
 		
 	End Method
 	
@@ -444,16 +456,6 @@ Type TShader
 	Method AmbientShader()
 	
 		AmbientShader_( GetInstance(Self) )
-		
-	End Method
-	
-	Method FreeShader() ' Spinduluz
-	
-		If exists
-			FreeShader_( GetInstance(Self) )
-			FreeObject( GetInstance(Self) )
-			exists=0
-		EndIf
 		
 	End Method
 	

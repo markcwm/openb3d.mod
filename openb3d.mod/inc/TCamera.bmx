@@ -126,6 +126,24 @@ Type TCamera Extends TEntity
 		
 	End Function
 	
+	' Extra
+	
+	' fog with Max2d fix - needed on Linux
+	Method UpdateFog()
+	
+		If TGlobal.fog_enabled[0]=1
+			glEnable(GL_FOG)
+			glFogf(GL_FOG_MODE,GL_LINEAR)
+			glFogf(GL_FOG_START,fog_range_near[0])
+			glFogf(GL_FOG_END,fog_range_far[0])
+			Local rgb#[]=[fog_r[0],fog_g[0],fog_b[0]]
+			glFogfv(GL_FOG_COLOR,rgb)
+		Else
+			glDisable(GL_FOG)
+		EndIf
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()
@@ -341,22 +359,6 @@ Type TCamera Extends TEntity
 		CameraUpdateEntityRender_( TEntity.GetInstance(ent),GetInstance(cam) )
 		
 	End Function
-	
-	' fog with Max2d fix - needed on Linux
-	Method UpdateFog()
-	
-		If TGlobal.fog_enabled[0]=1
-			glEnable(GL_FOG)
-			glFogf(GL_FOG_MODE,GL_LINEAR)
-			glFogf(GL_FOG_START,fog_range_near[0])
-			glFogf(GL_FOG_END,fog_range_far[0])
-			Local rgb#[]=[fog_r[0],fog_g[0],fog_b[0]]
-			glFogfv(GL_FOG_COLOR,rgb)
-		Else
-			glDisable(GL_FOG)
-		EndIf
-		
-	End Method
 	
 	Rem
 	Method SphereInFrustum:Float(x#,y#,z#,radius#)

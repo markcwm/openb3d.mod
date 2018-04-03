@@ -239,8 +239,8 @@ Loads a B3D, MD2 or 3DS file and returns a new TMesh.
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadTextureLib>LoadTextureLib</a></td><td class=docright>
-Loads an STB image and returns a new TTexture.
+<tr><td class=docleft width=1%><a href=#LoadTextureStream>LoadTextureStream</a></td><td class=docright>
+Loads an image and returns a new TTexture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -250,6 +250,9 @@ Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cul
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NameBrush>NameBrush</a></td><td class=docright>
+Sets a brush's name.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewAnimationKeys>NewAnimationKeys</a></td><td class=docright>
 Returns a new TAnimationKeys object.
@@ -515,6 +518,14 @@ Texture.
 Voxelsprite mesh entity.
 </td></tr>
 </table>
+<h2
+>Methods
+</h2>
+<table class=doc width=100% cellspacing=3 id=NameClass>
+<tr><td class=doctop colspan=2>Method NameClass( ent:TEntity,c_name:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets an entity's class name.</td></tr>
+</table>
+<br>
 <h2
  id=functionsdet>Functions
 </h2>
@@ -913,10 +924,9 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from two files, vertex and fragment.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadTextureLib>
-<tr><td class=doctop colspan=2>Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads an STB image and returns a new TTexture.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function.</td></tr>
+<table class=doc width=100% cellspacing=3 id=LoadTextureStream>
+<tr><td class=doctop colspan=2>Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads an image and returns a new TTexture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
@@ -936,6 +946,11 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
 <tr><td class=doctop colspan=2>Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set height of a given point, like ModifyTerrain.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NameBrush>
+<tr><td class=doctop colspan=2>Function NameBrush( brush:TBrush,b_name:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets a brush's name.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewAnimationKeys>

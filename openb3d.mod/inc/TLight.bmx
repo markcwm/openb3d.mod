@@ -110,6 +110,44 @@ Type TLight Extends TEntity
 		
 	End Function
 	
+	' Extra
+	
+	' at init, call after a RenderWorld
+	Function GetLightValues()
+		
+		For Local i%=0 To no_lights[0]-1
+			glGetLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0]))
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' if light_type>1
+			glGetLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' if light_type>1
+			glGetLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' if light_type>1
+		Next
+		
+	End Function
+	
+	' in main loop, call before RenderWorld
+	Function SetLightValues()
+	
+		For Local i%=0 To no_lights[0]-1
+			glLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0])) ' not set
+			glLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0])) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0])) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0])) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' not set
+		Next
+	
+	End Function
+	
 	' Minib3d
 	
 	Method New()
@@ -179,41 +217,5 @@ Type TLight Extends TEntity
 		LightUpdate_( GetInstance(Self) )
 		
 	End Method
-	
-	' at init, call after a RenderWorld
-	Function GetLightValues()
-		
-		For Local i%=0 To no_lights[0]-1
-			glGetLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' if light_type>1
-			glGetLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' if light_type>1
-			glGetLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' if light_type>1
-		Next
-		
-	End Function
-	
-	' in main loop, call before RenderWorld
-	Function SetLightValues()
-	
-		For Local i%=0 To no_lights[0]-1
-			glLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0])) ' not set
-			glLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' not set
-		Next
-	
-	End Function
 	
 End Type

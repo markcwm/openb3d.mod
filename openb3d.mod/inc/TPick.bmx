@@ -4,7 +4,7 @@ bbdoc: Pick
 EndRem
 Type TPick
 
-	Const EPSILON:Float=0.0001
+	'Const EPSILON:Float=0.0001 'not used
 	
 	Global ent_list:TList=CreateList() ' Entity list containing pickable entities - set in EntityPickMode
 	

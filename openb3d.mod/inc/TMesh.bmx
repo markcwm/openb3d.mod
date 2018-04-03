@@ -185,6 +185,43 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+	' Extra
+	
+	Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
+	
+		Local ent:TMesh=LoadAnimMesh(file)
+		ent.HideEntity()
+		Local mesh:TMesh=ent.CollapseAnimMesh()
+		ent.FreeEntity()
+		
+		mesh.NameClass("Mesh")
+		mesh.AddParent(parent)
+		mesh.EntityListAdd(entity_list)
+		
+		' update matrix
+		If mesh.parent<>Null
+			mesh.mat.Overwrite(mesh.parent.mat)
+			mesh.UpdateMat()
+		Else
+			mesh.UpdateMat(True)
+		EndIf
+		Return mesh
+		
+	End Function
+	
+	Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
+	
+		If ExtractExt(file)="b3d"
+			Return TB3D.LoadAnimB3D( file,parent )
+		ElseIf ExtractExt(file)="md2"
+			' todo
+		ElseIf ExtractExt(file)="3ds"
+			Local loader:T3DS = New T3DS ' hierarchy animation todo
+			Return loader.LoadMesh3DS( file,parent )
+		EndIf
+		
+	End Function
+	
 	Method CreateAllChildren()
 	
 		Local child_ent:TEntity=Null ' this will store child entity of anim mesh
@@ -197,31 +234,6 @@ Type TMesh Extends TEntity
 			child_ent=GetObject(inst)
 			If child_ent=Null And inst<>Null Then child_ent=CreateObject(inst)
 		Next
-		
-	End Method
-	
-	' Openb3d
-	
-	Method CreateBone:TBone( parent_ent:TEntity=Null ) ' same as function in TBone
-	
-		Local inst:Byte Ptr=CreateBone_( GetInstance(Self),GetInstance(parent_ent) )
-		CopyList(bones)
-		If is_anim=0
-			is_anim=1
-			CopyList(anim_surf_list)
-			For Local surf:TSurface=EachIn anim_surf_list
-				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
-				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
-				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
-				surf.vert_bone3_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone3_no )
-				surf.vert_bone4_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone4_no )
-				surf.vert_weight1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight1 )
-				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
-				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
-				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
-			Next
-		EndIf
-		Return TBone.CreateObject(inst)
 		
 	End Method
 	
@@ -264,6 +276,31 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
+	' Openb3d
+	
+	Method CreateBone:TBone( parent_ent:TEntity=Null ) ' same as function in TBone
+	
+		Local inst:Byte Ptr=CreateBone_( GetInstance(Self),GetInstance(parent_ent) )
+		CopyList(bones)
+		If is_anim=0
+			is_anim=1
+			CopyList(anim_surf_list)
+			For Local surf:TSurface=EachIn anim_surf_list
+				surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
+				surf.vert_bone1_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone1_no )
+				surf.vert_bone2_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone2_no )
+				surf.vert_bone3_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone3_no )
+				surf.vert_bone4_no=SurfaceInt_( TSurface.GetInstance(surf),SURFACE_vert_bone4_no )
+				surf.vert_weight1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight1 )
+				surf.vert_weight2=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight2 )
+				surf.vert_weight3=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight3 )
+				surf.vert_weight4=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_weight4 )
+			Next
+		EndIf
+		Return TBone.CreateObject(inst)
+		
+	End Method
+	
 	Function CreateQuad:TMesh( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CreateQuad_( GetInstance(parent) )
@@ -298,43 +335,6 @@ Type TMesh Extends TEntity
 		SkinMesh_( GetInstance(Self),surf_no_get,vid,bone1,weight1,bone2,weight2,bone3,weight3,bone4,weight4 )
 		
 	End Method
-	
-	' Extra
-	
-	Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
-	
-		Local ent:TMesh=LoadAnimMesh(file)
-		ent.HideEntity()
-		Local mesh:TMesh=ent.CollapseAnimMesh()
-		ent.FreeEntity()
-		
-		mesh.NameClass("Mesh")
-		mesh.AddParent(parent)
-		mesh.EntityListAdd(entity_list)
-		
-		' update matrix
-		If mesh.parent<>Null
-			mesh.mat.Overwrite(mesh.parent.mat)
-			mesh.UpdateMat()
-		Else
-			mesh.UpdateMat(True)
-		EndIf
-		Return mesh
-		
-	End Function
-	
-	Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
-	
-		If ExtractExt(file)="b3d"
-			Return TB3D.LoadAnimB3D( file,parent )
-		ElseIf ExtractExt(file)="md2"
-			' todo
-		ElseIf ExtractExt(file)="3ds"
-			Local loader:T3DS = New T3DS ' hierarchy animation todo
-			Return loader.LoadMesh3DS( file,parent )
-		EndIf
-		
-	End Function
 	
 	' Warner
 	

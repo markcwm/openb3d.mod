@@ -158,6 +158,168 @@ Type TTexture
 		
 	End Function
 	
+	Function NewTexture:TTexture()
+	
+		Local inst:Byte Ptr=NewTexture_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	' Extra
+	
+	' GL 2.0 support
+	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
+	
+		TGlobal.camera_in_use=cam
+		
+		Local target:Int
+		If flags[0] & 128
+			target=GL_TEXTURE_CUBE_MAP
+		Else
+			target=GL_TEXTURE_2D
+		EndIf
+		
+		glBindTexture(target, texture[0])
+		If framebuffer=Null ' Create texture image
+			framebuffer=Int Ptr(MemAlloc(8))
+			glGenFramebuffersEXT(1, Varptr framebuffer[0])
+			glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+			If flags[0] & 128
+				For Local i:Int=0 Until 6 ' i<6
+					Select i
+						Case 0
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 1
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 2
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 3
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 4
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+						Case 5
+							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+					EndSelect
+				Next
+			Else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+			EndIf
+		EndIf
+		
+		' Attach texture to FBO
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
+		If flags[0] & 128
+			Select cube_face[0]
+				Case 0
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, texture[0], 0)
+				Case 1
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, texture[0], 0)
+				Case 2
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture[0], 0)
+				Case 3
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, texture[0], 0)
+				Case 4
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, texture[0], 0)
+				Case 5
+					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, texture[0], 0)
+			EndSelect
+		Else
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
+		EndIf
+		
+		' Depth buffer, and stencil if supported
+		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
+		If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
+		If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
+		glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+		If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+		
+		cam.Render()
+		
+		If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+		
+		'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
+		
+		' Generate mipmaps for texture, need to bind after Render
+		glBindTexture(target,texture[0])
+		glGenerateMipmapEXT(target)
+		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
+		
+	End Method
+	
+	' GL 2.0 support
+	Method DepthBufferToTexEXT( cam:TCamera=Null,frame:Int=0 )
+	
+		' Copy viewport to texture
+		glBindTexture(GL_TEXTURE_2D, texture[0])	
+		If cam=Null
+			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,TGlobal.height[0]-height[0],width[0],height[0],0)
+			glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE)
+		Else
+			TGlobal.camera_in_use=cam
+			
+			If framebuffer=Null ' Create texture image
+				framebuffer=Int Ptr(MemAlloc(8))
+				glGenFramebuffersEXT(1, Varptr framebuffer[0])
+				glGenRenderbuffersEXT(1, Varptr framebuffer[1])
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
+			'glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width[0], height[0], 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, Null)
+			EndIf
+			
+			' Attach texture to FBO
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
+			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
+			
+			' Depth buffer, and stencil if supported
+			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
+			If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
+			If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
+			glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+			If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
+			
+			cam.Render()
+			
+			If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+		
+			'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
+			
+			' Generate mipmaps for texture, need to bind after Render
+			glBindTexture(GL_TEXTURE_2D,texture[0])
+			glGenerateMipmapEXT(GL_TEXTURE_2D)
+			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
+			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
+		EndIf
+		
+	End Method
+	
+	Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
+	
+		Local map:TPixmap=LoadPixmap(file)
+		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+		If alphamask ' only if alpha mask
+			For Local iy%=0 To PixmapWidth(map)-1
+				For Local ix%=0 To PixmapHeight(map)-1
+					Local rgba%=ReadPixel(map,ix,iy)
+					Local alp%=rgba & alphamask
+					If alp & $FF000000 ' alpha
+						alp=alp Shr 24 ' convert to byte
+					ElseIf alp & $00FF0000 ' blue
+						alp=alp Shr 16
+					ElseIf alp & $0000FF00 ' green
+						alp=alp Shr 8
+					EndIf
+					alp=alp*(Float(alp)/255.0) ' hack to make darker colors less visible
+					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+				Next
+			Next
+		EndIf
+		Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+		tex.BufferToTex PixmapPixelPtr(map,0,0)
+		Return tex
+		
+	End Function
+	
 	' Openb3d
 	
 	Method BufferToTex( buffer:Byte Ptr,frame:Int=0 )
@@ -194,6 +356,33 @@ Type TTexture
 	
 	' Extra
 	
+	Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	
+		' Brl.Tgaloader is deprecated, replaced with Brl.Stbimageloader (not loading tga)
+		'If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
+		'	If ExtractExt(file)="tga" Then Return LoadTexture( file,flags,tex )
+		'EndIf
+		
+		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
+		Local map:TPixmap=Null, name%
+		map=LoadPixmap(file) ' load from streams
+		If map=Null Then Return tex
+		tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
+		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+		
+		If (flags & 2) Then map=ApplyAlpha(map)
+		If (flags & 4) Then map=ApplyMask(map,10,10,10)
+		
+		glGenTextures(1,Varptr(name))
+		glBindtexture(GL_TEXTURE_2D,name)
+		gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
+		tex.texture[0]=name
+		
+		tex.BufferToTex PixmapPixelPtr(map,0,0)
+		Return tex
+		
+	End Function
+	
 	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
 	
 		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
@@ -205,8 +394,6 @@ Type TTexture
 		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
 		
 	End Method
-	
-	' Extra
 	
 	Method TextureMultitex( f:Float )
 	
@@ -254,153 +441,14 @@ Type TTexture
 		
 	End Function
 	
-	Function NewTexture:TTexture()
-	
-		Local inst:Byte Ptr=NewTexture_()
-		Return CreateObject(inst)
-		
-	End Function
-	
-	Rem
-	Function LoadCubeMapTexture:TTexture(file$,flags%=1,tex:TTexture=Null)
-		
-		If tex=Null Then tex:TTexture=New TTexture
-		
-		If FileFind(file$)=False Then Return Null
-		
-		tex.file$=file$
-		tex.file_abs$=FileAbs$(file$)
-		
-		' set tex.flags before TexInList
-		tex.flags=flags
-		tex.FilterFlags()
-		
-		' check to see if texture with same properties exists already, if so return existing texture
-		Local old_tex:TTexture
-		old_tex=tex.TexInList()
-		If old_tex<>Null And old_tex<>tex
-			Return old_tex
-		Else
-			If old_tex<>tex
-				ListAddLast(tex_list,tex)
-			EndIf
-		EndIf
-
-		' load pixmap
-		tex.pixmap=LoadPixmap(file$)
-		
-		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
-		Local alpha_present:Int=False
-		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
-
-		' convert pixmap to appropriate format
-		If tex.pixmap.format<>PF_RGBA8888
-			tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
-		EndIf
-		
-		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If tex.flags&2 And alpha_present=False
-			tex.pixmap=ApplyAlpha(tex.pixmap)
-		EndIf		
-
-		' if mask flag is true, mask pixmap
-		If tex.flags&4
-			tex.pixmap=MaskPixmap(tex.pixmap,0,0,0)
-		EndIf
-		
-		' ---
-						
-		tex.no_frames=1'frame_count
-		'tex.gltex=tex.gltex[..tex.no_frames]
-		
-		' ---
-		
-		' pixmap -> tex
-			
-		Local name:Int
-		glGenTextures 1,Varptr name
-		glBindtexture GL_TEXTURE_CUBE_MAP,name
-	
-		Local pixmap:TPixmap
-	
-		For Local i:Int=0 To 5
-		
-			pixmap=tex.pixmap.Window((tex.pixmap.width/6)*i,0,tex.pixmap.width/6,tex.pixmap.height)
-
-			' ---
-		
-			pixmap=AdjustPixmap(pixmap)
-			tex.width=pixmap.width
-			tex.height=pixmap.height
-			Local width:Int=pixmap.width
-			Local height:Int=pixmap.height
-
-			Local mipmap:Int
-			'If tex.flags&8 Then mipmap=True ***note*** prevent mipmaps being created for cubemaps - they are not used by TMesh.Update, so we don't need to create them
-			Local mip_level:Int=0
-			Repeat
-				glPixelStorei GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format]
-				Select i
-					Case 0 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_X,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-					Case 1 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_Z,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-					Case 2 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_X,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-					Case 3 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-					Case 4 glTexImage2D GL_TEXTURE_CUBE_MAP_POSITIVE_Y,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-					Case 5 glTexImage2D GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels
-				End Select
-				If Not mipmap Then Exit
-				If width=1 And height=1 Exit
-				If width>1 width:/2
-				If height>1 height:/2
-
-				pixmap=ResizePixmap(pixmap,width,height)
-				mip_level:+1
-			Forever
-			tex.no_mipmaps=mip_level
-			
-		Next
-		
-		tex.gltex[0]=name
-	
-		Return tex
-
-	End Function
-	EndRem
-	
 	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	
-		' Brl.Tgaloader is deprecated in NG, replaced with Brl.Stbimageloader (currently doesn't load tga)
-		If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
-			If ExtractExt(file)="tga" Then Return LoadTextureLib( file,flags,tex )
-		EndIf
-		
-		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
-		Local map:TPixmap=Null, name%
-		map=LoadPixmap(file) ' load from streams
-		If map=Null Then Return tex
-		tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-		
-		If (flags & 2) Then map=ApplyAlpha(map)
-		If (flags & 4) Then map=ApplyMask(map,10,10,10)
-		
-		glGenTextures(1,Varptr(name))
-		glBindtexture(GL_TEXTURE_2D,name)
-		gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-		tex.texture[0]=name
-		
-		tex.BufferToTex PixmapPixelPtr(map,0,0)
-		Return tex
-		
-	End Function
-	
-	Function LoadTextureLib:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	
 		Local map:TPixmap=Null, name%
 		Local cString:Byte Ptr=file.ToCString()
 		Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
 		If tex=Null Then tex=CreateObject(inst)
 		MemFree cString
+		Return tex
 		
 		Rem
 		If tex=Null Then Return Null
@@ -419,9 +467,9 @@ Type TTexture
 			
 			tex.BufferToTex PixmapPixelPtr(map,0,0)
 		EndIf
+		Return tex
 		EndRem
 		
-		Return tex
 	End Function
 	
 	Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
@@ -671,159 +719,6 @@ Type TTexture
 		Next
 		
 		Return map
-	End Function
-	
-	' GL 2.0 support
-	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
-	
-		TGlobal.camera_in_use=cam
-		
-		Local target:Int
-		If flags[0] & 128
-			target=GL_TEXTURE_CUBE_MAP
-		Else
-			target=GL_TEXTURE_2D
-		EndIf
-		
-		glBindTexture(target, texture[0])
-		If framebuffer=Null ' Create texture image
-			framebuffer=Int Ptr(MemAlloc(8))
-			glGenFramebuffersEXT(1, Varptr framebuffer[0])
-			glGenRenderbuffersEXT(1, Varptr framebuffer[1])
-			If flags[0] & 128
-				For Local i:Int=0 Until 6 ' i<6
-					Select i
-						Case 0
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-						Case 1
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-						Case 2
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-						Case 3
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-						Case 4
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-						Case 5
-							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-					EndSelect
-				Next
-			Else
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-			EndIf
-		EndIf
-		
-		' Attach texture to FBO
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
-		If flags[0] & 128
-			Select cube_face[0]
-				Case 0
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_X, texture[0], 0)
-				Case 1
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Z, texture[0], 0)
-				Case 2
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_X, texture[0], 0)
-				Case 3
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, texture[0], 0)
-				Case 4
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, texture[0], 0)
-				Case 5
-					glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_CUBE_MAP_POSITIVE_Y, texture[0], 0)
-			EndSelect
-		Else
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
-		EndIf
-		
-		' Depth buffer, and stencil if supported
-		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
-		If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
-		If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
-		glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
-		If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
-		
-		cam.Render()
-		
-		If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
-		
-		'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
-		
-		' Generate mipmaps for texture, need to bind after Render
-		glBindTexture(target,texture[0])
-		glGenerateMipmapEXT(target)
-		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
-		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
-		
-	End Method
-	
-	' GL 2.0 support
-	Method DepthBufferToTexEXT( cam:TCamera=Null,frame:Int=0 )
-	
-		' Copy viewport to texture
-		glBindTexture(GL_TEXTURE_2D, texture[0])	
-		If cam=Null
-			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,TGlobal.height[0]-height[0],width[0],height[0],0)
-			glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE)
-		Else
-			TGlobal.camera_in_use=cam
-			
-			If framebuffer=Null ' Create texture image
-				framebuffer=Int Ptr(MemAlloc(8))
-				glGenFramebuffersEXT(1, Varptr framebuffer[0])
-				glGenRenderbuffersEXT(1, Varptr framebuffer[1])
-				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
-			'glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width[0], height[0], 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, Null)
-			EndIf
-			
-			' Attach texture to FBO
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, framebuffer[0])
-			glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT, GL_TEXTURE_2D, texture[0], 0)
-			
-			' Depth buffer, and stencil if supported
-			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, framebuffer[1])
-			If THardwareInfo.DepthStencil=False Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH_COMPONENT, width[0], height[0])
-			If THardwareInfo.DepthStencil=True Then glRenderbufferStorageEXT( GL_RENDERBUFFER_EXT, GL_DEPTH24_STENCIL8_EXT, width[0], height[0])
-			glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_DEPTH_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
-			If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, framebuffer[1])
-			
-			cam.Render()
-			
-			If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
-		
-			'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
-			
-			' Generate mipmaps for texture, need to bind after Render
-			glBindTexture(GL_TEXTURE_2D,texture[0])
-			glGenerateMipmapEXT(GL_TEXTURE_2D)
-			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
-			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
-		EndIf
-		
-	End Method
-	
-	Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
-	
-		Local map:TPixmap=LoadPixmap(file)
-		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-		If alphamask ' only if alpha mask
-			For Local iy%=0 To PixmapWidth(map)-1
-				For Local ix%=0 To PixmapHeight(map)-1
-					Local rgba%=ReadPixel(map,ix,iy)
-					Local alp%=rgba & alphamask
-					If alp & $FF000000 ' alpha
-						alp=alp Shr 24 ' convert to byte
-					ElseIf alp & $00FF0000 ' blue
-						alp=alp Shr 16
-					ElseIf alp & $0000FF00 ' green
-						alp=alp Shr 8
-					EndIf
-					alp=alp*(Float(alp)/255.0) ' hack to make darker colors less visible
-					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-				Next
-			Next
-		EndIf
-		Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-		tex.BufferToTex PixmapPixelPtr(map,0,0)
-		Return tex
-		
 	End Function
 	
 	Method TextureFlags( flags:Int )

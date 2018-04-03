@@ -69,6 +69,18 @@ Type TMatrix
 		
 	End Function
 	
+	' Warner
+	
+	Method GetMatrixScale:TVector()
+	
+		Local s:TVector=New TVector
+		s.x = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
+		s.y = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
+		s.z = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
+		Return s
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()
@@ -85,16 +97,6 @@ Type TMatrix
 			DebugLog "Del TMatrix"
 		EndIf
 
-	End Method
-	
-	Method GetMatrixScale:TVector()
-	
-		Local s:TVector=New TVector
-		s.x = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
-		s.y = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
-		s.z = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
-		Return s
-		
 	End Method
 	
 	' converts matrix into an identity matrix
@@ -127,7 +129,7 @@ Type TMatrix
 		
 	End Method
 	
-	' minib3d
+	' from minib3d
 	Method Inverse:TMatrix()
 	
 		Local mat:TMatrix=NewMatrix()

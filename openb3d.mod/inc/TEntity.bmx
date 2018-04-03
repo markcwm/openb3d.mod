@@ -427,6 +427,16 @@ Type TEntity
 		
 	End Method
 	
+	' Extra
+	
+	Method NameClass( c_name:String )
+		
+		Local cString:Byte Ptr=c_name.ToCString()
+		NameClass_( GetInstance(Self),cString )
+		MemFree cString
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()
@@ -1022,14 +1032,6 @@ Type TEntity
 	Method Hidden:Int()
 	
 		Return Hidden_( GetInstance(Self) )
-		
-	End Method
-	
-	Method NameClass( c_name:String )
-		
-		Local cString:Byte Ptr=c_name.ToCString()
-		NameClass_( GetInstance(Self),cString )
-		MemFree cString
 		
 	End Method
 	

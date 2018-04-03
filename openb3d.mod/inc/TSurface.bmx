@@ -145,6 +145,18 @@ Type TSurface
 		
 	End Method
 	
+	' Extra
+	
+	Method FreeSurface()
+	
+		If exists
+			FreeSurface_( GetInstance(Self) )
+			FreeObject( GetInstance(Self) )
+			exists=0
+		EndIf
+		
+	End Method
+	
 	' Openb3d
 	
 	Method UpdateTexCoords()
@@ -434,16 +446,6 @@ Type TSurface
 	
 		SurfaceAlpha_( GetInstance(Self),a )
 	
-	End Method
-	
-	Method FreeSurface()
-	
-		If exists
-			FreeSurface_( GetInstance(Self) )
-			FreeObject( GetInstance(Self) )
-			exists=0
-		EndIf
-		
 	End Method
 	
 	Rem
