@@ -30,7 +30,8 @@ public:
 
 	//EntityPickMode in TEntity
 
-	//static const float EPSILON=0.0001; // not used, causes constexpr error in c++11
+	//static const float EPSILON=0.0001; // removed as not used, conflict in C++11 ..
+	// fixes error: constexpr of non-integral type needed for in-class initialization of static data member
 
 	static list<Entity*> ent_list; // list containing pickable entities
 

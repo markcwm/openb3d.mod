@@ -33,7 +33,7 @@
 *
 ***************************************************************************/
 
-#ifndef OPENB3D_GLEW // not Glew (avoids typedef conflicts)
+#ifndef OPENB3D_GLEW // not Glew, fixes typedef errors
 
 #ifdef _MSC_VER
 	#pragma optimize( "g", off )

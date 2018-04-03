@@ -12,7 +12,7 @@ public:
 	OcTreeChild* child[8];
 	int isBlock;
 	float x, y, z, width, height, depth;
-	float node_near, node_far;
+	float node_near, node_far; // renamed vars, fixes error: expected unqualified-id before , token
 	Mesh* mesh;
 
 
