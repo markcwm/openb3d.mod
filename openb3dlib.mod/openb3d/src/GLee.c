@@ -33,6 +33,8 @@
 *
 ***************************************************************************/
 
+#ifndef OPENB3D_GLEW // not Glew (avoids typedef conflicts)
+
 #ifdef _MSC_VER
 	#pragma optimize( "g", off )
 #endif
@@ -18168,3 +18170,5 @@ GLEE_EXTERN GLboolean GLeeInit( void )
     __GLeeExtList_clean(&extensionNames);
     return GL_TRUE;
 }
+
+#endif // end not Glew

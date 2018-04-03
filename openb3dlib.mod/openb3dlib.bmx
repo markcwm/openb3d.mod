@@ -28,7 +28,7 @@ ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
 ?macos
-'ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' GLee in MacOS
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glew in newer Mac and GLee in older
 
 Import Pub.Glew
 Import Pub.OpenGL
