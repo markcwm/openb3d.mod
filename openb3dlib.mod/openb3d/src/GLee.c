@@ -42,7 +42,7 @@
 #include <string.h>
 
 #ifdef __APPLE__ // Mac OSX, PPC not supported
-	#if (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1068) // x64 if OSX > 10.6.8
+	#ifdef __clang__ // x64, OSX > 10.6
 		#define OPENB3D_GLEW 1
 	#else // x86
 		#define OPENB3D_GLEE 1
