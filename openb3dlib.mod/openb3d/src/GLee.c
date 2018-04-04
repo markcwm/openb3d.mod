@@ -33,8 +33,6 @@
 *
 ***************************************************************************/
 
-#ifdef OPENB3D_GLEE // fixes typedef errors
-
 #ifdef _MSC_VER
 	#pragma optimize( "g", off )
 #endif
@@ -42,6 +40,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+#ifdef __APPLE__ // Mac OSX, PPC not supported
+	#if (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1068) // x64 if OSX > 10.6.8
+		#define OPENB3D_GLEW 1
+	#else // x86
+		#define OPENB3D_GLEE 1
+	#endif
+#endif
+
+#ifdef OPENB3D_GLEE // GLee in Mac, fixes error: typedef redefinition with different types
 #include "GLee.h"
 
 #if defined(__APPLE__) || defined(__APPLE_CC__)
@@ -18171,4 +18179,4 @@ GLEE_EXTERN GLboolean GLeeInit( void )
     return GL_TRUE;
 }
 
-#endif // end not Glew
+#endif // end OPENB3D_GLEE

@@ -7,11 +7,11 @@
 	#define OPENB3D_GLEW 1
 #endif
 
-#ifdef __APPLE__ // PPC not supported
-	#if (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > MAC_OS_X_VERSION_10_6) // Mac x64 if OSX > 10.6
+#ifdef __APPLE__ // Mac OSX, PPC not supported
+	#if (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > 1068) // x64 if OSX > 10.6.8
 		#define OPENB3D_GLEW 1
 	#else // x86
-		#define OPENB3D_GLEE 2
+		#define OPENB3D_GLEE 1
 	#endif
 #endif
 
