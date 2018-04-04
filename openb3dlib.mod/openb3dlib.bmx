@@ -22,19 +22,14 @@ ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
 ?win32
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in Win, also GLee, Win x86 untested!
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
-?macosx64
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' need Glew in newer/x64 Mac, GLee in older/x86 Mac
 ?macos
 Import Pub.Glew
 Import Pub.OpenGL
 ?linux
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' need Glew in Linux x64, Linux x86 untested!
-
 Import Pub.Glew
 Import Pub.OpenGL
 ?opengles
@@ -42,7 +37,6 @@ ModuleInfo "CC_OPTS: -UGLES2" ' untested!
 
 Import Pub.OpenGLES
 ?
-
 Import "source.bmx"
 
 ' methods.cpp

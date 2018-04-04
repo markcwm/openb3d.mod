@@ -61,7 +61,7 @@ Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
 ?win32
 Import "openb3d/src/GLee.c" ' 5.4
-?macosx86 ' only need in Mac x86, speeds up compile in x64
+?macos
 Import "openb3d/src/GLee.c" ' 5.4
 ?
 Import "methods.cpp" ' must be imported from this file in Mac
