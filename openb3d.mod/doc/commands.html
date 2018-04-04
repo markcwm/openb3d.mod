@@ -54,10 +54,10 @@ Set default shader for surfaces.
 Adds action to the end of another one, where act1 happens before act2.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#AttachFragShader>AttachFragShader</a></td><td class=docright>
-Attaches a frag shader object to a program object.
+Attaches a fragment shader object to a program object, attach vertex first or older compilers will crash.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#AttachVertShader>AttachVertShader</a></td><td class=docright>
-Attaches a vert shader object to a program object.
+Attaches a vertex shader object to a program object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BackBufferToTex>BackBufferToTex</a></td><td class=docright>
 Copy the contents of the backbuffer to a texture.
@@ -73,6 +73,9 @@ GL equivalent, experimental.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLColor>BrushGLColor</a></td><td class=docright>
 GL equivalent, experimental.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BrushName>BrushName</a></td><td class=docright>
+Gets a brush's name.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BufferToTex>BufferToTex</a></td><td class=docright>
 Copy pixmap buffer to texture, buffer must be a byte ptr.
@@ -253,6 +256,9 @@ Set height of a given point, like ModifyTerrain.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NameBrush>NameBrush</a></td><td class=docright>
 Sets a brush's name.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NameClass>NameClass</a></td><td class=docright>
+Sets an entity's class name.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewAnimationKeys>NewAnimationKeys</a></td><td class=docright>
 Returns a new TAnimationKeys object.
@@ -519,14 +525,6 @@ Voxelsprite mesh entity.
 </td></tr>
 </table>
 <h2
->Methods
-</h2>
-<table class=doc width=100% cellspacing=3 id=NameClass>
-<tr><td class=doctop colspan=2>Method NameClass( ent:TEntity,c_name:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Sets an entity's class name.</td></tr>
-</table>
-<br>
-<h2
  id=functionsdet>Functions
 </h2>
 <table class=doc width=100% cellspacing=3 id=ActFadeTo>
@@ -601,12 +599,12 @@ Voxelsprite mesh entity.
 <br>
 <table class=doc width=100% cellspacing=3 id=AttachFragShader>
 <tr><td class=doctop colspan=2>Function AttachFragShader:Int( shader:TShader,myShader:TShaderObject )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a frag shader object to a program object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a fragment shader object to a program object, attach vertex first or older compilers will crash.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=AttachVertShader>
 <tr><td class=doctop colspan=2>Function AttachVertShader:Int( shader:TShader,myShader:TShaderObject )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a vert shader object to a program object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a vertex shader object to a program object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BackBufferToTex>
@@ -636,6 +634,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=BrushGLColor>
 <tr><td class=doctop colspan=2>Function BrushGLColor( brush:TBrush,r:Float,g:Float,b:Float,a:Float=1.0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BrushName>
+<tr><td class=doctop colspan=2>Function BrushName:String( brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Gets a brush's name.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BufferToTex>
@@ -951,6 +954,11 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <table class=doc width=100% cellspacing=3 id=NameBrush>
 <tr><td class=doctop colspan=2>Function NameBrush( brush:TBrush,b_name:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sets a brush's name.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NameClass>
+<tr><td class=doctop colspan=2>Function NameClass( ent:TEntity,c_name:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets an entity's class name.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewAnimationKeys>

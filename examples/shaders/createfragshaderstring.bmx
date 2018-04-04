@@ -24,16 +24,16 @@ Local cube:TMesh=CreateCube()
 PositionEntity cube,0,0,3
 
 Local shader:TShader=CreateShaderMaterial("")
-Local fragshader:TShaderObject=CreateFragShaderString(shader,frag)
 Local vertshader:TShaderObject=CreateVertShaderString(shader,vert)
+Local fragshader:TShaderObject=CreateFragShaderString(shader,frag)
+AttachVertShader(shader,vertshader) ' vert before frag or older compilers will crash
 AttachFragShader(shader,fragshader)
-AttachVertShader(shader,vertshader)
 
 Local shader2:TShader=CreateShaderMaterial("")
-Local fragshader2:TShaderObject=CreateFragShaderString(shader2,FragFunc())
 Local vertshader2:TShaderObject=CreateVertShaderString(shader2,VertFunc())
-AttachFragShader(shader2,fragshader)
+Local fragshader2:TShaderObject=CreateFragShaderString(shader2,FragFunc())
 AttachVertShader(shader2,vertshader2)
+AttachFragShader(shader2,fragshader2)
 
 ShadeEntity(cube,shader)
 Local cs%

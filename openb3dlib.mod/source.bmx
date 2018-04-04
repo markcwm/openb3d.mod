@@ -61,8 +61,8 @@ Import "openb3d/src/collidetri.c"
 Import "openb3d/src/stb_image.c"
 ?win32
 Import "openb3d/src/GLee.c" ' 5.4
-?macos
+?macosx86 ' only need in Mac x86, speeds up compile in x64
 Import "openb3d/src/GLee.c" ' 5.4
 ?
-Import "methods.cpp" ' thse must be imported in source.bmx on Mac
+Import "methods.cpp" ' must be imported from this file in Mac
 Import "data.cpp"

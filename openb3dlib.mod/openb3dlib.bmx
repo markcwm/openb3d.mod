@@ -18,27 +18,27 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-'ModuleInfo "CC_OPTS: -std=c++11" ' don't use, if we enforce C++11 standard it won't build on older compilers
+'ModuleInfo "CC_OPTS: -std=c++11" ' don't enable: enforcing C++11 standard causes build fail on older compilers
 ?debug
-ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' C++ debug mode (by Spinduluz)
+ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
 ?win32
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew or GLee in Win, comment to use GLee
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in Win, also GLee, Win x86 untested!
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
 
 Import Pub.Glew
 Import Pub.OpenGL ' order is important, glew before OpenGL
 ?macosx64
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' use Glew in newer Mac, GLee in older Mac
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' need Glew in newer/x64 Mac, GLee in older/x86 Mac
 ?macos
 Import Pub.Glew
 Import Pub.OpenGL
 ?linux
-ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' Glew in Linux
+ModuleInfo "CC_OPTS: -DOPENB3D_GLEW" ' need Glew in Linux x64, Linux x86 untested!
 
 Import Pub.Glew
 Import Pub.OpenGL
 ?opengles
-ModuleInfo "CC_OPTS: -UGLES2"
+ModuleInfo "CC_OPTS: -UGLES2" ' untested!
 
 Import Pub.OpenGLES
 ?

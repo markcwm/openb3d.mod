@@ -27,20 +27,20 @@ ScaleEntity plane,10,0.1,10
 MoveEntity plane,0,-1.5,0
 
 Local shader:TShader=CreateShaderMaterial("")
-Local fragshader:TShaderObject=CreateFragShader(shader,"../glsl/greyscale.frag.glsl")
 Local vertshader:TShaderObject=CreateVertShader(shader,"../glsl/default.vert.glsl")
+Local fragshader:TShaderObject=CreateFragShader(shader,"../glsl/greyscale.frag.glsl")
+AttachVertShader(shader,vertshader) ' vert before frag or older compilers will crash
 AttachFragShader(shader,fragshader)
-AttachVertShader(shader,vertshader)
 
 ShaderTexture(shader,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube,shader)
 EntityFX(cube,32)
 
 Local shader2:TShader=CreateShaderMaterial("")
-Local fragshader2:TShaderObject=CreateFragShader(shader2,"../glsl/default.frag.glsl")
 Local vertshader2:TShaderObject=CreateVertShader(shader2,"../glsl/default.vert.glsl")
-AttachFragShader(shader2,fragshader2)
+Local fragshader2:TShaderObject=CreateFragShader(shader2,"../glsl/default.frag.glsl")
 AttachVertShader(shader2,vertshader2)
+AttachFragShader(shader2,fragshader2)
 
 ShaderTexture(shader2,LoadTexture("../media/colorkey.jpg"),"texture0",0)
 ShadeEntity(cube2,shader2)
@@ -67,17 +67,17 @@ While Not KeyDown(KEY_ESCAPE)
 		If del
 			DeleteVertShader(vertshader)
 			DeleteFragShader(fragshader)
-			fragshader=CreateFragShader(shader,"../glsl/greyscale.frag.glsl")
 			vertshader=CreateVertShader(shader,"../glsl/default.vert.glsl")
-			AttachFragShader(shader,fragshader2)
+			fragshader=CreateFragShader(shader,"../glsl/greyscale.frag.glsl")
 			AttachVertShader(shader,vertshader2)
+			AttachFragShader(shader,fragshader2)
 		Else
 			DeleteVertShader(vertshader2)
 			DeleteFragShader(fragshader2)
-			fragshader2=CreateFragShader(shader,"../glsl/default.frag.glsl")
 			vertshader2=CreateVertShader(shader,"../glsl/default.vert.glsl")
-			AttachFragShader(shader,fragshader)
+			fragshader2=CreateFragShader(shader,"../glsl/default.frag.glsl")
 			AttachVertShader(shader,vertshader)
+			AttachFragShader(shader,fragshader)
 		EndIf
 	EndIf
 	

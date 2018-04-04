@@ -198,14 +198,14 @@ Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String 
 End Function
 
 Rem
-bbdoc: Attaches a frag shader object to a program object
+bbdoc: Attaches a fragment shader object to a program object, attach vertex first or older compilers will crash
 End Rem
 Function AttachFragShader:Int( shader:TShader,myShader:TShaderObject )
 	Return myShader.AttachFragShader( shader )
 End Function
 
 Rem
-bbdoc: Attaches a vert shader object to a program object
+bbdoc: Attaches a vertex shader object to a program object
 End Rem
 Function AttachVertShader:Int( shader:TShader,myShader:TShaderObject )
 	Return myShader.AttachVertShader( shader )
