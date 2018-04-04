@@ -5,7 +5,6 @@
 	#define OPENB3D_GLEW 1
 #elif defined(_WIN64) // x86 and x64
 	#define OPENB3D_GLEW 1
-	#endif
 #endif
 
 #ifdef __APPLE__ // PPC not supported
