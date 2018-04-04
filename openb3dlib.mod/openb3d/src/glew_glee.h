@@ -1,33 +1,32 @@
 #ifndef GLEW_GLEE_H
 #define GLEW_GLEE_H
 
-#ifdef _WIN32 // Glew in Win, also GLee, Win x86 untested!
-	#if defined(__x86_64__) || defined(_M_X64) // x86 64-bit
-		#define OPENB3D_GLEW
-	#elif defined(__i386) || defined(_M_IX86) // x86 32-bit
-		#define OPENB3D_GLEW
+#ifdef _WIN32 // Win x86 untested!
+	#define OPENB3D_GLEW 1
+#elif defined(_WIN64) // x86 and x64
+	#define OPENB3D_GLEW 1
 	#endif
 #endif
 
-#ifdef __APPLE__ // need Glew in newer/x64 Mac, GLee in older/x86 Mac, PPC not supported
-	#if defined(__x86_64__) || defined(_M_X64) // x86 64-bit
-		#define OPENB3D_GLEW
-	#elif defined(__i386) || defined(_M_IX86) // x86 32-bit
-		#define OPENB3D_GLEE
+#ifdef __APPLE__ // PPC not supported
+	#if (__ENVIRONMENT_MAC_OS_X_VERSION_MIN_REQUIRED__ > MAC_OS_X_VERSION_10_6) // Mac x64 if OSX > 10.6
+		#define OPENB3D_GLEW 1
+	#else // x86
+		#define OPENB3D_GLEE 2
 	#endif
 #endif
 
-#ifdef __linux__ // need Glew in Linux x64, Linux x86 untested!
-	#if defined(__x86_64__) || defined(_M_X64) // x86 64-bit
-		#define OPENB3D_GLEW
-	#elif defined(__i386) || defined(_M_IX86) // x86 32-bit
-		#define OPENB3D_GLEW
+#ifdef __linux__ // Linux x86 untested!
+	#if defined(__x86_64__) || defined(__ia64__) // x64, itanium
+		#define OPENB3D_GLEW 1
+	#else // x86
+		#define OPENB3D_GLEW 1
 	#endif
 #endif
 
 #ifdef OPENB3D_GLEW
 	#include "glew.h"
-#elif OPENB3D_GLEE
+#elif defined(OPENB3D_GLEE)
 	#ifdef __linux__
 		#define GL_GLEXT_PROTOTYPES
 		#include <GL/gl.h>
