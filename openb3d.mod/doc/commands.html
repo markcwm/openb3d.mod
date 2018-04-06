@@ -230,6 +230,9 @@ Load texture and set alpha with alphamask - if set to zero then alpha is not cha
 <tr><td class=docleft width=1%><a href=#LoadAnimMeshStream>LoadAnimMeshStream</a></td><td class=docright>
 Loads a B3D or 3DS file and returns a New TMesh.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimTextureStream>LoadAnimTextureStream</a></td><td class=docright>
+Loads animation frames from an image and returns a new TTexture.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
 </td></tr>
@@ -902,6 +905,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=doctop colspan=2>Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D or 3DS file and returns a New TMesh.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function, the returned mesh will have children and animations.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimTextureStream>
+<tr><td class=doctop colspan=2>Function LoadAnimTextureStream:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads animation frames from an image and returns a new TTexture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>

@@ -154,6 +154,7 @@ void col_tree_sub( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 Texture* TextureCopy( Texture* obj );
 Texture* TexInList( Texture* obj,list<Texture*>& list_ref );
 void FilterFlags( Texture* obj );
+void SetTextureFilename( Texture* obj,char* t_filename );
 //static string Strip(string filename);
 
 #ifdef __cplusplus

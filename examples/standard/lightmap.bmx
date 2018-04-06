@@ -1,9 +1,14 @@
 ' lightmap.bmx
-' lightmapped B3D, use LoadB3D to load from streams
+' lightmapped B3D
 
 Strict
 
 Framework Openb3d.B3dglgraphics
+Import Koriolis.Zipstream
+
+Incbin "../media/test/test.b3d"
+Incbin "../media/test/shingle.bmp"
+Incbin "../media/test/test_lm.bmp"
 
 Local width%=DesktopWidth(),height%=DesktopHeight(),depth%=0,Mode%=2
 
@@ -14,21 +19,43 @@ PositionEntity cam,0,10,-15
 
 Local light:TLight=CreateLight()
 
+Local mesh:TMesh, debug:String, oldtime:Int
+
 ' load anim mesh
-Local ent:TMesh=Null
-Local loader%=1
+Local loader%=3
 Select loader
-	Case 1
-		ent=LoadAnimMeshStream("../media/bath/RomanBath.b3d")
+	Case 1 ' load stream mesh
+		oldtime=MilliSecs()
+		mesh=LoadAnimMeshStream("../media/bath/RomanBath.b3d")
+		
+		debug="b3d time="+(MilliSecs()-oldtime)
+		
+	Case 2 ' load incbin mesh
+		oldtime=MilliSecs()
+		Local file:String = "incbin::../media/test/test.b3d"
+		mesh=LoadAnimMeshStream(file)
+		
+		debug="incbin time="+(MilliSecs()-oldtime)
+		
+	Case 3 ' load zip mesh
+		oldtime=MilliSecs()
+		Local zipfile:String = "../media/test.zip"
+		Local file:String = "zip::"+zipfile+"//test.b3d"
+		mesh=LoadAnimMeshStream(file)
+		
+		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
-		ent=LoadAnimMesh("../media/bath/RomanBath.b3d")
+		oldtime=MilliSecs()
+		mesh=LoadAnimMesh("../media/bath/RomanBath.b3d")
+		
+		debug="lib time="+(MilliSecs()-oldtime)
 EndSelect
 
 ' child entity variables
 Local child_ent:TEntity ' this will store child entity of anim mesh
 Local child_no%=1 ' used to select child entity
-Local count_children%=TEntity.CountAllChildren(ent) ' total no. of children belonging to entity
+Local count_children%=TEntity.CountAllChildren(mesh) ' total no. of children belonging to entity
 
 ' marker entity. will be used to highlight selected child entity
 Local marker_ent:TMesh=CreateSphere(8)
@@ -57,7 +84,7 @@ While Not KeyDown(KEY_ESCAPE)
 	
 	' get child entity
 	Local count%=0 ' this is just a count variable needed by GetChildFromAll. must be set to 0.
-	child_ent=ent.GetChildFromAll(child_no,count) ' get child entity
+	child_ent=mesh.GetChildFromAll(child_no,count) ' get child entity
 
 	' position marker entity at child entity position
 	If child_ent<>Null
@@ -74,12 +101,12 @@ While Not KeyDown(KEY_ESCAPE)
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps
+	Text 0,20,"FPS: "+fps+", Debug: "+debug
 	Text 0,40,"[] to select different child entity (bone)"
 	If child_ent<>Null
 		Text 0,60,"Child Name: "+EntityName(child_ent)
 		
-		Local test:TEntity=FindChild(ent,EntityName(child_ent))
+		Local test:TEntity=FindChild(mesh,EntityName(child_ent))
 		If test<>Null Then Text 0,80,"FindChild: "+EntityName(test)
 	EndIf
 	Text 0,100,"Children: "+count_children

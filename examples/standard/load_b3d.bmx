@@ -22,7 +22,7 @@ Local mesh:TMesh, debug:String, oldtime:Int
 Local loader:Int=5 ' 0 to 5
 Select loader
 
-	Case 1 ' load zombie mesh
+	Case 1 ' load stream mesh
 		oldtime=MilliSecs()
 		mesh=LoadAnimMeshStream("../media/zombie.b3d")
 		
@@ -104,7 +104,7 @@ While Not KeyDown( KEY_ESCAPE )
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps
+	Text 0,20,"FPS: "+fps+", Debug: "+debug
 	Text 0,40,"+/-: animate, F: free entity"
 	Text 0,60,"WSAD/Arrows: move camera, IKJL: turn mesh"
 	If mesh

@@ -496,5 +496,9 @@ Texture* TexInList( Texture* obj,list<Texture*>& list_ref ){
 void FilterFlags( Texture* obj ){
 	obj->FilterFlags();
 }
+void SetTextureFilename( Texture* obj,char* t_filename ){
+	string filename(t_filename);
+	obj->file=filename;
+}
 
-} /* extern "C" */
+} // end extern C

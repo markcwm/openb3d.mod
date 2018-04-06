@@ -20,6 +20,7 @@ ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
 'ModuleInfo "CC_OPTS: -std=c++11" ' don't use, forcing C++11 standard fails on older compilers
 'ModuleInfo "CC_OPTS: -DOPENB3D_GLEE" ' use GLee instead of Glew
+
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
 ?win32
@@ -190,6 +191,7 @@ Extern
 	Function TextureCopy_:Byte Ptr( obj:Byte Ptr ) = "TextureCopy"
 	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr ) = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr ) = "FilterFlags"
+	Function SetTextureFilename_( obj:Byte Ptr,t_filename:Byte Ptr ) = "SetTextureFilename"
 	
 End Extern
 
@@ -313,6 +315,7 @@ Extern
 	Function TextureFloat_:Float Ptr( obj:Byte Ptr,varid:Int ) = "TextureFloat"
 	Function TextureString_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TextureString"
 	Function TextureListTexture_:Byte Ptr( obj:Byte Ptr,varid:Int ) = "TextureListTexture"
+	Function GlobalListPushBackTexture_( varid:Int,obj:Byte Ptr ) = "GlobalListPushBackTexture"
 	
 End Extern
 

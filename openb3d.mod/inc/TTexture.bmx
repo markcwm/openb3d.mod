@@ -158,6 +158,19 @@ Type TTexture
 		
 	End Function
 	
+	Method TextureListAdd( list:TList ) ' Global list
+	
+		Select list
+			Case tex_list
+				GlobalListPushBackTexture_( TEXTURE_tex_list,GetInstance(Self) )
+				AddList_(list)
+			Case tex_list_all
+				GlobalListPushBackTexture_( TEXTURE_tex_list_all,GetInstance(Self) )
+				AddList_(list)
+		End Select
+		
+	End Method
+	
 	Function NewTexture:TTexture()
 	
 		Local inst:Byte Ptr=NewTexture_()
@@ -165,7 +178,169 @@ Type TTexture
 		
 	End Function
 	
+	' Openb3d
+	
+	Method BufferToTex( buffer:Byte Ptr,frame:Int=0 )
+	
+		BufferToTex_( GetInstance(Self),buffer,frame )
+		
+	End Method
+	
+	Method TexToBuffer( buffer:Byte Ptr,frame:Int=0 )
+	
+		TexToBuffer_( GetInstance(Self),buffer,frame )
+		
+	End Method
+	
+	Method CameraToTex( cam:TCamera,frame:Int=0 )
+	
+		If GL_VERSION_2_1 ' GL 2.1 and above
+			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
+		Else ' GL 2.0 and below
+			CameraToTexEXT( cam )
+		EndIf
+		
+	End Method
+	
+	Method DepthBufferToTex( cam:TCamera=Null )
+	
+		If GL_VERSION_2_1 ' GL 2.1 and above
+			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
+		Else ' GL 2.0 and below
+			DepthBufferToTexEXT( cam )
+		EndIf
+		
+	End Method
+	
 	' Extra
+	
+	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
+	
+		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
+		
+	End Method
+	
+	Method TextureGLTexEnvf( target:Int,pname:Int,param:Float )
+	
+		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
+		
+	End Method
+	
+	Method TextureMultitex( f:Float )
+	
+		TextureMultitex_( GetInstance(Self),f )
+		
+	End Method
+	
+	Method SetTextureFilename( t_filename:String )
+	
+		Local cString:Byte Ptr=t_filename.ToCString()
+		SetTextureFilename_( GetInstance(Self),cString )
+		MemFree cString
+		
+	End Method
+	
+	Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	
+		Return LoadAnimTextureStream(file,flags,0,0,0,1,tex)
+		
+	End Function
+	
+	Function LoadAnimTextureStream:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	
+		' TGAs crashing! Brl.Tgaloader is deprecated replaced with Brl.Stbimageloader
+		If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
+			If ExtractExt(file)="tga" Then Return LoadTexture(file,flags,tex)
+		EndIf
+		
+		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' todo! load cubemaps
+		
+		If tex=Null Then tex=NewTexture()
+		If FileFind(file)=False Then Return Null
+		tex.SetTextureFilename(file)
+		
+		' set tex.flags before TexInList
+		tex.flags[0]=flags
+		tex.FilterFlags()
+		
+		' check to see if texture with same properties exists already, if so return existing texture
+		Local old_tex:TTexture=tex.TexInList()
+		If old_tex<>Null 'And old_tex<>tex
+			old_tex.TextureListAdd( tex_list_all )
+			FreeObject( GetInstance(tex) ) ; tex.exists=0
+			Return old_tex
+		ElseIf old_tex<>tex
+			tex.TextureListAdd( tex_list )
+			tex.TextureListAdd( tex_list_all )
+		EndIf
+		
+		Local map:TPixmap=LoadPixmap(file) ' load from streams
+		If map=Null Then Return tex
+		
+		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
+		If (flags & 2) map=ApplyAlpha(map)
+		If (flags & 4) map=ApplyMask(map,10,10,10)
+		
+		' if tex not anim tex, get frame width and height
+		If frame_width=0 And frame_height=0
+			frame_width=map.width
+			frame_height=map.height
+		EndIf
+		
+		tex.no_frames[0]=frame_count
+		'tex.gltex=tex.gltex[..tex.no_frames]
+		
+		' pixmap -> tex
+		Local xframes:Int=map.width/frame_width
+		Local yframes:Int=map.height/frame_height
+		Local startx:Int=first_frame Mod xframes
+		Local starty:Int=(first_frame/yframes) Mod yframes
+		Local x:Int=startx
+		Local y:Int=starty
+		Local pixmap:TPixmap
+		
+		' todo! test anim textures
+		For Local i:Int=0 To tex.no_frames[0]-1
+			' get static pixmap window. when resize pixmap is called new pixmap will be returned.
+			pixmap=map.Window(x*frame_width,y*frame_height,frame_width,frame_height)
+			x=x+1
+			If x>=xframes
+				x=0
+				y=y+1
+			EndIf
+			
+			pixmap=AdjustPixmap(pixmap)
+			tex.width[0]=pixmap.width
+			tex.height[0]=pixmap.height
+			'Local width:Int=pixmap.width
+			'Local height:Int=pixmap.height
+			
+			Local name:Int
+			glGenTextures(1,Varptr(name))
+			glBindtexture(GL_TEXTURE_2D,name)
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels)
+			
+			'Local mipmap:Int
+			'If (tex.flags[0] & 8) Then mipmap=True
+			'Local mip_level:Int=0
+			'Repeat
+			'	glPixelStorei(GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format])
+			'	glTexImage2D(GL_TEXTURE_2D,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels)
+			'	If Not mipmap Then Exit
+			'	If width=1 And height=1 Exit
+			'	If width>1 width:/2
+			'	If height>1 height:/2
+			'	pixmap=ResizePixmap(pixmap,width,height)
+			'	mip_level:+1
+			'Forever
+			'tex.no_mipmaps=mip_level
+			
+			tex.texture[0]=name
+			tex.BufferToTex(pixmap.pixels)
+		Next
+		
+		Return tex
+	End Function
 	
 	' GL 2.0 support
 	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
@@ -290,114 +465,6 @@ Type TTexture
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
 			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
 		EndIf
-		
-	End Method
-	
-	Function LoadAlphaTexture:TTexture( file:String,flags:Int=11,alphamask%=0 )
-	
-		Local map:TPixmap=LoadPixmap(file)
-		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-		If alphamask ' only if alpha mask
-			For Local iy%=0 To PixmapWidth(map)-1
-				For Local ix%=0 To PixmapHeight(map)-1
-					Local rgba%=ReadPixel(map,ix,iy)
-					Local alp%=rgba & alphamask
-					If alp & $FF000000 ' alpha
-						alp=alp Shr 24 ' convert to byte
-					ElseIf alp & $00FF0000 ' blue
-						alp=alp Shr 16
-					ElseIf alp & $0000FF00 ' green
-						alp=alp Shr 8
-					EndIf
-					alp=alp*(Float(alp)/255.0) ' hack to make darker colors less visible
-					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-				Next
-			Next
-		EndIf
-		Local tex:TTexture=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-		tex.BufferToTex PixmapPixelPtr(map,0,0)
-		Return tex
-		
-	End Function
-	
-	' Openb3d
-	
-	Method BufferToTex( buffer:Byte Ptr,frame:Int=0 )
-	
-		BufferToTex_( GetInstance(Self),buffer,frame )
-		
-	End Method
-	
-	Method TexToBuffer( buffer:Byte Ptr,frame:Int=0 )
-	
-		TexToBuffer_( GetInstance(Self),buffer,frame )
-		
-	End Method
-	
-	Method CameraToTex( cam:TCamera,frame:Int=0 )
-	
-		If GL_VERSION_2_1 ' GL 2.1 and above
-			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
-		Else ' GL 2.0 and below
-			CameraToTexEXT( cam )
-		EndIf
-		
-	End Method
-	
-	Method DepthBufferToTex( cam:TCamera=Null )
-	
-		If GL_VERSION_2_1 ' GL 2.1 and above
-			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
-		Else ' GL 2.0 and below
-			DepthBufferToTexEXT( cam )
-		EndIf
-		
-	End Method
-	
-	' Extra
-	
-	Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	
-		' Brl.Tgaloader is deprecated, replaced with Brl.Stbimageloader (not loading tga)
-		'If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
-		'	If ExtractExt(file)="tga" Then Return LoadTexture( file,flags,tex )
-		'EndIf
-		
-		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
-		Local map:TPixmap=Null, name%
-		map=LoadPixmap(file) ' load from streams
-		If map=Null Then Return tex
-		tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-		
-		If (flags & 2) Then map=ApplyAlpha(map)
-		If (flags & 4) Then map=ApplyMask(map,10,10,10)
-		
-		glGenTextures(1,Varptr(name))
-		glBindtexture(GL_TEXTURE_2D,name)
-		gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-		tex.texture[0]=name
-		
-		tex.BufferToTex PixmapPixelPtr(map,0,0)
-		Return tex
-		
-	End Function
-	
-	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
-	
-		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
-		
-	End Method
-	
-	Method TextureGLTexEnvf( target:Int,pname:Int,param:Float )
-	
-		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
-		
-	End Method
-	
-	Method TextureMultitex( f:Float )
-	
-		TextureMultitex_( GetInstance(Self),f )
 		
 	End Method
 	

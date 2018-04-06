@@ -1595,4 +1595,13 @@ list<Texture*>* TextureListTexture( Texture* obj,int varid ){
 	return NULL;
 }
 
+void GlobalListPushBackTexture( int varid,Texture* obj ){
+	switch (varid){
+		case TEXTURE_tex_list : Texture::tex_list.push_back(obj);
+			break;
+		case TEXTURE_tex_list_all : Texture::tex_list_all.push_back(obj);
+			break;
+	}
 }
+
+} // end extern C

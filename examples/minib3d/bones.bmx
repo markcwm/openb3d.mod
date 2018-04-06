@@ -1,5 +1,5 @@
 ' bones.bmx
-' B3D skeletal animation, use LoadB3D to load from streams
+' B3D skeletal animation
 
 Strict
 
@@ -18,7 +18,7 @@ Local light:TLight=CreateLight()
 Local ent:TMesh=Null
 Local loader%=3
 Select loader
-	Case 1
+	Case 1 ' load stream mesh
 		ent=LoadAnimMeshStream("../media/zombie.b3d")
 		MoveEntity ent,0,0,5
 		

@@ -104,7 +104,7 @@ While Not KeyDown( KEY_ESCAPE )
 		renders=0
 	EndIf
 	
-	Text 0,20,"FPS: "+fps
+	Text 0,20,"FPS: "+fps+", Debug: "+debug
 	Text 0,40,"WSAD/Arrows: move camera, IKJL: turn mesh, F: free entity"
 	If mesh
 		Text 0,60,"mesh depth="+MeshDepth(mesh)+" height="+MeshHeight(mesh)

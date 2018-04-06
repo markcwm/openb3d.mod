@@ -19,10 +19,17 @@ Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
 End Function
 
 Rem
+bbdoc: Loads animation frames from an image and returns a new TTexture
+End Rem
+Function LoadAnimTextureStream:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
+	Return TTexture.LoadAnimTextureStream( file,flags,frame_width,frame_height,first_frame,frame_count,tex )
+End Function
+
+Rem
 bbdoc: Loads an image and returns a new TTexture
 End Rem
 Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	Return TTexture.LoadTextureStream( file,flags,tex )
+	Return TTexture.LoadAnimTextureStream(file,flags,0,0,0,1,tex)
 End Function
 
 Rem

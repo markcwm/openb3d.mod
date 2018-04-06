@@ -229,7 +229,10 @@ Type TB3D
 						' if a texture exists with all the same values as above (blend etc)
 						' the existing texture will be returned. if not then the texture
 						' created above (supplied as param below) will be returned
-						Local tex_name$=filepath+"/"+StripDir(te_file)
+						Local tex_name$=te_file
+						If dir.StartsWith("incbin::") Or dir.StartsWith("zip::")
+							tex_name=filepath+"/"+StripDir(te_file)
+						EndIf
 						If LOG_CHUNKS Then DebugLog tab+new_tag+" tex_name="+tex_name
 						tex[tex_no]=LoadTextureStream(tex_name,te_flags,tex[tex_no])
 						tex_no=tex_no+1
