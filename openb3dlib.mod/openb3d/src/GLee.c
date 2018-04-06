@@ -42,9 +42,9 @@
 #include <string.h>
 
 #ifdef __APPLE__ // Mac OSX, PPC not supported
-	#ifdef __clang__ // x64, OSX > 10.6
+	#ifdef __clang__ // clang default compiler in OSX 10.7
 		#define OPENB3D_GLEW 1
-	#else // x86
+	#else // Glew not working in OSX <= 10.6
 		#define OPENB3D_GLEE 1
 	#endif
 #endif

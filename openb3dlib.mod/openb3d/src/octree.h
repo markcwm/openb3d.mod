@@ -11,9 +11,11 @@ class OcTreeChild{
 public:
 	OcTreeChild* child[8];
 	int isBlock;
-	float x, y, z, width, height, depth;
-	float node_near, node_far; // renamed vars, fixes error: expected unqualified-id before , token
+	float x,y,z, width, height, depth;
+	float node_near,node_far; // renamed, fixes error: expected unqualified-id before , token
+
 	Mesh* mesh;
+
 
 
 	void AddToOctree(Mesh* mesh1, int level, float X, float Y, float Z, float Near, float Far, int block);

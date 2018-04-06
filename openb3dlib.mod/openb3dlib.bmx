@@ -18,7 +18,8 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-'ModuleInfo "CC_OPTS: -std=c++11" ' don't enable: enforcing C++11 standard causes build fail on older compilers
+'ModuleInfo "CC_OPTS: -std=c++11" ' don't use, forcing C++11 standard fails on older compilers
+'ModuleInfo "CC_OPTS: -DOPENB3D_GLEE" ' use GLee instead of Glew
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
 ?win32
