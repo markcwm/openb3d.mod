@@ -16,6 +16,7 @@ Import Openb3d.Openb3d
 Import Brl.BmpLoader		' imports Brl.Pixmap, Brl.EndianStream
 Import Brl.PngLoader		' imports Brl.Pixmap, Pub.LibPng
 Import Brl.JpgLoader		' imports Brl.Pixmap, Pub.LibJpeg
+Import Brl.TgaLoader
 
 Include "TDebug.bmx"
 

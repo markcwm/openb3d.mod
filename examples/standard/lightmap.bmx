@@ -22,7 +22,7 @@ Local light:TLight=CreateLight()
 Local mesh:TMesh, debug:String, oldtime:Int
 
 ' load anim mesh
-Local loader%=3
+Local loader%=2
 Select loader
 	Case 1 ' load stream mesh
 		oldtime=MilliSecs()
@@ -32,16 +32,13 @@ Select loader
 		
 	Case 2 ' load incbin mesh
 		oldtime=MilliSecs()
-		Local file:String = "incbin::../media/test/test.b3d"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMeshStream("incbin::../media/test/test.b3d")
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load zip mesh
 		oldtime=MilliSecs()
-		Local zipfile:String = "../media/test.zip"
-		Local file:String = "zip::"+zipfile+"//test.b3d"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMeshStream("zip::../media/RomanBath.zip//RomanBath.b3d")
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		

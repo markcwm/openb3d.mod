@@ -248,11 +248,6 @@ Type TTexture
 	
 	Function LoadAnimTextureStream:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		' TGAs crashing! Brl.Tgaloader is deprecated replaced with Brl.Stbimageloader
-		If file.StartsWith("incbin::")=False And file.StartsWith("zip::")=False
-			If ExtractExt(file)="tga" Then Return LoadTexture(file,flags,tex)
-		EndIf
-		
 		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' todo! load cubemaps
 		
 		If tex=Null Then tex=NewTexture()
@@ -265,7 +260,7 @@ Type TTexture
 		
 		' check to see if texture with same properties exists already, if so return existing texture
 		Local old_tex:TTexture=tex.TexInList()
-		If old_tex<>Null 'And old_tex<>tex
+		If old_tex<>Null
 			old_tex.TextureListAdd( tex_list_all )
 			FreeObject( GetInstance(tex) ) ; tex.exists=0
 			Return old_tex
