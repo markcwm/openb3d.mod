@@ -36,7 +36,7 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on [Minib3d](http
 
 ## Status
 
-After giving up coding for a year (due to lack of time and enthusiasm) I returned to work on this wrapper in my spare time with the goal of getting it into a finished, bug-free state. When I left it, the last commit was sort-of broken due to a failed attempt to move to GLES. Since Angros now has a working WebGL/GLES2 version I will try to add Android support using NG. It should work with the latest NG source, if not then try the latest release (currently 0.87).
+After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I will probably try to add Android support from NG, but this is not a priority. It should work with the latest NG release (currently 0.93) but please note it is not working with modern compilers like GCC 7.x or Clang/LLVM, so for now use an older compiler.
 
 ## License
 

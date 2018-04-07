@@ -261,7 +261,7 @@ Type TB3D
 						
 						brush[brush_no]=CreateBrush()
 						brush[brush_no].no_texs[0]=b_no_texs
-						brush[brush_no].NameBrush(b_name)
+						brush[brush_no].SetString(brush[brush_no].name,b_name)
 						brush[brush_no].red[0]=b_red
 						brush[brush_no].green[0]=b_green
 						brush[brush_no].blue[0]=b_blue
@@ -322,8 +322,8 @@ Type TB3D
 					
 						' make 'piv' entity a mesh, not a pivot, as B3D does
 						Local piv:TMesh=NewMesh()
-						piv.NameClass("Mesh")
-						piv.NameEntity(n_name)
+						piv.SetString(piv.class_name,"Mesh")
+						piv.SetString(piv.name,n_name)
 						piv.px[0]=n_px
 						piv.py[0]=n_py
 						piv.pz[0]=n_pz
@@ -374,8 +374,8 @@ Type TB3D
 					If LOG_CHUNKS Then DebugLog tab+new_tag+" brush_id="+m_brush_id
 					
 					mesh=NewMesh()
-					mesh.NameClass("Mesh")
-					mesh.NameEntity(n_name)
+					mesh.SetString(mesh.class_name,"Mesh")
+					mesh.SetString(mesh.name,n_name)
 					mesh.px[0]=n_px
 					mesh.py[0]=n_py
 					mesh.pz[0]=n_pz
@@ -645,8 +645,8 @@ Type TB3D
 						new_tag=ReadTag(file)
 					Wend
 					
-					bo_bone.NameClass("Bone")
-					bo_bone.NameEntity(n_name)
+					bo_bone.SetString(mesh.class_name,"Bone")
+					bo_bone.SetString(mesh.name,n_name)
 					bo_bone.px[0]=n_px
 					bo_bone.py[0]=n_py
 					bo_bone.pz[0]=n_pz

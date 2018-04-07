@@ -429,11 +429,29 @@ Type TEntity
 	
 	' Extra
 	
-	Method NameClass( c_name:String )
+	Method GetString:String( strPtr:Byte Ptr )
+	
+		Select strPtr
+			Case name
+				Return String.FromCString( EntityString_( GetInstance(Self),ENTITY_name ) )
+			Case class_name
+				Return String.FromCString( EntityString_( GetInstance(Self),ENTITY_class_name ) )
+		End Select
 		
-		Local cString:Byte Ptr=c_name.ToCString()
-		NameClass_( GetInstance(Self),cString )
-		MemFree cString
+	End Method
+	
+	Method SetString( strPtr:Byte Ptr, strValue:String )
+	
+		Select strPtr
+			Case name
+				Local cString:Byte Ptr=strValue.ToCString()
+				SetEntityString_( GetInstance(Self),ENTITY_name,cString )
+				MemFree cString
+			Case class_name
+				Local cString:Byte Ptr=strValue.ToCString()
+				SetEntityString_( GetInstance(Self),ENTITY_class_name,cString )
+				MemFree cString
+		End Select
 		
 	End Method
 	

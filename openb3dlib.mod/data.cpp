@@ -432,7 +432,7 @@ extern "C" {
 
 // Static
 
-char* StaticChar( int classid,int varid ){
+char* StaticChar_( int classid,int varid ){
 	switch (classid){
 		case SHADOWOBJECT_class :
 			switch (varid){
@@ -443,7 +443,7 @@ char* StaticChar( int classid,int varid ){
 	return NULL;
 }
 
-int* StaticInt( int classid,int varid ){
+int* StaticInt_( int classid,int varid ){
 	switch (classid){
 		case GLOBAL_class :
 			switch (varid){
@@ -490,7 +490,7 @@ int* StaticInt( int classid,int varid ){
 	return NULL;
 }
 
-float* StaticFloat( int classid,int varid ){
+float* StaticFloat_( int classid,int varid ){
 	switch (classid){
 		case CAMERA_class :
 			switch (varid){
@@ -541,7 +541,7 @@ float* StaticFloat( int classid,int varid ){
 	return NULL;
 }
 
-Camera* StaticCamera( int classid,int varid ){
+Camera* StaticCamera_( int classid,int varid ){
 	switch (classid){
 		case GLOBAL_class :
 			switch (varid){
@@ -552,7 +552,7 @@ Camera* StaticCamera( int classid,int varid ){
 	return NULL;
 }
 
-Entity* StaticEntity( int classid,int varid ){
+Entity* StaticEntity_( int classid,int varid ){
 	switch (classid){
 		case PICK_class :
 			switch (varid){
@@ -563,7 +563,7 @@ Entity* StaticEntity( int classid,int varid ){
 	return NULL;
 }
 
-Pivot* StaticPivot( int classid,int varid ){
+Pivot* StaticPivot_( int classid,int varid ){
 	switch (classid){
 		case GLOBAL_class :
 			switch (varid){
@@ -574,7 +574,7 @@ Pivot* StaticPivot( int classid,int varid ){
 	return NULL;
 }
 
-Surface* StaticSurface( int classid,int varid ){
+Surface* StaticSurface_( int classid,int varid ){
 	switch (classid){
 		case PICK_class :
 			switch (varid){
@@ -585,7 +585,7 @@ Surface* StaticSurface( int classid,int varid ){
 	return NULL;
 }
 
-int StaticListSize( int classid,int varid ){
+int StaticListSize_( int classid,int varid ){
 	
 	switch (classid){
 		
@@ -636,7 +636,7 @@ int StaticListSize( int classid,int varid ){
 	return 0;
 }
 
-Action* StaticIterListAction( int classid,int varid,int &id ){
+Action* StaticIterListAction_( int classid,int varid,int &id ){
 	int count=0;
 	list<Action*>::iterator it;
 	Action* obj;
@@ -659,7 +659,7 @@ Action* StaticIterListAction( int classid,int varid,int &id ){
 	return obj;
 }
 
-Camera* StaticIterListCamera( int classid,int varid,int &id ){
+Camera* StaticIterListCamera_( int classid,int varid,int &id ){
 	int count=0;
 	list<Camera*>::iterator it;
 	Camera* obj;
@@ -682,7 +682,7 @@ Camera* StaticIterListCamera( int classid,int varid,int &id ){
 	return obj;
 }
 
-Entity* StaticIterListEntity( int classid,int varid,int &id ){
+Entity* StaticIterListEntity_( int classid,int varid,int &id ){
 	int count=0;
 	list<Entity*>::iterator it;
 	Entity* obj;
@@ -725,7 +725,7 @@ Entity* StaticIterListEntity( int classid,int varid,int &id ){
 	return obj;
 }
 
-ShadowObject* StaticIterListShadowObject( int classid,int varid,int &id ){
+ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id ){
 	int count=0;
 	list<ShadowObject*>::iterator it;
 	ShadowObject* obj;
@@ -748,7 +748,7 @@ ShadowObject* StaticIterListShadowObject( int classid,int varid,int &id ){
 	return obj;
 }
 
-Terrain* StaticIterListTerrain( int classid,int varid,int &id ){
+Terrain* StaticIterListTerrain_( int classid,int varid,int &id ){
 	int count=0;
 	list<Terrain*>::iterator it;
 	Terrain* obj;
@@ -771,7 +771,7 @@ Terrain* StaticIterListTerrain( int classid,int varid,int &id ){
 	return obj;
 }
 
-Texture* StaticIterListTexture( int classid,int varid,int &id ){
+Texture* StaticIterListTexture_( int classid,int varid,int &id ){
 	int count=0;
 	list<Texture*>::iterator it;
 	Texture* obj;
@@ -802,7 +802,7 @@ Texture* StaticIterListTexture( int classid,int varid,int &id ){
 	return obj;
 }
 
-Light* StaticIterVectorLight( int classid,int varid,int &id ){
+Light* StaticIterVectorLight_( int classid,int varid,int &id ){
 	int count=0;
 	vector<Light*>::iterator it;
 	Light* obj;
@@ -827,7 +827,7 @@ Light* StaticIterVectorLight( int classid,int varid,int &id ){
 
 // Action
 
-int* ActionInt( Action* obj,int varid ){
+int* ActionInt_( Action* obj,int varid ){
 	switch (varid){
 		case ACTION_act : return &obj->act;
 		case ACTION_endact : return &obj->endact;
@@ -836,7 +836,7 @@ int* ActionInt( Action* obj,int varid ){
 	return NULL;
 }
 
-float* ActionFloat( Action* obj,int varid ){
+float* ActionFloat_( Action* obj,int varid ){
 	switch (varid){
 		case ACTION_rate : return &obj->rate;
 		case ACTION_a : return &obj->a;
@@ -846,7 +846,7 @@ float* ActionFloat( Action* obj,int varid ){
 	return NULL;
 }
 
-Entity* ActionEntity( Action* obj,int varid ){
+Entity* ActionEntity_( Action* obj,int varid ){
 	switch (varid){
 		case ACTION_ent : return obj->ent;
 		case ACTION_target : return obj->target;
@@ -856,7 +856,7 @@ Entity* ActionEntity( Action* obj,int varid ){
 
 // AnimationKeys
 
-int* AnimationKeysInt( AnimationKeys* obj,int varid ){
+int* AnimationKeysInt_( AnimationKeys* obj,int varid ){
 	switch (varid){
 		case ANIMATIONKEYS_frames : return &obj->frames;
 		case ANIMATIONKEYS_flags : return &obj->flags[0];
@@ -864,7 +864,7 @@ int* AnimationKeysInt( AnimationKeys* obj,int varid ){
 	return NULL;
 }
 
-float* AnimationKeysFloat( AnimationKeys* obj,int varid ){
+float* AnimationKeysFloat_( AnimationKeys* obj,int varid ){
 	switch (varid){
 		case ANIMATIONKEYS_px : return &obj->px[0];
 		case ANIMATIONKEYS_py : return &obj->py[0];
@@ -880,7 +880,7 @@ float* AnimationKeysFloat( AnimationKeys* obj,int varid ){
 	return NULL;
 }
 
-AnimationKeys* NewAnimationKeys( Bone* obj ){
+AnimationKeys* NewAnimationKeys_( Bone* obj ){
 	if (obj==NULL){
 		AnimationKeys* keys=new AnimationKeys();
 		return keys;
@@ -892,7 +892,7 @@ AnimationKeys* NewAnimationKeys( Bone* obj ){
 
 // Bone
 
-float* BoneFloat( Bone* obj,int varid ){
+float* BoneFloat_( Bone* obj,int varid ){
 	switch (varid){
 		case BONE_n_px : return &obj->n_px;
 		case BONE_n_py : return &obj->n_py;
@@ -918,14 +918,14 @@ float* BoneFloat( Bone* obj,int varid ){
 	return NULL;
 }
 
-AnimationKeys* BoneAnimationKeys( Bone* obj,int varid ){
+AnimationKeys* BoneAnimationKeys_( Bone* obj,int varid ){
 	switch (varid){
 		case BONE_keys : return obj->keys;
 	}
 	return NULL;
 }
 
-Matrix* BoneMatrix( Bone* obj,int varid ){
+Matrix* BoneMatrix_( Bone* obj,int varid ){
 	switch (varid){
 		case BONE_mat2 : return &obj->mat2;
 		case BONE_inv_mat : return &obj->inv_mat;
@@ -936,7 +936,7 @@ Matrix* BoneMatrix( Bone* obj,int varid ){
 
 // Brush
 
-int* BrushInt( Brush* obj,int varid ){
+int* BrushInt_( Brush* obj,int varid ){
 	switch (varid){
 		case BRUSH_no_texs : return &obj->no_texs;
 		case BRUSH_blend : return &obj->blend;
@@ -945,14 +945,14 @@ int* BrushInt( Brush* obj,int varid ){
 	return NULL;
 }
 
-unsigned int* BrushUInt( Brush* obj,int varid ){
+unsigned int* BrushUInt_( Brush* obj,int varid ){
 	switch (varid){
 		case BRUSH_cache_frame : return &obj->cache_frame[0]; // array 8
 	}
 	return NULL;
 }
 
-float* BrushFloat( Brush* obj,int varid ){
+float* BrushFloat_( Brush* obj,int varid ){
 	switch (varid){
 		case BRUSH_red : return &obj->red;
 		case BRUSH_green : return &obj->green;
@@ -963,23 +963,32 @@ float* BrushFloat( Brush* obj,int varid ){
 	return NULL;
 }
 
-const char* BrushString( Brush* obj,int varid ){
+const char* BrushString_( Brush* obj,int varid ){
 	switch (varid){
 		case BRUSH_name : return obj->name.c_str();
 	}
 	return NULL;
 }
 
-Texture* BrushTextureArray( Brush* obj,int varid,int index ){
+Texture* BrushTextureArray_( Brush* obj,int varid,int index ){
 	switch (varid){
 		case BRUSH_tex : return obj->tex[index];
 	}
 	return NULL;
 }
 
+void SetBrushString_( Brush* obj,int varid,char* cstr ){
+	string str(cstr);
+	switch (varid){
+		case BRUSH_name :
+			obj->name=str;
+			break;
+	}
+}
+
 // Camera
 
-bool* CameraBool( Camera* obj,int varid ){
+bool* CameraBool_( Camera* obj,int varid ){
 	switch (varid){
 		case CAMERA_cls_color : return &obj->cls_color;
 		case CAMERA_cls_zbuffer : return &obj->cls_zbuffer;
@@ -987,7 +996,7 @@ bool* CameraBool( Camera* obj,int varid ){
 	return NULL;
 }
 
-int* CameraInt( Camera* obj,int varid ){
+int* CameraInt_( Camera* obj,int varid ){
 	switch (varid){
 		case CAMERA_vx : return &obj->vx;
 		case CAMERA_vy : return &obj->vy;
@@ -1001,7 +1010,7 @@ int* CameraInt( Camera* obj,int varid ){
 	return NULL;
 }
 
-float* CameraFloat( Camera* obj,int varid ){
+float* CameraFloat_( Camera* obj,int varid ){
 	switch (varid){
 		case CAMERA_cls_r : return &obj->cls_r;	
 		case CAMERA_cls_g : return &obj->cls_g;	
@@ -1023,7 +1032,7 @@ float* CameraFloat( Camera* obj,int varid ){
 
 // Entity
 
-int* EntityInt( Entity* obj,int varid ){
+int* EntityInt_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_order : return &obj->order;
 		case ENTITY_hide : return &obj->hide;
@@ -1048,7 +1057,7 @@ int* EntityInt( Entity* obj,int varid ){
 	return NULL;
 }
 
-float* EntityFloat( Entity* obj,int varid ){
+float* EntityFloat_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_px : return &obj->px;
 		case ENTITY_py : return &obj->py;
@@ -1094,7 +1103,7 @@ float* EntityFloat( Entity* obj,int varid ){
 	return NULL;
 }
 
-const char* EntityString( Entity* obj,int varid ){
+const char* EntityString_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_name : return obj->name.c_str();
 		case ENTITY_class_name : return obj->class_name.c_str();
@@ -1102,21 +1111,21 @@ const char* EntityString( Entity* obj,int varid ){
 	return NULL;
 }
 
-Entity* EntityEntity( Entity* obj,int varid ){
+Entity* EntityEntity_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_parent : return obj->parent;
 	}
 	return NULL;
 }
 
-Brush* EntityBrush( Entity* obj,int varid ){
+Brush* EntityBrush_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_brush : return &obj->brush;
 	}
 	return NULL;
 }
 
-Matrix* EntityMatrix( Entity* obj,int varid ){
+Matrix* EntityMatrix_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_mat : return &obj->mat;
 		case ENTITY_rotmat : return &obj->rotmat;
@@ -1125,7 +1134,7 @@ Matrix* EntityMatrix( Entity* obj,int varid ){
 	return NULL;
 }
 
-int EntityListSize( Entity* obj,int varid ){
+int EntityListSize_( Entity* obj,int varid ){
 	
 	switch (varid){
 		case ENTITY_child_list : return obj->child_list.size();
@@ -1134,7 +1143,7 @@ int EntityListSize( Entity* obj,int varid ){
 	return 0;
 }
 
-Entity* EntityIterListEntity( Entity* obj,int varid,int &id ){
+Entity* EntityIterListEntity_( Entity* obj,int varid,int &id ){
 	int count=0;
 	list<Entity*>::iterator it;
 	Entity* obj2;
@@ -1153,30 +1162,42 @@ Entity* EntityIterListEntity( Entity* obj,int varid,int &id ){
 	return obj2;
 }
 
-void EntityListPushBackEntity( Entity* obj,int varid,Entity* ent ){
+void EntityListPushBackEntity_( Entity* obj,int varid,Entity* ent ){
 	switch (varid){
 		case ENTITY_child_list : obj->child_list.push_back(ent);
 			break;
 	}
 }
 
-void EntityListRemoveEntity( Entity* obj,int varid,Entity* ent ){
+void EntityListRemoveEntity_( Entity* obj,int varid,Entity* ent ){
 	switch (varid){
 		case ENTITY_child_list : obj->child_list.remove(ent);
 			break;
 	}
 }
 
-void GlobalListPushBackEntity( int varid,Entity* obj ){
+void GlobalListPushBackEntity_( int varid,Entity* obj ){
 	switch (varid){
 		case ENTITY_entity_list : Entity::entity_list.push_back(obj);
 			break;
 	}
 }
 
+void SetEntityString_( Entity* obj,int varid,char* cstr ){
+	string str(cstr);
+	switch (varid){
+		case ENTITY_name :
+			obj->name=str;
+			break;
+		case ENTITY_class_name :
+			obj->class_name=str;
+			break;
+	}
+}
+
 // Light
 
-char* LightChar( Light* obj,int varid ){
+char* LightChar_( Light* obj,int varid ){
 	switch (varid){
 		case LIGHT_cast_shadow : return (char*)&obj->cast_shadow;
 		case LIGHT_light_type : return (char*)&obj->light_type;
@@ -1184,7 +1205,7 @@ char* LightChar( Light* obj,int varid ){
 	return NULL;
 }
 
-float* LightFloat( Light* obj,int varid ){
+float* LightFloat_( Light* obj,int varid ){
 	switch (varid){
 		case LIGHT_range : return &obj->range;
 		case LIGHT_red : return &obj->red;
@@ -1198,14 +1219,14 @@ float* LightFloat( Light* obj,int varid ){
 
 // Matrix
 
-float* MatrixFloat( Matrix* obj,int varid ){
+float* MatrixFloat_( Matrix* obj,int varid ){
 	switch (varid){
 		case MATRIX_grid : return &obj->grid[0][0];
 	}
 	return NULL;
 }
 
-Matrix* NewMatrix(){
+Matrix* NewMatrix_(){
 	Matrix* mat=new Matrix();
 	mat->LoadIdentity();
 	return mat;
@@ -1213,7 +1234,7 @@ Matrix* NewMatrix(){
 
 // Mesh
 
-int* MeshInt( Mesh* obj,int varid ){
+int* MeshInt_( Mesh* obj,int varid ){
 	switch (varid){
 		case MESH_no_surfs : return &obj->no_surfs;
 		case MESH_reset_col_tree : return &obj->reset_col_tree;
@@ -1222,7 +1243,7 @@ int* MeshInt( Mesh* obj,int varid ){
 	return NULL;
 }
 
-float* MeshFloat( Mesh* obj,int varid ){
+float* MeshFloat_( Mesh* obj,int varid ){
 	switch (varid){
 		case MESH_min_x : return &obj->min_x;
 		case MESH_min_y : return &obj->min_y;
@@ -1234,14 +1255,14 @@ float* MeshFloat( Mesh* obj,int varid ){
 	return NULL;
 }
 
-Matrix* MeshMatrix( Mesh* obj,int varid ){
+Matrix* MeshMatrix_( Mesh* obj,int varid ){
 	switch (varid){
 		case MESH_mat_sp : return &obj->mat_sp;
 	}
 	return NULL;
 }
 
-int MeshListSize( Mesh* obj,int varid ){
+int MeshListSize_( Mesh* obj,int varid ){
 	
 	switch (varid){
 		case MESH_surf_list : return obj->surf_list.size();
@@ -1251,7 +1272,7 @@ int MeshListSize( Mesh* obj,int varid ){
 	return 0;
 }
 
-Surface* MeshIterListSurface( Mesh* obj,int varid,int &id ){
+Surface* MeshIterListSurface_( Mesh* obj,int varid,int &id ){
 	int count=0;
 	list<Surface*>::iterator it;
 	Surface* obj2;
@@ -1277,7 +1298,7 @@ Surface* MeshIterListSurface( Mesh* obj,int varid,int &id ){
 	return obj2;
 }
 
-Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id ){
+Bone* MeshIterVectorBone_( Mesh* obj,int varid,int &id ){
 	int count=0;
 	vector<Bone*>::iterator it;
 	Bone* obj2;
@@ -1296,14 +1317,14 @@ Bone* MeshIterVectorBone( Mesh* obj,int varid,int &id ){
 	return obj2;
 }
 
-vector<Bone*>* MeshVectorBone( Mesh* obj,int varid ){
+vector<Bone*>* MeshVectorBone_( Mesh* obj,int varid ){
 	switch (varid){
 		case MESH_bones : return &obj->bones;
 	}
 	return NULL;
 }
 
-void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf ){
+void MeshListPushBackSurface_( Mesh* obj,int varid,Surface* surf ){
 	switch (varid){
 		case MESH_surf_list : obj->surf_list.push_back(surf);
 			break;
@@ -1312,7 +1333,7 @@ void MeshListPushBackSurface( Mesh* obj,int varid,Surface* surf ){
 	}
 }
 
-void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone ){
+void MeshListPushBackBone_( Mesh* obj,int varid,Bone* bone ){
 	switch (varid){
 		case MESH_bones : obj->bones.push_back(bone);
 			break;
@@ -1321,7 +1342,7 @@ void MeshListPushBackBone( Mesh* obj,int varid,Bone* bone ){
 
 // Model
 
-float* SurfaceCopyFloatArray( Surface* obj,int varid,Surface* surf ){
+float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf ){
 	switch (varid){
 		case SURFACE_vert_coords : obj->vert_coords=surf->vert_coords; return &obj->vert_coords[0];
 		case SURFACE_vert_col : obj->vert_col=surf->vert_col; return &obj->vert_col[0];
@@ -1332,7 +1353,7 @@ float* SurfaceCopyFloatArray( Surface* obj,int varid,Surface* surf ){
 	return NULL;
 }
 
-float* SurfaceResizeFloatArray( Surface* obj,int varid,Surface* surf ){
+float* SurfaceResizeFloatArray_( Surface* obj,int varid,Surface* surf ){
 	switch (varid){
 		case SURFACE_vert_coords : obj->vert_coords=surf->vert_coords; return &obj->vert_coords[0];
 		case SURFACE_vert_weight1 : obj->vert_weight1.resize(surf->no_verts+1); return &obj->vert_weight1[0];
@@ -1343,7 +1364,7 @@ float* SurfaceResizeFloatArray( Surface* obj,int varid,Surface* surf ){
 	return NULL;
 }
 
-int* SurfaceResizeIntArray( Surface* obj,int varid,Surface* surf ){
+int* SurfaceResizeIntArray_( Surface* obj,int varid,Surface* surf ){
 	switch (varid){
 		case SURFACE_vert_bone1_no : obj->vert_bone1_no.resize(surf->no_verts+1); return &obj->vert_bone1_no[0];
 		case SURFACE_vert_bone2_no : obj->vert_bone2_no.resize(surf->no_verts+1); return &obj->vert_bone2_no[0];
@@ -1353,7 +1374,7 @@ int* SurfaceResizeIntArray( Surface* obj,int varid,Surface* surf ){
 	return NULL;
 }
 
-float* AnimationKeysResizeFloatArray( AnimationKeys* obj,int varid,int a_frames ){
+float* AnimationKeysResizeFloatArray_( AnimationKeys* obj,int varid,int a_frames ){
 	switch (varid){
 		case ANIMATIONKEYS_px : obj->px.resize(a_frames+1); return &obj->px[0];
 		case ANIMATIONKEYS_py : obj->py.resize(a_frames+1); return &obj->py[0];
@@ -1369,14 +1390,14 @@ float* AnimationKeysResizeFloatArray( AnimationKeys* obj,int varid,int a_frames 
 	return NULL;
 }
 
-int* AnimationKeysResizeIntArray( AnimationKeys* obj,int varid,int a_frames ){
+int* AnimationKeysResizeIntArray_( AnimationKeys* obj,int varid,int a_frames ){
 	switch (varid){
 		case ANIMATIONKEYS_flags : obj->flags.resize(a_frames+1); return &obj->flags[0];
 	}
 	return NULL;
 }
 
-vector<Bone*>* MeshResizeBoneVector( Mesh* obj,Bone* bo_bone,int bo_no_bones ){
+vector<Bone*>* MeshResizeBoneVector_( Mesh* obj,Bone* bo_bone,int bo_no_bones ){
 	obj->bones.resize(bo_no_bones);
 	obj->bones[bo_no_bones-1]=bo_bone; // store last bone
 	return &obj->bones;
@@ -1384,7 +1405,7 @@ vector<Bone*>* MeshResizeBoneVector( Mesh* obj,Bone* bo_bone,int bo_no_bones ){
 
 // Quaternion
 
-float* QuaternionFloat( Quaternion* obj,int varid ){
+float* QuaternionFloat_( Quaternion* obj,int varid ){
 	switch (varid){
 		case QUATERNION_x : return &obj->x;
 		case QUATERNION_y : return &obj->y;
@@ -1394,14 +1415,14 @@ float* QuaternionFloat( Quaternion* obj,int varid ){
 	return NULL;
 }
 
-Quaternion* NewQuaternion(){
+Quaternion* NewQuaternion_(){
 	Quaternion* quat=new Quaternion();
 	return quat;
 }
 
 // ShadowObject
 
-char* ShadowObjectChar( ShadowObject* obj,int varid ){
+char* ShadowObjectChar_( ShadowObject* obj,int varid ){
 	switch (varid){
 		case SHADOWOBJECT_Render : return (char*)&obj->Render;
 		case SHADOWOBJECT_Static : return (char*)&obj->Static;
@@ -1410,14 +1431,14 @@ char* ShadowObjectChar( ShadowObject* obj,int varid ){
 	return NULL;
 }
 
-int* ShadowObjectInt( ShadowObject* obj,int varid ){
+int* ShadowObjectInt_( ShadowObject* obj,int varid ){
 	switch (varid){
 		case SHADOWOBJECT_cnt_tris : return &obj->cnt_tris;
 	}
 	return NULL;
 }
 
-Mesh* ShadowObjectMesh( ShadowObject* obj,int varid ){
+Mesh* ShadowObjectMesh_( ShadowObject* obj,int varid ){
 	switch (varid){
 		case SHADOWOBJECT_Parent : return obj->Parent;
 		case SHADOWOBJECT_ShadowMesh : return obj->ShadowMesh;
@@ -1425,7 +1446,7 @@ Mesh* ShadowObjectMesh( ShadowObject* obj,int varid ){
 	return NULL;
 }
 
-Surface* ShadowObjectSurface( ShadowObject* obj,int varid ){
+Surface* ShadowObjectSurface_( ShadowObject* obj,int varid ){
 	switch (varid){
 		case SHADOWOBJECT_ShadowVolume : return obj->ShadowVolume;
 	}
@@ -1434,7 +1455,7 @@ Surface* ShadowObjectSurface( ShadowObject* obj,int varid ){
 
 // Sprite
 
-int* SpriteInt( Sprite* obj,int varid ){
+int* SpriteInt_( Sprite* obj,int varid ){
 	switch (varid){
 		case SPRITE_view_mode : return &obj->view_mode;
 		case SPRITE_render_mode : return &obj->render_mode;
@@ -1442,7 +1463,7 @@ int* SpriteInt( Sprite* obj,int varid ){
 	return NULL;
 }
 
-float* SpriteFloat( Sprite* obj,int varid ){
+float* SpriteFloat_( Sprite* obj,int varid ){
 	switch (varid){
 		case SPRITE_angle : return &obj->angle;
 		case SPRITE_scale_x : return &obj->scale_x;
@@ -1455,14 +1476,14 @@ float* SpriteFloat( Sprite* obj,int varid ){
 
 // Surface
 
-unsigned short* SurfaceUShort( Surface* obj,int varid ){
+unsigned short* SurfaceUShort_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_tris : return &obj->tris[0];
 	}
 	return NULL;
 }
 
-int* SurfaceInt( Surface* obj,int varid ){
+int* SurfaceInt_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_no_verts : return &obj->no_verts;
 		case SURFACE_no_tris : return &obj->no_tris;
@@ -1481,14 +1502,14 @@ int* SurfaceInt( Surface* obj,int varid ){
 	return NULL;
 }
 
-unsigned int* SurfaceUInt( Surface* obj,int varid ){
+unsigned int* SurfaceUInt_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_vbo_id : return &obj->vbo_id[0];
 	}
 	return NULL;
 }
 
-float* SurfaceFloat( Surface* obj,int varid ){
+float* SurfaceFloat_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_vert_coords : return &obj->vert_coords[0];
 		case SURFACE_vert_norm : return &obj->vert_norm[0];
@@ -1503,14 +1524,14 @@ float* SurfaceFloat( Surface* obj,int varid ){
 	return NULL;
 }
 
-Brush* SurfaceBrush( Surface* obj,int varid ){
+Brush* SurfaceBrush_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_brush : return obj->brush;
 	}
 	return NULL;
 }
 
-Shader* SurfaceShader( Surface* obj,int varid ){
+Shader* SurfaceShader_( Surface* obj,int varid ){
 	switch (varid){
 		case SURFACE_ShaderMat : return obj->ShaderMat;
 	}
@@ -1519,7 +1540,7 @@ Shader* SurfaceShader( Surface* obj,int varid ){
 
 // Terrain
 
-float* TerrainFloat( Terrain* obj,int varid ){
+float* TerrainFloat_( Terrain* obj,int varid ){
 	switch (varid){
 		case TERRAIN_size : return &obj->size;
 		case TERRAIN_vsize : return &obj->vsize;
@@ -1529,14 +1550,14 @@ float* TerrainFloat( Terrain* obj,int varid ){
 	return NULL;
 }
 
-Camera* TerrainCamera( Terrain* obj,int varid ){
+Camera* TerrainCamera_( Terrain* obj,int varid ){
 	switch (varid){
 		case TERRAIN_eyepoint : return obj->eyepoint;
 	}
 	return NULL;
 }
 
-Shader* TerrainShader( Terrain* obj,int varid ){
+Shader* TerrainShader_( Terrain* obj,int varid ){
 	switch (varid){
 		case TERRAIN_ShaderMat : return obj->ShaderMat;
 	}
@@ -1545,7 +1566,7 @@ Shader* TerrainShader( Terrain* obj,int varid ){
 
 // Texture
 
-int* TextureInt( Texture* obj,int varid ){
+int* TextureInt_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_flags : return &obj->flags;
 		case TEXTURE_blend : return &obj->blend;
@@ -1559,7 +1580,7 @@ int* TextureInt( Texture* obj,int varid ){
 	return NULL;
 }
 
-unsigned int* TextureUInt( Texture* obj,int varid ){
+unsigned int* TextureUInt_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_texture : return &obj->texture;
 		case TEXTURE_frames : return obj->frames;
@@ -1568,7 +1589,7 @@ unsigned int* TextureUInt( Texture* obj,int varid ){
 	return NULL;
 }
 
-float* TextureFloat( Texture* obj,int varid ){
+float* TextureFloat_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_u_scale : return &obj->u_scale;
 		case TEXTURE_v_scale : return &obj->v_scale;
@@ -1579,7 +1600,7 @@ float* TextureFloat( Texture* obj,int varid ){
 	return NULL;
 }
 
-const char* TextureString( Texture* obj,int varid ){
+const char* TextureString_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_file : return obj->file.c_str();
 		case TEXTURE_file_abs : return obj->file_abs.c_str();
@@ -1587,7 +1608,7 @@ const char* TextureString( Texture* obj,int varid ){
 	return NULL;
 }
 
-list<Texture*>* TextureListTexture( Texture* obj,int varid ){
+list<Texture*>* TextureListTexture_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_tex_list : return &obj->tex_list;
 		case TEXTURE_tex_list_all : return &obj->tex_list_all;
@@ -1595,11 +1616,23 @@ list<Texture*>* TextureListTexture( Texture* obj,int varid ){
 	return NULL;
 }
 
-void GlobalListPushBackTexture( int varid,Texture* obj ){
+void GlobalListPushBackTexture_( int varid,Texture* obj ){
 	switch (varid){
 		case TEXTURE_tex_list : Texture::tex_list.push_back(obj);
 			break;
 		case TEXTURE_tex_list_all : Texture::tex_list_all.push_back(obj);
+			break;
+	}
+}
+
+void SetTextureString_( Texture* obj,int varid,char* cstr ){
+	string str(cstr);
+	switch (varid){
+		case TEXTURE_file :
+			obj->file=str;
+			break;
+		case TEXTURE_file_abs :
+			obj->file_abs=str;
 			break;
 	}
 }

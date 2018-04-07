@@ -109,17 +109,23 @@ Type TBrush
 	
 	' Extra
 	
-	Method BrushName:String()
+	Method GetString:String( str:Byte Ptr )
 	
-		Return String.FromCString( BrushString_( GetInstance(Self),BRUSH_name ) )
+		Select str
+			Case name
+				Return String.FromCString( BrushString_( GetInstance(Self),BRUSH_name ) )
+		End Select
 		
 	End Method
 	
-	Method NameBrush( b_name:String )
+	Method SetString( strPtr:Byte Ptr, strValue:String )
 	
-		Local cString:Byte Ptr=b_name.ToCString()
-		NameBrush_( GetInstance(Self),cString )
-		MemFree cString
+		Select strPtr
+			Case name
+				Local cString:Byte Ptr=strValue.ToCString()
+				SetBrushString_( GetInstance(Self),BRUSH_name,cString )
+				MemFree cString
+		End Select
 		
 	End Method
 	

@@ -194,7 +194,7 @@ Type TMesh Extends TEntity
 		Local mesh:TMesh=ent.CollapseAnimMesh()
 		ent.FreeEntity()
 		
-		mesh.NameClass("Mesh")
+		mesh.SetString(mesh.class_name,"Mesh")
 		mesh.AddParent(parent)
 		mesh.EntityListAdd(entity_list)
 		

@@ -232,12 +232,30 @@ Type TTexture
 		
 	End Method
 	
-	Method SetTextureFilename( t_filename:String )
+	Method GetString:String( strPtr:Byte Ptr )
 	
-		Local cString:Byte Ptr=t_filename.ToCString()
-		SetTextureFilename_( GetInstance(Self),cString )
-		MemFree cString
+		Select strPtr
+			Case file
+				Return String.FromCString( TextureString_( GetInstance(Self),TEXTURE_file ) )
+			Case file_abs
+				Return String.FromCString( TextureString_( GetInstance(Self),TEXTURE_file_abs ) )
+		End Select
 		
+	End Method
+	
+	Method SetString( strPtr:Byte Ptr, strValue:String )
+	
+		Select strPtr
+			Case file
+				Local cString:Byte Ptr=strValue.ToCString()
+				SetTextureString_( GetInstance(Self),TEXTURE_file,cString )
+				MemFree cString
+			Case file_abs
+				Local cString:Byte Ptr=strValue.ToCString()
+				SetTextureString_( GetInstance(Self),TEXTURE_file_abs,cString )
+				MemFree cString
+		End Select
+	
 	End Method
 	
 	Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
@@ -252,7 +270,7 @@ Type TTexture
 		
 		If tex=Null Then tex=NewTexture()
 		If FileFind(file)=False Then Return Null
-		tex.SetTextureFilename(file)
+		tex.SetString(tex.file,file)
 		
 		' set tex.flags before TexInList
 		tex.flags[0]=flags

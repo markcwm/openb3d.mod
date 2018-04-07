@@ -120,10 +120,6 @@ void Brush::BrushFX(int fx_no){
 	fx = fx_no;
 }
 
-void Brush::NameBrush(string b_name){
-	name=b_name;
-}
-
 /* moved to entity.mm to avoid dependency issues
 Brush* Brush::GetEntityBrush(Entity* ent){
 	return ent->brush->Copy();

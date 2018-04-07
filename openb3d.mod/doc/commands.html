@@ -74,9 +74,6 @@ GL equivalent, experimental.
 <tr><td class=docleft width=1%><a href=#BrushGLColor>BrushGLColor</a></td><td class=docright>
 GL equivalent, experimental.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#BrushName>BrushName</a></td><td class=docright>
-Gets a brush's name.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#BufferToTex>BufferToTex</a></td><td class=docright>
 Copy pixmap buffer to texture, buffer must be a byte ptr.
 </td></tr>
@@ -221,6 +218,9 @@ Frees VBO data and brush.
 <tr><td class=docleft width=1%><a href=#GeosphereHeight>GeosphereHeight</a></td><td class=docright>
 Set terrain height normalizing value, 0.05 is default.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
+Gets a Blitz string from a C string.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#ListPushBack>ListPushBack</a></td><td class=docright>
 Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
@@ -253,12 +253,6 @@ Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cul
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#NameBrush>NameBrush</a></td><td class=docright>
-Sets a brush's name.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#NameClass>NameClass</a></td><td class=docright>
-Sets an entity's class name.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewAnimationKeys>NewAnimationKeys</a></td><td class=docright>
 Returns a new TAnimationKeys object.
@@ -328,6 +322,9 @@ Set a shader variable name of a uniform ivec4 type to 4 integer values.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetShadowColor>SetShadowColor</a></td><td class=docright>
 Set color R/G/B in range 0..255 and A in range 0..1.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetString>SetString</a></td><td class=docright>
+Sets a C string from a Blitz string.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeEntity>ShadeEntity</a></td><td class=docright>
 Apply shader to an entity.
@@ -636,11 +633,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, experimental.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=BrushName>
-<tr><td class=doctop colspan=2>Function BrushName:String( brush:TBrush )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Gets a brush's name.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=BufferToTex>
 <tr><td class=doctop colspan=2>Function BufferToTex( tex:TTexture,buffer:Byte Ptr,frame:Int=0 ) ' frame currently does nothing</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy pixmap buffer to texture, buffer must be a byte ptr.</td></tr>
@@ -886,6 +878,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set terrain height normalizing value, 0.05 is default.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=GetString>
+<tr><td class=doctop colspan=2>Function GetString:String( obj:Object, strPtr:Byte Ptr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=ListPushBack>
 <tr><td class=doctop colspan=2>Function ListPushBack( list:TList,value:Object,ent:TEntity )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Like using ListAddLast(list,value) in Minib3d, except ent parameter.</td></tr>
@@ -948,16 +945,6 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
 <tr><td class=doctop colspan=2>Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set height of a given point, like ModifyTerrain.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=NameBrush>
-<tr><td class=doctop colspan=2>Function NameBrush( brush:TBrush,b_name:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Sets a brush's name.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=NameClass>
-<tr><td class=doctop colspan=2>Function NameClass( ent:TEntity,c_name:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Sets an entity's class name.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewAnimationKeys>
@@ -1079,6 +1066,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <table class=doc width=100% cellspacing=3 id=SetShadowColor>
 <tr><td class=doctop colspan=2>Function SetShadowColor( R:Int,G:Int,B:Int,A:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set color R/G/B in range 0..255 and A in range 0..1.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetString>
+<tr><td class=doctop colspan=2>Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets a C string from a Blitz string.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadeEntity>

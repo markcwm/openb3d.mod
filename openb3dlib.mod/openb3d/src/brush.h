@@ -58,7 +58,6 @@ public:
 	void BrushTexture(Texture* texture,int frame=0,int index=0);
 	void BrushBlend(int blend_no);
 	void BrushFX(int fx_no);
-	void NameBrush(string b_name);
 	//static Brush* GetEntityBrush(Entity* ent); // moved to entity.mm to avoid dependency isssues
 	//static Brush* GetSurfaceBrush(Surface* surf); // move to surface.mm to avoid dependency isssues
 	Texture* GetBrushTexture(int index=0);

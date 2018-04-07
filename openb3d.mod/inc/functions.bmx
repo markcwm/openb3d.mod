@@ -3,6 +3,64 @@
 ' *** Extra
 
 Rem
+bbdoc: Gets a Blitz string from a C string
+End Rem
+Function GetString:String( obj:Object, strPtr:Byte Ptr )
+	Local bru:TBrush=TBrush(obj)
+	Local ent:TEntity=TEntity(obj)
+	Local tex:TTexture=TTexture(obj)
+	If bru
+		Select strPtr
+			Case bru.name
+				Return String.FromCString( BrushString_( TBrush.GetInstance(bru),BRUSH_name ) )
+		End Select
+	ElseIf ent
+		Select strPtr
+			Case ent.name
+				Return String.FromCString( EntityString_( TEntity.GetInstance(ent),ENTITY_name ) )
+			Case ent.class_name
+				Return String.FromCString( EntityString_( TEntity.GetInstance(ent),ENTITY_class_name ) )
+		End Select
+	ElseIf tex
+		Select strPtr
+			Case tex.file
+				Return String.FromCString( TextureString_( TTexture.GetInstance(tex),TEXTURE_file ) )
+			Case tex.file_abs
+				Return String.FromCString( TextureString_( TTexture.GetInstance(tex),TEXTURE_file_abs ) )
+		End Select
+	EndIf
+End Function
+
+Rem
+bbdoc: Sets a C string from a Blitz string
+End Rem
+Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )
+	Local bru:TBrush=TBrush(obj)
+	Local ent:TEntity=TEntity(obj)
+	Local tex:TTexture=TTexture(obj)
+	If bru
+		Select strPtr
+			Case bru.name
+				bru.SetString(bru.name,strValue)
+		End Select
+	ElseIf ent
+		Select strPtr
+			Case ent.name
+				ent.SetString(ent.name,strValue)
+			Case ent.class_name
+				ent.SetString(ent.class_name,strValue)
+		End Select
+	ElseIf tex
+		Select strPtr
+			Case tex.file
+				tex.SetString(tex.file,strValue)
+			Case tex.file_abs
+				tex.SetString(tex.file_abs,strValue)
+		End Select
+	EndIf
+End Function
+
+Rem
 bbdoc: Loads a B3D or 3DS file and returns a New TMesh
 about: Uses the library function, the returned mesh will have children and animations.
 End Rem
@@ -30,31 +88,6 @@ bbdoc: Loads an image and returns a new TTexture
 End Rem
 Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	Return TTexture.LoadAnimTextureStream(file,flags,0,0,0,1,tex)
-End Function
-
-Rem
-bbdoc: Sets an entity's class name
-End Rem
-Function NameClass( ent:TEntity,c_name:String )	
-	Local cString:Byte Ptr=c_name.ToCString()
-	NameClass_( TEntity.GetInstance(ent),cString )
-	MemFree cString
-End Function
-
-Rem
-bbdoc: Gets a brush's name
-End Rem
-Function BrushName:String( brush:TBrush )
-	Return String.FromCString( BrushString_( TBrush.GetInstance(brush),BRUSH_name ) )
-End Function
-
-Rem
-bbdoc: Sets a brush's name
-End Rem
-Function NameBrush( brush:TBrush,b_name:String )
-	Local cString:Byte Ptr=b_name.ToCString()
-	NameBrush_( TBrush.GetInstance(brush),cString )
-	MemFree cString
 End Function
 
 Rem

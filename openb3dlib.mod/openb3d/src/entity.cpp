@@ -655,10 +655,6 @@ string Entity::EntityClass(){
 	return class_name;
 }
 
-void Entity::NameClass(string c_name){
-	class_name=c_name;
-}
-
 // anim
 void Entity::Animate(int mode,float speed,int seq,int trans){
 	anim_mode=mode;
