@@ -3,6 +3,7 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
+'Framework sidesign.minib3d
 
 Import Brl.Random
 
@@ -125,7 +126,7 @@ Type TBullet
 	
 		' check to see if the entity collided with the level
 		Local entity_hit% = CountCollisions(ent)
-
+		
 		' if the entity collided with the level, make it bounce
 		If entity_hit
 	

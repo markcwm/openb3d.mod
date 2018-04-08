@@ -94,8 +94,8 @@ void clearCollisions(){
 
 void UpdateStaticCollisions(){
 	list<CollisionPair*>::iterator cp_it;
-	int once=0;
-	
+	int col_once=0;
+
 	for(cp_it=CollisionPair::cp_list.begin();cp_it!=CollisionPair::cp_list.end();cp_it++){
 		CollisionPair col_pair=**cp_it;
 
@@ -108,14 +108,14 @@ void UpdateStaticCollisions(){
 		for(src_ent_it=CollisionPair::ent_lists[col_pair.src_type].begin();src_ent_it!=CollisionPair::ent_lists[col_pair.src_type].end();src_ent_it++){
 			Entity& ent=**src_ent_it;
 			// clear collisions
-			if(once==0){ // multiple collisions fix
+			if(col_once==0){ // fixes deleting collision list breaking multiple collisions
 				ent.no_collisions=0;
 				for(unsigned int ix=0;ix<ent.collision.size();ix++){
 					delete ent.collision[ix];
 				}
 				ent.collision.clear();
 			}
-			once++;
+			col_once++;
 
 			// if src entity is hidden or it's parent is hidden then do not check for collision
 			if(ent.Hidden()==true) continue;
@@ -198,13 +198,13 @@ void UpdateStaticCollisions(){
 
 				if(ent2_hit){
 
-					int x=C_CollisionResponse(c_col_info,c_coll,response); // SMALLFIXES topic=87446
+					int x=C_CollisionResponse(c_col_info,c_coll,response); // fixes collision functions lag, topic=87446
 					ent.no_collisions=ent.no_collisions+1;
 
 					//int i=ent.no_collisions-1;
 					CollisionImpact* eci=new CollisionImpact;
 					//ent.collision.push_back(eci);
-					ent.collision.insert(ent.collision.begin(),eci); // INVERT COLLISION ORDER (as in B3D)
+					ent.collision.insert(ent.collision.begin(),eci); // fixes some collisions breaking, inverts order
 
 					eci->x=C_CollisionX();
 					eci->y=C_CollisionY();
@@ -222,10 +222,12 @@ void UpdateStaticCollisions(){
 
 					eci->tri=C_CollisionTriangle();
 
-					if(x==false) break; // SMALLFIXES
+					//if(C_CollisionResponse(c_col_info,c_coll,response)==false) break;
+					if(x==false) break;
 
 				}else{
 
+					if(ent.no_collisions==0) col_once=0; // fixes collisions needing reset or keeps adding
 					break;
 
 				}
