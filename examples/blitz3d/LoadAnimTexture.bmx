@@ -19,7 +19,7 @@ PositionEntity cube,-2,0,5
 Local cube2:TMesh=CreateCube()
 PositionEntity cube2,2,0,5
 
-Local tex:TTexture=LoadTexture("../media/b3dlogo.jpg")
+Local tex:TTexture=LoadTextureStream("../media/b3dlogo.jpg")
 EntityTexture cube2,tex
 
 ' Load anim texture
