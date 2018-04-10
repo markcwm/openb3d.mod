@@ -130,6 +130,7 @@ Shader* TerrainShader_( Terrain* obj,int varid );
 // Texture
 int* TextureInt_( Texture* obj,int varid );
 unsigned int* TextureUInt_( Texture* obj,int varid );
+unsigned int* TextureNewUIntArray_( Texture* obj,int varid,int array_size );
 float* TextureFloat_( Texture* obj,int varid );
 const char* TextureString_( Texture* obj,int varid );
 list<Texture*>* TextureListTexture_( Texture* obj,int varid );

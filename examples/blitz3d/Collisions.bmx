@@ -3,7 +3,6 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
-'Framework sidesign.minib3d
 
 Graphics3D DesktopWidth(),DesktopHeight(),0,2
 

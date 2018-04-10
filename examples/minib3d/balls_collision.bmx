@@ -3,7 +3,6 @@
 Strict
 
 Framework Openb3d.B3dglgraphics
-'Framework sidesign.minib3d
 
 Import Brl.Random
 

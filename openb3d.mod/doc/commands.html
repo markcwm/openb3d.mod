@@ -86,6 +86,9 @@ Returns a copy of the new brush.
 <tr><td class=docleft width=1%><a href=#CopyList>CopyList</a></td><td class=docright>
 Copy a list or vector. To copy a field list use as a method.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CopyPixels>CopyPixels</a></td><td class=docright>
+Copy a section of source pixmap to destination pixmap.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CopySurface>CopySurface</a></td><td class=docright>
 Returns a copy of the new surface.
 </td></tr>
@@ -652,6 +655,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=doctop colspan=2>Function CopyList( list:TList )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy a list or vector. To copy a field list use as a method.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CopyPixels>
+<tr><td class=doctop colspan=2>Function CopyPixels( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a section of source pixmap to destination pixmap.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopySurface>

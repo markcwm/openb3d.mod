@@ -188,6 +188,7 @@ Extern
 	Function TextureCopy_:Byte Ptr( obj:Byte Ptr )' = "TextureCopy"
 	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr )' = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr )' = "FilterFlags"
+	Function CopyPixels_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int )' = "CopyPixels"
 	
 End Extern
 
@@ -310,6 +311,7 @@ Extern
 	' Texture
 	Function TextureInt_:Int Ptr( obj:Byte Ptr,varid:Int )' = "TextureInt"
 	Function TextureUInt_:Int Ptr( obj:Byte Ptr,varid:Int )' = "TextureUInt"
+	Function TextureNewUIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,array_size:Int )' = "TextureNewUIntArray"
 	Function TextureFloat_:Float Ptr( obj:Byte Ptr,varid:Int )' = "TextureFloat"
 	Function TextureString_:Byte Ptr( obj:Byte Ptr,varid:Int )' = "TextureString"
 	Function TextureListTexture_:Byte Ptr( obj:Byte Ptr,varid:Int )' = "TextureListTexture"

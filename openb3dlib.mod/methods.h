@@ -152,7 +152,7 @@ void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 Texture* TextureCopy_( Texture* obj );
 Texture* TexInList_( Texture* obj,list<Texture*>& list_ref );
 void FilterFlags_( Texture* obj );
-void SetTextureFilename_( Texture* obj,char* t_filename );
+void CopyPixels_(unsigned char* src,unsigned int sW,unsigned int sH,unsigned int sX,unsigned int sY,unsigned char* dst,unsigned int dW,unsigned int dH,unsigned int bPP);
 //static string Strip_(string filename);
 
 #ifdef __cplusplus

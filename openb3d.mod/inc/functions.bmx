@@ -3,6 +3,14 @@
 ' *** Extra
 
 Rem
+bbdoc: Copy a section of source pixmap to destination pixmap
+about: srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4
+End Rem
+Function CopyPixels( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )
+	CopyPixels_( src.pixels,srcW,srcH,srcX,srcY,dst.pixels,dstW,dstH,bPP )
+End Function
+
+Rem
 bbdoc: Gets a Blitz string from a C string
 End Rem
 Function GetString:String( obj:Object, strPtr:Byte Ptr )

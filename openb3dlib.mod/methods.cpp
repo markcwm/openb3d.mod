@@ -486,9 +486,11 @@ Texture* TexInList_( Texture* obj,list<Texture*>& list_ref ){
 void FilterFlags_( Texture* obj ){
 	obj->FilterFlags();
 }
-void SetTextureFilename_( Texture* obj,char* t_filename ){
-	string filename(t_filename);
-	obj->file=filename;
+
+void CopyPixels_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP){
+  unsigned int y;
+  for (y = 0; y < dstH; y++)
+    memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
 }
 
 } // end extern C

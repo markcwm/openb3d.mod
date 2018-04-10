@@ -163,7 +163,7 @@ Type TBrush
 	
 		If exists
 			For Local id:Int=0 To 7
-				TTexture.FreeObject( TTexture.GetInstance(tex[id]) ) ; tex[id]=Null
+				tex[id].FreeTexture()
 			Next
 			
 			FreeBrush_( GetInstance(Self) )

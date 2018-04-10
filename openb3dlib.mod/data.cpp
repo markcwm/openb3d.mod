@@ -1583,8 +1583,16 @@ int* TextureInt_( Texture* obj,int varid ){
 unsigned int* TextureUInt_( Texture* obj,int varid ){
 	switch (varid){
 		case TEXTURE_texture : return &obj->texture;
-		case TEXTURE_frames : return obj->frames;
-		case TEXTURE_framebuffer : return obj->framebuffer;
+		case TEXTURE_frames : return &obj->frames[0];
+		case TEXTURE_framebuffer : return &obj->framebuffer[0];
+	}
+	return NULL;
+}
+
+unsigned int* TextureNewUIntArray_( Texture* obj,int varid,int array_size ){
+	switch (varid){
+		case TEXTURE_frames : obj->frames=new unsigned int[array_size]; return &obj->frames[0];
+		case TEXTURE_framebuffer : obj->framebuffer=new unsigned int[array_size]; return &obj->framebuffer[0];
 	}
 	return NULL;
 }

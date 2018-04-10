@@ -21,7 +21,7 @@ Type TTexture
 	Field cube_face:Int Ptr,cube_mode:Int Ptr ' 0/1
 	
 	' minib3d
-	'Field pixmap:TPixmap
+	Field pixmap:TPixmap
 	'Field gltex:Int[1]
 	'Field cube_pixmap:TPixmap[7]
 	'Field no_mipmaps:Int
@@ -269,8 +269,11 @@ Type TTexture
 		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' todo! load cubemaps
 		
 		If tex=Null Then tex=NewTexture()
-		If FileFind(file)=False Then Return Null
+		
+		If FileFind(file)=False Then Return Null ' strips any directories from file
+		
 		tex.SetString(tex.file,file)
+		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
 		
 		' set tex.flags before TexInList
 		tex.flags[0]=flags
@@ -287,72 +290,66 @@ Type TTexture
 			tex.TextureListAdd( tex_list_all )
 		EndIf
 		
-		Local map:TPixmap=LoadPixmap(file) ' load from streams
-		If map=Null Then Return tex
+		tex.pixmap=LoadPixmap(file) ' load from streams
+		If tex.pixmap=Null Then Return tex
 		
-		If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-		If (flags & 2) map=ApplyAlpha(map)
-		If (flags & 4) map=ApplyMask(map,10,10,10)
+		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
+		Local alpha_present:Int=False
+		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
+		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		' if tex not anim tex, get frame width and height
-		If frame_width=0 And frame_height=0
-			frame_width=map.width
-			frame_height=map.height
-		EndIf
+		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,10,10,10) ' mask pixmap
 		
-		tex.no_frames[0]=frame_count
-		'tex.gltex=tex.gltex[..tex.no_frames]
+		Local name:Int
+		Local mapframe:TPixmap=Null
 		
-		' pixmap -> tex
-		Local xframes:Int=map.width/frame_width
-		Local yframes:Int=map.height/frame_height
-		Local startx:Int=first_frame Mod xframes
-		Local starty:Int=(first_frame/yframes) Mod yframes
-		Local x:Int=startx
-		Local y:Int=starty
-		Local pixmap:TPixmap
+		If frame_count<2 ' normal texture
 		
-		' todo! test anim textures
-		For Local i:Int=0 To tex.no_frames[0]-1
-			' get static pixmap window. when resize pixmap is called new pixmap will be returned.
-			pixmap=map.Window(x*frame_width,y*frame_height,frame_width,frame_height)
-			x=x+1
-			If x>=xframes
-				x=0
-				y=y+1
-			EndIf
-			
-			pixmap=AdjustPixmap(pixmap)
-			tex.width[0]=pixmap.width
-			tex.height[0]=pixmap.height
-			'Local width:Int=pixmap.width
-			'Local height:Int=pixmap.height
-			
-			Local name:Int
 			glGenTextures(1,Varptr(name))
 			glBindtexture(GL_TEXTURE_2D,name)
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels)
-			
-			'Local mipmap:Int
-			'If (tex.flags[0] & 8) Then mipmap=True
-			'Local mip_level:Int=0
-			'Repeat
-			'	glPixelStorei(GL_UNPACK_ROW_LENGTH,pixmap.pitch/BytesPerPixel[pixmap.format])
-			'	glTexImage2D(GL_TEXTURE_2D,mip_level,GL_RGBA8,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,pixmap.pixels)
-			'	If Not mipmap Then Exit
-			'	If width=1 And height=1 Exit
-			'	If width>1 width:/2
-			'	If height>1 height:/2
-			'	pixmap=ResizePixmap(pixmap,width,height)
-			'	mip_level:+1
-			'Forever
-			'tex.no_mipmaps=mip_level
-			
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
+						
 			tex.texture[0]=name
-			tex.BufferToTex(pixmap.pixels)
-		Next
+			tex.width[0]=tex.pixmap.width
+			tex.height[0]=tex.pixmap.height
+			
+		ElseIf frame_width>0 And frame_height>0 ' anim texture
+		
+			mapframe=CreatePixmap(frame_width,frame_height,tex.pixmap.format)
+			
+			tex.no_frames[0]=frame_count
+			tex.frames=TextureNewUIntArray_( GetInstance(tex),TEXTURE_frames,frame_count )
+			
+			Local xframes:Int=tex.pixmap.width/frame_width
+			Local yframes:Int=tex.pixmap.height/frame_height
+			Local x:Int=first_frame Mod xframes
+			Local y:Int=(first_frame/yframes) Mod yframes
+			
+			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to mapframe pixels
+				CopyPixels_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*frame_width,y*frame_height,mapframe.pixels,frame_width,frame_height,4)
+				x=x+1 ' left-right frames
+				If x>=xframes ' top-bottom frames
+					x=0
+					y=y+1
+				EndIf
+				
+				glGenTextures(1,Varptr(name))
+				glBindtexture(GL_TEXTURE_2D,name)
+				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,frame_width,frame_height,GL_RGBA,GL_UNSIGNED_BYTE,mapframe.pixels)
+				
+				tex.frames[i]=name
+			Next
+			
+			tex.texture[0]=tex.frames[0]
+			tex.width[0]=frame_width
+			tex.height[0]=frame_height
+			
+		EndIf
 		
 		Return tex
+		
 	End Function
 	
 	' GL 2.0 support
@@ -507,6 +504,7 @@ Type TTexture
 				If tex=Self Then ListRemove( tex_list_all,Self ) ; tex_list_all_id:-1
 			Next
 			ListRemove( tex_list,Self ) ; tex_list_id:-1
+			pixmap=Null
 			FreeTexture_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
 			exists=0
@@ -676,29 +674,28 @@ Type TTexture
 	
 	' Minib3d
 	
-	' return if file exists
-	' SMALLFIXES, replaced FileFind function to alow Incbin and Zipstream
-	' from www.blitzmax.com/Community/posts.php?topic=88901#1009408
+	' strips any directories from file, returns if file is found
+	' fixes FileFind not finding incbin or zip paths, topic=88901 (by SLotman)
 	Function FileFind:Int( file:String Var )
 	
 		'Local TS:TStream = OpenFile(file$,True,False)
 		Local TS:TStream = ReadFile(file$)
 		If Not TS Then
-			Repeat
+			Repeat ' strip \ dirs (Win)
 				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
 			Until Instr(file$,"\",1)=0
-			Repeat
+			Repeat ' strip / dirs
 				file$=Right$(file$,(Len(file$)-Instr(file$,"/",1)))
 			Until Instr(file$,"/",1)=0
 			TS = OpenStream(file$,True,False)
 			If Not TS Then
 				DebugLog "ERROR: Cannot find texture: "+file$
 				Return False
-			Else
+			Else ' file found after strip dir
 				CloseStream(TS)
 				TS=Null
 			EndIf
-		Else
+		Else ' incbin or zip file found
 			CloseStream TS
 			TS=Null	
 		EndIf
@@ -706,12 +703,12 @@ Type TTexture
 		
 	End Function
 	
-	' returns absolute path of file
+	' returns absolute path of file if relative and not incbin or zip
 	Function FileAbs:String( file:String )
 	
 		Local file_abs$
 		
-		If Instr(file$,":")=False
+		If Instr(file$,":")=False ' not incbin or zip
 			file_abs$=CurrentDir$()+"/"+file$
 		Else
 			file_abs$=file$
