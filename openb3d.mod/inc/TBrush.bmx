@@ -32,7 +32,7 @@ Type TBrush
 		?bmxng
 		brush_map.Insert( inst,obj )
 		?Not bmxng
-		brush_map.Insert( String(Long(inst)),obj )
+		brush_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -45,7 +45,7 @@ Type TBrush
 		?bmxng
 		brush_map.Remove( inst )
 		?Not bmxng
-		brush_map.Remove( String(Long(inst)) )
+		brush_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -55,7 +55,7 @@ Type TBrush
 		?bmxng
 		Return TBrush( brush_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TBrush( brush_map.ValueForKey( String(Long(inst)) ) )
+		Return TBrush( brush_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

@@ -20,7 +20,7 @@ Type TShaderObject
 		?bmxng
 		shaderobject_map.Insert( inst,obj )
 		?Not bmxng
-		shaderobject_map.Insert( String(Long(inst)),obj )
+		shaderobject_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		Return obj
@@ -32,7 +32,7 @@ Type TShaderObject
 		?bmxng
 		shaderobject_map.Remove( inst )
 		?Not bmxng
-		shaderobject_map.Remove( String(Long(inst)) )
+		shaderobject_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -42,7 +42,7 @@ Type TShaderObject
 		?bmxng
 		Return TShaderObject( shaderobject_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TShaderObject( shaderobject_map.ValueForKey( String(Long(inst)) ) )
+		Return TShaderObject( shaderobject_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function
@@ -135,7 +135,11 @@ Type TMaterial Extends TTexture
 	
 		If inst=Null Then Return Null
 		Local obj:TMaterial=New TMaterial
-		tex_map.Insert( String(Long(inst)),obj )
+		?bmxng
+		tex_map.Insert( inst,obj )
+		?Not bmxng
+		tex_map.Insert( String(Int(inst)),obj )
+		?
 		obj.instance=inst
 		Return obj
 		
@@ -179,7 +183,7 @@ Type TShader
 		?bmxng
 		shader_map.Insert( inst,obj )
 		?Not bmxng
-		shader_map.Insert( String(Long(inst)),obj )
+		shader_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -192,7 +196,7 @@ Type TShader
 		?bmxng
 		shader_map.Remove( inst )
 		?Not bmxng
-		shader_map.Remove( String(Long(inst)) )
+		shader_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -202,7 +206,7 @@ Type TShader
 		?bmxng
 		Return TShader( shader_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TShader( shader_map.ValueForKey( String(Long(inst)) ) )
+		Return TShader( shader_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

@@ -83,7 +83,11 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 			
 			If pf
 				pixmap = CreatePixmap( width, height, pf )
+				?bmxng
 				MemCopy(pixmap.pixels, imgPtr, Size_T(width * height * BytesPerPixel[pf]))
+				?Not bmxng
+				MemCopy(pixmap.pixels, imgPtr, Int(width * height * BytesPerPixel[pf]))
+				?
 			EndIf
 			
 			CloseStream(ram)

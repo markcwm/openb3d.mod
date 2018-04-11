@@ -21,7 +21,7 @@ Type TQuaternion
 		?bmxng
 		quaternion_map.Insert( inst,obj )
 		?Not bmxng
-		quaternion_map.Insert( String(Long(inst)),obj )
+		quaternion_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -34,7 +34,7 @@ Type TQuaternion
 		?bmxng
 		quaternion_map.Remove( inst )
 		?Not bmxng
-		quaternion_map.Remove( String(Long(inst)) )
+		quaternion_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -44,7 +44,7 @@ Type TQuaternion
 		?bmxng
 		Return TQuaternion( quaternion_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TQuaternion( quaternion_map.ValueForKey( String(Long(inst)) ) )
+		Return TQuaternion( quaternion_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

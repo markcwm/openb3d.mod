@@ -47,7 +47,7 @@ Type TTexture
 		?bmxng
 		tex_map.Insert( inst,obj )
 		?Not bmxng
-		tex_map.Insert( String(Long(inst)),obj )
+		tex_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -60,7 +60,7 @@ Type TTexture
 		?bmxng
 		tex_map.Remove( inst )
 		?Not bmxng
-		tex_map.Remove( String(Long(inst)) )
+		tex_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -70,7 +70,7 @@ Type TTexture
 		?bmxng
 		Return TTexture( tex_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TTexture( tex_map.ValueForKey( String(Long(inst)) ) )
+		Return TTexture( tex_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

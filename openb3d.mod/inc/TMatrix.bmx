@@ -21,7 +21,7 @@ Type TMatrix
 		?bmxng
 		matrix_map.Insert( inst,obj )
 		?Not bmxng
-		matrix_map.Insert( String(Long(inst)),obj )
+		matrix_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -34,7 +34,7 @@ Type TMatrix
 		?bmxng
 		matrix_map.Remove( inst )
 		?Not bmxng
-		matrix_map.Remove( String(Long(inst)) )
+		matrix_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -44,7 +44,7 @@ Type TMatrix
 		?bmxng
 		Return TMatrix( matrix_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TMatrix( matrix_map.ValueForKey( String(Long(inst)) ) )
+		Return TMatrix( matrix_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

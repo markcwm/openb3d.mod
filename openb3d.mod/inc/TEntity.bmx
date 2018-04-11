@@ -100,7 +100,7 @@ Type TEntity
 		?bmxng
 		ent_map.Remove( inst )
 		?Not bmxng
-		ent_map.Remove( String(Long(inst)) )
+		ent_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -110,7 +110,7 @@ Type TEntity
 		?bmxng
 		Return TEntity( ent_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TEntity( ent_map.ValueForKey( String(Long(inst)) ) )
+		Return TEntity( ent_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

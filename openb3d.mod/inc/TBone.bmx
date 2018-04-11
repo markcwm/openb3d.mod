@@ -27,7 +27,7 @@ Type TBone Extends TEntity
 		?bmxng
 		ent_map.Insert( inst,obj )
 		?Not bmxng
-		ent_map.Insert( String(Long(inst)),obj )
+		ent_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()

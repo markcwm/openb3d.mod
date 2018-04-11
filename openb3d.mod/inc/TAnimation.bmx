@@ -81,7 +81,7 @@ Type TAnimationKeys
 		?bmxng
 		animkeys_map.Insert( inst,obj )
 		?Not bmxng
-		animkeys_map.Insert( String(Long(inst)),obj )
+		animkeys_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -94,7 +94,7 @@ Type TAnimationKeys
 		?bmxng
 		animkeys_map.Remove( inst )
 		?Not bmxng
-		animkeys_map.Remove( String(Long(inst)) )
+		animkeys_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -104,7 +104,7 @@ Type TAnimationKeys
 		?bmxng
 		Return TAnimationKeys( animkeys_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TAnimationKeys( animkeys_map.ValueForKey( String(Long(inst)) ) )
+		Return TAnimationKeys( animkeys_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

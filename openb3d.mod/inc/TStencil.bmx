@@ -21,7 +21,7 @@ Type TStencil
 		?bmxng
 		stencil_map.Insert( inst,obj )
 		?Not bmxng
-		stencil_map.Insert( String(Long(inst)),obj )
+		stencil_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -34,7 +34,7 @@ Type TStencil
 		?bmxng
 		stencil_map.Remove( inst )
 		?Not bmxng
-		stencil_map.Remove( String(Long(inst)) )
+		stencil_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -44,7 +44,7 @@ Type TStencil
 		?bmxng
 		Return TStencil( stencil_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TStencil( stencil_map.ValueForKey( String(Long(inst)) ) )
+		Return TStencil( stencil_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

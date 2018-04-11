@@ -52,7 +52,7 @@ Type TShadowObject
 		?bmxng
 		shad_map.Insert( inst,obj )
 		?Not bmxng
-		shad_map.Insert( String(Long(inst)),obj )
+		shad_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -65,7 +65,7 @@ Type TShadowObject
 		?bmxng
 		shad_map.Remove( inst )
 		?Not bmxng
-		shad_map.Remove( String(Long(inst)) )
+		shad_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -75,7 +75,7 @@ Type TShadowObject
 		?bmxng
 		Return TShadowObject( shad_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TShadowObject( shad_map.ValueForKey( String(Long(inst)) ) )
+		Return TShadowObject( shad_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

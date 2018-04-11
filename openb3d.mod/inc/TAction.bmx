@@ -49,7 +49,7 @@ Type TAction
 		?bmxng
 		action_map.Insert( inst,obj )
 		?Not bmxng
-		action_map.Insert( String(Long(inst)),obj )
+		action_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -62,7 +62,7 @@ Type TAction
 		?bmxng
 		action_map.Remove( inst )
 		?Not bmxng
-		action_map.Remove( String(Long(inst)) )
+		action_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -72,7 +72,7 @@ Type TAction
 		?bmxng
 		Return TAction( action_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TAction( action_map.ValueForKey( String(Long(inst)) ) )
+		Return TAction( action_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

@@ -63,7 +63,7 @@ Type TSurface
 		?bmxng
 		surf_map.Insert( inst,obj )
 		?Not bmxng
-		surf_map.Insert( String(Long(inst)),obj )
+		surf_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -76,7 +76,7 @@ Type TSurface
 		?bmxng
 		surf_map.Remove( inst )
 		?Not bmxng
-		surf_map.Remove( String(Long(inst)) )
+		surf_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
@@ -86,7 +86,7 @@ Type TSurface
 		?bmxng
 		Return TSurface( surf_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TSurface( surf_map.ValueForKey( String(Long(inst)) ) )
+		Return TSurface( surf_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function

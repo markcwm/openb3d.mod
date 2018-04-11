@@ -20,6 +20,8 @@ PositionEntity pivot,0,4,0
 Local temp:TMesh=CreateCube()
 Local box:TEntity[], inc%, tex:TTexture
 
+SetTextureLoader 1 ' 1 for streams (default), 2 for library
+
 For Local t%=0 To 359 Step 360/6.9
 	box=box[..inc+1]
 	box[inc]=CopyEntity(temp,pivot)
