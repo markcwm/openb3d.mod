@@ -7,8 +7,6 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight()
 
-SetMeshLoader 2 ' 1 for streams (default), 2 for library
-
 Local camera:TCamera=CreateCamera()
 Local anim_ent:TMesh=LoadAnimMesh("../media/zombie.b3d")
 

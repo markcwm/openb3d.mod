@@ -643,8 +643,8 @@ Type TB3D
 						new_tag=ReadTag(file)
 					Wend
 					
-					bo_bone.SetString(mesh.class_name,"Bone")
-					bo_bone.SetString(mesh.name,n_name)
+					bo_bone.SetString(bo_bone.class_name,"Bone")
+					bo_bone.SetString(bo_bone.name,n_name)
 					bo_bone.px[0]=n_px
 					bo_bone.py[0]=n_py
 					bo_bone.pz[0]=n_pz
