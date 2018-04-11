@@ -21,28 +21,34 @@ Local light:TLight=CreateLight()
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
+SetMeshLoader 1 ' 1 for streams (default), 2 for library
+SetTextureLoader 1
+
 ' load anim mesh
 Local loader%=1
 Select loader
 	Case 1 ' load stream mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/bath/RomanBath.b3d")
+		mesh=LoadAnimMesh("../media/bath/RomanBath.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load incbin mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("incbin::../media/test/test.b3d")
+		mesh=LoadAnimMesh("incbin::../media/test/test.b3d")
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load zip mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("zip::../media/test.zip//test.b3d")
+		mesh=LoadAnimMesh("zip::../media/test.zip//test.b3d")
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
+		SetTextureLoader 2 ' 1 for streams (default), 2 for library
+		SetMeshLoader 2
+		
 		oldtime=MilliSecs()
 		mesh=LoadAnimMesh("../media/bath/RomanBath.b3d")
 		

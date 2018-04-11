@@ -19,31 +19,34 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
+SetMeshLoader 1 ' 1 for streams (default), 2 for library
+SetTextureLoader 1
+
 Local loader:Int=5 ' 0 to 5
 Select loader
 
 	Case 1 ' load stream mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/zombie.b3d")
+		mesh=LoadAnimMesh("../media/zombie.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load Bird mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/Bird.b3d")
+		mesh=LoadAnimMesh("../media/Bird.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 3 ' load castle1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/castle1.b3d")
+		mesh=LoadAnimMesh("../media/castle1.b3d")
 		
 		debug="b3d time="+(MilliSecs()-oldtime)
 		
 	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/zombie.b3d"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMesh(file)
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
@@ -51,11 +54,14 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/zombie.zip"
 		Local file:String = "zip::"+zipfile+"//zombie.b3d"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMesh(file)
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
+		SetTextureLoader 2 ' 1 for streams (default), 2 for library
+		SetMeshLoader 2
+		
 		oldtime=MilliSecs()
 		mesh=LoadAnimMesh("../media/zombie.b3d")
 		

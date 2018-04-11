@@ -3,6 +3,20 @@
 ' *** Extra
 
 Rem
+bbdoc: 1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders, default is 1
+End Rem
+Function SetTextureLoader( glob:Int )
+	TEXTURE_LOADER=glob
+End Function
+
+Rem
+bbdoc: 1 for stream mesh loaders, 2 for library loaders, default is 1
+End Rem
+Function SetMeshLoader( glob:Int )
+	MESH_LOADER=glob
+End Function
+
+Rem
 bbdoc: Copy a section of source pixmap to destination pixmap
 about: srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4
 End Rem
@@ -66,36 +80,6 @@ Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )
 				tex.SetString(tex.file_abs,strValue)
 		End Select
 	EndIf
-End Function
-
-Rem
-bbdoc: Loads a B3D or 3DS file and returns a New TMesh
-about: Uses the library function, the returned mesh will have children and animations.
-End Rem
-Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadAnimMeshStream( file,parent )
-End Function
-
-Rem
-bbdoc: Loads a B3D, MD2 or 3DS file and returns a new TMesh
-about: Uses the library function, the returned mesh is collapsed so has no children.
-End Rem
-Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMeshStream( file,parent )
-End Function
-
-Rem
-bbdoc: Loads animation frames from an image and returns a new TTexture
-End Rem
-Function LoadAnimTextureStream:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
-	Return TTexture.LoadAnimTextureStream( file,flags,frame_width,frame_height,first_frame,frame_count,tex )
-End Function
-
-Rem
-bbdoc: Loads an image and returns a new TTexture
-End Rem
-Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	Return TTexture.LoadAnimTextureStream(file,flags,0,0,0,1,tex)
 End Function
 
 Rem

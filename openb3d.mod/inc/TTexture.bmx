@@ -258,12 +258,6 @@ Type TTexture
 	
 	End Method
 	
-	Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
-	
-		Return LoadAnimTextureStream(file,flags,0,0,0,1,tex)
-		
-	End Function
-	
 	Function LoadAnimTextureStream:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
 		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' todo! load cubemaps
@@ -521,42 +515,38 @@ Type TTexture
 	
 	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	
-		Local map:TPixmap=Null, name%
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
-		If tex=Null Then tex=CreateObject(inst)
-		MemFree cString
-		Return tex
+		Select TEXTURE_LOADER
 		
-		Rem
-		If tex=Null Then Return Null
-		If tex.width[0]=0 ' Stbimage failed try pixmap - for progressive jpgs
-			'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' TODO load cubemaps
-			map=LoadPixmap(file)
-			If map=Null Then Return tex
-			tex=CreateTexture(PixmapWidth(map),PixmapHeight(map),flags)
-			If map.format<>PF_RGBA8888 Then map=map.Convert(PF_RGBA8888)
-			
-			If (flags & 2) Then ApplyAlpha(map)
-			If (flags & 4) Then ApplyMask(map,10,10,10)
-			
-			glBindTexture(GL_TEXTURE_2D,tex.texture[0])
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.width[0],tex.height[0],GL_RGBA,GL_UNSIGNED_BYTE,PixmapPixelPtr(map,0,0))
-			
-			tex.BufferToTex PixmapPixelPtr(map,0,0)
-		EndIf
-		Return tex
-		EndRem
+			Case 2 ' library
+				Local map:TPixmap=Null, name%
+				Local cString:Byte Ptr=file.ToCString()
+				Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
+				If tex=Null Then tex=CreateObject(inst)
+				MemFree cString
+				Return tex
+				
+			Default ' wrapper
+				Return LoadAnimTextureStream(file,flags,0,0,0,1,tex)
+				
+		EndSelect
 		
 	End Function
 	
-	Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
+	Function LoadAnimTexture:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
-		If tex=Null Then tex=CreateObject(inst)
-		MemFree cString
-		Return tex
+		Select TEXTURE_LOADER
+		
+			Case 2 ' library
+				Local cString:Byte Ptr=file.ToCString()
+				Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
+				If tex=Null Then tex=CreateObject(inst)
+				MemFree cString
+				Return tex
+		
+			Default ' wrapper
+				Return LoadAnimTextureStream(file,flags,frame_width,frame_height,first_frame,frame_count,tex)
+			
+		EndSelect
 		
 	End Function
 	

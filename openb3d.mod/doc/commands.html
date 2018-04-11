@@ -86,7 +86,7 @@ Returns a copy of the new brush.
 <tr><td class=docleft width=1%><a href=#CopyList>CopyList</a></td><td class=docright>
 Copy a list or vector. To copy a field list use as a method.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CopyPixels>CopyPixels</a></td><td class=docright>
+<tr><td class=docleft width=1%><a href=#CopyRect>CopyRect</a></td><td class=docright>
 Copy a section of source pixmap to destination pixmap.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopySurface>CopySurface</a></td><td class=docright>
@@ -227,26 +227,14 @@ Gets a Blitz string from a C string.
 <tr><td class=docleft width=1%><a href=#ListPushBack>ListPushBack</a></td><td class=docright>
 Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadAnimMeshStream>LoadAnimMeshStream</a></td><td class=docright>
-Loads a B3D or 3DS file and returns a New TMesh.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#LoadAnimTextureStream>LoadAnimTextureStream</a></td><td class=docright>
-Loads animation frames from an image and returns a new TTexture.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadMaterial>LoadMaterial</a></td><td class=docright>
 Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadMeshStream>LoadMeshStream</a></td><td class=docright>
-Loads a B3D, MD2 or 3DS file and returns a new TMesh.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#LoadTextureStream>LoadTextureStream</a></td><td class=docright>
-Loads an image and returns a new TTexture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -323,11 +311,17 @@ Set a shader variable name of a uniform ivec3 type to 3 integer values.
 <tr><td class=docleft width=1%><a href=#SetInteger4>SetInteger4</a></td><td class=docright>
 Set a shader variable name of a uniform ivec4 type to 4 integer values.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#SetMeshLoader>SetMeshLoader</a></td><td class=docright>
+1 for stream mesh loaders, 2 for library loaders, default is 1.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#SetShadowColor>SetShadowColor</a></td><td class=docright>
 Set color R/G/B in range 0..255 and A in range 0..1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetString>SetString</a></td><td class=docright>
 Sets a C string from a Blitz string.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetTextureLoader>SetTextureLoader</a></td><td class=docright>
+1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders, default is 1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeEntity>ShadeEntity</a></td><td class=docright>
 Apply shader to an entity.
@@ -657,8 +651,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CopyPixels>
-<tr><td class=doctop colspan=2>Function CopyPixels( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )</td></tr>
+<table class=doc width=100% cellspacing=3 id=CopyRect>
+<tr><td class=doctop colspan=2>Function CopyRect( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy a section of source pixmap to destination pixmap.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4.</td></tr>
 </table>
@@ -898,17 +892,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadAnimMeshStream>
-<tr><td class=doctop colspan=2>Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D or 3DS file and returns a New TMesh.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function, the returned mesh will have children and animations.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=LoadAnimTextureStream>
-<tr><td class=doctop colspan=2>Function LoadAnimTextureStream:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads animation frames from an image and returns a new TTexture.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>
 <tr><td class=doctop colspan=2>Function LoadGeosphere:TGeosphere( file:String,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load geodesic sphere terrain from heightmap image.</td></tr>
@@ -921,20 +904,9 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 first frame is the index of the slice and frame count is how many slices.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadMeshStream>
-<tr><td class=doctop colspan=2>Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a B3D, MD2 or 3DS file and returns a new TMesh.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Uses the library function, the returned mesh is collapsed so has no children.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=LoadShader>
 <tr><td class=doctop colspan=2>Function LoadShader:TShader( ShaderName:String,VshaderFileName:String,FshaderFileName:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from two files, vertex and fragment.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=LoadTextureStream>
-<tr><td class=doctop colspan=2>Function LoadTextureStream:TTexture( file:String,flags:Int=9,tex:TTexture=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Loads an image and returns a new TTexture.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
@@ -1072,6 +1044,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set a shader variable name of a uniform ivec4 type to 4 integer values.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=SetMeshLoader>
+<tr><td class=doctop colspan=2>Function SetMeshLoader( glob:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>1 for stream mesh loaders, 2 for library loaders, default is 1.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=SetShadowColor>
 <tr><td class=doctop colspan=2>Function SetShadowColor( R:Int,G:Int,B:Int,A:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set color R/G/B in range 0..255 and A in range 0..1.</td></tr>
@@ -1080,6 +1057,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <table class=doc width=100% cellspacing=3 id=SetString>
 <tr><td class=doctop colspan=2>Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sets a C string from a Blitz string.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetTextureLoader>
+<tr><td class=doctop colspan=2>Function SetTextureLoader( glob:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders, default is 1.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadeEntity>

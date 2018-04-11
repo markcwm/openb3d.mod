@@ -185,43 +185,6 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	' Extra
-	
-	Function LoadMeshStream:TMesh( file:String,parent:TEntity=Null )
-	
-		Local ent:TMesh=LoadAnimMesh(file)
-		ent.HideEntity()
-		Local mesh:TMesh=ent.CollapseAnimMesh()
-		ent.FreeEntity()
-		
-		mesh.SetString(mesh.class_name,"Mesh")
-		mesh.AddParent(parent)
-		mesh.EntityListAdd(entity_list)
-		
-		' update matrix
-		If mesh.parent<>Null
-			mesh.mat.Overwrite(mesh.parent.mat)
-			mesh.UpdateMat()
-		Else
-			mesh.UpdateMat(True)
-		EndIf
-		Return mesh
-		
-	End Function
-	
-	Function LoadAnimMeshStream:TMesh( file:String,parent:TEntity=Null )
-	
-		If ExtractExt(file)="b3d"
-			Return TB3D.LoadAnimB3D( file,parent )
-		ElseIf ExtractExt(file)="md2"
-			' todo
-		ElseIf ExtractExt(file)="3ds"
-			Local loader:T3DS = New T3DS ' hierarchy animation todo
-			Return loader.LoadMesh3DS( file,parent )
-		EndIf
-		
-	End Function
-	
 	Method CreateAllChildren()
 	
 		Local child_ent:TEntity=Null ' this will store child entity of anim mesh
@@ -464,22 +427,61 @@ Type TMesh Extends TEntity
 	
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
-		Local mesh:TMesh=CreateObject(inst)
-		MemFree cString
-		Return mesh ' no children, mesh is collapsed
+		Select MESH_LOADER
+		
+			Case 2 ' library
+				Local cString:Byte Ptr=file.ToCString()
+				Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
+				Local mesh:TMesh=CreateObject(inst)
+				MemFree cString
+				Return mesh ' no children, mesh is collapsed
+				
+			Default ' wrapper
+				Local ent:TMesh=LoadAnimMesh(file)
+				ent.HideEntity()
+				Local mesh:TMesh=ent.CollapseAnimMesh()
+				ent.FreeEntity()
+				
+				mesh.SetString(mesh.class_name,"Mesh")
+				mesh.AddParent(parent)
+				mesh.EntityListAdd(entity_list)
+				
+				' update matrix
+				If mesh.parent<>Null
+					mesh.mat.Overwrite(mesh.parent.mat)
+					mesh.UpdateMat()
+				Else
+					mesh.UpdateMat(True)
+				EndIf
+				Return mesh
+				
+		EndSelect
 		
 	End Function
 	
 	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Local cString:Byte Ptr=file.ToCString()
-		Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
-		Local mesh:TMesh=CreateObject(inst)
-		MemFree cString
-		mesh.CreateAllChildren() ' create child mesh objects
-		Return mesh
+		Select MESH_LOADER
+		
+			Case 2 ' library
+				Local cString:Byte Ptr=file.ToCString()
+				Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
+				Local mesh:TMesh=CreateObject(inst)
+				MemFree cString
+				mesh.CreateAllChildren() ' create child mesh objects
+				Return mesh
+				
+			Default ' wrapper
+				If ExtractExt(file)="b3d"
+					Return TB3D.LoadAnimB3D( file,parent )
+				ElseIf ExtractExt(file)="md2"
+					' md2 todo!
+				ElseIf ExtractExt(file)="3ds"
+					Local obj:T3DS = New T3DS ' hierarchy animation todo
+					Return obj.LoadMesh3DS( file,parent )
+				EndIf
+				
+		EndSelect
 		
 	End Function
 	

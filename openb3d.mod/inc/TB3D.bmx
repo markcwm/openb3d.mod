@@ -233,7 +233,7 @@ Type TB3D
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
 						If LOG_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
-						tex[tex_no]=LoadTextureStream(tex_name,te_flags,tex[tex_no])
+						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
 						

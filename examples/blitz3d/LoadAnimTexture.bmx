@@ -19,12 +19,14 @@ PositionEntity cube,-2,0,5
 Local cube2:TMesh=CreateCube()
 PositionEntity cube2,2,0,5
 
-Local tex:TTexture=LoadTextureStream("../media/b3dlogo.jpg")
+SetTextureLoader 1 ' 1 for streams (default), 2 for library
+
+Local tex:TTexture=LoadTexture("../media/b3dlogo.jpg")
 EntityTexture cube2,tex
 
 ' Load anim texture
 Local oldtime%=MilliSecs()
-Local anim_tex:TTexture=LoadAnimTextureStream( "incbin::../media/boomstrip.bmp",49,64,64,0,39 )
+Local anim_tex:TTexture=LoadAnimTexture( "incbin::../media/boomstrip.bmp",49,64,64,0,39 )
 Local debug$="incbin time="+(MilliSecs()-oldtime)
 
 Local frame%

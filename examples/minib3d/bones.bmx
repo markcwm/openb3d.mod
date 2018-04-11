@@ -14,25 +14,31 @@ PositionEntity cam,0,10,-15
 
 Local light:TLight=CreateLight()
 
+SetMeshLoader 1 ' 1 for streams (default), 2 for library
+SetTextureLoader 1
+
 ' load anim mesh
 Local ent:TMesh=Null
 Local loader%=3
 Select loader
 	Case 1 ' load stream mesh
-		ent=LoadAnimMeshStream("../media/zombie.b3d")
+		ent=LoadAnimMesh("../media/zombie.b3d")
 		MoveEntity ent,0,0,5
 		
 	Case 2
-		ent=LoadAnimMeshStream("../media/ninja.b3d")
+		ent=LoadAnimMesh("../media/ninja.b3d")
 		MoveEntity ent,0,5,0
 		TurnEntity ent,0,180,0
 		
 	Case 3
-		ent=LoadAnimMeshStream("../media/dwarf.b3d")
+		ent=LoadAnimMesh("../media/dwarf.b3d")
 		MoveEntity ent,0,-25,60
 		TurnEntity ent,0,180,0
 		
 	Default ' load library mesh
+		SetTextureLoader 2 ' 1 for streams (default), 2 for library
+		SetMeshLoader 2
+		
 		ent=LoadAnimMesh("../media/zombie.b3d")
 		MoveEntity ent,0,0,10
 EndSelect

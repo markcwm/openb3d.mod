@@ -388,7 +388,8 @@ Global LOG_DEL:Int=False		' True to DebugLog when 3d object destroyed
 Global LOG_B3D:Int=False		' True to DebugLog B3D chunks
 Global LOG_MD2:Int=False		' True to DebugLog MD2 chunks
 Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
-
+Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders
+Global MESH_LOADER:Int=1		' 1 for stream mesh loaders, 2 for library loaders
 ' Texture flags, also Brush
 'Const TEX_COLOR:Int=1
 'Const TEX_ALPHA:Int=2

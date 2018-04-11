@@ -19,18 +19,21 @@ RotateEntity light,45,45,0
 
 Local mesh:TMesh, debug:String, oldtime:Int
 
+SetMeshLoader 1 ' 1 for streams (default), 2 for library
+SetTextureLoader 1
+
 Local loader:Int=5 ' set 0 to 5
 Select loader
 
 	Case 1 ' load rallycar1 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/rallycar1.3ds")
+		mesh=LoadAnimMesh("../media/rallycar1.3ds")
 		
 		debug="3ds time="+(MilliSecs()-oldtime)
 		
 	Case 2 ' load mak_robotic mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/mak_robotic.3ds")
+		mesh=LoadAnimMesh("../media/mak_robotic.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,0)
 		mesh.ScaleAnimMesh(0.5,0.5,0.5)
@@ -39,7 +42,7 @@ Select loader
 		
 	Case 3 ' load phineas4 mesh
 		oldtime=MilliSecs()
-		mesh=LoadAnimMeshStream("../media/phineas4.3ds")
+		mesh=LoadAnimMesh("../media/phineas4.3ds")
 		
 		mesh.RotateAnimMesh(0,-90,-45)
 		mesh.PositionAnimMesh(0,10,0)
@@ -49,7 +52,7 @@ Select loader
 	Case 4 ' load incbin mesh
 		oldtime=MilliSecs()
 		Local file:String = "incbin::../media/rallycar1.3ds"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMesh(file)
 		
 		debug="incbin time="+(MilliSecs()-oldtime)
 		
@@ -57,11 +60,14 @@ Select loader
 		oldtime=MilliSecs()
 		Local zipfile:String = "../media/rallycar.zip"
 		Local file:String = "zip::"+zipfile+"//rallycar1.3ds"
-		mesh=LoadAnimMeshStream(file)
+		mesh=LoadAnimMesh(file)
 		
 		debug="zip time="+(MilliSecs()-oldtime)
 		
 	Default ' load library mesh
+		SetTextureLoader 2 ' 1 for streams (default), 2 for library
+		SetMeshLoader 2
+		
 		oldtime=MilliSecs()
 		mesh=LoadMesh("../media/rallycar1.3ds")
 		

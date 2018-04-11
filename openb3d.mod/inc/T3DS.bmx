@@ -611,7 +611,7 @@ Type T3DS
 		Wend
 		
 		Local name$ = filepath+"/"+StripDir(texname)
-		Local tex:TTexture = LoadTextureStream(name, Tex_Flags)
+		Local tex:TTexture = LoadTexture(name, Tex_Flags)
 		If LOG_3DS Then DebugLog " LoadTexture name="+name+" matname="+matname
 		
 		MapInsert materialmap, matname, tex
