@@ -22,6 +22,8 @@ PositionEntity dxt3,5,0,0
 PositionEntity dxt5,0,0,0
 PositionEntity rgba,0,5,0
 
+SetTextureLoader 2 ' 1 for streams (default), 2 for library
+
 Local dxt1_tex:TTexture=LoadTexture("../media/dxt1.dds")
 Local dxt3_tex:TTexture=LoadTexture("../media/dxt3.dds")
 Local dxt5_tex:TTexture=LoadTexture("../media/dxt5.dds")

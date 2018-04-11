@@ -7,6 +7,8 @@ Framework Openb3d.B3dglgraphics
 
 Graphics3D DesktopWidth(),DesktopHeight()
 
+SetMeshLoader 2 ' 1 for streams (default), 2 for library
+
 Local camera:TCamera=CreateCamera()
 Local anim_ent:TMesh=LoadAnimMesh("../media/zombie.b3d")
 
@@ -32,8 +34,8 @@ While Not KeyHit(KEY_ESCAPE)
 	Animate anim_ent,4 ' set mode: 1=loop, 2=ping-pong, 3=one-time, 4=manual
 	
 	' move bones before UpdateWorld
-	RotateEntity joint1,0,joint1_y,0
-	RotateEntity joint2,0,joint2_y,0
+	If joint1<>Null Then RotateEntity joint1,0,joint1_y,0
+	If joint2<>Null Then RotateEntity joint2,0,joint2_y,0
 	
 	UpdateWorld
 	

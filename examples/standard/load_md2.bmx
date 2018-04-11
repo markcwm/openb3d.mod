@@ -14,6 +14,8 @@ PositionEntity cam,0,10,-60
 
 Local light:TLight=CreateLight()
 
+SetMeshLoader 2 ' 1 for streams (default), 2 for library
+
 Local ent:TMesh=LoadAnimMesh("../media/tris.md2")
 RotateEntity ent,-90,180,0
 
