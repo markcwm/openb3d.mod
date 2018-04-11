@@ -487,7 +487,7 @@ void FilterFlags_( Texture* obj ){
 	obj->FilterFlags();
 }
 
-void CopyPixels_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP){
+void CopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP){
   unsigned int y;
   for (y = 0; y < dstH; y++)
     memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);

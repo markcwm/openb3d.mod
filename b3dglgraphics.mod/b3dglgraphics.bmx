@@ -13,10 +13,11 @@ ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
 Import Openb3d.Openb3d
-Import Brl.BmpLoader		' imports Brl.Pixmap, Brl.EndianStream
-Import Brl.PngLoader		' imports Brl.Pixmap, Pub.LibPng
-Import Brl.JpgLoader		' imports Brl.Pixmap, Pub.LibJpeg
-Import Brl.TgaLoader
+Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream
+Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
+Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
+Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream
+Import Openb3d.StbImageLoader	' imports Brl.Pixmap, Brl.RamStream
 
 Include "TDebug.bmx"
 

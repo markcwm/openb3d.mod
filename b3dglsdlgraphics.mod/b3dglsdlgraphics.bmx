@@ -16,10 +16,11 @@ Import Openb3d.Openb3d
 ?opengles
 Import Sdl.GlsdlMax2d
 ?
-Import Brl.BmpLoader		' imports Brl.Pixmap, Brl.EndianStream
-Import Brl.PngLoader		' imports Brl.Pixmap, Pub.LibPng
-Import Brl.JpgLoader		' imports Brl.Pixmap, Pub.LibJpeg
-Import Brl.TgaLoader
+Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream
+Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
+Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
+Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream
+Import Openb3d.StbImageLoader	' imports Brl.Pixmap, Brl.RamStream
 
 Include "TDebug.bmx"
 

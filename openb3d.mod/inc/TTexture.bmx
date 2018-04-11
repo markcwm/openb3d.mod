@@ -310,7 +310,7 @@ Type TTexture
 			glGenTextures(1,Varptr(name))
 			glBindtexture(GL_TEXTURE_2D,name)
 			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
-						
+			
 			tex.texture[0]=name
 			tex.width[0]=tex.pixmap.width
 			tex.height[0]=tex.pixmap.height
@@ -328,7 +328,7 @@ Type TTexture
 			Local y:Int=(first_frame/yframes) Mod yframes
 			
 			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to mapframe pixels
-				CopyPixels_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*frame_width,y*frame_height,mapframe.pixels,frame_width,frame_height,4)
+				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*frame_width,y*frame_height,mapframe.pixels,frame_width,frame_height,4)
 				x=x+1 ' left-right frames
 				If x>=xframes ' top-bottom frames
 					x=0

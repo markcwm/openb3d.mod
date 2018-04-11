@@ -18,8 +18,8 @@ ModuleInfo "History: 1.0 Release - update on Jun 2015"
 ModuleInfo "History: 0.9 Release - update on Nov 2014"
 ModuleInfo "History: 0.8 Initial Release - Oct 2014"
 
-'ModuleInfo "CC_OPTS: -std=c++11" ' don't use, forcing C++11 standard fails on older compilers
-'ModuleInfo "CC_OPTS: -DOPENB3D_GLEE" ' use GLee instead of Glew
+'ModuleInfo "CC_OPTS: -std=c++11" ' just a reminder that forcing C++11 standard fails on older compilers
+'ModuleInfo "CC_OPTS: -DOPENB3D_GLEE" ' force use of GLee instead of Glew
 
 ?debug
 ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
@@ -188,7 +188,7 @@ Extern
 	Function TextureCopy_:Byte Ptr( obj:Byte Ptr )' = "TextureCopy"
 	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr )' = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr )' = "FilterFlags"
-	Function CopyPixels_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int )' = "CopyPixels"
+	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int )' = "CopyPixels"
 	
 End Extern
 

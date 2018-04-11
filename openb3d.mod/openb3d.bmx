@@ -16,7 +16,7 @@ ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 Import Openb3d.Openb3dlib
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
-Import Brl.Retro				' imports BRL.Basic
+Import Brl.Retro			' imports BRL.Basic
 Import Brl.Map
 
 ' functions.cpp
@@ -379,25 +379,28 @@ End Extern
 
 ' *** Constants
 
-Const USE_MAX2D:Int=	True ' true to enable max2d/minib3d integration
-Const USE_VBO:Int=		True ' true to use vbos if supported by hardware
-Const VBO_MIN_TRIS:Int=	250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no. of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
-Const LOG_NEW:Int=		False ' true to write to debuglog when new minib3d object created
-Const LOG_DEL:Int=		False ' true to write to debuglog when minib3d object destroyed
+'Const USE_MAX2D:Int=True	' True to enable Max2d in 3d integration
+'Const USE_VBO:Int=True		' True to use vbos if supported by hardware
+'Const VBO_MIN_TRIS:Int=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no.
+							' of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+Global LOG_NEW:Int=False		' True to DebugLog when new 3d object created
+Global LOG_DEL:Int=False		' True to DebugLog when 3d object destroyed
+Global LOG_B3D:Int=False		' True to DebugLog B3D chunks
+Global LOG_MD2:Int=False		' True to DebugLog MD2 chunks
+Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
 
 ' Texture flags, also Brush
-Const TEX_COLOR:Int=1
-Const TEX_ALPHA:Int=2
-Const TEX_MASKED:Int=4
-Const TEX_MIPMAP:Int=8
-Const TEX_CLAMPU:Int=16
-Const TEX_CLAMPV:Int=32
-Const TEX_SPHEREMAP:Int=64
-Const TEX_CUBEMAP:Int=128
-Const TEX_VRAM:Int=256
-Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,8192,16384 unassigned
-'Const TEX_STREAM:Int=4096 ' load texture from stream
-Const TEX_SECONDUV:Int=65536
+'Const TEX_COLOR:Int=1
+'Const TEX_ALPHA:Int=2
+'Const TEX_MASKED:Int=4
+'Const TEX_MIPMAP:Int=8
+'Const TEX_CLAMPU:Int=16
+'Const TEX_CLAMPV:Int=32
+'Const TEX_SPHEREMAP:Int=64
+'Const TEX_CUBEMAP:Int=128
+'Const TEX_VRAM:Int=256
+'Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,4096,8192,16384 unassigned
+'Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions
 

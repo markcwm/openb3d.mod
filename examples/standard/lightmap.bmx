@@ -22,7 +22,7 @@ Local light:TLight=CreateLight()
 Local mesh:TMesh, debug:String, oldtime:Int
 
 ' load anim mesh
-Local loader%=3
+Local loader%=1
 Select loader
 	Case 1 ' load stream mesh
 		oldtime=MilliSecs()

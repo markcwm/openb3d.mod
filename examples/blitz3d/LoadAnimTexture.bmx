@@ -24,8 +24,7 @@ EntityTexture cube2,tex
 
 ' Load anim texture
 Local oldtime%=MilliSecs()
-Local file$ = "incbin::../media/boomstrip.bmp"
-Local anim_tex:TTexture=LoadAnimTextureStream( file,49,64,64,0,39 )
+Local anim_tex:TTexture=LoadAnimTextureStream( "incbin::../media/boomstrip.bmp",49,64,64,0,39 )
 Local debug$="incbin time="+(MilliSecs()-oldtime)
 
 Local frame%
