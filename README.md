@@ -19,7 +19,7 @@ OpenB3DMax is an OpenGL 2.0+ 3D engine for BlitzMax which is based on [Minib3d](
 * Supports streams like Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod) with Blitz image loaders and mesh loaders
 * 3D Model formats include 3DS (currently no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
 * Several more formats can be loaded using the Assimp library wrapper (currently no animation)
-* Collision detection is as in Minib3d and consists of Blitz3d's ellipsoid-to-something collisions, also includes dynamic collisions
+* Collision detection consists of Blitz3d's ellipsoid-to-something collisions, also includes dynamic collisions
 * Realtime textures are created with BackBufferToTex (cubemapping) or CameraToTex for use in post-processing effects
 * Quaternions are used for rotations instead of Eulers as in Minib3d, this avoids gimbal lock
 * Terrains are much like Blitz3D but UpdateNormals replaces TerrainShading and TerrainDetail is a constant
@@ -37,9 +37,10 @@ OpenB3DMax is an OpenGL 2.0+ 3D engine for BlitzMax which is based on [Minib3d](
 ## Installation
 * Copy **openb3dmax.mod** to the `MyBlitzMax/mod` folder, module folder names must end in **.mod**
 * If Windows, make sure you have a working version of MinGW. If Mac, make sure you have XCode installed. If Linux, read this guide:
- * [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
-* Open a Terminal, cd to `MyBlitzMax/bin` and for BRL Bmx type `./bmk makemods -a -d openb3dmax` or for NG 64-bit use `-a -d -w -g x64`
-* Alternatively, in MaxIDE NG make sure Quick Build is off and Debug, GUI App are on, then click Programs > Build Modules
+ [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
+* Open a Terminal, cd to `MyBlitzMax/bin` and for BRL Bmx type `bmk makemods -a -d openb3dmax`
+* For NG in 64-bit use `bmk makemods -a -d -w -g x64 openb3dmax`, if on Mac/Linux use `./bmk`
+* Or in MaxIDE NG make sure Quick Build is off and Debug, GUI App are on, then click Programs > Build Modules
 * To use Openb3dmax just import with `Framework OpenB3DMax.B3dGLGraphics`
 
 ## Status
