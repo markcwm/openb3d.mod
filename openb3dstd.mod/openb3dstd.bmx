@@ -3,10 +3,10 @@
 Strict
 
 Rem
-bbdoc: OpenB3D standard Blitz3D functions
-about: Mainly online Blitz3D documentation links.
+bbdoc: OpenB3DMax standard functions, as found in Blitz3D
+about: Blitz3D documentation todo!
 End Rem
-Module Openb3d.Openb3dstd
+Module Openb3dmax.Openb3dstd
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"

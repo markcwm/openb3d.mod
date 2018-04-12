@@ -1,9 +1,9 @@
 
-![Openb3d](./examples/media/openb3d_logo_512.png)
+![Openb3dmax](./examples/media/openb3d_logo_512.png)
 
 ## Introduction
 
-Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on [Minib3d](https://github.com/si-design/minib3d) which is itself based on Blitz3D. Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
+OpenB3DMax is an OpenGL 2.0+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on Blitz3D. Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
 
 ## Features 
 
@@ -33,6 +33,14 @@ Openb3d is an OpenGL 2.0+ 3d engine for BlitzMax that is based on [Minib3d](http
 * Actions are an event-based entity control system, they are triggered once and then automatically updated
 * Simple physics system consisting of constraints and rigid bodies
 * 3D sound module using Brl.Audio, similar to the Blitz3D commands but sounds can be qued, stopped, paused and resumed per entity.
+
+## Installation
+* Copy **openb3dmax.mod** to the `MyBlitzMax/mod` folder, module folder names must end in **.mod**
+* If Windows, make sure you have a working version of MinGW. If Mac, make sure you have XCode installed. If Linux, read this guide:
+ * [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
+* Open a Terminal, cd to `MyBlitzMax/bin` and for BRL Bmx type `./bmk makemods -a -d openb3dmax` or for NG 64-bit use `-a -d -w -g x64`
+* Alternatively, in MaxIDE NG make sure Quick Build is off and Debug, GUI App are on, then click Programs > Build Modules
+* To use Openb3dmax just import with `Framework OpenB3DMax.B3dGLGraphics`
 
 ## Status
 

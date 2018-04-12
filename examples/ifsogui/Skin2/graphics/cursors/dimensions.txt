@@ -1,6 +1,0 @@
-5
-normal.png,0,0
-mouseover.png,5,0
-mousedown.png,5,0
-mouseresize.png,8,6
-ibar.png,4,8

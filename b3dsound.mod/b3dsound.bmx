@@ -11,7 +11,7 @@ Failure to stop sounds associated with a non-existent entity can cause your prog
 If you set any SoundPoint "bump" field to UPDATE_DISABLED then it will no longer be updated and can be
 directly modified. For example, setting VolumeBump = UPDATE_DISABLED will stop Volume field from updating.
 End Rem
-Module Openb3d.B3dsound
+Module Openb3dmax.B3dsound
 
 ModuleInfo "Version: 1.3"
 ModuleInfo "License: zlib"
@@ -29,7 +29,7 @@ ModuleInfo "History: Added DopplerFrameSkip, Que3DSound, UPDATE_DISABLED option,
 ModuleInfo "History: SoundPoint playing, fixed unnecessarily confusing dopper effect"
 ModuleInfo "History: 1.0 Initial Release"
 
-Import Openb3d.Openb3d
+Import Openb3dmax.Openb3d
 Import Brl.Audio
 
 '### Constants

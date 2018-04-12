@@ -1,19 +1,19 @@
-' openb3d.bmx
+' openb3dmax.bmx
 
 Strict
 
 Rem
-bbdoc: OpenB3D extended functions
+bbdoc: OpenB3DMax extended functions, not found in Blitz3D
 about: Descriptions and some extra information.
 End Rem
-Module Openb3d.Openb3d
+Module Openb3dmax.Openb3d
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
-Import Openb3d.Openb3dlib
+Import Openb3dmax.Openb3dlib
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import Brl.Retro			' imports BRL.Basic
@@ -388,7 +388,7 @@ Global LOG_DEL:Int=False		' True to DebugLog when 3d object destroyed
 Global LOG_B3D:Int=False		' True to DebugLog B3D chunks
 Global LOG_MD2:Int=False		' True to DebugLog MD2 chunks
 Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
-Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders
+Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
 Global MESH_LOADER:Int=1		' 1 for stream mesh loaders, 2 for library loaders
 ' Texture flags, also Brush
 'Const TEX_COLOR:Int=1

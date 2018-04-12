@@ -5,7 +5,7 @@ SuperStrict
 Rem
 bbdoc: 
 End Rem
-Module Openb3d.Openb3dlib
+Module Openb3dmax.Openb3dlib
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"

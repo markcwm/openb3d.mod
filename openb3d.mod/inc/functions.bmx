@@ -3,7 +3,7 @@
 ' *** Extra
 
 Rem
-bbdoc: 1 for stream texture loaders (with Openb3d.StbImageLoader), 2 for library loaders, default is 1
+bbdoc: 1 for stream texture loaders (with Openb3dmax.StbImageLoader), 2 for library loaders, default is 1
 End Rem
 Function SetTextureLoader( glob:Int )
 	TEXTURE_LOADER=glob
@@ -289,7 +289,7 @@ End Function
 
 Rem
 bbdoc: Copy the contents of the backbuffer to a texture
-about: OpenB3D does not have the same buffer commands as Blitz3D.
+about: OpenB3DMax does not have the same buffer commands as Blitz3D.
 The region copied from the backbuffer will start at 0,0 and end at the texture's width and height.
 So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size, 
 use RenderWorld to render the camera, then use this command.

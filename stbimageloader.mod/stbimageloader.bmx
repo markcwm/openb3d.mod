@@ -8,7 +8,7 @@ about:
 The stb image loader module provides the ability to load different image format #pixmaps.
 Supported formats include, BMP, PSD, TGA, GIF, HDR, PIC and PNM
 End Rem
-Module Openb3d.StbImageLoader
+Module Openb3dmax.Stbimageloader
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "Author: Sean Barrett and contributers (see stb_image.c)"

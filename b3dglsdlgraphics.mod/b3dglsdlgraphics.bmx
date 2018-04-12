@@ -5,22 +5,22 @@ SuperStrict
 Rem
 bbdoc: SDL GLGraphics backend for B3D.
 End Rem
-Module Openb3d.B3dglsdlgraphics
+Module Openb3dmax.B3dglsdlgraphics
 
 ModuleInfo "Version: 1.12"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
-Import Openb3d.Openb3d
+Import Openb3dmax.Openb3d
 ?opengles
 Import Sdl.GlsdlMax2d
 ?
 Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream
 Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
 Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
-Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream
-Import Openb3d.StbImageLoader	' imports Brl.Pixmap, Brl.RamStream
+'Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream
+Import Openb3dmax.Stbimageloader	' imports Brl.Pixmap, Brl.RamStream
 
 Include "TDebug.bmx"
 
