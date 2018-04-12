@@ -91,7 +91,6 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 			EndIf
 			
 			CloseStream(ram)
-			CloseStream(stream)
 			MemFree(buffer)
 			b3d_stbi_image_free(imgPtr)
 			
