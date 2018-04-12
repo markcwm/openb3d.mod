@@ -40,7 +40,7 @@ OpenB3DMax is an OpenGL 2.0+ 3D engine for BlitzMax which is based on [Minib3d](
  [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
 * Open a Terminal, cd to `MyBlitzMax/bin` and for BRL Bmx type `bmk makemods -a -d openb3dmax`
 * For NG in 64-bit use `bmk makemods -a -d -w -g x64 openb3dmax`, if on Mac/Linux use `./bmk`
-* Or in MaxIDE NG make sure Quick Build is off and Debug, GUI App are on, then click Programs > Build Modules
+* Or in MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
 
 ## Status
 
