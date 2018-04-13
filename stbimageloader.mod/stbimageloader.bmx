@@ -46,10 +46,12 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 		CopyStream(stream, ram)
 		
 		Local pixmap:TPixmap, imgPtr:Byte Ptr, width:Int, height:Int, channels:Int
-		Local test:Int=b3d_stbi_info_from_memory( buffer,bufLen,Varptr(width),Varptr(height),Varptr(channels) )
-				
-		If test=True
-			imgPtr=b3d_stbi_load_from_memory( buffer,bufLen,Varptr(width),Varptr(height),Null,channels )
+		
+		Local test:Int=b3d_stbi_info_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels )
+		
+		If test=True ' prevent crash
+			imgPtr=b3d_stbi_load_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels,4 ) ' force alpha
+			If channels=3 Then channels=4 ' b3d expects alpha
 		EndIf
 		
 		If imgPtr Then
