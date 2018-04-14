@@ -454,9 +454,9 @@ bbdoc: Add an existing surface to a mesh.
 End Rem
 Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
 	If anim_surf=False
-		mesh.ListPushBack( mesh.surf_list,surf )
+		mesh.MeshListAdd( mesh.surf_list,surf )
 	Else
-		mesh.ListPushBack( mesh.anim_surf_list,surf )
+		mesh.MeshListAdd( mesh.anim_surf_list,surf )
 	EndIf
 End Function
 
