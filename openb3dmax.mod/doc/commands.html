@@ -2,11 +2,11 @@
 <link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
 </head><body>
 <table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
-<td class=small width=1%><b>Openb3dmax.Openb3d:</b></td>
+<td class=small width=1%><b>Openb3dmax.Openb3dmax:</b></td>
 <td class=small width=1%><a href=#functions class=small>Functions</a></td>
 <td class=small width=1%><a href=#types class=small>Types</a></td>
 <td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
-<td class=small width=1%><a href='../../../../mod/openb3dmax.mod/openb3d.mod/openb3d.bmx' class=small>Source</a></td>
+<td class=small width=1%><a href='../../../../mod/openb3dmax.mod/openb3dmax.mod/openb3dmax.bmx' class=small>Source</a></td>
 <td class=small>&nbsp;</td></tr></table>
 <h1>OpenB3DMax extended functions, not found in Blitz3D</h1>
 Descriptions and some extra information.
@@ -185,6 +185,9 @@ New end using Max2D, allows instant resolution switch.
 <tr><td class=docleft width=1%><a href=#EndMini2D>EndMini2D</a></td><td class=docright>
 Old Minib3d end using Max2d.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#EntityListAdd>EntityListAdd</a></td><td class=docright>
+Like using ListAddLast(list,value) in Minib3d, except ent parameter.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#EntityScaleX>EntityScaleX</a></td><td class=docright>
 Returns the scale for the x axis of an entity set with ScaleEntity.
 </td></tr>
@@ -223,9 +226,6 @@ Set terrain height normalizing value, 0.05 is default.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#ListPushBack>ListPushBack</a></td><td class=docright>
-Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
@@ -818,6 +818,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Old Minib3d end using Max2d.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=EntityListAdd>
+<tr><td class=doctop colspan=2>Function EntityListAdd( list:TList,value:Object,ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Like using ListAddLast(list,value) in Minib3d, except ent parameter.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=EntityScaleX>
 <tr><td class=doctop colspan=2>Function EntityScaleX:Float( ent:TEntity,glob:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns the scale for the x axis of an entity set with ScaleEntity.</td></tr>
@@ -884,12 +890,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=GetString>
 <tr><td class=doctop colspan=2>Function GetString:String( obj:Object, strPtr:Byte Ptr )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=ListPushBack>
-<tr><td class=doctop colspan=2>Function ListPushBack( list:TList,value:Object,ent:TEntity )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Like using ListAddLast(list,value) in Minib3d, except ent parameter.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists supported, use either mesh with surf_list/anim_surf_list/bones or ent with child_list.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>

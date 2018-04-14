@@ -16,7 +16,7 @@ Type TChunk
 	End Function
 End Type
 
-' animation not working, fixme?
+' animation not working, todo!
 Type TAnimKey
 	Field pos:Float[]
 	Field rot:Float[]
@@ -47,7 +47,7 @@ End Type
 
 Type T3DS
 
-	Global Transform_Verts:Int = 1 ' disabled if any child has no matrix
+	Global Pre_Transform_Verts:Int = 1 ' disabled if any child has no matrix
 	Global Tex_Flags:Int = 9 ' default LoadTexture flags
 	
 	' misc
@@ -116,7 +116,7 @@ Type T3DS
 	Field materialshinemap:TMap
 	Field materiallayermap:TMap
 	Field matrixmap:TMap
-	Field filepath$
+	Field filepath$, filename$
 	Field stream:TStream
 	
 	Method GetObject:TEntity( index% )
@@ -184,7 +184,7 @@ Type T3DS
 		Local layer:Int[] = Int[](MapValueForKey( materiallayermap, matname ))
 		
 		If tex<>Null
-			surface.brush.BrushTexture(tex, layer[0])
+			surface.brush.BrushTexture(tex, 0, layer[0])
 			surface.brush.BrushColor(255, 255, 255)
 		ElseIf col<>Null
 			surface.brush.BrushColor(col[0], col[1], col[2])
@@ -210,7 +210,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_FACEMATLIST ' $4130 - faces material list
@@ -234,7 +234,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_MAPFILENAME ' $A300 - map filename
@@ -285,7 +285,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_VERTEXLIST ' $4110
@@ -310,10 +310,12 @@ Type T3DS
 							matrix.grid[(4*x)+y] = stream.ReadFloat()
 						Next
 					Next
+					
 					matrix.grid[(4*0)+3] = 0
 					matrix.grid[(4*1)+3] = 0
 					matrix.grid[(4*2)+3] = 0
 					matrix.grid[(4*3)+3] = 1
+					
 					If LOG_3DS
 						DebugLog "- - - - CHUNK_TRANSMATRIX"
 						For Local z% = 0 To 2
@@ -369,6 +371,7 @@ Type T3DS
 					x = stream.ReadFloat()
 					y = stream.ReadFloat() 'some cases:::  1.swap y and z  2.negate new z
 					z = stream.ReadFloat()
+					
 					'Local q1:Float[] = NewQuaternion(ang, x, y, z)
 					'Local ll# = VectorMagnitude([x, y, z])
 					
@@ -404,7 +407,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_HIERPOS ' $B030 - node id
@@ -447,8 +450,11 @@ Type T3DS
 		Wend
 		
 		If objname = "$$$DUMMY"
-			mesh = CreateMesh(parent)
-			mesh.NameEntity(instname)
+			mesh = NewMesh()
+			mesh.SetString(mesh.name,instname)
+			mesh.SetString(mesh.class_name,"Mesh")
+			mesh.AddParent(parent)
+			mesh.EntityListAdd(TEntity.entity_list)
 		Else
 			For Local ent:TEntity = EachIn objlist
 				If ent.EntityName() = objname
@@ -463,8 +469,9 @@ Type T3DS
 					ent.SetParent(par)
 					
 					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+					
 					If parid <> 65535 And mesh.no_surfs[0] = 0 And matrix = Null ' if any dummy meshes
-						Transform_Verts = 0 ' don't pretransform vertices
+						Pre_Transform_Verts = 0 ' don't pretransform vertices
 					EndIf
 					
 					Exit
@@ -480,13 +487,24 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_TRIMESH ' $4100 - triangular mesh
 					If LOG_3DS Then DebugLog "- - - CHUNK_TRIMESH: "+objname
-					mesh = CreateMesh(parent)
-					mesh.NameEntity(objname)
+					mesh = NewMesh()
+					mesh.SetString(mesh.name,objname)
+					mesh.SetString(mesh.class_name,"Mesh")
+					mesh.AddParent(parent)
+					mesh.EntityListAdd(TEntity.entity_list)
+					
+					If mesh.parent<>Null ' update matrix
+						mesh.mat.Overwrite(mesh.parent.mat)
+						mesh.UpdateMat()
+					Else
+						mesh.UpdateMat(True)
+					EndIf
+					
 					ListAddLast objlist, mesh
 					ParseTriMesh(mesh, parent, chunk.endchunk)
 					
@@ -510,7 +528,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 			Case CHUNK_PERCENTI ' $0030
@@ -534,7 +552,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_RGB3F ' $0010 - 0..1
@@ -572,7 +590,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id		
 				Case CHUNK_MATNAME ' $A000
@@ -607,12 +625,17 @@ Type T3DS
 					
 				Default
 					stream.Seek(chunk.endchunk)
+					
 			End Select
 		Wend
 		
-		Local name$ = filepath+"/"+StripDir(texname)
+		Local name$ = StripDir(texname)
+		If filename.StartsWith("incbin::") Or filename.StartsWith("zip::")
+			name = filepath + "/" + StripDir(texname)
+		EndIf
+		
 		Local tex:TTexture = LoadTexture(name, Tex_Flags)
-		If LOG_3DS Then DebugLog " LoadTexture name="+name+" matname="+matname
+		If LOG_3DS Then DebugLog "MAT TEX name="+name+" matname="+matname
 		
 		MapInsert materialmap, matname, tex
 		MapInsert materialcolormap, matname, col
@@ -625,7 +648,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 			Case CHUNK_MESHINFO ' $B002 - mesh information
@@ -643,7 +666,7 @@ Type T3DS
 		
 		While StreamPos(stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_OBJECTBLOCK ' $4000
@@ -665,21 +688,25 @@ Type T3DS
 		
 	End Method
 	
-	Method ParseFile:TMesh( url:Object, Size% )
+	Method ParseFile:TMesh( url:Object, Size%, parent_ent:TEntity=Null )
 	
 		Local chunk:TChunk = ReadChunk()
 		If (chunk.id <> CHUNK_MAIN) Or (chunk.size <> Size) ' $4D4D
 			stream.Close()
-			Print "No 3DS File"
+			If LOG_3DS Then DebugLog "No 3DS File"
 			Return Null
 		EndIf
 		
-		Local parent:TMesh = CreateMesh()
-		parent.NameEntity("ROOT")
+		Local parent:TMesh = NewMesh()
+		parent.SetString(parent.name,"ROOT")
+		parent.SetString(parent.class_name,"Mesh")
+		parent.AddParent(parent_ent)
+		parent.EntityListAdd(TEntity.entity_list)
+		parent.UpdateMat(True) ' update matrix
 		
 		While Not stream.Eof()
 			Local chunk:TChunk = ReadChunk()
-			If chunk.id = 0 Exit
+			If chunk.id = 0 Then Exit
 			
 			Select chunk.id
 				Case CHUNK_3DEDITOR ' $3D3D
@@ -703,7 +730,7 @@ Type T3DS
 	End Method
 	
 	Method LoadMesh3DS:TMesh( url:Object, parent_ent:TEntity=Null )
-		Local size:Int, oldDir:String
+		Local size:Int, olddir:String
 		
 		stream = LittleEndianStream(ReadFile(url))
 		If stream = Null Then Return Null
@@ -716,32 +743,34 @@ Type T3DS
 		materiallayermap = CreateMap()
 		matrixmap = CreateMap()
 		
+		filename = String(url)
 		filepath = ExtractDir(String(url))
-		oldDir = CurrentDir()
-		If String(url) <> "" Then ChangeDir(ExtractDir(String(url)))
+		olddir = CurrentDir()
+		If filepath <> "" Then ChangeDir(filepath)
+		If LOG_3DS Then DebugLog " filename: "+filename
 		If LOG_3DS Then DebugLog " filepath: "+filepath
-		If LOG_3DS Then DebugLog " oldDir: "+oldDir
 		
-		Local parent:TMesh = ParseFile(url,size)
-		
-		If LOG_3DS Then DebugLog " Transform_Verts: "+Transform_Verts
+		Local parent:TMesh = ParseFile(url,size,parent_ent)
+		If LOG_3DS Then DebugLog " Pre_Transform_Verts: "+Pre_Transform_Verts
 		
 		stream.Close()
-		ChangeDir(oldDir)
+		ChangeDir(olddir)
 		
 		For Local ent:TEntity = EachIn objlist
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null
-				If Transform_Verts
+			If matrix <> Null And CountList(objlist) > 1 ' matrix transform, only if more than one mesh
+				If Pre_Transform_Verts ' valid mesh
 					Local invmat:TMatrix = NewMatrix()
 					matrix.GetInverse(invmat)
 					mesh.TransformVertices(invmat)
 					mesh.cull_radius[0] = 0.0
+					
 					If LOG_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
 				EndIf
-				mesh.SetMatrix(matrix)
+				
+				mesh.SetMatrix(matrix) ' rotate, scale from parent
 			EndIf
 			
 			'DebugLog "pos:"+animKeys[0].pos[0]+","+ animKeys[0].pos[1]+","+ animKeys[0].pos[2]
@@ -765,7 +794,7 @@ Type T3DS
 			'	ent.SetMatrix(oldmat)
 			'EndIf
 			
-			' reorient, swap y with -z
+			' reorient, swap y with -z - todo SetMatrixLoader
 			For Local surf:TSurface = EachIn mesh.surf_list
 				For Local v% = 0 To surf.no_verts[0]-1
 					Local pos_x# = surf.vert_coords[v*3 + 0]

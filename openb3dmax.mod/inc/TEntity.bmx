@@ -327,7 +327,21 @@ Type TEntity
 		
 	End Function
 	
-	Method ListPushBack( list:TList,value:Object ) ' Field list value
+	Method EntityListRemove( list:TList,value:Object )
+	
+		Local ent:TEntity=TEntity(value)
+		
+		Select list
+			Case child_list
+				If ent
+					EntityListRemoveEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
+					ListRemove( list,value ) ; child_list_id:-1
+				EndIf
+		End Select
+		
+	End Method
+	
+	Method EntityListAdd( list:TList,value:Object=Null ) ' Global list
 	
 		Local ent:TEntity=TEntity(value)
 		
@@ -337,27 +351,6 @@ Type TEntity
 					EntityListPushBackEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
 					AddList(list)
 				EndIf
-		End Select
-		
-	End Method
-	
-	Method EntityListRemove( list:TList,value:Object )
-	
-		Local ent:TEntity=TEntity(value)
-		
-		Select list
-			Case child_list
-				If ent
-					EntityListRemoveEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
-					AddList(list)
-				EndIf
-		End Select
-		
-	End Method
-	
-	Method EntityListAdd( list:TList ) ' Global list
-	
-		Select list
 			Case entity_list
 				GlobalListPushBackEntity_( ENTITY_entity_list,GetInstance(Self) )
 				AddList_(list)
@@ -519,7 +512,7 @@ Type TEntity
 			parent = Null
 		End If
 		parent = new_par
-		parent.ListPushBack( parent.child_list,Self )
+		parent.EntityListAdd( parent.child_list,Self )
 		
 	End Method
 	

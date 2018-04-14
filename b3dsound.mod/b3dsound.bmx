@@ -29,7 +29,7 @@ ModuleInfo "History: Added DopplerFrameSkip, Que3DSound, UPDATE_DISABLED option,
 ModuleInfo "History: SoundPoint playing, fixed unnecessarily confusing dopper effect"
 ModuleInfo "History: 1.0 Initial Release"
 
-Import Openb3dmax.Openb3d
+Import Openb3dmax.Openb3dmax
 Import Brl.Audio
 
 '### Constants

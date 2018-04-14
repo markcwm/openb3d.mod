@@ -32,7 +32,7 @@ Type TB3D
 			in=Instr(dir,"/",in+1)
 		Wend
 		If in<>0 Then dir=Left(dir,in-1)
-		If dir<>"" Then ChangeDir(dir)
+		If filepath<>"" Then ChangeDir(filepath)
 		
 		' Header info
 		Local tag$
@@ -64,7 +64,7 @@ Type TB3D
 		Local n_name$=""
 		Local n_px#=0, n_py#=0, n_pz#=0
 		Local n_sx#=0, n_sy#=0, n_sz#=0
-		Local n_rx#=0, n_ry#=0, n_rz#=0
+		'Local n_rx#=0, n_ry#=0, n_rz#=0
 		Local n_qw#=0, n_qx#=0, n_qy#=0, n_qz#=0
 		' mesh local vars
 		Local mesh:TMesh
@@ -228,12 +228,14 @@ Type TB3D
 						' if a texture exists with all the same values as above (blend etc)
 						' the existing texture will be returned. if not then the texture
 						' created above (supplied as param below) will be returned
-						Local tex_name$=te_file
+						Local tex_name$=StripDir(te_file)
 						If dir.StartsWith("incbin::") Or dir.StartsWith("zip::")
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
-						If LOG_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
+						
 						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
+						If LOG_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
+						
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
 						
@@ -309,9 +311,9 @@ Type TB3D
 					Local roll#=0
 					TQuaternion.QuatToEuler(n_qw,n_qx,n_qy,-n_qz,pitch,yaw,roll)
 					
-					n_rx=-pitch
-					n_ry=yaw
-					n_rz=roll
+					'n_rx=-pitch
+					'n_ry=yaw
+					'n_rz=roll
 					
 					new_tag=ReadTag(file)
 					
@@ -329,9 +331,9 @@ Type TB3D
 						piv.sx[0]=n_sx
 						piv.sy[0]=n_sy
 						piv.sz[0]=n_sz
-						piv.rx[0]=n_rx
-						piv.ry[0]=n_ry
-						piv.rz[0]=n_rz
+						'piv.rx[0]=n_rx
+						'piv.ry[0]=n_ry
+						'piv.rz[0]=n_rz
 						piv.qw[0]=n_qw
 						piv.qx[0]=n_qx
 						piv.qy[0]=n_qy
@@ -381,9 +383,9 @@ Type TB3D
 					mesh.sx[0]=n_sx
 					mesh.sy[0]=n_sy
 					mesh.sz[0]=n_sz
-					mesh.rx[0]=n_rx
-					mesh.ry[0]=n_ry
-					mesh.rz[0]=n_rz
+					'mesh.rx[0]=n_rx
+					'mesh.ry[0]=n_ry
+					'mesh.rz[0]=n_rz
 					mesh.qw[0]=n_qw
 					mesh.qx[0]=n_qx
 					mesh.qy[0]=n_qy
@@ -552,7 +554,7 @@ Type TB3D
 						' create anim surfs, copy vertex coords array, add to anim_surf_list
 						For Local surf:TSurface=EachIn mesh.surf_list
 							Local anim_surf:TSurface=mesh.NewSurface()
-							mesh.ListPushBack( mesh.anim_surf_list,anim_surf )
+							mesh.MeshListAdd( mesh.anim_surf_list,anim_surf )
 							
 							anim_surf.no_verts[0]=surf.no_verts[0]
 							
@@ -651,9 +653,9 @@ Type TB3D
 					bo_bone.sx[0]=n_sx
 					bo_bone.sy[0]=n_sy
 					bo_bone.sz[0]=n_sz
-					bo_bone.rx[0]=n_rx
-					bo_bone.ry[0]=n_ry
-					bo_bone.rz[0]=n_rz
+					'bo_bone.rx[0]=n_rx
+					'bo_bone.ry[0]=n_ry
+					'bo_bone.rz[0]=n_rz
 					bo_bone.qw[0]=n_qw
 					bo_bone.qx[0]=n_qx
 					bo_bone.qy[0]=n_qy
@@ -665,9 +667,9 @@ Type TB3D
 					bo_bone.n_sx[0]=n_sx
 					bo_bone.n_sy[0]=n_sy
 					bo_bone.n_sz[0]=n_sz
-					bo_bone.n_rx[0]=n_rx
-					bo_bone.n_ry[0]=n_ry
-					bo_bone.n_rz[0]=n_rz
+					'bo_bone.n_rx[0]=n_rx
+					'bo_bone.n_ry[0]=n_ry
+					'bo_bone.n_rz[0]=n_rz
 					bo_bone.n_qw[0]=n_qw
 					bo_bone.n_qx[0]=n_qx
 					bo_bone.n_qy[0]=n_qy

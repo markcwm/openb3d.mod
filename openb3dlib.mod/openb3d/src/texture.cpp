@@ -222,7 +222,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	if(flags&4) ApplyMask(tex,buffer,10,10,10);
 
 	unsigned int name;
-	if (frame_count<=2){
+	if (frame_count<2){
 		glGenTextures (1,&name);
 		glBindTexture (GL_TEXTURE_2D,name);
 		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -241,13 +241,19 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 		//tex.gltex=tex.gltex[..tex.no_frames]
 
-		int frames_in_row=tex->width/frame_width;
-
+		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
+		int yframes=tex->height/frame_height;
+		int x=first_frame % xframes;
+		int y=(first_frame / yframes) % yframes;
 
 		for (int i=0;i<frame_count;i++){
-			CopyPixels (buffer,tex->width, tex->height,frame_width*(i%frames_in_row), frame_height*(i/frames_in_row),
-			dstbuffer, frame_width, frame_height, 4);
-
+			CopyPixels(buffer,tex->width, tex->height, x*frame_width, y*frame_height, dstbuffer, frame_width, frame_height, 4);
+			x=x+1; // left-right frames
+			if (x>=xframes){ // top-bottom frames
+				x=0;
+				y=y+1;
+			}
+			
 			glGenTextures (1,&name);
 			glBindTexture (GL_TEXTURE_2D,name);
 			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA,frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);

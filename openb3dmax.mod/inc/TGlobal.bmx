@@ -107,13 +107,13 @@ Type TGlobal
 		
 	End Function
 	
-	Function ListPushBack( list:TList,value:Object,ent:TEntity )
+	Function EntityListAdd( list:TList,value:Object,ent:TEntity )
 	
 		Local mesh:TMesh=TMesh(ent)
 		If mesh
-			mesh.ListPushBack( list,value )
+			mesh.MeshListAdd( list,value )
 		Else
-			ent.ListPushBack( list,value )
+			ent.EntityListAdd( list,value )
 		EndIf
 		
 	End Function

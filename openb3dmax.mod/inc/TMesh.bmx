@@ -137,9 +137,9 @@ Type TMesh Extends TEntity
 			
 	End Method
 	
-	Method ListPushBack( list:TList,value:Object ) ' Field list value
+	Method MeshListAdd( list:TList,value:Object ) ' Field list value
 	
-		Super.ListPushBack( list,value )
+		Super.EntityListAdd( list,value )
 		
 		Local surf:TSurface=TSurface(value)
 		Local bone:TBone=TBone(value)
@@ -171,7 +171,7 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	Method NewSurface:TSurface() ' use ListPushBack(list,value)
+	Method NewSurface:TSurface() ' use MeshListAdd(list,value)
 	
 		Local inst:Byte Ptr=NewSurface_( GetInstance(Self) )
 		Return TSurface.CreateObject(inst)
@@ -303,7 +303,7 @@ Type TMesh Extends TEntity
 	
 	Method SetMatrix( matrix:TMatrix )
 	
-		If parent <> Null
+		If parent <> Null ' get parent local coords
 			Local invpar:TMatrix = NewMatrix()
 			parent.mat.GetInverse(invpar)
 			invpar.Multiply(matrix)
