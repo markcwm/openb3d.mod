@@ -79,7 +79,9 @@ Type TGlobal
 		TPick.InitGlobals()
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
-				
+		
+		LoaderMatrix("3ds", 1,0,0, 0,0,1, 0,1,0) ' swap z/y axis
+		
 	End Function
 	
 	Function CopyList( list:TList )

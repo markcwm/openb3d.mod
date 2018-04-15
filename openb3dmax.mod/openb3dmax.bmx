@@ -383,13 +383,17 @@ End Extern
 'Const USE_VBO:Int=True		' True to use vbos if supported by hardware
 'Const VBO_MIN_TRIS:Int=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no.
 							' of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+
 Global LOG_NEW:Int=False		' True to DebugLog when new 3d object created
 Global LOG_DEL:Int=False		' True to DebugLog when 3d object destroyed
 Global LOG_B3D:Int=False		' True to DebugLog B3D chunks
 Global LOG_MD2:Int=False		' True to DebugLog MD2 chunks
 Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
+
 Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
 Global MESH_LOADER:Int=1		' 1 for stream mesh loaders, 2 for library loaders
+Global MATRIX_3DS:TMatrix=NewMatrix()
+
 ' Texture flags, also Brush
 'Const TEX_COLOR:Int=1
 'Const TEX_ALPHA:Int=2

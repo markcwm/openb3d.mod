@@ -64,10 +64,34 @@ Type TMatrix
 	
 	Function NewMatrix:TMatrix()
 	
-		Local inst:Byte Ptr=NewMatrix_()
+		Local inst:Byte Ptr=NewMatrix_() ' and LoadIdentity
 		Return CreateObject(inst)
 		
 	End Function
+	
+	' Extra
+	
+	Method SetIdentity( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
+	
+		grid[(4*0)+0] = xx
+		grid[(4*0)+1] = xy
+		grid[(4*0)+2] = xz
+		grid[(4*1)+0] = yx
+		grid[(4*1)+1] = yy
+		grid[(4*1)+2] = yz
+		grid[(4*2)+0] = zx
+		grid[(4*2)+1] = zy
+		grid[(4*2)+2] = zz
+		
+	End Method
+	
+	Method SetVector( v:TVector )
+	
+		v.x = grid[(4*0)+0] + grid[(4*1)+0] + grid[(4*2)+0]
+		v.y = grid[(4*0)+1] + grid[(4*1)+1] + grid[(4*2)+1]
+		v.z = grid[(4*0)+2] + grid[(4*1)+2] + grid[(4*2)+2]
+		
+	End Method
 	
 	' Warner
 	

@@ -1,6 +1,6 @@
 ' T3DS.bmx
-' 3DS loader from Warner engine (by Bramdenhond)
-' loads meshes with single surface, pretransforms vertices but may need reorientation
+' 3DS loader from Warner engine (by Bram den Hond)
+' loads meshes with a single surface, pretransforms vertices but may need reorientation
 
 Type TChunk
 	Field id%
@@ -47,8 +47,8 @@ End Type
 
 Type T3DS
 
-	Global Pre_Transform_Verts:Int = 1 ' disabled if any child has no matrix
-	Global Tex_Flags:Int = 9 ' default LoadTexture flags
+	Global PRE_TRANSFORM_VERTS:Int = 1 ' disabled if any child has no matrix
+	Global TEX_FLAGS:Int = 9 ' default LoadTexture flags
 	
 	' misc
 	Const CHUNK_M3DVERSION = $0002
@@ -471,7 +471,7 @@ Type T3DS
 					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 					
 					If parid <> 65535 And mesh.no_surfs[0] = 0 And matrix = Null ' if any dummy meshes
-						Pre_Transform_Verts = 0 ' don't pretransform vertices
+						PRE_TRANSFORM_VERTS = 0 ' don't pretransform vertices
 					EndIf
 					
 					Exit
@@ -634,8 +634,8 @@ Type T3DS
 			name = filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture = LoadTexture(name, Tex_Flags)
-		If LOG_3DS Then DebugLog "MAT TEX name="+name+" matname="+matname
+		Local tex:TTexture = LoadTexture(name, TEX_FLAGS)
+		If LOG_3DS Then DebugLog " MAT TEX name="+name+" matname="+matname
 		
 		MapInsert materialmap, matname, tex
 		MapInsert materialcolormap, matname, col
@@ -751,57 +751,99 @@ Type T3DS
 		If LOG_3DS Then DebugLog " filepath: "+filepath
 		
 		Local parent:TMesh = ParseFile(url,size,parent_ent)
-		If LOG_3DS Then DebugLog " Pre_Transform_Verts: "+Pre_Transform_Verts
+		If LOG_3DS Then DebugLog " PRE_TRANSFORM_VERTS: "+PRE_TRANSFORM_VERTS
 		
 		stream.Close()
 		ChangeDir(olddir)
+		
+		Local master_scale#, vec:TVector
+		For Local ent:TEntity = EachIn objlist
+			Local mesh:TMesh = TMesh(ent)
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			
+			If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
+				vec = matrix.GetMatrixScale()
+				If vec.x > master_scale Then master_scale = vec.x
+				If vec.y > master_scale Then master_scale = vec.y
+				If vec.z > master_scale Then master_scale = vec.z
+			EndIf
+		Next
+		If LOG_3DS Then DebugLog " master_scale:"+master_scale
+		
+		If master_scale > 1.0
+			For Local ent:TEntity = EachIn objlist
+				Local mesh:TMesh = TMesh(ent)
+				Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+				
+				If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
+					matrix.Scale(1 / master_scale, 1 / master_scale, 1 / master_scale) ' normalize matrix
+				EndIf
+			Next
+		EndIf
 		
 		For Local ent:TEntity = EachIn objlist
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null And CountList(objlist) > 1 ' matrix transform, only if more than one mesh
-				If Pre_Transform_Verts ' valid mesh
-					Local invmat:TMatrix = NewMatrix()
-					matrix.GetInverse(invmat)
-					mesh.TransformVertices(invmat)
-					mesh.cull_radius[0] = 0.0
-					
-					If LOG_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
-				EndIf
+			If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
+				Local invmat:TMatrix = NewMatrix()
+				matrix.GetInverse(invmat)
+				mesh.TransformVertices(invmat)
+				mesh.SetMatrix(matrix) ' rotate and scale from parent
+				mesh.cull_radius[0] = 0.0
 				
-				mesh.SetMatrix(matrix) ' rotate, scale from parent
+				If LOG_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
 			EndIf
+		Next
+		
+		Rem
+		For Local ent:TEntity = EachIn objlist
+			Local mesh:TMesh = TMesh(ent)
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
 			'DebugLog "pos:"+animKeys[0].pos[0]+","+ animKeys[0].pos[1]+","+ animKeys[0].pos[2]
-			'Local matrix:Float[,] = ent.GetGlobalMatrix()
-			'ent.SetMatrix(matrix)
+			Local matrix:Float[,] = ent.GetGlobalMatrix()
+			ent.SetMatrix(matrix)
 			
-			'If animkeys.length > 0
-			'	Local oldmat:Float[,] = ent.GetGlobalMatrix()
+			If animkeys.length > 0
+				Local oldmat:Float[,] = ent.GetGlobalMatrix()
 			
-			'	For Local i% = 0 To animkeys.length-1
-			'		If animkeys[i]
-			'			If animkeys[i].pos ent.pos = animkeys[i].pos[..]
-			'			If animkeys[i].rot ent.rot = animkeys[i].rot[..]
-			'			If animkeys[i].size ent.size = animkeys[i].size[..]
-			'		End If
+				For Local i% = 0 To animkeys.length-1
+					If animkeys[i]
+						If animkeys[i].pos ent.pos = animkeys[i].pos[..]
+						If animkeys[i].rot ent.rot = animkeys[i].rot[..]
+						If animkeys[i].size ent.size = animkeys[i].size[..]
+					End If
 			
-			'		ent.SetAnimKey(i)
-			'	Next
+					ent.SetAnimKey(i)
+				Next
 			
-			'	ent.AddAnimSeq(animkeys.length)
-			'	ent.SetMatrix(oldmat)
-			'EndIf
+				ent.AddAnimSeq(animkeys.length)
+				ent.SetMatrix(oldmat)
+			EndIf
+		Next
+		EndRem
+		
+		Local m:TMatrix=NewMatrix()
+		Local m2:TMatrix=NewMatrix()
+		Local pos:TVector=New TVector
+		Local pos2:TVector=New TVector
+		For Local ent:TEntity = EachIn objlist
+			Local mesh:TMesh = TMesh(ent)
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			' reorient, swap y with -z - todo SetMatrixLoader
+			' reorient, swap y with -z, as set with LoaderMatrix
 			For Local surf:TSurface = EachIn mesh.surf_list
-				For Local v% = 0 To surf.no_verts[0]-1
-					Local pos_x# = surf.vert_coords[v*3 + 0]
-					Local pos_y# = surf.vert_coords[v*3 + 1]
-					Local pos_z# = surf.vert_coords[v*3 + 2]
-					surf.vert_coords[v*3 + 1] = -pos_z
-					surf.vert_coords[v*3 + 2] = pos_y
+				For Local v% = 0 To surf.CountVertices()-1
+					pos.x = surf.VertexX(v)
+					pos.y = surf.VertexY(v)
+					pos.z = surf.VertexZ(v)
+					
+					m.Overwrite(MATRIX_3DS) ' copy identity
+					m2.SetIdentity(pos.x,0,0, 0,pos.y,0, 0,0,pos.z) ' set vector in
+					m.Multiply(m2) ' transform identity
+					m.SetVector(pos2) ' get vector out
+					surf.VertexCoords(v, pos2.x, pos2.y, -pos2.z) ' -z for OpenGL
 				Next
 			Next
 		Next
