@@ -284,11 +284,20 @@ Set number of particles in trail.
 <tr><td class=docleft width=1%><a href=#ParticleVector>ParticleVector</a></td><td class=docright>
 Set vector (direction and speed) of particle trails.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#PositionAnimMesh>PositionAnimMesh</a></td><td class=docright>
+Moves all vertices of mesh and every child mesh.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#RepeatMesh>RepeatMesh</a></td><td class=docright>
 Like CopyMesh but for instancing effects.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ResetShadow>ResetShadow</a></td><td class=docright>
 Reset created flag to update static shadow.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#RotateAnimMesh>RotateAnimMesh</a></td><td class=docright>
+Rotates all vertices of mesh and every child mesh.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ScaleAnimMesh>ScaleAnimMesh</a></td><td class=docright>
+Scales all vertices of mesh and every child mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetFloat>SetFloat</a></td><td class=docright>
 Set a shader variable name of a uniform float type to a float value.
@@ -1002,6 +1011,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set vector (direction and speed) of particle trails.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=PositionAnimMesh>
+<tr><td class=doctop colspan=2>Function PositionAnimMesh( mesh:TMesh,px#,py#,pz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Moves all vertices of mesh and every child mesh.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=RepeatMesh>
 <tr><td class=doctop colspan=2>Function RepeatMesh:TMesh( mesh:TMesh,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Like CopyMesh but for instancing effects.</td></tr>
@@ -1010,6 +1024,16 @@ if the node is set at a higher range than the camera, its children won't be rend
 <table class=doc width=100% cellspacing=3 id=ResetShadow>
 <tr><td class=doctop colspan=2>Function ResetShadow( shad:TShadowObject )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Reset created flag to update static shadow.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=RotateAnimMesh>
+<tr><td class=doctop colspan=2>Function RotateAnimMesh( mesh:TMesh,rx#,ry#,rz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotates all vertices of mesh and every child mesh.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ScaleAnimMesh>
+<tr><td class=doctop colspan=2>Function ScaleAnimMesh( mesh:TMesh,sx#,sy#,sz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Scales all vertices of mesh and every child mesh.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SetFloat>

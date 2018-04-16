@@ -233,7 +233,7 @@ Type TB3D
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
 						
-						tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no])
+						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no]) ' wrong path crashes streams
 						If LOG_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
 						
 						tex_no=tex_no+1
@@ -589,7 +589,7 @@ Type TB3D
 						bo_vert_id=ReadInt(file)
 						bo_vert_w=ReadFloat(file)
 						
-						If LOG_B3D Then DebugLog tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w
+						'If LOG_B3D Then DebugLog tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w
 						
 						' assign weight values, with the strongest weight in vert_weight[1], and weakest in vert_weight[4]
 						Local anim_surf:TSurface
@@ -728,7 +728,7 @@ Type TB3D
 					While NewTag(new_tag)<>True And Eof(file)=0
 						k_frame=ReadInt(file)
 						
-						If LOG_B3D Then DebugLog tab+old_tag+" flags="+k_flags+" frame="+k_frame
+						'If LOG_B3D Then DebugLog tab+old_tag+" flags="+k_flags+" frame="+k_frame
 						
 						If (k_flags & 1)
 							k_px=ReadFloat(file)

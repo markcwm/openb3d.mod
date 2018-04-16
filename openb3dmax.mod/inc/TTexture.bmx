@@ -260,12 +260,13 @@ Type TTexture
 	
 	End Method
 	
-	Function LoadAnimTextureStream:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	Function LoadAnimTextureStream:TTexture( url:Object,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		'If (flags & 128) Then LoadCubeMapTexture(file,flags,tex) ' todo! load cubemaps
+		'If (flags & 128) Then LoadCubeMapTexture(url,flags,tex) ' todo! load cubemaps
 		
 		If tex=Null Then tex=NewTexture()
 		
+		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
 		tex.SetString(tex.file,file)
@@ -286,7 +287,7 @@ Type TTexture
 			tex.TextureListAdd( tex_list_all )
 		EndIf
 		
-		tex.pixmap=LoadPixmap(file) ' load from streams
+		tex.pixmap=LoadPixmap(url) ' streams
 		If tex.pixmap=Null Then Return tex
 		
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
@@ -538,7 +539,7 @@ Type TTexture
 		
 	End Function
 	
-	Function LoadAnimTexture:TTexture( file$,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	Function LoadAnimTexture:TTexture( file:String,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
 		Select TEXTURE_LOADER
 		

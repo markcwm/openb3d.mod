@@ -3,6 +3,27 @@
 ' *** Extra
 
 Rem
+bbdoc: Moves all vertices of mesh and every child mesh
+End Rem
+Function PositionAnimMesh( mesh:TMesh,px#,py#,pz# )
+	mesh.PositionAnimMesh( px#,py#,pz# )
+End Function
+
+Rem
+bbdoc: Rotates all vertices of mesh and every child mesh
+End Rem
+Function RotateAnimMesh( mesh:TMesh,rx#,ry#,rz# )
+	mesh.RotateAnimMesh( rx#,ry#,rz# )
+End Function
+
+Rem
+bbdoc: Scales all vertices of mesh and every child mesh
+End Rem
+Function ScaleAnimMesh( mesh:TMesh,sx#,sy#,sz# )
+	mesh.ScaleAnimMesh( sx#,sy#,sz# )
+End Function
+
+Rem
 bbdoc: Change model loader coordinates system, currently only 3DS supported
 End Rem
 Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )

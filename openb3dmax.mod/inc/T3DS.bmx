@@ -638,8 +638,9 @@ Type T3DS
 			name = filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture = LoadTexture(name, TEX_FLAGS)
-		If LOG_3DS Then DebugLog " MAT TEX name="+name+" matname="+matname
+		Local tex:TTexture
+		If texname <> "" Then tex = LoadTexture(name, TEX_FLAGS) ' check material has texture, wrong path crashes streams
+		If LOG_3DS Then DebugLog " MAT TEX name="+name+" matname="+matname+" texname="+texname
 		
 		MapInsert materialmap, matname, tex
 		MapInsert materialcolormap, matname, col
