@@ -125,6 +125,7 @@ Type TBrush
 				Local cString:Byte Ptr=strValue.ToCString()
 				SetBrushString_( GetInstance(Self),BRUSH_name,cString )
 				MemFree cString
+				name=BrushString_( GetInstance(Self),BRUSH_name )	
 		End Select
 		
 	End Method

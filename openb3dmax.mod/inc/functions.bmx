@@ -10,7 +10,7 @@ Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 		MATRIX_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="b3d" Or ext.ToLower()=".b3d"
-		'MATRIX_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		MATRIX_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
 		'MATRIX_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )

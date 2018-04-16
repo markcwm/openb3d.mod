@@ -440,10 +440,12 @@ Type TEntity
 				Local cString:Byte Ptr=strValue.ToCString()
 				SetEntityString_( GetInstance(Self),ENTITY_name,cString )
 				MemFree cString
+				name=EntityString_( GetInstance(Self),ENTITY_name )
 			Case class_name
 				Local cString:Byte Ptr=strValue.ToCString()
 				SetEntityString_( GetInstance(Self),ENTITY_class_name,cString )
 				MemFree cString
+				class_name=EntityString_( GetInstance(Self),ENTITY_class_name )
 		End Select
 		
 	End Method

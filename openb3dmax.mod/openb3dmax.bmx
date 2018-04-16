@@ -392,20 +392,24 @@ Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
 
 Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
 Global MESH_LOADER:Int=1		' 1 for stream mesh loaders, 2 for library loaders
-Global MATRIX_3DS:TMatrix=NewMatrix()
 
-' Texture flags, also Brush
-'Const TEX_COLOR:Int=1
-'Const TEX_ALPHA:Int=2
-'Const TEX_MASKED:Int=4
-'Const TEX_MIPMAP:Int=8
-'Const TEX_CLAMPU:Int=16
-'Const TEX_CLAMPV:Int=32
-'Const TEX_SPHEREMAP:Int=64
-'Const TEX_CUBEMAP:Int=128
-'Const TEX_VRAM:Int=256
-'Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,4096,8192,16384 unassigned
-'Const TEX_SECONDUV:Int=65536
+Global MATRIX_3DS:TMatrix=NewMatrix()
+Global MATRIX_B3D:TMatrix=NewMatrix()
+
+' Texture/Brush flags
+Const TEX_COLOR:Int=1
+Const TEX_ALPHA:Int=2
+Const TEX_MASKED:Int=4
+Const TEX_MIPMAP:Int=8
+Const TEX_CLAMPU:Int=16
+Const TEX_CLAMPV:Int=32
+Const TEX_SPHEREMAP:Int=64
+Const TEX_CUBEMAP:Int=128
+Const TEX_VRAM:Int=256
+Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,4096,8192,16384 unassigned AFAIK
+Const TEX_FLIPX:Int=8192 ' new, used in LoadAnimTextureStream
+Const TEX_FLIPY:Int=16384 ' new
+Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions
 

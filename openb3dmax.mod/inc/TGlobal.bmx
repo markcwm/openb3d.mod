@@ -81,6 +81,7 @@ Type TGlobal
 		TTerrain.InitGlobals()
 		
 		LoaderMatrix("3ds", 1,0,0, 0,0,1, 0,1,0) ' swap z/y axis
+		LoaderMatrix("b3d", 1,0,0, 0,1,0, 0,0,1) ' standard coords
 		
 	End Function
 	

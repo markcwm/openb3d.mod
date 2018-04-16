@@ -250,10 +250,12 @@ Type TTexture
 				Local cString:Byte Ptr=strValue.ToCString()
 				SetTextureString_( GetInstance(Self),TEXTURE_file,cString )
 				MemFree cString
+				file=TextureString_( GetInstance(Self),TEXTURE_file )
 			Case file_abs
 				Local cString:Byte Ptr=strValue.ToCString()
 				SetTextureString_( GetInstance(Self),TEXTURE_file_abs,cString )
 				MemFree cString
+				file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
 		End Select
 	
 	End Method
@@ -292,9 +294,13 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
+		If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
+		If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
+		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,10,10,10) ' mask pixmap
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel equal to 0,0,0
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,10,10,10) ' mask any pixel below 10,10,10 (allows for Jpg noise)
 		
 		Local name:Int
 		Local mapframe:TPixmap=Null

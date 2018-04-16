@@ -47,8 +47,11 @@ End Type
 
 Type T3DS
 
-	Global PRE_TRANSFORM_VERTS:Int = 1 ' disabled if any child has no matrix
-	Global TEX_FLAGS:Int = 9 ' default LoadTexture flags
+	Global TRANSFORM_FLAG:Int = 1 ' 0=disable, 1=disabled if dummy found, 2=always, disabled if any dummy child has no matrix
+	
+	Global TEX_FLAGS:Int = 9 ' set default LoadTexture flags
+	
+	Global MASTER_SCALE:Float = 0 ' internal, use ScaleAnimMesh()
 	
 	' misc
 	Const CHUNK_M3DVERSION = $0002
@@ -318,8 +321,8 @@ Type T3DS
 					
 					If LOG_3DS
 						DebugLog "- - - - CHUNK_TRANSMATRIX"
-						For Local z% = 0 To 2
-							DebugLog "- - - - "+matrix.grid[(4*0)+z]+","+matrix.grid[(4*1)+z]+","+matrix.grid[(4*2)+z]+","+matrix.grid[(4*3)+z]
+						For Local z% = 0 To 3
+							DebugLog "- - - - "+matrix.grid[(4*z)+0]+","+matrix.grid[(4*z)+1]+","+matrix.grid[(4*z)+2]+","+matrix.grid[(4*z)+3]
 						Next
 					EndIf
 					
@@ -455,6 +458,7 @@ Type T3DS
 			mesh.SetString(mesh.class_name,"Mesh")
 			mesh.AddParent(parent)
 			mesh.EntityListAdd(TEntity.entity_list)
+			'If TRANSFORM_FLAG = 1 Then TRANSFORM_FLAG = 0 ' disable transform vertices?
 		Else
 			For Local ent:TEntity = EachIn objlist
 				If ent.EntityName() = objname
@@ -470,8 +474,8 @@ Type T3DS
 					
 					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 					
-					If parid <> 65535 And mesh.no_surfs[0] = 0 And matrix = Null ' if any dummy meshes
-						PRE_TRANSFORM_VERTS = 0 ' don't pretransform vertices
+					If parid <> 65535 And mesh.no_surfs[0] = 0 And matrix = Null ' if any dummy child mesh found
+						If TRANSFORM_FLAG = 1 Then TRANSFORM_FLAG = 0 ' don't transform vertices
 					EndIf
 					
 					Exit
@@ -729,9 +733,9 @@ Type T3DS
 		Return parent
 	End Method
 	
-	Method LoadMesh3DS:TMesh( url:Object, parent_ent:TEntity=Null )
+	Method LoadAnim3DS:TMesh( url:Object, parent_ent:TEntity=Null )
+	
 		Local size:Int, olddir:String
-		
 		stream = LittleEndianStream(ReadFile(url))
 		If stream = Null Then Return Null
 		size = stream.Size()
@@ -747,56 +751,58 @@ Type T3DS
 		filepath = ExtractDir(String(url))
 		olddir = CurrentDir()
 		If filepath <> "" Then ChangeDir(filepath)
+		
 		If LOG_3DS Then DebugLog " filename: "+filename
 		If LOG_3DS Then DebugLog " filepath: "+filepath
 		
 		Local parent:TMesh = ParseFile(url,size,parent_ent)
-		If LOG_3DS Then DebugLog " PRE_TRANSFORM_VERTS: "+PRE_TRANSFORM_VERTS
+		
+		If LOG_3DS Then DebugLog " TRANSFORM_FLAG: "+TRANSFORM_FLAG
+		If LOG_3DS Then DebugLog " TEX_FLAGS: "+TEX_FLAGS
 		
 		stream.Close()
 		ChangeDir(olddir)
 		
-		Local master_scale#, vec:TVector
-		For Local ent:TEntity = EachIn objlist
+		Local vec:TVector
+		For Local ent:TEntity = EachIn objlist ' master scale is largest matrix value, ignore CHUNK_MASTERSCALE
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
+			If matrix <> Null And TRANSFORM_FLAG > 0
 				vec = matrix.GetMatrixScale()
-				If vec.x > master_scale Then master_scale = vec.x
-				If vec.y > master_scale Then master_scale = vec.y
-				If vec.z > master_scale Then master_scale = vec.z
+				If vec.x > MASTER_SCALE Then MASTER_SCALE = vec.x
+				If vec.y > MASTER_SCALE Then MASTER_SCALE = vec.y
+				If vec.z > MASTER_SCALE Then MASTER_SCALE = vec.z
 			EndIf
 		Next
-		If LOG_3DS Then DebugLog " master_scale:"+master_scale
 		
-		If master_scale > 1.0
-			For Local ent:TEntity = EachIn objlist
-				Local mesh:TMesh = TMesh(ent)
-				Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
-				
-				If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
-					matrix.Scale(1 / master_scale, 1 / master_scale, 1 / master_scale) ' normalize matrix
-				EndIf
-			Next
-		EndIf
+		If LOG_3DS Then DebugLog " MASTER_SCALE:"+MASTER_SCALE
 		
-		For Local ent:TEntity = EachIn objlist
+		For Local ent:TEntity = EachIn objlist ' normalize matrix (scale down) if too large
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null And PRE_TRANSFORM_VERTS ' valid mesh
+			If matrix <> Null And TRANSFORM_FLAG > 0 And MASTER_SCALE > 1.0 ' if < 1 will scale up
+				matrix.Scale(1.0 / MASTER_SCALE, 1.0 / MASTER_SCALE, 1.0 / MASTER_SCALE)
+			EndIf
+		Next
+		
+		For Local ent:TEntity = EachIn objlist ' transform vertices, re-positions mesh by matrix
+			Local mesh:TMesh = TMesh(ent)
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			
+			If matrix <> Null And TRANSFORM_FLAG > 0
 				Local invmat:TMatrix = NewMatrix()
 				matrix.GetInverse(invmat)
 				mesh.TransformVertices(invmat)
-				mesh.SetMatrix(matrix) ' rotate and scale from parent
+				'mesh.SetMatrix(matrix) ' parent rotate and scale (removed, already scaling)
 				mesh.cull_radius[0] = 0.0
 				
 				If LOG_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
 			EndIf
 		Next
 		
-		Rem
+		Rem ' animation todo!
 		For Local ent:TEntity = EachIn objlist
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
@@ -824,26 +830,19 @@ Type T3DS
 		Next
 		EndRem
 		
-		Local m:TMatrix=NewMatrix()
-		Local m2:TMatrix=NewMatrix()
 		Local pos:TVector=New TVector
-		Local pos2:TVector=New TVector
-		For Local ent:TEntity = EachIn objlist
+		For Local ent:TEntity = EachIn objlist ' transform coordinate system with global identity matrix, set by LoaderMatrix
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			' reorient, swap y with -z, as set with LoaderMatrix
 			For Local surf:TSurface = EachIn mesh.surf_list
 				For Local v% = 0 To surf.CountVertices()-1
 					pos.x = surf.VertexX(v)
 					pos.y = surf.VertexY(v)
-					pos.z = surf.VertexZ(v)
+					pos.z = -surf.VertexZ(v) ' -z for OpenGL
 					
-					m.Overwrite(MATRIX_3DS) ' copy identity
-					m2.SetIdentity(pos.x,0,0, 0,pos.y,0, 0,0,pos.z) ' set vector in
-					m.Multiply(m2) ' transform identity
-					m.SetVector(pos2) ' get vector out
-					surf.VertexCoords(v, pos2.x, pos2.y, -pos2.z) ' -z for OpenGL
+					MATRIX_3DS.TransformVec(pos.x, pos.y, pos.z, 1) ' transform vector
+					surf.VertexCoords(v, pos.x, pos.y, pos.z)
 				Next
 			Next
 		Next
@@ -853,6 +852,7 @@ Type T3DS
 		For Local surf:TSurface = EachIn parent.surf_list
 			surf.UpdateNormals()
 		Next
+		
 		parent.AddParent(parent_ent)
 		
 		' update matrix

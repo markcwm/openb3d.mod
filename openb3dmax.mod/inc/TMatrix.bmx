@@ -76,20 +76,22 @@ Type TMatrix
 		grid[(4*0)+0] = xx
 		grid[(4*0)+1] = xy
 		grid[(4*0)+2] = xz
+		grid[(4*0)+3] = 0
+		
 		grid[(4*1)+0] = yx
 		grid[(4*1)+1] = yy
 		grid[(4*1)+2] = yz
+		grid[(4*1)+3] = 0
+		
 		grid[(4*2)+0] = zx
 		grid[(4*2)+1] = zy
 		grid[(4*2)+2] = zz
+		grid[(4*2)+3] = 0
 		
-	End Method
-	
-	Method SetVector( v:TVector )
-	
-		v.x = grid[(4*0)+0] + grid[(4*1)+0] + grid[(4*2)+0]
-		v.y = grid[(4*0)+1] + grid[(4*1)+1] + grid[(4*2)+1]
-		v.z = grid[(4*0)+2] + grid[(4*1)+2] + grid[(4*2)+2]
+		grid[(4*3)+0] = 0
+		grid[(4*3)+1] = 0
+		grid[(4*3)+2] = 0
+		grid[(4*3)+3] = 1
 		
 	End Method
 	

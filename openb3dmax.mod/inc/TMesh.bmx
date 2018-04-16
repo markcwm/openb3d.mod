@@ -476,10 +476,10 @@ Type TMesh Extends TEntity
 				If ExtractExt(file)="b3d"
 					mesh=TB3D.LoadAnimB3D( file,parent )
 				ElseIf ExtractExt(file)="md2"
-					mesh=CreateCube() ' md2 todo!
+					mesh=CreateCube() ' load md2 todo!
 				ElseIf ExtractExt(file)="3ds"
-					Local obj:T3DS = New T3DS ' hierarchy animation todo
-					mesh=obj.LoadMesh3DS( file,parent )
+					Local model:T3DS = New T3DS ' hierarchy animation todo!
+					mesh=model.LoadAnim3DS( file,parent )
 				EndIf
 				Return mesh
 				
