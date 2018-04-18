@@ -113,7 +113,7 @@ Type TAction
 		Select list
 			Case action_list
 				If StaticListSize_( ACTION_class,ACTION_action_list )
-					Local inst:Byte Ptr=StaticIterListAction_( ACTION_class,ACTION_action_list,Varptr(action_list_id) )
+					Local inst:Byte Ptr=StaticIterListAction_( ACTION_class,ACTION_action_list,Varptr action_list_id )
 					Local obj:TAction=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -129,7 +129,7 @@ Type TAction
 			Case action_list
 				action_list_id=0
 				For Local id:Int=0 To StaticListSize_( ACTION_class,ACTION_action_list )-1
-					Local inst:Byte Ptr=StaticIterListAction_( ACTION_class,ACTION_action_list,Varptr(action_list_id) )
+					Local inst:Byte Ptr=StaticIterListAction_( ACTION_class,ACTION_action_list,Varptr action_list_id )
 					Local obj:TAction=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next

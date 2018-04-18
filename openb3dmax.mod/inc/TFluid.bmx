@@ -36,7 +36,7 @@ Type TFluid Extends TMesh
 	
 	Method FluidArray( Array:Float Var,w:Int,h:Int,d:Int )
 	
-		FluidArray_( GetInstance(Self),Varptr(Array),w,h,d )
+		FluidArray_( GetInstance(Self),Varptr Array,w,h,d )
 		
 	End Method
 	

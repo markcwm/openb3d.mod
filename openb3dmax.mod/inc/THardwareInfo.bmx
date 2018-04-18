@@ -76,9 +76,9 @@ Type THardwareInfo ' by klepto2
 		EndIf
 
 		' Get some numerics
-		glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr(THardwareInfo.MaxTextures))
-		glGetIntegerv(GL_MAX_TEXTURE_SIZE, Varptr(THardwareInfo.MaxTexSize))
-		glGetIntegerv(GL_MAX_LIGHTS, Varptr(THardwareInfo.MaxLights))
+		glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr THardwareInfo.MaxTextures)
+		glGetIntegerv(GL_MAX_TEXTURE_SIZE, Varptr THardwareInfo.MaxTexSize)
+		glGetIntegerv(GL_MAX_LIGHTS, Varptr THardwareInfo.MaxLights)
 	End Function
 
 	Function DisplayInfo(LogFile:Int=False)

@@ -209,6 +209,9 @@ Set threshold value used in fluid rendering algorithm, 0.5 is default.
 <tr><td class=docleft width=1%><a href=#FreeAction>FreeAction</a></td><td class=docright>
 Frees action from memory when it has ended.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#FreeBrushTextures>FreeBrushTextures</a></td><td class=docright>
+Frees all brush textures, FreeBrush does not free textures.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#FreeShader>FreeShader</a></td><td class=docright>
 Frees a shader material.
 </td></tr>
@@ -872,6 +875,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=FreeAction>
 <tr><td class=doctop colspan=2>Function FreeAction( act:TAction )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Frees action from memory when it has ended.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=FreeBrushTextures>
+<tr><td class=doctop colspan=2>Function FreeBrushTextures( brush:TBrush )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Frees all brush textures, FreeBrush does not free textures.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=FreeShader>

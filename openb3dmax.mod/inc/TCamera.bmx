@@ -102,7 +102,7 @@ Type TCamera Extends TEntity
 		Select list
 			Case cam_list
 				If StaticListSize_( CAMERA_class,CAMERA_cam_list )
-					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr(cam_list_id) )
+					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr cam_list_id )
 					Local obj:TCamera=TCamera( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -118,7 +118,7 @@ Type TCamera Extends TEntity
 			Case cam_list
 				cam_list_id=0
 				For Local id:Int=0 To StaticListSize_( CAMERA_class,CAMERA_cam_list )-1
-					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr(cam_list_id) )
+					Local inst:Byte Ptr=StaticIterListCamera_( CAMERA_class,CAMERA_cam_list,Varptr cam_list_id )
 					Local obj:TCamera=TCamera( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next

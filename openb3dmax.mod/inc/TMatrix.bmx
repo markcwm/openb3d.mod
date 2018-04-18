@@ -256,7 +256,7 @@ Type TMatrix
 	' transforms the specified vector by this matrix
 	Method TransformVec( rx:Float Var,ry:Float Var,rz:Float Var,addTranslation:Int=0 )
 	
-		MatrixTransformVec_( GetInstance(Self),Varptr(rx),Varptr(ry),Varptr(rz),addTranslation )
+		MatrixTransformVec_( GetInstance(Self),Varptr rx,Varptr ry,Varptr rz,addTranslation )
 		
 	End Method
 	
@@ -319,7 +319,7 @@ Type TMatrix
 	' convert matrix to quaternion
 	Method ToQuat( qx:Float Var,qy:Float Var,qz:Float Var,qw:Float Var )
 	
-		MatrixToQuat_( GetInstance(Self),Varptr(qx),Varptr(qy),Varptr(qz),Varptr(qw) )
+		MatrixToQuat_( GetInstance(Self),Varptr qx,Varptr qy,Varptr qz,Varptr qw )
 		
 	End Method
 	
@@ -332,14 +332,14 @@ Type TMatrix
 	' Creates a quaternion from an angle and an axis
 	Function Quaternion_FromAngleAxis( angle:Float,ax:Float,ay:Float,az:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
 	
-		MatrixQuaternion_FromAngleAxis_( angle,ax,ay,az,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
+		MatrixQuaternion_FromAngleAxis_( angle,ax,ay,az,Varptr rx,Varptr ry,Varptr rz,Varptr rw )
 		
 	End Function
 	
 	' Multiplies a quaternion
 	Function Quaternion_MultiplyQuat( x1:Float,y1:Float,z1:Float,w1:Float,x2:Float,y2:Float,z2:Float,w2:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
 	
-		MatrixQuaternion_MultiplyQuat_( x1,y1,z1,w1,x2,y2,z2,w2,Varptr(rx),Varptr(ry),Varptr(rz),Varptr(rw) )
+		MatrixQuaternion_MultiplyQuat_( x1,y1,z1,w1,x2,y2,z2,w2,Varptr rx,Varptr ry,Varptr rz,Varptr rw )
 			
 	End Function
 	

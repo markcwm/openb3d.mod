@@ -92,23 +92,25 @@ Type TBrush
 			Local inst:Byte Ptr=BrushTextureArray_( GetInstance(Self),BRUSH_tex,id )
 			tex[id]=TTexture.GetObject(inst)
 			If tex[id]=Null And inst<>Null Then tex[id]=TTexture.CreateObject(inst)
+			'If tex[id]<>Null Then DebugLog "get tex="+id+" tex.file="+tex[id].GetString(tex[id].file)
 		Next
 		
 		exists=1
 		
 	End Method
 	
-	' Openb3d
+	' Extra
 	
-	Method GetBrushTexture:TTexture( index:Int=0 ) ' same as function in TTexture
+	' Frees all brush textures, FreeBrush does not free textures
+	Method FreeBrushTextures()
 	
-		Local inst:Byte Ptr=GetBrushTexture_( GetInstance(Self),index )
-		Return TTexture.GetObject(inst) ' no CreateObject
+		For Local id:Int=0 To 7
+			If tex[id]<>Null Then tex[id].FreeTexture()
+		Next
 		
 	End Method
 	
-	' Extra
-	
+	' Gets a Blitz string from a C string
 	Method GetString:String( str:Byte Ptr )
 	
 		Select str
@@ -118,6 +120,7 @@ Type TBrush
 		
 	End Method
 	
+	' Sets a C string from a Blitz string
 	Method SetString( strPtr:Byte Ptr, strValue:String )
 	
 		Select strPtr
@@ -130,15 +133,26 @@ Type TBrush
 		
 	End Method
 	
+	' GL equivalent, experimental
 	Method BrushGLColor( r:Float,g:Float,b:Float,a:Float=1.0 )
 	
 		BrushGLColor_( GetInstance(Self),r,g,b,a )
 		
 	End Method
 	
+	' GL equivalent, experimental
 	Method BrushGLBlendFunc( sfactor:Int,dfactor:Int )
 	
 		BrushGLBlendFunc_( GetInstance(Self),sfactor,dfactor )
+		
+	End Method
+	
+	' Openb3d
+	
+	Method GetBrushTexture:TTexture( index:Int=0 ) ' same as function in TTexture
+	
+		Local inst:Byte Ptr=GetBrushTexture_( GetInstance(Self),index )
+		Return TTexture.GetObject(inst) ' no CreateObject
 		
 	End Method
 	
@@ -160,13 +174,10 @@ Type TBrush
 		
 	End Method
 	
+	' Frees a brush but not it's textures in case they are shared
 	Method FreeBrush()
 	
 		If exists
-			For Local id:Int=0 To 7
-				tex[id].FreeTexture()
-			Next
-			
 			FreeBrush_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
 			exists=0
@@ -209,11 +220,11 @@ Type TBrush
 		
 	End Method
 	
-	Method BrushTexture( tex:TTexture,frame:Int=0,index:Int=0 )
+	Method BrushTexture( texture:TTexture,frame:Int=0,index:Int=0 )
 	
-		BrushTexture_( GetInstance(Self),TTexture.GetInstance(tex),frame,index )
+		BrushTexture_( GetInstance(Self),TTexture.GetInstance(texture),frame,index )
 		
-		InitFields()
+		tex[index]=texture
 		
 	End Method
 	

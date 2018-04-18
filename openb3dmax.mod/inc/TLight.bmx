@@ -86,7 +86,7 @@ Type TLight Extends TEntity
 		Select list
 			Case light_list
 				If StaticListSize_( LIGHT_class,LIGHT_light_list )
-					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr(light_list_id) )
+					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr light_list_id )
 					Local obj:TLight=TLight( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -102,7 +102,7 @@ Type TLight Extends TEntity
 			Case light_list
 				light_list_id=0
 				For Local id:Int=0 To StaticListSize_( LIGHT_class,LIGHT_light_list )-1
-					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr(light_list_id) )
+					Local inst:Byte Ptr=StaticIterVectorLight_( LIGHT_class,LIGHT_light_list,Varptr light_list_id )
 					Local obj:TLight=TLight( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -116,16 +116,16 @@ Type TLight Extends TEntity
 	Function GetLightValues()
 		
 		For Local i%=0 To no_lights[0]-1
-			glGetLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0]))
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' if light_type=3
-			glGetLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' if light_type>1
-			glGetLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' if light_type>1
-			glGetLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' if light_type>1
+			glGetLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr ambient[i,0])
+			glGetLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr diffuse[i,0])
+			glGetLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr specular[i,0])
+			glGetLightfv(GL_LIGHT0+i, GL_POSITION, Varptr position[i,0])
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr spotDirection[i,0]) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr spotExponent[i,0]) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr spotCutoff[i,0]) ' if light_type=3
+			glGetLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr constantAtt[i,0]) ' if light_type>1
+			glGetLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr linearAtt[i,0]) ' if light_type>1
+			glGetLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr quadraticAtt[i,0]) ' if light_type>1
 		Next
 		
 	End Function
@@ -134,16 +134,16 @@ Type TLight Extends TEntity
 	Function SetLightValues()
 	
 		For Local i%=0 To no_lights[0]-1
-			glLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr(ambient[i,0])) ' not set
-			glLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr(diffuse[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr(specular[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_POSITION, Varptr(position[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr(spotDirection[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr(spotExponent[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr(spotCutoff[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr(constantAtt[i,0])) ' set in CreateLight
-			glLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr(linearAtt[i,0])) ' set in Update
-			glLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr(quadraticAtt[i,0])) ' not set
+			glLightfv(GL_LIGHT0+i, GL_AMBIENT, Varptr ambient[i,0]) ' not set
+			glLightfv(GL_LIGHT0+i, GL_DIFFUSE, Varptr diffuse[i,0]) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPECULAR, Varptr specular[i,0]) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_POSITION, Varptr position[i,0]) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPOT_DIRECTION, Varptr spotDirection[i,0]) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_SPOT_EXPONENT, Varptr spotExponent[i,0]) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_SPOT_CUTOFF, Varptr spotCutoff[i,0]) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_CONSTANT_ATTENUATION, Varptr constantAtt[i,0]) ' set in CreateLight
+			glLightfv(GL_LIGHT0+i, GL_LINEAR_ATTENUATION, Varptr linearAtt[i,0]) ' set in Update
+			glLightfv(GL_LIGHT0+i, GL_QUADRATIC_ATTENUATION, Varptr quadraticAtt[i,0]) ' not set
 		Next
 	
 	End Function

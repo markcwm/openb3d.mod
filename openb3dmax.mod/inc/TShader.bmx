@@ -340,7 +340,7 @@ Type TShader
 	Method UseFloat( name:String,v1:Float Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseFloat_( GetInstance(Self),cString,Varptr(v1) )
+		UseFloat_( GetInstance(Self),cString,Varptr v1 )
 		MemFree cString
 		
 	End Method
@@ -348,7 +348,7 @@ Type TShader
 	Method UseFloat2( name:String,v1:Float Var,v2:Float Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseFloat2_( GetInstance(Self),cString,Varptr(v1),Varptr(v2) )
+		UseFloat2_( GetInstance(Self),cString,Varptr v1,Varptr v2 )
 		MemFree cString
 		
 	End Method
@@ -356,7 +356,7 @@ Type TShader
 	Method UseFloat3( name:String,v1:Float Var,v2:Float Var,v3:Float Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseFloat3_( GetInstance(Self),cString,Varptr(v1),Varptr(v2),Varptr(v3) )
+		UseFloat3_( GetInstance(Self),cString,Varptr v1,Varptr v2,Varptr v3 )
 		MemFree cString
 		
 	End Method
@@ -364,7 +364,7 @@ Type TShader
 	Method UseFloat4( name:String,v1:Float Var,v2:Float Var,v3:Float Var,v4:Float Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseFloat4_( GetInstance(Self),cString,Varptr(v1),Varptr(v2),Varptr(v3),Varptr(v4) )
+		UseFloat4_( GetInstance(Self),cString,Varptr v1,Varptr v2,Varptr v3,Varptr v4 )
 		MemFree cString
 		
 	End Method
@@ -404,7 +404,7 @@ Type TShader
 	Method UseInteger( name:String,v1:Int Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseInteger_( GetInstance(Self),cString,Varptr(v1) )
+		UseInteger_( GetInstance(Self),cString,Varptr v1 )
 		MemFree cString
 		
 	End Method
@@ -412,7 +412,7 @@ Type TShader
 	Method UseInteger2( name:String,v1:Int Var,v2:Int Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseInteger2_( GetInstance(Self),cString,Varptr(v1),Varptr(v2) )
+		UseInteger2_( GetInstance(Self),cString,Varptr v1,Varptr v2 )
 		MemFree cString
 		
 	End Method
@@ -420,7 +420,7 @@ Type TShader
 	Method UseInteger3( name:String,v1:Int Var,v2:Int Var,v3:Int Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseInteger3_( GetInstance(Self),cString,Varptr(v1),Varptr(v2),Varptr(v3) )
+		UseInteger3_( GetInstance(Self),cString,Varptr v1,Varptr v2,Varptr v3 )
 		MemFree cString
 		
 	End Method
@@ -428,7 +428,7 @@ Type TShader
 	Method UseInteger4( name:String,v1:Int Var,v2:Int Var,v3:Int Var,v4:Int Var )
 	
 		Local cString:Byte Ptr=name.ToCString()
-		UseInteger4_( GetInstance(Self),cString,Varptr(v1),Varptr(v2),Varptr(v3),Varptr(v4) )
+		UseInteger4_( GetInstance(Self),cString,Varptr v1,Varptr v2,Varptr v3,Varptr v4 )
 		MemFree cString
 		
 	End Method

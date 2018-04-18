@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Frees all brush textures, FreeBrush does not free textures
+End Rem
+Function FreeBrushTextures( brush:TBrush )
+	brush.FreeBrushTextures()
+End Function
+
+Rem
 bbdoc: Moves all vertices of mesh and every child mesh
 End Rem
 Function PositionAnimMesh( mesh:TMesh,px#,py#,pz# )

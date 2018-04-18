@@ -81,21 +81,21 @@ Type TMesh Extends TEntity
 		Select list
 			Case surf_list
 				If MeshListSize_( GetInstance(Self),MESH_surf_list )
-					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr(surf_list_id) )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr surf_list_id )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
 				EndIf
 			Case anim_surf_list
 				If MeshListSize_( GetInstance(Self),MESH_anim_surf_list )
-					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr(anim_surf_list_id) )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr anim_surf_list_id )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
 				EndIf
 			Case bones
 				If MeshListSize_( GetInstance(Self),MESH_bones )
-					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr(bones_id) )
+					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr bones_id )
 					Local obj:TBone=TBone( TEntity.GetObject(inst) )
 					If obj=Null And inst<>Null Then obj=TBone.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
@@ -112,7 +112,7 @@ Type TMesh Extends TEntity
 			Case surf_list
 				surf_list_id=0
 				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_surf_list )-1
-					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr(surf_list_id) )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_surf_list,Varptr surf_list_id )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
@@ -120,7 +120,7 @@ Type TMesh Extends TEntity
 			Case anim_surf_list
 				anim_surf_list_id=0
 				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_anim_surf_list )-1
-					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr(anim_surf_list_id) )
+					Local inst:Byte Ptr=MeshIterListSurface_( GetInstance(Self),MESH_anim_surf_list,Varptr anim_surf_list_id )
 					Local obj:TSurface=TSurface.GetObject(inst)
 					If obj=Null And inst<>Null Then obj=TSurface.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
@@ -128,7 +128,7 @@ Type TMesh Extends TEntity
 			Case bones
 				bones_id=0
 				For Local id:Int=0 To MeshListSize_( GetInstance(Self),MESH_bones )-1
-					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr(bones_id) )
+					Local inst:Byte Ptr=MeshIterVectorBone_( GetInstance(Self),MESH_bones,Varptr bones_id )
 					Local obj:TBone=TBone( TEntity.GetObject(inst) )
 					If obj=Null And inst<>Null Then obj=TBone.CreateObject(inst)
 					If obj Then ListAddLast( list,obj )
@@ -193,7 +193,7 @@ Type TMesh Extends TEntity
 		
 		For Local child_no% = 1 To count_children
 			Local count%=0
-			Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr(count),Null )
+			Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr count,Null )
 			child_ent=GetObject(inst)
 			If child_ent=Null And inst<>Null Then child_ent=CreateObject(inst)
 		Next
@@ -298,7 +298,7 @@ Type TMesh Extends TEntity
 		SkinMesh_( GetInstance(Self),surf_no_get,vid,bone1,weight1,bone2,weight2,bone3,weight3,bone4,weight4 )
 		
 	End Method
-	
+		
 	' Warner
 	
 	Method SetMatrix( matrix:TMatrix )
@@ -371,6 +371,142 @@ Type TMesh Extends TEntity
 				surf.vert_coords[v*3 + 2] = pos.z
 			Next
 		Next
+		
+	End Method
+	
+	' RemiD
+	
+	' Update normals according to vertex structure, see syntaxbomb topic 4342
+	Method UpdateVerticesNormals%( Surface:TSurface )
+	
+		If Surface=Null Then Return 0
+		
+		'To store the temps indexes
+		Local NumTris%=CountTriangles(Surface)
+		Local TempsCount%
+		Local TempI%[numtris]
+		
+		'To store the normals of all triangles of a surface
+		Local TrianglesCount%
+		Local TriangleNX#[NumTris+1]
+		Local TriangleNY#[NumTris+1]
+		Local TriangleNZ#[NumTris+1]
+		
+		'To store the normals of the triangles which use a vertex
+		Local NormalsCount%
+		Local NormalNX#[]
+		Local NormalNY#[]
+		Local NormalNZ#[]
+		
+		'For each triangle of the surface
+		TrianglesCount% = 0
+		For Local TI% = 0 To CountTriangles(Surface)-1 Step 1
+		
+			'retrieve the X,Y,Z world coordinates of Vertex0, Vertex1, Vertex2 of this triangle
+			'V0
+			Local V0I% = TriangleVertex(Surface,TI,0)
+			TFormPoint(VertexX(Surface,V0I),VertexY(Surface,V0I),VertexZ(Surface,V0I),Self,Null)
+			Local V0GX# = TFormedX()
+			Local V0GY# = TFormedY()
+			Local V0GZ# = TFormedZ()
+			'V1
+			Local V1I% = TriangleVertex(Surface,TI,1)
+			TFormPoint(VertexX(Surface,V1I),VertexY(Surface,V1I),VertexZ(Surface,V1I),Self,Null)
+			Local V1GX# = TFormedX()
+			Local V1GY# = TFormedY()
+			Local V1GZ# = TFormedZ()
+			'V2
+			Local V2I% = TriangleVertex(Surface,TI,2)
+			TFormPoint(VertexX(Surface,V2I),VertexY(Surface,V2I),VertexZ(Surface,V2I),Self,Null)
+			Local V2GX# = TFormedX()
+			Local V2GY# = TFormedY()
+			Local V2GZ# = TFormedZ()
+			
+			'calculate the normal of the triangle by using the world position of its vertices
+			'Vector 0->1
+			Local Vec01X# = V0GX - V1GX
+			Local Vec01Y# = V0GY - V1GY
+			Local Vec01Z# = V0GZ - V1GZ
+			'Vector 0->2
+			Local Vec02X# = V0GX - V2GX
+			Local Vec02Y# = V0GY - V2GY
+			Local Vec02Z# = V0GZ - V2GZ
+			
+			Local CPX# = ( Vec01Y * Vec02Z ) - ( Vec01Z * Vec02Y )
+			Local CPY# = ( Vec01Z * Vec02X ) - ( Vec01X * Vec02Z )
+			Local CPZ# = ( Vec01X * Vec02Y ) - ( Vec01Y * Vec02X )
+			
+			Local Length# = Sqr( ( CPX * CPX ) + ( CPY * CPY ) + ( CPZ * CPZ ) )
+			
+			Local NX# = CPX / Length
+			Local NY# = CPY / Length
+			Local NZ# = CPZ / Length
+			
+			'store the normal in the triangles list
+			TrianglesCount = TrianglesCount + 1
+			Local TriI% = TrianglesCount
+			TriangleNX[TriI] = NX
+			TriangleNY[TriI] = NY
+			TriangleNZ[TriI] = NZ
+			
+		Next
+		
+		'For each vertex
+		For Local VI% = 0 To CountVertices(Surface)-1 Step 1
+		
+			'identify which triangles use this vertex
+			Local TempsCount% = 0
+			For Local TI% = 0 To CountTriangles(Surface)-1 Step 1
+				If TriangleVertex(Surface,TI,0) = VI Or TriangleVertex(Surface,TI,1) = VI Or TriangleVertex(Surface,TI,2) = VI
+					'add the triangle To the temps list
+					TempsCount = TempsCount + 1
+					Local TemI% = TempsCount
+					TempI[TemI] = TI
+				EndIf
+			Next
+			
+			'For each identified triangle
+			Local NormalsCount% = 0
+			For Local TemI% = 1 To TempsCount Step 1
+				Local TI% = TempI[TemI]
+				
+				'get the triangle normal (previously calculated)
+				Local NX# = TriangleNX[TI+1]
+				Local NY# = TriangleNY[TI+1]
+				Local NZ# = TriangleNZ[TI+1]
+				
+				'add the normal To the normals list
+				NormalsCount = NormalsCount + 1
+				NormalNX=NormalNX[..NormalsCount+1]
+				NormalNY=NormalNY[..NormalsCount+1]
+				NormalNZ=NormalNZ[..NormalsCount+1]
+				
+				Local NorI% = NormalsCount
+				NormalNX[NorI] = NX
+				NormalNY[NorI] = NY
+				NormalNZ[NorI] = NZ
+			Next
+			
+			'calculate the average normal vector, by considering the normals of the triangles using this vertex
+			Local VNX# = 0
+			Local VNY# = 0
+			Local VNZ# = 0
+			For Local NorI% = 1 To NormalsCount Step 1
+				VNX = VNX + NormalNX[NorI]
+				VNY = VNY + NormalNY[NorI]
+				VNZ = VNZ + NormalNZ[NorI]
+			Next
+			
+			VNX = VNX / NormalsCount
+			VNY = VNY / NormalsCount
+			VNZ = VNZ / NormalsCount
+			
+			'set the normal of this vertex
+			VertexNormal(Surface,VI,VNX,VNY,VNZ)
+			
+		Next
+		
+		Return 1
 		
 	End Method
 	

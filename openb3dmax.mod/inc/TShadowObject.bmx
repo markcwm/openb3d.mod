@@ -136,7 +136,7 @@ Type TShadowObject
 		Select list
 			Case shadow_list
 				If StaticListSize_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )
-					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr(shadow_list_id) )
+					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr shadow_list_id )
 					Local obj:TShadowObject=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -152,7 +152,7 @@ Type TShadowObject
 			Case shadow_list
 				shadow_list_id=0
 				For Local id:Int=0 To StaticListSize_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list )-1
-					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr(shadow_list_id) )
+					Local inst:Byte Ptr=StaticIterListShadowObject_( SHADOWOBJECT_class,SHADOWOBJECT_shadow_list,Varptr shadow_list_id )
 					Local obj:TShadowObject=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next

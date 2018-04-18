@@ -121,13 +121,13 @@ Type TTexture
 		Select list
 			Case tex_list
 				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list )
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
 			Case tex_list_all
 				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_all_id) )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_all_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -143,14 +143,14 @@ Type TTexture
 			Case tex_list
 				tex_list_id=0
 				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list )-1
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr(tex_list_id) )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
 			Case tex_list_all
 				tex_list_all_id=0
 				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )-1
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list_all,Varptr(tex_list_all_id) )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list_all,Varptr tex_list_all_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -214,24 +214,35 @@ Type TTexture
 	
 	' Extra
 	
+	' Set texture flags, see LoadTexture for values
+	Method TextureFlags( flags:Int )
+	
+		TextureFlags_( GetInstance(Self),flags )
+		
+	End Method
+	
+	' GL equivalent, param is a const, limited to 12 calls per texture, experimental
 	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
 	
 		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
 		
 	End Method
 	
+	' GL equivalent, param is a float, limited to 12 calls per texture, experimental
 	Method TextureGLTexEnvf( target:Int,pname:Int,param:Float )
 	
 		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
 		
 	End Method
 	
+	' Set texture multitex factor, used in interpolate and custom TexBlend options
 	Method TextureMultitex( f:Float )
 	
 		TextureMultitex_( GetInstance(Self),f )
 		
 	End Method
 	
+	' Gets a Blitz string from a C string
 	Method GetString:String( strPtr:Byte Ptr )
 	
 		Select strPtr
@@ -243,6 +254,7 @@ Type TTexture
 		
 	End Method
 	
+	' Sets a C string from a Blitz string
 	Method SetString( strPtr:Byte Ptr, strValue:String )
 	
 		Select strPtr
@@ -259,99 +271,6 @@ Type TTexture
 		End Select
 	
 	End Method
-	
-	Function LoadAnimTextureStream:TTexture( url:Object,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
-	
-		'If (flags & 128) Then LoadCubeMapTexture(url,flags,tex) ' todo! load cubemaps
-		
-		If tex=Null Then tex=NewTexture()
-		
-		Local file$=String(url)
-		If FileFind(file)=False Then Return Null ' strips any directories from file
-		
-		tex.SetString(tex.file,file)
-		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
-		
-		' set tex.flags before TexInList
-		tex.flags[0]=flags
-		tex.FilterFlags()
-		
-		' check to see if texture with same properties exists already, if so return existing texture
-		Local old_tex:TTexture=tex.TexInList()
-		If old_tex<>Null
-			old_tex.TextureListAdd( tex_list_all )
-			FreeObject( GetInstance(tex) ) ; tex.exists=0
-			Return old_tex
-		ElseIf old_tex<>tex
-			tex.TextureListAdd( tex_list )
-			tex.TextureListAdd( tex_list_all )
-		EndIf
-		
-		tex.pixmap=LoadPixmap(url) ' streams
-		If tex.pixmap=Null Then Return tex
-		
-		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
-		Local alpha_present:Int=False
-		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
-		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
-		
-		If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
-		If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
-		
-		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
-		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel equal to 0,0,0
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,10,10,10) ' mask any pixel below 10,10,10 (allows for Jpg noise)
-		
-		Local name:Int
-		Local mapframe:TPixmap=Null
-		
-		If frame_count<2 ' normal texture
-		
-			glGenTextures(1,Varptr(name))
-			glBindtexture(GL_TEXTURE_2D,name)
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
-			
-			tex.texture[0]=name
-			tex.width[0]=tex.pixmap.width
-			tex.height[0]=tex.pixmap.height
-			
-		ElseIf frame_width>0 And frame_height>0 ' anim texture
-		
-			mapframe=CreatePixmap(frame_width,frame_height,tex.pixmap.format)
-			
-			tex.no_frames[0]=frame_count
-			tex.frames=TextureNewUIntArray_( GetInstance(tex),TEXTURE_frames,frame_count )
-			
-			Local xframes:Int=tex.pixmap.width/frame_width
-			Local yframes:Int=tex.pixmap.height/frame_height
-			Local x:Int=first_frame Mod xframes
-			Local y:Int=(first_frame/yframes) Mod yframes
-			
-			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to mapframe pixels
-				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*frame_width,y*frame_height,mapframe.pixels,frame_width,frame_height,4)
-				x=x+1 ' left-right frames
-				If x>=xframes ' top-bottom frames
-					x=0
-					y=y+1
-				EndIf
-				
-				glGenTextures(1,Varptr(name))
-				glBindtexture(GL_TEXTURE_2D,name)
-				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,frame_width,frame_height,GL_RGBA,GL_UNSIGNED_BYTE,mapframe.pixels)
-				
-				tex.frames[i]=name
-			Next
-			
-			tex.texture[0]=tex.frames[0]
-			tex.width[0]=frame_width
-			tex.height[0]=frame_height
-			
-		EndIf
-		
-		Return tex
-		
-	End Function
 	
 	' GL 2.0 support
 	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
@@ -497,15 +416,16 @@ Type TTexture
 	
 	End Method
 	
-	' SMALLFIXES New function from www.blitzbasic.com/Community/posts.php?topic=88263#1002039
 	Method FreeTexture()
 	
 		If exists
 			For Local tex:TTexture=EachIn tex_list_all
 				If tex=Self Then ListRemove( tex_list_all,Self ) ; tex_list_all_id:-1
 			Next
+			
 			ListRemove( tex_list,Self ) ; tex_list_id:-1
 			pixmap=Null
+			
 			FreeTexture_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
 			exists=0
@@ -554,6 +474,345 @@ Type TTexture
 				Return LoadAnimTextureStream(file,flags,frame_width,frame_height,first_frame,frame_count,tex)
 			
 		EndSelect
+		
+	End Function
+	
+	Function LoadAnimTextureStream:TTexture( url:Object,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	
+		If (flags & 128) Then Return LoadCubeMapTextureStream(url,flags,tex)
+		
+		If tex=Null Then tex=NewTexture()
+		
+		Local file$=String(url)
+		If FileFind(file)=False Then Return Null ' strips any directories from file
+		
+		tex.SetString(tex.file,file)
+		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+		
+		' set tex.flags before TexInList
+		tex.flags[0]=flags
+		tex.FilterFlags()
+		
+		' check to see if texture with same properties exists already, if so return existing texture
+		Local old_tex:TTexture=tex.TexInList()
+		If old_tex<>Null
+		
+			If frame_width>0 And frame_height>0 And frame_count=1 And old_tex<>tex ' this allows loading sections of image
+				tex.TextureListAdd( tex_list )
+				tex.TextureListAdd( tex_list_all )
+				
+				tex.pixmap=LoadPixmap(url) ' streams
+				If tex.pixmap=Null Then Return tex
+				
+				GenerateAnimTextures( flags,frame_width,frame_height,first_frame,frame_count,tex )
+				
+				Return tex
+			Else
+				old_tex.TextureListAdd( tex_list_all )
+				FreeObject( GetInstance(tex) ) ; tex.exists=0
+				Return old_tex
+			EndIf
+			
+		ElseIf old_tex<>tex ' tex not pre-existing
+			tex.TextureListAdd( tex_list )
+			tex.TextureListAdd( tex_list_all )
+		EndIf
+		
+		tex.pixmap=LoadPixmap(url) ' streams
+		If tex.pixmap=Null Then Return tex
+		
+		GenerateAnimTextures( flags,frame_width,frame_height,first_frame,frame_count,tex )
+		
+		Return tex
+		
+	End Function
+	
+	Function GenerateAnimTextures:TTexture( flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture )
+	
+		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
+		Local alpha_present:Int=False
+		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
+		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
+		
+		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set this with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0,5) ' mask any pixel in range +/- 5 (allows for Jpg noise)
+		
+		Local name:Int
+		If frame_width>0 And frame_height>0 ' anim texture
+		
+			Local animmap:TPixmap=CreatePixmap(frame_width,frame_height,tex.pixmap.format) ' format=PF_RGBA8888
+			
+			tex.no_frames[0]=frame_count
+			tex.frames=TextureNewUIntArray_( GetInstance(tex),TEXTURE_frames,frame_count )
+			
+			Local width:Int=frame_width
+			Local height:Int=frame_height
+			Local xframes:Int=tex.pixmap.width/width
+			Local yframes:Int=tex.pixmap.height/height
+			Local x:Int=first_frame Mod xframes
+			Local y:Int=(first_frame/xframes) Mod yframes
+			
+			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to animmap pixels
+				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,animmap.pixels,width,height,4)
+				
+				x=x+1 ' left-right frames
+				If x>=xframes ' top-bottom frames
+					x=0
+					y=y+1
+				EndIf
+				
+				If (flags & 8192) Then animmap=XFlipPixmap(animmap) ' new flags, TEX_FLIPX=8192
+				If (flags & 16384) Then animmap=YFlipPixmap(animmap) ' new flags, TEX_FLIPY=16384
+				
+				glGenTextures(1,Varptr name)
+				glBindtexture(GL_TEXTURE_2D,name)
+				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,animmap.pixels)
+				
+				tex.frames[i]=name
+			Next
+			
+			tex.texture[0]=tex.frames[0]
+			tex.width[0]=width
+			tex.height[0]=height
+			
+		Else
+		
+			If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
+			If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
+			
+			glGenTextures(1,Varptr name)
+			glBindtexture(GL_TEXTURE_2D,name)
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
+			
+			tex.texture[0]=name
+			tex.width[0]=tex.pixmap.width
+			tex.height[0]=tex.pixmap.height
+			
+		EndIf
+		
+	End Function
+	
+	' Loads cubemaps in sideways cross layout rather than a single strip
+	Function LoadCubeMapTextureStream:TTexture( url:Object,flags:Int,tex:TTexture=Null )
+	
+		If tex=Null Then tex=NewTexture()
+		
+		Local file$=String(url)
+		If FileFind(file)=False Then Return Null ' strips any directories from file
+		
+		tex.SetString(tex.file,file)
+		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+		
+		' set tex.flags before TexInList
+		tex.flags[0]=flags
+		tex.FilterFlags()
+		
+		' check to see if texture with same properties exists already, if so return existing texture
+		Local old_tex:TTexture=tex.TexInList()
+		If old_tex<>Null
+			old_tex.TextureListAdd( tex_list_all )
+			FreeObject( GetInstance(tex) ) ; tex.exists=0
+			Return old_tex
+		ElseIf old_tex<>tex
+			tex.TextureListAdd( tex_list )
+			tex.TextureListAdd( tex_list_all )
+		EndIf
+		
+		tex.pixmap=LoadPixmap(url) ' streams
+		If tex.pixmap=Null Then Return tex
+		
+		tex.pixmap=YFlipPixmap(tex.pixmap) ' OpenGL screen coords are inverted
+		
+		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
+		Local alpha_present:Int=False
+		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
+		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
+		
+		If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
+		If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
+		
+		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - maybe set with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0,5) ' mask any pixel in range +/- 5 (allows for Jpg noise)
+		
+		Local width:Int=tex.pixmap.width/4
+		Local height:Int=tex.pixmap.height/3
+		
+		Local xframes:Int=tex.pixmap.width/width
+		Local nframes:Int=(tex.pixmap.height/height)*xframes
+		Local x:Int=0, y:Int=0
+		
+		Local cube0%, cube1%, cube2%, cube3%, cube4%, cube5%
+		cube0=GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' top
+		cube1=GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left
+		cube2=GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' back
+		cube3=GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
+		cube4=GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' front
+		cube5=GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' bottom
+		
+		Local cubemap:TPixmap=CreatePixmap(width,height,tex.pixmap.format) ' format=PF_RGBA8888
+		
+		Local name:Int
+		glGenTextures(1,Varptr name)
+		glBindtexture(GL_TEXTURE_CUBE_MAP,name)
+		
+		For Local i:Int=0 To nframes-1 ' copy tex.pixmap rect to cubemap pixels
+			If (x=1 And y=0) Or y=1 Or (x=1 And y=2) ' only cross-shaped cubemap supported
+				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,4)
+				
+				If x=1 And y=0 Then gluBuild2DMipmaps(cube0,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				If x=0 And y=1 Then gluBuild2DMipmaps(cube1,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				If x=1 And y=1 Then gluBuild2DMipmaps(cube2,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				If x=2 And y=1 Then gluBuild2DMipmaps(cube3,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				If x=3 And y=1 Then gluBuild2DMipmaps(cube4,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				If x=1 And y=2 Then gluBuild2DMipmaps(cube5,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+			EndIf
+			
+			x=x+1 ' left-right frames
+			If x>=xframes ' top-bottom frames
+				x=0
+				y=y+1
+			EndIf
+		Next
+		
+		tex.texture[0]=name
+		tex.no_frames[0]=1
+		tex.width[0]=width
+		tex.height[0]=height
+		
+		Return tex
+		
+	End Function
+	
+	' strips any directories from file, returns if file is found
+	' fixes FileFind not finding incbin or zip paths, topic=88901 (SLotman)
+	Function FileFind:Int( file:String Var )
+	
+		'Local TS:TStream = OpenFile(file$,True,False)
+		Local TS:TStream = ReadFile(file$)
+		If Not TS Then
+			Repeat ' strip \ dirs (Win)
+				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
+			Until Instr(file$,"\",1)=0
+			Repeat ' strip / dirs
+				file$=Right$(file$,(Len(file$)-Instr(file$,"/",1)))
+			Until Instr(file$,"/",1)=0
+			TS = OpenStream(file$,True,False)
+			If Not TS Then
+				DebugLog "ERROR: Cannot find texture: "+file$
+				Return False
+			Else ' file found after strip dir
+				CloseStream(TS)
+				TS=Null
+			EndIf
+		Else ' incbin or zip file found
+			CloseStream TS
+			TS=Null	
+		EndIf
+		Return True
+		
+	End Function
+	
+	' returns absolute path of file if relative and not incbin or zip
+	Function FileAbs:String( file:String )
+	
+		Local file_abs$
+		
+		If Instr(file$,":")=False ' not incbin or zip
+			file_abs$=CurrentDir$()+"/"+file$
+		Else
+			file_abs$=file$
+		EndIf
+		file_abs$=Replace$(file_abs$,"\","/")
+		
+		Return file_abs$
+		
+	End Function
+	
+	' resize pixmap to pow2 size
+	Function AdjustPixmap:TPixmap( pixmap:TPixmap )
+	
+		' adjust width and height size to next biggest power of 2 size
+		Local width:Int=Pow2Size(pixmap.width)
+		Local height:Int=Pow2Size(pixmap.height)
+		
+		' ***note*** commented out as it fails on some cards
+		Rem
+		' check that width and height size are valid (not too big)
+		Repeat
+			Local t
+			glTexImage2D GL_PROXY_TEXTURE_2D,0,4,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,Null
+			glGetTexLevelParameteriv GL_PROXY_TEXTURE_2D,0,GL_TEXTURE_WIDTH,Varptr t
+			If t Exit
+			If width=1 And height=1 RuntimeError "Unable to calculate tex size"
+			If width>1 width:/2
+			If height>1 height:/2
+		Forever
+		End Rem
+		
+		' if width or height have changed then resize pixmap
+		If width<>pixmap.width Or height<>pixmap.height
+			pixmap=ResizePixmap(pixmap,width,height)
+		EndIf
+		
+		' return pixmap
+		Return pixmap
+		
+	End Function
+	
+	' applys alpha to a pixmap based on average of colour values
+	Function ApplyAlpha:TPixmap( map:TPixmap Var )
+		Local rgba%,red%,grn%,blu%,alp%
+		
+		For Local iy%=0 To PixmapWidth(map)-1
+			For Local ix%=0 To PixmapHeight(map)-1
+				rgba=ReadPixel(map,ix,iy)
+				red%=rgba & $000000FF
+				grn%=(rgba & $0000FF00) Shr 8
+				blu%=(rgba & $00FF0000) Shr 16
+				alp%=(red + grn + blu) / 3.0
+				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+			Next
+		Next
+		
+		Return map
+	End Function
+	
+	' like MaskPixmap
+	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu%, pixelrange%=5 )
+		Local rgba%,red%,grn%,blu%
+		
+		For Local iy%=0 To PixmapWidth(map)-1
+			For Local ix%=0 To PixmapHeight(map)-1
+				rgba=ReadPixel(map,ix,iy)
+				red=rgba & $000000FF
+				grn=(rgba & $0000FF00) Shr 8
+				blu=(rgba & $00FF0000) Shr 16
+				If red > maskred-pixelrange And red < maskred+pixelrange
+					If grn > maskgrn-pixelrange And grn < maskgrn+pixelrange
+						If blu > maskblu-pixelrange And blu < maskblu+pixelrange
+							WritePixel map,ix,iy,(rgba & $00FFFFFF)
+						EndIf
+					EndIf
+				EndIf
+			Next
+		Next
+		
+		Return map
+	End Function
+	
+	' return texture size as pow2
+	Function Pow2Size:Int( n:Int )
+	
+		Local t:Int=1
+		While t<n
+			t:*2
+		Wend
+		Return t
 		
 	End Function
 	
@@ -668,152 +927,6 @@ Type TTexture
 		FilterFlags_( GetInstance(Self) )
 		
 	End Method
-	
-	' Minib3d
-	
-	' strips any directories from file, returns if file is found
-	' fixes FileFind not finding incbin or zip paths, topic=88901 (by SLotman)
-	Function FileFind:Int( file:String Var )
-	
-		'Local TS:TStream = OpenFile(file$,True,False)
-		Local TS:TStream = ReadFile(file$)
-		If Not TS Then
-			Repeat ' strip \ dirs (Win)
-				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
-			Until Instr(file$,"\",1)=0
-			Repeat ' strip / dirs
-				file$=Right$(file$,(Len(file$)-Instr(file$,"/",1)))
-			Until Instr(file$,"/",1)=0
-			TS = OpenStream(file$,True,False)
-			If Not TS Then
-				DebugLog "ERROR: Cannot find texture: "+file$
-				Return False
-			Else ' file found after strip dir
-				CloseStream(TS)
-				TS=Null
-			EndIf
-		Else ' incbin or zip file found
-			CloseStream TS
-			TS=Null	
-		EndIf
-		Return True
-		
-	End Function
-	
-	' returns absolute path of file if relative and not incbin or zip
-	Function FileAbs:String( file:String )
-	
-		Local file_abs$
-		
-		If Instr(file$,":")=False ' not incbin or zip
-			file_abs$=CurrentDir$()+"/"+file$
-		Else
-			file_abs$=file$
-		EndIf
-		file_abs$=Replace$(file_abs$,"\","/")
-		
-		Return file_abs$
-		
-	End Function
-	
-	' resize pixmap to pow2 size
-	Function AdjustPixmap:TPixmap( pixmap:TPixmap )
-	
-		' adjust width and height size to next biggest power of 2 size
-		Local width:Int=Pow2Size(pixmap.width)
-		Local height:Int=Pow2Size(pixmap.height)
-		
-		' ***note*** commented out as it fails on some cards
-		Rem
-		' check that width and height size are valid (not too big)
-		Repeat
-			Local t
-			glTexImage2D GL_PROXY_TEXTURE_2D,0,4,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,Null
-			glGetTexLevelParameteriv GL_PROXY_TEXTURE_2D,0,GL_TEXTURE_WIDTH,Varptr t
-			If t Exit
-			If width=1 And height=1 RuntimeError "Unable to calculate tex size"
-			If width>1 width:/2
-			If height>1 height:/2
-		Forever
-		End Rem
-		
-		' if width or height have changed then resize pixmap
-		If width<>pixmap.width Or height<>pixmap.height
-			pixmap=ResizePixmap(pixmap,width,height)
-		EndIf
-		
-		' return pixmap
-		Return pixmap
-		
-	End Function
-	
-	' return texture size as pow2
-	Function Pow2Size:Int( n:Int )
-	
-		Local t:Int=1
-		While t<n
-			t:*2
-		Wend
-		Return t
-		
-	End Function
-	
-	' applys alpha to a pixmap based on average of colour values
-	Function ApplyAlpha:TPixmap( map:TPixmap Var )
-		Local rgba%,red%,grn%,blu%,alp%
-		
-		For Local iy%=0 To PixmapWidth(map)-1
-			For Local ix%=0 To PixmapHeight(map)-1
-				rgba=ReadPixel(map,ix,iy)
-				red%=rgba & $000000FF
-				grn%=(rgba & $0000FF00) Shr 8
-				blu%=(rgba & $00FF0000) Shr 16
-				alp%=(red + grn + blu) / 3.0
-				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-			Next
-		Next
-		
-		Return map
-	End Function
-	
-	' like MaskPixmap
-	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu% )
-		Local rgba%,red%,grn%,blu%
-		
-		For Local iy%=0 To PixmapWidth(map)-1
-			For Local ix%=0 To PixmapHeight(map)-1
-				rgba=ReadPixel(map,ix,iy)
-				red=rgba & $000000FF
-				grn=(rgba & $0000FF00) Shr 8
-				blu=(rgba & $00FF0000) Shr 16
-				If red < maskred And grn < maskgrn And blu < maskblu
-					WritePixel map,ix,iy,(rgba & $00FFFFFF)
-				EndIf
-			Next
-		Next
-		
-		Return map
-	End Function
-	
-	Method TextureFlags( flags:Int )
-	
-		TextureFlags_( GetInstance(Self),flags )
-		
-	End Method
-	
-	Rem
-	Function CreateCubeMapTexture:TTexture(width:Int,height:Int,flags:Int,tex:TTexture=Null)
-		
-		
-		
-	End Function
-
-	Function LoadCubeMapTexture:TTexture(file:String,flags:Int=1,tex:TTexture=Null)
-		
-		
-
-	End Function
-	EndRem
 	
 	Rem
 	Method CountMipmaps:Int()

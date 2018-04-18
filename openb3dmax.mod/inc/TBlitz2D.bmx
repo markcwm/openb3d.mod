@@ -29,7 +29,7 @@ Type TBlitz2D
 		SetViewport x, y, w, h
 		
 		Local MaxTex:Int
-		glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr(MaxTex))
+		glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr MaxTex)
 		
 		For Local Layer:Int = 0 Until MaxTex
 			glActiveTexture(GL_TEXTURE0+Layer)

@@ -98,7 +98,7 @@ Type TQuaternion
 	
 	Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
 	
-		QuaternionToEuler_( w,x,y,z,Varptr(pitch),Varptr(yaw),Varptr(roll) )
+		QuaternionToEuler_( w,x,y,z,Varptr pitch,Varptr yaw,Varptr roll )
 		
 		Rem
 		Local q:Float[4]
@@ -150,7 +150,7 @@ Type TQuaternion
 	
 	Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )
 	
-		QuaternionSlerp_( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Varptr(Cx),Varptr(Cy),Varptr(Cz),Varptr(Cw),t )
+		QuaternionSlerp_( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Varptr Cx,Varptr Cy,Varptr Cz,Varptr Cw,t )
 		
 		Rem
 		If Abs(ax-bx)<0.001 And Abs(ay-by)<0.001 And Abs(az-bz)<0.001 And Abs(aw-bw)<0.001

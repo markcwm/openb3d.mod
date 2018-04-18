@@ -234,13 +234,13 @@ Type TEntity
 		Select list
 			Case child_list
 				If EntityListSize_( GetInstance(Self),ENTITY_child_list )
-					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr(child_list_id) )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
 			Case TGlobal.root_ent.child_list
 				If EntityListSize_( GetInstance(TGlobal.root_ent),ENTITY_child_list )
-					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr(TGlobal.root_ent.child_list_id) )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr TGlobal.root_ent.child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
 				EndIf
@@ -253,13 +253,13 @@ Type TEntity
 		Select list
 			Case entity_list
 				If StaticListSize_( ENTITY_class,ENTITY_entity_list )
-					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr(entity_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr entity_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
 			Case animate_list
 				If StaticListSize_( ENTITY_class,ENTITY_animate_list )
-					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr(animate_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr animate_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
 				EndIf
@@ -276,7 +276,7 @@ Type TEntity
 			Case child_list
 				child_list_id=0
 				For Local id:Int=0 To EntityListSize_( GetInstance(Self),ENTITY_child_list )-1
-					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr(child_list_id) )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(Self),ENTITY_child_list,Varptr child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj=Null And inst<>Null And ListContains( child_list_queue,Self )=0
 						ListAddLast( child_list_queue,Self ) ' store in queue
@@ -286,7 +286,7 @@ Type TEntity
 				For Local ent:TEntity=EachIn child_list_queue
 					ent.child_list_id=0 ; created=1
 					For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
-						Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(ent.child_list_id) )
+						Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr ent.child_list_id )
 						Local obj:TEntity=GetObject(inst)
 						If obj=Null Then created=0 ; Exit ' list not fully created yet
 					Next
@@ -294,7 +294,7 @@ Type TEntity
 						ent.child_list_id=0
 						ListRemove( child_list_queue,ent )
 						For Local id:Int=0 To EntityListSize_( GetInstance(ent),ENTITY_child_list )-1
-							Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr(ent.child_list_id) )
+							Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(ent),ENTITY_child_list,Varptr ent.child_list_id )
 							Local obj:TEntity=GetObject(inst)
 							If obj Then ListAddLast( ent.child_list,obj )
 						Next
@@ -312,14 +312,14 @@ Type TEntity
 			Case entity_list
 				entity_list_id=0
 				For Local id:Int=0 To StaticListSize_( ENTITY_class,ENTITY_entity_list )-1
-					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr(entity_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_entity_list,Varptr entity_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
 			Case animate_list
 				animate_list_id=0
 				For Local id:Int=0 To StaticListSize_( ENTITY_class,ENTITY_animate_list )-1
-					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr(animate_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr animate_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -1058,7 +1058,7 @@ Type TEntity
 	' Returns the specified child entity of a parent entity
 	Method GetChildFromAll:TEntity( child_no:Int,no_children:Int Var,ent:TEntity=Null )
 	
-		Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr(no_children),GetInstance(ent) )
+		Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr no_children,GetInstance(ent) )
 		Return GetObject(inst) ' no CreateObject
 		
 	End Method
@@ -1130,7 +1130,7 @@ Type TEntity
 	' scaling - called in EntityParent
 	Method MQ_GetScaleXYZ( width:Float Var,height:Float Var,depth:Float Var )
 		
-		MQ_GetScaleXYZ_( GetInstance(Self),Varptr(width),Varptr(height),Varptr(depth) )
+		MQ_GetScaleXYZ_( GetInstance(Self),Varptr width,Varptr height,Varptr depth )
 		
 	End Method
 	

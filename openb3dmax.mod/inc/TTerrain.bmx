@@ -70,7 +70,7 @@ Type TTerrain Extends TEntity
 		Select list
 			Case terrain_list
 				If StaticListSize_( TERRAIN_class,TERRAIN_terrain_list )
-					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr(terrain_list_id) )
+					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr terrain_list_id )
 					Local obj:TTerrain=TTerrain( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
@@ -86,7 +86,7 @@ Type TTerrain Extends TEntity
 			Case terrain_list
 				terrain_list_id=0
 				For Local id:Int=0 To StaticListSize_( TERRAIN_class,TERRAIN_terrain_list )-1
-					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr(terrain_list_id) )
+					Local inst:Byte Ptr=StaticIterListTerrain_( TERRAIN_class,TERRAIN_terrain_list,Varptr terrain_list_id )
 					Local obj:TTerrain=TTerrain( GetObject(inst) ) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next

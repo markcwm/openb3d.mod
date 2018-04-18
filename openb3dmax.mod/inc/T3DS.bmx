@@ -16,7 +16,7 @@ Type TChunk
 	End Function
 End Type
 
-' animation not working, todo!
+' animation todo!
 Type TAnimKey
 	Field pos:Float[]
 	Field rot:Float[]
@@ -89,21 +89,59 @@ Type T3DS
 	Const CHUNK_DIFFUSE = $A020
 	Const CHUNK_SPECULAR = $A030
 	Const CHUNK_SHININESS = $A040
+	Const CHUNK_SHININESSSTRENGTH = $A041
+	Const CHUNK_TRANSPARENCY = $A050
+	Const CHUNK_TRANSFALLOFF = $A052
+	Const CHUNK_REFLECTIONBLUR = $A053
+	Const CHUNK_TWOSIDED = $A081
+	Const CHUNK_ADDTRANSPARENCY = $A083
+	Const CHUNK_SELFILLUM = $A084
+	Const CHUNK_WIREFRAMEON = $A085
+	Const CHUNK_WIRETHICKNESS = $A087
+	Const CHUNK_FACEMAP = $A088
+	Const CHUNK_TRANSFALLOFFIN = $A08A
+	Const CHUNK_SOFTEN = $A08C
+	Const CHUNK_WIRETHICKNESSUNITS = $A08E
+	Const CHUNK_RENDERTYPE = $A100
+	Const CHUNK_TRANSFALLOFF2 = $A240
+	Const CHUNK_REFLECTIONBLUR2 = $A250
+	Const CHUNK_BUMPMAPPERCENT = $A252
 	Const CHUNK_TEXTUREMAP1 = $A200
 	Const CHUNK_TEXTUREMAP2 = $A33A
+	Const CHUNK_SPECULARMAP = $A204
+	Const CHUNK_OPACITYMAP = $A210
+	Const CHUNK_REFLECTIONMAP = $A220
 	Const CHUNK_BUMPMAP = $A230
-	' map sub-chunk
+	Const CHUNK_SHININESSMAP = $A33C
+	Const CHUNK_SELFILLUMMAP = $A33D
+	Const CHUNK_MASKTEXTUREMAP1 = $A33E
+	Const CHUNK_MASKTEXTUREMAP2 = $A340
+	Const CHUNK_MASKOPACITYMAP = $A342
+	Const CHUNK_MASKBUMPMAP = $A344
+	Const CHUNK_MASKSHININESSMAP = $A346
+	Const CHUNK_MASKSPECULARMAP = $A348
+	Const CHUNK_MASKSELFILLUMMAP = $A34A
+	Const CHUNK_MASKREFLECTIONMAP = $A34C
+	' map or mask sub-chunks
 	Const CHUNK_MAPFILENAME = $A300
+	Const CHUNK_AUTOREFLECTION = $A310
+	Const CHUNK_MAPPARAMETERS = $A351
+	Const CHUNK_BLUR = $A353
 	Const CHUNK_MAPVSCALE = $A354
 	Const CHUNK_MAPUSCALE = $A356
 	Const CHUNK_MAPUOFFSET = $A358
 	Const CHUNK_MAPVOFFSET = $A35A
 	Const CHUNK_MAPROTATION = $A35C
+	Const CHUNK_RGBALPHATINT1 = $A360
+	Const CHUNK_RGBALPHATINT2 = $A362
+	Const CHUNK_RGBTINTR = $A364
+	Const CHUNK_RGBTINTG = $A366
+	Const CHUNK_RGBTINTB = $A368
 	' keyframer chunk
 	Const CHUNK_KEYFRAMER = $B000
 	Const CHUNK_MESHINFO = $B002
 	Const CHUNK_FRAMES = $B008
-	' information sub-chunk
+	' information sub-chunks
 	Const CHUNK_HIERINFO = $B010
 	Const CHUNK_INSTNAME = $B011
 	Const CHUNK_PIVOT = $B013
@@ -221,8 +259,8 @@ Type T3DS
 					ParseFaceMatList(surface, parent)
 					
 				Case CHUNK_SMOOTHLIST ' $4150 - smoothing groups list
-					If LOG_3DS Then DebugLog "- - - - - CHUNK_SMOOTHLIST"
 					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - - CHUNK_SMOOTHLIST"
 					
 				Default
 					stream.Seek(chunk.endchunk)
@@ -243,6 +281,18 @@ Type T3DS
 				Case CHUNK_MAPFILENAME ' $A300 - map filename
 					texname = ParseString()
 					If LOG_3DS Then DebugLog "- - - - CHUNK_MAPFILENAME: "+texname
+					
+				Case CHUNK_AUTOREFLECTION ' $A310
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_AUTOREFLECTION"
+				
+				Case CHUNK_MAPPARAMETERS ' $A351
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_MAPPARAMETERS"
+					
+				Case CHUNK_BLUR ' $A353 - percent
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_BLUR"
 					
 				Case CHUNK_MAPVSCALE ' $A354
 					val = stream.ReadFloat()
@@ -273,6 +323,26 @@ Type T3DS
 					tex = TTexture(MapValueForKey( materialmap, texname ))
 					If tex <> Null Then tex.angle[0] = val
 					If LOG_3DS Then DebugLog "- - - - CHUNK_MAPROTATION: "+val
+				
+				Case CHUNK_RGBALPHATINT1 ' $A360
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_RGBALPHATINT1"
+					
+				Case CHUNK_RGBALPHATINT2 ' $A362
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_RGBALPHATINT2"
+				
+				Case CHUNK_RGBTINTR ' $A364
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_RGBTINTR"
+					
+				Case CHUNK_RGBTINTG ' $A366
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_RGBTINTG"
+					
+				Case CHUNK_RGBTINTB ' $A368
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - - CHUNK_RGBTINTB"
 					
 				Default
 					stream.Seek(chunk.endchunk)
@@ -513,12 +583,12 @@ Type T3DS
 					ParseTriMesh(mesh, parent, chunk.endchunk)
 					
 				Case CHUNK_LIGHT ' $4600
-					If LOG_3DS Then DebugLog "- - - CHUNK_LIGHT"
 					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_LIGHT"
 					
 				Case CHUNK_CAMERA ' $4700
-					If LOG_3DS Then DebugLog "- - - CHUNK_CAMERA"
 					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_CAMERA"
 					
 				Default
 					stream.Seek(chunk.endchunk)
@@ -603,7 +673,7 @@ Type T3DS
 					
 				Case CHUNK_AMBIENT ' $A010
 					stream.Seek(chunk.endchunk)
-					If LOG_3DS Then DebugLog "- - - CHUNK_AMBIENT" ' same as diffuse
+					If LOG_3DS Then DebugLog "- - - CHUNK_AMBIENT" ' ignore, same as diffuse
 					
 				Case CHUNK_DIFFUSE ' $A020
 					col = ParseColor(parent, chunk.endchunk)
@@ -617,6 +687,74 @@ Type T3DS
 					shine[0] = ParsePercent(parent, chunk.endchunk)
 					If LOG_3DS Then DebugLog "- - - CHUNK_SHININESS: "+shine[0]
 					
+				Case CHUNK_SHININESSSTRENGTH ' $A041
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SHININESSSTRENGTH"
+					
+				Case CHUNK_TRANSPARENCY ' $A050
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_TRANSPARENCY"
+					
+				Case CHUNK_TRANSFALLOFF ' $A052
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_TRANSFALLOFF"
+					
+				Case CHUNK_REFLECTIONBLUR ' $A053
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_REFLECTIONBLUR"
+					
+				Case CHUNK_TWOSIDED ' $A081
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_TWOSIDED"
+					
+				Case CHUNK_ADDTRANSPARENCY ' $A083
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_ADDTRANSPARENCY"
+					
+				Case CHUNK_SELFILLUM ' $A084
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SELFILLUM"
+					
+				Case CHUNK_WIREFRAMEON ' $A085
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_WIREFRAMEON"
+					
+				Case CHUNK_WIRETHICKNESS ' $A087 ' float
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_WIRETHICKNESS"
+					
+				Case CHUNK_FACEMAP ' $A088
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_FACEMAP"
+					
+				Case CHUNK_TRANSFALLOFFIN ' $A08A
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_TRANSFALLOFFIN"
+					
+				Case CHUNK_SOFTEN ' $A08C
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SOFTEN"
+					
+				Case CHUNK_WIRETHICKNESSUNITS ' $A08E
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_WIRETHICKNESSUNITS"
+					
+				Case CHUNK_RENDERTYPE ' $A100 - short, 1=flat 2=gouraud 3=phong 4=metal
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_RENDERTYPE"
+					
+				Case CHUNK_TRANSFALLOFF2 ' $A240
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_TRANSFALLOFF2"
+					
+				Case CHUNK_REFLECTIONBLUR2 ' $A250
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_REFLECTIONBLUR2"
+					
+				Case CHUNK_BUMPMAPPERCENT ' $A252
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_BUMPMAPPERCENT"
+					
 				Case CHUNK_TEXTUREMAP1 ' $A200
 					If LOG_3DS Then DebugLog "- - - CHUNK_TEXTUREMAP1"
 					layer[0] = 0
@@ -626,6 +764,62 @@ Type T3DS
 					If LOG_3DS Then DebugLog "- - - CHUNK_TEXTUREMAP2"
 					layer[0] = 1
 					texname = ParseMap(parent, chunk.endchunk)
+					
+				Case CHUNK_SPECULARMAP ' $A204
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SPECULARMAP"
+					
+				Case CHUNK_OPACITYMAP ' $A210
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_OPACITYMAP"
+					
+				Case CHUNK_REFLECTIONMAP ' $A220
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_REFLECTIONMAP"
+					
+				Case CHUNK_BUMPMAP ' $A230
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_BUMPMAP"
+					
+				Case CHUNK_SHININESSMAP ' $A33C
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SHININESSMAP"
+					
+				Case CHUNK_SELFILLUMMAP ' $A33D
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_SELFILLUMMAP"
+					
+				Case CHUNK_MASKTEXTUREMAP1 ' $A33E
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKTEXTUREMAP1"
+					
+				Case CHUNK_MASKTEXTUREMAP2 ' $A340
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKTEXTUREMAP2"
+					
+				Case CHUNK_MASKOPACITYMAP ' $A342
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKOPACITYMAP"
+					
+				Case CHUNK_MASKBUMPMAP ' $A344
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKBUMPMAP"
+					
+				Case CHUNK_MASKSHININESSMAP ' $A346
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKSHININESSMAP"
+					
+				Case CHUNK_MASKSPECULARMAP ' $A348
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKSPECULARMAP"
+					
+				Case CHUNK_MASKSELFILLUMMAP ' $A34A
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKSELFILLUMMAP"
+					
+				Case CHUNK_MASKREFLECTIONMAP ' $A34C
+					stream.Seek(chunk.endchunk)
+					If LOG_3DS Then DebugLog "- - - CHUNK_MASKREFLECTIONMAP"
 					
 				Default
 					stream.Seek(chunk.endchunk)

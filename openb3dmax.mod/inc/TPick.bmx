@@ -41,7 +41,7 @@ Type TPick
 		Select list
 			Case ent_list
 				If StaticListSize_( PICK_class,PICK_ent_list )
-					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr(ent_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr ent_list_id )
 					Local obj:TEntity=TEntity.GetObject(inst) ' no CreateObject
 					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
 				EndIf
@@ -57,7 +57,7 @@ Type TPick
 			Case ent_list
 				ent_list_id=0
 				For Local id:Int=0 To StaticListSize_( PICK_class,PICK_ent_list )-1
-					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr(ent_list_id) )
+					Local inst:Byte Ptr=StaticIterListEntity_( PICK_class,PICK_ent_list,Varptr ent_list_id )
 					Local obj:TEntity=TEntity.GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
