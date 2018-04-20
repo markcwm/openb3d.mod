@@ -153,7 +153,7 @@ Type TAnimationKeys
 	
 	Method New()
 	
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TAnimationKeys"
 		EndIf
 		
@@ -161,7 +161,7 @@ Type TAnimationKeys
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TAnimationKeys"
 		EndIf
 	

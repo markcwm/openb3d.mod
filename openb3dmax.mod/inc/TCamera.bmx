@@ -148,7 +148,7 @@ Type TCamera Extends TEntity
 	
 	Method New()
 	
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TCamera"
 		EndIf
 	
@@ -156,7 +156,7 @@ Type TCamera Extends TEntity
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TCamera"
 		EndIf
 		

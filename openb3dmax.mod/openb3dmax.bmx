@@ -377,72 +377,57 @@ Extern
 	
 End Extern
 
-' *** Constants
-
+' No constants, no globals (see TGlobal)
 'Const USE_MAX2D:Int=True	' True to enable Max2d in 3d integration
 'Const USE_VBO:Int=True		' True to use vbos if supported by hardware
 'Const VBO_MIN_TRIS:Int=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no.
 							' of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
 
-Global LOG_NEW:Int=False		' True to DebugLog when new 3d object created
-Global LOG_DEL:Int=False		' True to DebugLog when 3d object destroyed
-Global LOG_B3D:Int=False		' True to DebugLog B3D chunks
-Global LOG_MD2:Int=False		' True to DebugLog MD2 chunks
-Global LOG_3DS:Int=False		' True to DebugLog 3DS chunks
-
-Global TEXTURE_LOADER:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
-Global MESH_LOADER:Int=1		' 1 for stream mesh loaders, 2 for library loaders
-
-Global MATRIX_3DS:TMatrix=NewMatrix()
-Global MATRIX_B3D:TMatrix=NewMatrix()
-
-' Texture/Brush flags
-Const TEX_COLOR:Int=1
-Const TEX_ALPHA:Int=2
-Const TEX_MASKED:Int=4
-Const TEX_MIPMAP:Int=8
-Const TEX_CLAMPU:Int=16
-Const TEX_CLAMPV:Int=32
-Const TEX_SPHEREMAP:Int=64
-Const TEX_CUBEMAP:Int=128
-Const TEX_VRAM:Int=256
-Const TEX_HIGHCOLOR:Int=512 ' 1024,2048,4096,8192,16384 unassigned AFAIK
-Const TEX_FLIPX:Int=8192 ' new, used in LoadAnimTextureStream
-Const TEX_FLIPY:Int=16384 ' new
-Const TEX_SECONDUV:Int=65536
+' Texture/Brush flags, reference
+'Const TEX_COLOR:Int=1
+'Const TEX_ALPHA:Int=2
+'Const TEX_MASKED:Int=4
+'Const TEX_MIPMAP:Int=8
+'Const TEX_CLAMPU:Int=16
+'Const TEX_CLAMPV:Int=32
+'Const TEX_SPHEREMAP:Int=64
+'Const TEX_CUBEMAP:Int=128
+'Const TEX_VRAM:Int=256
+'Const TEX_HIGHCOLOR:Int=512 ' flags 1024,2048,4096,8192,16384 appear to be unassigned
+'Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions
 
 Rem
-bbdoc: New begin using Max2D, allows instant resolution switch.
+bbdoc: New begin Max2D function, allows instant resolution switch
+End Rem
+Function BeginMax2DEx()
+	TBlitz2D.BeginMax2DEx()
+End Function
+
+Rem
+bbdoc: New end Max2D function, allows instant resolution switch
+End Rem
+Function EndMax2DEx()
+	TBlitz2D.EndMax2DEx()
+End Function
+
+Rem
+bbdoc: Old begin Max2d, using pop matrix
 End Rem
 Function BeginMax2D()
 	TBlitz2D.BeginMax2D()
 End Function
 
 Rem
-bbdoc: New end using Max2D, allows instant resolution switch.
+bbdoc: Old end Max2d, using push matrix
 End Rem
 Function EndMax2D()
 	TBlitz2D.EndMax2D()
 End Function
 
 Rem
-bbdoc: Old Minib3d begin using Max2d.
-End Rem
-Function BeginMini2D()
-	TBlitz2D.BeginMini2D()
-End Function
-
-Rem
-bbdoc: Old Minib3d end using Max2d.
-End Rem
-Function EndMini2D()
-	TBlitz2D.EndMini2D()
-End Function
-
-Rem
-bbdoc: Copy a list or vector. To copy a field list use as a method.
+bbdoc: Copy a list or vector. To copy a field list use as a method
 about: Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
 End Rem
 Function CopyList( list:TList )
@@ -450,7 +435,7 @@ Function CopyList( list:TList )
 End Function
 
 Rem
-bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter.
+bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter
 about: Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.
 EndRem
 Function EntityListAdd( list:TList,value:Object,ent:TEntity )
@@ -458,7 +443,7 @@ Function EntityListAdd( list:TList,value:Object,ent:TEntity )
 End Function
 
 Rem
-bbdoc: Add an existing surface to a mesh.
+bbdoc: Add an existing surface to a mesh
 End Rem
 Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )
 	If anim_surf=False

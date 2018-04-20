@@ -487,10 +487,17 @@ void FilterFlags_( Texture* obj ){
 	obj->FilterFlags();
 }
 
-void CopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP){
-  unsigned int y;
-  for (y = 0; y < dstH; y++)
-    memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
+void CopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert){
+	unsigned int y;
+	if (invert != 0){
+		for (y = 0; y < dstH; y++){
+			memcpy(dst + y * dstW * bPP, src + (((dstH - 1 - y) + srcY) * srcW + srcX) * bPP, dstW * bPP);
+		}
+	}else{
+		for (y = 0; y < dstH; y++){
+			memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
+		}
+	}
 }
 
 } // end extern C

@@ -29,7 +29,7 @@ Type TPivot Extends TEntity
 	
 	Method New()
 	
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TPivot"
 		EndIf
 		
@@ -37,7 +37,7 @@ Type TPivot Extends TEntity
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TPivot"
 		EndIf
 	

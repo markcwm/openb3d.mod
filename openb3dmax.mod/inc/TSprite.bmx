@@ -54,7 +54,7 @@ Type TSprite Extends TMesh
 	
 	Method New()
 		
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TSprite"
 		EndIf
 		
@@ -62,7 +62,7 @@ Type TSprite Extends TMesh
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TSprite"
 		EndIf
 	

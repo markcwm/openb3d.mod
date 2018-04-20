@@ -384,7 +384,7 @@ Type TMesh Extends TEntity
 		'To store the temps indexes
 		Local NumTris%=CountTriangles(Surface)
 		Local TempsCount%
-		Local TempI%[numtris]
+		Local TempI%[NumTris]
 		
 		'To store the normals of all triangles of a surface
 		Local TrianglesCount%
@@ -514,7 +514,7 @@ Type TMesh Extends TEntity
 	
 	Method New()
 		
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TMesh"
 		EndIf
 	
@@ -522,7 +522,7 @@ Type TMesh Extends TEntity
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TMesh"
 		EndIf
 	
@@ -563,7 +563,7 @@ Type TMesh Extends TEntity
 	
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Select MESH_LOADER
+		Select TGlobal.Mesh_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=file.ToCString()
@@ -597,7 +597,7 @@ Type TMesh Extends TEntity
 	
 	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Select MESH_LOADER
+		Select TGlobal.Mesh_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=file.ToCString()

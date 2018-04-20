@@ -188,7 +188,7 @@ Type TSurface
 	
 	Method New()
 	
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TSurface"
 		EndIf
 		
@@ -196,7 +196,7 @@ Type TSurface
 	
 	Method Delete()
 		
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TSurface"
 		EndIf
 			

@@ -402,7 +402,7 @@ Type TTexture
 	
 	Method New()
 	
-		If LOG_NEW
+		If TGlobal.Log_New
 			DebugLog "New TTexture"
 		EndIf
 	
@@ -410,7 +410,7 @@ Type TTexture
 	
 	Method Delete()
 	
-		If LOG_DEL
+		If TGlobal.Log_Del
 			DebugLog "Del TTexture"
 		EndIf
 	
@@ -442,7 +442,7 @@ Type TTexture
 	
 	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 	
-		Select TEXTURE_LOADER
+		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
 				Local map:TPixmap=Null, name%
@@ -461,7 +461,7 @@ Type TTexture
 	
 	Function LoadAnimTexture:TTexture( file:String,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		Select TEXTURE_LOADER
+		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=file.ToCString()
@@ -479,7 +479,7 @@ Type TTexture
 	
 	Function LoadAnimTextureStream:TTexture( url:Object,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		If (flags & 128) Then Return LoadCubeMapTextureStream(url,flags,tex)
+		If (flags & 128) Then Return LoadCubeMapTextureStream(url,flags,frame_width,frame_height,first_frame,frame_count,tex)
 		
 		If tex=Null Then tex=NewTexture()
 		
@@ -496,23 +496,15 @@ Type TTexture
 		' check to see if texture with same properties exists already, if so return existing texture
 		Local old_tex:TTexture=tex.TexInList()
 		If old_tex<>Null
-		
-			If frame_width>0 And frame_height>0 And frame_count=1 And old_tex<>tex ' this allows loading sections of image
+			If frame_width>0 And frame_height>0 And frame_count=1 And old_tex<>tex ' load area of same image
 				tex.TextureListAdd( tex_list )
 				tex.TextureListAdd( tex_list_all )
-				
-				tex.pixmap=LoadPixmap(url) ' streams
-				If tex.pixmap=Null Then Return tex
-				
-				GenerateAnimTextures( flags,frame_width,frame_height,first_frame,frame_count,tex )
-				
-				Return tex
 			Else
 				old_tex.TextureListAdd( tex_list_all )
 				FreeObject( GetInstance(tex) ) ; tex.exists=0
+				
 				Return old_tex
 			EndIf
-			
 		ElseIf old_tex<>tex ' tex not pre-existing
 			tex.TextureListAdd( tex_list )
 			tex.TextureListAdd( tex_list_all )
@@ -521,14 +513,6 @@ Type TTexture
 		tex.pixmap=LoadPixmap(url) ' streams
 		If tex.pixmap=Null Then Return tex
 		
-		GenerateAnimTextures( flags,frame_width,frame_height,first_frame,frame_count,tex )
-		
-		Return tex
-		
-	End Function
-	
-	Function GenerateAnimTextures:TTexture( flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture )
-	
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
 		Local alpha_present:Int=False
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
@@ -552,11 +536,12 @@ Type TTexture
 			Local height:Int=frame_height
 			Local xframes:Int=tex.pixmap.width/width
 			Local yframes:Int=tex.pixmap.height/height
+			If first_frame>(xframes*yframes)-1 Then first_frame=(xframes*yframes)-1 ' maximum first_frame
 			Local x:Int=first_frame Mod xframes
 			Local y:Int=(first_frame/xframes) Mod yframes
 			
 			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to animmap pixels
-				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,animmap.pixels,width,height,4)
+				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,animmap.pixels,width,height,4,0)
 				
 				x=x+1 ' left-right frames
 				If x>=xframes ' top-bottom frames
@@ -564,8 +549,8 @@ Type TTexture
 					y=y+1
 				EndIf
 				
-				If (flags & 8192) Then animmap=XFlipPixmap(animmap) ' new flags, TEX_FLIPX=8192
-				If (flags & 16384) Then animmap=YFlipPixmap(animmap) ' new flags, TEX_FLIPY=16384
+				'If (flags & 8192) Then animmap=XFlipPixmap(animmap) ' TEX_FLIPX=8192 (too slow)
+				'If (flags & 16384) Then animmap=YFlipPixmap(animmap) ' TEX_FLIPY=16384
 				
 				glGenTextures(1,Varptr name)
 				glBindtexture(GL_TEXTURE_2D,name)
@@ -578,11 +563,8 @@ Type TTexture
 			tex.width[0]=width
 			tex.height[0]=height
 			
-		Else
+		Else ' whole image
 		
-			If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
-			If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
-			
 			glGenTextures(1,Varptr name)
 			glBindtexture(GL_TEXTURE_2D,name)
 			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
@@ -593,10 +575,12 @@ Type TTexture
 			
 		EndIf
 		
+		Return tex
+		
 	End Function
 	
-	' Loads cubemaps in sideways cross layout rather than a single strip
-	Function LoadCubeMapTextureStream:TTexture( url:Object,flags:Int,tex:TTexture=Null )
+	' Load cubemaps in 4 * 3 cross rather than single strip
+	Function LoadCubeMapTextureStream:TTexture( url:Object,flags:Int,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
 		If tex=Null Then tex=NewTexture()
 		
@@ -615,6 +599,7 @@ Type TTexture
 		If old_tex<>Null
 			old_tex.TextureListAdd( tex_list_all )
 			FreeObject( GetInstance(tex) ) ; tex.exists=0
+			
 			Return old_tex
 		ElseIf old_tex<>tex
 			tex.TextureListAdd( tex_list )
@@ -623,36 +608,26 @@ Type TTexture
 		
 		tex.pixmap=LoadPixmap(url) ' streams
 		If tex.pixmap=Null Then Return tex
-		
-		tex.pixmap=YFlipPixmap(tex.pixmap) ' OpenGL screen coords are inverted
-		
+				
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
 		Local alpha_present:Int=False
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPX=8192
-		If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' new flags, TEX_FLIPY=16384
+		'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' TEX_FLIPX=8192 (too slow)
+		'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' TEX_FLIPY=16384
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - maybe set with ClsColor?
 		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0,5) ' mask any pixel in range +/- 5 (allows for Jpg noise)
 		
-		Local width:Int=tex.pixmap.width/4
-		Local height:Int=tex.pixmap.height/3
-		
+		Local width:Int=frame_width
+		Local height:Int=frame_height
 		Local xframes:Int=tex.pixmap.width/width
 		Local nframes:Int=(tex.pixmap.height/height)*xframes
-		Local x:Int=0, y:Int=0
-		
-		Local cube0%, cube1%, cube2%, cube3%, cube4%, cube5%
-		cube0=GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' top
-		cube1=GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left
-		cube2=GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' back
-		cube3=GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
-		cube4=GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' front
-		cube5=GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' bottom
+		Local x:Int=0, y:Int=0, cubeid:Int=0
+		Local bpp:Int=BytesPerPixel[tex.pixmap.format]
 		
 		Local cubemap:TPixmap=CreatePixmap(width,height,tex.pixmap.format) ' format=PF_RGBA8888
 		
@@ -660,16 +635,20 @@ Type TTexture
 		glGenTextures(1,Varptr name)
 		glBindtexture(GL_TEXTURE_CUBE_MAP,name)
 		
-		For Local i:Int=0 To nframes-1 ' copy tex.pixmap rect to cubemap pixels
-			If (x=1 And y=0) Or y=1 Or (x=1 And y=2) ' only cross-shaped cubemap supported
-				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,4)
+		For Local i:Int=0 To nframes-1 ' copy tex.pixmap rect to cubemap
+			Local found:Int=0
+			For Local j:Int=0 To 5
+				If i=TGlobal.Cubemap_Frame[j] Then found=1
+			Next
+			
+			If nframes=6 And found=0 Then found=1 ' always copy something if 6
+			
+			If found=1 And cubeid<6 ' frame found
+				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,bpp,1)
 				
-				If x=1 And y=0 Then gluBuild2DMipmaps(cube0,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				If x=0 And y=1 Then gluBuild2DMipmaps(cube1,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				If x=1 And y=1 Then gluBuild2DMipmaps(cube2,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				If x=2 And y=1 Then gluBuild2DMipmaps(cube3,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				If x=3 And y=1 Then gluBuild2DMipmaps(cube4,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				If x=1 And y=2 Then gluBuild2DMipmaps(cube5,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				gluBuild2DMipmaps(TGlobal.Cubemap_Order[cubeid],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+				
+				cubeid:+1
 			EndIf
 			
 			x=x+1 ' left-right frames

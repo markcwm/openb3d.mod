@@ -44,6 +44,21 @@ Type TGlobal
 	' wrapper
 	Global gfx:TGraphics
 	
+	Global Log_New:Int=False		' True to DebugLog when new 3d object created
+	Global Log_Del:Int=False		' True to DebugLog when 3d object destroyed
+	Global Log_3DS:Int=False		' True to DebugLog 3DS chunks
+	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
+	'Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
+	
+	Global Texture_Loader:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
+	Global Mesh_Loader:Int=1		' 1 for stream mesh loaders, 2 for library loaders
+	Global Cubemap_Frame:Int[12]
+	Global Cubemap_Order:Int[12]
+	
+	Global Matrix_3DS:TMatrix
+	Global Matrix_B3D:TMatrix
+	'Global Matrix_MD2:TMatrix
+	
 	Function InitGlobals() ' Once per Graphics3D
 	
 		width=StaticInt_( GLOBAL_class,GLOBAL_width )
@@ -80,8 +95,14 @@ Type TGlobal
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
 		
+		Matrix_3DS=NewMatrix()
+		Matrix_B3D=NewMatrix()
+		'Matrix_MD2=NewMatrix()
 		LoaderMatrix("3ds", 1,0,0, 0,0,1, 0,1,0) ' swap z/y axis
 		LoaderMatrix("b3d", 1,0,0, 0,1,0, 0,0,1) ' standard coords
+		'LoaderMatrix("md2", 1,0,0, 0,1,0, 0,0,1) ' ?
+		CubeMapLoader "face",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
+		CubeMapLoader "frame",0,1,2,3,4,5
 		
 	End Function
 	

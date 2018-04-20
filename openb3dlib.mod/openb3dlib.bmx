@@ -188,7 +188,7 @@ Extern
 	Function TextureCopy_:Byte Ptr( obj:Byte Ptr )' = "TextureCopy"
 	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr )' = "TexInList"
 	Function FilterFlags_( obj:Byte Ptr )' = "FilterFlags"
-	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int )' = "CopyPixels"
+	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int )' = "CopyPixels"
 	
 End Extern
 

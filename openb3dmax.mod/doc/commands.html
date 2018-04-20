@@ -63,10 +63,10 @@ Attaches a vertex shader object to a program object.
 Copy the contents of the backbuffer to a texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BeginMax2D>BeginMax2D</a></td><td class=docright>
-New begin using Max2D, allows instant resolution switch.
+Old begin Max2d, using pop matrix.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#BeginMini2D>BeginMini2D</a></td><td class=docright>
-Old Minib3d begin using Max2d.
+<tr><td class=docleft width=1%><a href=#BeginMax2DEx>BeginMax2DEx</a></td><td class=docright>
+New begin Max2D function, allows instant resolution switch.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLBlendFunc>BrushGLBlendFunc</a></td><td class=docright>
 GL equivalent, experimental.
@@ -87,7 +87,7 @@ Returns a copy of the new brush.
 Copy a list or vector. To copy a field list use as a method.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyRect>CopyRect</a></td><td class=docright>
-Copy a section of source pixmap to destination pixmap.
+Copy rectangle of source pixmap pixels to destination, not exactly like B3D.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopySurface>CopySurface</a></td><td class=docright>
 Returns a copy of the new surface.
@@ -149,6 +149,9 @@ Returns a new vert shader object from string.
 <tr><td class=docleft width=1%><a href=#CreateVoxelSprite>CreateVoxelSprite</a></td><td class=docright>
 Create voxel sprite where slices is the number of sprites.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CubeMapLoader>CubeMapLoader</a></td><td class=docright>
+Set cubemap frame or face ordering of anim image.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#DeleteFragShader>DeleteFragShader</a></td><td class=docright>
 Deletes a frag shader object from a program object.
 </td></tr>
@@ -180,10 +183,10 @@ Set vector (direction and speed) for wind or gravity effects.
 Ends action so it can be freed, 1 = automatically ended, 2 = manually ended.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndMax2D>EndMax2D</a></td><td class=docright>
-New end using Max2D, allows instant resolution switch.
+Old end Max2d, using push matrix.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#EndMini2D>EndMini2D</a></td><td class=docright>
-Old Minib3d end using Max2d.
+<tr><td class=docleft width=1%><a href=#EndMax2DEx>EndMax2DEx</a></td><td class=docright>
+New end Max2D function, allows instant resolution switch.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityListAdd>EntityListAdd</a></td><td class=docright>
 Like using ListAddLast(list,value) in Minib3d, except ent parameter.
@@ -627,12 +630,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=BeginMax2D>
 <tr><td class=doctop colspan=2>Function BeginMax2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New begin using Max2D, allows instant resolution switch.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old begin Max2d, using pop matrix.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=BeginMini2D>
-<tr><td class=doctop colspan=2>Function BeginMini2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old Minib3d begin using Max2d.</td></tr>
+<table class=doc width=100% cellspacing=3 id=BeginMax2DEx>
+<tr><td class=doctop colspan=2>Function BeginMax2DEx()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New begin Max2D function, allows instant resolution switch.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushGLBlendFunc>
@@ -667,8 +670,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyRect>
-<tr><td class=doctop colspan=2>Function CopyRect( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a section of source pixmap to destination pixmap.</td></tr>
+<tr><td class=doctop colspan=2>Function CopyRect( srcX:Int,srcY:Int,srcW:Int,srcH:Int,dstW:Int,dstH:Int,src:Byte Ptr,dst:Byte Ptr,bPP:Int=4,invert:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy rectangle of source pixmap pixels to destination, not exactly like B3D.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4.</td></tr>
 </table>
 <br>
@@ -772,6 +775,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create voxel sprite where slices is the number of sprites.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CubeMapLoader>
+<tr><td class=doctop colspan=2>Function CubeMapLoader( cubemap$,cube0%,cube1%,cube2%,cube3%,cube4%,cube5% )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set cubemap frame or face ordering of anim image.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>For example, frames of a 4 * 3 cross are "frame",1,4,5,6,7,9 and their faces are "face",1,2,3,4,5,0.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=DeleteFragShader>
 <tr><td class=doctop colspan=2>Function DeleteFragShader( myShader:TShaderObject )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Deletes a frag shader object from a program object.</td></tr>
@@ -825,12 +834,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndMax2D>
 <tr><td class=doctop colspan=2>Function EndMax2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New end using Max2D, allows instant resolution switch.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old end Max2d, using push matrix.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=EndMini2D>
-<tr><td class=doctop colspan=2>Function EndMini2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old Minib3d end using Max2d.</td></tr>
+<table class=doc width=100% cellspacing=3 id=EndMax2DEx>
+<tr><td class=doctop colspan=2>Function EndMax2DEx()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>New end Max2D function, allows instant resolution switch.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityListAdd>

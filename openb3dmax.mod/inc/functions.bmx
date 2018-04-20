@@ -3,6 +3,29 @@
 ' *** Extra
 
 Rem
+bbdoc: Set cubemap frame or face ordering of anim image
+about: For example, frames of a 4 * 3 cross are "frame",1,4,5,6,7,9 and their faces are "face",1,2,3,4,5,0
+End Rem
+Function CubeMapLoader( cubemap$,cube0%,cube1%,cube2%,cube3%,cube4%,cube5% )
+	If cubemap.ToLower()="frame" Or cubemap.ToLower()="rect"
+		TGlobal.Cubemap_Frame[0] = cube0
+		TGlobal.Cubemap_Frame[1] = cube1
+		TGlobal.Cubemap_Frame[2] = cube2
+		TGlobal.Cubemap_Frame[3] = cube3
+		TGlobal.Cubemap_Frame[4] = cube4
+		TGlobal.Cubemap_Frame[5] = cube5
+	EndIf
+	If cubemap.ToLower()="face" Or cubemap.ToLower()="tex"
+		TGlobal.Cubemap_Order[cube0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left
+		TGlobal.Cubemap_Order[cube1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
+		TGlobal.Cubemap_Order[cube2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
+		TGlobal.Cubemap_Order[cube3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
+		TGlobal.Cubemap_Order[cube4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
+		TGlobal.Cubemap_Order[cube5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
+	EndIf
+End Function
+
+Rem
 bbdoc: Frees all brush textures, FreeBrush does not free textures
 End Rem
 Function FreeBrushTextures( brush:TBrush )
@@ -35,13 +58,13 @@ bbdoc: Change model loader coordinates system, currently only 3DS supported
 End Rem
 Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 	If ext.ToLower()="3ds" Or ext.ToLower()=".3ds"
-		MATRIX_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		TGlobal.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="b3d" Or ext.ToLower()=".b3d"
-		MATRIX_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		TGlobal.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
-		'MATRIX_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		'TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 End Function
 
@@ -49,22 +72,22 @@ Rem
 bbdoc: 1 for stream texture loaders (with Openb3dmax.StbImageLoader), 2 for library loaders, default is 1
 End Rem
 Function SetTextureLoader( glob:Int )
-	TEXTURE_LOADER=glob
+	TGlobal.Texture_Loader=glob
 End Function
 
 Rem
 bbdoc: 1 for stream mesh loaders, 2 for library loaders, default is 1
 End Rem
 Function SetMeshLoader( glob:Int )
-	MESH_LOADER=glob
+	TGlobal.Mesh_Loader=glob
 End Function
 
 Rem
-bbdoc: Copy a section of source pixmap to destination pixmap
+bbdoc: Copy rectangle of source pixmap pixels to destination, not exactly like B3D
 about: srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4
 End Rem
-Function CopyRect( src:TPixmap,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:TPixmap,dstW:Int,dstH:Int,bPP:Int=4 )
-	CopyRect_( src.pixels,srcW,srcH,srcX,srcY,dst.pixels,dstW,dstH,bPP )
+Function CopyRect( srcX:Int,srcY:Int,srcW:Int,srcH:Int,dstW:Int,dstH:Int,src:Byte Ptr,dst:Byte Ptr,bPP:Int=4,invert:Int=0 )
+	CopyRect_( src,srcW,srcH,srcX,srcY,dst,dstW,dstH,bPP,invert )
 End Function
 
 Rem
