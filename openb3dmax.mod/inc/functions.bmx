@@ -3,26 +3,46 @@
 ' *** Extra
 
 Rem
-bbdoc: Set cubemap frame or face ordering of anim texture
-about: For example, frames of a 4 * 3 cross are "frame",1,4,5,6,7,9 and their faces are "face",1,2,3,4,5,0
+bbdoc: Set mesh loaders to use (default is streamed)
+about: Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp", "lib" or "open" for 
+Openb3d library meshes (only loads local files).
 End Rem
-Function CubeMapLoader( cubemap$,cube0%,cube1%,cube2%,cube3%,cube4%,cube5% )
-	If cubemap.ToLower()="frame" Or cubemap.ToLower()="rect"
-		TGlobal.Cubemap_Frame[0] = cube0
-		TGlobal.Cubemap_Frame[1] = cube1
-		TGlobal.Cubemap_Frame[2] = cube2
-		TGlobal.Cubemap_Frame[3] = cube3
-		TGlobal.Cubemap_Frame[4] = cube4
-		TGlobal.Cubemap_Frame[5] = cube5
-	EndIf
-	If cubemap.ToLower()="face" Or cubemap.ToLower()="tex"
-		TGlobal.Cubemap_Order[cube0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left
-		TGlobal.Cubemap_Order[cube1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
-		TGlobal.Cubemap_Order[cube2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
-		TGlobal.Cubemap_Order[cube3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
-		TGlobal.Cubemap_Order[cube4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
-		TGlobal.Cubemap_Order[cube5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
-	EndIf
+Function MeshLoader( meshid:String )
+	Select meshid.ToLower()
+		Case "bb", "bmx", "bmax", "max", "blitzmax"
+			TGlobal.Mesh_Loader=1
+		Case "cpp", "c++", "lib", "library", "open", "openb3d"
+			TGlobal.Mesh_Loader=2
+	EndSelect
+End Function
+
+Rem
+bbdoc: Set texture loaders to use (default is streamed), also sets cubemap faces or frames
+about: Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" for 
+Openb3d library textures (only loads local files). As an extra feature you can define the cubemap face order 
+with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,2,3,4,5 (these are the default layouts).
+End Rem
+Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
+	Select texid.ToLower()
+		Case "bb", "bmx", "bmax", "max", "blitzmax"
+			TGlobal.Texture_Loader=1
+		Case "cpp", "c++", "lib", "library", "open", "openb3d"
+			TGlobal.Texture_Loader=2
+		Case "frame", "frames"
+			TGlobal.Cubemap_Frame[0] = lf0
+			TGlobal.Cubemap_Frame[1] = fr1
+			TGlobal.Cubemap_Frame[2] = rt2
+			TGlobal.Cubemap_Frame[3] = bk3
+			TGlobal.Cubemap_Frame[4] = dn4
+			TGlobal.Cubemap_Frame[5] = up5
+		Case "face", "faces"
+			TGlobal.Cubemap_Face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left (B3D layout)
+			TGlobal.Cubemap_Face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
+			TGlobal.Cubemap_Face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
+			TGlobal.Cubemap_Face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
+			TGlobal.Cubemap_Face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
+			TGlobal.Cubemap_Face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
+	EndSelect
 End Function
 
 Rem
@@ -66,20 +86,6 @@ Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
 		'TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
-End Function
-
-Rem
-bbdoc: 1 for stream texture loaders (with Openb3dmax.StbImageLoader), 2 for library loaders, default is 1
-End Rem
-Function SetTextureLoader( glob:Int )
-	TGlobal.Texture_Loader=glob
-End Function
-
-Rem
-bbdoc: 1 for stream mesh loaders, 2 for library loaders, default is 1
-End Rem
-Function SetMeshLoader( glob:Int )
-	TGlobal.Mesh_Loader=glob
 End Function
 
 Rem

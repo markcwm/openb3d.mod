@@ -3,7 +3,7 @@
 
 ## Introduction
 
-OpenB3DMax is an OpenGL 2.0+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on Blitz3D. Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
+OpenB3DMax is an OpenGL 1+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on Blitz3D. Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
 
 ## Features 
 

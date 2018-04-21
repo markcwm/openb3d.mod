@@ -244,7 +244,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
 		int yframes=tex->height/frame_height;
 		int x=first_frame % xframes;
-		int y=(first_frame / yframes) % yframes;
+		int y=(first_frame / xframes) % yframes;
 
 		for (int i=0;i<frame_count;i++){
 			CopyPixels(buffer,tex->width, tex->height, x*frame_width, y*frame_height, dstbuffer, frame_width, frame_height, 4);

@@ -50,10 +50,10 @@ Type TGlobal
 	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
 	'Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
 	
-	Global Texture_Loader:Int=1		' 1 for stream texture loaders (with OpenB3dMax.StbImageLoader), 2 for library loaders
-	Global Mesh_Loader:Int=1		' 1 for stream mesh loaders, 2 for library loaders
+	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
+	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Cubemap_Frame:Int[12]
-	Global Cubemap_Order:Int[12]
+	Global Cubemap_Face:Int[12]
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix
@@ -103,8 +103,8 @@ Type TGlobal
 		LoaderMatrix("b3d", 1,0,0, 0,1,0, 0,0,1) ' standard coords
 		'LoaderMatrix("md2", 1,0,0, 0,1,0, 0,0,1) ' ?
 		
-		CubeMapLoader "face",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
-		CubeMapLoader "frame",0,1,2,3,4,5
+		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
+		TextureLoader "frames",0,1,2,3,4,5
 		
 	End Function
 	

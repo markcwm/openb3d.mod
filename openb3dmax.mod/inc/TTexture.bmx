@@ -639,7 +639,7 @@ Type TTexture
 			
 			CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,bpp,1)
 			
-			gluBuild2DMipmaps(TGlobal.Cubemap_Order[i],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+			gluBuild2DMipmaps(TGlobal.Cubemap_Face[i],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
 		Next
 		
 		tex.texture[0]=name
