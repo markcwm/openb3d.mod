@@ -549,9 +549,6 @@ Type TTexture
 					y=y+1
 				EndIf
 				
-				'If (flags & 8192) Then animmap=XFlipPixmap(animmap) ' TEX_FLIPX=8192 (too slow)
-				'If (flags & 16384) Then animmap=YFlipPixmap(animmap) ' TEX_FLIPY=16384
-				
 				glGenTextures(1,Varptr name)
 				glBindtexture(GL_TEXTURE_2D,name)
 				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,animmap.pixels)
@@ -565,6 +562,9 @@ Type TTexture
 			
 		Else ' whole image
 		
+			'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' these functions are too slow, flip in an editor
+			'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap)
+			
 			glGenTextures(1,Varptr name)
 			glBindtexture(GL_TEXTURE_2D,name)
 			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
@@ -614,9 +614,6 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' TEX_FLIPX=8192 (too slow)
-		'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap) ' TEX_FLIPY=16384
-		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - maybe set with ClsColor?
@@ -625,8 +622,8 @@ Type TTexture
 		Local width:Int=frame_width
 		Local height:Int=frame_height
 		Local xframes:Int=tex.pixmap.width/width
-		Local nframes:Int=(tex.pixmap.height/height)*xframes
-		Local x:Int=0, y:Int=0, cubeid:Int=0
+		Local yframes:Int=tex.pixmap.height/height
+		Local x:Int, y:Int, cubeid:Int
 		Local bpp:Int=BytesPerPixel[tex.pixmap.format]
 		
 		Local cubemap:TPixmap=CreatePixmap(width,height,tex.pixmap.format) ' format=PF_RGBA8888
@@ -635,27 +632,14 @@ Type TTexture
 		glGenTextures(1,Varptr name)
 		glBindtexture(GL_TEXTURE_CUBE_MAP,name)
 		
-		For Local i:Int=0 To nframes-1 ' copy tex.pixmap rect to cubemap
-			Local found:Int=0
-			For Local j:Int=0 To 5
-				If i=TGlobal.Cubemap_Frame[j] Then found=1
-			Next
+		For Local i:Int=0 To 5 ' copy tex.pixmap rect to cubemap
+			cubeid=TGlobal.Cubemap_Frame[i]
+			x=cubeid Mod xframes ' left-right frames
+			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
-			If nframes=6 And found=0 Then found=1 ' always copy something if 6
+			CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,bpp,1)
 			
-			If found=1 And cubeid<6 ' frame found
-				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,bpp,1)
-				
-				gluBuild2DMipmaps(TGlobal.Cubemap_Order[cubeid],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
-				
-				cubeid:+1
-			EndIf
-			
-			x=x+1 ' left-right frames
-			If x>=xframes ' top-bottom frames
-				x=0
-				y=y+1
-			EndIf
+			gluBuild2DMipmaps(TGlobal.Cubemap_Order[i],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
 		Next
 		
 		tex.texture[0]=name

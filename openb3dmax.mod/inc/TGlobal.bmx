@@ -98,9 +98,11 @@ Type TGlobal
 		Matrix_3DS=NewMatrix()
 		Matrix_B3D=NewMatrix()
 		'Matrix_MD2=NewMatrix()
+		
 		LoaderMatrix("3ds", 1,0,0, 0,0,1, 0,1,0) ' swap z/y axis
 		LoaderMatrix("b3d", 1,0,0, 0,1,0, 0,0,1) ' standard coords
 		'LoaderMatrix("md2", 1,0,0, 0,1,0, 0,0,1) ' ?
+		
 		CubeMapLoader "face",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
 		CubeMapLoader "frame",0,1,2,3,4,5
 		

@@ -377,13 +377,9 @@ Extern
 	
 End Extern
 
-' No constants, no globals (see TGlobal)
-'Const USE_MAX2D:Int=True	' True to enable Max2d in 3d integration
-'Const USE_VBO:Int=True		' True to use vbos if supported by hardware
-'Const VBO_MIN_TRIS:Int=250	' if USE_VBO=True and vbos are supported by hardware, then surface must also have this minimum no.
-							' of tris before vbo is used for surface (vbos work best with surfaces with high amount of tris)
+' *** Globals moved to TGlobal
 
-' Texture/Brush flags, reference
+' Texture/Brush flags - flags 1024,2048,4096,8192,16384 seem to be unassigned
 'Const TEX_COLOR:Int=1
 'Const TEX_ALPHA:Int=2
 'Const TEX_MASKED:Int=4
@@ -393,7 +389,7 @@ End Extern
 'Const TEX_SPHEREMAP:Int=64
 'Const TEX_CUBEMAP:Int=128
 'Const TEX_VRAM:Int=256
-'Const TEX_HIGHCOLOR:Int=512 ' flags 1024,2048,4096,8192,16384 appear to be unassigned
+'Const TEX_HIGHCOLOR:Int=512
 'Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions

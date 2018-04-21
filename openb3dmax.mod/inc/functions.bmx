@@ -3,7 +3,7 @@
 ' *** Extra
 
 Rem
-bbdoc: Set cubemap frame or face ordering of anim image
+bbdoc: Set cubemap frame or face ordering of anim texture
 about: For example, frames of a 4 * 3 cross are "frame",1,4,5,6,7,9 and their faces are "face",1,2,3,4,5,0
 End Rem
 Function CubeMapLoader( cubemap$,cube0%,cube1%,cube2%,cube3%,cube4%,cube5% )
