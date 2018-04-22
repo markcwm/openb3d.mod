@@ -227,8 +227,14 @@ Frees VBO data and brush.
 <tr><td class=docleft width=1%><a href=#GeosphereHeight>GeosphereHeight</a></td><td class=docright>
 Set terrain height normalizing value, 0.05 is default.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#GetMeshLoader>GetMeshLoader</a></td><td class=docright>
+Returns a mesh loader capable of loading <b>extension</b>.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
+Load an anim mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoaderMatrix>LoaderMatrix</a></td><td class=docright>
 Change model loader coordinates system, currently only 3DS supported.
@@ -238,6 +244,9 @@ Load geodesic sphere terrain from heightmap image.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadMaterial>LoadMaterial</a></td><td class=docright>
 Load a texture from image for 3D texture sampling, use with voxelsprites.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
+Load a mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
@@ -483,6 +492,9 @@ Matrix functions.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TMesh>TMesh</a></td><td class=docright>
 Mesh entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TMeshLoader>TMeshLoader</a></td><td class=docright>
+Mesh loader.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TOcTree>TOcTree</a></td><td class=docright>
 Octree terrain entity.
@@ -907,9 +919,20 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set terrain height normalizing value, 0.05 is default.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=GetMeshLoader>
+<tr><td class=doctop colspan=2>Function GetMeshLoader:TMeshLoader(extension:String)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a mesh loader capable of loading <b>extension</b>.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=GetString>
 <tr><td class=doctop colspan=2>Function GetString:String( obj:Object, strPtr:Byte Ptr )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
+<tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object with child meshes if any.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load an anim mesh.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoaderMatrix>
@@ -927,6 +950,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load a texture from image for 3D texture sampling, use with voxelsprites.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Flags are texture flags, frame width/height is the size in pixels of each slice,
 first frame is the index of the slice and frame count is how many slices.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadMesh>
+<tr><td class=doctop colspan=2>Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load a mesh.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadShader>
@@ -1360,6 +1389,11 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <table class=doc width=100% cellspacing=3 id=TMesh>
 <tr><td class=doctop colspan=2>Type TMesh Extends TEntity</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Mesh entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TMeshLoader>
+<tr><td class=doctop colspan=2>Type TMeshLoader</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Mesh loader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TOcTree>

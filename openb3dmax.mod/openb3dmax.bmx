@@ -484,7 +484,7 @@ Include "inc/BoxSphere.bmx"
 Include "inc/TBlitz2D.bmx"
 Include "inc/TUtility.bmx"
 'Include "inc/TDebug.bmx"
-'Include "TMeshLoader.bmx" ' not implemented
+Include "inc/TMeshLoader.bmx"
 
 ' extra
 Include "inc/TTerrain.bmx"

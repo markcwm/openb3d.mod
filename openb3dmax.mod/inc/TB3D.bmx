@@ -8,9 +8,13 @@ Type TB3D
 	Function LoadAnimB3D:TMesh( url:Object, parent_ent_ext:TEntity=Null )
 	
 		' Start file reading
-		Local file:TStream=LittleEndianStream(ReadFile(url)) 'OpenStream("littleendian::"+url)
+		Local file:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream("littleendian::"+url)
 		If file=Null Then Return Null
-		Return LoadAnimB3DFromStream(file, url, parent_ent_ext)
+		
+		Local mesh:TMesh=LoadAnimB3DFromStream(file, url, parent_ent_ext)
+		
+		CloseStream file
+		Return mesh
 		
 	End Function
 	
@@ -811,7 +815,6 @@ Type TB3D
 			Next
 		EndIf
 		
-		CloseStream file
 		ChangeDir(cd)
 		Return TMesh(root_ent)
 		

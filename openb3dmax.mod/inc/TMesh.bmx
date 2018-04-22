@@ -560,7 +560,7 @@ Type TMesh Extends TEntity
 		Return CreateObject(inst)
 		
 	End Function
-	
+	Rem
 	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
 		Select TGlobal.Mesh_Loader
@@ -622,7 +622,7 @@ Type TMesh Extends TEntity
 		EndSelect
 		
 	End Function
-	
+	EndRem
 	Function CreateCube:TMesh( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CreateCube_( GetInstance(parent) )

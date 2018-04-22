@@ -13,6 +13,10 @@ Function MeshLoader( meshid:String )
 			TGlobal.Mesh_Loader=1
 		Case "cpp", "c++", "lib", "library", "open", "openb3d"
 			TGlobal.Mesh_Loader=2
+		Case "ai", "assimp"
+			TGlobal.Mesh_Loader=3
+		Default
+			TGlobal.Mesh_Loader=0
 	EndSelect
 End Function
 
@@ -1277,8 +1281,37 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimMesh">Online doc</a>
 'End Rem
-Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadAnimMesh( file,parent )
+'Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
+'	Return TMesh.LoadAnimMesh( file,parent )
+'End Function
+
+Rem
+bbdoc: Load an anim mesh
+returns: A mesh object with child meshes if any
+End Rem
+Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
+	Local stream:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream( url )
+	If Not stream Then Return Null
+	
+	Local pos=stream.Pos()
+	If pos=-1
+		stream.Close
+		Return
+	EndIf
+	
+	Local mesh:TMesh
+	Local loader:TMeshLoader=mesh_loaders
+	While loader
+		stream.Seek pos
+		Try
+			mesh=loader.LoadAnimMesh( stream,url,parent )
+		Catch ex:TStreamException
+		End Try
+		If mesh Then Exit
+		loader=loader._succ
+	Wend
+	stream.Close
+	Return mesh
 End Function
 
 'Rem
@@ -1298,8 +1331,38 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadMesh">Online doc</a>
 'End Rem
-Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
-	Return TMesh.LoadMesh( file,parent )
+'Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
+'	Return TMesh.LoadMesh( file,parent )
+'End Function
+
+Rem
+bbdoc: Load a mesh
+returns: A mesh object
+End Rem
+Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
+	Local stream:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream( url )
+	If Not stream Then Return Null
+	
+	Local pos=stream.Pos()
+	If pos=-1
+		stream.Close
+		Return
+	EndIf
+	
+	Local mesh:TMesh
+	Local loader:TMeshLoader=mesh_loaders
+	
+	While loader
+		stream.Seek pos
+		Try
+			mesh=loader.LoadMesh( stream,url,parent )
+		Catch ex:TStreamException
+		End Try
+		If mesh Then Exit
+		loader=loader._succ
+	Wend
+	stream.Close
+	Return mesh
 End Function
 
 'Rem

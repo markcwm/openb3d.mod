@@ -513,8 +513,7 @@ Type TEntity
 			parent.EntityListRemove( parent.child_list,Self )
 			parent = Null
 		End If
-		parent = new_par
-		parent.EntityListAdd( parent.child_list,Self )
+		AddParent( new_par )
 		
 	End Method
 	

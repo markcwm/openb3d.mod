@@ -3,11 +3,11 @@
 ' loads meshes with a single surface, pretransforms vertices but may need reorientation
 
 Type TChunk
-	Field id%
-	Field size%
-	Field endchunk%
+	Field id:Int
+	Field size:Int
+	Field endchunk:Int
 	
-	Function Create:TChunk(id%, size%, endchunk%)
+	Function Create:TChunk(id:Int, size:Int, endchunk:Int)
 		Local c:TChunk = New TChunk
 		c.id = id
 		c.size = size
@@ -437,7 +437,7 @@ Type T3DS
 					y = stream.ReadFloat()
 					z = stream.ReadFloat()
 					animKeys[time].pos = [x, y, z]
-					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_POSTRACK: "+x+","+y+","+z
+					'If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_POSTRACK: "+x+","+y+","+z
 					
 				Case CHUNK_ROTTRACK ' $B021
 					ang = -stream.ReadFloat() / 0.0175
@@ -457,14 +457,14 @@ Type T3DS
 					'	animKeys[time].rot = quat
 					'EndIf
 					'animKeys[time].rot = quat
-					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_ROTTRACK: "+x+","+y+","+z
+					'If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_ROTTRACK: "+x+","+y+","+z
 					
 				Case CHUNK_SCALETRACK ' $B022
 					x = stream.ReadFloat()
 					y = stream.ReadFloat()
 					z = stream.ReadFloat()
 					animKeys[time].size = [x, y, z]
-					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_SCALETRACK: "+x+","+y+","+z
+					'If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_SCALETRACK: "+x+","+y+","+z
 			End Select
 		Next
 		
@@ -488,13 +488,17 @@ Type T3DS
 					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_HIERPOS: "+id
 					
 				Case CHUNK_HIERINFO ' $B010 - node header
+
+'DebugLog "CHUNK_HIERINFO .size="+chunk.size+" .endchunk="+Hex(chunk.endchunk)+" .pos="+Hex(stream.Pos())
 					objname = ParseString()
 					Local flag1% = stream.ReadShort()
 					Local flag2% = stream.ReadShort()
 					parid = stream.ReadShort()
+					
+					'stream.Seek(chunk.endchunk)
 					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_HIERINFO: "+objname+", parent="+parid
 					
-				Case CHUNK_INSTNAME ' $B011
+				Case CHUNK_INSTNAME ' $B011 - dummy name object
 					instname = ParseString()
 					If TGlobal.Log_3DS Then DebugLog "- - - CHUNK_INSTNAME: "+instname
 					
@@ -539,12 +543,12 @@ Type T3DS
 					Else
 						par = GetObject(parid)
 					EndIf
-					If par = Null Or par = ent Then par = parent ' in case of invalid parent
-					ent.SetParent(par)
+					If par = ent Then par = parent ' in case of invalid parent
+					If par <> Null Then ent.SetParent(par)
 					
 					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 					
-					If parid <> 65535 And mesh.no_surfs[0] = 0 And matrix = Null ' if any dummy child mesh found
+					If parid <> 65535 And matrix = Null 'And mesh.no_surfs[0] = 0 ' if any dummy child mesh found
 						If TRANSFORM_FLAG = 1 Then TRANSFORM_FLAG = 0 ' don't transform vertices
 					EndIf
 					
@@ -887,10 +891,10 @@ Type T3DS
 		
 	End Method
 	
-	Method ParseFile:TMesh( url:Object, Size%, parent_ent:TEntity=Null )
+	Method ParseFile:TMesh( url:Object, parent_ent:TEntity=Null )
 	
 		Local chunk:TChunk = ReadChunk()
-		If (chunk.id <> CHUNK_MAIN) Or (chunk.size <> Size) ' $4D4D
+		If (chunk.id <> CHUNK_MAIN) Or (chunk.size <> stream.Size()) ' $4D4D
 			stream.Close()
 			If TGlobal.Log_3DS Then DebugLog "No 3DS File"
 			Return Null
@@ -901,7 +905,14 @@ Type T3DS
 		parent.SetString(parent.class_name,"Mesh")
 		parent.AddParent(parent_ent)
 		parent.EntityListAdd(TEntity.entity_list)
-		parent.UpdateMat(True) ' update matrix
+		
+		' update matrix
+		If parent.parent <> Null
+			parent.mat.Overwrite(parent.parent.mat)
+			parent.UpdateMat()
+		Else
+			parent.UpdateMat(True)
+		EndIf
 		
 		While Not stream.Eof()
 			Local chunk:TChunk = ReadChunk()
@@ -928,13 +939,23 @@ Type T3DS
 		Return parent
 	End Method
 	
-	Method LoadAnim3DS:TMesh( url:Object, parent_ent:TEntity=Null )
+	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
 	
-		Local size:Int, olddir:String
-		stream = LittleEndianStream(ReadFile(url))
-		If stream = Null Then Return Null
-		size = stream.Size()
+		' Start file reading
+		Local file:TStream=LittleEndianStream(ReadFile(url)) 'OpenStream("littleendian::"+url)
+		If file=Null Then Return Null
 		
+		Local model:T3DS = New T3DS
+		Local mesh:TMesh=model.LoadAnim3DSFromStream(file, url, parent_ent_ext)
+		
+		file.Close()
+		Return mesh
+		
+	End Function
+	
+	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null )
+	
+		stream = file
 		objlist = CreateList()
 		materialmap = CreateMap()
 		materialcolormap = CreateMap()
@@ -944,18 +965,17 @@ Type T3DS
 		
 		filename = String(url)
 		filepath = ExtractDir(String(url))
-		olddir = CurrentDir()
+		Local olddir:String = CurrentDir()
 		If filepath <> "" Then ChangeDir(filepath)
 		
 		If TGlobal.Log_3DS Then DebugLog " filename: "+filename
 		If TGlobal.Log_3DS Then DebugLog " filepath: "+filepath
 		
-		Local parent:TMesh = ParseFile(url,size,parent_ent)
+		Local parent:TMesh = ParseFile(url, parent_ent)
 		
 		If TGlobal.Log_3DS Then DebugLog " TRANSFORM_FLAG: "+TRANSFORM_FLAG
 		If TGlobal.Log_3DS Then DebugLog " TEX_FLAGS: "+TEX_FLAGS
 		
-		stream.Close()
 		ChangeDir(olddir)
 		
 		Local vec:TVector
@@ -986,13 +1006,16 @@ Type T3DS
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null And TRANSFORM_FLAG > 0
-				Local invmat:TMatrix = NewMatrix()
-				matrix.GetInverse(invmat)
-				mesh.TransformVertices(invmat)
-				'mesh.SetMatrix(matrix) ' parent rotate and scale (removed, already scaling)
-				mesh.cull_radius[0] = 0.0
-				
+			If matrix <> Null
+				If TRANSFORM_FLAG > 0
+					Local invmat:TMatrix = NewMatrix()
+					matrix.GetInverse(invmat)
+					'invmat.Multiply(matrix)
+					mesh.TransformVertices(invmat)
+					mesh.cull_radius[0] = 0.0
+				Else
+					mesh.SetMatrix(matrix) ' parent rotate and scale
+				EndIf
 				If TGlobal.Log_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
 			EndIf
 		Next
@@ -1048,16 +1071,7 @@ Type T3DS
 			surf.UpdateNormals()
 		Next
 		
-		parent.AddParent(parent_ent)
-		
-		' update matrix
-		If parent.parent <> Null
-			parent.mat.Overwrite(parent.parent.mat)
-			parent.UpdateMat()
-		Else
-			parent.UpdateMat(True)
-		EndIf
-		
 		Return parent
 	End Method
+	
 End Type
