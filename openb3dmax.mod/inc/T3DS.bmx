@@ -544,7 +544,14 @@ Type T3DS
 						par = GetObject(parid)
 					EndIf
 					If par = ent Then par = parent ' in case of invalid parent
-					If par <> Null Then ent.SetParent(par)
+					If par <> Null Then mesh.SetParent(par)
+					
+					If mesh.parent<>Null ' update matrix
+						mesh.mat.Overwrite(mesh.parent.mat)
+						mesh.UpdateMat()
+					Else
+						mesh.UpdateMat(True)
+					EndIf
 					
 					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 					
@@ -575,13 +582,6 @@ Type T3DS
 					mesh.SetString(mesh.class_name,"Mesh")
 					mesh.AddParent(parent)
 					mesh.EntityListAdd(TEntity.entity_list)
-					
-					If mesh.parent<>Null ' update matrix
-						mesh.mat.Overwrite(mesh.parent.mat)
-						mesh.UpdateMat()
-					Else
-						mesh.UpdateMat(True)
-					EndIf
 					
 					ListAddLast objlist, mesh
 					ParseTriMesh(mesh, parent, chunk.endchunk)
@@ -1006,16 +1006,12 @@ Type T3DS
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
 			
-			If matrix <> Null
-				If TRANSFORM_FLAG > 0
-					Local invmat:TMatrix = NewMatrix()
-					matrix.GetInverse(invmat)
-					'invmat.Multiply(matrix)
-					mesh.TransformVertices(invmat)
-					mesh.cull_radius[0] = 0.0
-				Else
-					mesh.SetMatrix(matrix) ' parent rotate and scale
-				EndIf
+			If matrix <> Null And TRANSFORM_FLAG > 0
+				Local invmat:TMatrix = NewMatrix()
+				matrix.GetInverse(invmat)
+				'invmat.Multiply(matrix)
+				mesh.TransformVertices(invmat)
+				mesh.cull_radius[0] = 0.0
 				If TGlobal.Log_3DS Then DebugLog " ent.name:"+ent.EntityName()+" parent.name:"+ent.parent.EntityName()
 			EndIf
 		Next

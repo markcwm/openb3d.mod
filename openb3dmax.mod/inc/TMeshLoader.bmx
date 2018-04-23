@@ -63,7 +63,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If TGlobal.Mesh_Loader<>0 Or TGlobal.Mesh_Loader<>2 Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=2) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,TEntity.GetInstance(parent) )
@@ -76,7 +76,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If TGlobal.Mesh_Loader<>0 Or TGlobal.Mesh_Loader<>2 Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=2) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,TEntity.GetInstance(parent) )
@@ -105,7 +105,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If TGlobal.Mesh_Loader<>0 Or TGlobal.Mesh_Loader<>1 Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=1) Then Return Null
 		
 		Local anim_mesh:TMesh
 		Select ExtractExt(String(url))
@@ -141,7 +141,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If TGlobal.Mesh_Loader<>0 Or TGlobal.Mesh_Loader<>1 Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=1) Then Return Null
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))

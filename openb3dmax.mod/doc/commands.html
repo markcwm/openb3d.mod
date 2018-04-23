@@ -234,7 +234,7 @@ Returns a mesh loader capable of loading <b>extension</b>.
 Gets a Blitz string from a C string.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
-Load an anim mesh.
+Loads an anim mesh, see MeshLoader.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoaderMatrix>LoaderMatrix</a></td><td class=docright>
 Change model loader coordinates system, currently only 3DS supported.
@@ -246,7 +246,7 @@ Load geodesic sphere terrain from heightmap image.
 Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
-Load a mesh.
+Loads a single mesh, see MeshLoader.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
@@ -258,7 +258,7 @@ Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns
 Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cull sphere'
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshLoader>MeshLoader</a></td><td class=docright>
-Set mesh loaders to use (default is streamed)
+Set mesh loaders to use, default is "bmx"
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
@@ -932,7 +932,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
 <tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object with child meshes if any.</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Load an anim mesh.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads an anim mesh, see MeshLoader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoaderMatrix>
@@ -955,7 +955,7 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <table class=doc width=100% cellspacing=3 id=LoadMesh>
 <tr><td class=doctop colspan=2>Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object.</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Load a mesh.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads a single mesh, see MeshLoader.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadShader>
@@ -979,9 +979,9 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshLoader>
 <tr><td class=doctop colspan=2>Function MeshLoader( meshid:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use (default is streamed)</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp", "lib" or "open" for
-Openb3d library meshes (only loads local files).</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp" or "lib" for
+Openb3d library meshes (only from files), use "all" to use all available mesh loaders.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>

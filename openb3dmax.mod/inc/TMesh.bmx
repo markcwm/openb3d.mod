@@ -382,7 +382,7 @@ Type TMesh Extends TEntity
 		If Surface=Null Then Return 0
 		
 		'To store the temps indexes
-		Local NumTris%=CountTriangles(Surface)
+		Local NumTris%=Surface.CountTriangles()
 		Local TempsCount%
 		Local TempI%[NumTris]
 		
@@ -400,7 +400,7 @@ Type TMesh Extends TEntity
 		
 		'For each triangle of the surface
 		TrianglesCount% = 0
-		For Local TI% = 0 To CountTriangles(Surface)-1 Step 1
+		For Local TI% = 0 To Surface.CountTriangles()-1 Step 1
 		
 			'retrieve the X,Y,Z world coordinates of Vertex0, Vertex1, Vertex2 of this triangle
 			'V0
@@ -452,11 +452,11 @@ Type TMesh Extends TEntity
 		Next
 		
 		'For each vertex
-		For Local VI% = 0 To CountVertices(Surface)-1 Step 1
+		For Local VI% = 0 To Surface.CountVertices()-1 Step 1
 		
 			'identify which triangles use this vertex
 			Local TempsCount% = 0
-			For Local TI% = 0 To CountTriangles(Surface)-1 Step 1
+			For Local TI% = 0 To Surface.CountTriangles()-1 Step 1
 				If TriangleVertex(Surface,TI,0) = VI Or TriangleVertex(Surface,TI,1) = VI Or TriangleVertex(Surface,TI,2) = VI
 					'add the triangle To the temps list
 					TempsCount = TempsCount + 1
@@ -560,69 +560,7 @@ Type TMesh Extends TEntity
 		Return CreateObject(inst)
 		
 	End Function
-	Rem
-	Function LoadMesh:TMesh( file:String,parent:TEntity=Null )
 	
-		Select TGlobal.Mesh_Loader
-		
-			Case 2 ' library
-				Local cString:Byte Ptr=file.ToCString()
-				Local inst:Byte Ptr=LoadMesh_( cString,GetInstance(parent) )
-				Local mesh:TMesh=CreateObject(inst)
-				MemFree cString
-				Return mesh ' no children, mesh is collapsed
-				
-			Default ' wrapper
-				Local ent:TMesh=LoadAnimMesh(file)
-				ent.HideEntity()
-				Local mesh:TMesh=ent.CollapseAnimMesh()
-				ent.FreeEntity()
-				
-				mesh.SetString(mesh.class_name,"Mesh")
-				mesh.AddParent(parent)
-				mesh.EntityListAdd(entity_list)
-				
-				' update matrix
-				If mesh.parent<>Null
-					mesh.mat.Overwrite(mesh.parent.mat)
-					mesh.UpdateMat()
-				Else
-					mesh.UpdateMat(True)
-				EndIf
-				Return mesh
-				
-		EndSelect
-		
-	End Function
-	
-	Function LoadAnimMesh:TMesh( file:String,parent:TEntity=Null )
-	
-		Select TGlobal.Mesh_Loader
-		
-			Case 2 ' library
-				Local cString:Byte Ptr=file.ToCString()
-				Local inst:Byte Ptr=LoadAnimMesh_( cString,GetInstance(parent) )
-				Local mesh:TMesh=CreateObject(inst)
-				MemFree cString
-				mesh.CreateAllChildren() ' create child mesh objects
-				Return mesh
-				
-			Default ' wrapper
-				Local mesh:TMesh
-				If ExtractExt(file)="b3d"
-					mesh=TB3D.LoadAnimB3D( file,parent )
-				ElseIf ExtractExt(file)="md2"
-					mesh=CreateCube() ' load md2 todo!
-				ElseIf ExtractExt(file)="3ds"
-					Local model:T3DS = New T3DS ' hierarchy animation todo!
-					mesh=model.LoadAnim3DS( file,parent )
-				EndIf
-				Return mesh
-				
-		EndSelect
-		
-	End Function
-	EndRem
 	Function CreateCube:TMesh( parent:TEntity=Null )
 	
 		Local inst:Byte Ptr=CreateCube_( GetInstance(parent) )
