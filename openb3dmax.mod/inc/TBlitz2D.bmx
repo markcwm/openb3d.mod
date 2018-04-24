@@ -78,15 +78,15 @@ Type TBlitz2D
 		glDisable(GL_FOG)
 		glDisable(GL_CULL_FACE)
 		
-		glMatrixMode GL_TEXTURE
-		glLoadIdentity
+		glMatrixMode(GL_TEXTURE)
+		glLoadIdentity()
 		
-		glMatrixMode GL_PROJECTION
-		glLoadIdentity
-		glOrtho 0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1
+		glMatrixMode(GL_PROJECTION)
+		glLoadIdentity()
+		glOrtho(0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1)
 		
-		glMatrixMode GL_MODELVIEW
-		glLoadIdentity
+		glMatrixMode(GL_MODELVIEW)
+		glLoadIdentity()
 		
 		SetViewport x, y, w, h
 		
@@ -109,7 +109,8 @@ Type TBlitz2D
 		glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
 		glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
 		
-		glEnable GL_BLEND
+		glEnable(GL_BLEND)
+		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA) ' fixes text hidden when blend=2
 		glEnable(GL_TEXTURE_2D)
 		
 	End Function
@@ -123,7 +124,7 @@ Type TBlitz2D
 		glDisable(GL_TEXTURE_GEN_R)
 		
 		glDisable(GL_TEXTURE_2D)
-		glDisable GL_BLEND
+		glDisable(GL_BLEND)
 		
 		TGlobal.EnableStates()
 		

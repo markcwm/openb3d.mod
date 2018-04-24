@@ -81,19 +81,12 @@ Function Text( x%,y%,txt$ )
 		glClientActiveTextureARB(GL_TEXTURE0)
 	EndIf
 	
-	' Tell OpenGL you want to use texture combiners (non vbo)
-	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_COMBINE)
-	' Tell OpenGL which combiner you want to use (Modulate for RGB values)
-	glTexEnvi(GL_TEXTURE_ENV, GL_COMBINE_RGB, GL_DECAL) 'GL_MODULATE
-	' Tell OpenGL To use texture unit 0's color values for Arg0
-	glTexEnvi(GL_TEXTURE_ENV, GL_SOURCE0_RGB, GL_TEXTURE0)
-	glTexEnvi(GL_TEXTURE_ENV, GL_OPERAND0_RGB, GL_SRC_COLOR)
-	
 	glDisable(GL_LIGHTING)
 	glColor3f(1.0,1.0,1.0)
-	
+		
 	' enable blend to hide text background
 	glEnable(GL_BLEND)
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA) ' fixes text hidden when blend=2
 	GLDrawText txt,x,y
 	
 	glDisable(GL_BLEND)
