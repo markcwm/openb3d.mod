@@ -579,8 +579,9 @@ void Camera::Render(){
 	// add meshes to render list
 	Global::root_ent->UpdateAllEntities(UpdateEntityRender,this);
 	
+	// fixes batch sprites rendering over alpha meshes in front of them
 	// add every sprite batch mesh to render list
-	list<SpriteBatch*>::iterator it;
+	/*list<SpriteBatch*>::iterator it;
 
 	//cout << "Sprite batch list size: " << SpriteBatch::sprite_batch_list.size() << endl;
 
@@ -599,7 +600,7 @@ void Camera::Render(){
 		
 		RenderListAdd(mesh);
 		
-	}
+	}*/
 
 	// Draw everything in render list
 
@@ -666,8 +667,9 @@ void UpdateEntityRender(Entity* ent,Entity* cam){
 						Surface* surf=SpriteBatch::GetSpriteBatchSurface(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
 			
 						dynamic_cast<Camera*>(cam)->AddTransformedSpriteToSurface(*sprite,surf);
-				
-						return;}
+												
+						//return;}
+						break;}
 					case (3):{
 						ParticleBatch* p=ParticleBatch::GetParticleBatch(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
 						Surface* surf=*p->surf_list.begin();
