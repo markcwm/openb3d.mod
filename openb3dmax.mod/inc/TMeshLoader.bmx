@@ -33,17 +33,15 @@ Type TMeshLoader
 	End Method
 	
 	Method CanLoadMesh:Int(extension:String) Abstract
-
-	'Rem
-	'bbdoc: Call mesh loader implementation.
-	'about: @obj could be filename (string) or perhaps TStream, if implementation supports it.
-	'End Rem
+	
+	Rem
+	bbdoc: Call mesh loader implementation.
+	End Rem
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract
 
-	'Rem
-	'bbdoc: Call animated mesh loader implementation
-	'about: @obj could be filename (string) or perhaps TStream, if implementation supports it.
-	'End Rem
+	Rem
+	bbdoc: Call animated mesh loader implementation
+	End Rem
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract
 	
 End Type
@@ -63,7 +61,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=2) Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 2)) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,TEntity.GetInstance(parent) )
@@ -76,7 +74,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=2) Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 2)) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,TEntity.GetInstance(parent) )
@@ -105,7 +103,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=1) Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
 		
 		Local anim_mesh:TMesh
 		Select ExtractExt(String(url))
@@ -141,7 +139,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or TGlobal.Mesh_Loader=1) Then Return Null
+		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))

@@ -48,9 +48,7 @@ End Type
 Type T3DS
 
 	Global TRANSFORM_FLAG:Int = 1 ' 0=disable, 1=disabled if dummy found, 2=always, disabled if any dummy child has no matrix
-	
-	Global TEX_FLAGS:Int = 9 ' set default LoadTexture flags
-	
+		
 	Global MASTER_SCALE:Float = 0 ' internal, use ScaleAnimMesh()
 	
 	' misc
@@ -837,7 +835,7 @@ Type T3DS
 		EndIf
 		
 		Local tex:TTexture
-		If texname <> "" Then tex = LoadTexture(name, TEX_FLAGS) ' check material has texture, wrong path crashes streams
+		If texname <> "" Then tex = LoadTexture(name, TGlobal.Texture_Flags) ' check material has texture, bad path crash streams
 		If TGlobal.Log_3DS Then DebugLog " MAT TEX name="+name+" matname="+matname+" texname="+texname
 		
 		MapInsert materialmap, matname, tex
@@ -974,7 +972,7 @@ Type T3DS
 		Local parent:TMesh = ParseFile(url, parent_ent)
 		
 		If TGlobal.Log_3DS Then DebugLog " TRANSFORM_FLAG: "+TRANSFORM_FLAG
-		If TGlobal.Log_3DS Then DebugLog " TEX_FLAGS: "+TEX_FLAGS
+		If TGlobal.Log_3DS Then DebugLog " Texture_Flags: "+TGlobal.Texture_Flags
 		
 		ChangeDir(olddir)
 		

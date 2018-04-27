@@ -978,7 +978,7 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshLoader>
-<tr><td class=doctop colspan=2>Function MeshLoader( meshid:String )</td></tr>
+<tr><td class=doctop colspan=2>Function MeshLoader( meshid:String,flags:Int=-1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp" or "lib" for
 Openb3d library meshes (only from files), use "all" to use all available mesh loaders.</td></tr>
@@ -1394,6 +1394,22 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <table class=doc width=100% cellspacing=3 id=TMeshLoader>
 <tr><td class=doctop colspan=2>Type TMeshLoader</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Mesh loader.</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMeshLoader_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
+Call animated mesh loader implementation.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
+Call mesh loader implementation.
+</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
+<tr><td class=doctop colspan=2>Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Call animated mesh loader implementation.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=LoadMesh>
+<tr><td class=doctop colspan=2>Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Call mesh loader implementation.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TOcTree>

@@ -66,18 +66,23 @@ bbdoc: Set mesh loaders to use, default is "bmx"
 about: Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp" or "lib" for 
 Openb3d library meshes (only from files), use "all" to use all available mesh loaders.
 End Rem
-Function MeshLoader( meshid:String )
+Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()
 		Case "all"
 			TGlobal.Mesh_Loader=0
-		Case "bb", "bmx", "bmax", "max", "blitzmax"
+		Case "bmxassimp", "assimpbmx", "stream", "streams"
+			TGlobal.Mesh_Loader=1+8
+			TGlobal.Mesh_Flags=flags
+		Case "bb", "bmx", "blitzmax"
 			TGlobal.Mesh_Loader=1
-		Case "cpp", "c++", "lib", "library", "open", "openb3d"
+		Case "cpp", "c++", "lib", "library"
 			TGlobal.Mesh_Loader=2
-		Case "ai", "assimp"
-			TGlobal.Mesh_Loader=3
-		Default
-			TGlobal.Mesh_Loader=0
+		Case "assimp"
+			TGlobal.Mesh_Loader=4
+			TGlobal.Mesh_Flags=flags
+		Case "assimpstream"
+			TGlobal.Mesh_Loader=8
+			TGlobal.Mesh_Flags=flags
 	EndSelect
 End Function
 
@@ -89,9 +94,13 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 End Rem
 Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
 	Select texid.ToLower()
-		Case "bb", "bmx", "bmax", "max", "blitzmax"
+		Case "bb", "bmx", "blitzmax"
 			TGlobal.Texture_Loader=1
-		Case "cpp", "c++", "lib", "library", "open", "openb3d"
+			TGlobal.Texture_Flags=lf0
+		Case "assimp", "assimpstream", "bmxassimp", "assimpbmx", "stream", "streams"
+			TGlobal.Texture_Loader=1
+			TGlobal.Texture_Flags=lf0
+		Case "cpp", "c++", "lib", "library"
 			TGlobal.Texture_Loader=2
 		Case "frame", "frames"
 			TGlobal.Cubemap_Frame[0] = lf0

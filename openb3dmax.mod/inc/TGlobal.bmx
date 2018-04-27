@@ -49,9 +49,12 @@ Type TGlobal
 	Global Log_3DS:Int=False		' True to DebugLog 3DS chunks
 	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
 	'Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
+	Global Log_Assimp:Int=False		' True to DebugLog Assimp
 	
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
+	Global Mesh_Flags:Int=-1		' Assimp mesh flags
+	Global Texture_Flags:Int=9		' LoadTexture flags
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
 	
