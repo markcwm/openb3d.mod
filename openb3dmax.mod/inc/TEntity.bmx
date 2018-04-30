@@ -337,6 +337,11 @@ Type TEntity
 					EntityListRemoveEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
 					ListRemove( list,value ) ; child_list_id:-1
 				EndIf
+			Case TGlobal.root_ent.child_list
+				If ent
+					EntityListRemoveEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(ent) )
+					ListRemove( list,value ) ; TGlobal.root_ent.child_list_id:-1
+				EndIf
 		End Select
 		
 	End Method
@@ -509,10 +514,13 @@ Type TEntity
 	' replace parent with new_par
 	Method SetParent( new_par:TEntity )
 	
-		If parent <> Null
+		If parent<>Null
 			parent.EntityListRemove( parent.child_list,Self )
-			parent = Null
-		End If
+			parent=Null
+		Else
+			TGlobal.root_ent.EntityListRemove( TGlobal.root_ent.child_list,Self )
+		EndIf
+		
 		AddParent( new_par )
 		
 	End Method
@@ -1087,7 +1095,11 @@ Type TEntity
 		
 		Local inst:Byte Ptr=EntityEntity_( GetInstance(Self),ENTITY_parent )
 		parent=GetObject(inst) ' no CreateObject
-		If parent<>Null Then parent.CopyList(parent.child_list)
+		If parent<>Null
+			parent.CopyList(parent.child_list)
+		Else
+			TGlobal.root_ent.CopyList(TGlobal.root_ent.child_list)
+		EndIf
 		
 	End Method
 	
