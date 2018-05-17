@@ -180,14 +180,6 @@ int Surface::AddVertex(float x,float y,float z,float u,float v,float w){
 
 	vert_tex_coords1.push_back(0.0);
 	vert_tex_coords1.push_back(0.0);
-
-	vert_tan.push_back(0.0);
-	vert_tan.push_back(0.0);
-	vert_tan.push_back(0.0);
-	
-	vert_bitan.push_back(0.0);
-	vert_bitan.push_back(0.0);
-	vert_bitan.push_back(0.0);
 	
 	return no_verts-1;
 
@@ -287,6 +279,10 @@ void Surface::VertexTexCoords(int vi,float u,float v,float w,int coords_set){
 
 void Surface::VertexTangent(int vid,float tx,float ty,float tz){
 
+	if (vert_tan.size()==0){
+		vert_tan.resize(no_verts,0.0);
+	}
+	
 	vid=vid*3;
 
 	vert_tan[vid]=tx;
@@ -301,6 +297,10 @@ void Surface::VertexTangent(int vid,float tx,float ty,float tz){
 
 void Surface::VertexBitangent(int vid,float bx,float by,float bz){
 
+	if (vert_bitan.size()==0){
+		vert_bitan.resize(no_verts,0.0);
+	}
+	
 	vid=vid*3;
 
 	vert_bitan[vid]=bx;

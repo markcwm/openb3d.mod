@@ -518,7 +518,7 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local mask:Int=CheckAlphaMask(tex.pixmap)
+		Local mask:Int=CheckAlpha(tex.pixmap)
 		If (flags & 2048) Then flags=flags | mask ' determine Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
@@ -617,7 +617,7 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local mask:Int=CheckAlphaMask(tex.pixmap)
+		Local mask:Int=CheckAlpha(tex.pixmap)
 		If (flags & 2048) Then flags=flags | mask ' determine Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
@@ -735,11 +735,12 @@ Type TTexture
 	End Function
 	
 	' quick test for Assimp to see if true alpha used in image, if not then return 4 else 2 (tex flags)
-	Function CheckAlphaMask:Int( map:TPixmap )
+	Function CheckAlpha:Int( map:TPixmap )
 		Local rgba%,alp%,a0%,a1%
+		Local ix%=PixmapWidth(map)/2
 		
-		For Local iy%=0 To PixmapHeight(map)-1 ' check first line
-			rgba=ReadPixel(map,0,iy)
+		For Local iy%=0 To PixmapHeight(map)-1 ' check one line
+			rgba=ReadPixel(map,ix,iy)
 			alp=(rgba & $FF000000) Shr 24
 			If alp=0 Then a0:+1
 			If alp=255 Then a1:+1
