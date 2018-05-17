@@ -1,6 +1,7 @@
 ' T3DS.bmx
 ' 3DS loader from Warner engine (by Bram den Hond)
 ' loads meshes with a single surface, pretransforms vertices but may need reorientation
+' todo flip uvs and winding order
 
 Type TChunk
 	Field id:Int

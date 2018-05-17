@@ -52,6 +52,7 @@ Surface::Surface(){
 	// reset flag - this is set when mesh shape is changed in TSurface and TMesh
 	reset_vbo=-1; // (-1 = all)
 	vbo_enabled=Global::vbo_enabled;
+	has_tangents=0;
 
 	// used by Compare to sort array, and TMesh.Update to enable/disable alpha blending
 	alpha_enable=false;
@@ -80,6 +81,8 @@ Surface* Surface::Copy(){
 	surf->vert_tex_coords1=vert_tex_coords1;
 	surf->vert_norm=vert_norm;
 	surf->vert_col=vert_col;
+	surf->vert_tan=vert_tan;
+	surf->vert_bitan=vert_bitan;
 
 	surf->vert_bone1_no=vert_bone1_no;
 	surf->vert_bone2_no=vert_bone2_no;
@@ -113,6 +116,7 @@ Surface* Surface::Copy(){
 
 	surf->vbo_enabled=vbo_enabled;
 	surf->reset_vbo=-1;
+	surf->has_tangents=has_tangents;
 
 	surf->ShaderMat=ShaderMat;
 
@@ -131,6 +135,8 @@ void Surface::ClearSurface(int clear_verts,int clear_tris){
 		vert_col.clear();
 		vert_tex_coords0.clear();
 		vert_tex_coords1.clear();
+		vert_tan.clear();
+		vert_bitan.clear();
 
 		vert_array_size=1;
 
@@ -148,6 +154,7 @@ void Surface::ClearSurface(int clear_verts,int clear_tris){
 
 	// mesh shape has changed - update reset flag
 	reset_vbo=-1; // (-1 = all)
+	has_tangents=0;
 
 }
 
@@ -174,6 +181,14 @@ int Surface::AddVertex(float x,float y,float z,float u,float v,float w){
 	vert_tex_coords1.push_back(0.0);
 	vert_tex_coords1.push_back(0.0);
 
+	vert_tan.push_back(0.0);
+	vert_tan.push_back(0.0);
+	vert_tan.push_back(0.0);
+	
+	vert_bitan.push_back(0.0);
+	vert_bitan.push_back(0.0);
+	vert_bitan.push_back(0.0);
+	
 	return no_verts-1;
 
 }
@@ -270,6 +285,34 @@ void Surface::VertexTexCoords(int vi,float u,float v,float w,int coords_set){
 
 }
 
+void Surface::VertexTangent(int vid,float tx,float ty,float tz){
+
+	vid=vid*3;
+
+	vert_tan[vid]=tx;
+	vert_tan[vid+1]=ty;
+	vert_tan[vid+2]=-tz; // ***ogl***
+
+	// mesh state has changed - update reset flags
+	reset_vbo=reset_vbo|32;
+	has_tangents=has_tangents|1;
+
+}
+
+void Surface::VertexBitangent(int vid,float bx,float by,float bz){
+
+	vid=vid*3;
+
+	vert_bitan[vid]=bx;
+	vert_bitan[vid+1]=by;
+	vert_bitan[vid+2]=-bz; // ***ogl***
+
+	// mesh state has changed - update reset flags
+	reset_vbo=reset_vbo|32;
+	has_tangents=has_tangents|2;
+
+}
+
 float Surface::VertexX(int vid){
 
 	return vert_coords[vid*3];
@@ -361,6 +404,42 @@ float Surface::VertexW(int vid,int coord_set){
 	}else{
 		return vert_tex_coords1[(vid*3)+2];
 	}
+
+}
+
+float Surface::VertexTX(int vid){
+
+	return vert_tan[vid*3];
+
+}
+
+float Surface::VertexTY(int vid){
+
+	return vert_tan[(vid*3)+1];
+
+}
+
+float Surface::VertexTZ(int vid){
+
+	return -vert_tan[(vid*3)+2]; // ***ogl***
+
+}
+
+float Surface::VertexBX(int vid){
+
+	return vert_bitan[vid*3];
+
+}
+
+float Surface::VertexBY(int vid){
+
+	return vert_bitan[(vid*3)+1];
+
+}
+
+float Surface::VertexBZ(int vid){
+
+	return -vert_bitan[(vid*3)+2]; // ***ogl***
 
 }
 
@@ -628,11 +707,11 @@ float Surface::TriangleNZ(int tri_no){
 void Surface::UpdateVBO(){
 
 	if(vbo_id[0]==0){
-		glGenBuffers(6,&vbo_id[0]);
+		glGenBuffers(8,&vbo_id[0]);
 
 	}
 
-	if (reset_vbo==-1) reset_vbo=1|2|4|8|16;
+	if (reset_vbo==-1) reset_vbo=1|2|4|8|16|32;
 
 	if(reset_vbo&1){
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[0]);
@@ -661,7 +740,15 @@ void Surface::UpdateVBO(){
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,vbo_id[5]);
 		glBufferData(GL_ELEMENT_ARRAY_BUFFER,no_tris*3*2,&tris[0],GL_STATIC_DRAW);
 	}
+	
+	if(reset_vbo&32){
+		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[6]);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*4),&vert_tan[0],GL_STATIC_DRAW);
 
+		glBindBuffer(GL_ARRAY_BUFFER,vbo_id[7]);
+		glBufferData(GL_ARRAY_BUFFER,(no_verts*3*4),&vert_bitan[0],GL_STATIC_DRAW);
+	}
+	
 	reset_vbo=false;
 
 }
@@ -669,7 +756,7 @@ void Surface::UpdateVBO(){
 void Surface::FreeVBO(){
 
 	if(vbo_id[0]!=0){
-		glDeleteBuffers(6,vbo_id);
+		glDeleteBuffers(8,vbo_id);
 	}
 
 }

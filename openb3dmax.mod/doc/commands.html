@@ -437,6 +437,30 @@ Stencil to use, set to Null to disable stencil.
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#VertexBitangent>VertexBitangent</a></td><td class=docright>
+Sets the bitangent of an existing vertex.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexBX>VertexBX</a></td><td class=docright>
+Returns the x component of a vertices bitangent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexBY>VertexBY</a></td><td class=docright>
+Returns the y component of a vertices bitangent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexBZ>VertexBZ</a></td><td class=docright>
+Returns the z component of a vertices bitangent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexTangent>VertexTangent</a></td><td class=docright>
+Sets the tangent of an existing vertex.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexTX>VertexTX</a></td><td class=docright>
+Returns the x component of a vertices tangent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexTY>VertexTY</a></td><td class=docright>
+Returns the y component of a vertices tangent.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertexTZ>VertexTZ</a></td><td class=docright>
+Returns the z component of a vertices tangent.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#VoxelSpriteMaterial>VoxelSpriteMaterial</a></td><td class=docright>
 Set material for voxel sprite.
 </td></tr>
@@ -1295,6 +1319,46 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends surface data to a shader variable name.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Vbo is in range 1..6 which selects what vertex buffer data to access, where 1 is vertex positions,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexBitangent>
+<tr><td class=doctop colspan=2>Function VertexBitangent( surf:TSurface,vid:Int,bx:Float,by:Float,bz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets the bitangent of an existing vertex.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexBX>
+<tr><td class=doctop colspan=2>Function VertexBX:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the x component of a vertices bitangent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexBY>
+<tr><td class=doctop colspan=2>Function VertexBY:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the y component of a vertices bitangent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexBZ>
+<tr><td class=doctop colspan=2>Function VertexBZ:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the z component of a vertices bitangent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexTangent>
+<tr><td class=doctop colspan=2>Function VertexTangent( surf:TSurface,vid:Int,tx:Float,ty:Float,tz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets the tangent of an existing vertex.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexTX>
+<tr><td class=doctop colspan=2>Function VertexTX:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the x component of a vertices tangent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexTY>
+<tr><td class=doctop colspan=2>Function VertexTY:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the y component of a vertices tangent.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertexTZ>
+<tr><td class=doctop colspan=2>Function VertexTZ:Float( surf:TSurface,vid:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the z component of a vertices tangent.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=VoxelSpriteMaterial>

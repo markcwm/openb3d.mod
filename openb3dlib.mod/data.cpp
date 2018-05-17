@@ -389,7 +389,10 @@ const int SURFACE_vmin=				22;
 const int SURFACE_vmax=				23;
 const int SURFACE_vbo_enabled=		24;
 const int SURFACE_reset_vbo=		25;
-const int SURFACE_alpha_enable=		26;	
+const int SURFACE_alpha_enable=		26;
+const int SURFACE_vert_tan=			27;
+const int SURFACE_vert_bitan=		28;
+const int SURFACE_has_tangents=		29;
 
 // Terrain varid
 const int TERRAIN_terrain_list=	1;
@@ -1498,6 +1501,7 @@ int* SurfaceInt_( Surface* obj,int varid ){
 		case SURFACE_vbo_enabled : return &obj->vbo_enabled;
 		case SURFACE_reset_vbo : return &obj->reset_vbo;
 		case SURFACE_alpha_enable : return &obj->alpha_enable;
+		case SURFACE_has_tangents : return &obj->has_tangents;
 	}
 	return NULL;
 }
@@ -1520,6 +1524,8 @@ float* SurfaceFloat_( Surface* obj,int varid ){
 		case SURFACE_vert_weight2 : return &obj->vert_weight2[0];
 		case SURFACE_vert_weight3 : return &obj->vert_weight3[0];
 		case SURFACE_vert_weight4 : return &obj->vert_weight4[0];
+		case SURFACE_vert_tan : return &obj->vert_tan[0];
+		case SURFACE_vert_bitan : return &obj->vert_bitan[0];
 	}
 	return NULL;
 }

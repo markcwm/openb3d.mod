@@ -33,6 +33,8 @@ public:
 	vector<float> vert_tex_coords1;
 	vector<float> vert_col;
 	vector<unsigned short> tris;
+	vector<float> vert_tan;
+	vector<float> vert_bitan;
 
 	// arrays containing vertex bone no and weights info - used by animated meshes only
 	
@@ -52,7 +54,7 @@ public:
 	
 	// vbo
 	
-	unsigned int vbo_id[7];
+	unsigned int vbo_id[8];
 	
 	// misc vars
 	
@@ -64,6 +66,7 @@ public:
 	// reset flag - this is set when mesh shape is changed in TSurface and TMesh
 	int vbo_enabled;
 	int reset_vbo; // (-1 = all)
+	int has_tangents;
 	
 	// used by Compare to sort array, and TMesh.Update to enable/disable alpha blending
 	int alpha_enable;
@@ -80,6 +83,8 @@ public:
 	void VertexNormal(int vid,float nx,float ny,float nz);
 	void VertexColor(int vid,float r,float g,float b,float a=1.0);
 	void VertexTexCoords(int vid,float u,float v,float w=0.0,int coord_set=0);	
+	void VertexTangent(int vid,float tx,float ty,float tz);
+	void VertexBitangent(int vid,float bx,float by,float bz);
 	float VertexX(int vid);
 	float VertexY(int vid);
 	float VertexZ(int vid);
@@ -93,6 +98,12 @@ public:
 	float VertexU(int vid,int coord_set=0);
 	float VertexV(int vid,int coord_set=0);
 	float VertexW(int vid,int coord_set=0);
+	float VertexTX(int vid);
+	float VertexTY(int vid);
+	float VertexTZ(int vid);
+	float VertexBX(int vid);
+	float VertexBY(int vid);
+	float VertexBZ(int vid);
 	Brush* GetSurfaceBrush();
 	void PaintSurface(Brush* bru);
 	void SurfaceColor(float r,float g,float b,float a);

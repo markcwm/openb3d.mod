@@ -187,6 +187,8 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 		new_surf->vert_tex_coords1=surf->vert_tex_coords1;
 		new_surf->vert_col=surf->vert_col;
 		new_surf->tris=surf->tris;
+		new_surf->vert_tan=surf->vert_tan;
+		new_surf->vert_bitan=surf->vert_bitan;
 
 		// copy brush
 		delete new_surf->brush;
@@ -199,6 +201,7 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
 		new_surf->vbo_enabled=surf->vbo_enabled;
 		new_surf->reset_vbo=-1; // (-1 = all)
+		new_surf->has_tangents=surf->has_tangents;
 
 	}
 
@@ -260,6 +263,9 @@ void Mesh::FreeEntity(){
 			surf->vert_tex_coords1.clear();
 			surf->vert_col.clear();
 			surf->tris.clear();
+			surf->vert_tan.clear();
+			surf->vert_bitan.clear();
+			
 			surf->vert_bone1_no.clear();
 			surf->vert_bone2_no.clear();
 			surf->vert_bone3_no.clear();
@@ -281,6 +287,9 @@ void Mesh::FreeEntity(){
 			anim_surf->vert_tex_coords1.clear();
 			anim_surf->vert_col.clear();
 			anim_surf->tris.clear();
+			anim_surf->vert_tan.clear();
+			anim_surf->vert_bitan.clear();
+			
 			anim_surf->vert_bone1_no.clear();
 			anim_surf->vert_bone2_no.clear();
 			anim_surf->vert_bone3_no.clear();
@@ -1328,7 +1337,18 @@ void Mesh::FlipMesh(){
 			surf->vert_norm[v*3]=surf->vert_norm[v*3]*-1; // x
 			surf->vert_norm[(v*3)+1]=surf->vert_norm[(v*3)+1]*-1; // y
 			surf->vert_norm[(v*3)+2]=surf->vert_norm[(v*3)+2]*-1; // z
-
+			
+			if(surf->has_tangents&1){
+				surf->vert_tan[v*3]=surf->vert_tan[v*3]*-1; // x
+				surf->vert_tan[(v*3)+1]=surf->vert_tan[(v*3)+1]*-1; // y
+				surf->vert_tan[(v*3)+2]=surf->vert_tan[(v*3)+2]*-1; // z
+			}
+			
+			if(surf->has_tangents&2){
+				surf->vert_bitan[v*3]=surf->vert_bitan[v*3]*-1; // x
+				surf->vert_bitan[(v*3)+1]=surf->vert_bitan[(v*3)+1]*-1; // y
+				surf->vert_bitan[(v*3)+2]=surf->vert_bitan[(v*3)+2]*-1; // z
+			}
 		}
 
 		// mesh shape has changed - update reset flag
@@ -1636,7 +1656,27 @@ void Mesh::RotateMesh(float pitch,float yaw,float roll){
 			surf->vert_norm[v*3] = mat.grid[0][0]*nx + mat.grid[1][0]*ny + mat.grid[2][0]*nz + mat.grid[3][0];
 			surf->vert_norm[v*3+1] = mat.grid[0][1]*nx + mat.grid[1][1]*ny + mat.grid[2][1]*nz + mat.grid[3][1];
 			surf->vert_norm[v*3+2] = mat.grid[0][2]*nx + mat.grid[1][2]*ny + mat.grid[2][2]*nz + mat.grid[3][2];
-
+			
+			if(surf->has_tangents&1){
+				float tx=surf->vert_tan[v*3];
+				float ty=surf->vert_tan[v*3+1];
+				float tz=surf->vert_tan[v*3+2];
+				
+				surf->vert_tan[v*3] = mat.grid[0][0]*tx + mat.grid[1][0]*ty + mat.grid[2][0]*tz + mat.grid[3][0];
+				surf->vert_tan[v*3+1] = mat.grid[0][1]*tx + mat.grid[1][1]*ty + mat.grid[2][1]*tz + mat.grid[3][1];
+				surf->vert_tan[v*3+2] = mat.grid[0][2]*tx + mat.grid[1][2]*ty + mat.grid[2][2]*tz + mat.grid[3][2];
+			}
+			
+			if(surf->has_tangents&2){
+				float bx=surf->vert_bitan[v*3];
+				float by=surf->vert_bitan[v*3+1];
+				float bz=surf->vert_bitan[v*3+2];
+				
+				surf->vert_bitan[v*3] = mat.grid[0][0]*bx + mat.grid[1][0]*by + mat.grid[2][0]*bz + mat.grid[3][0];
+				surf->vert_bitan[v*3+1] = mat.grid[0][1]*bx + mat.grid[1][1]*by + mat.grid[2][1]*bz + mat.grid[3][1];
+				surf->vert_bitan[v*3+2] = mat.grid[0][2]*bx + mat.grid[1][2]*by + mat.grid[2][2]*bz + mat.grid[3][2];
+			}
+			
 		}
 
 		// mesh shape has changed - update reset flag
@@ -1902,7 +1942,27 @@ void Mesh::TransformMesh(Matrix& mat){
 			surf.vert_norm[v*3] = mat.grid[0][0]*nx + mat.grid[1][0]*ny + mat.grid[2][0]*nz;
 			surf.vert_norm[v*3+1] = mat.grid[0][1]*nx + mat.grid[1][1]*ny + mat.grid[2][1]*nz;
 			surf.vert_norm[v*3+2] = mat.grid[0][2]*nx + mat.grid[1][2]*ny + mat.grid[2][2]*nz;
-
+			
+			if(surf.has_tangents&1){
+				float tx=surf.vert_tan[v*3];
+				float ty=surf.vert_tan[v*3+1];
+				float tz=surf.vert_tan[v*3+2];
+				
+				surf.vert_tan[v*3] = mat.grid[0][0]*tx + mat.grid[1][0]*ty + mat.grid[2][0]*tz;
+				surf.vert_tan[v*3+1] = mat.grid[0][1]*tx + mat.grid[1][1]*ty + mat.grid[2][1]*tz;
+				surf.vert_tan[v*3+2] = mat.grid[0][2]*tx + mat.grid[1][2]*ty + mat.grid[2][2]*tz;
+			}
+			
+			if(surf.has_tangents&2){
+				float bx=surf.vert_bitan[v*3];
+				float by=surf.vert_bitan[v*3+1];
+				float bz=surf.vert_bitan[v*3+2];
+				
+				surf.vert_bitan[v*3] = mat.grid[0][0]*bx + mat.grid[1][0]*by + mat.grid[2][0]*bz;
+				surf.vert_bitan[v*3+1] = mat.grid[0][1]*bx + mat.grid[1][1]*by + mat.grid[2][1]*bz;
+				surf.vert_bitan[v*3+2] = mat.grid[0][2]*bx + mat.grid[1][2]*by + mat.grid[2][2]*bz;
+			}
+			
 		}
 
 	}

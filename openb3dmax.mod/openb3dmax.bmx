@@ -23,6 +23,14 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function VertexTangent_( surf:Byte Ptr,vid:Int,tx:Float,ty:Float,tz:Float )' = "VertexTangent"
+	Function VertexTX_:Float( surf:Byte Ptr,vid:Int )' = "VertexTX"
+	Function VertexTY_:Float( surf:Byte Ptr,vid:Int )' = "VertexTY"
+	Function VertexTZ_:Float( surf:Byte Ptr,vid:Int )' = "VertexTZ"
+	Function VertexBitangent_( surf:Byte Ptr,vid:Int,bx:Float,by:Float,bz:Float )' = "VertexBitangent"
+	Function VertexBX_:Float( surf:Byte Ptr,vid:Int )' = "VertexBX"
+	Function VertexBY_:Float( surf:Byte Ptr,vid:Int )' = "VertexBY"
+	Function VertexBZ_:Float( surf:Byte Ptr,vid:Int )' = "VertexBZ"
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )' = "TextureMultitex"
 	Function TrisRendered_:Int()' = "TrisRendered"
 	Function NewTexture_:Byte Ptr()' = "NewTexture"

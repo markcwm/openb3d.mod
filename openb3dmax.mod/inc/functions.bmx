@@ -3,6 +3,62 @@
 ' *** Extra
 
 Rem
+bbdoc: Sets the tangent of an existing vertex
+End Rem
+Function VertexTangent( surf:TSurface,vid:Int,tx:Float,ty:Float,tz:Float )
+	surf.VertexTangent( vid,tx,ty,tz )
+End Function
+
+Rem
+bbdoc: Returns the x component of a vertices tangent
+End Rem
+Function VertexTX:Float( surf:TSurface,vid:Int )
+	Return surf.VertexTX( vid )
+End Function
+
+Rem
+bbdoc: Returns the y component of a vertices tangent
+End Rem
+Function VertexTY:Float( surf:TSurface,vid:Int )
+	Return surf.VertexTY( vid )
+End Function
+
+Rem
+bbdoc: Returns the z component of a vertices tangent
+End Rem
+Function VertexTZ:Float( surf:TSurface,vid:Int )
+	Return surf.VertexTZ( vid )
+End Function
+
+Rem
+bbdoc: Sets the bitangent of an existing vertex
+End Rem
+Function VertexBitangent( surf:TSurface,vid:Int,bx:Float,by:Float,bz:Float )
+	surf.VertexBitangent( vid,bx,by,bz )
+End Function
+
+Rem
+bbdoc: Returns the x component of a vertices bitangent
+End Rem
+Function VertexBX:Float( surf:TSurface,vid:Int )
+	Return surf.VertexBX( vid )
+End Function
+
+Rem
+bbdoc: Returns the y component of a vertices bitangent
+End Rem
+Function VertexBY:Float( surf:TSurface,vid:Int )
+	Return surf.VertexBY( vid )
+End Function
+
+Rem
+bbdoc: Returns the z component of a vertices bitangent
+End Rem
+Function VertexBZ:Float( surf:TSurface,vid:Int )
+	Return surf.VertexBZ( vid )
+End Function
+
+Rem
 bbdoc: Loads an anim mesh, see MeshLoader
 returns: A mesh object with child meshes if any
 End Rem
