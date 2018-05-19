@@ -275,11 +275,12 @@ Extern
 	
 	' Model
 	Function SurfaceCopyFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr )' = "SurfaceCopyFloatArray"
-	Function SurfaceResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr )' = "SurfaceResizeFloatArray"
-	Function SurfaceResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr )' = "SurfaceResizeIntArray"
-	Function AnimationKeysResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,a_frames:Int )' = "AnimationKeysResizeFloatArray"
-	Function AnimationKeysResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,a_frames:Int )' = "AnimationKeysResizeIntArray"
-	Function MeshResizeBoneVector_:Byte Ptr( obj:Byte Ptr,bo_bone:Byte Ptr,bo_no_bones:Int )' = "MeshResizeBoneVector"
+	Function SurfaceResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "SurfaceResizeFloatArray"
+	Function SurfaceResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "SurfaceResizeIntArray"
+	Function AnimationKeysResizeFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "AnimationKeysResizeFloatArray"
+	Function AnimationKeysResizeIntArray_:Int Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "AnimationKeysResizeIntArray"
+	Function MeshResizeBoneVector_:Byte Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "MeshResizeBoneVector"
+	Function MeshSetBoneVector_( obj:Byte Ptr,varid:Int,pos:Int,bone:Byte Ptr )' = "MeshSetBoneVector"
 	
 	' Quaternion
 	Function QuaternionFloat_:Float Ptr( obj:Byte Ptr,varid:Int )' = "QuaternionFloat"

@@ -229,7 +229,7 @@ End Function
 Rem
 bbdoc: Gets a Blitz string from a C string
 End Rem
-Function GetString:String( obj:Object, strPtr:Byte Ptr )
+Function GetString:String( obj:Object,strPtr:Byte Ptr )
 	Local bru:TBrush=TBrush(obj)
 	Local ent:TEntity=TEntity(obj)
 	Local tex:TTexture=TTexture(obj)
@@ -258,7 +258,7 @@ End Function
 Rem
 bbdoc: Sets a C string from a Blitz string
 End Rem
-Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )
+Function SetString:String( obj:Object,strPtr:Byte Ptr,strValue:String )
 	Local bru:TBrush=TBrush(obj)
 	Local ent:TEntity=TEntity(obj)
 	Local tex:TTexture=TTexture(obj)

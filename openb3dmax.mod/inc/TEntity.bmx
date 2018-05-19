@@ -300,7 +300,7 @@ Type TEntity
 						Next
 					EndIf
 				Next
-			End Select
+		End Select
 			
 	End Method
 	

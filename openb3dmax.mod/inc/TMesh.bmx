@@ -185,6 +185,27 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+	Method ResizeBoneArray( list:TList,size:Int )
+	
+		Select list
+			Case bones
+				MeshResizeBoneVector_( TEntity.GetInstance(Self),MESH_bones,size )
+				CopyList(bones)
+		End Select
+		
+	End Method
+	
+	Method SetBoneArray( list:TList,pos:Int,bone:TBone )
+	
+		Select list
+			Case bones
+				MeshSetBoneVector_( TEntity.GetInstance(Self),MESH_bones,pos,TEntity.GetInstance(bone) )
+		End Select
+		
+	End Method
+	
+	' Extra
+	
 	Method CreateAllChildren()
 	
 		Local child_ent:TEntity=Null ' this will store child entity of anim mesh

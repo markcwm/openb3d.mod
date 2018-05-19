@@ -335,9 +335,7 @@ Type TB3D
 						piv.sx[0]=n_sx
 						piv.sy[0]=n_sy
 						piv.sz[0]=n_sz
-						'piv.rx[0]=n_rx
-						'piv.ry[0]=n_ry
-						'piv.rz[0]=n_rz
+						
 						piv.qw[0]=n_qw
 						piv.qx[0]=n_qx
 						piv.qy[0]=n_qy
@@ -387,9 +385,7 @@ Type TB3D
 					mesh.sx[0]=n_sx
 					mesh.sy[0]=n_sy
 					mesh.sz[0]=n_sz
-					'mesh.rx[0]=n_rx
-					'mesh.ry[0]=n_ry
-					'mesh.rz[0]=n_rz
+					
 					mesh.qw[0]=n_qw
 					mesh.qx[0]=n_qx
 					mesh.qy[0]=n_qy
@@ -496,11 +492,11 @@ Type TB3D
 						' new surf - copy arrays
 						surf=mesh.CreateSurface()
 						
-						surf.vert_coords=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_coords,TSurface.GetInstance(v_surf) )
-						surf.vert_norm=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_norm,TSurface.GetInstance(v_surf) )
-						surf.vert_tex_coords0=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords0,TSurface.GetInstance(v_surf) )
-						surf.vert_tex_coords1=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords1,TSurface.GetInstance(v_surf) )
-						surf.vert_col=SurfaceCopyFloatArray_( TSurface.GetInstance(surf),SURFACE_vert_col,TSurface.GetInstance(v_surf) )
+						surf.vert_coords=surf.CopyFloatArray(v_surf.vert_coords, v_surf)
+						surf.vert_norm=surf.CopyFloatArray(v_surf.vert_norm, v_surf)
+						surf.vert_tex_coords0=surf.CopyFloatArray(v_surf.vert_tex_coords0, v_surf)
+						surf.vert_tex_coords1=surf.CopyFloatArray(v_surf.vert_tex_coords1, v_surf)
+						surf.vert_col=surf.CopyFloatArray(v_surf.vert_col, v_surf)
 						
 						surf.no_verts[0]=v_surf.no_verts[0]
 					EndIf
@@ -562,15 +558,17 @@ Type TB3D
 							
 							anim_surf.no_verts[0]=surf.no_verts[0]
 							
-							anim_surf.vert_coords=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_coords,TSurface.GetInstance(surf) )
-							anim_surf.vert_bone1_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone1_no,TSurface.GetInstance(surf) )
-							anim_surf.vert_bone2_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone2_no,TSurface.GetInstance(surf) )
-							anim_surf.vert_bone3_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone3_no,TSurface.GetInstance(surf) )
-							anim_surf.vert_bone4_no=SurfaceResizeIntArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_bone4_no,TSurface.GetInstance(surf) )
-							anim_surf.vert_weight1=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight1,TSurface.GetInstance(surf) )
-							anim_surf.vert_weight2=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight2,TSurface.GetInstance(surf) )
-							anim_surf.vert_weight3=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight3,TSurface.GetInstance(surf) )
-							anim_surf.vert_weight4=SurfaceResizeFloatArray_( TSurface.GetInstance(anim_surf),SURFACE_vert_weight4,TSurface.GetInstance(surf) )
+							anim_surf.vert_coords=anim_surf.CopyFloatArray(surf.vert_coords, surf)
+							
+							anim_surf.vert_bone1_no=anim_surf.ResizeIntArray(anim_surf.vert_bone1_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone2_no=anim_surf.ResizeIntArray(anim_surf.vert_bone2_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone3_no=anim_surf.ResizeIntArray(anim_surf.vert_bone3_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone4_no=anim_surf.ResizeIntArray(anim_surf.vert_bone4_no, surf.no_verts[0]+1)
+							
+							anim_surf.vert_weight1=anim_surf.ResizeFloatArray(anim_surf.vert_weight1, surf.no_verts[0]+1)
+							anim_surf.vert_weight2=anim_surf.ResizeFloatArray(anim_surf.vert_weight2, surf.no_verts[0]+1)
+							anim_surf.vert_weight3=anim_surf.ResizeFloatArray(anim_surf.vert_weight3, surf.no_verts[0]+1)
+							anim_surf.vert_weight4=anim_surf.ResizeFloatArray(anim_surf.vert_weight4, surf.no_verts[0]+1)
 							
 							' transfer vmin/vmax values for using with TrimVerts func after
 							anim_surf.vmin[0]=surf.vmin[0]
@@ -585,7 +583,7 @@ Type TB3D
 					old_tag=new_tag
 					new_tag=ReadTag(file)
 					
-					bo_bone:TBone=mesh.NewBone()
+					bo_bone=mesh.NewBone()
 					bo_no_bones=bo_no_bones+1
 					
 					While NewTag(new_tag)<>True And Eof(file)=0
@@ -657,9 +655,7 @@ Type TB3D
 					bo_bone.sx[0]=n_sx
 					bo_bone.sy[0]=n_sy
 					bo_bone.sz[0]=n_sz
-					'bo_bone.rx[0]=n_rx
-					'bo_bone.ry[0]=n_ry
-					'bo_bone.rz[0]=n_rz
+					
 					bo_bone.qw[0]=n_qw
 					bo_bone.qx[0]=n_qx
 					bo_bone.qy[0]=n_qy
@@ -671,9 +667,7 @@ Type TB3D
 					bo_bone.n_sx[0]=n_sx
 					bo_bone.n_sy[0]=n_sy
 					bo_bone.n_sz[0]=n_sz
-					'bo_bone.n_rx[0]=n_rx
-					'bo_bone.n_ry[0]=n_ry
-					'bo_bone.n_rz[0]=n_rz
+					
 					bo_bone.n_qw[0]=n_qw
 					bo_bone.n_qx[0]=n_qx
 					bo_bone.n_qy[0]=n_qy
@@ -682,18 +676,19 @@ Type TB3D
 					bo_bone.keys=NewAnimationKeys(bo_bone)
 					bo_bone.keys.frames[0]=a_frames
 					
-					bo_bone.keys.flags=AnimationKeysResizeIntArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_flags,a_frames )
-					bo_bone.keys.px=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_px,a_frames )
-					bo_bone.keys.py=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_py,a_frames )
-					bo_bone.keys.pz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_pz,a_frames )
-					bo_bone.keys.sx=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sx,a_frames )
-					bo_bone.keys.sy=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sy,a_frames )
-					bo_bone.keys.sz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_sz,a_frames )
-					bo_bone.keys.qw=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qw,a_frames )
-					bo_bone.keys.qx=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qx,a_frames )
-					bo_bone.keys.qy=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qy,a_frames )
-					bo_bone.keys.qz=AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(bo_bone.keys),ANIMATIONKEYS_qz,a_frames )
+					bo_bone.keys.flags=bo_bone.keys.ResizeIntArray(bo_bone.keys.flags, a_frames+1)
 					
+					bo_bone.keys.px=bo_bone.keys.ResizeFloatArray(bo_bone.keys.px, a_frames+1)
+					bo_bone.keys.py=bo_bone.keys.ResizeFloatArray(bo_bone.keys.py, a_frames+1)
+					bo_bone.keys.pz=bo_bone.keys.ResizeFloatArray(bo_bone.keys.pz, a_frames+1)
+					bo_bone.keys.sx=bo_bone.keys.ResizeFloatArray(bo_bone.keys.sx, a_frames+1)
+					bo_bone.keys.sy=bo_bone.keys.ResizeFloatArray(bo_bone.keys.sy, a_frames+1)
+					bo_bone.keys.sz=bo_bone.keys.ResizeFloatArray(bo_bone.keys.sz, a_frames+1)
+					bo_bone.keys.qw=bo_bone.keys.ResizeFloatArray(bo_bone.keys.qw, a_frames+1)
+					bo_bone.keys.qx=bo_bone.keys.ResizeFloatArray(bo_bone.keys.qx, a_frames+1)
+					bo_bone.keys.qy=bo_bone.keys.ResizeFloatArray(bo_bone.keys.qy, a_frames+1)
+					bo_bone.keys.qz=bo_bone.keys.ResizeFloatArray(bo_bone.keys.qz, a_frames+1)
+										
 					' root ent?
 					If root_ent=Null Then root_ent=bo_bone
 					
@@ -718,8 +713,10 @@ Type TB3D
 					
 					If new_tag<>"KEYS"
 						bo_bone.EntityListAdd(TEntity.entity_list)
-						MeshResizeBoneVector_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
-						mesh.CopyList(mesh.bones)
+						
+						mesh.ResizeBoneArray(mesh.bones, bo_no_bones)
+						mesh.SetBoneArray(mesh.bones, bo_no_bones-1, bo_bone)
+						
 						last_ent=bo_bone
 					EndIf
 					
@@ -782,8 +779,10 @@ Type TB3D
 						' check if bo_bone exists - it won't for non-boned, keyframe anims
 						If bo_bone<>Null
 							bo_bone.EntityListAdd(TEntity.entity_list)
-							MeshResizeBoneVector_( TEntity.GetInstance(mesh),TEntity.GetInstance(bo_bone),bo_no_bones )
-							mesh.CopyList(mesh.bones)
+							
+							mesh.ResizeBoneArray(mesh.bones, bo_no_bones)
+							mesh.SetBoneArray(mesh.bones, bo_no_bones-1, bo_bone)
+							
 							last_ent=bo_bone
 						EndIf
 						

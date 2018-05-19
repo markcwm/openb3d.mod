@@ -151,6 +151,53 @@ Type TSurface
 		
 	End Method
 	
+	Method CopyFloatArray:Float Ptr( surf_array:Float Ptr,surf:TSurface )
+	
+		Select surf_array
+			Case surf.vert_coords
+				Return SurfaceCopyFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_coords,TSurface.GetInstance(surf) )
+			Case surf.vert_norm
+				Return SurfaceCopyFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_norm,TSurface.GetInstance(surf) )
+			Case surf.vert_tex_coords0
+				Return SurfaceCopyFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_tex_coords0,TSurface.GetInstance(surf) )
+			Case surf.vert_tex_coords1
+				Return SurfaceCopyFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_tex_coords1,TSurface.GetInstance(surf) )
+			Case surf.vert_col
+				Return SurfaceCopyFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_col,TSurface.GetInstance(surf) )
+		End Select
+		
+	End Method
+	
+	Method ResizeIntArray:Int Ptr( surf_array:Int Ptr,size:Int )
+	
+		Select surf_array
+			Case vert_bone1_no
+				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone1_no,size )
+			Case vert_bone2_no
+				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone2_no,size )
+			Case vert_bone3_no
+				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone3_no,size )
+			Case vert_bone4_no
+				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone4_no,size )
+		End Select
+		
+	End Method
+	
+	Method ResizeFloatArray:Float Ptr( surf_array:Float Ptr,size:Int )
+	
+		Select surf_array
+			Case vert_weight1
+				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_weight1,size )
+			Case vert_weight2
+				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_weight2,size )
+			Case vert_weight3
+				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_weight3,size )
+			Case vert_weight4
+				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_weight4,size )
+		End Select
+		
+	End Method
+	
 	' Extra
 	
 	Method FreeSurface()
@@ -229,8 +276,6 @@ Type TSurface
 		vert_tex_coords0=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords0 )
 		vert_tex_coords1=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords1 )
 		vert_col=SurfaceFloat_( GetInstance(Self),SURFACE_vert_col )
-		vert_tan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tan )
-		vert_bitan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_bitan )
 		Return no
 		
 	End Method
@@ -282,12 +327,14 @@ Type TSurface
 	Method VertexTangent( vid:Int,tx:Float,ty:Float,tz:Float )
 	
 		VertexTangent_( GetInstance(Self),vid,tx,ty,tz )
+		vert_tan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tan )
 		
 	End Method
 	
 	Method VertexBitangent( vid:Int,bx:Float,by:Float,bz:Float )
 	
 		VertexBitangent_( GetInstance(Self),vid,bx,by,bz )
+		vert_bitan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_bitan )
 		
 	End Method
 	

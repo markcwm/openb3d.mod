@@ -149,6 +149,42 @@ Type TAnimationKeys
 		
 	End Function
 	
+	Method ResizeIntArray:Int Ptr( animkeys_array:Int Ptr,size:Int )
+	
+		Select animkeys_array
+			Case flags
+				Return AnimationKeysResizeIntArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_flags,size )
+		End Select
+		
+	End Method
+	
+	Method ResizeFloatArray:Float Ptr( animkeys_array:Float Ptr,size:Int )
+	
+		Select animkeys_array
+			Case px
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_px,size )
+			Case py
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_py,size )
+			Case pz
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_pz,size )
+			Case sx
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sx,size )
+			Case sy
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sy,size )
+			Case sz
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sz,size )
+			Case qw
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qw,size )
+			Case qx
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qx,size )
+			Case qy
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qy,size )
+			Case qz
+				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qz,size )
+		End Select
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()

@@ -94,11 +94,12 @@ void MeshListPushBackBone_( Mesh* obj,int varid,Bone* bone );
 
 // Model
 float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf );
-float* SurfaceResizeFloatArray_( Surface* obj,int varid,Surface* surf );
-int* SurfaceResizeIntArray_( Surface* obj,int varid,Surface* surf );
-float* AnimationKeysResizeFloatArray_( AnimationKeys* obj,int varid,int a_frames );
-int* AnimationKeysResizeIntArray_( AnimationKeys* obj,int varid,int a_frames );
-vector<Bone*>* MeshResizeBoneVector_( Mesh* obj,Bone* bo_bone,int bo_no_bones );
+float* SurfaceResizeFloatArray_( Surface* obj,int varid,int size );
+int* SurfaceResizeIntArray_( Surface* obj,int varid,int size );
+float* AnimationKeysResizeFloatArray_( AnimationKeys* obj,int varid,int size );
+int* AnimationKeysResizeIntArray_( AnimationKeys* obj,int varid,int size );
+vector<Bone*>* MeshResizeBoneVector_( Mesh* obj,int varid,int size );
+void MeshSetBoneVector_( Mesh* obj,int varid,int pos,Bone* bone );
 
 // Quaternion
 float* QuaternionFloat_( Quaternion* obj,int varid );
