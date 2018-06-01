@@ -1358,6 +1358,11 @@ float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf ){ // = oper
 
 float* SurfaceResizeFloatArray_( Surface* obj,int varid,int size ){
 	switch (varid){
+		case SURFACE_vert_coords : obj->vert_coords.resize(size); return &obj->vert_coords[0];
+		case SURFACE_vert_col : obj->vert_col.resize(size); return &obj->vert_col[0];
+		case SURFACE_vert_norm : obj->vert_norm.resize(size); return &obj->vert_norm[0];
+		case SURFACE_vert_tex_coords0 : obj->vert_tex_coords0.resize(size); return &obj->vert_tex_coords0[0];
+		case SURFACE_vert_tex_coords1 : obj->vert_tex_coords1.resize(size); return &obj->vert_tex_coords1[0];
 		case SURFACE_vert_weight1 : obj->vert_weight1.resize(size); return &obj->vert_weight1[0];
 		case SURFACE_vert_weight2 : obj->vert_weight2.resize(size); return &obj->vert_weight2[0];
 		case SURFACE_vert_weight3 : obj->vert_weight3.resize(size); return &obj->vert_weight3[0];
@@ -1410,6 +1415,31 @@ void MeshSetBoneVector_( Mesh* obj,int varid,int pos,Bone* bone ){
 	switch (varid){
 		case MESH_bones : obj->bones[pos]=bone;
 		break;
+	}
+}
+
+// MD2
+
+void SurfaceVectorPushBackFloat_( Surface* obj,int varid,float value ){
+	switch (varid){
+		case SURFACE_vert_coords : obj->vert_coords.push_back(value);
+			break;
+		case SURFACE_vert_col : obj->vert_col.push_back(value);
+			break;
+		case SURFACE_vert_norm : obj->vert_norm.push_back(value);
+			break;
+		case SURFACE_vert_tex_coords0 : obj->vert_tex_coords0.push_back(value);
+			break;
+		case SURFACE_vert_tex_coords1 : obj->vert_tex_coords1.push_back(value);
+			break;
+		case SURFACE_vert_weight1 : obj->vert_weight1.push_back(value);
+			break;
+		case SURFACE_vert_weight2 : obj->vert_weight2.push_back(value);
+			break;
+		case SURFACE_vert_weight3 : obj->vert_weight3.push_back(value);
+			break;
+		case SURFACE_vert_weight4 : obj->vert_weight4.push_back(value);
+			break;
 	}
 }
 

@@ -89,7 +89,7 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 			t0*=anim_surf.no_verts*3;
 			t1*=anim_surf.no_verts*3;
 
-			for(int i=0;i<=anim_surf.no_verts*3;i++){
+			for(int i=0;i<anim_surf.no_verts*3;i++){ // mem corruption for i<=anim_surf.no_verts*3
 				anim_surf.vert_coords[i]=surf.vert_coords[i+t0]*m0+surf.vert_coords[i+t1]*m1;
 
 			}
@@ -390,7 +390,7 @@ void Animation::AnimateMesh2(Mesh* ent1,float framef,int start_frame,int end_fra
 				float m0=1.0/ent1->anim_trans;
 				float m1=1.0-m0;
 
-				for(int i=0;i<=anim_surf.no_verts*3;i++){
+				for(int i=0;i<anim_surf.no_verts*3;i++){ // mem corruption for i<=anim_surf.no_verts*3
 					anim_surf.vert_coords[i]=surf.vert_coords[i+t0]*m0+anim_surf.vert_coords[i]*m1;
 
 				}

@@ -245,6 +245,9 @@ Load geodesic sphere terrain from heightmap image.
 <tr><td class=docleft width=1%><a href=#LoadMaterial>LoadMaterial</a></td><td class=docright>
 Load a texture from image for 3D texture sampling, use with voxelsprites.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#LoadMD2>LoadMD2</a></td><td class=docright>
+Loads an md2 entity and returns its handle.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadMesh>LoadMesh</a></td><td class=docright>
 Loads a single mesh, see MeshLoader.
 </td></tr>
@@ -949,7 +952,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetString>
-<tr><td class=doctop colspan=2>Function GetString:String( obj:Object, strPtr:Byte Ptr )</td></tr>
+<tr><td class=doctop colspan=2>Function GetString:String( obj:Object,strPtr:Byte Ptr )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
 </table>
 <br>
@@ -974,6 +977,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load a texture from image for 3D texture sampling, use with voxelsprites.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Flags are texture flags, frame width/height is the size in pixels of each slice,
 first frame is the index of the slice and frame count is how many slices.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadMD2>
+<tr><td class=doctop colspan=2>Function LoadMD2:TMesh( url:Object,parent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loads an md2 entity and returns its handle.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadMesh>
@@ -1150,7 +1158,7 @@ if the node is set at a higher range than the camera, its children won't be rend
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SetString>
-<tr><td class=doctop colspan=2>Function SetString:String( obj:Object, strPtr:Byte Ptr, strValue:String )</td></tr>
+<tr><td class=doctop colspan=2>Function SetString:String( obj:Object,strPtr:Byte Ptr,strValue:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sets a C string from a Blitz string.</td></tr>
 </table>
 <br>

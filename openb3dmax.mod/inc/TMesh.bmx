@@ -185,20 +185,20 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	Method ResizeBoneArray( list:TList,size:Int )
+	Method ResizeBoneArray( varid:Int,size:Int )
 	
-		Select list
-			Case bones
+		Select varid
+			Case MESH_bones
 				MeshResizeBoneVector_( TEntity.GetInstance(Self),MESH_bones,size )
 				CopyList(bones)
 		End Select
 		
 	End Method
 	
-	Method SetBoneArray( list:TList,pos:Int,bone:TBone )
+	Method SetBoneArray( varid:Int,pos:Int,bone:TBone )
 	
-		Select list
-			Case bones
+		Select varid
+			Case MESH_bones
 				MeshSetBoneVector_( TEntity.GetInstance(Self),MESH_bones,pos,TEntity.GetInstance(bone) )
 		End Select
 		

@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Loads an md2 entity and returns its handle
+End Rem
+Function LoadMD2:TMesh( url:Object,parent:TEntity=Null )
+	Return TMD2.LoadMD2(String(url), parent)
+End Function
+
+Rem
 bbdoc: Sets the tangent of an existing vertex
 End Rem
 Function VertexTangent( surf:TSurface,vid:Int,tx:Float,ty:Float,tz:Float )
@@ -63,7 +70,7 @@ bbdoc: Loads an anim mesh, see MeshLoader
 returns: A mesh object with child meshes if any
 End Rem
 Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
-	Local stream:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream(url)
+	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream Then Return Null
 	
 	Local pos=stream.Pos()
@@ -92,7 +99,7 @@ bbdoc: Loads a single mesh, see MeshLoader
 returns: A mesh object
 End Rem
 Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
-	Local stream:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream(url)
+	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream Then Return Null
 	
 	Local pos=stream.Pos()

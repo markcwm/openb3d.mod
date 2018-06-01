@@ -149,37 +149,37 @@ Type TAnimationKeys
 		
 	End Function
 	
-	Method ResizeIntArray:Int Ptr( animkeys_array:Int Ptr,size:Int )
+	Method ResizeIntArray:Int Ptr( varid:Int,size:Int )
 	
-		Select animkeys_array
-			Case flags
+		Select varid
+			Case ANIMATIONKEYS_flags
 				Return AnimationKeysResizeIntArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_flags,size )
 		End Select
 		
 	End Method
 	
-	Method ResizeFloatArray:Float Ptr( animkeys_array:Float Ptr,size:Int )
+	Method ResizeFloatArray:Float Ptr( varid:Int,size:Int )
 	
-		Select animkeys_array
-			Case px
+		Select varid
+			Case ANIMATIONKEYS_px
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_px,size )
-			Case py
+			Case ANIMATIONKEYS_py
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_py,size )
-			Case pz
+			Case ANIMATIONKEYS_pz
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_pz,size )
-			Case sx
+			Case ANIMATIONKEYS_sx
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sx,size )
-			Case sy
+			Case ANIMATIONKEYS_sy
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sy,size )
-			Case sz
+			Case ANIMATIONKEYS_sz
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_sz,size )
-			Case qw
+			Case ANIMATIONKEYS_qw
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qw,size )
-			Case qx
+			Case ANIMATIONKEYS_qx
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qx,size )
-			Case qy
+			Case ANIMATIONKEYS_qy
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qy,size )
-			Case qz
+			Case ANIMATIONKEYS_qz
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_qz,size )
 		End Select
 		

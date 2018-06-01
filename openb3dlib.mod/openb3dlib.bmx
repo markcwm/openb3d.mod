@@ -282,6 +282,9 @@ Extern
 	Function MeshResizeBoneVector_:Byte Ptr( obj:Byte Ptr,varid:Int,size:Int )' = "MeshResizeBoneVector"
 	Function MeshSetBoneVector_( obj:Byte Ptr,varid:Int,pos:Int,bone:Byte Ptr )' = "MeshSetBoneVector"
 	
+	' MD2
+	Function SurfaceVectorPushBackFloat_( obj:Byte Ptr,varid:Int,value:Float )' = "SurfaceVectorPushBackFloat"
+	
 	' Quaternion
 	Function QuaternionFloat_:Float Ptr( obj:Byte Ptr,varid:Int )' = "QuaternionFloat"
 	Function NewQuaternion_:Byte Ptr()' = "NewQuaternion"

@@ -48,7 +48,7 @@ Type TGlobal
 	Global Log_Del:Int=False		' True to DebugLog when 3d object destroyed
 	Global Log_3DS:Int=False		' True to DebugLog 3DS chunks
 	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
-	'Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
+	Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
 	Global Log_Assimp:Int=False		' True to DebugLog Assimp
 	
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library

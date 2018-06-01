@@ -215,7 +215,7 @@ Mesh* LoadMD2(string filename,Entity* parent_ent){
 	mesh->anim_surf_list.push_back(anim_surf);
 	anim_surf->no_verts=surf->no_verts;
 
-	anim_surf->vert_coords.resize((num_vertices+1)*3,0); // ensure enough mem alloc +1
+	anim_surf->vert_coords.resize(num_vertices*3,0);
 
 	/*unsigned short tri[num_tris*6];
 	Stream->SeekFile(stream, offset_skins);

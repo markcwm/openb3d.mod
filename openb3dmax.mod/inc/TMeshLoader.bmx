@@ -94,8 +94,8 @@ Type TMeshLoaderMax Extends TMeshLoader
 		Select extension.ToLower()
 			Case "b3d"
 				Return True
-			'Case "md2"
-			'	Return True
+			Case "md2"
+				Return True
 			Case "3ds"
 				Return True
 		End Select
@@ -109,10 +109,10 @@ Type TMeshLoaderMax Extends TMeshLoader
 		Select ExtractExt(String(url))
 			Case "b3d"
 				anim_mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
-			'Case "md2"
-				'anim_mesh=CreateCube() ' load md2 todo!
+			Case "md2"
+				anim_mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				Local model:T3DS = New T3DS ' hierarchy animation todo!
+				Local model:T3DS = New T3DS ' no animation
 				anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
 		EndSelect
 		
@@ -145,10 +145,10 @@ Type TMeshLoaderMax Extends TMeshLoader
 		Select ExtractExt(String(url))
 			Case "b3d"
 				mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
-			'Case "md2"
-				'mesh=CreateCube() ' load md2 todo!
+			Case "md2"
+				mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				Local model:T3DS = New T3DS ' hierarchy animation todo!
+				Local model:T3DS = New T3DS ' no animation
 				mesh=model.LoadAnim3DSFromStream(file, url, parent)
 		EndSelect
 		

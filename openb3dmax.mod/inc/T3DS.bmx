@@ -17,7 +17,7 @@ Type TChunk
 	End Function
 End Type
 
-' animation todo!
+' hierarchy animation?
 Type TAnimKey
 	Field pos:Float[]
 	Field rot:Float[]
@@ -1015,7 +1015,7 @@ Type T3DS
 			EndIf
 		Next
 		
-		Rem ' animation todo!
+		Rem ' animation
 		For Local ent:TEntity = EachIn objlist
 			Local mesh:TMesh = TMesh(ent)
 			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))

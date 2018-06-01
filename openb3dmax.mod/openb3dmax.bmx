@@ -478,6 +478,7 @@ Include "inc/TBrush.bmx"
 Include "inc/TAnimation.bmx"
 Include "inc/T3DS.bmx"
 Include "inc/TB3D.bmx"
+Include "inc/TMD2.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"
@@ -499,7 +500,6 @@ Include "inc/TTerrain.bmx"
 Include "inc/TShader.bmx"
 Include "inc/TShadowObject.bmx"
 Include "inc/THardwareInfo.bmx"
-'Include "inc/TGLShader.bmx" ' AdamStrange
 Include "inc/TStencil.bmx"
 Include "inc/TFluid.bmx"
 Include "inc/TGeosphere.bmx"

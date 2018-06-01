@@ -101,6 +101,9 @@ int* AnimationKeysResizeIntArray_( AnimationKeys* obj,int varid,int size );
 vector<Bone*>* MeshResizeBoneVector_( Mesh* obj,int varid,int size );
 void MeshSetBoneVector_( Mesh* obj,int varid,int pos,Bone* bone );
 
+// MD2
+void SurfaceVectorPushBackFloat_( Surface* obj,int varid,float value );
+
 // Quaternion
 float* QuaternionFloat_( Quaternion* obj,int varid );
 Quaternion* NewQuaternion_();
