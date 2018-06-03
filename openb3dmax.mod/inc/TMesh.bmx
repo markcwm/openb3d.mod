@@ -164,6 +164,29 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
+	Method MeshArrayResize( varid:Int,size:Int )
+	
+		Select varid
+			Case MESH_bones
+				MeshResizeBoneVector_( TEntity.GetInstance(Self),MESH_bones,size )
+				CopyList(bones)
+		End Select
+		
+	End Method
+	
+	Method MeshArraySet( varid:Int,pos:Int,value:Object )
+	
+		Local bone:TBone=TBone(value)
+		
+		Select varid
+			Case MESH_bones
+				If bone
+					MeshSetBoneVector_( GetInstance(Self),MESH_bones,pos,GetInstance(bone) )
+				EndIf
+		End Select
+		
+	End Method
+	
 	Function NewMesh:TMesh()
 	
 		Local inst:Byte Ptr=NewMesh_()
@@ -182,25 +205,6 @@ Type TMesh Extends TEntity
 	
 		Local inst:Byte Ptr=NewBone_( GetInstance(Self) )
 		Return TBone.CreateObject(inst)
-		
-	End Method
-	
-	Method ResizeBoneArray( varid:Int,size:Int )
-	
-		Select varid
-			Case MESH_bones
-				MeshResizeBoneVector_( TEntity.GetInstance(Self),MESH_bones,size )
-				CopyList(bones)
-		End Select
-		
-	End Method
-	
-	Method SetBoneArray( varid:Int,pos:Int,bone:TBone )
-	
-		Select varid
-			Case MESH_bones
-				MeshSetBoneVector_( TEntity.GetInstance(Self),MESH_bones,pos,TEntity.GetInstance(bone) )
-		End Select
 		
 	End Method
 	
@@ -322,28 +326,6 @@ Type TMesh Extends TEntity
 		
 	' Warner
 	
-	Method SetMatrix( matrix:TMatrix )
-	
-		If parent <> Null ' get parent local coords
-			Local invpar:TMatrix = NewMatrix()
-			parent.mat.GetInverse(invpar)
-			invpar.Multiply(matrix)
-		EndIf
-		
-		'Local pos_x# = matrix.grid[(4*3)+0]
-		'Local pos_y# = matrix.grid[(4*3)+1]
-		'Local pos_z# = matrix.grid[(4*3)+2]
-		'PositionMesh(pos_x, pos_y, pos_z) ' makes a mess
-		
-		Local rot:TQuaternion = NewQuaternion()
-		matrix.ToQuat(rot.x[0], rot.y[0], rot.z[0], rot.w[0])
-		RotateMesh(rot.x[0], rot.y[0], rot.z[0])
-		
-		Local size:TVector = matrix.GetMatrixScale()
-		ScaleMesh(size.x, size.y, size.z)
-		
-	End Method
-	
 	Method PositionAnimMesh( px#,py#,pz# )
 	
 		Local count_children% = TEntity.CountAllChildren(Self)
@@ -380,16 +362,18 @@ Type TMesh Extends TEntity
 	
 	Method TransformVertices( matrix:TMatrix )
 	
-		Local pos:TVector = New TVector
+		Local px:Float, py:Float, pz:Float
 		For Local surf:TSurface = EachIn surf_list
-			For Local v% = 0 To surf.no_verts[0]-1
-				pos.x = surf.vert_coords[v*3 + 0]
-				pos.y = surf.vert_coords[v*3 + 1]
-				pos.z = surf.vert_coords[v*3 + 2]
-				matrix.TransformVec(pos.x, pos.y, pos.z, 1)
-				surf.vert_coords[v*3 + 0] = pos.x
-				surf.vert_coords[v*3 + 1] = pos.y
-				surf.vert_coords[v*3 + 2] = pos.z
+			For Local v:Int = 0 Until surf.CountVertices()
+				px = surf.vert_coords[(v*3)+0]
+				py = surf.vert_coords[(v*3)+1]
+				pz = surf.vert_coords[(v*3)+2]
+				
+				matrix.TransformVec(px, py, pz, 1)
+				
+				surf.vert_coords[(v*3)+0] = px
+				surf.vert_coords[(v*3)+1] = py
+				surf.vert_coords[(v*3)+2] = pz
 			Next
 		Next
 		

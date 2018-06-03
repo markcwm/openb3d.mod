@@ -525,7 +525,6 @@ Type TTexture
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
-		'If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0,5) ' mask pixel in range +/- 5 (allows Jpg noise)
 		
 		Local name:Int
 		If frame_width>0 And frame_height>0 ' anim texture
@@ -624,7 +623,6 @@ Type TTexture
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
-		'If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0,5) ' mask pixel in range +/- 5 (allows Jpg noise)
 		
 		Local width:Int=frame_width
 		Local height:Int=frame_height
@@ -769,7 +767,8 @@ Type TTexture
 	End Function
 	
 	' like MaskPixmap
-	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu%, pixelrange%=5 )
+	' used to allow masking pixels in a defined range to account for jpg noise but removed since you should use png/tga
+	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu% )
 		Local rgba%,red%,grn%,blu%
 		
 		For Local iy%=0 To PixmapHeight(map)-1
@@ -778,12 +777,8 @@ Type TTexture
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
-				If red > maskred-pixelrange And red < maskred+pixelrange
-					If grn > maskgrn-pixelrange And grn < maskgrn+pixelrange
-						If blu > maskblu-pixelrange And blu < maskblu+pixelrange
-							WritePixel map,ix,iy,(rgba & $00FFFFFF)
-						EndIf
-					EndIf
+				If red = maskred And grn = maskgrn And blu = maskblu
+					WritePixel map,ix,iy,(rgba & $00FFFFFF)
 				EndIf
 			Next
 		Next

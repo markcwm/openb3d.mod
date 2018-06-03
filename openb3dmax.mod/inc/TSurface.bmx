@@ -151,7 +151,7 @@ Type TSurface
 		
 	End Method
 	
-	Method CopyFloatArray:Float Ptr( varid:Int,surf:TSurface )
+	Method SurfaceArrayCopy:Float Ptr( varid:Int,surf:TSurface )
 	
 		Select varid
 			Case SURFACE_vert_coords
@@ -168,7 +168,7 @@ Type TSurface
 		
 	End Method
 	
-	Method ResizeIntArray:Int Ptr( varid:Int,size:Int )
+	Method SurfaceArrayResize:Float Ptr( varid:Int,size:Int )
 	
 		Select varid
 			Case SURFACE_vert_bone1_no
@@ -179,13 +179,6 @@ Type TSurface
 				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone3_no,size )
 			Case SURFACE_vert_bone4_no
 				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone4_no,size )
-		End Select
-		
-	End Method
-	
-	Method ResizeFloatArray:Float Ptr( varid:Int,size:Int )
-	
-		Select varid
 			Case SURFACE_vert_coords
 				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_coords,size )
 			Case SURFACE_vert_norm
@@ -208,27 +201,36 @@ Type TSurface
 		
 	End Method
 	
-	Method SurfaceFloatArrayAdd( varid:Int,value:Float )
+	Method SurfaceArrayAdd( varid:Int,value:Float )
 	
 		Select varid
 			Case SURFACE_vert_coords
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_coords,value )
+				vert_coords=SurfaceFloat_( TSurface.GetInstance(Self),SURFACE_vert_coords )
 			Case SURFACE_vert_norm
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_norm,value )
+				vert_norm=SurfaceFloat_( GetInstance(Self),SURFACE_vert_norm )
 			Case SURFACE_vert_tex_coords0
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_tex_coords0,value )
+				vert_tex_coords0=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords0 )
 			Case SURFACE_vert_tex_coords1
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_tex_coords1,value )
+				vert_tex_coords1=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tex_coords1 )
 			Case SURFACE_vert_col
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_col,value )
+				vert_col=SurfaceFloat_( GetInstance(Self),SURFACE_vert_col )
 			Case SURFACE_vert_weight1
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_weight1,value )
+				vert_weight1=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight1 )
 			Case SURFACE_vert_weight2
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_weight2,value )
+				vert_weight2=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight2 )
 			Case SURFACE_vert_weight3
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_weight3,value )
+				vert_weight3=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight3 )
 			Case SURFACE_vert_weight4
 				SurfaceVectorPushBackFloat_( TSurface.GetInstance(Self),SURFACE_vert_weight4,value )
+				vert_weight4=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight4 )
 		End Select
 		
 	End Method

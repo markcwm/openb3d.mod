@@ -1,5 +1,6 @@
 ' TB3D.bmx
 ' B3D loader from Minib3d (by Simon Harrison)
+' todo LoaderMatrix on animations
 
 Type TB3D
 
@@ -310,11 +311,17 @@ Type TB3D
 					n_qy=ReadFloat(file)
 					n_qz=ReadFloat(file)
 					
-					Local pitch#=0
-					Local yaw#=0
-					Local roll#=0
-					TQuaternion.QuatToEuler(n_qw,n_qx,n_qy,-n_qz,pitch,yaw,roll)
+					'TGlobal.Matrix_B3D.TransformVec(n_px,n_py,n_pz,1) ' transform by LoaderMatrix
+					'TGlobal.Matrix_B3D.TransformVec(n_sx,n_sy,n_sz,1) ' transform by LoaderMatrix
+					'Local new_mat:TMatrix=NewMatrix()
+					'TQuaternion.QuatToMat(n_qw,n_qx,n_qy,n_qz,new_mat)
+					'TGlobal.Matrix_B3D.Multiply(new_mat) ' transform by LoaderMatrix
+					'new_mat.ToQuat(n_qx,n_qy,n_qz,n_qw)
 					
+					'Local pitch#=0
+					'Local yaw#=0
+					'Local roll#=0
+					'TQuaternion.QuatToEuler(n_qw,n_qx,n_qy,-n_qz,pitch,yaw,roll)
 					'n_rx=-pitch
 					'n_ry=yaw
 					'n_rz=roll
@@ -449,15 +456,17 @@ Type TB3D
 						EndIf
 						
 						If (v_flags & 2) ' rgba colors
-							v_r=ReadFloat(file)*255.0 ' *255 as VertexColor requires 0-255 values
+							v_r=ReadFloat(file)*255.0 ' VertexColor rgb require 0-255 values
 							v_g=ReadFloat(file)*255.0
 							v_b=ReadFloat(file)*255.0
 							v_a=ReadFloat(file)
 						EndIf
 						
-						v_id=v_surf.AddVertex(v_x,v_y,v_z)
-						v_surf.VertexColor(v_id,v_r,v_g,v_b,v_a)
+						TGlobal.Matrix_B3D.TransformVec(v_x,v_y,v_z,1) ' transform by LoaderMatrix
+						
+						v_id=v_surf.AddVertex(v_x,v_y,v_z) ' inverts z
 						v_surf.VertexNormal(v_id,v_nx,v_ny,v_nz)
+						v_surf.VertexColor(v_id,v_r,v_g,v_b,v_a)
 						
 						' read texture coords per vertex: 1 for simple uv, 8 max
 						For Local j:Int=0 To v_tc_sets-1
@@ -492,11 +501,11 @@ Type TB3D
 						' new surf - copy arrays
 						surf=mesh.CreateSurface()
 						
-						surf.vert_coords=surf.CopyFloatArray(SURFACE_vert_coords, v_surf)
-						surf.vert_norm=surf.CopyFloatArray(SURFACE_vert_norm, v_surf)
-						surf.vert_tex_coords0=surf.CopyFloatArray(SURFACE_vert_tex_coords0, v_surf)
-						surf.vert_tex_coords1=surf.CopyFloatArray(SURFACE_vert_tex_coords1, v_surf)
-						surf.vert_col=surf.CopyFloatArray(SURFACE_vert_col, v_surf)
+						surf.vert_coords=surf.SurfaceArrayCopy(SURFACE_vert_coords, v_surf)
+						surf.vert_norm=surf.SurfaceArrayCopy(SURFACE_vert_norm, v_surf)
+						surf.vert_tex_coords0=surf.SurfaceArrayCopy(SURFACE_vert_tex_coords0, v_surf)
+						surf.vert_tex_coords1=surf.SurfaceArrayCopy(SURFACE_vert_tex_coords1, v_surf)
+						surf.vert_col=surf.SurfaceArrayCopy(SURFACE_vert_col, v_surf)
 						
 						surf.no_verts[0]=v_surf.no_verts[0]
 					EndIf
@@ -558,17 +567,17 @@ Type TB3D
 							
 							anim_surf.no_verts[0]=surf.no_verts[0]
 							
-							anim_surf.vert_coords=anim_surf.CopyFloatArray(SURFACE_vert_coords, surf)
+							anim_surf.vert_coords=anim_surf.SurfaceArrayCopy(SURFACE_vert_coords, surf)
 							
-							anim_surf.vert_bone1_no=anim_surf.ResizeIntArray(SURFACE_vert_bone1_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone2_no=anim_surf.ResizeIntArray(SURFACE_vert_bone2_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone3_no=anim_surf.ResizeIntArray(SURFACE_vert_bone3_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone4_no=anim_surf.ResizeIntArray(SURFACE_vert_bone4_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone1_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone1_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone2_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone2_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone3_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone3_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone4_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone4_no, surf.no_verts[0]+1)
 							
-							anim_surf.vert_weight1=anim_surf.ResizeFloatArray(SURFACE_vert_weight1, surf.no_verts[0]+1)
-							anim_surf.vert_weight2=anim_surf.ResizeFloatArray(SURFACE_vert_weight2, surf.no_verts[0]+1)
-							anim_surf.vert_weight3=anim_surf.ResizeFloatArray(SURFACE_vert_weight3, surf.no_verts[0]+1)
-							anim_surf.vert_weight4=anim_surf.ResizeFloatArray(SURFACE_vert_weight4, surf.no_verts[0]+1)
+							anim_surf.vert_weight1=anim_surf.SurfaceArrayResize(SURFACE_vert_weight1, surf.no_verts[0]+1)
+							anim_surf.vert_weight2=anim_surf.SurfaceArrayResize(SURFACE_vert_weight2, surf.no_verts[0]+1)
+							anim_surf.vert_weight3=anim_surf.SurfaceArrayResize(SURFACE_vert_weight3, surf.no_verts[0]+1)
+							anim_surf.vert_weight4=anim_surf.SurfaceArrayResize(SURFACE_vert_weight4, surf.no_verts[0]+1)
 							
 							' transfer vmin/vmax values for using with TrimVerts func after
 							anim_surf.vmin[0]=surf.vmin[0]
@@ -676,18 +685,18 @@ Type TB3D
 					bo_bone.keys=NewAnimationKeys(bo_bone)
 					bo_bone.keys.frames[0]=a_frames
 					
-					bo_bone.keys.flags=bo_bone.keys.ResizeIntArray(ANIMATIONKEYS_flags, a_frames+1)
+					bo_bone.keys.flags=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_flags, a_frames+1)
 					
-					bo_bone.keys.px=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_px, a_frames+1)
-					bo_bone.keys.py=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_py, a_frames+1)
-					bo_bone.keys.pz=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_pz, a_frames+1)
-					bo_bone.keys.sx=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_sx, a_frames+1)
-					bo_bone.keys.sy=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_sy, a_frames+1)
-					bo_bone.keys.sz=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_sz, a_frames+1)
-					bo_bone.keys.qw=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_qw, a_frames+1)
-					bo_bone.keys.qx=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_qx, a_frames+1)
-					bo_bone.keys.qy=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_qy, a_frames+1)
-					bo_bone.keys.qz=bo_bone.keys.ResizeFloatArray(ANIMATIONKEYS_qz, a_frames+1)
+					bo_bone.keys.px=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_px, a_frames+1)
+					bo_bone.keys.py=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_py, a_frames+1)
+					bo_bone.keys.pz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_pz, a_frames+1)
+					bo_bone.keys.sx=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sx, a_frames+1)
+					bo_bone.keys.sy=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sy, a_frames+1)
+					bo_bone.keys.sz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sz, a_frames+1)
+					bo_bone.keys.qw=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qw, a_frames+1)
+					bo_bone.keys.qx=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qx, a_frames+1)
+					bo_bone.keys.qy=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qy, a_frames+1)
+					bo_bone.keys.qz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qz, a_frames+1)
 					
 					' root ent?
 					If root_ent=Null Then root_ent=bo_bone
@@ -714,8 +723,8 @@ Type TB3D
 					If new_tag<>"KEYS"
 						bo_bone.EntityListAdd(TEntity.entity_list)
 						
-						mesh.ResizeBoneArray(MESH_bones, bo_no_bones)
-						mesh.SetBoneArray(MESH_bones, bo_no_bones-1, bo_bone)
+						mesh.MeshArrayResize(MESH_bones, bo_no_bones)
+						mesh.MeshArraySet(MESH_bones, bo_no_bones-1, bo_bone)
 						
 						last_ent=bo_bone
 					EndIf
@@ -753,6 +762,8 @@ Type TB3D
 						
 							bo_bone.keys.flags[k_frame]=bo_bone.keys.flags[k_frame]+k_flags
 							If (k_flags & 1)
+								'TGlobal.Matrix_B3D.TransformVec(k_px,k_py,k_pz,1) ' transform by LoaderMatrix
+								
 								bo_bone.keys.px[k_frame]=k_px
 								bo_bone.keys.py[k_frame]=k_py
 								bo_bone.keys.pz[k_frame]=k_pz
@@ -780,8 +791,8 @@ Type TB3D
 						If bo_bone<>Null
 							bo_bone.EntityListAdd(TEntity.entity_list)
 							
-							mesh.ResizeBoneArray(MESH_bones, bo_no_bones)
-							mesh.SetBoneArray(MESH_bones, bo_no_bones-1, bo_bone)
+							mesh.MeshArrayResize(MESH_bones, bo_no_bones)
+							mesh.MeshArraySet(MESH_bones, bo_no_bones-1, bo_bone)
 							
 							last_ent=bo_bone
 						EndIf

@@ -60,7 +60,7 @@ Type TGlobal
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix
-	'Global Matrix_MD2:TMatrix
+	Global Matrix_MD2:TMatrix
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
@@ -100,11 +100,11 @@ Type TGlobal
 		
 		Matrix_3DS=NewMatrix()
 		Matrix_B3D=NewMatrix()
-		'Matrix_MD2=NewMatrix()
+		Matrix_MD2=NewMatrix()
 		
-		LoaderMatrix("3ds", 1,0,0, 0,0,1, 0,1,0) ' swap z/y axis
-		LoaderMatrix("b3d", 1,0,0, 0,1,0, 0,0,1) ' standard coords
-		'LoaderMatrix("md2", 1,0,0, 0,1,0, 0,0,1) ' ?
+		LoaderMatrix "3ds", 1,0,0, 0,0,1, 0,1,0 ' swap z/y
+		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' standard
+		LoaderMatrix "md2", -1,0,0, 0,0,-1, 0,-1,0 ' swap z/y and invert all
 		
 		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
 		TextureLoader "frames",0,1,2,3,4,5

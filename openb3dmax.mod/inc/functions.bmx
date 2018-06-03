@@ -6,7 +6,7 @@ Rem
 bbdoc: Loads an md2 entity and returns its handle
 End Rem
 Function LoadMD2:TMesh( url:Object,parent:TEntity=Null )
-	Return TMD2.LoadMD2(String(url), parent)
+	Return TMD2.LoadMD2( String(url),parent )
 End Function
 
 Rem
@@ -221,7 +221,7 @@ Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 		TGlobal.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
-		'TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 End Function
 

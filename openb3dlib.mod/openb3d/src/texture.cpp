@@ -83,7 +83,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		if(!dds) return NULL;
 		
 		if(flags&2) ApplyAlpha(tex,dds->buffer);
-		if(flags&4) ApplyMask(tex,dds->buffer,10,10,10);
+		if(flags&4) ApplyMask(tex,dds->buffer,0,0,0);
 		
 		unsigned int name;
 		glGenTextures (1,&name);
@@ -219,7 +219,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
 
 	if(flags&2) ApplyAlpha(tex,buffer);
-	if(flags&4) ApplyMask(tex,buffer,10,10,10);
+	if(flags&4) ApplyMask(tex,buffer,0,0,0);
 
 	unsigned int name;
 	if (frame_count<2){
@@ -633,7 +633,7 @@ void ApplyMask(Texture* tex, unsigned char *src, unsigned char maskred, unsigned
 			red = src[scanline + scanlength];
 			grn = src[scanline + scanlength + 1];
 			blu = src[scanline + scanlength + 2];
-			if (red < maskred && grn < maskgrn && blu < maskblu){
+			if (red == maskred && grn == maskgrn && blu == maskblu){
 				src[scanline + scanlength + 3] = 0;
 			}
 		}

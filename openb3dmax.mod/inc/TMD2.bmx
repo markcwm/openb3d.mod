@@ -1,8 +1,9 @@
 ' TMD2.bmx
+' MD2 loader from Openb3d (by Angelo Rosina)
 
 Type TMD2Vertex
 	Field x:Float, y:Float, z:Float
-	Field normalid:Byte
+	Field normalindex:Byte ' index to precalculated normal table for lighting
 End Type
 
 Type TMD2Triangle
@@ -19,7 +20,7 @@ Type TMD2Frame
 	Field name:String
 	Field sx:Float, sy:Float, sz:Float
 	Field tx:Float, ty:Float, tz:Float
-	Field vertices:TMD2Vertex[]	
+	Field verts:TMD2Vertex[]	
 End Type
 
 Type TMD2
@@ -202,26 +203,31 @@ Type TMD2
 	Function LoadMD2FromStream:TMesh( file:TStream,url:Object,parent_ent:TEntity=Null )
 	
 		Local magic:Int=ReadInt(file)
-		If magic<>844121161 Then Return Null
+		If magic<>844121161 ' "IDP2"
+			If TGlobal.Log_MD2 Then DebugLog " Not an md2 file"
+			Return Null
+		EndIf
 		
 		Local version:Int=ReadInt(file)
-		If version<>8 Then Return Null
+		If version<>8
+			If TGlobal.Log_MD2 Then DebugLog " Wrong md2 version"
+		EndIf
 		
 		Local mesh:TMesh=NewMesh()
 		mesh.SetString(mesh.class_name, "Mesh")
 		mesh.AddParent(parent_ent)
 		mesh.EntityListAdd(TEntity.entity_list)
 		
-		Local skinwidth:Int=ReadInt(file)
-		Local skinheight:Int=ReadInt(file)
-		Local framesize:Int=ReadInt(file)
-		Local num_skins:Int=ReadInt(file)
+		Local skinwidth:Int=ReadInt(file) ' tex width
+		Local skinheight:Int=ReadInt(file) ' tex height
+		Local framesize:Int=ReadInt(file) ' memory for vertices
+		Local num_skins:Int=ReadInt(file) ' tex versions (red/blue team)
 		Local num_vertices:Int=ReadInt(file)
-		Local num_st:Int=ReadInt(file)
-		Local num_tris:Int=ReadInt(file)
-		Local num_glcmds:Int=ReadInt(file)
-		Local num_frames:Int=ReadInt(file)
-		Local offset_skins:Int=ReadInt(file)
+		Local num_st:Int=ReadInt(file) ' texture coords
+		Local num_tris:Int=ReadInt(file) ' triangles
+		Local num_glcmds:Int=ReadInt(file) ' number of GL commands
+		Local num_frames:Int=ReadInt(file) ' keyframes
+		Local offset_skins:Int=ReadInt(file) ' data offsets
 		Local offset_st:Int=ReadInt(file)
 		Local offset_tris:Int=ReadInt(file)
 		Local offset_frames:Int=ReadInt(file)
@@ -248,19 +254,18 @@ Type TMD2
 		
 		Local surf:TSurface=mesh.CreateSurface()
 		surf.no_verts[0]=num_vertices
-		surf.vert_tex_coords0=surf.ResizeFloatArray(SURFACE_vert_tex_coords0, num_vertices*2)
-		surf.vert_tex_coords1=surf.ResizeFloatArray(SURFACE_vert_tex_coords1, num_vertices*2)
-		surf.vert_col=surf.ResizeFloatArray(SURFACE_vert_col, num_vertices*4)
+		surf.vert_tex_coords0=surf.SurfaceArrayResize(SURFACE_vert_tex_coords0, num_vertices*2)
+		surf.vert_tex_coords1=surf.SurfaceArrayResize(SURFACE_vert_tex_coords1, num_vertices*2)
+		surf.vert_col=surf.SurfaceArrayResize(SURFACE_vert_col, num_vertices*4)
 		
 		Local anim_surf:TSurface=mesh.NewSurface()
 		mesh.MeshListAdd(mesh.anim_surf_list, anim_surf)
 		anim_surf.no_verts[0]=surf.no_verts[0]
-		anim_surf.vert_coords=anim_surf.ResizeFloatArray(SURFACE_vert_coords, num_vertices*3)
+		anim_surf.vert_coords=anim_surf.SurfaceArrayResize(SURFACE_vert_coords, num_vertices*3)
 		
-		Local tri:Short[num_tris*6]
 		SeekStream(file, offset_skins)
 		
-		For Local i:Int=0 To num_skins-1
+		For Local i:Int=0 Until num_skins
 			skin[i]=ReadString(file, 64)
 		Next
 		
@@ -305,25 +310,31 @@ Type TMD2
 			If i=0 Then mesh.SetString(mesh.name, frames[i].name)
 			
 			If TGlobal.Log_MD2 Then DebugLog " frames["+i+"].name: "+frames[i].name
+			If TGlobal.Log_MD2 Then DebugLog " scale: "+frames[i].sx+", "+frames[i].sy+", "+frames[i].sz
+			If TGlobal.Log_MD2 Then DebugLog " trans: "+frames[i].tx+", "+frames[i].ty+", "+frames[i].tz
 			
-			frames[i].vertices[]=New TMD2Vertex[num_vertices]
+			frames[i].verts[]=New TMD2Vertex[num_vertices]
 			For Local v:Int=0 Until num_vertices
-				frames[i].vertices[v]=New TMD2Vertex
-				frames[i].vertices[v].x=Float(ReadByte(file))*frames[i].sx+frames[i].tx
-				frames[i].vertices[v].y=Float(ReadByte(file))*frames[i].sy+frames[i].ty
-				frames[i].vertices[v].z=Float(ReadByte(file))*frames[i].sz+frames[i].tz
-				frames[i].vertices[v].normalid=ReadByte(file)
+				frames[i].verts[v]=New TMD2Vertex
+				frames[i].verts[v].x=Float(ReadByte(file)) * frames[i].sx + frames[i].tx
+				frames[i].verts[v].y=Float(ReadByte(file)) * frames[i].sy + frames[i].ty
+				frames[i].verts[v].z=Float(ReadByte(file)) * frames[i].sz + frames[i].tz
+				frames[i].verts[v].normalindex=ReadByte(file)
 				
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].vertices[v].x)
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].vertices[v].y)
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, -frames[i].vertices[v].z)
+				'If TGlobal.Log_MD2 And v=0 Then DebugLog " v[0]: "+frames[i].verts[v].x+", "+frames[i].verts[v].y+", "+frames[i].verts[v].z+", ni="+frames[i].verts[v].normalindex
 				
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].vertices[v].normalid+2])
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].vertices[v].normalid+1])
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].vertices[v].normalid])
+				TGlobal.Matrix_MD2.TransformVec(frames[i].verts[v].x, frames[i].verts[v].y, frames[i].verts[v].z, 1) ' transform by LoaderMatrix
+				
+				surf.SurfaceArrayAdd(SURFACE_vert_coords, frames[i].verts[v].x) ' AddVertex
+				surf.SurfaceArrayAdd(SURFACE_vert_coords, frames[i].verts[v].y)
+				surf.SurfaceArrayAdd(SURFACE_vert_coords, -frames[i].verts[v].z)
+				
+				surf.SurfaceArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+2]) ' add normal
+				surf.SurfaceArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+1])
+				surf.SurfaceArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].verts[v].normalindex])
 			Next
 			
-			anim_surf.SurfaceFloatArrayAdd(SURFACE_vert_weight4, i)
+			anim_surf.SurfaceArrayAdd(SURFACE_vert_weight4, i)
 		Next
 		
 		If num_frames>1 Then mesh.anim[0]=2
