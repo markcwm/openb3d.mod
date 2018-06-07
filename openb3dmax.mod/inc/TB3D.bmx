@@ -5,7 +5,7 @@ Type TB3D
 
 	Global filepath$
 	
-	Function LoadAnimB3D:TMesh( url:Object, parent_ent_ext:TEntity=Null )
+	Function LoadAnimB3D:TMesh( url:Object,parent_ent_ext:TEntity=Null )
 	
 		' Start file reading
 		Local file:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream("littleendian::"+url)
@@ -18,7 +18,7 @@ Type TB3D
 		
 	End Function
 	
-	Function LoadAnimB3DFromStream:TMesh( file:TStream, url:Object, parent_ent_ext:TEntity=Null )
+	Function LoadAnimB3DFromStream:TMesh( file:TStream,url:Object,parent_ent_ext:TEntity=Null )
 	
 		' get current dir - we'll change it back at end of func
 		Local cd$=CurrentDir()
@@ -29,13 +29,13 @@ Type TB3D
 		Local dir$=String(url) 'f_name
 		Local in:Int=0
 		
-		While Instr(dir,"\",in+1)<>0
-			in=Instr(dir,"\",in+1)
+		While Instr(dir, "\", in+1)<>0
+			in=Instr(dir, "\", in+1)
 		Wend
-		While Instr(dir,"/",in+1)<>0
-			in=Instr(dir,"/",in+1)
+		While Instr(dir, "/", in+1)<>0
+			in=Instr(dir, "/", in+1)
 		Wend
-		If in<>0 Then dir=Left(dir,in-1)
+		If in<>0 Then dir=Left(dir, in-1)
 		If filepath<>"" Then ChangeDir(filepath)
 		
 		' Header info
@@ -237,7 +237,7 @@ Type TB3D
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
 						
-						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name,te_flags,tex[tex_no]) ' wrong path crashes streams
+						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
 						If TGlobal.Log_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
 						
 						tex_no=tex_no+1
@@ -266,7 +266,7 @@ Type TB3D
 						
 						brush[brush_no]=CreateBrush()
 						brush[brush_no].no_texs[0]=b_no_texs
-						brush[brush_no].SetString(brush[brush_no].name,b_name)
+						brush[brush_no].SetString(brush[brush_no].name, b_name)
 						brush[brush_no].red[0]=b_red
 						brush[brush_no].green[0]=b_green
 						brush[brush_no].blue[0]=b_blue
@@ -281,7 +281,12 @@ Type TB3D
 							b_tex_id=ReadInt(file)
 							
 							If b_tex_id>=0 And tex[b_tex_id]<>Null ' valid id and texture
-								brush[brush_no].BrushTexture(tex[b_tex_id],0,ix)
+								brush[brush_no].BrushTexture(tex[b_tex_id], 0, ix)
+								
+								If (tex[b_tex_id].flags[0] & 2) And brush[brush_no].blend[0]=1
+									BrushFX(brush[brush_no], brush[brush_no].fx[0]|32) ' transparency for brush alpha tex
+								EndIf
+								
 								If TGlobal.Log_B3D Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id
 							Else
 								brush[brush_no].tex[ix]=Null
@@ -313,7 +318,7 @@ Type TB3D
 					'Local pitch#=0
 					'Local yaw#=0
 					'Local roll#=0
-					'TQuaternion.QuatToEuler(n_qw,n_qx,n_qy,-n_qz,pitch,yaw,roll)
+					'TQuaternion.QuatToEuler(n_qw, n_qx, n_qy, -n_qz, pitch, yaw, roll)
 					'n_rx=-pitch
 					'n_ry=yaw
 					'n_rz=roll
@@ -326,8 +331,8 @@ Type TB3D
 					
 						' make 'piv' entity a mesh, not a pivot, as B3D does
 						Local piv:TMesh=NewMesh()
-						piv.SetString(piv.class_name,"Mesh")
-						piv.SetString(piv.name,n_name)
+						piv.SetString(piv.class_name, "Mesh")
+						piv.SetString(piv.name, n_name)
 						piv.px[0]=n_px
 						piv.py[0]=n_py
 						piv.pz[0]=n_pz
@@ -352,13 +357,13 @@ Type TB3D
 						' if ent nested then add parent
 						If node_level>0 Then piv.AddParent(parent_ent)
 						
-						TQuaternion.QuatToMat(-n_qw,n_qx,n_qy,-n_qz,piv.mat)
+						TQuaternion.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, piv.mat)
 						
 						piv.mat.grid[(4*3)+0]=n_px
 						piv.mat.grid[(4*3)+1]=n_py
 						piv.mat.grid[(4*3)+2]=n_pz
 						
-						piv.mat.Scale(n_sx,n_sy,n_sz)
+						piv.mat.Scale(n_sx, n_sy, n_sz)
 						
 						If piv.parent<>Null
 							Local new_mat:TMatrix=piv.parent.mat.Copy()
@@ -375,8 +380,8 @@ Type TB3D
 					If TGlobal.Log_B3D Then DebugLog tab+new_tag+" brush_id="+m_brush_id
 					
 					mesh=NewMesh()
-					mesh.SetString(mesh.class_name,"Mesh")
-					mesh.SetString(mesh.name,n_name)
+					mesh.SetString(mesh.class_name, "Mesh")
+					mesh.SetString(mesh.name, n_name)
 					mesh.px[0]=n_px
 					mesh.py[0]=n_py
 					mesh.pz[0]=n_pz
@@ -400,13 +405,13 @@ Type TB3D
 					' if ent nested then add parent
 					If node_level>0 Then mesh.AddParent(parent_ent)
 					
-					TQuaternion.QuatToMat(-n_qw,n_qx,n_qy,-n_qz,mesh.mat)
+					TQuaternion.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, mesh.mat)
 					
 					mesh.mat.grid[(4*3)+0]=n_px
 					mesh.mat.grid[(4*3)+1]=n_py
 					mesh.mat.grid[(4*3)+2]=n_pz
 					
-					mesh.mat.Scale(n_sx,n_sy,n_sz)
+					mesh.mat.Scale(n_sx, n_sy, n_sz)
 					
 					If mesh.parent<>Null
 						Local new_mat:TMatrix=mesh.parent.mat.Copy()
@@ -452,9 +457,9 @@ Type TB3D
 							v_a=ReadFloat(file)
 						EndIf
 						
-						v_id=v_surf.AddVertex(v_x,v_y,v_z) ' inverts z
-						v_surf.VertexNormal(v_id,v_nx,v_ny,v_nz)
-						v_surf.VertexColor(v_id,v_r,v_g,v_b,v_a)
+						v_id=v_surf.AddVertex(v_x, v_y, v_z) ' inverts z
+						v_surf.VertexNormal(v_id, v_nx, v_ny, v_nz)
+						v_surf.VertexColor(v_id, v_r, v_g, v_b, v_a)
 						
 						' read texture coords per vertex: 1 for simple uv, 8 max
 						For Local j:Int=0 To v_tc_sets-1
@@ -465,7 +470,7 @@ Type TB3D
 							Next
 							
 							If j=0 Or j=1
-								v_surf.VertexTexCoords(v_id,v_u,v_v,v_w,j)
+								v_surf.VertexTexCoords(v_id, v_u, v_v, v_w, j)
 								'If TGlobal.Log_B3D Then DebugLog "VRTS id="+v_id+" u="+v_u+" v="+v_v+" j="+j+" tcsets="+v_tc_sets
 							EndIf
 						Next
@@ -518,7 +523,7 @@ Type TB3D
 						If tr_vid1>surf.vmax[0] Then surf.vmax[0]=tr_vid1
 						If tr_vid2>surf.vmax[0] Then surf.vmax[0]=tr_vid2
 						
-						surf.AddTriangle(tr_vid0,tr_vid1,tr_vid2)
+						surf.AddTriangle(tr_vid0, tr_vid1, tr_vid2)
 						
 						new_tag=ReadTag(file)
 						
@@ -551,7 +556,7 @@ Type TB3D
 						' create anim surfs, copy vertex coords array, add to anim_surf_list
 						For Local surf:TSurface=EachIn mesh.surf_list
 							Local anim_surf:TSurface=mesh.NewSurface()
-							mesh.MeshListAdd( mesh.anim_surf_list,anim_surf )
+							mesh.MeshListAdd(mesh.anim_surf_list, anim_surf)
 							
 							anim_surf.no_verts[0]=surf.no_verts[0]
 							
@@ -644,8 +649,8 @@ Type TB3D
 						new_tag=ReadTag(file)
 					Wend
 					
-					bo_bone.SetString(bo_bone.class_name,"Bone")
-					bo_bone.SetString(bo_bone.name,n_name)
+					bo_bone.SetString(bo_bone.class_name, "Bone")
+					bo_bone.SetString(bo_bone.name, n_name)
 					bo_bone.px[0]=n_px
 					bo_bone.py[0]=n_py
 					bo_bone.pz[0]=n_pz
@@ -690,7 +695,7 @@ Type TB3D
 					' if ent nested then add parent
 					If node_level>0 Then bo_bone.AddParent(parent_ent)
 					
-					TQuaternion.QuatToMat(-bo_bone.n_qw[0],bo_bone.n_qx[0],bo_bone.n_qy[0],-bo_bone.n_qz[0],bo_bone.mat)
+					TQuaternion.QuatToMat(-bo_bone.n_qw[0], bo_bone.n_qx[0], bo_bone.n_qy[0], -bo_bone.n_qz[0], bo_bone.mat)
 					
 					bo_bone.mat.grid[(4*3)+0]=bo_bone.n_px[0]
 					bo_bone.mat.grid[(4*3)+1]=bo_bone.n_py[0]
@@ -791,14 +796,14 @@ Type TB3D
 		
 		If TGlobal.Log_B3D ' print any mesh surface info
 			Local temp_list:TList=CreateList()
-			If root_ent<>Null Then ListAddLast temp_list,TMesh(root_ent)
+			If root_ent<>Null Then ListAddLast(temp_list, TMesh(root_ent))
 			Local count_children%=TEntity.CountAllChildren(TMesh(root_ent))
 			
 			For Local child_no%=1 To count_children
 				Local count%=0
 				Local child:TEntity=TMesh(root_ent).GetChildFromAll(child_no, count)
 				Local child_mesh:TMesh=TMesh(child)
-				If child_mesh<>Null Then ListAddLast temp_list,child
+				If child_mesh<>Null Then ListAddLast(temp_list, child)
 			Next
 			
 			For Local child_mesh:TMesh=EachIn temp_list
@@ -818,14 +823,14 @@ Type TB3D
 	' Otherwise we duplicate all vert information per surf
 	Function TrimVerts( surf:TSurface )
 	
-		ModelTrimVerts_( TSurface.GetInstance(surf) )
+		ModelTrimVerts_(TSurface.GetInstance(surf))
 		
-		surf.vert_coords=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_coords )
-		surf.vert_norm=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_norm )
-		surf.vert_tex_coords0=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords0 )
-		surf.vert_tex_coords1=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_tex_coords1 )
-		surf.vert_col=SurfaceFloat_( TSurface.GetInstance(surf),SURFACE_vert_col )
-		surf.tris=SurfaceUShort_( TSurface.GetInstance(surf),SURFACE_tris )
+		surf.vert_coords=SurfaceFloat_(TSurface.GetInstance(surf), SURFACE_vert_coords)
+		surf.vert_norm=SurfaceFloat_(TSurface.GetInstance(surf), SURFACE_vert_norm)
+		surf.vert_tex_coords0=SurfaceFloat_(TSurface.GetInstance(surf), SURFACE_vert_tex_coords0)
+		surf.vert_tex_coords1=SurfaceFloat_(TSurface.GetInstance(surf), SURFACE_vert_tex_coords1)
+		surf.vert_col=SurfaceFloat_(TSurface.GetInstance(surf), SURFACE_vert_col)
+		surf.tris=SurfaceUShort_(TSurface.GetInstance(surf), SURFACE_tris)
 		
 	End Function
 	
@@ -852,7 +857,7 @@ Type TB3D
 			EndIf
 		Next
 		
-		SeekStream(file,pos)
+		SeekStream(file, pos)
 		Return tag
 		
 	End Function

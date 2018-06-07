@@ -50,8 +50,8 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 		Local test:Int=b3d_stbi_info_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels )
 		
 		If test=True ' prevent crash
-			imgPtr=b3d_stbi_load_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels,4 ) ' force alpha
-			If channels=3 Then channels=4 ' b3d expects alpha
+			imgPtr=b3d_stbi_load_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels,4 ) ' force RGBA
+			If channels=3 Then channels=4 ' for uncompressed BMP, may be 24 or 32-bit
 		EndIf
 		
 		If imgPtr Then
@@ -84,7 +84,7 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 			EndSelect
 			
 			If pf
-				pixmap = CreatePixmap( width, height, pf )
+				pixmap = CreatePixmap(width, height, pf, BytesPerPixel[pf])
 				?bmxng
 				MemCopy(pixmap.pixels, imgPtr, Size_T(width * height * BytesPerPixel[pf]))
 				?Not bmxng
