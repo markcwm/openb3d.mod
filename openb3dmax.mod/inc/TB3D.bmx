@@ -1,6 +1,5 @@
 ' TB3D.bmx
 ' B3D loader from Minib3d (by Simon Harrison)
-' todo LoaderMatrix on animations
 
 Type TB3D
 
@@ -311,13 +310,6 @@ Type TB3D
 					n_qy=ReadFloat(file)
 					n_qz=ReadFloat(file)
 					
-					'TGlobal.Matrix_B3D.TransformVec(n_px,n_py,n_pz,1) ' transform by LoaderMatrix
-					'TGlobal.Matrix_B3D.TransformVec(n_sx,n_sy,n_sz,1) ' transform by LoaderMatrix
-					'Local new_mat:TMatrix=NewMatrix()
-					'TQuaternion.QuatToMat(n_qw,n_qx,n_qy,n_qz,new_mat)
-					'TGlobal.Matrix_B3D.Multiply(new_mat) ' transform by LoaderMatrix
-					'new_mat.ToQuat(n_qx,n_qy,n_qz,n_qw)
-					
 					'Local pitch#=0
 					'Local yaw#=0
 					'Local roll#=0
@@ -342,7 +334,6 @@ Type TB3D
 						piv.sx[0]=n_sx
 						piv.sy[0]=n_sy
 						piv.sz[0]=n_sz
-						
 						piv.qw[0]=n_qw
 						piv.qx[0]=n_qx
 						piv.qy[0]=n_qy
@@ -392,7 +383,6 @@ Type TB3D
 					mesh.sx[0]=n_sx
 					mesh.sy[0]=n_sy
 					mesh.sz[0]=n_sz
-					
 					mesh.qw[0]=n_qw
 					mesh.qx[0]=n_qx
 					mesh.qy[0]=n_qy
@@ -461,8 +451,6 @@ Type TB3D
 							v_b=ReadFloat(file)*255.0
 							v_a=ReadFloat(file)
 						EndIf
-						
-						TGlobal.Matrix_B3D.TransformVec(v_x,v_y,v_z,1) ' transform by LoaderMatrix
 						
 						v_id=v_surf.AddVertex(v_x,v_y,v_z) ' inverts z
 						v_surf.VertexNormal(v_id,v_nx,v_ny,v_nz)
@@ -636,16 +624,16 @@ Type TB3D
 										
 									Else If bo_vert_w>anim_surf.vert_weight3[vid]
 									
-										anim_surf.vert_bone4_no[vid]=anim_surf.vert_bone3_no[vid]
-										anim_surf.vert_weight4[vid]=anim_surf.vert_weight3[vid]
+									'	anim_surf.vert_bone4_no[vid]=anim_surf.vert_bone3_no[vid]
+									'	anim_surf.vert_weight4[vid]=anim_surf.vert_weight3[vid]
 										
-										anim_surf.vert_bone3_no[vid]=bo_no_bones
-										anim_surf.vert_weight3[vid]=bo_vert_w
+									'	anim_surf.vert_bone3_no[vid]=bo_no_bones
+									'	anim_surf.vert_weight3[vid]=bo_vert_w
 										
 									Else If bo_vert_w>anim_surf.vert_weight4[vid]
 									
-										anim_surf.vert_bone4_no[vid]=bo_no_bones
-										anim_surf.vert_weight4[vid]=bo_vert_w
+									'	anim_surf.vert_bone4_no[vid]=bo_no_bones
+									'	anim_surf.vert_weight4[vid]=bo_vert_w
 										
 									EndIf
 								EndIf
@@ -664,7 +652,6 @@ Type TB3D
 					bo_bone.sx[0]=n_sx
 					bo_bone.sy[0]=n_sy
 					bo_bone.sz[0]=n_sz
-					
 					bo_bone.qw[0]=n_qw
 					bo_bone.qx[0]=n_qx
 					bo_bone.qy[0]=n_qy
@@ -676,7 +663,6 @@ Type TB3D
 					bo_bone.n_sx[0]=n_sx
 					bo_bone.n_sy[0]=n_sy
 					bo_bone.n_sz[0]=n_sz
-					
 					bo_bone.n_qw[0]=n_qw
 					bo_bone.n_qx[0]=n_qx
 					bo_bone.n_qy[0]=n_qy
@@ -762,8 +748,6 @@ Type TB3D
 						
 							bo_bone.keys.flags[k_frame]=bo_bone.keys.flags[k_frame]+k_flags
 							If (k_flags & 1)
-								'TGlobal.Matrix_B3D.TransformVec(k_px,k_py,k_pz,1) ' transform by LoaderMatrix
-								
 								bo_bone.keys.px[k_frame]=k_px
 								bo_bone.keys.py[k_frame]=k_py
 								bo_bone.keys.pz[k_frame]=k_pz

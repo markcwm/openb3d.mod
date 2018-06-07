@@ -519,10 +519,10 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determine Assimp mesh tex flags, 2 or 4
+		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
 		
@@ -617,10 +617,10 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determine Assimp mesh tex flags, 2 or 4
+		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap)
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
 		
@@ -732,28 +732,33 @@ Type TTexture
 		
 	End Function
 	
-	' quick test for Assimp to see if true alpha used in image, if not then return 4 else 2 (tex flags)
+	' quick test for Assimp to see if true alpha used in image, if true returns 2 (for tex flags)
 	Function CheckAlpha:Int( map:TPixmap )
-		Local rgba%,alp%,a0%,a1%
-		Local ix%=PixmapWidth(map)/2
+		Local rgba%, alp%, a0%, a1%
+		Local sqrw#=Sqr(PixmapWidth(map))
+		Local sqrh#=Sqr(PixmapHeight(map))
+		Local sizew%=Int(PixmapWidth(map)/sqrw)
+		Local sizeh%=Int(PixmapHeight(map)/sqrh)
 		
-		For Local iy%=0 To PixmapHeight(map)-1 ' check one line
-			rgba=ReadPixel(map,ix,iy)
-			alp=(rgba & $FF000000) Shr 24
-			If alp=0 Then a0:+1
-			If alp=255 Then a1:+1
+		For Local iy%=0 Until sizeh ' check sqrt times pixel columns
+			For Local ix%=0 Until sizew ' check sqrt times pixel rows
+				rgba=ReadPixel(map,ix*sizew,iy*sizeh)
+				alp=(rgba & $FF000000) Shr 24
+				If alp=0 Then a0:+1
+				If alp=255 Then a1:+1
+			Next
 		Next
 		
-		If a0=PixmapHeight(map) Or a1=PixmapHeight(map) Then Return 4 ' mask
-		Return 2 ' alpha
+		If a0=sizew*sizeh Or a1=sizew*sizeh Then Return 4 ' mask flag, no alpha values
+		Return 2 ' alpha flag
 	End Function
 	
 	' applys alpha to a pixmap based on average of colour values
 	Function ApplyAlpha:TPixmap( map:TPixmap Var )
-		Local rgba%,red%,grn%,blu%,alp%
+		Local rgba%, red%, grn%, blu%, alp%
 		
-		For Local iy%=0 To PixmapHeight(map)-1
-			For Local ix%=0 To PixmapWidth(map)-1
+		For Local iy%=0 Until PixmapHeight(map)
+			For Local ix%=0 Until PixmapWidth(map)
 				rgba=ReadPixel(map,ix,iy)
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
@@ -769,7 +774,7 @@ Type TTexture
 	' like MaskPixmap
 	' used to allow masking pixels in a defined range to account for jpg noise but removed since you should use png/tga
 	Function ApplyMask:TPixmap( map:TPixmap Var, maskred%, maskgrn%, maskblu% )
-		Local rgba%,red%,grn%,blu%
+		Local rgba%, red%, grn%, blu%
 		
 		For Local iy%=0 To PixmapHeight(map)-1
 			For Local ix%=0 To PixmapWidth(map)-1

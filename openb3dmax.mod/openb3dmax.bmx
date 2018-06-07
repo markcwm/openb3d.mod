@@ -387,6 +387,11 @@ End Extern
 
 ' *** Globals moved to TGlobal
 
+Const GRAPHICS_MULTISAMPLE2X:Int=$40
+Const GRAPHICS_MULTISAMPLE4X:Int=$80
+Const GRAPHICS_MULTISAMPLE8X:Int=$100
+Const GRAPHICS_MULTISAMPLE16X:Int=$200
+
 ' Texture/Brush flags - flags 1024,2048,4096,8192,16384 seem to be unassigned
 'Const TEX_COLOR:Int=1
 'Const TEX_ALPHA:Int=2
