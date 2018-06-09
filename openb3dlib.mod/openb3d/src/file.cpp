@@ -76,11 +76,11 @@ string File::ResourceFilePath(string filename){
 	stream=File::ReadFile(filename);
 
 	if (stream!=0) {
-		//cout << "Error: Can't Find Resource File Path '"+filename+"'" << endl;
 		stream->CloseFile();
 		return filename;
 	}
-
+	
+	cout << "Error: Can't Find Resource File Path '"+filename+"'" << endl;
 	return "";
 
 }

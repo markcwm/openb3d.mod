@@ -185,10 +185,10 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	filename=File::ResourceFilePath(filename);
 
-	if (filename==""){
+	/*if (filename==""){
 		cout << "Error: Can't Find Texture: " << filename << endl;
 		return NULL;
-	}
+	}*/
 
 	if(tex==NULL) tex=new Texture();
 	tex->file=filename;
