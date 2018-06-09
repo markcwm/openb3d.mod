@@ -390,6 +390,10 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 					if(b_tex_id>=0){
 						new_brush->tex[ix]=tex[b_tex_id];
 						new_brush->cache_frame[ix]=tex[b_tex_id]->texture;
+						
+						if (tex[b_tex_id]->flags&2 && new_brush->blend==1){
+							new_brush->fx=new_brush->fx|32; // transparency fx for brush alpha tex
+						}
 					}else{
 						new_brush->tex[ix]=NULL;
 					}

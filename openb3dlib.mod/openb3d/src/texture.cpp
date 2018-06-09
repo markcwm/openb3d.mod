@@ -20,6 +20,7 @@
 #include "dds.h"
 
 #include <string.h>
+#include <math.h>
 #include <stdio.h>
 
 list<Texture*> Texture::tex_list;
@@ -28,6 +29,7 @@ list<Texture*> Texture::tex_list_all;
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
 void ApplyAlpha (Texture* tex, unsigned char *src);
 void ApplyMask (Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu);
+int CheckAlpha(Texture* tex, unsigned char *src);
 
 Texture* Texture::Copy(){
 	Texture *tex=new Texture();
@@ -183,10 +185,10 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	filename=File::ResourceFilePath(filename);
 
-	/*if (filename==""){
-		cout << "Error: Cannot Find Texture: " << filename << endl;
+	if (filename==""){
+		cout << "Error: Can't Find Texture: " << filename << endl;
 		return NULL;
-	}*/
+	}
 
 	if(tex==NULL) tex=new Texture();
 	tex->file=filename;
@@ -218,7 +220,8 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
 
-	if(flags&2) ApplyAlpha(tex,buffer);
+	int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
+	if(flags&2 && mask==4) ApplyAlpha(tex,buffer);
 	if(flags&4) ApplyMask(tex,buffer,0,0,0);
 
 	unsigned int name;
@@ -638,6 +641,28 @@ void ApplyMask(Texture* tex, unsigned char *src, unsigned char maskred, unsigned
 			}
 		}
 	}
+}
+
+// quick test to see if true alpha used in image, if true returns 2 (for tex flags)
+int CheckAlpha(Texture* tex, unsigned char *src){
+	unsigned int scanline, scanlength, x, y, alp, a0 = 0, a1 = 0, bpp = 4;
+	float sqrw = sqrt(tex->width);
+	float sqrh = sqrt(tex->height);
+	int sizew = tex->width / sqrw;
+	int sizeh = tex->height / sqrh;
+	
+	for (y = 0; y < sizeh; y++){ // check sqrt times pixel columns
+		for (x = 0; x < sizew; x++){ // check sqrt times pixel rows
+			scanline = sizeh * y * bpp * tex->width;
+			scanlength = sizew * x * bpp;
+			alp = src[scanline + scanlength + 3];
+			if (alp == 0) a0 = a0 + 1;
+			if (alp == 255) a1 = a1 + 1;
+		}
+	}
+	
+	if (a0 == sizew * sizeh || a1 == sizew * sizeh) return 4; // mask flag, no alpha values
+	return 2; // alpha flag
 }
 
 void Texture::TextureMultitex(float f){

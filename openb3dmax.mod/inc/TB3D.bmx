@@ -287,7 +287,7 @@ Type TB3D
 									BrushFX(brush[brush_no], brush[brush_no].fx[0]|32) ' transparency for brush alpha tex
 								EndIf
 								
-								If TGlobal.Log_B3D Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id
+								If TGlobal.Log_B3D Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id+" ix="+ix
 							Else
 								brush[brush_no].tex[ix]=Null
 							EndIf

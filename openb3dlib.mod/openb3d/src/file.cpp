@@ -76,6 +76,7 @@ string File::ResourceFilePath(string filename){
 	stream=File::ReadFile(filename);
 
 	if (stream!=0) {
+		//cout << "Error: Can't Find Resource File Path '"+filename+"'" << endl;
 		stream->CloseFile();
 		return filename;
 	}
@@ -96,8 +97,6 @@ File* File::ReadResourceFile(string filename){
 
 	//string filename2=ResourceFilePath(filename);
 
-	
-
 	if(filename==""){
 		cout << "Error: No Filename: " << filename << endl;
 	}
@@ -107,7 +106,7 @@ File* File::ReadResourceFile(string filename){
 	FILE* pFile=fopen(c_filename,"rb");
 
 	if(pFile==NULL){
-		cout << "Error: Cannot Find Resource File: " << filename << endl;
+		cout << "Error: Can't Find Resource File: " << filename << endl;
 		return NULL;
 	}
 
@@ -129,7 +128,7 @@ File* File::ReadFile(string filename){
 	FILE* pFile=fopen(filename2.c_str(),"rb");
 
 	if(pFile==NULL){
-		cout << "Error: Can't Find Document File '"+filename+"'" << endl;
+		//cout << "Error: Can't Find Document File '"+filename+"'" << endl;
 		return NULL;
 	}
 

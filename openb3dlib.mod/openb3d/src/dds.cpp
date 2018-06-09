@@ -337,6 +337,10 @@ DirectDrawSurface *DirectDrawSurface::LoadSurface(const string& filename,bool fl
 	int len;
 
 	file=File::ReadFile(filename);
+	if(file==0){
+		return 0;
+	}
+	
 	len=file->FileSize();
 
 	buffer=new unsigned char[len];
