@@ -50,6 +50,7 @@ Type TGlobal
 	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
 	Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
 	Global Log_Assimp:Int=False		' True to DebugLog Assimp
+	Global Log_Texture:Int=False	' True to DebugLog texture streams
 	
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library

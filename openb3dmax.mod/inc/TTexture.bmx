@@ -503,6 +503,7 @@ Type TTexture
 				old_tex.TextureListAdd( tex_list_all )
 				FreeObject( GetInstance(tex) ) ; tex.exists=0
 				
+				If TGlobal.Log_Texture Then DebugLog " Texture already exists: "+file
 				Return old_tex
 			EndIf
 		ElseIf old_tex<>tex ' tex not pre-existing
@@ -511,7 +512,10 @@ Type TTexture
 		EndIf
 		
 		tex.pixmap=LoadPixmap(url) ' streams
-		If tex.pixmap=Null Then Return tex
+		If tex.pixmap=Null
+			If TGlobal.Log_Texture Then DebugLog " No pixmap texture loaded: "+file
+			Return tex
+		EndIf
 		
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
 		Local alpha_present:Int=False
@@ -602,6 +606,7 @@ Type TTexture
 			old_tex.TextureListAdd( tex_list_all )
 			FreeObject( GetInstance(tex) ) ; tex.exists=0
 			
+			If TGlobal.Log_Texture Then DebugLog " Texture already exists: "+file
 			Return old_tex
 		ElseIf old_tex<>tex
 			tex.TextureListAdd( tex_list )
@@ -609,8 +614,11 @@ Type TTexture
 		EndIf
 		
 		tex.pixmap=LoadPixmap(url) ' streams
-		If tex.pixmap=Null Then Return tex
-				
+		If tex.pixmap=Null
+			If TGlobal.Log_Texture Then DebugLog " No pixmap texture loaded: "+file
+			Return tex
+		EndIf
+		
 		' check to see if pixmap contain alpha layer, set alpha_present to true if so (do this before converting)
 		Local alpha_present:Int=False
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
@@ -660,27 +668,30 @@ Type TTexture
 	' fixes FileFind not finding incbin or zip paths, topic=88901 (SLotman)
 	Function FileFind:Int( file:String Var )
 	
-		'Local TS:TStream = OpenFile(file$,True,False)
-		Local TS:TStream = ReadFile(file$)
-		If Not TS Then
+		'Local TS:TStream = OpenFile(file,True,False)
+		Local stream:TStream = ReadFile(file)
+		If Not stream
 			Repeat ' strip \ dirs (Win)
-				file$=Right$(file$,(Len(file$)-Instr(file$,"\",1)))
-			Until Instr(file$,"\",1)=0
+				file=Right(file,(Len(file)-Instr(file,"\",1)))
+			Until Instr(file,"\",1)=0
+			
 			Repeat ' strip / dirs
-				file$=Right$(file$,(Len(file$)-Instr(file$,"/",1)))
-			Until Instr(file$,"/",1)=0
-			TS = OpenStream(file$,True,False)
-			If Not TS Then
-				DebugLog "ERROR: Cannot find texture: "+file$
+				file=Right(file,(Len(file)-Instr(file,"/",1)))
+			Until Instr(file,"/",1)=0
+			
+			stream = OpenStream(file,True,False)
+			If Not stream
+				If TGlobal.Log_Texture Then DebugLog " Can't find texture path: "+file
 				Return False
 			Else ' file found after strip dir
-				CloseStream(TS)
-				TS=Null
+				CloseStream(stream)
+				stream=Null
 			EndIf
 		Else ' incbin or zip file found
-			CloseStream TS
-			TS=Null	
+			CloseStream stream
+			stream=Null	
 		EndIf
+		
 		Return True
 		
 	End Function
@@ -690,14 +701,14 @@ Type TTexture
 	
 		Local file_abs$
 		
-		If Instr(file$,":")=False ' not incbin or zip
-			file_abs$=CurrentDir$()+"/"+file$
+		If Instr(file,":")=False ' not incbin or zip
+			file_abs=CurrentDir()+"/"+file
 		Else
-			file_abs$=file$
+			file_abs=file
 		EndIf
-		file_abs$=Replace$(file_abs$,"\","/")
+		file_abs=Replace(file_abs,"\","/")
 		
-		Return file_abs$
+		Return file_abs
 		
 	End Function
 	
