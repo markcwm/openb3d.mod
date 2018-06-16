@@ -22,7 +22,7 @@ Type TTexture
 	
 	' minib3d
 	Field pixmap:TPixmap
-	Field cutoff:Float=0
+	Field discard:Float=1
 	'Field gltex:Int[1]
 	'Field cube_pixmap:TPixmap[7]
 	'Field no_mipmaps:Int
@@ -215,10 +215,10 @@ Type TTexture
 	
 	' Extra
 	
-	' range from 0 to 1
-	Method SetCutoff( value:Float )
+	' Set discard value (as 0..1) above which to ignore pixel's alpha value, default is 1 (only if flag 2)
+	Method AlphaDiscard( alpha:Float=0.01 )
 	
-		cutoff=value
+		discard=alpha
 		
 	End Method
 	
@@ -538,7 +538,7 @@ Type TTexture
 			If alpha_present=False And mask=4
 				tex.pixmap=ApplyAlpha(tex.pixmap)
 			Else
-				tex.pixmap=ApplyAlphaCutoff(tex.pixmap,tex.cutoff)
+				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
 			EndIf
 		EndIf
 		
@@ -646,7 +646,7 @@ Type TTexture
 			If alpha_present=False And mask=4
 				tex.pixmap=ApplyAlpha(tex.pixmap)
 			Else
-				tex.pixmap=ApplyAlphaCutoff(tex.pixmap,tex.cutoff)
+				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
 			EndIf
 		EndIf
 		
@@ -802,9 +802,9 @@ Type TTexture
 		Return map
 	End Function
 	
-	Function ApplyAlphaCutoff:TPixmap( map:TPixmap Var,cutoff# )
+	Function ApplyAlphaDiscard:TPixmap( map:TPixmap Var,alpha# )
 		Local rgba%, red%, grn%, blu%, alp%
-		Local cut%=cutoff * 255
+		Local discard%=alpha * 255
 		
 		For Local iy%=0 Until PixmapHeight(map)
 			For Local ix%=0 Until PixmapWidth(map)
@@ -815,7 +815,7 @@ Type TTexture
 				alp=(rgba & $FF000000) Shr 24
 				If alp=0 Or alp=255
 					alp=(red + grn + blu) / 3.0
-					If alp < cut
+					If alp < discard
 						WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
 					EndIf
 				EndIf

@@ -3,10 +3,10 @@
 ' *** Extra
 
 Rem
-bbdoc: Set minimum cutoff value to ignore alpha at (0..1), requires flag 2
+bbdoc: Set discard value (as 0..1) above which to ignore pixel's alpha value, default is 1 (only if flag 2)
 End Rem
-Function SetCutoff( tex:TTexture,cutoff:Float=0.0 )
-	Return tex.SetCutoff( cutoff )
+Function AlphaDiscard( tex:TTexture,alpha:Float=0.01 )
+	Return tex.AlphaDiscard( alpha )
 End Function
 
 Rem
