@@ -317,6 +317,9 @@ Rotates all vertices of mesh and every child mesh.
 <tr><td class=docleft width=1%><a href=#ScaleAnimMesh>ScaleAnimMesh</a></td><td class=docright>
 Scales all vertices of mesh and every child mesh.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#SetCutoff>SetCutoff</a></td><td class=docright>
+Set minimum cutoff value to ignore alpha at (0..1), requires flag 2.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#SetFloat>SetFloat</a></td><td class=docright>
 Set a shader variable name of a uniform float type to a float value.
 </td></tr>
@@ -1110,6 +1113,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <table class=doc width=100% cellspacing=3 id=ScaleAnimMesh>
 <tr><td class=doctop colspan=2>Function ScaleAnimMesh( mesh:TMesh,sx#,sy#,sz# )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Scales all vertices of mesh and every child mesh.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetCutoff>
+<tr><td class=doctop colspan=2>Function SetCutoff( tex:TTexture,cutoff:Float=0.0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set minimum cutoff value to ignore alpha at (0..1), requires flag 2.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SetFloat>

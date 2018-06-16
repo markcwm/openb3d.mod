@@ -206,7 +206,7 @@ Type TB3D
 						
 						' hidden tex coords 1 flag
 						If (te_flags & 65536)
-							te_flags=te_flags-65536
+							te_flags=te_flags ~ 65536
 							te_coords=1
 						Else
 							te_coords=0
@@ -237,8 +237,8 @@ Type TB3D
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
 						
-						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
-						If TGlobal.Log_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name
+						If te_file<>"" Then LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
+						If TGlobal.Log_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0]
 						
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
@@ -283,11 +283,11 @@ Type TB3D
 							If b_tex_id>=0 And tex[b_tex_id]<>Null ' valid id and texture
 								brush[brush_no].BrushTexture(tex[b_tex_id], 0, ix)
 								
-								If (tex[b_tex_id].flags[0] & 2) And brush[brush_no].blend[0]=1
-									BrushFX(brush[brush_no], brush[brush_no].fx[0]|32) ' transparency for brush alpha tex
+								If (tex[b_tex_id].flags[0] & 2) And (brush[brush_no].fx[0] & 16)
+									brush[brush_no].BrushFX(brush[brush_no].fx[0] | 32) ' transparency for brush alpha tex
 								EndIf
 								
-								If TGlobal.Log_B3D Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id+" ix="+ix
+								If TGlobal.Log_B3D Then DebugLog tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id+" ix="+ix+" flags="+tex[b_tex_id].flags[0]
 							Else
 								brush[brush_no].tex[ix]=Null
 							EndIf
@@ -471,7 +471,7 @@ Type TB3D
 							
 							If j=0 Or j=1
 								v_surf.VertexTexCoords(v_id, v_u, v_v, v_w, j)
-								'If TGlobal.Log_B3D Then DebugLog "VRTS id="+v_id+" u="+v_u+" v="+v_v+" j="+j+" tcsets="+v_tc_sets
+								If TGlobal.Log_B3D And v_id=0 Then DebugLog "VRTS 0: u="+v_u+" v="+v_v+" cset="+j+" nsets="+v_tc_sets
 							EndIf
 						Next
 						

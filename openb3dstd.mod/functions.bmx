@@ -731,7 +731,7 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadAnimTexture">Online doc</a>
 End Rem
-Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int )
+Function LoadAnimTexture:TTexture( file:String,flags:Int,frame_width:Int,frame_height:Int,first_frame:Int,frame_count:Int,tex:TTexture=Null )
 End Function
 
 Rem
@@ -748,9 +748,8 @@ End Function
 
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=LoadTexture">Online doc</a>
-about: Set usepixmap to true if using pixmap to incbin textures.
 End Rem
-Function LoadTexture:TTexture( file:String,flags:Int=9,usepixmap:Int=False )
+Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
 End Function
 
 Rem

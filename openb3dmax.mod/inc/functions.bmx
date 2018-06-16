@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Set minimum cutoff value to ignore alpha at (0..1), requires flag 2
+End Rem
+Function SetCutoff( tex:TTexture,cutoff:Float=0.0 )
+	Return tex.SetCutoff( cutoff )
+End Function
+
+Rem
 bbdoc: Loads an md2 entity and returns its handle
 End Rem
 Function LoadMD2:TMesh( url:Object,parent:TEntity=Null )

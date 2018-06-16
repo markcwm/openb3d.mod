@@ -22,6 +22,7 @@ Type TTexture
 	
 	' minib3d
 	Field pixmap:TPixmap
+	Field cutoff:Float=0
 	'Field gltex:Int[1]
 	'Field cube_pixmap:TPixmap[7]
 	'Field no_mipmaps:Int
@@ -213,6 +214,13 @@ Type TTexture
 	End Method
 	
 	' Extra
+	
+	' range from 0 to 1
+	Method SetCutoff( value:Float )
+	
+		cutoff=value
+		
+	End Method
 	
 	' Set texture flags, see LoadTexture for values
 	Method TextureFlags( flags:Int )
@@ -526,7 +534,13 @@ Type TTexture
 		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		If (flags & 2)
+			If alpha_present=False And mask=4
+				tex.pixmap=ApplyAlpha(tex.pixmap)
+			Else
+				tex.pixmap=ApplyAlphaCutoff(tex.pixmap,tex.cutoff)
+			EndIf
+		EndIf
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
 		
@@ -628,7 +642,13 @@ Type TTexture
 		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap)
+		If (flags & 2)
+			If alpha_present=False And mask=4
+				tex.pixmap=ApplyAlpha(tex.pixmap)
+			Else
+				tex.pixmap=ApplyAlphaCutoff(tex.pixmap,tex.cutoff)
+			EndIf
+		EndIf
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
 		
@@ -776,6 +796,29 @@ Type TTexture
 				blu=(rgba & $00FF0000) Shr 16
 				alp=(red + grn + blu) / 3.0
 				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+			Next
+		Next
+		
+		Return map
+	End Function
+	
+	Function ApplyAlphaCutoff:TPixmap( map:TPixmap Var,cutoff# )
+		Local rgba%, red%, grn%, blu%, alp%
+		Local cut%=cutoff * 255
+		
+		For Local iy%=0 Until PixmapHeight(map)
+			For Local ix%=0 Until PixmapWidth(map)
+				rgba=ReadPixel(map,ix,iy)
+				red=rgba & $000000FF
+				grn=(rgba & $0000FF00) Shr 8
+				blu=(rgba & $00FF0000) Shr 16
+				alp=(rgba & $FF000000) Shr 24
+				If alp=0 Or alp=255
+					alp=(red + grn + blu) / 3.0
+					If alp < cut
+						WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+					EndIf
+				EndIf
 			Next
 		Next
 		
