@@ -537,7 +537,7 @@ Type TTexture
 		If (flags & 2)
 			If alpha_present=False And mask=4
 				tex.pixmap=ApplyAlpha(tex.pixmap)
-			Else
+			ElseIf mask=4
 				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
 			EndIf
 		EndIf
@@ -645,7 +645,7 @@ Type TTexture
 		If (flags & 2)
 			If alpha_present=False And mask=4
 				tex.pixmap=ApplyAlpha(tex.pixmap)
-			Else
+			ElseIf mask=4
 				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
 			EndIf
 		EndIf
@@ -812,12 +812,9 @@ Type TTexture
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
-				alp=(rgba & $FF000000) Shr 24
-				If alp=0 Or alp=255
-					alp=(red + grn + blu) / 3.0
-					If alp < discard
-						WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-					EndIf
+				alp=(red + grn + blu) / 3.0
+				If alp < discard
+					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
 				EndIf
 			Next
 		Next
