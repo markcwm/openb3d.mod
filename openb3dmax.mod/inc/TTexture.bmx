@@ -531,15 +531,11 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
+		If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
 		If (flags & 2)
-			If alpha_present=False And mask=4
-				tex.pixmap=ApplyAlpha(tex.pixmap)
-			ElseIf mask=4
-				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
-			EndIf
+			If alpha_present=False Or mask=4 Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		EndIf
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
@@ -639,15 +635,11 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determines Assimp mesh tex flags, 2 or 4
+		If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
 		If (flags & 2)
-			If alpha_present=False And mask=4
-				tex.pixmap=ApplyAlpha(tex.pixmap)
-			ElseIf mask=4
-				tex.pixmap=ApplyAlphaDiscard(tex.pixmap,tex.discard)
-			EndIf
+			If alpha_present=False Or mask=4 Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		EndIf
 		
 		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
@@ -785,24 +777,7 @@ Type TTexture
 	End Function
 	
 	' applys alpha to a pixmap based on average of colour values
-	Function ApplyAlpha:TPixmap( map:TPixmap Var )
-		Local rgba%, red%, grn%, blu%, alp%
-		
-		For Local iy%=0 Until PixmapHeight(map)
-			For Local ix%=0 Until PixmapWidth(map)
-				rgba=ReadPixel(map,ix,iy)
-				red=rgba & $000000FF
-				grn=(rgba & $0000FF00) Shr 8
-				blu=(rgba & $00FF0000) Shr 16
-				alp=(red + grn + blu) / 3.0
-				WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-			Next
-		Next
-		
-		Return map
-	End Function
-	
-	Function ApplyAlphaDiscard:TPixmap( map:TPixmap Var,alpha# )
+	Function ApplyAlpha:TPixmap( map:TPixmap Var,alpha# )
 		Local rgba%, red%, grn%, blu%, alp%
 		Local discard%=alpha * 255
 		
@@ -813,9 +788,7 @@ Type TTexture
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
 				alp=(red + grn + blu) / 3.0
-				If alp < discard
-					WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
-				EndIf
+				If alp < discard Then WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
 			Next
 		Next
 		

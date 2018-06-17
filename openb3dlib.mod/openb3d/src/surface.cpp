@@ -42,7 +42,7 @@ Surface::Surface(){
 
 	brush=new Brush;
 
-	for(int i=0;i<7;i++){vbo_id[i]=0;}
+	for(int i=0;i<=7;i++){vbo_id[i]=0;}
 
 	vert_array_size=1;
 	tri_array_size=1;
