@@ -27,7 +27,7 @@ Pivot* Pivot::CopyEntity(Entity* parent_ent){
 	// lists
 	
 	// add parent, add to list
-	piv->AddParent(*parent_ent);
+	piv->AddParent(parent_ent);
 	entity_list.push_back(piv);
 	
 	// add to collision entity list
@@ -104,7 +104,7 @@ Pivot* Pivot::CreatePivot(Entity* parent_ent){
 	Pivot* piv=new Pivot;
 	piv->class_name="Pivot";
 		
-	piv->AddParent(*parent_ent);
+	piv->AddParent(parent_ent);
 	entity_list.push_back(piv);
 
 	// update matrix

@@ -42,7 +42,7 @@ Geosphere* Geosphere::CopyEntity(Entity* parent_ent){
 	// lists
 
 	// add parent, add to list
-	geo->AddParent(*parent_ent);
+	geo->AddParent(parent_ent);
 	entity_list.push_back(geo);
 
 	// add to collision entity list
@@ -157,7 +157,7 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 	mesh_info=C_NewMeshInfo();
 	geo->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
-	geo->AddParent(*parent_ent);
+	geo->AddParent(parent_ent);
 	terrain_list.push_back(geo);
 	if (tsize!=0){
 		geo->size=tsize/2;

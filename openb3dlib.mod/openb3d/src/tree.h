@@ -9,7 +9,7 @@ using namespace std;
 #include "collision.h"
 #include "geom.h"
 
-class Collision;
+struct Collision;
 
 class MeshCollider{
 public:

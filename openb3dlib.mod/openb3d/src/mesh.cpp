@@ -75,7 +75,7 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 	// lists
 
 	// add parent, add to list
-	mesh->AddParent(*parent_ent);
+	mesh->AddParent(parent_ent);
 	entity_list.push_back(mesh);
 
 	// add to animate list
@@ -328,7 +328,7 @@ Mesh* Mesh::CreateMesh(Entity* parent_ent){
 
 	mesh->class_name="Mesh";
 
-	mesh->AddParent(*parent_ent);
+	mesh->AddParent(parent_ent);
 	entity_list.push_back(mesh);
 
 	//update matrix
@@ -372,7 +372,7 @@ Bone* Mesh::CreateBone(Entity* parent_ent){
 	bone->keys=new AnimationKeys();
 	
 	// add parent, add to list
-	bone->AddParent(*parent_ent);
+	bone->AddParent(parent_ent);
 	entity_list.push_back(bone);
 	
 	// update matrix
@@ -436,7 +436,7 @@ Mesh* Mesh::LoadMesh(string filename,Entity* parent_ent){
 
 	mesh->class_name="Mesh";
 
-	mesh->AddParent(*parent_ent);
+	mesh->AddParent(parent_ent);
 	entity_list.push_back(mesh);
 
 	//update matrix
@@ -499,11 +499,10 @@ Mesh* Mesh::CreatePlane(int divs, Entity* parent_ent){
 	surf->AddVertex( 50000.0,0.0, 50000.0);
 	surf->AddVertex( 50000.0,0.0,-50000.0);
 
-
-	surf->VertexNormal(0,0.0,0.0,-1.0);
-	surf->VertexNormal(1,0.0,0.0,-1.0);
-	surf->VertexNormal(2,0.0,0.0,-1.0);
-	surf->VertexNormal(3,0.0,0.0,-1.0);
+	surf->VertexNormal(0,0.0,1.0,0.0);
+	surf->VertexNormal(1,0.0,1.0,0.0);
+	surf->VertexNormal(2,0.0,1.0,0.0);
+	surf->VertexNormal(3,0.0,1.0,0.0);
 
 	surf->VertexTexCoords(0,0.0,1.0,0.0,0);
 	surf->VertexTexCoords(1,0.0,0.0,0.0,0);

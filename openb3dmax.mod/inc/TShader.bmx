@@ -463,4 +463,24 @@ Type TShader
 		
 	End Method
 	
+	Method UseEntity( name:String,ent:TEntity,mode:Int )
+	
+		Local cString:Byte Ptr=name.ToCString()
+		UseEntity_( GetInstance(Self),cString,TEntity.GetInstance(ent),mode )
+		MemFree cString
+		
+	End Method
+	
+	Method ShaderFunction( EnableFunction(),DisableFunction() )
+	
+		ShaderFunction_( GetInstance(Self),EnableFunction,DisableFunction )
+		
+	End Method
+	
+	Method GetShaderProgram:Int()
+	
+		Return GetShaderProgram_( GetInstance(Self) )
+		
+	End Method
+	
 End Type

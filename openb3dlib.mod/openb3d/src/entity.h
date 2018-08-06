@@ -262,7 +262,7 @@ public:
 	static float TFormedZ();
 	// helper funcs
 	void UpdateMat(bool load_identity=false);
-	void AddParent(Entity &parent_ent);
+	void AddParent(Entity* parent_ent);
 	static void UpdateChildren(Entity* ent_p);	
 	float EntityDistanceSquared(Entity* ent2);	
 	// Quaternions
@@ -272,6 +272,7 @@ public:
 	void MQ_GetScaleXYZ(float &width, float &height, float &depth);
 	void MQ_Turn( float ang, float vx, float vy, float vz, int glob=false);
 	void MQ_ApplyNewtonTransform( const float* newtonMatrix );
+	float* EntityMatrix();
 	// virtual
 	virtual void Update() {};
 	virtual void Render() {};

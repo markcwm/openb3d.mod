@@ -34,7 +34,7 @@ VoxelSprite* VoxelSprite::CreateVoxelSprite(int slices, Entity* parent_ent){
 
 	voxelSprite->class_name="VoxelSprite";
 
-	voxelSprite->AddParent(*parent_ent);
+	voxelSprite->AddParent(parent_ent);
 	entity_list.push_back(voxelSprite);
 
 	//update matrix
@@ -138,10 +138,10 @@ VoxelSprite* VoxelSprite::CreateVoxelSprite(int slices, Entity* parent_ent){
 			surf->reset_vbo=1|4|8;
 			surf->UpdateVBO();
 			glBindBuffer(GL_ARRAY_BUFFER,surf->vbo_id[2]);
-			glBufferData(GL_ARRAY_BUFFER,(surf->no_verts*3*4),&surf->vert_tex_coords1[0],GL_STATIC_DRAW);
+			glBufferData(GL_ARRAY_BUFFER,(surf->no_verts*3*sizeof(float)),&surf->vert_tex_coords1[0],GL_STATIC_DRAW);
 
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,surf->vbo_id[5]);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER,surf->tris.size()*2,&surf->tris[0],GL_STATIC_DRAW);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER,surf->tris.size()*sizeof(unsigned short),&surf->tris[0],GL_STATIC_DRAW);
 
 		}
 		surf_number++;

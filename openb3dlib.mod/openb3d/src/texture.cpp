@@ -166,7 +166,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 					break;
 			}
 		}
-		delete dstbuffer;
+		delete[] dstbuffer;
 		stbi_image_free(buffer);
 
 		tex->texture=name;
@@ -267,7 +267,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		tex->texture=tex->frames[0];
 		tex->width=frame_width;
 		tex->height=frame_height;
-		delete dstbuffer;
+		delete[] dstbuffer;
 
 	}
 	stbi_image_free(buffer);
@@ -485,34 +485,34 @@ void Texture::CameraToTex(Camera* cam, int frame){
 	glBindTexture (target, texture);
 
 	if (framebuffer==0){
-		framebuffer=new unsigned int[1];
+		framebuffer=new unsigned int[2];
 		glGenFramebuffers(1, &framebuffer[0]);
 		glGenRenderbuffers(1, &framebuffer[1]);
 		if(flags&128){
 			for (int i=0;i<6;i++){
 				switch(i){
 					case 0:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 					case 1:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 					case 2:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 					case 3:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 					case 4:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 					case 5:
-						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+						glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 						break;
 				}
 			}
 		}else{
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
 		}
 
 	}
@@ -584,20 +584,24 @@ void Texture::DepthBufferToTex(Camera* cam=0 ){
 		if (framebuffer==0){
 			framebuffer=new unsigned int[1];
 			glGenFramebuffers(1, &framebuffer[0]);
-			glGenRenderbuffers(1, &framebuffer[1]);
+			//glGenRenderbuffers(1, &framebuffer[1]);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
-		}
+
+			//glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]); // removed as I don't think it's needed
+			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+		}//else{
 		glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]);
+		//}
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
-		glBindRenderbuffer(GL_RENDERBUFFER, framebuffer[1]);
+		//glBindRenderbuffer(GL_RENDERBUFFER, framebuffer[1]);
 
 		cam->Render();
-		glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
+		//glFramebufferRenderbuffer( GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, 0); 
 
 		glGenerateMipmap(GL_TEXTURE_2D);
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+		//glBindRenderbuffer(GL_RENDERBUFFER, 0);
 
 	}
 }

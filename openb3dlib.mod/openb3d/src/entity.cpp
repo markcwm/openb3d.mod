@@ -294,7 +294,8 @@ void Entity::RotateEntity(float x,float y,float z,int global){
 			m2.grid[3][0] = 0; //remove translation
 			m2.grid[3][1] = 0;
 			m2.grid[3][2] = 0;
-			m2.Scale(parent->sx, parent->sy, parent->sz);
+			//m2.Scale(parent->sx, parent->sy, parent->sz);
+			m2.Scale(parent->EntityScaleX(true), parent->EntityScaleY(true), parent->EntityScaleZ(true));
 			//apply rotation matrix
 			rotmat.Multiply2(m2);
 		}
@@ -1346,9 +1347,9 @@ void Entity::UpdateMat(bool load_identity){
 	
 }
 
-void Entity::AddParent(Entity &parent_ent){
+void Entity::AddParent(Entity* parent_ent){
 	// self.parent = parent_ent
-	parent=&parent_ent;
+	parent=parent_ent;
 
 	//add self to parent_ent child list
 	if(parent!=NULL){
@@ -1566,4 +1567,8 @@ void Entity::MQ_Update(){
 		Entity* ent=*it;
 		ent->MQ_Update();
 	}
+}
+
+float* Entity::EntityMatrix(){
+	return &mat.grid[0][0];
 }

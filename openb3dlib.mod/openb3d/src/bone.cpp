@@ -24,7 +24,7 @@ Bone* Bone::CopyEntity(Entity* parent_ent){
 	}
 	
 	// add parent, add to list
-	bone->AddParent(*parent_ent);
+	bone->AddParent(parent_ent);
 	entity_list.push_back(bone);
 	
 	// update matrix

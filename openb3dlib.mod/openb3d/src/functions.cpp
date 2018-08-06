@@ -15,6 +15,7 @@
 #include "particle.h"
 #include "physics.h"
 #include "actions.h"
+#include "postfx.h"
 
 //#include "functions.h"
 
@@ -2092,6 +2093,17 @@ void AmbientShader_(Shader* material){
 	Global::ambient_shader=material;
 }
 
+void UseEntity_(Shader* material, char* name, Entity* ent, int mode){
+	material->UseEntity(name, ent, mode);
+}
+
+void ShaderFunction_(Shader* material, void (*EnableFunction)(void), void (*DisableFunction)(void)){
+	material->UseFunction(EnableFunction, DisableFunction);
+}
+
+int GetShaderProgram_(Shader* material){
+	return material->GetProgram();
+}
 
 
 OcTree* CreateOcTree_(float w, float h, float d, Entity* parent_ent=0){
@@ -2172,6 +2184,43 @@ void EndAction_(Action* act){
 
 void DepthBufferToTex_( Texture* tex, Camera* cam=0 ){
 	tex->DepthBufferToTex(cam);
+}
+
+
+PostFX* CreatePostFX_(Camera* cam, int passes=1){
+	return PostFX::CreatePostFX(cam, passes);
+}
+
+void AddRenderTarget_(PostFX* fx, int pass_no, int numColBufs, bool depth, int format=8, float scale=1.0){
+	fx->AddRenderTarget(pass_no, numColBufs, depth, format, scale);
+}
+
+void PostFXShader_(PostFX* fx, int pass_no, Shader* shader){
+	fx->PostFXShader(pass_no, shader);
+}
+
+void PostFXShaderPass_(PostFX* fx, int pass_no, char* name, int v){
+	fx->PostFXShaderPass(pass_no, name, v);
+}
+
+void PostFXBuffer_(PostFX* fx, int pass_no, int source_pass, int index, int slot){
+	fx->PostFXBuffer(pass_no, source_pass, index, slot);
+}
+
+void PostFXTexture_(PostFX* fx, int pass_no, Texture* tex, int slot, int frame=0){
+	fx->PostFXTexture(pass_no, tex, slot, frame);
+}
+
+void PostFXFunction_(PostFX* fx, int pass_no, void (*PassFunction)(void)){
+	fx->PostFXFunction(pass_no, PassFunction);
+}
+
+float* CameraProjMatrix_(Camera* cam){
+	return cam->CameraProjMatrix();
+}
+
+float* EntityMatrix_(Entity* ent){
+	return ent->EntityMatrix();
 }
 
 /*void SetParameter1S(Shader* material, char* name, float v1){

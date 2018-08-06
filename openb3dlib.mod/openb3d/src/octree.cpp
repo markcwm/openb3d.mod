@@ -209,7 +209,7 @@ OcTree* OcTree::CreateOcTree(float w, float h, float d, Entity* parent_ent){
 
 	OcTree* oct=new OcTree;
 
-	oct->AddParent(*parent_ent);
+	oct->AddParent(parent_ent);
 	mesh_info=C_NewMeshInfo();
 	oct->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
@@ -646,7 +646,7 @@ OcTree* OcTree::CopyEntity(Entity* parent_ent){
 	// lists
 
 	// add parent, add to list
-	oct->AddParent(*parent_ent);
+	oct->AddParent(parent_ent);
 	entity_list.push_back(oct);
 
 	// add to collision entity list

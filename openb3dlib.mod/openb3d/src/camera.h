@@ -108,6 +108,8 @@ public:
 	void accFrustum(float left_,float right_,float bottom,float top,float zNear,float zFar,float pixdx,float pixdy,float eyedx,float eyedy,float focus);
 	void UpdateProjMatrix();
 
+	float* CameraProjMatrix();
+
 };
 
 void UpdateEntityRender0(Entity* ent,Entity* cam=NULL);

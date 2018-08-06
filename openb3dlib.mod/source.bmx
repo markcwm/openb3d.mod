@@ -36,6 +36,7 @@ Import "openb3d/src/particle.cpp" ' 0.9
 Import "openb3d/src/physics.cpp" ' 1.1
 Import "openb3d/src/pick.cpp"
 Import "openb3d/src/pivot.cpp"
+Import "openb3d/src/postfx.cpp" ' 1.25
 Import "openb3d/src/project.cpp"
 Import "openb3d/src/quaternion.cpp"
 Import "openb3d/src/shadow.cpp"

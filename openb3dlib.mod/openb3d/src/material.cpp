@@ -28,11 +28,14 @@ USE_INTEGER_2,
 USE_INTEGER_3,
 USE_INTEGER_4,
 USE_ENTITY_COORDS,
+USE_ENTITY_MATRIX,
+USE_ENTITY_INVERSE_MATRIX,
 USE_SURFACE,
 USE_MODEL_MATRIX,
 USE_VIEW_MATRIX,
 USE_PROJ_MATRIX,
-USE_MODELVIEW_MATRIX
+USE_MODELVIEW_MATRIX,
+USE_FUNCTION
 };
 
 void Shader::FreeShader(){
@@ -550,6 +553,20 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 			Parameters[i].ent->EntityY(),
 			Parameters[i].ent->EntityZ());}
 			break;
+		case USE_ENTITY_MATRIX:
+			if (arb_program !=0){
+				int loc=glGetUniformLocation(arb_program->Program, Parameters[i].name.c_str());
+				glUniformMatrix4fv(loc, 1 , 0, &Parameters[i].ent->mat.grid[0][0]);
+			}
+			break;
+		case USE_ENTITY_INVERSE_MATRIX:
+			if (arb_program !=0){
+				Matrix new_mat;
+				Parameters[i].ent->mat.GetInverse(new_mat);
+				int loc=glGetUniformLocation(arb_program->Program, Parameters[i].name.c_str());
+				glUniformMatrix4fv(loc, 1 , 0, &new_mat.grid[0][0]);
+			}
+			break;
 		case USE_SURFACE:
 			if (arb_program !=0){
 				if(Parameters[i].surf!=0){
@@ -589,7 +606,11 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices){
 				arb_program->SetMatrix4F(Parameters[i].name, &new_mat.grid[0][0]);
 			}
 			break;
-
+		case USE_FUNCTION:
+			if (Parameters[i].Enable!=0){
+				Parameters[i].Enable();
+			}
+			break;
 
 		//default:
 		}
@@ -880,6 +901,11 @@ void Shader::TurnOff(){
 				int loc= glGetAttribLocation(arb_program->Program, Parameters[i].name.c_str());
 				glDisableVertexAttribArray(loc);
 			}
+		case USE_FUNCTION:
+			if (Parameters[i].Disable!=0){
+				Parameters[i].Disable();
+			}
+			break;
 		}
 	}
 
@@ -1132,6 +1158,27 @@ void Shader::UseMatrix(string name, int mode){
 	}
 	Parameters.push_back(data);
 }
+
+void Shader::UseEntity(string name, Entity* ent, int mode){
+	ShaderData data;
+	data.name=glGetUniformLocation(arb_program->Program, name.c_str());
+	if (mode==0) {		//model matrix
+		data.type=USE_ENTITY_MATRIX;
+	}else if(mode==1){	//view matrix
+		data.type=USE_ENTITY_INVERSE_MATRIX;
+	}
+	data.ent=ent;
+	Parameters.push_back(data);
+}
+
+void Shader::UseFunction(void (*Enable)(void), void (*Disable)(void)){
+	ShaderData data;
+	data.type=USE_FUNCTION;
+	data.Enable=Enable;
+	data.Disable=Disable;
+	Parameters.push_back(data);
+}
+
 /*void Shader::SetParameter1S(string name, float v1){
 	if (arb_program !=0){arb_program->SetParameter1S(name, v1);}
 }

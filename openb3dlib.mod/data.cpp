@@ -1128,7 +1128,7 @@ Brush* EntityBrush_( Entity* obj,int varid ){
 	return NULL;
 }
 
-Matrix* EntityMatrix_( Entity* obj,int varid ){
+Matrix* EntityMatrix2_( Entity* obj,int varid ){
 	switch (varid){
 		case ENTITY_mat : return &obj->mat;
 		case ENTITY_rotmat : return &obj->rotmat;

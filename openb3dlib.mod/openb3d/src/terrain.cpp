@@ -48,7 +48,7 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 	// lists
 
 	// add parent, add to list
-	terr->AddParent(*parent_ent);
+	terr->AddParent(parent_ent);
 	entity_list.push_back(terr);
 
 	// add to collision entity list
@@ -156,7 +156,7 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	mesh_info=C_NewMeshInfo();
 	terr->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
-	terr->AddParent(*parent_ent);
+	terr->AddParent(parent_ent);
 	terrain_list.push_back(terr);
 	if (tsize!=0){
 		terr->size=tsize;

@@ -64,7 +64,7 @@ int* EntityInt_( Entity* obj,int varid );
 float* EntityFloat_( Entity* obj,int varid );
 const char* EntityString_( Entity* obj,int varid );
 Entity* EntityEntity_( Entity* obj,int varid );
-Matrix* EntityMatrix_( Entity* obj,int varid );
+Matrix* EntityMatrix2_( Entity* obj,int varid );
 Brush* EntityBrush_( Entity* obj,int varid );
 int EntityListSize_( Entity* obj,int varid );
 Entity* EntityIterListEntity_( Entity* obj,int varid,int &id );

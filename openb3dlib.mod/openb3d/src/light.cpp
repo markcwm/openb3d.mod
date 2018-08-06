@@ -33,7 +33,7 @@ Light* Light::CopyEntity(Entity* parent_ent){
 	// lists
 	
 	// add parent, add to list
-	light->AddParent(*parent_ent);
+	light->AddParent(parent_ent);
 	entity_list.push_back(light);
 	
 	// add to collision entity list
@@ -162,7 +162,7 @@ Light* Light::CreateLight(int l_type,Entity* parent_ent){
 	}
 	
 	light_list.push_back(light);
-	light->AddParent(*parent_ent);
+	light->AddParent(parent_ent);
 	entity_list.push_back(light);
 
 	// update matrix

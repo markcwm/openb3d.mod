@@ -462,10 +462,10 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 				if(root_ent==NULL) root_ent=piv;
 
 				// if ent is root ent, and external parent specified, add parent
-				if(root_ent==piv) piv->AddParent(*parent_ent_ext);
+				if(root_ent==piv) piv->AddParent(parent_ent_ext);
 
 				// if ent nested then add parent
-				if(node_level>0) piv->AddParent(*parent_ent);
+				if(node_level>0) piv->AddParent(parent_ent);
 
 				QuatToMat(-n_qw,n_qx,n_qy,-n_qz,piv->mat);
 
@@ -512,10 +512,10 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 			if(root_ent==NULL) root_ent=mesh;
 
 			// if ent is root ent, and external parent specified, add parent
-			if(root_ent==mesh) mesh->AddParent(*parent_ent_ext);
+			if(root_ent==mesh) mesh->AddParent(parent_ent_ext);
 
 			// if ent nested then add parent
-			if(node_level>0) mesh->AddParent(*parent_ent);
+			if(node_level>0) mesh->AddParent(parent_ent);
 
 			QuatToMat(-n_qw,n_qx,n_qy,-n_qz,mesh->mat);
 
@@ -815,7 +815,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 			if(root_ent==NULL) root_ent=bo_bone;
 
 			// if ent nested then add parent
-			if(node_level>0) bo_bone->AddParent(*parent_ent);
+			if(node_level>0) bo_bone->AddParent(parent_ent);
 
 			QuatToMat(-bo_bone->n_qw,bo_bone->n_qx,bo_bone->n_qy,-bo_bone->n_qz,bo_bone->mat);
 

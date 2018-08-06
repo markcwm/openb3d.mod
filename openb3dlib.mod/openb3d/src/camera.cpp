@@ -38,7 +38,7 @@ Camera* Camera::CopyEntity(Entity* parent_ent){
 	// lists
 	
 	// add parent, add to list
-	cam->AddParent(*parent_ent);
+	cam->AddParent(parent_ent);
 	entity_list.push_back(cam);
 	
 	// add to collision entity list
@@ -144,7 +144,7 @@ Camera* Camera::CreateCamera(Entity* parent_ent){
 	
 	cam->class_name="Camera";
 	
-	cam->AddParent(*parent_ent);
+	cam->AddParent(parent_ent);
 	entity_list.push_back(cam); // add to entity list
 	cam_list.push_back(cam); // add to cam list
 	
@@ -1083,4 +1083,8 @@ void Camera::UpdateProjMatrix(){
 		proj_mat[15]=1.0;
 	}
 
+}
+
+float* Camera::CameraProjMatrix(){
+	return &proj_mat[0];
 }

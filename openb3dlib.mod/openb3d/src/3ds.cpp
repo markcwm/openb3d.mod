@@ -403,7 +403,7 @@ Mesh* Load3ds(string URL, Entity* parent_ent){
   'Loader.Mesh.FlipMesh()*/
 
   mesh->class_name="Mesh";
-  mesh->AddParent(*parent_ent);
+  mesh->AddParent(parent_ent);
   Entity::entity_list.push_back(mesh);
   if(mesh->parent!=0){
     mesh->mat.Overwrite(mesh->parent->mat);

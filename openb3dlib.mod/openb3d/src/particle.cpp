@@ -234,7 +234,7 @@ ParticleEmitter* ParticleEmitter::CreateParticleEmitter(Entity* particle, Entity
 
 	emitter->class_name="Emitter";
 		
-	emitter->AddParent(*parent_ent);
+	emitter->AddParent(parent_ent);
 	entity_list.push_back(emitter);
 
 	// update matrix
@@ -263,7 +263,7 @@ ParticleEmitter* ParticleEmitter::CopyEntity(Entity* parent_ent){
 
 	emitter->class_name="Emitter";
 		
-	emitter->AddParent(*parent_ent);
+	emitter->AddParent(parent_ent);
 	entity_list.push_back(emitter);
 
 	// add to collision entity list

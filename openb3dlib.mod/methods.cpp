@@ -114,7 +114,7 @@ void UpdateMat_( Entity* obj,bool load_identity ){
 	obj->UpdateMat( load_identity );
 }
 
-void AddParent_( Entity* obj,Entity &parent_ent ){
+void AddParent_( Entity* obj,Entity* parent_ent ){
 	obj->AddParent( parent_ent );
 }
 

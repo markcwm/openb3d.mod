@@ -29,7 +29,7 @@ Sprite* Sprite::CopyEntity(Entity* parent_ent){
 	// lists
 
 	// add parent, add to list
-	sprite->AddParent(*parent_ent);
+	sprite->AddParent(parent_ent);
 	entity_list.push_back(sprite);
 
 	// add to collision entity list
@@ -122,7 +122,7 @@ Sprite* Sprite::CreateSprite(Entity* parent_ent){
 	Sprite* sprite=new Sprite;
 	sprite->class_name="Sprite";
 
-	sprite->AddParent(*parent_ent);
+	sprite->AddParent(parent_ent);
 	Entity::entity_list.push_back(sprite);
 
 	// update matrix

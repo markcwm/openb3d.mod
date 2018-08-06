@@ -208,13 +208,13 @@ Type TEntity
 		If parent<>Null Then parent.CopyList(parent.child_list)
 		
 		' matrix
-		inst=EntityMatrix_( GetInstance(Self),ENTITY_mat )
+		inst=EntityMatrix2_( GetInstance(Self),ENTITY_mat )
 		mat=TMatrix.GetObject(inst)
 		If mat=Null And inst<>Null Then mat=TMatrix.CreateObject(inst)
-		inst=EntityMatrix_( GetInstance(Self),ENTITY_rotmat )
+		inst=EntityMatrix2_( GetInstance(Self),ENTITY_rotmat )
 		rotmat=TMatrix.GetObject(inst)
 		If rotmat=Null And inst<>Null Then rotmat=TMatrix.CreateObject(inst)
-		inst=EntityMatrix_( GetInstance(Self),ENTITY_old_mat )
+		inst=EntityMatrix2_( GetInstance(Self),ENTITY_old_mat )
 		old_mat=TMatrix.GetObject(inst)
 		If old_mat=Null And inst<>Null Then old_mat=TMatrix.CreateObject(inst)
 		

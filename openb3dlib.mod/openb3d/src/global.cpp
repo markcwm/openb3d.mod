@@ -20,6 +20,7 @@
 #include "particle.h"
 #include "physics.h"
 #include "actions.h"
+#include "postfx.h"
 
 #include <list>
 #include <stdlib.h>
@@ -216,6 +217,12 @@ void Global::RenderWorld(){
 			if(camera_in_use->Hidden()==true) continue;
 			ShadowObject::Update(camera_in_use);
 		}
+	}
+	
+	list<PostFX*>::iterator it2;
+	for(it2=PostFX::fx_list.begin();it2!=PostFX::fx_list.end();it2++){
+		PostFX* fx=*it2;
+		fx->Render();
 	}
 }
 

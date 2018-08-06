@@ -629,6 +629,20 @@ Function UpdateTexCoords( surf:TSurface )
 	surf.UpdateTexCoords()
 End Function
 
+Rem
+bbdoc: undocumented
+End Rem
+Function CameraProjMatrix:Float Ptr( cam:TCamera )
+	Return CameraProjMatrix_( TCamera.GetInstance(cam) )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function EntityMatrix:Float Ptr( ent:TEntity )
+	Return EntityMatrix_( TEntity.GetInstance(ent) )
+End Function
+
 ' *** Blitz3D functions, A-Z (in Minib3d)
 
 'Rem
@@ -2410,6 +2424,57 @@ Function ParticleTrail( sprite:TSprite,length:Int )
 	ParticleTrail_( TSprite.GetInstance(sprite),length )
 End Function
 
+' *** PostFX
+
+Rem
+bbdoc: undocumented
+End Rem
+Function CreatePostFX:TPostFX( cam:TCamera,passes:Int=1 )
+	Return TPostFX.CreatePostFX( cam,passes )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function AddRenderTarget( fx:TPostFX,pass_no:Int,numColBufs:Int,depth:Int,format:Int=8,scale:Float=1.0 )
+	fx.AddRenderTarget( pass_no,numColBufs,depth,format,scale )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function PostFXShader( fx:TPostFX,pass_no:Int,shader:TShader )
+	fx.PostFXShader( pass_no,shader )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function PostFXShaderPass( fx:TPostFX,pass_no:Int,name:String,v:Int )
+	fx.PostFXShaderPass( pass_no,name,v )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function PostFXBuffer( fx:TPostFX,pass_no:Int,source_pass:Int,index:Int,slot:Int )
+	fx.PostFXBuffer( pass_no,source_pass,index,slot )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function PostFXTexture( fx:TPostFX,pass_no:Int,tex:TTexture,slot:Int,frame:Int=0 )
+	fx.PostFXTexture( pass_no,tex,slot,frame )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function PostFXFunction( fx:TPostFX,pass_no:Int,PassFunction() )
+	fx.PostFXFunction( pass_no,PassFunction )
+End Function
+
 ' *** Shader
 
 Rem
@@ -2603,7 +2668,28 @@ bbdoc: Set default shader for surfaces
 End Rem
 Function AmbientShader( material:TShader )
 	TGlobal.ambient_shader=material
-	AmbientShader_( TShader.GetInstance(material) )
+	material.AmbientShader()
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function UseEntity( material:TShader,name:String,ent:TEntity,mode:Int )
+	material.UseEntity( name,ent,mode )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function ShaderFunction( material:TShader,EnableFunction(),DisableFunction() )
+	material.ShaderFunction( EnableFunction,DisableFunction )
+End Function
+
+Rem
+bbdoc: undocumented
+End Rem
+Function GetShaderProgram:Int( material:TShader )
+	Return material.GetShaderProgram()
 End Function
 
 ' *** Shadow

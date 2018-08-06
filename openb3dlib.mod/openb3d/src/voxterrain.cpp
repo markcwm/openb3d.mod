@@ -35,7 +35,7 @@ VoxelTerrain* VoxelTerrain::CreateVoxelTerrain(int xsize, int ysize, int zsize, 
 	mesh_info=C_NewMeshInfo();
 	terr->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
-	terr->AddParent(*parent_ent);
+	terr->AddParent(parent_ent);
 	terrain_list.push_back(terr);
 	if (xsize!=0){
 		terr->size=xsize;

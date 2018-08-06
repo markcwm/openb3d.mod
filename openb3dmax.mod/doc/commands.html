@@ -44,6 +44,9 @@ Turns entity to the given x y z rotation at the speed of rate.
 <tr><td class=docleft width=1%><a href=#ActVector>ActVector</a></td><td class=docright>
 Positions entity according the given x y z vector.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#AddRenderTarget>AddRenderTarget</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#AddSurface>AddSurface</a></td><td class=docright>
 Add an existing surface to a mesh.
 </td></tr>
@@ -79,6 +82,9 @@ GL equivalent, experimental.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BufferToTex>BufferToTex</a></td><td class=docright>
 Copy pixmap buffer to texture, buffer must be a byte ptr.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CameraProjMatrix>CameraProjMatrix</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CameraToTex>CameraToTex</a></td><td class=docright>
 Copy rendered camera view to texture.
@@ -124,6 +130,9 @@ Create octree and set its width, height and depth.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateParticleEmitter>CreateParticleEmitter</a></td><td class=docright>
 Create particle emitter from sprite.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreatePostFX>CreatePostFX</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateQuad>CreateQuad</a></td><td class=docright>
 Create flat quad.
@@ -191,6 +200,9 @@ New end Max2D function, allows instant resolution switch.
 <tr><td class=docleft width=1%><a href=#EntityListAdd>EntityListAdd</a></td><td class=docright>
 Like using ListAddLast(list,value) in Minib3d, except ent parameter.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#EntityMatrix>EntityMatrix</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#EntityScaleX>EntityScaleX</a></td><td class=docright>
 Returns the scale for the x axis of an entity set with ScaleEntity.
 </td></tr>
@@ -232,6 +244,9 @@ Set terrain height normalizing value, 0.05 is default.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetMeshLoader>GetMeshLoader</a></td><td class=docright>
 Returns a mesh loader capable of loading <b>extension</b>.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetShaderProgram>GetShaderProgram</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
@@ -308,6 +323,21 @@ Set vector (direction and speed) of particle trails.
 <tr><td class=docleft width=1%><a href=#PositionAnimMesh>PositionAnimMesh</a></td><td class=docright>
 Moves all vertices of mesh and every child mesh.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#PostFXBuffer>PostFXBuffer</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PostFXFunction>PostFXFunction</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PostFXShader>PostFXShader</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PostFXShaderPass>PostFXShaderPass</a></td><td class=docright>
+undocumented.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#PostFXTexture>PostFXTexture</a></td><td class=docright>
+undocumented.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#RepeatMesh>RepeatMesh</a></td><td class=docright>
 Like CopyMesh but for instancing effects.
 </td></tr>
@@ -355,6 +385,9 @@ Apply shader to an entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadeMesh>ShadeMesh</a></td><td class=docright>
 Apply shader to a mesh.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ShaderFunction>ShaderFunction</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShaderMaterial>ShaderMaterial</a></td><td class=docright>
 Set a 3d texture for sampling.
@@ -409,6 +442,9 @@ Number of triangles currently rendered.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UpdateTexCoords>UpdateTexCoords</a></td><td class=docright>
 Recalculates the surface's uvw coord set 1 based on vertices.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseEntity>UseEntity</a></td><td class=docright>
+undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseFloat>UseFloat</a></td><td class=docright>
 Bind a float variable to a shader variable name of a uniform float type.
@@ -541,6 +577,9 @@ Pick.
 <tr><td class=docleft width=1%><a href=#TPivot>TPivot</a></td><td class=docright>
 Pivot entity.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#TPostFX>TPostFX</a></td><td class=docright>
+Post effects object.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TQuaternion>TQuaternion</a></td><td class=docright>
 Quaternion functions.
 </td></tr>
@@ -633,6 +672,11 @@ Voxelsprite mesh entity.
 <tr><td class=docleft width=1%>Description</td><td class=docright>Positions entity according the given x y z vector.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=AddRenderTarget>
+<tr><td class=doctop colspan=2>Function AddRenderTarget( fx:TPostFX,pass_no:Int,numColBufs:Int,depth:Int,format:Int=8,scale:Float=1.0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=AddSurface>
 <tr><td class=doctop colspan=2>Function AddSurface( mesh:TMesh,surf:TSurface,anim_surf%=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Add an existing surface to a mesh.</td></tr>
@@ -695,6 +739,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=BufferToTex>
 <tr><td class=doctop colspan=2>Function BufferToTex( tex:TTexture,buffer:Byte Ptr,frame:Int=0 ) ' frame currently does nothing</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy pixmap buffer to texture, buffer must be a byte ptr.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CameraProjMatrix>
+<tr><td class=doctop colspan=2>Function CameraProjMatrix:Float Ptr( cam:TCamera )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CameraToTex>
@@ -772,6 +821,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=CreateParticleEmitter>
 <tr><td class=doctop colspan=2>Function CreateParticleEmitter:TParticleEmitter( particle:TEntity,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create particle emitter from sprite.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreatePostFX>
+<tr><td class=doctop colspan=2>Function CreatePostFX:TPostFX( cam:TCamera,passes:Int=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateQuad>
@@ -886,6 +940,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=EntityMatrix>
+<tr><td class=doctop colspan=2>Function EntityMatrix:Float Ptr( ent:TEntity )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=EntityScaleX>
 <tr><td class=doctop colspan=2>Function EntityScaleX:Float( ent:TEntity,glob:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns the scale for the x axis of an entity set with ScaleEntity.</td></tr>
@@ -957,6 +1016,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <table class=doc width=100% cellspacing=3 id=GetMeshLoader>
 <tr><td class=doctop colspan=2>Function GetMeshLoader:TMeshLoader(extension:String)</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a mesh loader capable of loading <b>extension</b>.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=GetShaderProgram>
+<tr><td class=doctop colspan=2>Function GetShaderProgram:Int( material:TShader )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetString>
@@ -1100,6 +1164,31 @@ if the node is set at a higher range than the camera, its children won't be rend
 <tr><td class=docleft width=1%>Description</td><td class=docright>Moves all vertices of mesh and every child mesh.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=PostFXBuffer>
+<tr><td class=doctop colspan=2>Function PostFXBuffer( fx:TPostFX,pass_no:Int,source_pass:Int,index:Int,slot:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PostFXFunction>
+<tr><td class=doctop colspan=2>Function PostFXFunction( fx:TPostFX,pass_no:Int,PassFunction() )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PostFXShader>
+<tr><td class=doctop colspan=2>Function PostFXShader( fx:TPostFX,pass_no:Int,shader:TShader )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PostFXShaderPass>
+<tr><td class=doctop colspan=2>Function PostFXShaderPass( fx:TPostFX,pass_no:Int,name:String,v:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=PostFXTexture>
+<tr><td class=doctop colspan=2>Function PostFXTexture( fx:TPostFX,pass_no:Int,tex:TTexture,slot:Int,frame:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=RepeatMesh>
 <tr><td class=doctop colspan=2>Function RepeatMesh:TMesh( mesh:TMesh,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Like CopyMesh but for instancing effects.</td></tr>
@@ -1178,6 +1267,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <table class=doc width=100% cellspacing=3 id=ShadeMesh>
 <tr><td class=doctop colspan=2>Function ShadeMesh( mesh:TMesh,material:TShader )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Apply shader to a mesh.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ShaderFunction>
+<tr><td class=doctop colspan=2>Function ShaderFunction( material:TShader,EnableFunction(),DisableFunction() )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShaderMaterial>
@@ -1278,6 +1372,11 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <table class=doc width=100% cellspacing=3 id=UpdateTexCoords>
 <tr><td class=doctop colspan=2>Function UpdateTexCoords( surf:TSurface )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Recalculates the surface's uvw coord set 1 based on vertices.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseEntity>
+<tr><td class=doctop colspan=2>Function UseEntity( material:TShader,name:String,ent:TEntity,mode:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseFloat>
@@ -1515,6 +1614,11 @@ Call mesh loader implementation.
 <table class=doc width=100% cellspacing=3 id=TPivot>
 <tr><td class=doctop colspan=2>Type TPivot Extends TEntity</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Pivot entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TPostFX>
+<tr><td class=doctop colspan=2>Type TPostFX</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Post effects object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TQuaternion>
