@@ -18,6 +18,7 @@ int Light::gl_light[]={GL_LIGHT0,GL_LIGHT1,GL_LIGHT2,GL_LIGHT3,GL_LIGHT4,GL_LIGH
 
 vector<Light*> Light::light_list;
 
+
 Light* Light::CopyEntity(Entity* parent_ent){
 
 	// new light
@@ -121,7 +122,6 @@ void Light::FreeEntity(){
 	}
 
 	no_lights=no_lights-1;
-
 	
 	delete this;
 	
@@ -199,7 +199,6 @@ void Light::LightConeAngles(float inner,float outer){
 }
 	
 void Light::Update(){
-
 	light_no=light_no+1;
 	if(light_no>no_lights) light_no=1;
 	

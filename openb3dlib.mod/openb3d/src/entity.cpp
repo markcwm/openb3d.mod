@@ -14,7 +14,7 @@
 #include "animation.h"
 #include "pick.h"
 #include "maths_helper.h"
-#include <string.h>
+//#include <string.h>
 
 list<Entity*> Entity::entity_list;
 list<Entity*> Entity::animate_list;
@@ -269,16 +269,15 @@ void Entity::ScaleEntity(float x,float y,float z,int glob){
 			float esx = parent->EntityScaleX(true);
 			float esy = parent->EntityScaleY(true);
 			float esz = parent->EntityScaleZ(true);
-			
 			if (esx != 0) {x = x / esx;}
 			if (esy != 0) {y = y / esy;}
 			if (esz != 0) {z = z / esz;}
 	}
-	
+
 	sx = x; // scale (local)
 	sy = y;
 	sz = z;
-	
+
 	MQ_Update(); // scale children
 }
 
@@ -1331,20 +1330,12 @@ float Entity::TFormedZ(){
 }*/
 
 void Entity::UpdateMat(bool load_identity){
-	
 	if (load_identity==true){
 		mat.LoadIdentity();
 		MQ_Update();
-		//mat.Translate(px,py,pz);
-		//mat.Rotate(rx,ry,rz);
-		//mat.Scale(sx,sy,sz);
 	}else{
 		MQ_Update();
-		//mat.Translate(px,py,pz);
-		//mat.Rotate(rx,ry,rz);
-		//mat.Scale(sx,sy,sz);
 	}
-	
 }
 
 void Entity::AddParent(Entity* parent_ent){
@@ -1366,7 +1357,7 @@ void Entity::UpdateChildren(Entity* ent_p){
 		Entity* p=*it;
 		//p->mat.Overwrite(ent_p->mat);
 		p->MQ_Update();
-		//UpdateChildren(p);//fixes
+		//UpdateChildren(p);
 	}
 }
 

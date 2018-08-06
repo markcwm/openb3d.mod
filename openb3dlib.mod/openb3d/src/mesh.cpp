@@ -30,8 +30,8 @@
 #include <vector>
 #include <list>
 #include <map>
-#include <stdio.h>
-using namespace std;
+//#include <stdio.h>
+//using namespace std;
 
 // Extra
 
@@ -307,12 +307,15 @@ void Mesh::FreeEntity(){
 	surf_list.clear();
 	anim_surf_list.clear();
 
-	/*vector<Bone*>::iterator bone_it;
-	for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
+	//vector<Bone*>::iterator bone_it;
+
+	/*for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
 		Bone* bone=*bone_it;
 		delete bone;
 	}*/
 	bones.clear();
+
+	
 
 	Entity::FreeEntity();
 
@@ -424,6 +427,7 @@ Bone* Mesh::CreateBone(Entity* parent_ent){
 	return bone;
 }
 
+
 Mesh* Mesh::LoadMesh(string filename,Entity* parent_ent){
 
 	if(Right(filename,4)==".3ds") return load3ds::Load3ds(filename, parent_ent);//filename=Replace(filename,".3ds",".b3d");
@@ -498,6 +502,7 @@ Mesh* Mesh::CreatePlane(int divs, Entity* parent_ent){
 	surf->AddVertex(-50000.0,0.0, 50000.0);
 	surf->AddVertex( 50000.0,0.0, 50000.0);
 	surf->AddVertex( 50000.0,0.0,-50000.0);
+
 
 	surf->VertexNormal(0,0.0,1.0,0.0);
 	surf->VertexNormal(1,0.0,1.0,0.0);
@@ -2092,6 +2097,8 @@ int Mesh::Alpha(){
 				if(surf.brush->tex[0]){
 					if(surf.brush->tex[0]->flags&2){
 						alpha=true;
+
+
 					}
 				}
 
@@ -2371,6 +2378,7 @@ void Mesh::Render(){
 			if(shine!=0.0 && shine2!=0.0) shine=shine*shine2;
 			if(blend==0) blend=surf.brush->blend; // overwrite master brush if master brush blend=0
 			fx=fx|surf.brush->fx;
+
 		//}
 
 		if(surf.alpha_enable==true){
@@ -2567,7 +2575,7 @@ void Mesh::Render(){
 					int tex_cube_mode=0;
 					Texture* bte=NULL;
 					//int frame=0;
-					
+	
 					if(brush.tex[ix]){
 						texture=brush.cache_frame[ix];//brush.tex[ix]->texture;
 						tex_flags=brush.tex[ix]->flags;
@@ -2692,7 +2700,8 @@ void Mesh::Render(){
 						//glDisable(GL_TEXTURE_GEN_Q)
 	
 					}
-					
+	
+	
 					switch(tex_blend){
 						case 0: glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 						break;

@@ -284,7 +284,7 @@ Texture* Texture::CreateTexture(int width,int height,int flags, int frames){
 	tex->FilterFlags();
 	tex->width=width;
 	tex->height=height;
-	
+
 	unsigned int name;
 	glGenTextures (1,&name);
 	tex->texture=name;

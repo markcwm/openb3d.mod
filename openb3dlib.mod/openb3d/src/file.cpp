@@ -79,7 +79,7 @@ string File::ResourceFilePath(string filename){
 		stream->CloseFile();
 		return filename;
 	}
-	
+
 	cout << "Error: Can't Find Resource File Path '"+filename+"'" << endl;
 	return "";
 

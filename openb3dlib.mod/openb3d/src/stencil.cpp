@@ -5,6 +5,7 @@
 #include "mesh.h"
 #include "global.h"
 
+
 int Stencil::midStencilVal;
 
 Stencil* Stencil::CreateStencil(){

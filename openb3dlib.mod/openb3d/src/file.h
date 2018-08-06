@@ -51,6 +51,7 @@ public:
 	
 	void SeekFile(int pos);
 	int FilePos();
+	
 	int Eof();
 	
 	// dds

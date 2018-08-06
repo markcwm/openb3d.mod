@@ -477,7 +477,6 @@ void Terrain::UpdateTerrain(){
 
 			}
 
-
 		}
 
 	}

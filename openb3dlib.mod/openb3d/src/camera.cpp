@@ -7,6 +7,7 @@
  *
  */
 
+
 #include "global.h"
 #include "entity.h"
 #include "camera.h"
@@ -474,11 +475,11 @@ void Camera::Update(){
 	static float fogb=-1.0;
 
 	if(fog_mode>0){
-		
+	
 		glEnable(GL_FOG); // enable if disabled
 		glFogf(GL_FOG_MODE,GL_LINEAR); // each render when 2d in 3d
+		//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 		if(fog!=true){
-			//if(fog==-1) glFogf(GL_FOG_MODE,GL_LINEAR); // once only
 			fog=true;
 			Global::fog_enabled=true; // used in mesh render
 		}
@@ -667,7 +668,7 @@ void UpdateEntityRender(Entity* ent,Entity* cam){
 						Surface* surf=SpriteBatch::GetSpriteBatchSurface(sprite->brush.tex[0],sprite->brush.blend,sprite->order);
 			
 						dynamic_cast<Camera*>(cam)->AddTransformedSpriteToSurface(*sprite,surf);
-												
+				
 						//return;}
 						break;}
 					case (3):{

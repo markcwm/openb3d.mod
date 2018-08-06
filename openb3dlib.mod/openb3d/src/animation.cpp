@@ -12,7 +12,7 @@
 #include "mesh.h"
 #include "bone.h"
 #include "quaternion.h"
-#include "stdio.h"
+//#include "stdio.h"
 
 #include <list>
 #include <vector>
@@ -49,9 +49,13 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 				src_surf_it++;
 				dst_surf_it++;
 			}
+			
 
+
+			
 			return;
 		}
+
 
 		//Vertex deform animation
 		ent1->anim_render=true;
@@ -60,6 +64,7 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 		surf_it=ent1->surf_list.begin();
 
 		list<Surface*>::iterator anim_surf_it;
+
 
 		// cycle through all surfs
 		for(anim_surf_it=ent1->anim_surf_list.begin();anim_surf_it!=ent1->anim_surf_list.end();anim_surf_it++){
@@ -72,7 +77,6 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 
 			int t0, t1;
 			t0=0;
-
 			for(unsigned int i=0;i<=anim_surf.vert_weight4.size();i++){
 				if (anim_surf.vert_weight4[i]>=framef){
 					t1=i; t0=i-1;
@@ -80,7 +84,6 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 					break;
 				}
 			}
-
 			float md=anim_surf.vert_weight4[t1]-anim_surf.vert_weight4[t0];
 			if(md==0.0) md=1.0; // avoid divide by zero
 			float m1=(framef-anim_surf.vert_weight4[t0])/md;
@@ -94,10 +97,16 @@ void Animation::AnimateMesh(Mesh* ent1,float framef,int start_frame,int end_fram
 
 			}
 
-			surf_it++;
-		}
 
+
+
+			surf_it++;
+
+		}
+		
 		return;
+
+
 	}
 
 	ent1->anim_render=true;

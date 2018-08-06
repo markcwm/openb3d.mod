@@ -180,7 +180,7 @@ int Surface::AddVertex(float x,float y,float z,float u,float v,float w){
 
 	vert_tex_coords1.push_back(0.0);
 	vert_tex_coords1.push_back(0.0);
-	
+
 	return no_verts-1;
 
 }

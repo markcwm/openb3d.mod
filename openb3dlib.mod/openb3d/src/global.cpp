@@ -218,12 +218,13 @@ void Global::RenderWorld(){
 			ShadowObject::Update(camera_in_use);
 		}
 	}
-	
+
 	list<PostFX*>::iterator it2;
 	for(it2=PostFX::fx_list.begin();it2!=PostFX::fx_list.end();it2++){
 		PostFX* fx=*it2;
 		fx->Render();
 	}
+
 }
 
 void Global::UpdateEntityAnim(Mesh& mesh){

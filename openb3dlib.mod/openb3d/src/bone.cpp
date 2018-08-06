@@ -107,7 +107,7 @@ void Bone::FreeEntity(){
 		keys->qz.clear();
 		delete keys;
 	}
-	
+
 	Entity::FreeEntity();
 	
 	delete this;

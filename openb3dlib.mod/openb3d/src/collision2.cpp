@@ -530,7 +530,6 @@ int QuickCheck(Entity& ent,Entity& ent2){
 }
 
 
-
  // dynamic to static
 /*void UpdateStaticCollisions2(){
 
@@ -711,5 +710,5 @@ int QuickCheck(Entity& ent,Entity& ent2){
 
 	}
 
-}*/
-
+}
+*/

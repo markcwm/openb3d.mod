@@ -59,7 +59,7 @@ public:
 		no_frames=1;
 		framebuffer=0;
 		cube_face=0,cube_mode=1;
-		
+
 		TexEnv_count=0,multitex_factor=0.5;
 	};
 

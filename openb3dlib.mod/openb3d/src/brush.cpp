@@ -8,7 +8,7 @@
  */
 
 #include "brush.h"
-#include <string.h>
+//#include <string.h>
 
 Brush* Brush::Copy(){
 

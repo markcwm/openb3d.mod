@@ -6,11 +6,11 @@ list<Action*> Action::delete_list;
 
 void Action::Update(){
 	list<Action*>::iterator it;
-	
+
 	for(it=Action::action_list.begin();it!=Action::action_list.end();it++){
 		Action* act=*it;
 		act->lifetime++;
-		
+
 		switch (act->act){
 		case ACT_COMPLETED:	{
 			//completed action
@@ -123,7 +123,7 @@ void Action::Update(){
 			float a=d/n*act->rate + act->ent->brush.alpha;
 
 			act->ent->EntityAlpha(a);
-			
+
 			break;}
 		case ACT_TINTTO:{
 			//TintTo
@@ -173,7 +173,7 @@ void Action::Update(){
 
 				act->ent->RotateEntity(p,y,r,true);
 			}
-			
+
 			break;}
 		case ACT_TRACK_BY_DISTANCE:{
 			//TrackByDistance
@@ -185,7 +185,7 @@ void Action::Update(){
 			if (n<act->rate) {
 				break;}
 			act->ent->MoveEntity(0,0,act->rate*d/n);
-			
+
 			break;}
 		case ACT_NEWTONIAN:{
 			
@@ -198,10 +198,10 @@ void Action::Update(){
 			act->c=act->ent->EntityZ(true);
 
 			act->ent->TranslateEntity(dx*act->rate,dy*act->rate,dz*act->rate,true);
-			
+
 			break;}
 		}
-		
+
 	if (act->endact) act->act=ACT_COMPLETED;
 	}
 }

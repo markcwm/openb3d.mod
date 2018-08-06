@@ -106,11 +106,10 @@ public:
 
 	void UseSurface(string name, Surface* surf, int vbo);
 	void UseMatrix(string name, int mode);
-
 	void UseEntity(string name, Entity* ent, int mode);
 	void UseFunction(void (*Enable)(void), void (*Disable)(void));
-	int GetProgram(){return arb_program->Program;}
 
+	int GetProgram(){return arb_program->Program;}
 	/*void SetParameter1S(string name, float v1);
 	void SetParameter2S(string name, float v1, float v2);
 	void SetParameter3S(string name, float v1, float v2, float v3);
