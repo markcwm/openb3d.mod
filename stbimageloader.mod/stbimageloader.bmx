@@ -40,7 +40,11 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 
 	Method LoadPixmap:TPixmap( stream:TStream )
 	
+		?bmxng
+		Local bufLen:Size_T = StreamSize(stream)
+		?Not bmxng
 		Local bufLen:Int = StreamSize(stream)
+		?
 		Local buffer:Byte Ptr = MemAlloc(bufLen)
 		Local ram:TRamStream = CreateRamStream(buffer, bufLen, True, True)
 		CopyStream(stream, ram)

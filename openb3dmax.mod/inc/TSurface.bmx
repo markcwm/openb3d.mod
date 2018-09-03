@@ -168,7 +168,7 @@ Type TSurface
 		
 	End Method
 	
-	Method SurfaceArrayResize:Float Ptr( varid:Int,size:Int )
+	Method SurfaceIntArrayResize:Int Ptr( varid:Int,size:Int )
 	
 		Select varid
 			Case SURFACE_vert_bone1_no
@@ -179,6 +179,13 @@ Type TSurface
 				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone3_no,size )
 			Case SURFACE_vert_bone4_no
 				Return SurfaceResizeIntArray_( TSurface.GetInstance(Self),SURFACE_vert_bone4_no,size )
+			End Select
+		
+	End Method
+	
+	Method SurfaceFloatArrayResize:Float Ptr( varid:Int,size:Int )
+	
+		Select varid
 			Case SURFACE_vert_coords
 				Return SurfaceResizeFloatArray_( TSurface.GetInstance(Self),SURFACE_vert_coords,size )
 			Case SURFACE_vert_norm
@@ -201,7 +208,7 @@ Type TSurface
 		
 	End Method
 	
-	Method SurfaceArrayAdd( varid:Int,value:Float )
+	Method SurfaceFloatArrayAdd( varid:Int,value:Float )
 	
 		Select varid
 			Case SURFACE_vert_coords

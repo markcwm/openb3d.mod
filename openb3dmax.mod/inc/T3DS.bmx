@@ -194,17 +194,17 @@ Type T3DS
 		Local count:Short = stream.ReadShort()
 		
 		surface.no_verts[0] = count
-		surface.vert_norm = surface.SurfaceArrayResize(SURFACE_vert_norm, count*3)
-		surface.vert_col = surface.SurfaceArrayResize(SURFACE_vert_col, count*4)
+		surface.vert_norm = surface.SurfaceFloatArrayResize(SURFACE_vert_norm, count*3)
+		surface.vert_col = surface.SurfaceFloatArrayResize(SURFACE_vert_col, count*4)
 		
 		For Local id% = 0 Until count
 			Local x# = stream.ReadFloat()
 			Local y# = stream.ReadFloat()
-			Local z# = -stream.ReadFloat()
+			Local z# = stream.ReadFloat()
 			
-			surface.SurfaceArrayAdd(SURFACE_vert_coords, x) ' AddVertex
-			surface.SurfaceArrayAdd(SURFACE_vert_coords, y)
-			surface.SurfaceArrayAdd(SURFACE_vert_coords, z)
+			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, x) ' AddVertex
+			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, y)
+			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, z)
 		Next
 		
 		Return count
@@ -213,8 +213,8 @@ Type T3DS
 	Method ParseMapList( surface:TSurface, parent:TEntity )
 		Local count:Short = stream.ReadShort()
 		
-		surface.vert_tex_coords0 = surface.SurfaceArrayResize(SURFACE_vert_tex_coords0, count*2)
-		surface.vert_tex_coords1 = surface.SurfaceArrayResize(SURFACE_vert_tex_coords1, count*2)
+		surface.vert_tex_coords0 = surface.SurfaceFloatArrayResize(SURFACE_vert_tex_coords0, count*2)
+		surface.vert_tex_coords1 = surface.SurfaceFloatArrayResize(SURFACE_vert_tex_coords1, count*2)
 		
 		For Local id% = 0 Until count
 			Local u# = stream.ReadFloat()
@@ -1023,7 +1023,7 @@ Type T3DS
 				For Local v:Int = 0 Until surf.CountVertices()
 					px = surf.vert_coords[(v*3)+0]
 					py = surf.vert_coords[(v*3)+1]
-					pz = surf.vert_coords[(v*3)+2]
+					pz = -surf.vert_coords[(v*3)+2]
 					
 					If Transform_Flag > 0 Then invmat.TransformVec(px, py, pz, 1)
 					
@@ -1031,7 +1031,7 @@ Type T3DS
 					
 					surf.vert_coords[(v*3)+0] = px
 					surf.vert_coords[(v*3)+1] = py
-					surf.vert_coords[(v*3)+2] = pz
+					surf.vert_coords[(v*3)+2] = -pz
 				Next
 				
 				surf.UpdateNormals()

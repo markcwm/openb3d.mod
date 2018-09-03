@@ -254,14 +254,14 @@ Type TMD2
 		
 		Local surf:TSurface=mesh.CreateSurface()
 		surf.no_verts[0]=num_vertices
-		surf.vert_tex_coords0=surf.SurfaceArrayResize(SURFACE_vert_tex_coords0, num_vertices*2)
-		surf.vert_tex_coords1=surf.SurfaceArrayResize(SURFACE_vert_tex_coords1, num_vertices*2)
-		surf.vert_col=surf.SurfaceArrayResize(SURFACE_vert_col, num_vertices*4)
+		surf.vert_tex_coords0=surf.SurfaceFloatArrayResize(SURFACE_vert_tex_coords0, num_vertices*2)
+		surf.vert_tex_coords1=surf.SurfaceFloatArrayResize(SURFACE_vert_tex_coords1, num_vertices*2)
+		surf.vert_col=surf.SurfaceFloatArrayResize(SURFACE_vert_col, num_vertices*4)
 		
 		Local anim_surf:TSurface=mesh.NewSurface()
 		mesh.MeshListAdd(mesh.anim_surf_list, anim_surf)
 		anim_surf.no_verts[0]=surf.no_verts[0]
-		anim_surf.vert_coords=anim_surf.SurfaceArrayResize(SURFACE_vert_coords, num_vertices*3)
+		anim_surf.vert_coords=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_coords, num_vertices*3)
 		
 		SeekStream(file, offset_skins)
 		
@@ -313,7 +313,7 @@ Type TMD2
 			If TGlobal.Log_MD2 Then DebugLog " scale: "+frames[i].sx+", "+frames[i].sy+", "+frames[i].sz
 			If TGlobal.Log_MD2 Then DebugLog " trans: "+frames[i].tx+", "+frames[i].ty+", "+frames[i].tz
 			
-			frames[i].verts[]=New TMD2Vertex[num_vertices]
+			frames[i].verts=New TMD2Vertex[num_vertices]
 			For Local v:Int=0 Until num_vertices
 				frames[i].verts[v]=New TMD2Vertex
 				frames[i].verts[v].x=Float(ReadByte(file)) * frames[i].sx + frames[i].tx
@@ -325,16 +325,16 @@ Type TMD2
 				
 				TGlobal.Matrix_MD2.TransformVec(frames[i].verts[v].x, frames[i].verts[v].y, frames[i].verts[v].z, 1) ' transform by LoaderMatrix
 				
-				surf.SurfaceArrayAdd(SURFACE_vert_coords, frames[i].verts[v].x) ' AddVertex
-				surf.SurfaceArrayAdd(SURFACE_vert_coords, frames[i].verts[v].y)
-				surf.SurfaceArrayAdd(SURFACE_vert_coords, -frames[i].verts[v].z)
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].x) ' AddVertex
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].y)
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, -frames[i].verts[v].z)
 				
-				surf.SurfaceArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+2]) ' add normal
-				surf.SurfaceArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+1])
-				surf.SurfaceArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].verts[v].normalindex])
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+2]) ' add normal
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+1])
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].verts[v].normalindex])
 			Next
 			
-			anim_surf.SurfaceArrayAdd(SURFACE_vert_weight4, i)
+			anim_surf.SurfaceFloatArrayAdd(SURFACE_vert_weight4, i)
 		Next
 		
 		If num_frames>1 Then mesh.anim[0]=2

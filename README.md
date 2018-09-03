@@ -35,16 +35,19 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * 3D sound module using Brl.Audio, similar to the Blitz3D commands but sounds can be qued, stopped, paused and resumed per entity.
 
 ## Installation
-* Copy **openb3dmax.mod** to the `MyBlitzMax/mod` folder, module folder names must end in **.mod**
-* If Windows, make sure you have a working version of MinGW. If Mac, make sure you have XCode installed. If Linux, read this guide:
- [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
-* Open a Terminal, cd to `MyBlitzMax/bin` and for BRL Bmx type `bmk makemods -a -d openb3dmax`
-* For NG in 64-bit use `bmk makemods -a -d -w -g x64 openb3dmax`, if on Mac/Linux use `./bmk`
-* Or in MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
+* Click on the Github Download Zip link, then extract contents to your `BlitzMax/mod` folder
+* Remove **-master** from the main **openb3dmax.mod-master** folder (module names must end in **.mod**)
+* Also, check the contents of **openb3dmax.mod** contains several different folders with **b3d** in the name
+* If on Windows, make sure you have a working version of the MinGW compiler
+* If on Mac, make sure you have an appropriate version of XCode installed
+* If on Linux, read this guide: [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
+* To build the mod for BRL Blitzmax, open Command/Terminal, cd to `BlitzMax/bin` and type `bmk makemods -d openb3dmax`
+* For NG Blitzmax in 64-bit you would use `bmk makemods -d -w -g x64 openb3dmax` (on Mac/Linux you need `./bmk`)
+* Or from MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
 
 ## Status
 
-After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I will probably try to add Android support from NG, but this is not a priority. It should work with the latest NG release (currently 0.93) but please note it is not working with modern compilers like GCC 7.x or Clang/LLVM, so for now use an older compiler.
+After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I will probably try to add Android support from NG, but this is not a priority. It should work with the latest NG release (currently 0.93) but please note it is not working with modern compilers like GCC 7.x or Clang/LLVM, so for now you need an older compiler.
 
 ## License
 

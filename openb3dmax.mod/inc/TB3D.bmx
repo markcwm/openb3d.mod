@@ -562,15 +562,15 @@ Type TB3D
 							
 							anim_surf.vert_coords=anim_surf.SurfaceArrayCopy(SURFACE_vert_coords, surf)
 							
-							anim_surf.vert_bone1_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone1_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone2_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone2_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone3_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone3_no, surf.no_verts[0]+1)
-							anim_surf.vert_bone4_no=anim_surf.SurfaceArrayResize(SURFACE_vert_bone4_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone1_no=anim_surf.SurfaceIntArrayResize(SURFACE_vert_bone1_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone2_no=anim_surf.SurfaceIntArrayResize(SURFACE_vert_bone2_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone3_no=anim_surf.SurfaceIntArrayResize(SURFACE_vert_bone3_no, surf.no_verts[0]+1)
+							anim_surf.vert_bone4_no=anim_surf.SurfaceIntArrayResize(SURFACE_vert_bone4_no, surf.no_verts[0]+1)
 							
-							anim_surf.vert_weight1=anim_surf.SurfaceArrayResize(SURFACE_vert_weight1, surf.no_verts[0]+1)
-							anim_surf.vert_weight2=anim_surf.SurfaceArrayResize(SURFACE_vert_weight2, surf.no_verts[0]+1)
-							anim_surf.vert_weight3=anim_surf.SurfaceArrayResize(SURFACE_vert_weight3, surf.no_verts[0]+1)
-							anim_surf.vert_weight4=anim_surf.SurfaceArrayResize(SURFACE_vert_weight4, surf.no_verts[0]+1)
+							anim_surf.vert_weight1=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_weight1, surf.no_verts[0]+1)
+							anim_surf.vert_weight2=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_weight2, surf.no_verts[0]+1)
+							anim_surf.vert_weight3=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_weight3, surf.no_verts[0]+1)
+							anim_surf.vert_weight4=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_weight4, surf.no_verts[0]+1)
 							
 							' transfer vmin/vmax values for using with TrimVerts func after
 							anim_surf.vmin[0]=surf.vmin[0]
@@ -676,18 +676,18 @@ Type TB3D
 					bo_bone.keys=NewAnimationKeys(bo_bone)
 					bo_bone.keys.frames[0]=a_frames
 					
-					bo_bone.keys.flags=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_flags, a_frames+1)
+					bo_bone.keys.flags=bo_bone.keys.AnimationKeysIntArrayResize(ANIMATIONKEYS_flags, a_frames+1)
 					
-					bo_bone.keys.px=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_px, a_frames+1)
-					bo_bone.keys.py=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_py, a_frames+1)
-					bo_bone.keys.pz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_pz, a_frames+1)
-					bo_bone.keys.sx=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sx, a_frames+1)
-					bo_bone.keys.sy=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sy, a_frames+1)
-					bo_bone.keys.sz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_sz, a_frames+1)
-					bo_bone.keys.qw=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qw, a_frames+1)
-					bo_bone.keys.qx=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qx, a_frames+1)
-					bo_bone.keys.qy=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qy, a_frames+1)
-					bo_bone.keys.qz=bo_bone.keys.AnimationKeysArrayResize(ANIMATIONKEYS_qz, a_frames+1)
+					bo_bone.keys.px=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_px, a_frames+1)
+					bo_bone.keys.py=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_py, a_frames+1)
+					bo_bone.keys.pz=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_pz, a_frames+1)
+					bo_bone.keys.sx=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_sx, a_frames+1)
+					bo_bone.keys.sy=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_sy, a_frames+1)
+					bo_bone.keys.sz=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_sz, a_frames+1)
+					bo_bone.keys.qw=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_qw, a_frames+1)
+					bo_bone.keys.qx=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_qx, a_frames+1)
+					bo_bone.keys.qy=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_qy, a_frames+1)
+					bo_bone.keys.qz=bo_bone.keys.AnimationKeysFloatArrayResize(ANIMATIONKEYS_qz, a_frames+1)
 					
 					' root ent?
 					If root_ent=Null Then root_ent=bo_bone

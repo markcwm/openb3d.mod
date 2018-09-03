@@ -149,11 +149,18 @@ Type TAnimationKeys
 		
 	End Function
 	
-	Method AnimationKeysArrayResize:Float Ptr( varid:Int,size:Int )
+	Method AnimationKeysIntArrayResize:Int Ptr( varid:Int,size:Int )
 	
 		Select varid
 			Case ANIMATIONKEYS_flags
 				Return AnimationKeysResizeIntArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_flags,size )
+			End Select
+		
+	End Method
+	
+	Method AnimationKeysFloatArrayResize:Float Ptr( varid:Int,size:Int )
+	
+		Select varid
 			Case ANIMATIONKEYS_px
 				Return AnimationKeysResizeFloatArray_( TAnimationKeys.GetInstance(Self),ANIMATIONKEYS_px,size )
 			Case ANIMATIONKEYS_py
