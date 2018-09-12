@@ -709,9 +709,6 @@ Const SURFACE_vmax:Int=				23
 Const SURFACE_vbo_enabled:Int=		24
 Const SURFACE_reset_vbo:Int=		25
 Const SURFACE_alpha_enable:Int=		26
-Const SURFACE_vert_tan:Int=			27
-Const SURFACE_vert_bitan:Int=		28
-Const SURFACE_has_tangents:Int=		29
 
 ' Terrain varid
 Const TERRAIN_terrain_list:Int=	1

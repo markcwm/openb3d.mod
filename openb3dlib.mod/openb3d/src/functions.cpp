@@ -23,38 +23,6 @@ extern "C" {
 
 // Extra
 
-void VertexTangent_(Surface* surf,int vid,float tx,float ty,float tz){
-	surf->VertexTangent(vid,tx,ty,tz);
-}
-
-float VertexTX_(Surface* surf,int vid){
-	return surf->VertexTX(vid);
-}
-
-float VertexTY_(Surface* surf,int vid){
-	return surf->VertexTY(vid);
-}
-
-float VertexTZ_(Surface* surf,int vid){
-	return surf->VertexTZ(vid);
-}
-
-void VertexBitangent_(Surface* surf,int vid,float bx,float by,float bz){
-	surf->VertexBitangent(vid,bx,by,bz);
-}
-
-float VertexBX_(Surface* surf,int vid){
-	return surf->VertexBX(vid);
-}
-
-float VertexBY_(Surface* surf,int vid){
-	return surf->VertexBY(vid);
-}
-
-float VertexBZ_(Surface* surf,int vid){
-	return surf->VertexBZ(vid);
-}
-
 void TextureMultitex_(Texture* tex, float f){
 	tex->TextureMultitex(f);
 }

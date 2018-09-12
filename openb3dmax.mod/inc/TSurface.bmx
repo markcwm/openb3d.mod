@@ -15,8 +15,6 @@ Type TSurface
 	Field vert_tex_coords1:Float Ptr ' vector
 	Field vert_col:Float Ptr ' vector
 	Field tris:Short Ptr ' ushort vector
-	Field vert_tan:Float Ptr ' vector
-	Field vert_bitan:Float Ptr ' vector
 	
 	' arrays containing vertex bone no and weights info - used by animated meshes only
 	Field vert_bone1_no:Int Ptr ' vector - bone no used to reference bones[] array belonging to TMesh
@@ -44,7 +42,6 @@ Type TSurface
 	' reset flag - this is set when mesh shape is changed in TSurface and TMesh
 	Field vbo_enabled:Int Ptr ' openb3d: Global::vbo_enabled
 	Field reset_vbo:Int Ptr ' (-1 = all) - -1
-	Field has_tangents:Int Ptr
 	
 	' used by Compare to sort array, and TMesh.Update to enable/disable alpha blending
 	Field alpha_enable:Int Ptr ' false
@@ -120,7 +117,6 @@ Type TSurface
 		vbo_enabled=SurfaceInt_( GetInstance(Self),SURFACE_vbo_enabled )
 		reset_vbo=SurfaceInt_( GetInstance(Self),SURFACE_reset_vbo )
 		alpha_enable=SurfaceInt_( GetInstance(Self),SURFACE_alpha_enable )
-		has_tangents=SurfaceInt_( GetInstance(Self),SURFACE_has_tangents )
 		
 		' uint
 		vbo_id=SurfaceUInt_( GetInstance(Self),SURFACE_vbo_id )
@@ -135,8 +131,6 @@ Type TSurface
 		vert_weight2=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight2 )
 		vert_weight3=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight3 )
 		vert_weight4=SurfaceFloat_( GetInstance(Self),SURFACE_vert_weight4 )
-		vert_tan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tan )
-		vert_bitan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_bitan )
 		
 		' brush
 		Local inst:Byte Ptr=SurfaceBrush_( GetInstance(Self),SURFACE_brush )
@@ -368,20 +362,6 @@ Type TSurface
 		
 	End Method
 	
-	Method VertexTangent( vid:Int,tx:Float,ty:Float,tz:Float )
-	
-		VertexTangent_( GetInstance(Self),vid,tx,ty,tz )
-		vert_tan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_tan )
-		
-	End Method
-	
-	Method VertexBitangent( vid:Int,bx:Float,by:Float,bz:Float )
-	
-		VertexBitangent_( GetInstance(Self),vid,bx,by,bz )
-		vert_bitan=SurfaceFloat_( GetInstance(Self),SURFACE_vert_bitan )
-		
-	End Method
-	
 	Method VertexX:Float( vid:Int )
 	
 		Return VertexX_( GetInstance(Self),vid )
@@ -457,42 +437,6 @@ Type TSurface
 	Method VertexW:Float( vid:Int,coord_set:Int=0 )
 	
 		Return VertexW_( GetInstance(Self),vid,coord_set )
-		
-	End Method
-	
-	Method VertexTX:Float( vid:Int )
-	
-		Return VertexTX_( GetInstance(Self),vid )
-		
-	End Method
-	
-	Method VertexTY:Float( vid:Int )
-	
-		Return VertexTY_( GetInstance(Self),vid )
-		
-	End Method
-	
-	Method VertexTZ:Float( vid:Int )
-	
-		Return VertexTZ_( GetInstance(Self),vid )
-		
-	End Method
-	
-	Method VertexBX:Float( vid:Int )
-	
-		Return VertexBX_( GetInstance(Self),vid )
-		
-	End Method
-	
-	Method VertexBY:Float( vid:Int )
-	
-		Return VertexBY_( GetInstance(Self),vid )
-		
-	End Method
-	
-	Method VertexBZ:Float( vid:Int )
-	
-		Return VertexBZ_( GetInstance(Self),vid )
 		
 	End Method
 	
