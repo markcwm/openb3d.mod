@@ -1,6 +1,12 @@
 #include <stdlib.h> 
 
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#define GLES2
+#endif
+
 #include "glew_glee.h" // glee or glew
+
 
 #include "camera.h"
 #include "particle.h"
@@ -16,6 +22,7 @@ void ParticleBatch::Render(){
 
 	Surface* surf=*surf_list.begin();
 
+#ifndef GLES2
 	glDisable(GL_ALPHA_TEST); // ?
 
 	if(Global::fx1!=true){
@@ -43,6 +50,13 @@ void ParticleBatch::Render(){
 			//glDepthMask(GL_TRUE); already set to true
 		}
 	}
+#else
+	Global::shader=&Global::shader_particle;
+	glUseProgram(Global::shader->ambient_program);
+	glUniformMatrix4fv(Global::shader->view, 1 , 0, &Global::camera_in_use->mod_mat[0] );
+	glUniformMatrix4fv(Global::shader->proj, 1 , 0, &Global::camera_in_use->proj_mat[0] );
+
+#endif
 
 	if(brush.blend!=Global::blend_mode){
 		Global::blend_mode=brush.blend;
@@ -66,8 +80,9 @@ void ParticleBatch::Render(){
 
 
 	if(surf->ShaderMat!=NULL){
-		surf->ShaderMat->TurnOn(mat, surf);
+		surf->ShaderMat->TurnOn(mat, surf, 0, &brush);
 	}else{
+#ifndef GLES2
 		glEnable( GL_POINT_SPRITE ); 
 
 		float quadratic[] = {0,0,1};
@@ -115,10 +130,30 @@ void ParticleBatch::Render(){
 	glColorPointer(4,GL_FLOAT,0,&surf->vert_col[0]);
 
 	glVertexPointer(3,GL_FLOAT,0,&surf->vert_coords[0]);
+#else
+		//glEnable( GL_PROGRAM_POINT_SIZE );
+		glActiveTexture(GL_TEXTURE0);
+		//glTexEnvf(GL_POINT_SPRITE, GL_COORD_REPLACE, GL_TRUE);
+		glBindTexture(GL_TEXTURE_2D, brush.tex[0]->texture);
+
+		surf->reset_vbo=9;
+		surf->UpdateVBO();
+		glBindBuffer(GL_ARRAY_BUFFER,surf->vbo_id[0]);
+		glVertexAttribPointer(Global::shader->vposition, 3, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(Global::shader->vposition);
+		glBindBuffer(GL_ARRAY_BUFFER,surf->vbo_id[4]);
+		glVertexAttribPointer(Global::shader->color, 4, GL_FLOAT, GL_FALSE, 0, 0);
+		glEnableVertexAttribArray(Global::shader->color);
+		glUniform1i(Global::shader->texflag, brush.tex[0]->flags&4);
+	}
+
+#endif
 	glDrawArrays(GL_POINTS,0,surf->no_verts);
 
+#ifndef GLES2
 	glDisable( GL_POINT_SPRITE ); 
 	glDisable( GL_POINT_SMOOTH );
+#endif
 
 	// enable depth mask again if it was disabled when blend was enabled
 	if(depth_mask_disabled==true){
@@ -163,9 +198,13 @@ void ParticleBatch::Render(){
 			surf->no_verts-=del_trail_points;
 		}
 	}
+#ifndef GLES2
 	if(surf->ShaderMat!=NULL){
 		surf->ShaderMat->TurnOff();
 	}
+#else
+	glDisableVertexAttribArray(Global::shader->vposition);
+#endif
 
 }
 

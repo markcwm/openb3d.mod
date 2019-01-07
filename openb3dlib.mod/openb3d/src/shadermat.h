@@ -1,6 +1,7 @@
 #ifndef SHADERMAT_H
 #define SHADERMAT_H
 
+
 //#include "global.h"
 #include "matrix.h"
 //#include "surface.h"
@@ -15,7 +16,7 @@ class Entity;
 
 class ShaderData{
 	public:
-	string name;
+	int name;
 	int type;
 	union{
 		//float valuef[3];
@@ -45,12 +46,11 @@ public:
 
 class Sampler{
 public:
-	string Name;
 	Texture* texture;
 	int Slot;
 	int is3D;
 	
-	static Sampler* Create(string Name, int Slot, Texture* Tex);
+	static Sampler* Create(int Slot, Texture* Tex);
 
 };
 
@@ -65,7 +65,7 @@ public:
 	ProgramObject* arb_program;
 	int ID;
 	string name;
-	char UpdateSampler;
+	//char UpdateSampler;
 
 	vector<ShaderData> Parameters;
 
@@ -77,12 +77,12 @@ public:
 	// internal 
 //public:
 	static Shader* CreateShaderMaterial(string Name = "");
-	void TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices=0);
+	void TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices=0, Brush* brush=0);
 	void TurnOff();
-	void AddShader(string _vert, string _frag);
-	void AddShaderFromString(string _vert, string _frag);
-	Texture* AddSampler2D(string Name, int Slot, Texture* Tex);
-	void AddSampler3D(string Name, int Slot, Texture* Tex);
+	int AddShader(string shaderFilename, int shadertype);
+	int AddShaderFromString(string shaderFilename, int shadertype);
+	int Link();
+	Texture* AddSampler(string Name, int Slot, Texture* Tex, int is3D);
 	void ProgramAttriBegin();
 	void ProgramAttriEnd();
 	void FreeShader();

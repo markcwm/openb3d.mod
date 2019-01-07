@@ -1,3 +1,8 @@
+#ifdef EMSCRIPTEN
+#include <GLES3/gl3.h>
+#include <GLES3/gl2ext.h>
+#define GLES2
+#endif
 
 #include "glew_glee.h" // glee or glew
 

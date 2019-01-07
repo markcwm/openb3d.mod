@@ -38,7 +38,9 @@ public:
 	MeshCollider* c_col_tree;
 
 	Camera* eyepoint; 			//reference to camera
-
+#ifdef GLES2
+	unsigned int vbo_id;
+#endif
 	Shader* ShaderMat;
 
 

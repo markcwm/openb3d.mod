@@ -14,7 +14,6 @@
 #include "animation.h"
 #include "pick.h"
 #include "maths_helper.h"
-//#include <string.h>
 
 list<Entity*> Entity::entity_list;
 list<Entity*> Entity::animate_list;
@@ -293,7 +292,7 @@ void Entity::RotateEntity(float x,float y,float z,int global){
 			m2.grid[3][0] = 0; //remove translation
 			m2.grid[3][1] = 0;
 			m2.grid[3][2] = 0;
-			//m2.Scale(parent->sx, parent->sy, parent->sz);
+			//m2.Scale(parent->sx, parent->sy, parent->sz); //no hierarchy
 			m2.Scale(parent->EntityScaleX(true), parent->EntityScaleY(true), parent->EntityScaleZ(true));
 			//apply rotation matrix
 			rotmat.Multiply2(m2);
@@ -1325,11 +1324,8 @@ float Entity::TFormedZ(){
 }
 
 // helper funcs
-/*void Entity::UpdateMat(bool load_identity){
-	MQ_Update();
-}*/
-
 void Entity::UpdateMat(bool load_identity){
+	//MQ_Update();
 	if (load_identity==true){
 		mat.LoadIdentity();
 		MQ_Update();

@@ -8,7 +8,7 @@ about: Descriptions and some extra information.
 End Rem
 Module Openb3dmax.Openb3dmax
 
-ModuleInfo "Version: 1.12"
+ModuleInfo "Version: 1.25"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
@@ -36,6 +36,7 @@ Extern
 	Function CreateVertShaderFromString_:Byte Ptr( shader:Byte Ptr,shadercode:Byte Ptr )
 	Function AttachFragShader_:Int( shader:Byte Ptr,myShader:Byte Ptr )
 	Function AttachVertShader_:Int( shader:Byte Ptr,myShader:Byte Ptr )
+	Function LinkShader_:Int( shader:Byte Ptr )
 	Function DeleteFragShader_( myShader:Byte Ptr )
 	Function DeleteVertShader_( myShader:Byte Ptr )
 	Function FreeShader_( shader:Byte Ptr )
@@ -343,6 +344,8 @@ Extern
 	' *** Shader
 	Function LoadShader_:Byte Ptr( ShaderName:Byte Ptr,VshaderFileName:Byte Ptr,FshaderFileName:Byte Ptr )
 	Function CreateShader_:Byte Ptr( ShaderName:Byte Ptr,VshaderString:Byte Ptr,FshaderString:Byte Ptr )
+	Function LoadShaderVGF_:Byte Ptr( ShaderName:Byte Ptr,VshaderFileName:Byte Ptr,GshaderFileName:Byte Ptr,FshaderFileName:Byte Ptr )
+	Function CreateShaderVGF_:Byte Ptr( ShaderName:Byte Ptr,VshaderString:Byte Ptr,GshaderString:Byte Ptr,FshaderString:Byte Ptr )
 	Function ShadeSurface_( surf:Byte Ptr,material:Byte Ptr )
 	Function ShadeMesh_( mesh:Byte Ptr,material:Byte Ptr )
 	Function ShadeEntity_( ent:Byte Ptr,material:Byte Ptr )

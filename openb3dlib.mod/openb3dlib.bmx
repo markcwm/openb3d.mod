@@ -7,7 +7,7 @@ bbdoc:
 End Rem
 Module Openb3dmax.Openb3dlib
 
-ModuleInfo "Version: 1.12"
+ModuleInfo "Version: 1.25"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"

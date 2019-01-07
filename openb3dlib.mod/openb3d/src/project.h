@@ -21,16 +21,18 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-//#include "glew.h"
-//#import <OpenGLES/ES1/gl.h>
-//#include <GL/gl.h>
-
-#ifdef __linux__ // operating system type using compiler predefined macros
+#ifndef GLES2
 #include <GL/gl.h>
 #endif
+
+#ifdef __linux__
+#include <GL/gl.h>
+#endif
+
 #ifdef _WIN32
 #include <GL\gl.h>
 #endif
+
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
 #endif
@@ -46,6 +48,14 @@
 
 #include <iostream>
 using namespace std;
+
+#ifdef GLES2
+#define GLint int
+#define GLfloat float
+#define GLboolean bool
+#define GL_FALSE false
+#define GL_TRUE true
+#endif
 
 // !!! static void transform_point(GLfloat out[4], const GLfloat m[16], const GLfloat in[4]);
 // !!! static void matmul(GLfloat * product, const GLfloat * a, const GLfloat * b);

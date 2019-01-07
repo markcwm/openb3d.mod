@@ -103,7 +103,7 @@ Type TGlobal
 		Matrix_B3D=NewMatrix()
 		Matrix_MD2=NewMatrix()
 		
-		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z not working for Sketchup
+		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,1 ' swap y/z not working for Sketchup
 		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented
 		?win32
 		LoaderMatrix "md2", 1,0,0, 0,1,0, 0,0,1

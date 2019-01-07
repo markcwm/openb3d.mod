@@ -7,7 +7,7 @@ bbdoc: GLGraphics backend for B3D.
 End Rem
 Module Openb3dmax.B3dglgraphics
 
-ModuleInfo "Version: 1.12"
+ModuleInfo "Version: 1.25"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"

@@ -146,6 +146,9 @@ Load shader from two strings, vertex and fragment.
 <tr><td class=docleft width=1%><a href=#CreateShaderMaterial>CreateShaderMaterial</a></td><td class=docright>
 Returns a new shader material without creating any shader objects.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CreateShaderVGF>CreateShaderVGF</a></td><td class=docright>
+Load shader from three strings, vertex, geometry and fragment.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateShadow>CreateShadow</a></td><td class=docright>
 Create stencil shadow, static is for static or dynamic shadows.
 </td></tr>
@@ -251,6 +254,9 @@ undocumented.
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#LinkShader>LinkShader</a></td><td class=docright>
+Link shader to program.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 Loads an anim mesh, see MeshLoader.
 </td></tr>
@@ -271,6 +277,9 @@ Loads a single mesh, see MeshLoader.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShader>LoadShader</a></td><td class=docright>
 Load shader from two files, vertex and fragment.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LoadShaderVGF>LoadShaderVGF</a></td><td class=docright>
+Load shader from three files, vertex, geometry and fragment.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -478,30 +487,6 @@ Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexBitangent>VertexBitangent</a></td><td class=docright>
-Sets the bitangent of an existing vertex.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexBX>VertexBX</a></td><td class=docright>
-Returns the x component of a vertices bitangent.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexBY>VertexBY</a></td><td class=docright>
-Returns the y component of a vertices bitangent.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexBZ>VertexBZ</a></td><td class=docright>
-Returns the z component of a vertices bitangent.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexTangent>VertexTangent</a></td><td class=docright>
-Sets the tangent of an existing vertex.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexTX>VertexTX</a></td><td class=docright>
-Returns the x component of a vertices tangent.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexTY>VertexTY</a></td><td class=docright>
-Returns the y component of a vertices tangent.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VertexTZ>VertexTZ</a></td><td class=docright>
-Returns the z component of a vertices tangent.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#VoxelSpriteMaterial>VoxelSpriteMaterial</a></td><td class=docright>
 Set material for voxel sprite.
@@ -848,6 +833,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new shader material without creating any shader objects.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CreateShaderVGF>
+<tr><td class=doctop colspan=2>Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three strings, vertex, geometry and fragment.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateShadow>
 <tr><td class=doctop colspan=2>Function CreateShadow:TShadowObject( parent:TMesh,Static:Int=False )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create stencil shadow, static is for static or dynamic shadows.</td></tr>
@@ -1028,6 +1018,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=LinkShader>
+<tr><td class=doctop colspan=2>Function LinkShader:Int( shader:TShader )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Link shader to program.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
 <tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object with child meshes if any.</td></tr>
@@ -1065,6 +1060,11 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <table class=doc width=100% cellspacing=3 id=LoadShader>
 <tr><td class=doctop colspan=2>Function LoadShader:TShader( ShaderName:String,VshaderFileName:String,FshaderFileName:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from two files, vertex and fragment.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=LoadShaderVGF>
+<tr><td class=doctop colspan=2>Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three files, vertex, geometry and fragment.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
@@ -1436,46 +1436,6 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=VertexBitangent>
-<tr><td class=doctop colspan=2>Function VertexBitangent( surf:TSurface,vid:Int,bx:Float,by:Float,bz:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Sets the bitangent of an existing vertex.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexBX>
-<tr><td class=doctop colspan=2>Function VertexBX:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the x component of a vertices bitangent.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexBY>
-<tr><td class=doctop colspan=2>Function VertexBY:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the y component of a vertices bitangent.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexBZ>
-<tr><td class=doctop colspan=2>Function VertexBZ:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the z component of a vertices bitangent.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexTangent>
-<tr><td class=doctop colspan=2>Function VertexTangent( surf:TSurface,vid:Int,tx:Float,ty:Float,tz:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Sets the tangent of an existing vertex.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexTX>
-<tr><td class=doctop colspan=2>Function VertexTX:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the x component of a vertices tangent.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexTY>
-<tr><td class=doctop colspan=2>Function VertexTY:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the y component of a vertices tangent.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VertexTZ>
-<tr><td class=doctop colspan=2>Function VertexTZ:Float( surf:TSurface,vid:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the z component of a vertices tangent.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=VoxelSpriteMaterial>
 <tr><td class=doctop colspan=2>Function VoxelSpriteMaterial( voxelspr:TVoxelSprite,mat:TMaterial )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set material for voxel sprite.</td></tr>
@@ -1678,7 +1638,7 @@ Call mesh loader implementation.
 <br>
 <h2 id=modinfo>Module Information</h2>
 <table width=100%>
-<tr><th width=1%>Version</th><td>1.12</td></tr>
+<tr><th width=1%>Version</th><td>1.25</td></tr>
 <tr><th width=1%>License</th><td>zlib</td></tr>
 <tr><th width=1%>Copyright</th><td>Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson</td></tr>
 <tr><th width=1%>Copyright</th><td>Library - 2010-2018 Angelo Rosina</td></tr>

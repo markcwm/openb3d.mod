@@ -25,8 +25,13 @@ Import "glue.c"
 
 Extern' "C"
 
+	?bmxng
+	Function b3d_stbi_load_from_memory:Byte Ptr( buffer:Byte Ptr,bufLen:Size_T,width:Int Ptr,height:Int Ptr,chan:Int Ptr,req_chan:Int ) = "stbi_load_from_memory"
+	Function b3d_stbi_info_from_memory:Int( buffer:Byte Ptr,bufLen:Size_T,width:Int Ptr,height:Int Ptr,chan:Int Ptr ) = "stbi_info_from_memory"
+	?Not bmxng
 	Function b3d_stbi_load_from_memory:Byte Ptr( buffer:Byte Ptr,bufLen:Int,width:Int Ptr,height:Int Ptr,chan:Int Ptr,req_chan:Int ) = "stbi_load_from_memory"
 	Function b3d_stbi_info_from_memory:Int( buffer:Byte Ptr,bufLen:Int,width:Int Ptr,height:Int Ptr,chan:Int Ptr ) = "stbi_info_from_memory"
+	?
 	Function b3d_stbi_image_free( stbi_handle:Byte Ptr ) = "stbi_image_free"
 	
 End Extern

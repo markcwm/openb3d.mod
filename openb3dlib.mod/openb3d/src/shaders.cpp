@@ -274,17 +274,58 @@ const char *GLES2_Shader::vert_voxel=
 "  varying highp vec3 ray;"
 
 "  varying lowp vec4 vColor;\r\n"
+"highp mat4 InverseMatrix( mat4 A ) {"
+
+"	highp float s0 = A[0][0] * A[1][1] - A[1][0] * A[0][1];"
+"	highp float s1 = A[0][0] * A[1][2] - A[1][0] * A[0][2];"
+"	highp float s2 = A[0][0] * A[1][3] - A[1][0] * A[0][3];"
+"	highp float s3 = A[0][1] * A[1][2] - A[1][1] * A[0][2];"
+"	highp float s4 = A[0][1] * A[1][3] - A[1][1] * A[0][3];"
+"	highp float s5 = A[0][2] * A[1][3] - A[1][2] * A[0][3];"
+		     
+"	highp float c5 = A[2][2] * A[3][3] - A[3][2] * A[2][3];"
+"	highp float c4 = A[2][1] * A[3][3] - A[3][1] * A[2][3];"
+"	highp float c3 = A[2][1] * A[3][2] - A[3][1] * A[2][2];"
+"	highp float c2 = A[2][0] * A[3][3] - A[3][0] * A[2][3];"
+"	highp float c1 = A[2][0] * A[3][2] - A[3][0] * A[2][2];"
+"	highp float c0 = A[2][0] * A[3][1] - A[3][0] * A[2][1];"
+		     
+"	highp float invdet = 1.0 / (s0 * c5 - s1 * c4 + s2 * c3 + s3 * c2 - s4 * c1 + s5 * c0);"
+		     
+"	highp mat4 B;"
+		     
+"	B[0][0] = ( A[1][1] * c5 - A[1][2] * c4 + A[1][3] * c3) * invdet;"
+"	B[0][1] = (-A[0][1] * c5 + A[0][2] * c4 - A[0][3] * c3) * invdet;"
+"	B[0][2] = ( A[3][1] * s5 - A[3][2] * s4 + A[3][3] * s3) * invdet;"
+"	B[0][3] = (-A[2][1] * s5 + A[2][2] * s4 - A[2][3] * s3) * invdet;"
+		     
+"	B[1][0] = (-A[1][0] * c5 + A[1][2] * c2 - A[1][3] * c1) * invdet;"
+"	B[1][1] = ( A[0][0] * c5 - A[0][2] * c2 + A[0][3] * c1) * invdet;"
+"	B[1][2] = (-A[3][0] * s5 + A[3][2] * s2 - A[3][3] * s1) * invdet;"
+"	B[1][3] = ( A[2][0] * s5 - A[2][2] * s2 + A[2][3] * s1) * invdet;"
+		     
+"	B[2][0] = ( A[1][0] * c4 - A[1][1] * c2 + A[1][3] * c0) * invdet;"
+"	B[2][1] = (-A[0][0] * c4 + A[0][1] * c2 - A[0][3] * c0) * invdet;"
+"	B[2][2] = ( A[3][0] * s4 - A[3][1] * s2 + A[3][3] * s0) * invdet;"
+"	B[2][3] = (-A[2][0] * s4 + A[2][1] * s2 - A[2][3] * s0) * invdet;"
+		     
+"	B[3][0] = (-A[1][0] * c3 + A[1][1] * c1 - A[1][2] * c0) * invdet;"
+"	B[3][1] = ( A[0][0] * c3 - A[0][1] * c1 + A[0][2] * c0) * invdet;"
+"	B[3][2] = (-A[3][0] * s3 + A[3][1] * s1 - A[3][2] * s0) * invdet;"
+"	B[3][3] = ( A[2][0] * s3 - A[2][1] * s1 + A[2][2] * s0) * invdet;"
+		     
+"	return B;"
+"}\r\n"
 "  void main(void) {"
 "    vec4 vertpos = uPMatrix * uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0);"
 "    texcoords = aVertexPosition;"
 "    gl_Position = vertpos;"
+"	highp mat4 modelViewMatrixInverse = InverseMatrix( uVMatrix * uMMatrix );"
 
 "    lowp vec3 pos_eye=vec3(uVMatrix * uMMatrix * vec4(aVertexPosition, 1.0));"
 "    lowp vec3 norm_eye=normalize(vec3(vec4(aVertexNormal, 0.0)*uVMatrix * uMMatrix));"
-"    highp vec3 worldpos = refract(pos_eye,norm_eye,0.07);"
-"    ray[0] = worldpos[0]*abs(aVertexNormal[2])-worldpos[0]*aVertexNormal[1]-worldpos[2]*aVertexNormal[0];"
-"    ray[1] = worldpos[1]*aVertexNormal[2]-worldpos[2]*aVertexNormal[1]+worldpos[1]*abs(aVertexNormal[0]);"
-"    ray[2] = worldpos[2]*aVertexNormal[2]+worldpos[1]*aVertexNormal[1]+worldpos[0]*aVertexNormal[0];"
+"    highp vec3 worldpos = aVertexPosition-modelViewMatrixInverse[3].xyz;"
+"    ray = worldpos;"
 
 
 
@@ -294,18 +335,18 @@ const char *GLES2_Shader::frag_voxel=
 "  uniform sampler2D uSampler0;\r\n"
 "  uniform int texFlag;\r\n"
 "  varying highp vec3 texcoords;"
-"  highp float slices=32.0;"
+"  uniform highp float slices;"
 "  varying highp vec3 ray;"
 
 "  void main(void) {"
 "    highp vec3 tex_coords=texcoords;"
-"    for (int i=0; i<1000; ++i){"
+"    for (int i=0; i<48; ++i){"
 "      highp vec3 tcoords=(tex_coords+1.0)/2.0;"
 "      if (tcoords!=clamp(tcoords,0.0,1.0)) {discard;}"
 "      highp vec2 texc=vec2(tcoords.x/slices + floor(tcoords.z*slices)/slices, tcoords.y);"
 "      lowp vec4 texel = texture2D(uSampler0, texc);"
 "      if (texel.a>0.5) {gl_FragColor = texel; return;}\r\n"
-"      tex_coords+=ray/100.0;"
+"      tex_coords+=normalize(ray)/16.0;"
 "    }"
 "    discard;"
 "  }\r\n";

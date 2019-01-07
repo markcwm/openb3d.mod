@@ -276,6 +276,44 @@ Type TShader
 		
 	End Function
 	
+	Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )
+	
+		Local cString:Byte Ptr=ShaderName.ToCString()
+		Local vcString:Byte Ptr=VshaderFileName.ToCString()
+		Local gcString:Byte Ptr=GshaderFileName.ToCString()
+		Local fcString:Byte Ptr=FshaderFileName.ToCString()
+		Local inst:Byte Ptr=LoadShaderVGF_( cString,vcString,gcString,fcString )
+		Local material:TShader=CreateObject(inst)
+		MemFree cString
+		MemFree vcString
+		MemFree gcString
+		MemFree fcString
+		Return material
+		
+	End Function
+	
+	Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )
+	
+		Local cString:Byte Ptr=ShaderName.ToCString()
+		Local vcString:Byte Ptr=VshaderString.ToCString()
+		Local gcString:Byte Ptr=GshaderFileName.ToCString()
+		Local fcString:Byte Ptr=FshaderString.ToCString()
+		Local inst:Byte Ptr=CreateShaderVGF_( cString,vcString,gcString,fcString )
+		Local material:TShader=CreateObject(inst)
+		MemFree cString
+		MemFree vcString
+		MemFree gcString
+		MemFree fcString
+		Return material
+		
+	End Function
+	
+	Method LinkShader:Int()
+	
+		Return LinkShader_( GetInstance(Self) )
+		
+	End Method
+	
 	Method ShadeSurface( surf:TSurface )
 	
 		ShadeSurface_( TSurface.GetInstance(surf),GetInstance(Self) )

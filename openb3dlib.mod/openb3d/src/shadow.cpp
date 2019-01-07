@@ -1,3 +1,7 @@
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#define GLES2
+#endif
 
 #include "glew_glee.h" // glee or glew
 
@@ -5,6 +9,7 @@
 #include "light.h"
 #include "mesh.h"
 #include "global.h"
+
 
 float ShadowObject::ShadowRed   =0;
 float ShadowObject::ShadowGreen =0;
@@ -464,7 +469,9 @@ void ShadowObject::ShadowRenderWorldZFail(){
 
 	// When done, set the states back To something more typical.
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+#ifndef GLES2
 	glEnable(GL_LIGHTING);
+#endif
 	glDepthMask(GL_TRUE);
 
 	glColorMask( GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE );
@@ -479,7 +486,9 @@ void ShadowObject::ShadowRenderWorldZFail(){
 	glCullFace( GL_BACK   ); // cull front facing polys For this pass
 
 	glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+#ifndef GLES2
 	glEnable(GL_LIGHTING);
+#endif
 	glDepthMask(GL_TRUE);
 
 	glCullFace(GL_BACK);
@@ -487,6 +496,7 @@ void ShadowObject::ShadowRenderWorldZFail(){
 	glStencilOp(GL_KEEP , GL_KEEP , GL_KEEP);
 
 // NOTE: is it the projektion matrix ?
+#ifndef GLES2
 	glPushMatrix();
 	  glLoadIdentity();
 	  glMatrixMode(GL_MODELVIEW);
@@ -536,6 +546,23 @@ void ShadowObject::ShadowRenderWorldZFail(){
 	  // NOTE: is it the projektion matrix ?
 	  glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+#else
+	Global::shader=&Global::shader_stencil;
+	glUseProgram(Global::shader->ambient_program);
+
+	glBindBuffer(GL_ARRAY_BUFFER, Global::stencil_vbo);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+
+	glVertexAttribPointer(Global::shader->vposition, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glUniform4f(Global::shader->color,ShadowRed,ShadowGreen,ShadowBlue,.5);
+	glEnableVertexAttribArray(Global::shader->vposition);
+ 
+	glDrawArrays(GL_TRIANGLE_FAN,0,4);
+
+#endif
 
 	glCullFace( GL_BACK   ); // cull front facing polys For this pass
 	glDisable(GL_STENCIL_TEST);

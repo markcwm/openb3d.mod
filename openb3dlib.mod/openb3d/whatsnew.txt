@@ -1,10 +1,34 @@
+V1.25
+Added:
+-Geometry shaders
+-possibility to use custom functions in materials
+
+Fixed
+-bugs in the post processor
+-anti alias
+-normals in isosurfaces
+-voxels can be used also in the Emscripten version
+
+V1.20
+Added:
+-Custom shaders now can also use the entity textures
+-Experimental post processor
+
+Fixed:
+-Bug in isosurfaces when using custom shaders
+-Bug in RotateEntity and PointEntity, that caused issue with the scale of an entity when it was in a nested structure
+-Bug in calculating light in geospheres
+
+V1.15
+Added Emscripten as a target (compile with: make web)
+
 V1.12
 Fixed:
 -Bug in planet rendering that caused irregularities in textures
 -Bug in terrains that set wrong height in corners
 -Bug that made particles crash
 -many memory leaks
--wrong declaraion in basic header for PositionTexture
+-wrong declaration in basic header for PositionTexture
 
 Deprecated:
 The file 2d.bi isn't included anymore

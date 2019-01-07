@@ -390,6 +390,13 @@ Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String 
 End Function
 
 Rem
+bbdoc: Link shader to program
+End Rem
+Function LinkShader:Int( shader:TShader )
+	Return shader.LinkShader()
+End Function
+
+Rem
 bbdoc: Attaches a fragment shader object to a program object, attach vertex first or older compilers will crash
 End Rem
 Function AttachFragShader:Int( shader:TShader,myShader:TShaderObject )
@@ -2433,6 +2440,20 @@ bbdoc: Load shader from two strings, vertex and fragment
 End Rem
 Function CreateShader:TShader( ShaderName:String,VshaderString:String,FshaderString:String )
 	Return TShader.CreateShader( ShaderName,VshaderString,FshaderString )
+End Function
+
+Rem
+bbdoc: Load shader from three files, vertex, geometry and fragment
+End Rem
+Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )
+	Return TShader.LoadShaderVGF( ShaderName,VshaderFileName,GshaderFileName,FshaderFileName )
+End Function
+
+Rem
+bbdoc: Load shader from three strings, vertex, geometry and fragment
+End Rem
+Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )
+	Return TShader.CreateShaderVGF( ShaderName,VshaderString,GshaderFileName,FshaderString )
 End Function
 
 Rem

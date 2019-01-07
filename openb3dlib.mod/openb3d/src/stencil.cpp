@@ -1,3 +1,7 @@
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#define GLES2
+#endif
 
 #include "glew_glee.h" // glee or glew
 
@@ -129,6 +133,7 @@ void Stencil::UseStencil(){
 
 	//glDisable(GL_POLYGON_OFFSET_FILL);
 
+#ifndef GLES2
 	glPushMatrix();
 		glLoadIdentity();
 		glMatrixMode(GL_MODELVIEW);
@@ -193,6 +198,25 @@ void Stencil::UseStencil(){
 		// NOTE: is it the projektion matrix ?
 		glMatrixMode(GL_MODELVIEW);
 	glPopMatrix();
+#else
+	Global::shader=&Global::shader_stencil;
+	glUseProgram(Global::shader->ambient_program);
+
+	glBindBuffer(GL_ARRAY_BUFFER, Global::stencil_vbo);
+
+	if (alpha<1){
+		glEnable(GL_BLEND);
+	}
+	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+	glDisable(GL_DEPTH_TEST);
+
+	glVertexAttribPointer(Global::shader->vposition, 2, GL_FLOAT, GL_FALSE, 0, 0);
+	glUniform4f(Global::shader->color,cls_r,cls_g,cls_b,alpha);
+	glEnableVertexAttribArray(Global::shader->vposition);
+ 
+	glDrawArrays(GL_TRIANGLE_FAN,0,4);
+
+#endif
 	if (cls_color==0) {
 		glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 	}

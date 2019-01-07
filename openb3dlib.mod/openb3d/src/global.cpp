@@ -7,6 +7,13 @@
  *
  */
 
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#define GLES2
+#endif
+
+#include "glew_glee.h" // glee or glew
+
 #include "global.h"
 
 #include "entity.h"
@@ -24,6 +31,8 @@
 
 #include <list>
 #include <stdlib.h>
+
+#include "shaders.h"
 
 using namespace std;
 
@@ -51,12 +60,26 @@ int Global::fx2=-1;
 
 int Global::rendered_tris=0;
 
+#ifdef GLES2
+	Global::Program Global::shaders[9][9][2];
+	Global::Program* Global::shader;
+
+	Global::Program Global::shader_stencil;
+	Global::Program Global::shader_particle;
+	Global::Program Global::shader_voxel;
+
+	GLuint Global::stencil_vbo;
+
+
+#endif
+
 Pivot* Global::root_ent=new Pivot();
 
 Camera* Global::camera_in_use;
 
 void Global::Graphics(){
 
+#ifndef GLES2
 	glDepthFunc(GL_LEQUAL);
 	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -79,20 +102,260 @@ void Global::Graphics(){
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	glEnableClientState(GL_NORMAL_ARRAY);
+#else
+/*	ambient_shader=Shader::CreateShaderMaterial("default");
+	ambient_shader->AddShaderFromString(vert_shader, frag_shader);
+	ambient_shader->ProgramAttriBegin();*/
 
+	GLuint ambient_vert[9][2];
+	GLuint ambient_frag[9][2];
+
+	int compiled, linked;
+
+	for (int f=0; f<=1; f++){
+
+		for (int l=0;l<=8;l++){
+			for (int t=0;t<=8;t++){
+				shaders[l][t][f].ambient_program=glCreateProgram();
+			}
+		}
+
+		for (int l=0;l<=8;l++){
+			ambient_vert[l][f]=glCreateShader(GL_VERTEX_SHADER);
+			const char* vshader[]={GLES2_Shader::version, GLES2_Shader::vert_flags[l], GLES2_Shader::fog_flags[f], GLES2_Shader::vert_shader};
+			glShaderSource(ambient_vert[l][f],4, (const GLchar**)&vshader, 0);
+			glCompileShader(ambient_vert[l][f]);
+
+			glGetShaderiv(ambient_vert[l][f],GL_COMPILE_STATUS, &compiled);
+		}
+
+		for (int t=0;t<=8;t++){
+			ambient_frag[t][f]=glCreateShader(GL_FRAGMENT_SHADER);
+			const char* fshader[]={GLES2_Shader::version, GLES2_Shader::frag_flags[t], GLES2_Shader::fog_flags[f], GLES2_Shader::frag_shader};
+			glShaderSource(ambient_frag[t][f],4, (const GLchar**)&fshader, 0);
+			glCompileShader(ambient_frag[t][f]);
+
+			glGetShaderiv(ambient_frag[t][f],GL_COMPILE_STATUS, &compiled);
+		}
+
+		for (int l=0;l<=8;l++){
+			for (int t=0;t<=8;t++){
+				shader=&shaders[l][t][f];
+				glAttachShader(shader->ambient_program, ambient_vert[l][f]);
+				glAttachShader(shader->ambient_program, ambient_frag[t][f]);
+
+				glLinkProgram(shader->ambient_program);
+				glValidateProgram(shader->ambient_program);
+
+				glDetachShader(shader->ambient_program, ambient_vert[l][f]);
+				glDetachShader(shader->ambient_program, ambient_frag[t][f]);
+
+				glGetProgramiv(shader->ambient_program,GL_LINK_STATUS, &linked);
+
+				shader->vposition=glGetAttribLocation(shader->ambient_program, "aVertexPosition");
+				shader->vnormal=glGetAttribLocation(shader->ambient_program, "aVertexNormal");
+				shader->tex_coords=glGetAttribLocation(shader->ambient_program, "aTextureCoord");
+				shader->tex_coords2=glGetAttribLocation(shader->ambient_program, "aTextureCoord2");
+				shader->color=glGetAttribLocation(shader->ambient_program, "aVertexColor");
+
+				shader->shininess=glGetUniformLocation(shader->ambient_program, "uShine");
+				shader->model=glGetUniformLocation(shader->ambient_program, "uMMatrix");
+				shader->view=glGetUniformLocation(shader->ambient_program, "uVMatrix");
+				shader->proj=glGetUniformLocation(shader->ambient_program, "uPMatrix");
+
+				shader->amblight=glGetUniformLocation(shader->ambient_program, "AmbLight");
+
+				shader->fogRange=glGetUniformLocation(shader->ambient_program, "fogRange");
+				shader->fogColor=glGetUniformLocation(shader->ambient_program, "fogColor");
+
+				if (l!=0){
+					shader->lightMat=glGetUniformLocation(shader->ambient_program, "LightMatrix");
+					shader->lightType=glGetUniformLocation(shader->ambient_program, "LightType");
+					shader->lightOuterCone=glGetUniformLocation(shader->ambient_program, "LightOuterCone");
+					shader->lightColor=glGetUniformLocation(shader->ambient_program, "LightColor");
+				}
+
+				if (t!=0){
+					shader->texflag=glGetUniformLocation(shader->ambient_program, "texFlag");
+					shader->texmat=glGetUniformLocation(shader->ambient_program, "texMat");
+					shader->tex_coords_set=glGetUniformLocation(shader->ambient_program, "tex_coord_set");
+
+					glUseProgram(shader->ambient_program);
+					switch(t){
+					case 8:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler7"), 7);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC7"), 15);
+					case 7:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler6"), 6);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC6"), 14);
+					case 6:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler5"), 5);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC5"), 13);
+					case 5:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler4"), 4);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC4"), 12);
+					case 4:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler3"), 3);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC3"), 11);
+					case 3:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler2"), 2);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC2"), 10);
+					case 2:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler1"), 1);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC1"), 9);
+					case 1:
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSampler0"), 0);
+						glUniform1i(glGetUniformLocation(shader->ambient_program, "uSamplerC0"), 8);
+					}
+				}
+				/*uSamp=glGetUniformLocation(ambient_program[l][t], "uSampler2");
+				glUniform1i(uSamp, 1);*/
+			}
+		}
+	}
+
+
+	GLuint v,f;
+	//Special shader for particles
+	v=glCreateShader(GL_VERTEX_SHADER);
+	const char* vparticle[]={GLES2_Shader::version, GLES2_Shader::vert_particle};
+	glShaderSource(v,2, (const GLchar**)&vparticle, 0);
+	glCompileShader(v);
+	glGetShaderiv(v,GL_COMPILE_STATUS, &compiled);
+
+	f=glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fparticle[]={GLES2_Shader::version, GLES2_Shader::frag_particle};
+	glShaderSource(f,2, (const GLchar**)&fparticle, 0);
+	glCompileShader(f);
+	glGetShaderiv(f,GL_COMPILE_STATUS, &compiled);
+
+	shader_particle.ambient_program=glCreateProgram();
+
+	glAttachShader(shader_particle.ambient_program, v);
+	glAttachShader(shader_particle.ambient_program, f);
+
+	glLinkProgram(shader_particle.ambient_program);
+	glValidateProgram(shader_particle.ambient_program);
+
+	glDetachShader(shader_particle.ambient_program, v);
+	glDetachShader(shader_particle.ambient_program, f);
+
+	glGetProgramiv(shader_particle.ambient_program,GL_LINK_STATUS, &linked);
+
+	shader_particle.view=glGetUniformLocation(shader_particle.ambient_program, "uVMatrix");
+	shader_particle.proj=glGetUniformLocation(shader_particle.ambient_program, "uPMatrix");
+
+	shader_particle.vposition=glGetAttribLocation(shader_particle.ambient_program, "aVertexPosition");
+	shader_particle.color=glGetAttribLocation(shader_particle.ambient_program, "aVertexColor");
+
+	glUseProgram(shader_particle.ambient_program);
+	glUniform1i(glGetUniformLocation(shader_particle.ambient_program, "uSampler0"), 0);
+	shader_particle.texflag=glGetUniformLocation(shader_particle.ambient_program, "texFlag");
+
+	//Special shader for voxels
+	v=glCreateShader(GL_VERTEX_SHADER);
+	const char* vvoxel[]={GLES2_Shader::version, GLES2_Shader::vert_voxel};
+	glShaderSource(v,2, (const GLchar**)&vvoxel, 0);
+	glCompileShader(v);
+	glGetShaderiv(v,GL_COMPILE_STATUS, &compiled);
+
+	f=glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fvoxel[]={GLES2_Shader::version, GLES2_Shader::frag_voxel};
+	glShaderSource(f,2, (const GLchar**)&fvoxel, 0);
+	glCompileShader(f);
+	glGetShaderiv(f,GL_COMPILE_STATUS, &compiled);
+
+	shader_voxel.ambient_program=glCreateProgram();
+
+	glAttachShader(shader_voxel.ambient_program, v);
+	glAttachShader(shader_voxel.ambient_program, f);
+
+	glLinkProgram(shader_voxel.ambient_program);
+	glValidateProgram(shader_voxel.ambient_program);
+
+	glDetachShader(shader_voxel.ambient_program, v);
+	glDetachShader(shader_voxel.ambient_program, f);
+
+	glGetProgramiv(shader_voxel.ambient_program,GL_LINK_STATUS, &linked);
+
+	shader_voxel.model=glGetUniformLocation(shader_voxel.ambient_program, "uMMatrix");
+	shader_voxel.view=glGetUniformLocation(shader_voxel.ambient_program, "uVMatrix");
+	shader_voxel.proj=glGetUniformLocation(shader_voxel.ambient_program, "uPMatrix");
+
+	shader_voxel.vposition=glGetAttribLocation(shader_voxel.ambient_program, "aVertexPosition");
+	shader_voxel.vnormal=glGetAttribLocation(shader_voxel.ambient_program, "aVertexNormal");
+
+	glUseProgram(shader_voxel.ambient_program);
+	glUniform1i(glGetUniformLocation(shader_voxel.ambient_program, "uSampler0"), 0);
+	shader_voxel.texflag=glGetUniformLocation(shader_voxel.ambient_program, "texFlag");
+	shader_voxel.tex_coords_set=glGetUniformLocation(shader_voxel.ambient_program, "slices");
+
+	//Special shader for stencils
+	v=glCreateShader(GL_VERTEX_SHADER);
+	const char* vstencil[]={GLES2_Shader::version, GLES2_Shader::vert_stencil};
+	glShaderSource(v,2, (const GLchar**)&vstencil, 0);
+	glCompileShader(v);
+	glGetShaderiv(v,GL_COMPILE_STATUS, &compiled);
+
+	f=glCreateShader(GL_FRAGMENT_SHADER);
+	const char* fstencil[]={GLES2_Shader::version, GLES2_Shader::frag_stencil};
+	glShaderSource(f,2, (const GLchar**)&fstencil, 0);
+	glCompileShader(f);
+	glGetShaderiv(f,GL_COMPILE_STATUS, &compiled);
+
+	shader_stencil.ambient_program=glCreateProgram();
+
+	glAttachShader(shader_stencil.ambient_program, v);
+	glAttachShader(shader_stencil.ambient_program, f);
+
+	glLinkProgram(shader_stencil.ambient_program);
+	glValidateProgram(shader_stencil.ambient_program);
+
+	glDetachShader(shader_stencil.ambient_program, v);
+	glDetachShader(shader_stencil.ambient_program, f);
+
+	glGetProgramiv(shader_stencil.ambient_program,GL_LINK_STATUS, &linked);
+
+	shader_stencil.vposition=glGetAttribLocation(shader_stencil.ambient_program, "aVertexPosition");
+	shader_stencil.color=glGetUniformLocation(shader_stencil.ambient_program, "uColor");
+
+
+	glGenBuffers(1, &stencil_vbo);
+	glBindBuffer(GL_ARRAY_BUFFER, stencil_vbo);
+	GLfloat q3[] = {1,1,-1,1,-1,-1,1,-1};
+ 
+	glBufferData(GL_ARRAY_BUFFER,8*sizeof(float),q3,GL_STATIC_DRAW);
+
+
+	//Program::ambient_current_program=shaders[0][0][0].ambient_program;
+	glUseProgram(shaders[0][0][0].ambient_program);
+
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glClearDepthf(1.0);			
+	glDepthFunc(GL_LEQUAL);
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_SCISSOR_TEST);
+	glEnable(GL_BLEND);
+
+#endif
 
 	float amb[]={0.5,0.5,0.5,1.0};
 
 	float flag[]={0.0};
 
+#ifndef GLES2
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT,amb);
 	glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE,flag); // 0 for one sided, 1 for two sided
+#endif
 
 	Texture::AddTextureFilter("",9);
 
+#ifndef GLES2
 	if (atof((char*)glGetString(GL_VERSION))<1.5){
 		Global::vbo_enabled=false;
 	}
+#endif
 
 }
 

@@ -12,7 +12,6 @@
 #include "mesh.h"
 #include "bone.h"
 #include "quaternion.h"
-//#include "stdio.h"
 
 #include <list>
 #include <vector>

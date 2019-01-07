@@ -1,3 +1,8 @@
+#ifdef EMSCRIPTEN
+#include <GLES2/gl2.h>
+#define GLES2
+#endif
+
 #include "texture.h"
 #include "entity.h"
 #include "mesh.h"
@@ -17,6 +22,22 @@
 #include "actions.h"
 #include "postfx.h"
 
+#ifndef GL_FRAGMENT_SHADER
+#define GL_FRAGMENT_SHADER 0x8B30
+#endif
+
+#ifndef GL_VERTEX_SHADER
+#define GL_VERTEX_SHADER 0x8B31
+#endif
+
+#ifndef GL_GEOMETRY_SHADER
+#define GL_GEOMETRY_SHADER 0x8DD9
+#endif
+
+#ifndef GL_MULTISAMPLE
+#define GL_MULTISAMPLE 0x809D
+#endif
+
 //#include "functions.h"
 
 extern "C" {
@@ -27,7 +48,7 @@ void TextureMultitex_(Texture* tex, float f){
 	tex->TextureMultitex(f);
 }
 
-int TrisRendered_(){
+int TrisRendered_(){ // todo: not properly implemented
 	return Global::TrisRendered();
 }
 
@@ -47,7 +68,8 @@ Bone* NewBone_(Mesh* mesh){
 	return mesh->NewBone();
 }
 
-Shader* CreateShaderMaterial_(char* ShaderName){
+
+/*Shader* CreateShaderMaterial_(char* ShaderName){
 	return Shader::CreateShaderMaterial(ShaderName);
 }
 
@@ -106,6 +128,73 @@ void DeleteFragShader_(ShaderObject* myShader){
 
 void DeleteVertShader_(ShaderObject* myShader){
 	myShader->DeleteVertShader(myShader);
+}
+
+void FreeShader_(Shader* shader){
+	shader->FreeShader();
+}*/
+
+Shader* CreateShaderMaterial_(char* ShaderName){
+	return Shader::CreateShaderMaterial(ShaderName);
+}
+
+ShaderObject* CreateVertShader_(Shader* shader, char* shaderFileName){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shaderFileName != ""){
+		return ShaderObject::CreateShader(shaderFileName, GL_VERTEX_SHADER);
+	}
+	return NULL;
+}
+
+ShaderObject* CreateVertShaderFromString_(Shader* shader, char* shadercode){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shadercode != ""){
+		return ShaderObject::CreateShaderFromString(shadercode, GL_VERTEX_SHADER);
+	}
+	return NULL;
+}
+
+ShaderObject* CreateFragShader_(Shader* shader, char* shaderFileName){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shaderFileName != ""){
+		return ShaderObject::CreateShader(shaderFileName, GL_FRAGMENT_SHADER);
+	}
+	return NULL;
+}
+
+ShaderObject* CreateFragShaderFromString_(Shader* shader, char* shadercode){
+	if (shader->arb_program == 0) return NULL;
+	
+	if (shadercode != ""){
+		return ShaderObject::CreateShaderFromString(shadercode, GL_FRAGMENT_SHADER);
+	}
+}
+
+void AttachVertShader_(Shader* shader, ShaderObject* myShader){
+	if (myShader!=0) {
+		shader->arb_program->AttachShader(myShader, GL_VERTEX_SHADER);
+	}
+}
+
+void AttachFragShader_(Shader* shader, ShaderObject* myShader){
+	if (myShader!=0) {
+		shader->arb_program->AttachShader(myShader, GL_FRAGMENT_SHADER);
+	}
+}
+
+int LinkShader_(Shader* shader){
+	return shader->Link();
+}
+
+void DeleteFragShader_(ShaderObject* myShader){
+	myShader->DeleteShader(myShader, GL_FRAGMENT_SHADER);
+}
+
+void DeleteVertShader_(ShaderObject* myShader){
+	myShader->DeleteShader(myShader, GL_VERTEX_SHADER);
 }
 
 void FreeShader_(Shader* shader){
@@ -264,6 +353,13 @@ bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">On
 */
 void AntiAlias_(int samples){
 	//Global::AntiAlias(samples);
+#ifndef GLES2
+	if (samples==0){
+		glDisable(GL_MULTISAMPLE);
+	}else{
+		glEnable(GL_MULTISAMPLE);
+	}
+#endif
 }
 
 /*
@@ -1908,10 +2004,12 @@ void VoxelSpriteMaterial_(VoxelSprite* voxelspr, Material* mat){
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Wireframe">Online Help</a>
 */
 void Wireframe_(int enable){
+#ifndef GLES2
 	if (enable!=0)
 	  glPolygonMode(GL_FRONT,GL_LINE);
 	else
 	  glPolygonMode(GL_FRONT,GL_FILL);
+#endif
 
 }
 
@@ -1943,7 +2041,7 @@ float EntityScaleZ_(Entity* ent,bool glob){
 	return ent->EntityScaleZ(glob);
 }
 
-Shader* LoadShader_(char* ShaderName, char* VshaderFileName, char* FshaderFileName){
+/*Shader* LoadShader_(char* ShaderName, char* VshaderFileName, char* FshaderFileName){
 	Shader* s=Shader::CreateShaderMaterial(ShaderName);
 	s->AddShader(VshaderFileName, FshaderFileName);
 	return s;
@@ -1952,6 +2050,48 @@ Shader* LoadShader_(char* ShaderName, char* VshaderFileName, char* FshaderFileNa
 Shader* CreateShader_(char* ShaderName, char* VshaderString, char* FshaderString){
 	Shader* s=Shader::CreateShaderMaterial(ShaderName);
 	s->AddShaderFromString(VshaderString, FshaderString);
+	return s;
+}*/
+
+Shader* LoadShader_(char* ShaderName, char* VshaderFileName, char* FshaderFileName){
+	Shader* s=Shader::CreateShaderMaterial(ShaderName);
+	int Vert, Frag;
+	Vert = s->AddShader(VshaderFileName, GL_VERTEX_SHADER);
+	Frag = s->AddShader(FshaderFileName, GL_FRAGMENT_SHADER);
+	s->Link();
+	return s;
+}
+
+Shader* CreateShader_(char* ShaderName, char* VshaderString, char* FshaderString){
+	Shader* s=Shader::CreateShaderMaterial(ShaderName);
+	int Vert, Frag;
+	Vert = s->AddShaderFromString(VshaderString, GL_VERTEX_SHADER);
+	Frag = s->AddShaderFromString(FshaderString, GL_FRAGMENT_SHADER);
+	s->Link();
+	return s;
+}
+
+Shader* LoadShaderVGF_(char* ShaderName, char* VshaderFileName, char* GshaderFileName, char* FshaderFileName){
+	Shader* s=Shader::CreateShaderMaterial(ShaderName);
+	int Vert, Geom, Frag;
+	Vert = s->AddShader(VshaderFileName, GL_VERTEX_SHADER);
+#ifndef GLES2
+	Geom = s->AddShader(GshaderFileName, GL_GEOMETRY_SHADER);
+#endif
+	Frag = s->AddShader(FshaderFileName, GL_FRAGMENT_SHADER);
+	s->Link();
+	return s;
+}
+
+Shader* CreateShaderVGF_(char* ShaderName, char* VshaderString, char* GshaderString, char* FshaderString){
+	Shader* s=Shader::CreateShaderMaterial(ShaderName);
+	int Vert, Geom, Frag;
+	Vert = s->AddShaderFromString(VshaderString, GL_VERTEX_SHADER);
+#ifndef GLES2
+	Geom = s->AddShaderFromString(GshaderString, GL_GEOMETRY_SHADER);
+#endif
+	Frag = s->AddShaderFromString(FshaderString, GL_FRAGMENT_SHADER);
+	s->Link();
 	return s;
 }
 
@@ -1974,7 +2114,8 @@ void ShadeEntity_(Entity* ent, Shader* material){
 }
 
 Texture* ShaderTexture_(Shader* material, Texture* tex, char* name, int index){
-	return material->AddSampler2D(name, index, tex);
+//	return material->AddSampler2D(name, index, tex);
+	return material->AddSampler(name, index, tex, 0); // 2D
 }
 
 void SetFloat_(Shader* material, char* name, float v1){
@@ -2049,24 +2190,25 @@ void UseMatrix_(Shader* material, char* name, int mode){
 	material->UseMatrix(name, mode);
 }
 
-Material* LoadMaterial_(char* filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
-	return Material::LoadMaterial(filename, flags, frame_width, frame_height, first_frame, frame_count);
-}
-
-void ShaderMaterial_(Shader* material, Material* tex, char* name, int index){
-	material->AddSampler3D(name, index, tex);
-}
-
-void AmbientShader_(Shader* material){
-	Global::ambient_shader=material;
-}
-
 void UseEntity_(Shader* material, char* name, Entity* ent, int mode){
 	material->UseEntity(name, ent, mode);
 }
 
 void ShaderFunction_(Shader* material, void (*EnableFunction)(void), void (*DisableFunction)(void)){
 	material->UseFunction(EnableFunction, DisableFunction);
+}
+
+Material* LoadMaterial_(char* filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
+	return Material::LoadMaterial(filename, flags, frame_width, frame_height, first_frame, frame_count);
+}
+
+void ShaderMaterial_(Shader* material, Material* tex, char* name, int index){
+//	material->AddSampler3D(name, index, tex);
+	material->AddSampler(name, index, tex, 1); // 3D
+}
+
+void AmbientShader_(Shader* material){
+	Global::ambient_shader=material;
 }
 
 int GetShaderProgram_(Shader* material){
@@ -2310,6 +2452,8 @@ void SetParameter4D(Shader* material, char* name, double v1, double v2, double v
 
 /*
 Function LightMesh(mesh:TMesh,red#,green#,blue#,range#=0,light_x#=0,light_y#=0,light_z#=0)
+End Function
+Function SetAnimKey(ent:TEntity,frame,pos_key=True,rot_key=True,scale_key=True)
 End Function
 */
 
