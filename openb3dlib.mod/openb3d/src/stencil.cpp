@@ -1,7 +1,3 @@
-#ifdef EMSCRIPTEN
-#include <GLES2/gl2.h>
-#define GLES2
-#endif
 
 #include "glew_glee.h" // glee or glew
 

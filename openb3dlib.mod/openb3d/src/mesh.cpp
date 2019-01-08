@@ -1,8 +1,3 @@
-#ifdef EMSCRIPTEN
-#include <GLES2/gl2.h>
-#define GLES2
-#endif
-
 /*
  *  mesh.mm
  *  iminib3d
@@ -2560,13 +2555,13 @@ void Mesh::Render(){
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,surf.vbo_id[5]);
 
-		if(fx&1){ // if full-bright flag, don't use normal data
-			glDisableVertexAttribArray(Global::shader->vnormal);
-		}else{
+		//if(fx&1){ // if full-bright flag, don't use normal data
+		//	glDisableVertexAttribArray(Global::shader->vnormal);
+		//}else{ // always use normals data fix
 			glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[3]);
 			glVertexAttribPointer(Global::shader->vnormal, 3, GL_FLOAT, GL_FALSE, 0, 0);
 			glEnableVertexAttribArray(Global::shader->vnormal);
-		}
+		//}
 
 		if(fx&2){ // if vertex colours flag - use colour data
 			glBindBuffer(GL_ARRAY_BUFFER,surf.vbo_id[4]);

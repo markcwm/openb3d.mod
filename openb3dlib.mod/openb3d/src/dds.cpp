@@ -1,6 +1,7 @@
 #include "file.h"
 #include "dds.h"
-#include <GL/glew.h>
+//#include <GL/glew.h>
+#include "glew_glee.h" // glee or glew
 #include "string_helper.h"
 #include <strings.h>
 

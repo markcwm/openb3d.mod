@@ -1,8 +1,3 @@
-#ifdef EMSCRIPTEN
-#include <GLES2/gl2.h>
-#define GLES2
-#endif
-
 /*
  *  terrain.cpp
  *  minib3d

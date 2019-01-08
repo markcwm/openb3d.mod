@@ -21,21 +21,7 @@
 #ifndef PROJECT_H
 #define PROJECT_H
 
-#ifndef GLES2
-#include <GL/gl.h>
-#endif
-
-#ifdef __linux__
-#include <GL/gl.h>
-#endif
-
-#ifdef _WIN32
-#include <GL\gl.h>
-#endif
-
-#ifdef __APPLE__
-#include <OpenGL/gl.h>
-#endif
+#include "glew_glee.h" // glee or glew
 
 #ifdef PC_HEADER
 #include "all.h"

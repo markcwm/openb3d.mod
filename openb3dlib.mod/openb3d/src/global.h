@@ -7,17 +7,27 @@
  *
  */
 
-#ifdef EMSCRIPTEN
-#ifndef GLES2
-#define GLES2
-#endif
-#endif
-
 #ifndef GLOBAL_H
 #define GLOBAL_H
 
 #include "pivot.h"
 #include "mesh.h"
+
+#ifndef GL_FRAGMENT_SHADER
+#define GL_FRAGMENT_SHADER 0x8B30
+#endif
+
+#ifndef GL_VERTEX_SHADER
+#define GL_VERTEX_SHADER 0x8B31
+#endif
+
+#ifndef GL_GEOMETRY_SHADER
+#define GL_GEOMETRY_SHADER 0x8DD9
+#endif
+
+#ifndef GL_MULTISAMPLE
+#define GL_MULTISAMPLE 0x809D
+#endif
 
 class Camera;
 
