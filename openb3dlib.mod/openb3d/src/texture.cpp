@@ -332,14 +332,14 @@ Texture* Texture::NewTexture(){
 }
 
 void Texture::FreeTexture(){
-	tex_list_all.remove(this);
 	Texture* tex=this->TexInList(tex_list);
 	Texture* tex_all=this->TexInList(tex_list_all);
+	tex_list_all.remove(this);
 	
-	if(tex!=NULL && tex_all==NULL){
+	if(tex!=NULL && tex_all==NULL){ // tex is unique
 		tex_list.remove(this);
 		delete this;
-		glDeleteTextures (1, &texture); // only if no other refs
+		glDeleteTextures (1, &texture); // delete if no other refs
 	}
 }
 

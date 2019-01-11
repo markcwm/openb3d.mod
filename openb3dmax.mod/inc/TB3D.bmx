@@ -237,7 +237,7 @@ Type TB3D
 							tex_name=filepath+"/"+StripDir(te_file)
 						EndIf
 						
-						If te_file<>"" Then LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
+						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
 						If TGlobal.Log_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0]
 						
 						tex_no=tex_no+1
