@@ -190,9 +190,7 @@ void TextureFlags_(Texture* tex, int flags){
 }
 
 void FreeSurface_(Surface* surf){
-	surf->FreeVBO();
-	delete surf->brush;
-	delete surf;
+	delete surf; // ~Surface frees brush and VBOs
 }
 
 void TextureGLTexEnvi_(Texture* tex, int target, int pname, int param){
@@ -254,6 +252,10 @@ void BrushGLBlendFunc_(Brush* brush, int sfactor, int dfactor){
 	brush->glBlendFunc[0] = sfactor;
 	brush->glBlendFunc[1] = dfactor;
 	brush->BrushBlend(6);
+}
+
+void LightMesh_(Mesh* m,float red,float green,float blue,float range,float light_x,float light_y,float light_z){
+	Mesh::LightMesh(m,red,green,blue,range,light_x,light_y,light_z);
 }
 
 // rendering
@@ -2431,8 +2433,6 @@ void SetParameter4D(Shader* material, char* name, double v1, double v2, double v
 //' ***todo***
 
 /*
-Function LightMesh(mesh:TMesh,red#,green#,blue#,range#=0,light_x#=0,light_y#=0,light_z#=0)
-End Function
 Function SetAnimKey(ent:TEntity,frame,pos_key=True,rot_key=True,scale_key=True)
 End Function
 */

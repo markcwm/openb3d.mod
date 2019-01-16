@@ -65,6 +65,40 @@ void Mesh::ShadeMesh(Shader* material){
 	}
 }
 
+void Mesh::LightMesh(Mesh* m,float red,float green,float blue,float range,float light_x,float light_y,float light_z){
+	Vector rgb(red,green,blue);
+	Vector pos(light_x,light_y,-light_z); // ***ogl***
+	if( range ){
+		float att=1.0f/range;
+		list<Surface*>::iterator it;
+		for(it=m->surf_list.begin();it!=m->surf_list.end();it++){
+			Surface* surf=*it;
+			for(int j=0;j<surf->no_verts;j++){
+				Vector v(surf->vert_coords[j*3],surf->vert_coords[j*3+1],surf->vert_coords[j*3+2]);
+				Vector lv=pos-v;
+				Vector n(surf->vert_norm[j*3],surf->vert_norm[j*3+1],surf->vert_norm[j*3+2]);
+				float dp=n.normalized().dot( lv );
+				if( dp<=0 ) continue;
+				float d=lv.length();
+				float i=1/(d*att)*(dp/d);
+				Vector c(surf->VertexRed(j),surf->VertexGreen(j),surf->VertexBlue(j));
+				Vector color=c+rgb*i;
+				surf->VertexColor(j,color.x,color.y,color.z,surf->VertexAlpha(j));
+			}
+		}
+	}else{
+		list<Surface*>::iterator it;
+		for(it=m->surf_list.begin();it!=m->surf_list.end();it++){
+			Surface* surf=*it;
+			for(int j=0;j<surf->no_verts;j++){
+				Vector c(surf->VertexRed(j),surf->VertexGreen(j),surf->VertexBlue(j));
+				Vector color=c+rgb;
+				surf->VertexColor(j,color.x,color.y,color.z,surf->VertexAlpha(j));
+			}
+		}
+	}
+}
+
 
 Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
@@ -519,7 +553,6 @@ Mesh* Mesh::CreatePlane(int divs, Entity* parent_ent){
 	return mesh;
 
 }
-
 
 Mesh* Mesh::CreateCube(Entity* parent_ent){
 

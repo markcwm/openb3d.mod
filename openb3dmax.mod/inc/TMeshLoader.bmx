@@ -112,8 +112,13 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "md2"
 				anim_mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				Local model:T3DS = New T3DS ' no animation
-				anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
+				If TGlobal.Loader_3DS2
+					Local model:T3DS2 = New T3DS2
+					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
+				Else
+					Local model:T3DS = New T3DS
+					anim_mesh=model.Load3DSFromStream(file, url, parent)
+				EndIf
 		EndSelect
 		
 		If anim_mesh=Null Then Return Null
@@ -148,8 +153,13 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "md2"
 				mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				Local model:T3DS = New T3DS ' no animation
-				mesh=model.LoadAnim3DSFromStream(file, url, parent)
+				If TGlobal.Loader_3DS2
+					Local model:T3DS2 = New T3DS2
+					mesh=model.LoadAnim3DSFromStream(file, url, parent)
+				Else
+					Local model:T3DS = New T3DS
+					mesh=model.Load3DSFromStream(file, url, parent)
+				EndIf
 		EndSelect
 		
 		Return mesh

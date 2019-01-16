@@ -137,10 +137,8 @@ Type TMesh Extends TEntity
 			
 	End Method
 	
-	Method MeshListAdd( list:TList,value:Object ) ' Field list value
+	Method MeshListAdd( list:TList,value:Object )
 	
-		Super.EntityListAdd( list,value )
-		
 		Local surf:TSurface=TSurface(value)
 		Local bone:TBone=TBone(value)
 		
@@ -159,6 +157,31 @@ Type TMesh Extends TEntity
 				If bone
 					MeshListPushBackBone_( GetInstance(Self),MESH_bones,TBone.GetInstance(bone) )
 					AddList(list)
+				EndIf
+		End Select
+		
+	End Method
+	
+	Method MeshListRemove( list:TList,value:Object )
+	
+		Local surf:TSurface=TSurface(value)
+		Local bone:TBone=TBone(value)
+		
+		Select list
+			Case surf_list
+				If surf
+					MeshListRemoveSurface_( GetInstance(Self),MESH_surf_list,TSurface.GetInstance(surf) )
+					ListRemove( list,value ) ; surf_list_id:-1
+				EndIf
+			Case anim_surf_list
+				If surf
+					MeshListRemoveSurface_( GetInstance(Self),MESH_anim_surf_list,TSurface.GetInstance(surf) )
+					ListRemove( list,value ) ; anim_surf_list_id:-1
+				EndIf
+			Case bones
+				If bone
+					MeshListRemoveBone_( GetInstance(Self),MESH_bones,TBone.GetInstance(bone) )
+					ListRemove( list,value ) ; bones_id:-1
 				EndIf
 		End Select
 		
@@ -209,6 +232,12 @@ Type TMesh Extends TEntity
 	End Method
 	
 	' Extra
+	
+	Method LightMesh( red:Float,green:Float,blue:Float,range:Float=0,light_x:Float=0,light_y:Float=0,light_z:Float=0 )
+	
+		LightMesh_( GetInstance(Self),red,green,blue,range,light_x,light_y,light_z )
+		
+	End Method
 	
 	Method CreateAllChildren()
 	

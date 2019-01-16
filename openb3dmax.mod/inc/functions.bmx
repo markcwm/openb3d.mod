@@ -3,6 +3,17 @@
 ' *** Extra
 
 Rem
+bbdoc: Enables full debugging mode
+End Rem
+Function VerboseDebug( value:Int )
+	TGlobal.Log_3DS=value ' 3DS chunks
+	TGlobal.Log_B3D=value ' B3D chunks
+	TGlobal.Log_MD2=value ' MD2 chunks
+	TGlobal.Log_Assimp=value ' Assimp mesh
+	TGlobal.Log_Texture=value ' texture streams
+End Function
+
+Rem
 bbdoc: Set discard value (as 0..1) above which to ignore pixel's alpha value, default is 1 (only if flag 2)
 End Rem
 Function AlphaDiscard( tex:TTexture,alpha:Float=0.01 )
@@ -77,19 +88,20 @@ End Function
 
 Rem
 bbdoc: Set mesh loaders to use, default is "bmx"
-about: Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp" or "lib" for 
-Openb3d library meshes (only from files), use "all" to use all available mesh loaders.
+about: Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
+mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
+Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms.
 End Rem
 Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()
 		Case "all"
 			TGlobal.Mesh_Loader=0
-		Case "bmxassimp", "assimpbmx", "stream", "streams"
+		Case "bmxassimp", "assimpbmx", "stream"
 			TGlobal.Mesh_Loader=1+8
 			TGlobal.Mesh_Flags=flags
-		Case "bb", "bmx", "blitzmax"
+		Case "bmx", "max", "blitzmax"
 			TGlobal.Mesh_Loader=1
-		Case "cpp", "c++", "lib", "library"
+		Case "cpp", "lib", "library"
 			TGlobal.Mesh_Loader=2
 		Case "assimp"
 			TGlobal.Mesh_Loader=4
@@ -97,6 +109,14 @@ Function MeshLoader( meshid:String,flags:Int=-1 )
 		Case "assimpstream"
 			TGlobal.Mesh_Loader=8
 			TGlobal.Mesh_Flags=flags
+		Case "3ds"
+			TGlobal.Loader_3DS2=0
+		Case "3ds2"
+			TGlobal.Loader_3DS2=1
+		Case "notrans"
+			TGlobal.Mesh_Transform=0
+		Case "trans"
+			TGlobal.Mesh_Transform=1
 	EndSelect
 End Function
 
@@ -450,6 +470,14 @@ bbdoc: Set texture flags, see LoadTexture for values
 End Rem
 Function TextureFlags( tex:TTexture,flags:Int )
 	tex.TextureFlags(flags)
+End Function
+
+Rem
+bbdoc: Performs a 'fake' lighting operation on a mesh.
+about: You need to use EntityFX ent,2 to enable vertex colors on the target mesh before you can see any results.
+End Rem
+Function LightMesh( mesh:TMesh,red:Float,green:Float,blue:Float,range:Float=0,light_x:Float=0,light_y:Float=0,light_z:Float=0 )
+	mesh.LightMesh( red,green,blue,range,light_x,light_y,light_z )
 End Function
 
 ' *** Minib3d only

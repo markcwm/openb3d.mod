@@ -72,7 +72,8 @@ public:
 	Surface* NewSurface();
 	Bone* NewBone();
 	void ShadeMesh(Shader* material);
-	
+	static void LightMesh(Mesh* m,float red,float green,float blue,float range,float light_x,float light_y,float light_z);
+
 	Mesh* CopyEntity(Entity* ent=NULL);
 	void FreeEntity(void);
 	static Mesh* CreateMesh(Entity* parent_ent=NULL);

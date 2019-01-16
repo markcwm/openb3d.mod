@@ -58,6 +58,8 @@ Type TGlobal
 	Global Texture_Flags:Int=9		' LoadTexture flags
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
+	Global Loader_3DS2:Int=0		' alternative 3DS loader
+	Global Mesh_Transform:Int=1		' mesh transform vertices
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix
@@ -137,17 +139,6 @@ Type TGlobal
 			Case TTexture.tex_list_all
 				TTexture.CopyList_( TTexture.tex_list_all )
 		End Select
-		
-	End Function
-	
-	Function EntityListAdd( list:TList,value:Object,ent:TEntity )
-	
-		Local mesh:TMesh=TMesh(ent)
-		If mesh
-			mesh.MeshListAdd( list,value )
-		Else
-			ent.EntityListAdd( list,value )
-		EndIf
 		
 	End Function
 	

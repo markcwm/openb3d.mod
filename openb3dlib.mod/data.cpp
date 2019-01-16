@@ -1030,6 +1030,22 @@ float* CameraFloat_( Camera* obj,int varid ){
 	return NULL;
 }
 
+void GlobalListPushBackCamera_( int varid,Camera* obj ){
+	switch (varid){
+		case CAMERA_cam_list : 
+			Camera::cam_list.push_back(obj);
+			break;
+	}
+}
+
+void GlobalListRemoveCamera_( int varid,Camera* obj ){
+	switch (varid){
+		case CAMERA_cam_list : 
+			Camera::cam_list.remove(obj);
+			break;
+	}
+}
+
 // Entity
 
 int* EntityInt_( Entity* obj,int varid ){
@@ -1164,21 +1180,38 @@ Entity* EntityIterListEntity_( Entity* obj,int varid,int &id ){
 
 void EntityListPushBackEntity_( Entity* obj,int varid,Entity* ent ){
 	switch (varid){
-		case ENTITY_child_list : obj->child_list.push_back(ent);
+		case ENTITY_child_list : 
+			obj->child_list.push_back(ent);
 			break;
 	}
 }
 
 void EntityListRemoveEntity_( Entity* obj,int varid,Entity* ent ){
 	switch (varid){
-		case ENTITY_child_list : obj->child_list.remove(ent);
+		case ENTITY_child_list : 
+			obj->child_list.remove(ent);
 			break;
 	}
 }
 
 void GlobalListPushBackEntity_( int varid,Entity* obj ){
 	switch (varid){
-		case ENTITY_entity_list : Entity::entity_list.push_back(obj);
+		case ENTITY_entity_list : 
+			Entity::entity_list.push_back(obj);
+			break;
+		case ENTITY_animate_list : 
+			Entity::animate_list.push_back(obj);
+			break;
+	}
+}
+
+void GlobalListRemoveEntity_( int varid,Entity* obj ){
+	switch (varid){
+		case ENTITY_entity_list : 
+			Entity::entity_list.remove(obj);
+			break;
+		case ENTITY_animate_list : 
+			Entity::animate_list.remove(obj);
 			break;
 	}
 }
@@ -1326,16 +1359,42 @@ vector<Bone*>* MeshVectorBone_( Mesh* obj,int varid ){
 
 void MeshListPushBackSurface_( Mesh* obj,int varid,Surface* surf ){
 	switch (varid){
-		case MESH_surf_list : obj->surf_list.push_back(surf);
+		case MESH_surf_list : 
+			obj->surf_list.push_back(surf);
 			break;
-		case MESH_anim_surf_list : obj->anim_surf_list.push_back(surf);
+		case MESH_anim_surf_list : 
+			obj->anim_surf_list.push_back(surf);
+			break;
+	}
+}
+
+void MeshListRemoveSurface_( Mesh* obj,int varid,Surface* surf ){
+	switch (varid){
+		case MESH_surf_list : 
+			obj->surf_list.remove(surf);
+			break;
+		case MESH_anim_surf_list : 
+			obj->anim_surf_list.remove(surf);
 			break;
 	}
 }
 
 void MeshListPushBackBone_( Mesh* obj,int varid,Bone* bone ){
 	switch (varid){
-		case MESH_bones : obj->bones.push_back(bone);
+		case MESH_bones : 
+			obj->bones.push_back(bone);
+			break;
+	}
+}
+
+void MeshListRemoveBone_( Mesh* obj,int varid,Bone* bone ){
+	switch (varid){
+		case MESH_bones : 
+			vector<Bone*>::iterator it;
+			for(it=obj->bones.begin(); it!=obj->bones.end(); it++){
+				Bone* tmp=*it;
+				if (tmp == bone) obj->bones.erase(it);
+			}
 			break;
 	}
 }
@@ -1663,9 +1722,22 @@ list<Texture*>* TextureListTexture_( Texture* obj,int varid ){
 
 void GlobalListPushBackTexture_( int varid,Texture* obj ){
 	switch (varid){
-		case TEXTURE_tex_list : Texture::tex_list.push_back(obj);
+		case TEXTURE_tex_list : 
+			Texture::tex_list.push_back(obj);
 			break;
-		case TEXTURE_tex_list_all : Texture::tex_list_all.push_back(obj);
+		case TEXTURE_tex_list_all : 
+			Texture::tex_list_all.push_back(obj);
+			break;
+	}
+}
+
+void GlobalListRemoveTexture_( int varid,Texture* obj ){
+	switch (varid){
+		case TEXTURE_tex_list : 
+			Texture::tex_list.remove(obj);
+			break;
+		case TEXTURE_tex_list_all : 
+			Texture::tex_list_all.remove(obj);
 			break;
 	}
 }

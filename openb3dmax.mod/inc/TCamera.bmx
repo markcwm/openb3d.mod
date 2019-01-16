@@ -126,6 +126,26 @@ Type TCamera Extends TEntity
 		
 	End Function
 	
+	Method CameraListAdd( list:TList )
+	
+		Select list
+			Case cam_list
+				GlobalListPushBackCamera_( CAMERA_cam_list,GetInstance(Self) )
+				AddList_(list)
+		End Select
+		
+	End Method
+	
+	Method CameraListRemove( list:TList )
+	
+		Select list
+			Case cam_list
+				GlobalListRemoveCamera_( CAMERA_cam_list,GetInstance(Self) )
+				ListRemove( list,Self ) ; cam_list_id:-1
+		End Select
+		
+	End Method
+	
 	' Extra
 	
 	' fog with Max2d fix - needed on Linux

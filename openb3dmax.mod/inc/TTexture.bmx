@@ -159,7 +159,7 @@ Type TTexture
 		
 	End Function
 	
-	Method TextureListAdd( list:TList ) ' Global list
+	Method TextureListAdd( list:TList )
 	
 		Select list
 			Case tex_list
@@ -168,6 +168,19 @@ Type TTexture
 			Case tex_list_all
 				GlobalListPushBackTexture_( TEXTURE_tex_list_all,GetInstance(Self) )
 				AddList_(list)
+		End Select
+		
+	End Method
+	
+	Method TextureListRemove( list:TList )
+	
+		Select list
+			Case tex_list
+				GlobalListRemoveTexture_( TEXTURE_tex_list,GetInstance(Self) )
+				ListRemove( list,Self ) ; tex_list_id:-1
+			Case tex_list_all
+				GlobalListRemoveTexture_( TEXTURE_tex_list_all,GetInstance(Self) )
+				ListRemove( list,Self ) ; tex_list_all_id:-1
 		End Select
 		
 	End Method

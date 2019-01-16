@@ -327,7 +327,32 @@ Type TEntity
 		
 	End Function
 	
-	Method EntityListRemove( list:TList,value:Object )
+	Method EntityListAdd( list:TList,value:Object=Null )
+	
+		Local ent:TEntity=TEntity(value)
+		
+		Select list
+			Case child_list
+				If ent
+					EntityListPushBackEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
+					AddList(list)
+				EndIf
+			Case TGlobal.root_ent.child_list
+				If ent
+					EntityListPushBackEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(ent) )
+					AddList(list)
+				EndIf
+			Case entity_list
+				GlobalListPushBackEntity_( ENTITY_entity_list,GetInstance(Self) )
+				AddList_(list)
+			Case animate_list
+				GlobalListPushBackEntity_( ENTITY_animate_list,GetInstance(Self) )
+				AddList_(list)
+		End Select
+		
+	End Method
+	
+	Method EntityListRemove( list:TList,value:Object=Null )
 	
 		Local ent:TEntity=TEntity(value)
 		
@@ -342,29 +367,12 @@ Type TEntity
 					EntityListRemoveEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(ent) )
 					ListRemove( list,value ) ; TGlobal.root_ent.child_list_id:-1
 				EndIf
-		End Select
-		
-	End Method
-	
-	Method EntityListAdd( list:TList,value:Object=Null ) ' Global list
-	
-		Local ent:TEntity=TEntity(value)
-		
-		Select list
-			Case child_list
-				If ent
-					EntityListPushBackEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
-					AddList(list)
-				EndIf
 			Case entity_list
-				GlobalListPushBackEntity_( ENTITY_entity_list,GetInstance(Self) )
-				AddList_(list)
+				GlobalListRemoveEntity_( ENTITY_entity_list,GetInstance(Self) )
+				ListRemove( list,value ) ; entity_list_id:-1
 			Case animate_list
-				GlobalListPushBackEntity_( ENTITY_animate_list,GetInstance(Self) )
-				AddList_(list)
-			Case TCamera.cam_list
-				GlobalListPushBackEntity_( CAMERA_cam_list,GetInstance(Self) )
-				AddList_(list)
+				GlobalListRemoveEntity_( ENTITY_animate_list,GetInstance(Self) )
+				ListRemove( list,value ) ; animate_list_id:-1
 		End Select
 		
 	End Method

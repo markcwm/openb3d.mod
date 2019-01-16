@@ -498,11 +498,12 @@ Type TSurface
 	End Method
 	
 	' removes a tri from a surface - called in Load3ds and LoadX
-	Function RemoveTri( surf:TSurface,tri:Int )
+	Method RemoveTri( tri:Int )
 	
-		RemoveTri_( GetInstance(surf),tri )
+		RemoveTri_( GetInstance(Self),tri )
+		tris=SurfaceUShort_( GetInstance(Self),SURFACE_tris )
 		
-	End Function
+	End Method
 	
 	' sets the vertex colors of a surface - called by MeshColor
 	Method SurfaceColor( r:Float,g:Float,b:Float,a:Float=1.0 )

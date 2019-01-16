@@ -200,9 +200,6 @@ Old end Max2d, using push matrix.
 <tr><td class=docleft width=1%><a href=#EndMax2DEx>EndMax2DEx</a></td><td class=docright>
 New end Max2D function, allows instant resolution switch.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#EntityListAdd>EntityListAdd</a></td><td class=docright>
-Like using ListAddLast(list,value) in Minib3d, except ent parameter.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#EntityMatrix>EntityMatrix</a></td><td class=docright>
 undocumented.
 </td></tr>
@@ -253,6 +250,9 @@ undocumented.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#LightMesh>LightMesh</a></td><td class=docright>
+Performs a 'fake' lighting operation on a mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LinkShader>LinkShader</a></td><td class=docright>
 Link shader to program.
@@ -487,6 +487,9 @@ Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VerboseDebug>VerboseDebug</a></td><td class=docright>
+Enables full debugging mode.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#VoxelSpriteMaterial>VoxelSpriteMaterial</a></td><td class=docright>
 Set material for voxel sprite.
@@ -924,12 +927,6 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>New end Max2D function, allows instant resolution switch.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=EntityListAdd>
-<tr><td class=doctop colspan=2>Function EntityListAdd( list:TList,value:Object,ent:TEntity )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Like using ListAddLast(list,value) in Minib3d, except ent parameter.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=EntityMatrix>
 <tr><td class=doctop colspan=2>Function EntityMatrix:Float Ptr( ent:TEntity )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
@@ -1018,6 +1015,12 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=LightMesh>
+<tr><td class=doctop colspan=2>Function LightMesh( mesh:TMesh,red:Float,green:Float,blue:Float,range:Float=0,light_x:Float=0,light_y:Float=0,light_z:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Performs a 'fake' lighting operation on a mesh.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>You need to use EntityFX ent,2 to enable vertex colors on the target mesh before you can see any results.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=LinkShader>
 <tr><td class=doctop colspan=2>Function LinkShader:Int( shader:TShader )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Link shader to program.</td></tr>
@@ -1084,8 +1087,9 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <table class=doc width=100% cellspacing=3 id=MeshLoader>
 <tr><td class=doctop colspan=2>Function MeshLoader( meshid:String,flags:Int=-1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bb" or "bmx" for Blitzmax streamed meshes, use "cpp" or "lib" for
-Openb3d library meshes (only from files), use "all" to use all available mesh loaders.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library
+mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
+Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
@@ -1434,6 +1438,11 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends surface data to a shader variable name.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Vbo is in range 1..6 which selects what vertex buffer data to access, where 1 is vertex positions,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VerboseDebug>
+<tr><td class=doctop colspan=2>Function VerboseDebug( value:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Enables full debugging mode.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=VoxelSpriteMaterial>

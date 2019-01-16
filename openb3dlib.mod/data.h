@@ -58,6 +58,8 @@ void SetBrushString_( Brush* obj,int varid,char* cstr );
 bool* CameraBool_( Camera* obj,int varid );
 int* CameraInt_( Camera* obj,int varid );
 float* CameraFloat_( Camera* obj,int varid );
+void GlobalListPushBackCamera_( int varid,Camera* obj );
+void GlobalListRemoveCamera_( int varid,Camera* obj );
 
 // Entity
 int* EntityInt_( Entity* obj,int varid );
@@ -71,6 +73,7 @@ Entity* EntityIterListEntity_( Entity* obj,int varid,int &id );
 void EntityListPushBackEntity_( Entity* obj,int varid,Entity* ent );
 void EntityListRemoveEntity_( Entity* obj,int varid,Entity* ent );
 void GlobalListPushBackEntity_( int varid,Entity* obj );
+void GlobalListRemoveEntity_( int varid,Entity* obj );
 void SetEntityString_( Entity* obj,int varid,char* cstr );
 
 // Light
@@ -90,7 +93,9 @@ Surface* MeshIterListSurface_( Mesh* obj,int varid,int &id );
 Bone* MeshIterVectorBone_( Mesh* obj,int varid,int &id );
 vector<Bone*>* MeshVectorBone_( Mesh* obj,int varid );
 void MeshListPushBackSurface_( Mesh* obj,int varid,Surface* surf );
+void MeshListRemoveSurface_( Mesh* obj,int varid,Surface* surf );
 void MeshListPushBackBone_( Mesh* obj,int varid,Bone* bone );
+void MeshListRemoveBone_( Mesh* obj,int varid,Bone* bone );
 
 // Model
 float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf );
@@ -139,6 +144,7 @@ float* TextureFloat_( Texture* obj,int varid );
 const char* TextureString_( Texture* obj,int varid );
 list<Texture*>* TextureListTexture_( Texture* obj,int varid );
 void GlobalListPushBackTexture_( int varid,Texture* obj );
+void GlobalListRemoveTexture_( int varid,Texture* obj );
 void SetTextureString_( Texture* obj,int varid,char* cstr );
 
 #ifdef __cplusplus

@@ -47,6 +47,7 @@ Extern
 	Function TextureGLTexEnvf_( tex:Byte Ptr,target:Int,pname:Int,param:Float )
 	Function BrushGLColor_( brush:Byte Ptr,r:Float,g:Float,b:Float,a:Float )
 	Function BrushGLBlendFunc_( brush:Byte Ptr,sfactor:Int,dfactor:Int )
+	Function LightMesh_( m:Byte Ptr,red:Float,green:Float,blue:Float,range:Float,light_x:Float,light_y:Float,light_z:Float )
 	
 	' *** Minib3d only
 	Function BackBufferToTex_( tex:Byte Ptr,frame:Int )
@@ -452,13 +453,13 @@ Function CopyList( list:TList )
 	TGlobal.CopyList( list )
 End Function
 
-Rem
-bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter
-about: Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.
-EndRem
-Function EntityListAdd( list:TList,value:Object,ent:TEntity )
-	TGlobal.EntityListAdd( list,value,ent )
-End Function
+'Rem
+'bbdoc: Like using ListAddLast(list,value) in Minib3d, except ent parameter
+'about: Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.
+'EndRem
+'Function EntityListAdd( list:TList,value:Object,ent:TEntity )
+'	TGlobal.EntityListAdd( list,value,ent )
+'End Function
 
 Rem
 bbdoc: Add an existing surface to a mesh
@@ -490,9 +491,10 @@ Include "inc/TSurface.bmx"
 Include "inc/TTexture.bmx"
 Include "inc/TBrush.bmx"
 Include "inc/TAnimation.bmx"
-Include "inc/T3DS.bmx"
 Include "inc/TB3D.bmx"
 Include "inc/TMD2.bmx"
+Include "inc/T3DS.bmx"
+Include "inc/T3DS2.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"

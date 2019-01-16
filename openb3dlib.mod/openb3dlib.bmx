@@ -239,6 +239,8 @@ Extern
 	Function CameraBool_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function CameraInt_:Int Ptr( obj:Byte Ptr,varid:Int )
 	Function CameraFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function GlobalListPushBackCamera_( varid:Int,obj:Byte Ptr )
+	Function GlobalListRemoveCamera_( varid:Int,obj:Byte Ptr )
 	
 	' Entity
 	Function EntityInt_:Int Ptr( obj:Byte Ptr,varid:Int )
@@ -252,6 +254,7 @@ Extern
 	Function EntityListPushBackEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr )
 	Function EntityListRemoveEntity_( obj:Byte Ptr,varid:Int,ent:Byte Ptr )
 	Function GlobalListPushBackEntity_( varid:Int,obj:Byte Ptr )
+	Function GlobalListRemoveEntity_( varid:Int,obj:Byte Ptr )
 	Function SetEntityString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
 	
 	' Light
@@ -271,7 +274,9 @@ Extern
 	Function MeshIterVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int,id:Int Ptr )
 	Function MeshVectorBone_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function MeshListPushBackSurface_( obj:Byte Ptr,varid:Int,surf:Byte Ptr )
+	Function MeshListRemoveSurface_( obj:Byte Ptr,varid:Int,surf:Byte Ptr )
 	Function MeshListPushBackBone_( obj:Byte Ptr,varid:Int,bone:Byte Ptr )
+	Function MeshListRemoveBone_( obj:Byte Ptr,varid:Int,bone:Byte Ptr )
 	
 	' Model
 	Function SurfaceCopyFloatArray_:Float Ptr( obj:Byte Ptr,varid:Int,surf:Byte Ptr )
@@ -320,6 +325,7 @@ Extern
 	Function TextureString_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function TextureListTexture_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function GlobalListPushBackTexture_( varid:Int,obj:Byte Ptr )
+	Function GlobalListRemoveTexture_( varid:Int,obj:Byte Ptr )
 	Function SetTextureString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
 	
 End Extern

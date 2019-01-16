@@ -203,8 +203,8 @@ void ReadTexCoords(){
   for (Index = 0; Index<Count;Index++){
     U = Stream->ReadFloat();
     V = -Stream->ReadFloat();
-    surface->VertexTexCoords(Index, U, V,0, 0);
-    surface->VertexTexCoords(Index, U, V,0, 1);
+    surface->VertexTexCoords(Index, U, V, 0, 0);
+    surface->VertexTexCoords(Index, U, V, 0, 1);
   }
 }
 
@@ -336,7 +336,7 @@ Mesh* Load3ds(string URL, Entity* parent_ent){
     case M3D_3DS_BrushDIFFUSE:
       ReadChunk();
       ReadRGB(ChunkID, Red, Green, Blue);
-      brush->BrushColor(Red, Green, Blue);
+      //brush->BrushColor(Red, Green, Blue);
       break;
     case M3D_3DS_BrushSPECULAR:
       //'Loader.ReadChunk()
@@ -350,6 +350,7 @@ Mesh* Load3ds(string URL, Entity* parent_ent){
       break;
     case M3D_3DS_MAPFILENAME:
       LoadMap();
+      if(brush->no_texs==0) brush->BrushColor(Red, Green, Blue); // only use rgb if no texture
       break;
     case M3D_3DS_MAPVSCALE:
       texture->v_scale = Stream->ReadFloat();
