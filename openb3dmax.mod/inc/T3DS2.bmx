@@ -205,7 +205,7 @@ Type T3DS2
 			
 			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, x) ' AddVertex
 			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, y)
-			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, z)
+			surface.SurfaceFloatArrayAdd(SURFACE_vert_coords, z) ' invert z for ogl
 		Next
 		
 		Return count
@@ -389,17 +389,13 @@ Type T3DS2
 					If TGlobal.Log_3DS Then DebugLog "- - - - CHUNK_MAPLIST"
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
-					matrix = NewMatrix()
+					matrix = NewMatrix() ' calls LoadIdentity
+					
 					For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
 						For Local y% = 0 To 2
 							matrix.grid[(4*x)+y] = stream.ReadFloat()
 						Next
 					Next
-					
-					matrix.grid[(4*0)+3] = 0
-					matrix.grid[(4*1)+3] = 0
-					matrix.grid[(4*2)+3] = 0
-					matrix.grid[(4*3)+3] = 1
 					
 					If TGlobal.Log_3DS
 						DebugLog "- - - - CHUNK_TRANSMATRIX"
@@ -414,7 +410,7 @@ Type T3DS2
 		Wend
 		
 		If matrix <> Null
-			MapInsert matrixmap, mesh.EntityName(), matrix
+			MapInsert matrixmap, mesh, matrix
 		EndIf
 	End Method
 	
@@ -544,7 +540,8 @@ Type T3DS2
 			mesh.AddParent(parent)
 			mesh.EntityListAdd(TEntity.entity_list)
 			'If TGlobal.Mesh_Transform = 1 Then TGlobal.Mesh_Transform = 0 ' disable transform vertices?
-		Else
+		'Else
+			Rem
 			For Local ent:TEntity = EachIn objlist
 				If ent.EntityName() = objname
 					Local par:TEntity, mesh:TMesh = TMesh(ent)
@@ -564,7 +561,7 @@ Type T3DS2
 						mesh.UpdateMat(True)
 					EndIf
 					
-					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+					Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh ))
 					
 					If parid <> 65535 And matrix = Null 'And mesh.no_surfs[0] = 0 ' if any dummy child mesh found
 						If TGlobal.Mesh_Transform = 1 Then TGlobal.Mesh_Transform = 0 ' don't transform vertices
@@ -573,6 +570,7 @@ Type T3DS2
 					Exit
 				EndIf
 			Next
+			EndRem
 		EndIf
 		
 	End Method
@@ -656,13 +654,17 @@ Type T3DS2
 					b = stream.ReadByte()
 					If TGlobal.Log_3DS Then DebugLog " CHUNK_RGB3B: "+r+","+g+","+b
 					
-				'Case CHUNK_RGBGAMMA3F ' $0013 - 0..1
-				'	SeekStream(stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog " CHUNK_RGBGAMMA3F"
+				Case CHUNK_RGBGAMMA3F ' $0013 - 0..1
+					r = stream.ReadFloat() * 255
+					g = stream.ReadFloat() * 255
+					b = stream.ReadFloat() * 255
+					If TGlobal.Log_3DS Then DebugLog " CHUNK_RGBGAMMA3F: "+r+","+g+","+b
 					
-				'Case CHUNK_RGBGAMMA3B ' $0012 - 0.255
-				'	SeekStream(stream, chunk.endchunk) ' same as color
-				'	If TGlobal.Log_3DS Then DebugLog " CHUNK_RGBGAMMA3B"
+				Case CHUNK_RGBGAMMA3B ' $0012 - 0.255
+					r = stream.ReadByte()
+					g = stream.ReadByte()
+					b = stream.ReadByte()
+					If TGlobal.Log_3DS Then DebugLog " CHUNK_RGBGAMMA3B: "+r+","+g+","+b
 					
 				Default
 					SeekStream(stream, chunk.endchunk)
@@ -847,8 +849,7 @@ Type T3DS2
 			name = filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture
-		If texname <> "" Then tex = LoadTexture(name, TGlobal.Texture_Flags) ' check material has texture, bad path crash streams
+		Local tex:TTexture = LoadTexture(name, TGlobal.Texture_Flags) ' check material has texture, bad path crash streams
 		If TGlobal.Log_3DS Then DebugLog " MAT TEX name="+name+" matname="+matname+" texname="+texname
 		
 		MapInsert materialmap, matname, tex
@@ -914,13 +915,6 @@ Type T3DS2
 	
 	Method ParseFile:TMesh( url:Object, parent_ent:TEntity=Null )
 	
-		Local chunk:TChunk = ReadChunk()
-		If (chunk.id <> CHUNK_MAIN) Or (chunk.size <> stream.Size()) ' $4D4D
-			stream.Close()
-			If TGlobal.Log_3DS Then DebugLog "No 3DS File"
-			Return Null
-		EndIf
-		
 		Local parent:TMesh = NewMesh()
 		parent.SetString(parent.name,"ROOT")
 		parent.SetString(parent.class_name,"Mesh")
@@ -962,7 +956,10 @@ Type T3DS2
 	
 	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
-		If file=Null Then Return Null
+		If file = Null
+			If TGlobal.Log_Mesh Then DebugLog " Invalid 3DS stream: "+String(url)
+			Return Null
+		EndIf
 		
 		Local model:T3DS2 = New T3DS2
 		Local mesh:TMesh=model.LoadAnim3DSFromStream(file, url, parent_ent_ext)
@@ -972,6 +969,7 @@ Type T3DS2
 	End Function
 	
 	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null )
+	
 		stream = file
 		objlist = CreateList()
 		materialmap = CreateMap()
@@ -986,20 +984,25 @@ Type T3DS2
 		Local olddir:String = CurrentDir()
 		If filepath <> "" Then ChangeDir(filepath)
 		
-		If TGlobal.Log_3DS Then DebugLog "" ; DebugLog " filename: "+filename
-		If TGlobal.Log_3DS Then DebugLog " filepath: "+filepath
+		Local chunk:TChunk = ReadChunk()
+		If (chunk.id <> CHUNK_MAIN) Or (chunk.size <> stream.Size()) ' $4D4D
+			stream.Close()
+			If TGlobal.Log_Mesh Then DebugLog " Invalid 3DS file: "+filename
+			Return Null
+		EndIf
+		If TGlobal.Log_3DS Then DebugLog "" ; DebugLog " Filename: "+filename
 		
 		Local parent:TMesh = ParseFile(url, parent_ent)
 		
-		If TGlobal.Log_3DS Then DebugLog " Mesh_Transform: "+TGlobal.Mesh_Transform
-		If TGlobal.Log_3DS Then DebugLog " Texture_Flags: "+TGlobal.Texture_Flags
+		'If TGlobal.Log_3DS Then DebugLog " Mesh_Transform: "+TGlobal.Mesh_Transform
+		'If TGlobal.Log_3DS Then DebugLog " Texture_Flags: "+TGlobal.Texture_Flags
 		
 		ChangeDir(olddir)
 		
 		'Local vec:TVector
 		'For Local ent:TEntity = EachIn objlist ' master scale is largest matrix value, ignore CHUNK_MASTERSCALE
 			'Local mesh:TMesh = TMesh(ent)
-			'Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			'Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh ))
 			
 			'If matrix <> Null And TGlobal.Mesh_Transform > 0
 			'	vec = matrix.GetMatrixScale()
@@ -1013,7 +1016,7 @@ Type T3DS2
 		
 		'For Local ent:TEntity = EachIn objlist ' normalize matrix (scale down) if too large
 			'Local mesh:TMesh = TMesh(ent)
-			'Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			'Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh ))
 			
 			'If matrix <> Null And TGlobal.Mesh_Transform > 0 And Master_Scale > 1.0 ' if < 1 it would scale up
 			'	matrix.Scale(1.0 / Master_Scale, 1.0 / Master_Scale, 1.0 / Master_Scale)
@@ -1022,7 +1025,7 @@ Type T3DS2
 		
 		For Local ent:TEntity = EachIn objlist ' transform vertices, re-positions mesh by matrix
 			Local mesh:TMesh = TMesh(ent)
-			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh ))
 			
 			Local invmat:TMatrix = NewMatrix()
 			If matrix <> Null Then matrix.GetInverse(invmat)
@@ -1036,13 +1039,10 @@ Type T3DS2
 					
 					If TGlobal.Mesh_Transform > 0 Then invmat.TransformVec(px, py, pz, 1)
 					
-				'	TGlobal.Matrix_3DS.TransformVec(px, py, pz, 1) ' transform by LoaderMatrix
-					
 					surf.vert_coords[(v*3)+0] = px
 					surf.vert_coords[(v*3)+1] = py
 					surf.vert_coords[(v*3)+2] = -pz
 				Next
-				
 				surf.UpdateNormals()
 			Next
 			
@@ -1053,7 +1053,7 @@ Type T3DS2
 		Rem ' animation
 		For Local ent:TEntity = EachIn objlist
 			Local mesh:TMesh = TMesh(ent)
-			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh.EntityName() ))
+			Local matrix:TMatrix = TMatrix(MapValueForKey( matrixmap, mesh ))
 			
 			'DebugLog "pos:"+animKeys[0].pos[0]+","+ animKeys[0].pos[1]+","+ animKeys[0].pos[2]
 			Local matrix:Float[,] = ent.GetGlobalMatrix()

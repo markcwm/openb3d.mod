@@ -9,7 +9,10 @@ Type TB3D
 	
 		' Start file reading
 		Local file:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream("littleendian::"+url)
-		If file=Null Then Return Null
+		If file=Null
+			If TGlobal.Log_Mesh Then DebugLog " Invalid B3D stream: "+String(url)
+			Return Null
+		EndIf
 		
 		Local mesh:TMesh=LoadAnimB3DFromStream(file, url, parent_ent_ext)
 		
@@ -22,13 +25,11 @@ Type TB3D
 	
 		' get current dir - we'll change it back at end of func
 		Local cd$=CurrentDir()
+		Local dir$=String(url) 'f_name
 		filepath = ExtractDir(String(url))
-		If TGlobal.Log_B3D Then DebugLog "filepath="+filepath+" file.size="+ file.Size()
 		
 		' get directory of b3d file name, set current dir to match it so we can find textures
-		Local dir$=String(url) 'f_name
 		Local in:Int=0
-		
 		While Instr(dir, "\", in+1)<>0
 			in=Instr(dir, "\", in+1)
 		Wend
@@ -45,8 +46,15 @@ Type TB3D
 		tag=ReadTag(file)
 		ReadLong(file)
 		Local vno:Int=ReadInt(file)
-		If tag<>"BB3D" Then Print "Invalid b3d file" ; Return Null
-		If vno/100>0 Then Print "Invalid b3d file version" ; Return Null
+		If tag<>"BB3D"
+			If TGlobal.Log_Mesh Then DebugLog " Invalid B3D file: "+dir
+			Return Null
+		EndIf
+		If vno/100>0
+			If TGlobal.Log_Mesh Then DebugLog " Invalid B3D version: "+vno
+			Return Null
+		EndIf
+		If TGlobal.Log_B3D Then DebugLog "" ; DebugLog " Dir="+dir+" file.size="+ file.Size()
 		
 		' Locals
 		Local size:Int, node_level:Int=-1, old_node_level:Int=-1

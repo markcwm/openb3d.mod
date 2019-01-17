@@ -3,14 +3,13 @@
 ' *** Extra
 
 Rem
-bbdoc: Enables full debugging mode
+bbdoc: Enables or disables full mesh debug information
 End Rem
-Function VerboseDebug( value:Int )
+Function MeshDebug( value:Int )
 	TGlobal.Log_3DS=value ' 3DS chunks
 	TGlobal.Log_B3D=value ' B3D chunks
 	TGlobal.Log_MD2=value ' MD2 chunks
 	TGlobal.Log_Assimp=value ' Assimp mesh
-	TGlobal.Log_Texture=value ' texture streams
 End Function
 
 Rem
@@ -33,7 +32,10 @@ returns: A mesh object with child meshes if any
 End Rem
 Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
-	If Not stream Then Return Null
+	If Not stream
+		If TGlobal.Log_Mesh Then DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
+		Return Null
+	EndIf
 	
 	Local pos=stream.Pos()
 	If pos=-1
@@ -62,7 +64,10 @@ returns: A mesh object
 End Rem
 Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
-	If Not stream Then Return Null
+	If Not stream
+		If TGlobal.Log_Mesh Then DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
+		Return Null
+	EndIf
 	
 	Local pos=stream.Pos()
 	If pos=-1
@@ -90,7 +95,7 @@ Rem
 bbdoc: Set mesh loaders to use, default is "bmx"
 about: Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
 mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms.
+Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms (only on 3DS files).
 End Rem
 Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()

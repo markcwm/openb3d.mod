@@ -20,6 +20,7 @@ Type T3DS
 	Const M3D_3DS_FACELIST = $4120
 	Const M3D_3DS_FACEMATLIST = $4130
 	Const M3D_3DS_TEXCOORDS = $4140
+	Const M3D_3DS_TRANSMATRIX = $4160
 	Const M3D_3DS_BrushBLOCK = $AFFF
 	Const M3D_3DS_BrushNAME = $A000
 	Const M3D_3DS_BrushAMBIENT = $A010
@@ -45,6 +46,8 @@ Type T3DS
 	Field MovedTris:Int[], TrisIndex:Int
 	Field ObjectNames:String[], ObjectIndex:Int
 	Field Red:Byte, Green:Byte, Blue:Byte, Percent:Int
+	Field Meshes:TList, MatrixMap:TMap
+	Field Matrix:TMatrix, New_matrix:TMatrix
 	
 	Method ReadChunk()
 		If Stream.Eof() Return
@@ -128,7 +131,7 @@ Type T3DS
 			Position[1] = Stream.ReadFloat()
 			Position[2] = Stream.ReadFloat()
 			
-			Surface.AddVertex(Position[0], Position[1], Position[2])
+			Surface.AddVertex(Position[0], Position[1], -Position[2]) ' AddVertex inverts z, so reinverted for uv flip
 		Next
 		
 		'Surface.UpdateVertices()
@@ -146,11 +149,45 @@ Type T3DS
 			Indices[2] = Stream.ReadShort()
 			Stream.ReadShort() ' FaceFlags
 			
-			Surface.AddTriangle(Indices[0], Indices[1], Indices[2])
+			Surface.AddTriangle(Indices[2], Indices[1], Indices[0]) ' reverse winding order
 		Next
 		
 		'Surface.UpdateTriangles()
 		'Surface.SmoothNormals()
+	End Method
+	
+	Method ReadTexCoords()
+		Local CoordCount:Int, Index:Int, U:Float, V:Float
+		
+		CoordCount = Stream.ReadShort()
+		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_TEXCOORDS: CoordCount = "+CoordCount
+		
+		For Index = 0 To CoordCount-1
+			U = Stream.ReadFloat()
+			V = -Stream.ReadFloat() ' flip v
+			
+			Surface.VertexTexCoords(Index, U, V, 0, 0)
+			Surface.VertexTexCoords(Index, U, V, 0, 1)
+		Next
+		
+		'Surface.UpdateVertices(False, False, True, True, False, False)
+	End Method
+	
+	Method ReadTransMatrix()
+		New_matrix = NewMatrix() ' calls LoadIdentity
+		
+		For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
+			For Local y% = 0 To 2
+				New_matrix.grid[(4*x)+y] = Stream.ReadFloat()
+			Next
+		Next
+		
+		If TGlobal.Log_3DS
+			DebugLog "- M3D_3DS_TRANSMATRIX"
+			'For Local z% = 0 To 3
+			'	DebugLog "- "+New_matrix.grid[(4*z)+0]+","+New_matrix.grid[(4*z)+1]+","+New_matrix.grid[(4*z)+2]+","+New_matrix.grid[(4*z)+3]
+			'Next
+		EndIf
 	End Method
 	
 	Method ReadFaceMatList()
@@ -178,8 +215,10 @@ Type T3DS
 			New_mesh.AddParent(Parent_Mesh)
 			New_mesh.EntityListAdd(TEntity.entity_list)
 			New_surface = New_mesh.CreateSurface()
+			MapInsert MatrixMap, New_mesh, New_matrix
+			Meshes.AddLast(New_mesh)
 			
-			For Index = 0 To Count-1
+			For Index = 0 To Count-1 ' copy surface data
 				v = Stream.ReadShort()
 				Local v0:Int[3]
 				For i=0 To 2
@@ -190,7 +229,7 @@ Type T3DS
 					Local u#=Surface.VertexU(v0[i])
 					Local v#=Surface.VertexV(v0[i])
 					Local w#=Surface.VertexW(v0[i])
-					v0[i]=New_surface.AddVertex(x, y, z, u, v, w)
+					v0[i]=New_surface.AddVertex(x, y, z, u, v, w) ' inverts z
 				Next
 				New_surface.AddTriangle(v0[0], v0[1], v0[2])
 				'Surface.RemoveTri(v)
@@ -210,23 +249,6 @@ Type T3DS
 		
 	End Method
 	
-	Method ReadTexCoords()
-		Local CoordCount:Int, Index:Int, U:Float, V:Float
-		
-		CoordCount = Stream.ReadShort()
-		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_TEXCOORDS: CoordCount = "+CoordCount
-		
-		For Index = 0 To CoordCount-1
-			U = Stream.ReadFloat()
-			V = -Stream.ReadFloat() ' flip v
-			
-			Surface.VertexTexCoords(Index, U, V, 0, 0)
-			Surface.VertexTexCoords(Index, U, V, 0, 1)
-		Next
-		
-		'Surface.UpdateVertices(False, False, True, True, False, False)
-	End Method
-	
 	Method LoadMap(Dir:String, Filepath:String)
 		Local Filename:String = ReadCString()
 		
@@ -236,7 +258,7 @@ Type T3DS
 		EndIf
 		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_MAPFILENAME: Filename = "+Filename+" Texname = "+Texname
 		
-		If Filename <> "" Then Texture = LoadTexture(Texname, TGlobal.Texture_Flags)
+		Texture = LoadTexture(Texname, TGlobal.Texture_Flags)
 		
 		If TextureLayer = M3D_3DS_TEXTUREMAP1
 			Brush.BrushTexture(Texture, 0, 0) ' Layer 0
@@ -248,7 +270,7 @@ Type T3DS
 	Method ReadMap(Layer:Int)
 		Texture = NewTexture()
 		TextureLayer = Layer
-		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
+		'If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
 	End Method
 	
 	Method ReadTriMesh()
@@ -266,6 +288,7 @@ Type T3DS
 				Mesh.FreeEntity()
 			EndIf
 		EndIf
+		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface
 		
 		' Dummy mesh and surface
 		Mesh = NewMesh()
@@ -274,7 +297,6 @@ Type T3DS
 		Mesh.AddParent(Parent_Mesh)
 		Mesh.EntityListAdd(TEntity.entity_list)
 		Surface = Mesh.CreateSurface()
-		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface
 	End Method
 	
 	Method ReadBrushBlock()
@@ -297,11 +319,16 @@ Type T3DS
 		Brushs = CreateList()
 		TrisIndex = 0
 		ObjectIndex = 0
+		Meshes = CreateList()
+		MatrixMap = CreateMap()
 	End Method
 	
 	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
-		If file=Null Then Return Null
+		If file = Null
+			If TGlobal.Log_Mesh Then DebugLog " Invalid 3DS stream: "+String(url)
+			Return Null
+		EndIf
 		
 		Local model:T3DS = New T3DS
 		Local mesh:TMesh = model.Load3DSFromStream(file, url, parent_ent_ext)
@@ -316,14 +343,17 @@ Type T3DS
 		
 		Stream = file
 		Size = Stream.Size()
+		Dir = String(url)
+		OldDir = CurrentDir()
 		
 		' Read Main-Chunk
 		ReadChunk()
 		If (ChunkID <> M3D_3DS_MAIN) Or (ChunkSize <> Size)
 			Stream.Close()
-			If TGlobal.Log_3DS Then DebugLog "No 3DS file!"
+			If TGlobal.Log_Mesh Then DebugLog " Invalid 3DS file: "+Dir
 			Return Null
 		EndIf
+		If TGlobal.Log_3DS Then DebugLog "" ; DebugLog " Dir: "+Dir+" Size: "+Size
 		
 		' Find 3DEditor-Chunk
 		While Not Stream.Eof()
@@ -335,11 +365,7 @@ Type T3DS
 			EndIf
 		Wend
 		
-		OldDir = CurrentDir()
-		Dir = String(url)
-		If TGlobal.Log_3DS Then DebugLog "" ; DebugLog " Dir: "+Dir+" Size: "+Size
 		Local in:Int=0
-		
 		While Instr(Dir, "\", in+1)<>0
 			in=Instr(Dir, "\", in+1)
 		Wend
@@ -383,13 +409,16 @@ Type T3DS
 				Case M3D_3DS_TEXCOORDS
 					ReadTexCoords()
 					
+				Case M3D_3DS_TRANSMATRIX
+					ReadTransMatrix()
+					
 				Case M3D_3DS_BrushNAME
 					'Brush = CreateBrush()
 					BrushName = ReadCString()
 					Brush.SetString(Brush.name, BrushName)
 					If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_BrushNAME: "+BrushName
 					
-				Case M3D_3DS_BrushAMBIENT
+				'Case M3D_3DS_BrushAMBIENT
 					'ReadChunk()
 					'ReadRGB(ChunkID, Red, Green, Blue)
 					'Brush.SetAmbientColor(Red, Green, Blue)
@@ -399,12 +428,12 @@ Type T3DS
 					ReadRGB(ChunkID, Red, Green, Blue)
 					'Brush.BrushColor(Red, Green, Blue)
 					
-				Case M3D_3DS_BrushSPECULAR
+				'Case M3D_3DS_BrushSPECULAR
 					'ReadChunk()
 					'ReadRGB(ChunkID, Red, Green, Blue)
 					'Brush.SetSpecularColor(Red, Green, Blue)
 					
-				Case M3D_3DS_BrushSHININESS
+				'Case M3D_3DS_BrushSHININESS
 					'ReadChunk()
 					'Percent = ReadPercent(ChunkID)
 					'Brush.BrushShininess(Percent)
@@ -463,7 +492,7 @@ Type T3DS
 		
 		'Surface.UpdateVertices()
 		'Surface.UpdateTriangles()
-		Parent_Mesh.UpdateNormals()
+		'Parent_Mesh.UpdateNormals()
 		'Parent_Mesh.UpdateBuffer()
 		'Parent_Mesh.FlipMesh()
 		
@@ -471,6 +500,30 @@ Type T3DS
 		Parent_Mesh.SetString(Parent_Mesh.class_name, "Mesh")
 		Parent_Mesh.AddParent(parent_ent)
 		Parent_Mesh.EntityListAdd(TEntity.entity_list)
+		
+		For Local Current_mesh:TMesh = EachIn Meshes ' transform vertices, re-positions mesh by matrix
+			Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, Current_mesh ))
+			Local invmat:TMatrix = NewMatrix()
+			If mat <> Null Then mat.GetInverse(invmat)
+			
+			Local px:Float, py:Float, pz:Float
+			For Local surf:TSurface = EachIn Current_mesh.surf_list
+				For Local v:Int = 0 Until surf.CountVertices()
+					px = surf.vert_coords[(v*3)+0]
+					py = surf.vert_coords[(v*3)+1]
+					pz = -surf.vert_coords[(v*3)+2]
+					
+					If TGlobal.Mesh_Transform > 0 Then invmat.TransformVec(px, py, pz, 1)
+					
+					surf.vert_coords[(v*3)+0] = px
+					surf.vert_coords[(v*3)+1] = py
+					surf.vert_coords[(v*3)+2] = -pz
+				Next
+				surf.UpdateNormals()
+			Next
+			
+			Current_mesh.cull_radius[0] = 0.0
+		Next
 		
 		Return Parent_Mesh
 	End Method

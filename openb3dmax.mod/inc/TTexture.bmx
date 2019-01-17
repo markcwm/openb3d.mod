@@ -502,11 +502,10 @@ Type TTexture
 	
 		If (flags & 128) Then Return LoadCubeMapTextureStream(url,flags,frame_width,frame_height,first_frame,frame_count,tex)
 		
-		If tex=Null Then tex=NewTexture()
-		
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
+		If tex=Null Then tex=NewTexture()
 		tex.SetString(tex.file,file)
 		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
 		
@@ -611,11 +610,10 @@ Type TTexture
 	' Load cubemaps in 4 * 3 cross rather than single strip
 	Function LoadCubeMapTextureStream:TTexture( url:Object,flags:Int,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
 	
-		If tex=Null Then tex=NewTexture()
-		
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
+		If tex=Null Then tex=NewTexture()
 		tex.SetString(tex.file,file)
 		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
 		
@@ -706,7 +704,7 @@ Type TTexture
 			
 			stream = OpenStream(file,True,False)
 			If Not stream
-				If TGlobal.Log_Texture Then DebugLog " Can't find texture path: "+file
+				If TGlobal.Log_Texture Then DebugLog " Invalid texture stream: "+file
 				Return False
 			Else ' file found after strip dir
 				CloseStream(stream)

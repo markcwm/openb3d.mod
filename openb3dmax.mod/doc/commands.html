@@ -287,6 +287,9 @@ Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns
 <tr><td class=docleft width=1%><a href=#MeshCullRadius>MeshCullRadius</a></td><td class=docright>
 Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cull sphere'
 </td></tr>
+<tr><td class=docleft width=1%><a href=#MeshDebug>MeshDebug</a></td><td class=docright>
+Enables or disables full mesh debug information.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#MeshLoader>MeshLoader</a></td><td class=docright>
 Set mesh loaders to use, default is "bmx"
 </td></tr>
@@ -487,9 +490,6 @@ Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#VerboseDebug>VerboseDebug</a></td><td class=docright>
-Enables full debugging mode.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#VoxelSpriteMaterial>VoxelSpriteMaterial</a></td><td class=docright>
 Set material for voxel sprite.
@@ -1084,12 +1084,17 @@ One time you may have to use it is for animated meshes where the default cull ra
 account all animation positions, resulting in the mesh being wrongly culled at extreme positions.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=MeshDebug>
+<tr><td class=doctop colspan=2>Function MeshDebug( value:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Enables or disables full mesh debug information.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=MeshLoader>
 <tr><td class=doctop colspan=2>Function MeshLoader( meshid:String,flags:Int=-1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library
 mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms.</td></tr>
+Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms (only on 3DS files).</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
@@ -1438,11 +1443,6 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends surface data to a shader variable name.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Vbo is in range 1..6 which selects what vertex buffer data to access, where 1 is vertex positions,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=VerboseDebug>
-<tr><td class=doctop colspan=2>Function VerboseDebug( value:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Enables full debugging mode.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=VoxelSpriteMaterial>
