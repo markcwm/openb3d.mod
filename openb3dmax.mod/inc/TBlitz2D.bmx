@@ -4,153 +4,177 @@ bbdoc: Blitz2D
 EndRem
 Type TBlitz2D
 
-	' Oddball
+	Function BeginMax2D( version:Int=0 )
 	
-	' Old begin Max2d function
-	Function BeginMax2D()
-	
-		glPopClientAttrib()
-		glPopAttrib()
-		glMatrixMode(GL_MODELVIEW)
-		glPopMatrix()
-		glMatrixMode(GL_PROJECTION)
-		glPopMatrix()
-		glMatrixMode(GL_TEXTURE)
-		glPopMatrix()
-		glMatrixMode(GL_COLOR)
-		glPopMatrix()
+		Select version
+			
+		Case 1 ' New begin function, allows instant resolution switch (by Krischan)
+			
+			Local x:Int, y:Int, w:Int, h:Int
+			GetViewport(x, y, w, h)
+			
+			'glPopClientAttrib()
+			'glPopAttrib()
+			glMatrixMode(GL_MODELVIEW)
+			glPopMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPopMatrix()
+			glMatrixMode(GL_TEXTURE)
+			glPopMatrix()
+			glMatrixMode(GL_COLOR)
+			glPopMatrix()
+			 
+			glDisable(GL_LIGHTING)
+			glDisable(GL_DEPTH_TEST)
+			glDisable(GL_SCISSOR_TEST)
+			glDisable(GL_FOG)
+			glDisable(GL_CULL_FACE)
+			
+			glMatrixMode GL_TEXTURE
+			glLoadIdentity
+			
+			glMatrixMode GL_PROJECTION
+			glLoadIdentity
+			glOrtho 0, GraphicsWidth(), GraphicsHeight(), 0, -1, 1
+			
+			glMatrixMode GL_MODELVIEW
+			glLoadIdentity
+			
+			SetViewport x, y, w, h
+			
+			Local MaxTex:Int
+			glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr(MaxTex))
+			
+			For Local Layer:Int = 0 Until MaxTex
+			
+				glActiveTexture(GL_TEXTURE0+Layer)
+			
+				glDisable(GL_TEXTURE_CUBE_MAP)
+				glDisable(GL_TEXTURE_GEN_S)
+				glDisable(GL_TEXTURE_GEN_T)
+				glDisable(GL_TEXTURE_GEN_R)
+			
+				glDisable(GL_TEXTURE_2D)
+			
+			Next
+			
+			glActiveTexture(GL_TEXTURE0)
+			
+			glViewport(0, 0, GraphicsWidth(), GraphicsHeight())
+			glScissor(0, 0, GraphicsWidth(), GraphicsHeight())
+			
+			glEnable GL_BLEND
+			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			glEnable(GL_TEXTURE_2D)
+			
+		Default ' Old begin function (by Oddball)
+		
+			glPopClientAttrib()
+			glPopAttrib()
+			glMatrixMode(GL_MODELVIEW)
+			glPopMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPopMatrix()
+			glMatrixMode(GL_TEXTURE)
+			glPopMatrix()
+			glMatrixMode(GL_COLOR)
+			glPopMatrix()
+			
+		End Select
 		
 	End Function
 	
 	' Old end Max2d function
-	Function EndMax2D()
+	Function EndMax2D( version:Int=0 )
 	
-		' save the Max2D settings for later
-		glPushAttrib(GL_ALL_ATTRIB_BITS)
-		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-		glMatrixMode(GL_MODELVIEW)
-		glPushMatrix()
-		glMatrixMode(GL_PROJECTION)
-		glPushMatrix()
-		glMatrixMode(GL_TEXTURE)
-		glPushMatrix()
-		glMatrixMode(GL_COLOR)
-		glPushMatrix()
+		Select version
 		
-		TGlobal.EnableStates() ' enables normals and vertex colors
-		glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
+		Case 1 ' New end function, allows instant resolution switch (by Krischan)
 		
-		' set render state flags (crashes if fx2 is not set)
-		TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
-		TGlobal.blend_mode[0]=1 ' force alpha blending
-		TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
-		TGlobal.fx2[0]=1 ' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
-		
-		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
-		
-		glClearDepth(1.0)						
-		glDepthFunc(GL_LEQUAL)
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
-		
-		glAlphaFunc(GL_GEQUAL,0.5)
-		
-		For Local cam:TCamera=EachIn TCamera.cam_list
-			If cam=TGlobal.camera_in_use ' active camera - was if cam.hide[0]=0
-				cam.UpdateFog() ' fog with Max2d fix
-				Exit
-			EndIf
-		Next
-		
-	End Function
-	
-	' Krischan
-	
-	' New begin Max2D, makes instant resolution switch work with Max2d
-	Function BeginMax2DEx()
-	
-		Local x:Int, y:Int, w:Int, h:Int
-		GetViewport(x, y, w, h)
-		
-		glDisable(GL_LIGHTING)
-		glDisable(GL_DEPTH_TEST)
-		glDisable(GL_SCISSOR_TEST)
-		glDisable(GL_FOG)
-		glDisable(GL_CULL_FACE)
-		
-		glMatrixMode(GL_TEXTURE)
-		glLoadIdentity()
-		
-		glMatrixMode(GL_PROJECTION)
-		glLoadIdentity()
-		glOrtho(0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1)
-		
-		glMatrixMode(GL_MODELVIEW)
-		glLoadIdentity()
-		
-		SetViewport x, y, w, h
-		
-		Local MaxTex:Int
-		glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr MaxTex)
-		
-		For Local Layer:Int = 0 Until MaxTex
-			glActiveTexture(GL_TEXTURE0+Layer)
-			
+			' save the Max2D settings for later
+			'glPushAttrib(GL_ALL_ATTRIB_BITS)
+			'glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
+			glMatrixMode(GL_MODELVIEW)
+			glPushMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPushMatrix()
+			glMatrixMode(GL_TEXTURE)
+			glPushMatrix()
+			glMatrixMode(GL_COLOR)
+			glPushMatrix()
+			  
 			glDisable(GL_TEXTURE_CUBE_MAP)
 			glDisable(GL_TEXTURE_GEN_S)
 			glDisable(GL_TEXTURE_GEN_T)
 			glDisable(GL_TEXTURE_GEN_R)
 			
 			glDisable(GL_TEXTURE_2D)
-		Next
-		
-		glActiveTexture(GL_TEXTURE0)
-		
-		glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
-		glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
-		
-		glEnable(GL_BLEND)
-		glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA) ' fixes text hidden when blend=2
-		glEnable(GL_TEXTURE_2D)
-		
-	End Function
-	
-	' New begin Max2D, makes instant resolution switch work with Max2d
-	Function EndMax2DEx()
-	
-		glDisable(GL_TEXTURE_CUBE_MAP)
-		glDisable(GL_TEXTURE_GEN_S)
-		glDisable(GL_TEXTURE_GEN_T)
-		glDisable(GL_TEXTURE_GEN_R)
-		
-		glDisable(GL_TEXTURE_2D)
-		glDisable(GL_BLEND)
-		
-		TGlobal.EnableStates()
-		
-		TGlobal.alpha_enable[0] = 0	' alpha blending was disabled by Max2d (GL_BLEND)
-		TGlobal.blend_mode[0] = 1	' force alpha blending
-		TGlobal.fx1[0] = 0			' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
-		TGlobal.fx2[0] = 1			' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
-		
-		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
-		
-		glClearDepth(1.0)
-		glDepthFunc(GL_LEQUAL)
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
-		
-		glAlphaFunc(GL_GEQUAL, 0.5)
-		
-		For Local cam:TCamera=EachIn TCamera.cam_list
-		
-			' active camera - was if cam.hide[0]=0
-			If cam = TGlobal.camera_in_use
-				cam.UpdateFog() ' fog with Max2d fix
-				Exit
-			EndIf
+			glDisable(GL_BLEND)
 			
-		Next
+			TGlobal.EnableStates()
+			'glDisable(GL_TEXTURE_2D)
+			
+			TGlobal.alpha_enable[0] = 0 ' alpha blending was disabled by Max2d (GL_BLEND)
+			TGlobal.blend_mode[0] = 1 ' force alpha blending
+			TGlobal.fx1[0] = 0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
+			TGlobal.fx2[0] = 1 ' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
+			
+			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
+			
+			glClearDepth(1.0)
+			glDepthFunc(GL_LEQUAL)
+			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+			
+			glAlphaFunc(GL_GEQUAL, 0.5)
+			
+			For Local cam:TCamera=EachIn TCamera.cam_list ' active camera - was if cam.hide[0]=0
+				If cam = TGlobal.camera_in_use ' fog with Max2d fix
+					cam.UpdateFog()
+					Exit
+				EndIf
+			Next
+			
+		Default ' Old end function (by Oddball)
+		
+			' save the Max2D settings for later
+			glPushAttrib(GL_ALL_ATTRIB_BITS)
+			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
+			glMatrixMode(GL_MODELVIEW)
+			glPushMatrix()
+			glMatrixMode(GL_PROJECTION)
+			glPushMatrix()
+			glMatrixMode(GL_TEXTURE)
+			glPushMatrix()
+			glMatrixMode(GL_COLOR)
+			glPushMatrix()
+			
+			TGlobal.EnableStates() ' enables normals and vertex colors
+			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
+			
+			' set render state flags (crashes if fx2 is not set)
+			TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
+			TGlobal.blend_mode[0]=1 ' force alpha blending
+			TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
+			TGlobal.fx2[0]=1 ' vertex colors was enabled by EnableStates (GL_COLOR_ARRAY)
+			
+			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
+			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
+			
+			glClearDepth(1.0)						
+			glDepthFunc(GL_LEQUAL)
+			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+			
+			glAlphaFunc(GL_GEQUAL,0.5)
+			
+			For Local cam:TCamera=EachIn TCamera.cam_list
+				If cam=TGlobal.camera_in_use ' active camera - was if cam.hide[0]=0
+					cam.UpdateFog() ' fog with Max2d fix
+					Exit
+				EndIf
+			Next
+			
+		End Select
 		
 	End Function
 	

@@ -106,13 +106,10 @@ Type TGlobal
 		Matrix_B3D=NewMatrix()
 		Matrix_MD2=NewMatrix()
 		
-		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z not working for Sketchup
-		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented
-		?win32
-		LoaderMatrix "md2", 1,0,0, 0,1,0, 0,0,1
-		?Not win32
-		LoaderMatrix "md2", -1,0,0, 0,0,-1, 0,-1,0 ' swap z/y and invert all
-		?
+		'LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as not working right on multiple mesh
+		'LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented
+		LoaderMatrix "md2", 1,0,0, 0,0,1, 0,-1,0 ' swap z/y and invert y
+		
 		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
 		TextureLoader "frames",0,1,2,3,4,5
 		

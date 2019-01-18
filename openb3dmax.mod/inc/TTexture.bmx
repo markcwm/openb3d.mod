@@ -23,9 +23,9 @@ Type TTexture
 	' minib3d
 	Field pixmap:TPixmap
 	Field discard:Float=1
-	'Field gltex:Int[1]
+	Field gltex:Int Ptr
 	'Field cube_pixmap:TPixmap[7]
-	'Field no_mipmaps:Int
+	Field no_mipmaps:Int[1]
 	
 	' extra
 	Global tex_list_all:TList=CreateList()
@@ -98,6 +98,7 @@ Type TTexture
 		' uint
 		texture=TextureUInt_( GetInstance(Self),TEXTURE_texture )
 		frames=TextureUInt_( GetInstance(Self),TEXTURE_frames )
+		gltex=frames ' as in Minib3d
 		framebuffer=TextureUInt_( GetInstance(Self),TEXTURE_framebuffer )
 		
 		' float
@@ -471,6 +472,7 @@ Type TTexture
 				Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
+				tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 				Return tex
 				
 			Default ' wrapper
@@ -489,11 +491,12 @@ Type TTexture
 				Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
+				tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 				Return tex
-		
+				
 			Default ' wrapper
 				Return LoadAnimTextureStream(file,flags,frame_width,frame_height,first_frame,frame_count,tex)
-			
+				
 		EndSelect
 		
 	End Function
@@ -559,6 +562,7 @@ Type TTexture
 			
 			tex.no_frames[0]=frame_count
 			tex.frames=TextureNewUIntArray_( GetInstance(tex),TEXTURE_frames,frame_count )
+			tex.gltex=tex.frames ' as in Minib3d
 			
 			Local width:Int=frame_width
 			Local height:Int=frame_height
@@ -602,6 +606,8 @@ Type TTexture
 			tex.height[0]=tex.pixmap.height
 			
 		EndIf
+		
+		tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 		
 		Return tex
 		
@@ -682,6 +688,7 @@ Type TTexture
 		tex.no_frames[0]=1
 		tex.width[0]=width
 		tex.height[0]=height
+		tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 		
 		Return tex
 		

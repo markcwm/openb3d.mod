@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Returns the binary (base-2) logarithm of x
+End Rem
+Function Log2:Double( value:Double )
+	Return Log2_(value)
+End Function
+
+Rem
 bbdoc: Enables or disables full mesh debug information
 End Rem
 Function MeshDebug( value:Int )

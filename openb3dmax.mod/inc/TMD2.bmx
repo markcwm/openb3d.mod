@@ -189,18 +189,16 @@ Type TMD2
 	-0.688191, -0.587785, -0.425325]
 	
 	Function LoadMD2:TMesh( url:Object, parent_ent:TEntity=Null )
-	
 		Local file:TStream = LittleEndianStream(ReadFile(url))
 		If file = Null
 			If TGlobal.Log_Mesh Then DebugLog " Invalid MD2 stream: "+String(url)
 			Return Null
 		EndIf
 		
-		Local mesh:TMesh = LoadMd2FromStream(file, url, parent_ent)
+		Local mesh:TMesh = LoadMD2FromStream(file, url, parent_ent)
 		
 		CloseStream file
 		Return mesh
-		
 	End Function
 	
 	Function LoadMD2FromStream:TMesh( file:TStream,url:Object,parent_ent:TEntity=Null )
@@ -290,7 +288,7 @@ Type TMD2
 			tris[i].t1=ReadShort(file)
 			tris[i].t2=ReadShort(file)
 			
-			surf.AddTriangle(tris[i].v2, tris[i].v1, tris[i].v0)
+			surf.AddTriangle(tris[i].v2, tris[i].v1, tris[i].v0) ' reverse winding order
 			
 			surf.VertexTexCoords(tris[i].v0, coords[tris[i].t0].u, coords[tris[i].t0].v)
 			surf.VertexTexCoords(tris[i].v1, coords[tris[i].t1].u, coords[tris[i].t1].v)
@@ -329,11 +327,11 @@ Type TMD2
 				
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].x) ' AddVertex
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].y)
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, -frames[i].verts[v].z)
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, -frames[i].verts[v].z) ' invert z for ogl
 				
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+2]) ' add normal
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, md2_anorms[frames[i].verts[v].normalindex+1])
-				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].verts[v].normalindex])
+				surf.SurfaceFloatArrayAdd(SURFACE_vert_norm, -md2_anorms[frames[i].verts[v].normalindex]) ' invert z for ogl
 			Next
 			
 			anim_surf.SurfaceFloatArrayAdd(SURFACE_vert_weight4, i)
@@ -345,7 +343,6 @@ Type TMD2
 		mesh.no_surfs[0]=-1
 		
 		Return mesh
-		
 	End Function
 		
 End Type

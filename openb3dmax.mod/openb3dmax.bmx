@@ -23,6 +23,7 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function Log2_:Double(value:Double)
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
 	Function TrisRendered_:Int()
 	Function NewTexture_:Byte Ptr()
@@ -418,31 +419,17 @@ Const GRAPHICS_MULTISAMPLE16X:Int=$200
 ' *** Wrapper functions
 
 Rem
-bbdoc: New begin Max2D function, allows instant resolution switch
+bbdoc: Old begin function as in Minib3d is 0, new function is 1 (default is 0)
 End Rem
-Function BeginMax2DEx()
-	TBlitz2D.BeginMax2DEx()
+Function BeginMax2D( version:Int=0 )
+	TBlitz2D.BeginMax2D( version )
 End Function
 
 Rem
-bbdoc: New end Max2D function, allows instant resolution switch
+bbdoc: Old end function as in Minib3d is 0, new function is 1 (default is 0)
 End Rem
-Function EndMax2DEx()
-	TBlitz2D.EndMax2DEx()
-End Function
-
-Rem
-bbdoc: Old begin Max2d, using pop matrix
-End Rem
-Function BeginMax2D()
-	TBlitz2D.BeginMax2D()
-End Function
-
-Rem
-bbdoc: Old end Max2d, using push matrix
-End Rem
-Function EndMax2D()
-	TBlitz2D.EndMax2D()
+Function EndMax2D( version:Int=0 )
+	TBlitz2D.EndMax2D( version )
 End Function
 
 Rem

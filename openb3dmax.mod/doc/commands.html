@@ -69,10 +69,7 @@ Attaches a vertex shader object to a program object.
 Copy the contents of the backbuffer to a texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BeginMax2D>BeginMax2D</a></td><td class=docright>
-Old begin Max2d, using pop matrix.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#BeginMax2DEx>BeginMax2DEx</a></td><td class=docright>
-New begin Max2D function, allows instant resolution switch.
+Old begin function as in Minib3d is 0, new function is 1 (default is 0)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLBlendFunc>BrushGLBlendFunc</a></td><td class=docright>
 GL equivalent, experimental.
@@ -195,10 +192,7 @@ Set vector (direction and speed) for wind or gravity effects.
 Ends action so it can be freed, 1 = automatically ended, 2 = manually ended.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndMax2D>EndMax2D</a></td><td class=docright>
-Old end Max2d, using push matrix.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#EndMax2DEx>EndMax2DEx</a></td><td class=docright>
-New end Max2D function, allows instant resolution switch.
+Old end function as in Minib3d is 0, new function is 1 (default is 0)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityMatrix>EntityMatrix</a></td><td class=docright>
 undocumented.
@@ -280,6 +274,9 @@ Load shader from two files, vertex and fragment.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShaderVGF>LoadShaderVGF</a></td><td class=docright>
 Load shader from three files, vertex, geometry and fragment.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Log2>Log2</a></td><td class=docright>
+Returns the binary (base-2) logarithm of x.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -705,13 +702,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BeginMax2D>
-<tr><td class=doctop colspan=2>Function BeginMax2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old begin Max2d, using pop matrix.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=BeginMax2DEx>
-<tr><td class=doctop colspan=2>Function BeginMax2DEx()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New begin Max2D function, allows instant resolution switch.</td></tr>
+<tr><td class=doctop colspan=2>Function BeginMax2D( version:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old begin function as in Minib3d is 0, new function is 1 (default is 0)</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushGLBlendFunc>
@@ -918,13 +910,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndMax2D>
-<tr><td class=doctop colspan=2>Function EndMax2D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old end Max2d, using push matrix.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=EndMax2DEx>
-<tr><td class=doctop colspan=2>Function EndMax2DEx()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>New end Max2D function, allows instant resolution switch.</td></tr>
+<tr><td class=doctop colspan=2>Function EndMax2D( version:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old end function as in Minib3d is 0, new function is 1 (default is 0)</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityMatrix>
@@ -1068,6 +1055,11 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <table class=doc width=100% cellspacing=3 id=LoadShaderVGF>
 <tr><td class=doctop colspan=2>Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three files, vertex, geometry and fragment.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Log2>
+<tr><td class=doctop colspan=2>Function Log2:Double( value:Double )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the binary (base-2) logarithm of x.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
