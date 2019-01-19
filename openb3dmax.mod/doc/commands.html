@@ -69,7 +69,7 @@ Attaches a vertex shader object to a program object.
 Copy the contents of the backbuffer to a texture.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BeginMax2D>BeginMax2D</a></td><td class=docright>
-Old begin function as in Minib3d is 0, new function is 1 (default is 0)
+Old begin function as in Minib3d is 0, new begin function is 1 (default)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#BrushGLBlendFunc>BrushGLBlendFunc</a></td><td class=docright>
 GL equivalent, experimental.
@@ -192,7 +192,7 @@ Set vector (direction and speed) for wind or gravity effects.
 Ends action so it can be freed, 1 = automatically ended, 2 = manually ended.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndMax2D>EndMax2D</a></td><td class=docright>
-Old end function as in Minib3d is 0, new function is 1 (default is 0)
+Old end function as in Minib3d is 0, new end function is 1 (default)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityMatrix>EntityMatrix</a></td><td class=docright>
 undocumented.
@@ -240,7 +240,7 @@ Set terrain height normalizing value, 0.05 is default.
 Returns a mesh loader capable of loading <b>extension</b>.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetShaderProgram>GetShaderProgram</a></td><td class=docright>
-undocumented.
+Get a shader program object reference.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
@@ -249,7 +249,7 @@ Gets a Blitz string from a C string.
 Performs a 'fake' lighting operation on a mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LinkShader>LinkShader</a></td><td class=docright>
-Link shader to program.
+Link shader to a program object, as created by CreateShaderMaterial.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 Loads an anim mesh, see MeshLoader.
@@ -275,20 +275,17 @@ Load shader from two files, vertex and fragment.
 <tr><td class=docleft width=1%><a href=#LoadShaderVGF>LoadShaderVGF</a></td><td class=docright>
 Load shader from three files, vertex, geometry and fragment.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#Log2>Log2</a></td><td class=docright>
-Returns the binary (base-2) logarithm of x.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCullRadius>MeshCullRadius</a></td><td class=docright>
 Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cull sphere'
 </td></tr>
-<tr><td class=docleft width=1%><a href=#MeshDebug>MeshDebug</a></td><td class=docright>
-Enables or disables full mesh debug information.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#MeshLoader>MeshLoader</a></td><td class=docright>
 Set mesh loaders to use, default is "bmx"
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Mipmaps>Mipmaps</a></td><td class=docright>
+Returns the number of mipmaps a texture has.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
@@ -702,8 +699,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BeginMax2D>
-<tr><td class=doctop colspan=2>Function BeginMax2D( version:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old begin function as in Minib3d is 0, new function is 1 (default is 0)</td></tr>
+<tr><td class=doctop colspan=2>Function BeginMax2D( version:Int=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old begin function as in Minib3d is 0, new begin function is 1 (default)</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=BrushGLBlendFunc>
@@ -829,7 +826,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateShaderVGF>
-<tr><td class=doctop colspan=2>Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )</td></tr>
+<tr><td class=doctop colspan=2>Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderString:String,FshaderString:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three strings, vertex, geometry and fragment.</td></tr>
 </table>
 <br>
@@ -910,8 +907,8 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndMax2D>
-<tr><td class=doctop colspan=2>Function EndMax2D( version:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Old end function as in Minib3d is 0, new function is 1 (default is 0)</td></tr>
+<tr><td class=doctop colspan=2>Function EndMax2D( version:Int=1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Old end function as in Minib3d is 0, new end function is 1 (default)</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityMatrix>
@@ -994,7 +991,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetShaderProgram>
 <tr><td class=doctop colspan=2>Function GetShaderProgram:Int( material:TShader )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>undocumented.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Get a shader program object reference.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=GetString>
@@ -1010,7 +1007,7 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=LinkShader>
 <tr><td class=doctop colspan=2>Function LinkShader:Int( shader:TShader )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Link shader to program.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Link shader to a program object, as created by CreateShaderMaterial.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
@@ -1057,11 +1054,6 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three files, vertex, geometry and fragment.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=Log2>
-<tr><td class=doctop colspan=2>Function Log2:Double( value:Double )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the binary (base-2) logarithm of x.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>
 <tr><td class=doctop colspan=2>Function MeshCSG:TMesh( m1:TMesh,m2:TMesh,method_no:Int=1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.</td></tr>
@@ -1076,17 +1068,18 @@ One time you may have to use it is for animated meshes where the default cull ra
 account all animation positions, resulting in the mesh being wrongly culled at extreme positions.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=MeshDebug>
-<tr><td class=doctop colspan=2>Function MeshDebug( value:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Enables or disables full mesh debug information.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=MeshLoader>
 <tr><td class=doctop colspan=2>Function MeshLoader( meshid:String,flags:Int=-1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library
-mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms (only on 3DS files).</td></tr>
+mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
+Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
+Use "debug" for mesh loader debug information or disable with "nodebug".</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Mipmaps>
+<tr><td class=doctop colspan=2>Function Mipmaps:Int( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the number of mipmaps a texture has.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>

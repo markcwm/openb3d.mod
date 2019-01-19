@@ -94,6 +94,7 @@ Type TTexture
 		no_frames=TextureInt_( GetInstance(Self),TEXTURE_no_frames )
 		cube_face=TextureInt_( GetInstance(Self),TEXTURE_cube_face )
 		cube_mode=TextureInt_( GetInstance(Self),TEXTURE_cube_mode )
+		no_mipmaps[0]=Mipmaps() ' calculate number of mipmaps
 		
 		' uint
 		texture=TextureUInt_( GetInstance(Self),TEXTURE_texture )
@@ -192,6 +193,12 @@ Type TTexture
 		Return CreateObject(inst)
 		
 	End Function
+	
+	Method Mipmaps:Int()
+	
+		Return Mipmaps_( GetInstance(Self) )
+		
+	End Method
 	
 	' Openb3d
 	
@@ -472,7 +479,6 @@ Type TTexture
 				Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
-				tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 				Return tex
 				
 			Default ' wrapper
@@ -491,7 +497,6 @@ Type TTexture
 				Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
-				tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
 				Return tex
 				
 			Default ' wrapper
@@ -607,7 +612,7 @@ Type TTexture
 			
 		EndIf
 		
-		tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
+		tex.no_mipmaps[0]=tex.Mipmaps() ' calculate number of mipmaps
 		
 		Return tex
 		
@@ -688,7 +693,7 @@ Type TTexture
 		tex.no_frames[0]=1
 		tex.width[0]=width
 		tex.height[0]=height
-		tex.no_mipmaps[0]=1+Log2(Max(tex.width[0],tex.height[0])) ' calculate mipmap levels
+		tex.no_mipmaps[0]=tex.Mipmaps() ' calculate number of mipmaps
 		
 		Return tex
 		

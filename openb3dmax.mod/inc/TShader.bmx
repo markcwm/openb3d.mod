@@ -58,6 +58,10 @@ Type TShaderObject
 	
 	Function CreateFragShader:TShaderObject( shader:TShader,shaderFileName:String )
 	
+		If TGlobal.Log_Shader
+			If FileType(shaderFileName)=0 Then DebugLog " Invalid shader file: "+String(shaderFileName)
+		EndIf
+		
 		Local cString:Byte Ptr=shaderFileName.ToCString()
 		Local inst:Byte Ptr=CreateFragShader_( TShader.GetInstance(shader),cString )
 		Local obj:TShaderObject=CreateObject(inst)
@@ -78,6 +82,10 @@ Type TShaderObject
 	
 	Function CreateVertShader:TShaderObject( shader:TShader,shaderFileName:String )
 	
+		If TGlobal.Log_Shader
+			If FileType(shaderFileName)=0 Then DebugLog " Invalid shader file: "+String(shaderFileName)
+		EndIf
+		
 		Local cString:Byte Ptr=shaderFileName.ToCString()
 		Local inst:Byte Ptr=CreateVertShader_( TShader.GetInstance(shader),cString )
 		Local obj:TShaderObject=CreateObject(inst)
@@ -250,6 +258,11 @@ Type TShader
 	
 	Function LoadShader:TShader( ShaderName:String,VshaderFileName:String,FshaderFileName:String )
 	
+		If TGlobal.Log_Shader
+			If FileType(VshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(VshaderFileName)
+			If FileType(FshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(FshaderFileName)
+		EndIf
+		
 		Local cString:Byte Ptr=ShaderName.ToCString()
 		Local vcString:Byte Ptr=VshaderFileName.ToCString()
 		Local fcString:Byte Ptr=FshaderFileName.ToCString()
@@ -278,6 +291,12 @@ Type TShader
 	
 	Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )
 	
+		If TGlobal.Log_Shader
+			If FileType(VshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(VshaderFileName)
+			If FileType(GshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(GshaderFileName)
+			If FileType(FshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(FshaderFileName)
+		EndIf
+		
 		Local cString:Byte Ptr=ShaderName.ToCString()
 		Local vcString:Byte Ptr=VshaderFileName.ToCString()
 		Local gcString:Byte Ptr=GshaderFileName.ToCString()
@@ -292,11 +311,11 @@ Type TShader
 		
 	End Function
 	
-	Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )
+	Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderString:String,FshaderString:String )
 	
 		Local cString:Byte Ptr=ShaderName.ToCString()
 		Local vcString:Byte Ptr=VshaderString.ToCString()
-		Local gcString:Byte Ptr=GshaderFileName.ToCString()
+		Local gcString:Byte Ptr=GshaderString.ToCString()
 		Local fcString:Byte Ptr=FshaderString.ToCString()
 		Local inst:Byte Ptr=CreateShaderVGF_( cString,vcString,gcString,fcString )
 		Local material:TShader=CreateObject(inst)

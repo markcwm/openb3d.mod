@@ -104,31 +104,32 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
+		TGlobal.Anim_Mesh = 0 ' disable multiple meshes
 		
-		Local anim_mesh:TMesh
+		Local mesh:TMesh 'anim_mesh
 		Select ExtractExt(String(url))
 			Case "b3d"
-				anim_mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
+				mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
 			Case "md2"
-				anim_mesh=TMD2.LoadMD2FromStream(file, url, parent)
+				mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
 				If TGlobal.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
-					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
+					mesh=model.LoadAnim3DSFromStream(file, url, parent)
 				Else
 					Local model:T3DS = New T3DS
-					anim_mesh=model.Load3DSFromStream(file, url, parent)
+					mesh=model.Load3DSFromStream(file, url, parent)
 				EndIf
 		EndSelect
 		
-		If anim_mesh=Null Then Return Null
-		anim_mesh.HideEntity()
-		Local mesh:TMesh=anim_mesh.CollapseAnimMesh()
-		anim_mesh.FreeEntity()
+		'If anim_mesh=Null Then Return Null
+		'anim_mesh.HideEntity()
+		'Local mesh:TMesh=anim_mesh.CollapseAnimMesh()
+		'anim_mesh.FreeEntity()
 		
-		mesh.SetString(mesh.class_name,"Mesh")
-		mesh.AddParent(parent)
-		mesh.EntityListAdd(TEntity.entity_list)
+		'mesh.SetString(mesh.class_name,"Mesh")
+		'mesh.AddParent(parent)
+		'mesh.EntityListAdd(TEntity.entity_list)
 		
 		' update matrix
 		If mesh.parent<>Null
@@ -145,6 +146,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
+		TGlobal.Anim_Mesh = 1 ' enable multiple meshes
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))

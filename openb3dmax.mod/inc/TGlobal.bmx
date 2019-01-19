@@ -52,6 +52,7 @@ Type TGlobal
 	Global Log_Assimp:Int=False		' True to DebugLog Assimp
 	Global Log_Mesh:Int=True		' True to DebugLog mesh streams
 	Global Log_Texture:Int=True		' True to DebugLog texture streams
+	Global Log_Shader:Int=True		' True to DebugLog shader files
 	
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
@@ -61,6 +62,7 @@ Type TGlobal
 	Global Cubemap_Face:Int[12]
 	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Mesh_Transform:Int=False	' mesh transform vertices
+	Global Anim_Mesh:Int=False		' model has multiple meshes (set in LoadMesh)
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix

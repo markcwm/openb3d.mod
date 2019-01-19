@@ -806,7 +806,7 @@ Type TMesh Extends TEntity
 		Return mesh2
 		
 	End Method
-
+	
 	' used by LoadMesh
 	Method TransformMesh( mat:TMatrix )
 	

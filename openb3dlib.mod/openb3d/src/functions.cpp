@@ -18,11 +18,18 @@
 #include "actions.h"
 #include "postfx.h"
 
+#include <math.h>
+
 //#include "functions.h"
 
 extern "C" {
 
 // Extra
+
+int Mipmaps_(Texture* tex){
+	if (tex==NULL) return 0;
+	return 1 + (int)(log2(max(tex->width, tex->height)));
+}
 
 void TextureMultitex_(Texture* tex, float f){
 	tex->TextureMultitex(f);

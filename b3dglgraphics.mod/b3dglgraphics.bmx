@@ -71,7 +71,7 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 End Function
 
 Rem
-bbdoc: Draw text, doesn't need Max2D. Updated to work with DrawText.
+bbdoc: Draw text, doesn't need BeginMax2D - updated to work with DrawText
 EndRem
 Function Text( x%,y%,txt$ )
 

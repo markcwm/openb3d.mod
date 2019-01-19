@@ -3,20 +3,10 @@
 ' *** Extra
 
 Rem
-bbdoc: Returns the binary (base-2) logarithm of x
+bbdoc: Returns the number of mipmaps a texture has
 End Rem
-Function Log2:Double( value:Double )
-	Return Log2_(value)
-End Function
-
-Rem
-bbdoc: Enables or disables full mesh debug information
-End Rem
-Function MeshDebug( value:Int )
-	TGlobal.Log_3DS=value ' 3DS chunks
-	TGlobal.Log_B3D=value ' B3D chunks
-	TGlobal.Log_MD2=value ' MD2 chunks
-	TGlobal.Log_Assimp=value ' Assimp mesh
+Function Mipmaps:Int( tex:TTexture )
+	Return tex.Mipmaps()
 End Function
 
 Rem
@@ -101,14 +91,15 @@ End Function
 Rem
 bbdoc: Set mesh loaders to use, default is "bmx"
 about: Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
-mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader and "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or "notrans" to disable mesh transforms (only on 3DS files).
+mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
+Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
+Use "debug" for mesh loader debug information or disable with "nodebug".
 End Rem
 Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()
 		Case "all"
 			TGlobal.Mesh_Loader=0
-		Case "bmxassimp", "assimpbmx", "stream"
+		Case "bmxassimp", "assimpbmx", "stream", "streams"
 			TGlobal.Mesh_Loader=1+8
 			TGlobal.Mesh_Flags=flags
 		Case "bmx", "max", "blitzmax"
@@ -129,6 +120,16 @@ Function MeshLoader( meshid:String,flags:Int=-1 )
 			TGlobal.Mesh_Transform=0
 		Case "trans"
 			TGlobal.Mesh_Transform=1
+		Case "debug"
+			TGlobal.Log_3DS=1
+			TGlobal.Log_B3D=1
+			TGlobal.Log_MD2=1
+			TGlobal.Log_Assimp=1
+		Case "nodebug"
+			TGlobal.Log_3DS=0
+			TGlobal.Log_B3D=0
+			TGlobal.Log_MD2=0
+			TGlobal.Log_Assimp=0
 	EndSelect
 End Function
 
@@ -422,7 +423,7 @@ Function CreateVertShaderString:TShaderObject( shader:TShader,shadercode:String 
 End Function
 
 Rem
-bbdoc: Link shader to program
+bbdoc: Link shader to a program object, as created by CreateShaderMaterial
 End Rem
 Function LinkShader:Int( shader:TShader )
 	Return shader.LinkShader()
@@ -2492,8 +2493,8 @@ End Function
 Rem
 bbdoc: Load shader from three strings, vertex, geometry and fragment
 End Rem
-Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderFileName:String,FshaderString:String )
-	Return TShader.CreateShaderVGF( ShaderName,VshaderString,GshaderFileName,FshaderString )
+Function CreateShaderVGF:TShader( ShaderName:String,VshaderString:String,GshaderString:String,FshaderString:String )
+	Return TShader.CreateShaderVGF( ShaderName,VshaderString,GshaderString,FshaderString )
 End Function
 
 Rem
@@ -2691,7 +2692,7 @@ Function ShaderFunction( material:TShader,EnableFunction(),DisableFunction() )
 End Function
 
 Rem
-bbdoc: undocumented
+bbdoc: Get a shader program object reference
 End Rem
 Function GetShaderProgram:Int( material:TShader )
 	Return material.GetShaderProgram()

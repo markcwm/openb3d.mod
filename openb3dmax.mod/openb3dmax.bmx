@@ -23,7 +23,7 @@ Import Brl.Map
 Extern
 
 	' *** Extra
-	Function Log2_:Double(value:Double)
+	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
 	Function TrisRendered_:Int()
 	Function NewTexture_:Byte Ptr()
@@ -419,16 +419,16 @@ Const GRAPHICS_MULTISAMPLE16X:Int=$200
 ' *** Wrapper functions
 
 Rem
-bbdoc: Old begin function as in Minib3d is 0, new function is 1 (default is 0)
+bbdoc: Old begin function as in Minib3d is 0, new begin function is 1 (default)
 End Rem
-Function BeginMax2D( version:Int=0 )
+Function BeginMax2D( version:Int=1 )
 	TBlitz2D.BeginMax2D( version )
 End Function
 
 Rem
-bbdoc: Old end function as in Minib3d is 0, new function is 1 (default is 0)
+bbdoc: Old end function as in Minib3d is 0, new end function is 1 (default)
 End Rem
-Function EndMax2D( version:Int=0 )
+Function EndMax2D( version:Int=1 )
 	TBlitz2D.EndMax2D( version )
 End Function
 
