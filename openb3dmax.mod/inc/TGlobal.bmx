@@ -35,6 +35,8 @@ Type TGlobal
 	Global fx1:Int Ptr ' -1
 	Global fx2:Int Ptr ' -1
 	
+	Global txt_r:Byte=255, txt_g:Byte=255, txt_b:Byte=255 ' TextColor, in bytes
+	
 	' minib3d: anti aliasing globs
 	'Global aa:Int ' anti_alias true/false
 	'Global ACSIZE:Int ' accum size

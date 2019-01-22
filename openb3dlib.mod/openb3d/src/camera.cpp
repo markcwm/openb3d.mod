@@ -18,6 +18,8 @@
 #include "pick.h"
 #include "project.h"
 //#include "misc.h"
+#include "mesh.h"
+#include <stdio.h>
 
 list<Camera*> Camera::cam_list;
 list<Mesh*> Camera::render_list;
@@ -138,7 +140,7 @@ void Camera::FreeEntity(){
 }
 
 Camera* Camera::CreateCamera(Entity* parent_ent){
-	
+
 	Camera* cam=new Camera;
 	
 	cam->CameraViewport(0,0,Global::width,Global::height);
@@ -614,7 +616,7 @@ void Camera::Render(){
 	list<Mesh*>::iterator mesh_it;
 
 	//cout << "Render list size: " << render_list.size() << endl;
-
+	
 	for(mesh_it=render_list.begin();mesh_it!=render_list.end();mesh_it++){
 		
 		Mesh &mesh=**mesh_it;
@@ -623,6 +625,12 @@ void Camera::Render(){
 		
 	}
 	
+	if(Global::last_mesh==NULL){
+		Global::last_mesh=Mesh::CreateMesh();
+		Global::last_mesh->CreateSurface();
+	}
+	Global::last_mesh->Render(); // fixes vertex color breaks if last in render_list
+
 	// free sprite meshes
 	SpriteBatch::Clear();
 

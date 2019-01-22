@@ -57,21 +57,21 @@ Type TB3D
 		If TGlobal.Log_B3D Then DebugLog "" ; DebugLog " Dir="+dir+" file.size="+ file.Size()
 		
 		' Locals
-		Local size:Int, node_level:Int=-1, old_node_level:Int=-1
+		Local size:Int=0, node_level:Int=-1, old_node_level:Int=-1
 		Local node_pos:Int[100]
 		Local info$, tab$, old_tag$
 		' tex local vars
 		Local tex_no:Int=0
 		Local tex:TTexture[1]
 		Local te_file$
-		Local te_flags:Int, te_blend:Int, te_coords:Int
-		Local te_u_pos#, te_v_pos#, te_u_scale#, te_v_scale#, te_angle#
+		Local te_flags:Int=0, te_blend:Int=0, te_coords:Int=0
+		Local te_u_pos#=0, te_v_pos#=0, te_u_scale#=0, te_v_scale#=0, te_angle#=0
 		' brush local vars
-		Local brush_no:Int, b_no_texs:Int
+		Local brush_no:Int=0, b_no_texs:Int=0
 		Local brush:TBrush[1]
 		Local b_name$
-		Local b_red#, b_green#, b_blue#, b_alpha#, b_shine#
-		Local b_blend:Int, b_fx:Int, b_tex_id:Int
+		Local b_red#=0, b_green#=0, b_blue#=0, b_alpha#=0, b_shine#=0
+		Local b_blend:Int=0, b_fx:Int=0, b_tex_id:Int=0
 		' node local vars
 		Local n_name$=""
 		Local n_px#=0, n_py#=0, n_pz#=0
@@ -80,35 +80,35 @@ Type TB3D
 		Local n_qw#=0, n_qx#=0, n_qy#=0, n_qz#=0
 		' mesh local vars
 		Local mesh:TMesh
-		Local m_brush_id:Int
+		Local m_brush_id:Int=0
 		' verts local vars
 		Local v_mesh:TMesh
 		Local v_surf:TSurface
-		Local v_flags:Int, v_tc_sets:Int, v_tc_size:Int, v_sz:Int
-		Local v_x#, v_y#, v_z#
-		Local v_nx#, v_ny#, v_nz#
-		Local v_r#, v_g#, v_b#, v_a#
-		Local v_u#, v_v#, v_w#	
-		Local v_id:Int
+		Local v_flags:Int=0, v_tc_sets:Int=0, v_tc_size:Int=0, v_sz:Int=0
+		Local v_x#=0, v_y#=0, v_z#=0
+		Local v_nx#=0, v_ny#=0, v_nz#=0
+		Local v_r#=0, v_g#=0, v_b#=0, v_a#=0
+		Local v_u#=0, v_v#=0, v_w#=0	
+		Local v_id:Int=0
 		' tris local vars
 		Local surf:TSurface
-		Local tr_brush_id:Int, tr_sz:Int, tr_no:Int
-		Local tr_vid:Int, tr_vid0:Int, tr_vid1:Int, tr_vid2:Int
-		Local tr_x#, tr_y#, tr_z#
-		Local tr_nx#, tr_ny#, tr_nz#
-		Local tr_r#, tr_g#, tr_b#, tr_a#
-		Local tr_u#, tr_v#, tr_w#	
+		Local tr_brush_id:Int=0, tr_sz:Int=0, tr_no:Int=0
+		Local tr_vid:Int=0, tr_vid0:Int=0, tr_vid1:Int=0, tr_vid2:Int=0
+		Local tr_x#=0, tr_y#=0, tr_z#=0
+		Local tr_nx#=0, tr_ny#=0, tr_nz#=0
+		Local tr_r#=0, tr_g#=0, tr_b#=0, tr_a#=0
+		Local tr_u#=0, tr_v#=0, tr_w#=0	
 		' anim local vars
-		Local a_flags:Int, a_frames:Int, a_fps:Int
+		Local a_flags:Int=0, a_frames:Int=0, a_fps:Int=0
 		' bone local vars
 		Local bo_bone:TBone
-		Local bo_no_bones:Int, bo_vert_id:Int
-		Local bo_vert_w#
+		Local bo_no_bones:Int=0, bo_vert_id:Int=0
+		Local bo_vert_w#=0
 		' key local vars	
-		Local k_flags:Int, k_frame:Int
-		Local k_px#, k_py#, k_pz#
-		Local k_sx#, k_sy#, k_sz#
-		Local k_qw#, k_qx#, k_qy#, k_qz#
+		Local k_flags:Int=0, k_frame:Int=0
+		Local k_px#=0, k_py#=0, k_pz#=0
+		Local k_sx#=0, k_sy#=0, k_sz#=0
+		Local k_qw#=0, k_qx#=0, k_qy#=0, k_qz#=0
 		' entities
 		Local root_ent:TEntity=Null
 		Local parent_ent:TEntity=Null ' keeps track of model parent entities (not external parent_ent_ext)
@@ -283,7 +283,7 @@ Type TB3D
 						brush[brush_no].blend[0]=b_blend
 						brush[brush_no].fx[0]=b_fx
 						
-						If TGlobal.Log_B3D Then DebugLog tab+old_tag+" name="+b_name+" blend="+b_blend+" fx="+b_fx
+						If TGlobal.Log_B3D Then DebugLog tab+old_tag+" name="+b_name+" blend="+b_blend+" fx="+b_fx+" b_no_texs="+b_no_texs
 						
 						For Local ix:Int=0 To b_no_texs-1
 							b_tex_id=ReadInt(file)

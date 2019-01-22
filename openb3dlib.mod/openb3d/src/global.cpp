@@ -72,6 +72,8 @@ Pivot* Global::root_ent=new Pivot();
 
 Camera* Global::camera_in_use;
 
+Mesh* Global::last_mesh=NULL;
+
 void Global::Graphics(){
 
 #ifndef GLES2

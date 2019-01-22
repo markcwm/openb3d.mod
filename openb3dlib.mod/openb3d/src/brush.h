@@ -44,6 +44,7 @@ public:
 
 		for(int i=0;i<8;i++){
 			tex[i]=NULL;
+			cache_frame[i]=0;
 		}
 
 	};

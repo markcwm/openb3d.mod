@@ -26,8 +26,8 @@ Type TBlitz2D
 			Local x:Int, y:Int, w:Int, h:Int
 			GetViewport(x, y, w, h)
 			
-			'glPopClientAttrib()
-			'glPopAttrib()
+			glPopClientAttrib()
+			glPopAttrib()
 			glMatrixMode(GL_MODELVIEW)
 			glPopMatrix()
 			glMatrixMode(GL_PROJECTION)
@@ -82,7 +82,6 @@ Type TBlitz2D
 		
 	End Function
 	
-	' Old end Max2d function
 	Function EndMax2D( version:Int=1 )
 	
 		Select version
@@ -129,8 +128,8 @@ Type TBlitz2D
 		Case 1 ' New end function, allows instant resolution switch (by Krischan)
 		
 			' save the Max2D settings for later
-			'glPushAttrib(GL_ALL_ATTRIB_BITS)
-			'glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
+			glPushAttrib(GL_ALL_ATTRIB_BITS)
+			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
 			glMatrixMode(GL_MODELVIEW)
 			glPushMatrix()
 			glMatrixMode(GL_PROJECTION)

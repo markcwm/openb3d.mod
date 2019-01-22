@@ -71,10 +71,10 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 End Function
 
 Rem
-bbdoc: Draw text, doesn't need BeginMax2D - updated to work with DrawText
+bbdoc: Draw text, doesn't need BeginMax2D
 EndRem
 Function Text( x%,y%,txt$ )
-
+	
 	' set active texture to texture 0 so gldrawtext will work correctly
 	If THardwareInfo.VBOSupport 'SMALLFIXES hack to prevent crash when vbo is not supported by GFX
 		glActiveTextureARB(GL_TEXTURE0)
@@ -82,8 +82,8 @@ Function Text( x%,y%,txt$ )
 	EndIf
 	
 	glDisable(GL_LIGHTING)
-	glColor3f(1.0,1.0,1.0)
-		
+	glColor3ub(TGlobal.txt_r,TGlobal.txt_g,TGlobal.txt_b)
+	
 	' enable blend to hide text background
 	glEnable(GL_BLEND)
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA) ' fixes text hidden when blend=2
@@ -94,5 +94,16 @@ Function Text( x%,y%,txt$ )
 	
 	' disable texture 2D - needed as gldrawtext enables it, but doesn't disable after use
 	glDisable(GL_TEXTURE_2D)
+		
+End Function
+
+Rem
+bbdoc: Set draw text color, in bytes
+EndRem
+Function TextColor( r:Byte,g:Byte,b:Byte )
+
+	TGlobal.txt_r=r
+	TGlobal.txt_g=g
+	TGlobal.txt_b=b
 	
 End Function

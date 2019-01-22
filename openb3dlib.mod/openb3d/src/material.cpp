@@ -125,7 +125,7 @@ ShaderObject* ShaderObject::CreateShader(string shaderFileName, int shadertype){
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
 #ifdef OPENB3D_DEBUG
-DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
+		DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
 #endif
 		// don't leak the shader
 		myShader->DeleteShader(myShader, shadertype);
@@ -200,7 +200,7 @@ ShaderObject* ShaderObject::CreateShaderFromString(string shadercode, int shader
 		vector<char> infoLog(maxLength);
 		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
 #ifdef OPENB3D_DEBUG
-DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
+		DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
 #endif
 		// don't leak the shader
 		myShader->DeleteShader(myShader, shadertype);
@@ -445,7 +445,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 		}
 		UpdateSampler = 0;
 	}*/
-	
+
 	int tex_count=0;
 	tex_count=brush->no_texs;
 
@@ -455,6 +455,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 
 	int DisableCubeSphereMapping=0;
 	for (int ix=0;ix<=254;ix++){
+		if (brush->tex[ix]==0 && surf->brush->tex[ix]==0 && Shader_Tex[ix]==0) return; // fixes crash if no textures
 		if (Shader_Tex[ix] == 0 && ix>=tex_count) break;
 		// Main brush texture takes precedent over surface brush texture
 		unsigned int texture=0;
@@ -498,10 +499,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			tex_cube_mode=surf->brush->tex[ix]->cube_mode;
 			//frame=surf.brush.tex_frame;
 		}
-		
-		
 
-											
 		glActiveTexture(GL_TEXTURE0+slot);
 #ifndef GLES2
 		glClientActiveTexture(GL_TEXTURE0+slot);
@@ -879,8 +877,8 @@ int Shader::Link(){
 		vector<char> infoLog(maxLength);
 		glGetProgramInfoLog(arb_program->Program, maxLength, &maxLength, &infoLog[0]);
 #ifdef OPENB3D_DEBUG
-		if (arb_program->vList.size()!=0){
-			ShaderObject* obj=arb_program->vList.front();
+		if (arb_program->fList.size()!=0){
+			ShaderObject* obj=arb_program->fList.front();
 			DebugLog("%s; %s",obj->shaderName.c_str(),&infoLog[0]);
 		}
 #endif

@@ -91,6 +91,8 @@ public:
 
 	static Camera* camera_in_use;
 	
+	static Mesh* last_mesh;
+	
 	static void Graphics();
 	
 	static void AmbientLight(float r,float g,float b);
