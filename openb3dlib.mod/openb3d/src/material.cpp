@@ -441,7 +441,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 	/*if (UpdateSampler != 0){
 		for (int i=0; i<=254; i++){
 			if (Shader_Tex[i] == 0) break;
-			if (arb_program !=0){glUniform1i(Shader_Tex[i]->Name,Shader_Tex[i]->Slot);}
+			if (arb_program !=0){glUniform1i(Parameters[i].name,Shader_Tex[i]->Slot);}
 		}
 		UpdateSampler = 0;
 	}*/
@@ -452,11 +452,15 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 	if (surf!=0) {
 		if(surf->brush->no_texs>tex_count) tex_count=surf->brush->no_texs;
 	}
-
+	
 	int DisableCubeSphereMapping=0;
 	for (int ix=0;ix<=254;ix++){
-		if (brush->tex[ix]==0 && surf->brush->tex[ix]==0 && Shader_Tex[ix]==0) return; // fixes crash if no textures
-		if (Shader_Tex[ix] == 0 && ix>=tex_count) break;
+		if(surf!=0){
+			if(Shader_Tex[ix]==0 && surf->brush->tex[ix]==0) break; // if surface and no shadertex and no surfacetex
+		}else{
+			if(Shader_Tex[ix]==0) break; // if terrain and no shadertex
+		}
+		if(Shader_Tex[ix]==0 && ix>=tex_count) break; // if not shadertex and no more texs
 		// Main brush texture takes precedent over surface brush texture
 		unsigned int texture=0;
 		int tex_flags=0,tex_blend=0,tex_coords=0;
@@ -475,7 +479,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
 			is3D=Shader_Tex[ix]->is3D;
 			slot=Shader_Tex[ix]->Slot;
-		}else if(brush->tex[ix]){
+		}else if(brush->tex[ix] != 0){
 			texture=brush->cache_frame[ix];//brush.tex[ix]->texture;
 			tex_flags=brush->tex[ix]->flags;
 			tex_blend=brush->tex[ix]->blend;
@@ -486,7 +490,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			tex_v_pos=brush->tex[ix]->v_pos;
 			tex_ang=brush->tex[ix]->angle;
 			tex_cube_mode=brush->tex[ix]->cube_mode;
-		}else{
+		}else if(surf->brush->tex[ix] != 0){
 			texture=surf->brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
 			tex_flags=surf->brush->tex[ix]->flags;
 			tex_blend=surf->brush->tex[ix]->blend;
@@ -498,7 +502,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			tex_ang=surf->brush->tex[ix]->angle;
 			tex_cube_mode=surf->brush->tex[ix]->cube_mode;
 			//frame=surf.brush.tex_frame;
-		}
+		}else break;
 
 		glActiveTexture(GL_TEXTURE0+slot);
 #ifndef GLES2
@@ -894,14 +898,15 @@ int Shader::Link(){
 
 Texture* Shader::AddSampler(string Name, int Slot, Texture* Tex, int is3D){
 	if (Tex!=0) {
-		Shader_Tex[texCount] = Sampler::Create(Slot,Tex);
+		Shader_Tex[Slot] = Sampler::Create(Slot,Tex);
+		//UpdateSampler = 1;
 		SetInteger(Name, Slot);
-		Shader_Tex[texCount]->is3D=is3D;
+		Shader_Tex[Slot]->is3D=is3D;
 	}
 	texCount++;
-	return Shader_Tex[texCount-1]->texture;
+	return Shader_Tex[Slot]->texture;
 }
-	
+
 
 void Shader::ProgramAttriBegin(){
 	if (arb_program !=0){

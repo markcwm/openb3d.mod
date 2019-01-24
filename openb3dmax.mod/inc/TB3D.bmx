@@ -54,7 +54,8 @@ Type TB3D
 			If TGlobal.Log_Mesh Then DebugLog " Invalid B3D version: "+vno
 			Return Null
 		EndIf
-		If TGlobal.Log_B3D Then DebugLog "" ; DebugLog " Dir="+dir+" file.size="+ file.Size()
+		If TGlobal.Log_B3D Then DebugLog ""
+		If TGlobal.Log_B3D Then DebugLog " Dir="+dir+" file.size="+ file.Size()
 		
 		' Locals
 		Local size:Int=0, node_level:Int=-1, old_node_level:Int=-1
@@ -246,7 +247,7 @@ Type TB3D
 						EndIf
 						
 						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
-						If TGlobal.Log_B3D Then DebugLog tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0]
+						If TGlobal.Log_B3D And tex[tex_no]<>Null Then DebugLog tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0]
 						
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1

@@ -46,6 +46,7 @@ public:
 
 class Sampler{
 public:
+	//string Name;
 	Texture* texture;
 	int Slot;
 	int is3D;
