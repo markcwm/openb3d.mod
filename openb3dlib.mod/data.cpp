@@ -1261,7 +1261,7 @@ float* MatrixFloat_( Matrix* obj,int varid ){
 
 Matrix* NewMatrix_(){
 	Matrix* mat=new Matrix();
-	mat->LoadIdentity();
+	//mat->LoadIdentity();
 	return mat;
 }
 

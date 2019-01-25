@@ -26,6 +26,8 @@ Extern
 	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
 	Function TrisRendered_:Int()
+	Function VertsRendered_:Int()
+	Function SurfsRendered_:Int()
 	Function NewTexture_:Byte Ptr()
 	Function NewMesh_:Byte Ptr()
 	Function NewSurface_:Byte Ptr( mesh:Byte Ptr )

@@ -107,11 +107,13 @@ Type TGlobal
 		TTerrain.InitGlobals()
 		
 		Matrix_3DS=NewMatrix()
+		Matrix_3DS.LoadIdentity()
 		Matrix_B3D=NewMatrix()
+		Matrix_B3D.LoadIdentity()
 		Matrix_MD2=NewMatrix()
-		
-		'LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as not working right on multiple mesh
-		'LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented
+		Matrix_MD2.LoadIdentity()
+		'LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - not working right on multi-mesh
+		'LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented at all
 		LoaderMatrix "md2", 1,0,0, 0,0,1, 0,-1,0 ' swap z/y and invert y
 		
 		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
@@ -170,12 +172,6 @@ Type TGlobal
 			Default
 				DebugLog "FBO unsuccessful: "+status
 		EndSelect
-		
-	End Function
-	
-	Function TrisRendered:Int()
-	
-		Return TrisRendered_()
 		
 	End Function
 	

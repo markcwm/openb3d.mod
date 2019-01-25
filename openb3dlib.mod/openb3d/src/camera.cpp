@@ -1105,3 +1105,53 @@ void Camera::UpdateProjMatrix(){
 float* Camera::CameraProjMatrix(){
 	return &proj_mat[0];
 }
+
+int Camera::TrisRendered(){
+	list<Mesh*>::iterator mesh_it;
+	int count=0;
+	
+	for(mesh_it=render_list.begin();mesh_it!=render_list.end();mesh_it++){
+		Mesh* mesh=*mesh_it;
+		list<Surface*>::iterator surf_it;
+		//Entity* ent=dynamic_cast<Entity*>(mesh);
+		//float d=Global::camera_in_use->EntityInView(ent);
+		
+		for(surf_it=mesh->surf_list.begin();surf_it!=mesh->surf_list.end();surf_it++){
+			Surface* surf=*surf_it;
+			if(surf->no_tris>0 && surf->no_verts>0) count+=surf->no_tris;
+		}
+	}
+	return count;
+}
+
+int Camera::VertsRendered(){
+	list<Mesh*>::iterator mesh_it;
+	int count=0;
+	
+	for(mesh_it=render_list.begin();mesh_it!=render_list.end();mesh_it++){
+		Mesh* mesh=*mesh_it;
+		list<Surface*>::iterator surf_it;
+		
+		for(surf_it=mesh->surf_list.begin();surf_it!=mesh->surf_list.end();surf_it++){
+			Surface* surf=*surf_it;
+			if(surf->no_tris>0 && surf->no_verts>0) count+=surf->no_verts;
+		}
+	}
+	return count;
+}
+
+int Camera::SurfsRendered(){
+	list<Mesh*>::iterator mesh_it;
+	int count=0;
+	
+	for(mesh_it=render_list.begin();mesh_it!=render_list.end();mesh_it++){
+		Mesh* mesh=*mesh_it;
+		list<Surface*>::iterator surf_it;
+		
+		for(surf_it=mesh->surf_list.begin();surf_it!=mesh->surf_list.end();surf_it++){
+			Surface* surf=*surf_it;
+			if(surf->no_tris>0 && surf->no_verts>0) count+=1;
+		}
+	}
+	return count;
+}

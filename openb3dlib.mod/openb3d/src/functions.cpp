@@ -35,8 +35,16 @@ void TextureMultitex_(Texture* tex, float f){
 	tex->TextureMultitex(f);
 }
 
-int TrisRendered_(){ // todo: not properly implemented
-	return Global::TrisRendered();
+int TrisRendered_(){
+	return Camera::TrisRendered();
+}
+
+int VertsRendered_(){
+	return Camera::VertsRendered();
+}
+
+int SurfsRendered_(){
+	return Camera::SurfsRendered();
 }
 
 Texture* NewTexture_(){

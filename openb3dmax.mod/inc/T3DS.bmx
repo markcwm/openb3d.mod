@@ -2,8 +2,6 @@
 ' 3DS loader from OpenB3D - which is ported from MiniB3D Extended (by Benjamin Rossig)
 
 Type T3DS
-
-	Global Debug:Int = 0
 	
 	Const M3D_3DS_M3DVERSION = $0002
 	Const M3D_3DS_RGB3F = $0010
@@ -38,7 +36,7 @@ Type T3DS
 	
 	Field Stream:TStream
 	Field ChunkID:Short, ChunkSize:Int
-	Field Surface:TSurface, Mesh:TMesh, Parent_Mesh:TMesh
+	Field Surface:TSurface, Mesh:TMesh, Root:TMesh
 	Field New_surface:TSurface, New_mesh:TMesh
 	Field VertexCount:Int, TriangleCount:Int
 	Field Brush:TBrush, Brushs:TList
@@ -131,7 +129,7 @@ Type T3DS
 			Position[1] = Stream.ReadFloat()
 			Position[2] = Stream.ReadFloat()
 			
-			Surface.AddVertex(Position[0], Position[1], -Position[2]) ' AddVertex inverts z, so reinverted for uv flip
+			Surface.AddVertex(Position[0], Position[1], -Position[2]) ' inverts z for ogl, re-invert needed for flip uvs
 		Next
 		
 		'Surface.UpdateVertices()
@@ -149,7 +147,7 @@ Type T3DS
 			Indices[2] = Stream.ReadShort()
 			Stream.ReadShort() ' FaceFlags
 			
-			Surface.AddTriangle(Indices[2], Indices[1], Indices[0]) ' reverse winding order
+			Surface.AddTriangle(Indices[2], Indices[1], Indices[0]) ' reverse winding order needed for flip uvs
 		Next
 		
 		'Surface.UpdateTriangles()
@@ -164,7 +162,7 @@ Type T3DS
 		
 		For Index = 0 To CoordCount-1
 			U = Stream.ReadFloat()
-			V = -Stream.ReadFloat() ' flip v
+			V = -Stream.ReadFloat() ' flip uvs
 			
 			Surface.VertexTexCoords(Index, U, V, 0, 0)
 			Surface.VertexTexCoords(Index, U, V, 0, 1)
@@ -174,7 +172,8 @@ Type T3DS
 	End Method
 	
 	Method ReadTransMatrix()
-		New_matrix = NewMatrix() ' calls LoadIdentity
+		New_matrix = NewMatrix()
+		New_matrix.LoadIdentity() ' set grid[x,3]
 		
 		For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
 			For Local y% = 0 To 2
@@ -209,14 +208,14 @@ Type T3DS
 		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_FACEMATLIST: BrushName = "+BrushName
 		
 		If Found=True
-			If TGlobal.Anim_Mesh = 0
-			    New_surface = Parent_Mesh.CreateSurface()
+			If TGlobal.Anim_Mesh = 0 ' multi-surface
+			    New_surface = Root.CreateSurface()
 				MapInsert MatrixMap, New_surface, New_matrix
-			Else
+			Else ' multi-mesh
 				New_mesh = NewMesh()
 				If ObjectIndex>0 Then New_mesh.SetString(New_mesh.name,ObjectNames[ObjectIndex-1])
 				New_mesh.SetString(New_mesh.class_name,"Mesh")
-				New_mesh.AddParent(Parent_Mesh)
+				New_mesh.AddParent(Root)
 				New_mesh.EntityListAdd(TEntity.entity_list)
 				New_surface = New_mesh.CreateSurface()
 				MapInsert MatrixMap, New_mesh, New_matrix
@@ -234,7 +233,7 @@ Type T3DS
 					Local u#=Surface.VertexU(v0[i])
 					Local v#=Surface.VertexV(v0[i])
 					Local w#=Surface.VertexW(v0[i])
-					v0[i]=New_surface.AddVertex(x, y, z, u, v, w) ' inverts z
+					v0[i]=New_surface.AddVertex(x, y, z, u, v, w) ' inverts z for ogl
 				Next
 				New_surface.AddTriangle(v0[0], v0[1], v0[2])
 				'Surface.RemoveTri(v)
@@ -289,12 +288,12 @@ Type T3DS
 			MovedTris=MovedTris[..0] ' clear
 			
 			If Surface.no_tris[0]=0 And CheckSurface<>0
-				If TGlobal.Anim_Mesh = 0
-					Parent_Mesh.MeshListRemove(Parent_Mesh.surf_list, Surface)
-					Parent_Mesh.no_surfs[0]=Parent_Mesh.no_surfs[0]-1
+				If TGlobal.Anim_Mesh = 0 ' multi-surface
+					Root.MeshListRemove(Root.surf_list, Surface)
+					Root.no_surfs[0]=Root.no_surfs[0]-1
 					Surface.FreeSurface()
-				Else
-					Parent_Mesh.EntityListRemove(Parent_Mesh.child_list, Mesh)
+				Else ' multi-mesh
+					Root.EntityListRemove(Root.child_list, Mesh)
 					Mesh.FreeEntity()
 				EndIf
 			EndIf
@@ -302,13 +301,13 @@ Type T3DS
 		If TGlobal.Log_3DS Then DebugLog "- M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface
 		
 		' Dummy mesh and surface
-		If TGlobal.Anim_Mesh = 0
-			Surface = Parent_Mesh.CreateSurface()
-		Else
+		If TGlobal.Anim_Mesh = 0 ' multi-surface
+			Surface = Root.CreateSurface()
+		Else ' multi-mesh
 			Mesh = NewMesh()
 			If ObjectIndex>0 Then Mesh.SetString(Mesh.name,ObjectNames[ObjectIndex-1])
 			Mesh.SetString(Mesh.class_name,"Mesh")
-			Mesh.AddParent(Parent_Mesh)
+			Mesh.AddParent(Root)
 			Mesh.EntityListAdd(TEntity.entity_list)
 			Surface = Mesh.CreateSurface()
 		EndIf
@@ -327,7 +326,7 @@ Type T3DS
 		VertexCount = 0
 		TriangleCount = 0
 		Mesh = Null
-		Parent_Mesh = Null
+		Root = Null
 		Brush = Null
 		TextureLayer = 0
 		Texture = Null
@@ -392,8 +391,12 @@ Type T3DS
 		Filepath = ExtractDir(String(url))
 		If Filepath<>"" Then ChangeDir(Filepath)
 		If TGlobal.Log_3DS Then DebugLog " OldDir: "+OldDir
-
-		Parent_Mesh = CreateMesh(parent_ent)
+		
+		Root = NewMesh()
+		Root.SetString(Root.name,"ROOT")
+		Root.SetString(Root.class_name, "Mesh")
+		Root.AddParent(parent_ent)
+		Root.EntityListAdd(TEntity.entity_list)
 		
 		While Not Stream.Eof()
 			ReadChunk()
@@ -499,12 +502,12 @@ Type T3DS
 			MovedTris=MovedTris[..0] ' clear
 			
 			If Surface.no_tris[0]=0 And CheckSurface<>0
-				If TGlobal.Anim_Mesh = 0
-					Parent_Mesh.MeshListRemove(Parent_Mesh.surf_list, Surface)
-					Parent_Mesh.no_surfs[0]=Parent_Mesh.no_surfs[0]-1
+				If TGlobal.Anim_Mesh = 0 ' multi-surface
+					Root.MeshListRemove(Root.surf_list, Surface)
+					Root.no_surfs[0]=Root.no_surfs[0]-1
 					Surface.FreeSurface()
-				Else
-					Parent_Mesh.EntityListRemove(Parent_Mesh.child_list, Mesh)
+				Else ' multi-mesh
+					Root.EntityListRemove(Root.child_list, Mesh)
 					Mesh.FreeEntity()
 				EndIf
 			EndIf
@@ -513,38 +516,32 @@ Type T3DS
 		
 		'Surface.UpdateVertices()
 		'Surface.UpdateTriangles()
-		'Parent_Mesh.UpdateNormals()
-		'Parent_Mesh.UpdateBuffer()
-		'Parent_Mesh.FlipMesh()
+		'Root.UpdateNormals()
+		'Root.UpdateBuffer()
+		'Root.FlipMesh()
 		
-		Parent_Mesh.SetString(Parent_Mesh.name,"ROOT")
-		Parent_Mesh.SetString(Parent_Mesh.class_name, "Mesh")
-		Parent_Mesh.AddParent(parent_ent)
-		Parent_Mesh.EntityListAdd(TEntity.entity_list)
-		
-		If TGlobal.Anim_Mesh = 0
+		If TGlobal.Anim_Mesh = 0 ' multi-surface
 			Local px:Float, py:Float, pz:Float
-			For Local surf2:TSurface = EachIn Parent_Mesh.surf_list
+			For Local surf2:TSurface = EachIn Root.surf_list
 				Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, surf2 ))
 				Local invmat:TMatrix = NewMatrix()
 				If mat <> Null Then mat.GetInverse(invmat)
 				
 				For Local v:Int = 0 Until surf2.CountVertices()
-					px = surf2.vert_coords[(v*3)+0]
-					py = surf2.vert_coords[(v*3)+1]
-					pz = -surf2.vert_coords[(v*3)+2]
+					px = surf2.VertexX(v)
+					py = surf2.VertexY(v)
+					pz = surf2.VertexZ(v) ' inverts z for ogl
 					
-					If TGlobal.Mesh_Transform > 0 Then invmat.TransformVec(px, py, pz, 1)
-					
-					surf2.vert_coords[(v*3)+0] = px
-					surf2.vert_coords[(v*3)+1] = py
-					surf2.vert_coords[(v*3)+2] = -pz
+					If TGlobal.Mesh_Transform > 0
+						invmat.TransformVec(px, py, pz, 1)
+						surf2.VertexCoords(v, px, py, pz) ' inverts z for ogl
+					EndIf
 				Next
 				surf2.UpdateNormals()
 			Next
 			
-			Parent_Mesh.cull_radius[0] = 0.0
-		Else
+			Root.cull_radius[0] = 0.0
+		Else ' multi-mesh
 			For Local mesh2:TMesh = EachIn Meshes ' transform vertices, re-positions mesh by matrix
 				Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, mesh2 ))
 				Local invmat:TMatrix = NewMatrix()
@@ -553,15 +550,14 @@ Type T3DS
 				Local px:Float, py:Float, pz:Float
 				For Local surf2:TSurface = EachIn mesh2.surf_list
 					For Local v:Int = 0 Until surf2.CountVertices()
-						px = surf2.vert_coords[(v*3)+0]
-						py = surf2.vert_coords[(v*3)+1]
-						pz = -surf2.vert_coords[(v*3)+2]
+						px = surf2.VertexX(v)
+						py = surf2.VertexY(v)
+						pz = surf2.VertexZ(v) ' inverts z for ogl
 						
-						If TGlobal.Mesh_Transform > 0 Then invmat.TransformVec(px, py, pz, 1)
-						
-						surf2.vert_coords[(v*3)+0] = px
-						surf2.vert_coords[(v*3)+1] = py
-						surf2.vert_coords[(v*3)+2] = -pz
+						If TGlobal.Mesh_Transform > 0
+							invmat.TransformVec(px, py, pz, 1)
+							surf2.VertexCoords(v, px, py, pz) ' inverts z for ogl
+						EndIf
 					Next
 					surf2.UpdateNormals()
 				Next
@@ -570,7 +566,7 @@ Type T3DS
 			Next
 		EndIf
 		
-		Return Parent_Mesh
+		Return Root
 	End Method
 	
 End Type

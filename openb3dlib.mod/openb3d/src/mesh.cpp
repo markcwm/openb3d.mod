@@ -2332,8 +2332,6 @@ void Mesh::Render(){
 
 		}
 		
-		Global::rendered_tris=Global::rendered_tris+surf.tris.size(); // TrisRendered
-		
 		float red,green,blue,alpha,shine,texenv_color[4];
 		int blend,fx;
 		float ambient_red,ambient_green,ambient_blue;

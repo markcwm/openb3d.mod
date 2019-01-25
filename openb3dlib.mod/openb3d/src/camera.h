@@ -109,7 +109,10 @@ public:
 	void UpdateProjMatrix();
 
 	float* CameraProjMatrix();
-
+	static int TrisRendered();
+	static int VertsRendered();
+	static int SurfsRendered();
+	
 };
 
 void UpdateEntityRender0(Entity* ent,Entity* cam=NULL);

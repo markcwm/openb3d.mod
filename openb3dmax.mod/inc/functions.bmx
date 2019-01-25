@@ -199,10 +199,10 @@ bbdoc: Change model loader coordinates system, currently only 3DS supported
 End Rem
 Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 	If ext.ToLower()="3ds" Or ext.ToLower()=".3ds"
-		TGlobal.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		'TGlobal.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="b3d" Or ext.ToLower()=".b3d"
-		TGlobal.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		'TGlobal.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
 		TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
@@ -283,10 +283,24 @@ Function TextureMultitex( tex:TTexture,f:Float )
 End Function
 
 Rem
-bbdoc: Number of triangles currently rendered
+bbdoc: Number of triangles currently being rendered
 End Rem
 Function TrisRendered:Int()
 	Return TrisRendered_()
+End Function
+
+Rem
+bbdoc: Number of vertices currently being rendered
+End Rem
+Function VertsRendered:Int()
+	Return VertsRendered_()
+End Function
+
+Rem
+bbdoc: Number of surfaces currently being rendered
+End Rem
+Function SurfsRendered:Int()
+	Return SurfsRendered_()
 End Function
 
 Rem

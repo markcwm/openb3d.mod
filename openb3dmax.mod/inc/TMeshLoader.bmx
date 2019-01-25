@@ -104,7 +104,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
-		TGlobal.Anim_Mesh = 0 ' disable multiple meshes
+		TGlobal.Anim_Mesh = 0 ' enable multi-surface
 		
 		Local mesh:TMesh 'anim_mesh
 		Select ExtractExt(String(url))
@@ -146,7 +146,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
-		TGlobal.Anim_Mesh = 1 ' enable multiple meshes
+		TGlobal.Anim_Mesh = 1 ' enable multi-mesh
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))

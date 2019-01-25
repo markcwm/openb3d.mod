@@ -425,6 +425,9 @@ Set mesh to be used as stencil.
 <tr><td class=docleft width=1%><a href=#StencilMode>StencilMode</a></td><td class=docright>
 Set stencil render modes.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#SurfsRendered>SurfsRendered</a></td><td class=docright>
+Number of surfaces currently being rendered.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#TexToBuffer>TexToBuffer</a></td><td class=docright>
 Copy texture to a pixmap buffer, buffer must be a byte ptr.
 </td></tr>
@@ -444,7 +447,7 @@ Set texture loaders to use (default is streamed), also sets cubemap faces or fra
 Set texture multitex factor, used in interpolate and custom TexBlend options.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TrisRendered>TrisRendered</a></td><td class=docright>
-Number of triangles currently rendered.
+Number of triangles currently being rendered.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UpdateTexCoords>UpdateTexCoords</a></td><td class=docright>
 Recalculates the surface's uvw coord set 1 based on vertices.
@@ -484,6 +487,9 @@ Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#VertsRendered>VertsRendered</a></td><td class=docright>
+Number of vertices currently being rendered.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#VoxelSpriteMaterial>VoxelSpriteMaterial</a></td><td class=docright>
 Set material for voxel sprite.
@@ -1325,6 +1331,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or GEQUAL.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=SurfsRendered>
+<tr><td class=doctop colspan=2>Function SurfsRendered:Int()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Number of surfaces currently being rendered.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=TexToBuffer>
 <tr><td class=doctop colspan=2>Function TexToBuffer( tex:TTexture,buffer:Byte Ptr,frame:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy texture to a pixmap buffer, buffer must be a byte ptr.</td></tr>
@@ -1360,7 +1371,7 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <br>
 <table class=doc width=100% cellspacing=3 id=TrisRendered>
 <tr><td class=doctop colspan=2>Function TrisRendered:Int()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Number of triangles currently rendered.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Number of triangles currently being rendered.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UpdateTexCoords>
@@ -1428,6 +1439,11 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends surface data to a shader variable name.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Vbo is in range 1..6 which selects what vertex buffer data to access, where 1 is vertex positions,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=VertsRendered>
+<tr><td class=doctop colspan=2>Function VertsRendered:Int()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Number of vertices currently being rendered.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=VoxelSpriteMaterial>

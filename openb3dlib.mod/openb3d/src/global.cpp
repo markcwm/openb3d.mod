@@ -53,8 +53,6 @@ int Global::fx1=-1;
 
 int Global::fx2=-1;
 
-int Global::rendered_tris=0;
-
 #ifdef GLES2
 	Global::Program Global::shaders[9][9][2];
 	Global::Program* Global::shader;
@@ -460,7 +458,6 @@ void Global::UpdateWorld(float anim_speed){
 }
 
 void Global::RenderWorld(){
-	rendered_tris=0;
 	Camera::cam_list.sort(CompareEntityOrder); // sort cam list based on entity order
 	list<Camera*>::iterator it;
 	for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
@@ -573,8 +570,4 @@ bool CompareEntityOrder(Entity* ent1,Entity* ent2){
 		return false;
 	}
 
-}
-
-int Global::TrisRendered(){
-	return rendered_tris;
 }
