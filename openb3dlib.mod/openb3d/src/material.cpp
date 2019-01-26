@@ -466,6 +466,8 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 		}else{
 			if(Shader_Tex[ix]!=0){ // terrain
 				if(Shader_Tex[ix]->texture==0) break; // no shadertex
+			}else if(brush!=0){
+				if(brush->tex[ix2]==0) break; // no surfacetex
 			}else{
 				break;
 			}
@@ -477,42 +479,48 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 		float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 		int tex_cube_mode=0, is3D=0, slot=ix2;//,frame=0;
 		if (Shader_Tex[ix]!=0){
-			texture=Shader_Tex[ix]->texture->texture;
-			tex_flags=Shader_Tex[ix]->texture->flags;
-			tex_blend=Shader_Tex[ix]->texture->blend;
-			tex_coords=Shader_Tex[ix]->texture->coords;
-			tex_u_scale=Shader_Tex[ix]->texture->u_scale;
-			tex_v_scale=Shader_Tex[ix]->texture->v_scale;
-			tex_u_pos=Shader_Tex[ix]->texture->u_pos;
-			tex_v_pos=Shader_Tex[ix]->texture->v_pos;
-			tex_ang=Shader_Tex[ix]->texture->angle;
-			tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
+			if(Shader_Tex[ix]->texture!=0){
+				texture=Shader_Tex[ix]->texture->texture;
+				tex_flags=Shader_Tex[ix]->texture->flags;
+				tex_blend=Shader_Tex[ix]->texture->blend;
+				tex_coords=Shader_Tex[ix]->texture->coords;
+				tex_u_scale=Shader_Tex[ix]->texture->u_scale;
+				tex_v_scale=Shader_Tex[ix]->texture->v_scale;
+				tex_u_pos=Shader_Tex[ix]->texture->u_pos;
+				tex_v_pos=Shader_Tex[ix]->texture->v_pos;
+				tex_ang=Shader_Tex[ix]->texture->angle;
+				tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
+			}
 			is3D=Shader_Tex[ix]->is3D;
 			slot=Shader_Tex[ix]->Slot;
-		}else if(brush->tex[ix2]!=0){
-			texture=brush->cache_frame[ix2];//brush->tex[ix2]->texture;
-			tex_flags=brush->tex[ix2]->flags;
-			tex_blend=brush->tex[ix2]->blend;
-			tex_coords=brush->tex[ix2]->coords;
-			tex_u_scale=brush->tex[ix2]->u_scale;
-			tex_v_scale=brush->tex[ix2]->v_scale;
-			tex_u_pos=brush->tex[ix2]->u_pos;
-			tex_v_pos=brush->tex[ix2]->v_pos;
-			tex_ang=brush->tex[ix2]->angle;
-			tex_cube_mode=brush->tex[ix2]->cube_mode;
-		}else if(surf->brush->tex[ix2]!=0){
-			texture=surf->brush->cache_frame[ix2];//surf->brush->tex[ix2]->texture;
-			tex_flags=surf->brush->tex[ix2]->flags;
-			tex_blend=surf->brush->tex[ix2]->blend;
-			tex_coords=surf->brush->tex[ix2]->coords;
-			tex_u_scale=surf->brush->tex[ix2]->u_scale;
-			tex_v_scale=surf->brush->tex[ix2]->v_scale;
-			tex_u_pos=surf->brush->tex[ix2]->u_pos;
-			tex_v_pos=surf->brush->tex[ix2]->v_pos;
-			tex_ang=surf->brush->tex[ix2]->angle;
-			tex_cube_mode=surf->brush->tex[ix2]->cube_mode;
-			//frame=surf->brush->tex_frame;
-		}else break;
+		}else if(brush!=0){
+			if(brush->tex[ix2]!=0){
+				texture=brush->cache_frame[ix2];//brush->tex[ix2]->texture;
+				tex_flags=brush->tex[ix2]->flags;
+				tex_blend=brush->tex[ix2]->blend;
+				tex_coords=brush->tex[ix2]->coords;
+				tex_u_scale=brush->tex[ix2]->u_scale;
+				tex_v_scale=brush->tex[ix2]->v_scale;
+				tex_u_pos=brush->tex[ix2]->u_pos;
+				tex_v_pos=brush->tex[ix2]->v_pos;
+				tex_ang=brush->tex[ix2]->angle;
+				tex_cube_mode=brush->tex[ix2]->cube_mode;
+			}
+		}else if(surf!=0){
+			if(surf->brush->tex[ix2]!=0){
+				texture=surf->brush->cache_frame[ix2];//surf->brush->tex[ix2]->texture;
+				tex_flags=surf->brush->tex[ix2]->flags;
+				tex_blend=surf->brush->tex[ix2]->blend;
+				tex_coords=surf->brush->tex[ix2]->coords;
+				tex_u_scale=surf->brush->tex[ix2]->u_scale;
+				tex_v_scale=surf->brush->tex[ix2]->v_scale;
+				tex_u_pos=surf->brush->tex[ix2]->u_pos;
+				tex_v_pos=surf->brush->tex[ix2]->v_pos;
+				tex_ang=surf->brush->tex[ix2]->angle;
+				tex_cube_mode=surf->brush->tex[ix2]->cube_mode;
+				//frame=surf->brush->tex_frame;
+			}
+		}
 
 		glActiveTexture(GL_TEXTURE0+slot);
 #ifndef GLES2

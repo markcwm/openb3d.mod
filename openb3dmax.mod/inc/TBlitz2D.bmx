@@ -58,22 +58,25 @@ Type TBlitz2D
 			Local MaxTex:Int
 			glGetIntegerv(GL_MAX_TEXTURE_UNITS, Varptr(MaxTex))
 			
-			For Local Layer:Int = 0 Until MaxTex
-				glActiveTexture(GL_TEXTURE0+Layer)
+			If THardwareInfo.VBOSupport
+				For Local Layer:Int = 0 Until MaxTex
+					glActiveTexture(GL_TEXTURE0+Layer)
+					
+					glDisable(GL_TEXTURE_2D)
+					
+					glDisable(GL_TEXTURE_CUBE_MAP)
+					glDisable(GL_TEXTURE_GEN_S)
+					glDisable(GL_TEXTURE_GEN_T)
+					glDisable(GL_TEXTURE_GEN_R)
+				Next
 				
-				glDisable(GL_TEXTURE_2D)
-				
-				glDisable(GL_TEXTURE_CUBE_MAP)
-				glDisable(GL_TEXTURE_GEN_S)
-				glDisable(GL_TEXTURE_GEN_T)
-				glDisable(GL_TEXTURE_GEN_R)
-			Next
-			
-			glActiveTexture(GL_TEXTURE0)
+				glActiveTexture(GL_TEXTURE0)
+			EndIf
 			
 			glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
 			glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
 			
+			' GLDrawText does this
 			'glEnable GL_BLEND
 			'glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 			'glEnable(GL_TEXTURE_2D)
@@ -101,6 +104,7 @@ Type TBlitz2D
 			glPushMatrix()
 			
 			TGlobal.EnableStates() ' enables normals and vertex colors
+			
 			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
 			' set render state flags (crash if fx2 is not set)
@@ -139,6 +143,7 @@ Type TBlitz2D
 			glMatrixMode(GL_COLOR)
 			glPushMatrix()
 			
+			' don't disable states after restoring stack, unless you know it will be enabled again
 			'glDisable(GL_TEXTURE_CUBE_MAP)
 			'glDisable(GL_TEXTURE_GEN_S)
 			'glDisable(GL_TEXTURE_GEN_T)
@@ -146,8 +151,9 @@ Type TBlitz2D
 			
 			'glDisable(GL_BLEND)
 			
-			TGlobal.EnableStates()
-			glDisable(GL_TEXTURE_2D)
+			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
+			
+			TGlobal.EnableStates() ' enables normals and vertex colors
 			
 			' set render state flags (crash if fx2 is not set)
 			TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
