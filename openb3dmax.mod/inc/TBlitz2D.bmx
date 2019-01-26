@@ -60,13 +60,13 @@ Type TBlitz2D
 			
 			For Local Layer:Int = 0 Until MaxTex
 				glActiveTexture(GL_TEXTURE0+Layer)
-			
+				
+				glDisable(GL_TEXTURE_2D)
+				
 				glDisable(GL_TEXTURE_CUBE_MAP)
 				glDisable(GL_TEXTURE_GEN_S)
 				glDisable(GL_TEXTURE_GEN_T)
 				glDisable(GL_TEXTURE_GEN_R)
-			
-				glDisable(GL_TEXTURE_2D)
 			Next
 			
 			glActiveTexture(GL_TEXTURE0)
@@ -74,9 +74,9 @@ Type TBlitz2D
 			glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
 			glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
 			
-			glEnable GL_BLEND
-			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			glEnable(GL_TEXTURE_2D)
+			'glEnable GL_BLEND
+			'glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
+			'glEnable(GL_TEXTURE_2D)
 			
 		End Select
 		
@@ -138,16 +138,16 @@ Type TBlitz2D
 			glPushMatrix()
 			glMatrixMode(GL_COLOR)
 			glPushMatrix()
-			  
-			glDisable(GL_TEXTURE_CUBE_MAP)
-			glDisable(GL_TEXTURE_GEN_S)
-			glDisable(GL_TEXTURE_GEN_T)
-			glDisable(GL_TEXTURE_GEN_R)
 			
-			glDisable(GL_TEXTURE_2D)
-			glDisable(GL_BLEND)
+			'glDisable(GL_TEXTURE_CUBE_MAP)
+			'glDisable(GL_TEXTURE_GEN_S)
+			'glDisable(GL_TEXTURE_GEN_T)
+			'glDisable(GL_TEXTURE_GEN_R)
+			
+			'glDisable(GL_BLEND)
 			
 			TGlobal.EnableStates()
+			glDisable(GL_TEXTURE_2D)
 			
 			' set render state flags (crash if fx2 is not set)
 			TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)

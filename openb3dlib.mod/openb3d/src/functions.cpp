@@ -28,7 +28,7 @@ extern "C" {
 
 int Mipmaps_(Texture* tex){
 	if (tex==NULL) return 0;
-	return 1 + (int)(log2(max(tex->width, tex->height)));
+	return 1 + (int)(floor(log2(max(tex->width, tex->height))));
 }
 
 void TextureMultitex_(Texture* tex, float f){

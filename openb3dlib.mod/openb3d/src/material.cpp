@@ -446,27 +446,37 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 		UpdateSampler = 0;
 	}*/
 
-	int tex_count=0;
-	tex_count=brush->no_texs;
-
+	int tex_count=0, ix2=0;
+	if (brush!=0) tex_count=brush->no_texs;
 	if (surf!=0) {
 		if(surf->brush->no_texs>tex_count) tex_count=surf->brush->no_texs;
 	}
+	if(Shader_Tex[0]!=0) tex_count=texCount; // shader takes precedence
 	
 	int DisableCubeSphereMapping=0;
 	for (int ix=0;ix<=254;ix++){
-		if(surf!=0){
-			if(Shader_Tex[ix]==0 && surf->brush->tex[ix]==0) break; // if surface and no shadertex and no surfacetex
+		if(ix>=tex_count) break; // no more texs
+		if(ix>7) ix2=0; else ix2=ix; // crash if tex[ix]>7
+		if(surf!=0){ // mesh
+			if(Shader_Tex[ix]!=0){
+				if(Shader_Tex[ix]->texture==0 && surf->brush->tex[ix2]==0) break; // no shadertex or surfacetex
+			}else{
+				if(surf->brush->tex[ix2]==0) break; // no surfacetex
+			}
 		}else{
-			if(Shader_Tex[ix]==0) break; // if terrain and no shadertex
+			if(Shader_Tex[ix]!=0){ // terrain
+				if(Shader_Tex[ix]->texture==0) break; // no shadertex
+			}else{
+				break;
+			}
 		}
-		if(Shader_Tex[ix]==0 && ix>=tex_count) break; // if not shadertex and no more texs
+		
 		// Main brush texture takes precedent over surface brush texture
 		unsigned int texture=0;
 		int tex_flags=0,tex_blend=0,tex_coords=0;
 		float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
-		int tex_cube_mode=0, is3D=0, slot=ix;//,frame=0;
-		if (Shader_Tex[ix] != 0){
+		int tex_cube_mode=0, is3D=0, slot=ix2;//,frame=0;
+		if (Shader_Tex[ix]!=0){
 			texture=Shader_Tex[ix]->texture->texture;
 			tex_flags=Shader_Tex[ix]->texture->flags;
 			tex_blend=Shader_Tex[ix]->texture->blend;
@@ -479,29 +489,29 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
 			is3D=Shader_Tex[ix]->is3D;
 			slot=Shader_Tex[ix]->Slot;
-		}else if(brush->tex[ix] != 0){
-			texture=brush->cache_frame[ix];//brush.tex[ix]->texture;
-			tex_flags=brush->tex[ix]->flags;
-			tex_blend=brush->tex[ix]->blend;
-			tex_coords=brush->tex[ix]->coords;
-			tex_u_scale=brush->tex[ix]->u_scale;
-			tex_v_scale=brush->tex[ix]->v_scale;
-			tex_u_pos=brush->tex[ix]->u_pos;
-			tex_v_pos=brush->tex[ix]->v_pos;
-			tex_ang=brush->tex[ix]->angle;
-			tex_cube_mode=brush->tex[ix]->cube_mode;
-		}else if(surf->brush->tex[ix] != 0){
-			texture=surf->brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
-			tex_flags=surf->brush->tex[ix]->flags;
-			tex_blend=surf->brush->tex[ix]->blend;
-			tex_coords=surf->brush->tex[ix]->coords;
-			tex_u_scale=surf->brush->tex[ix]->u_scale;
-			tex_v_scale=surf->brush->tex[ix]->v_scale;
-			tex_u_pos=surf->brush->tex[ix]->u_pos;
-			tex_v_pos=surf->brush->tex[ix]->v_pos;
-			tex_ang=surf->brush->tex[ix]->angle;
-			tex_cube_mode=surf->brush->tex[ix]->cube_mode;
-			//frame=surf.brush.tex_frame;
+		}else if(brush->tex[ix2]!=0){
+			texture=brush->cache_frame[ix2];//brush->tex[ix2]->texture;
+			tex_flags=brush->tex[ix2]->flags;
+			tex_blend=brush->tex[ix2]->blend;
+			tex_coords=brush->tex[ix2]->coords;
+			tex_u_scale=brush->tex[ix2]->u_scale;
+			tex_v_scale=brush->tex[ix2]->v_scale;
+			tex_u_pos=brush->tex[ix2]->u_pos;
+			tex_v_pos=brush->tex[ix2]->v_pos;
+			tex_ang=brush->tex[ix2]->angle;
+			tex_cube_mode=brush->tex[ix2]->cube_mode;
+		}else if(surf->brush->tex[ix2]!=0){
+			texture=surf->brush->cache_frame[ix2];//surf->brush->tex[ix2]->texture;
+			tex_flags=surf->brush->tex[ix2]->flags;
+			tex_blend=surf->brush->tex[ix2]->blend;
+			tex_coords=surf->brush->tex[ix2]->coords;
+			tex_u_scale=surf->brush->tex[ix2]->u_scale;
+			tex_v_scale=surf->brush->tex[ix2]->v_scale;
+			tex_u_pos=surf->brush->tex[ix2]->u_pos;
+			tex_v_pos=surf->brush->tex[ix2]->v_pos;
+			tex_ang=surf->brush->tex[ix2]->angle;
+			tex_cube_mode=surf->brush->tex[ix2]->cube_mode;
+			//frame=surf->brush->tex_frame;
 		}else break;
 
 		glActiveTexture(GL_TEXTURE0+slot);
