@@ -451,7 +451,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 	if (surf!=0) {
 		if(surf->brush->no_texs>tex_count) tex_count=surf->brush->no_texs;
 	}
-	if(Shader_Tex[0]!=0) tex_count=texCount; // shader takes precedence
+	if(Shader_Tex[0]!=0 && texCount>tex_count) tex_count=texCount;
 	
 	int DisableCubeSphereMapping=0;
 	for (int ix=0;ix<=254;ix++){
@@ -467,7 +467,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			if(Shader_Tex[ix]!=0){ // terrain
 				if(Shader_Tex[ix]->texture==0) break; // no shadertex
 			}else if(brush!=0){
-				if(brush->tex[ix2]==0) break; // no surfacetex
+				if(brush->tex[ix2]==0) break; // no brushtex
 			}else{
 				break;
 			}

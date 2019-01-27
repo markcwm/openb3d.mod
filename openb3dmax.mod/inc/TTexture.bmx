@@ -550,15 +550,15 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
+		'Local mask:Int=CheckAlpha(tex.pixmap)
+		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2)
-			If alpha_present=False Or mask=4 Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
-		EndIf
+		'If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		
-		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0
 		
 		Local name:Int
 		If frame_width>0 And frame_height>0 ' anim texture
@@ -656,15 +656,15 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local mask:Int=CheckAlpha(tex.pixmap)
-		If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
+		'Local mask:Int=CheckAlpha(tex.pixmap)
+		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2)
-			If alpha_present=False Or mask=4 Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
-		EndIf
+		'If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		
-		If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0
 		
 		Local width:Int=frame_width
 		Local height:Int=frame_height
@@ -778,6 +778,7 @@ Type TTexture
 		
 	End Function
 	
+	Rem
 	' quick test for Assimp to see if true alpha used in image, if true returns 2 (for tex flags)
 	Function CheckAlpha:Int( map:TPixmap )
 		Local rgba%, alp%, a0%, a1%
@@ -798,6 +799,7 @@ Type TTexture
 		If a0=sizew*sizeh Or a1=sizew*sizeh Then Return 4 ' mask flag, no alpha values
 		Return 2 ' alpha flag
 	End Function
+	EndRem
 	
 	' applys alpha to a pixmap based on average of colour values
 	Function ApplyAlpha:TPixmap( map:TPixmap Var,alpha# )
