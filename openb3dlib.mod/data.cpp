@@ -1401,13 +1401,28 @@ void MeshListRemoveBone_( Mesh* obj,int varid,Bone* bone ){
 
 // Model
 
-float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf ){ // = operator copies array
+float* SurfaceCopyFloatArray_( Surface* obj,int varid,Surface* surf ){
 	switch (varid){
-		case SURFACE_vert_coords : obj->vert_coords=surf->vert_coords; return &obj->vert_coords[0];
-		case SURFACE_vert_col : obj->vert_col=surf->vert_col; return &obj->vert_col[0];
-		case SURFACE_vert_norm : obj->vert_norm=surf->vert_norm; return &obj->vert_norm[0];
-		case SURFACE_vert_tex_coords0 : obj->vert_tex_coords0=surf->vert_tex_coords0; return &obj->vert_tex_coords0[0];
-		case SURFACE_vert_tex_coords1 : obj->vert_tex_coords1=surf->vert_tex_coords1; return &obj->vert_tex_coords1[0];
+		case SURFACE_vert_coords :
+			for (int i=0; i<surf->vert_coords.size(); i++)
+				obj->vert_coords.push_back(surf->vert_coords[i]);
+			return &obj->vert_coords[0];
+		case SURFACE_vert_col :
+			for (int i=0; i<surf->vert_col.size(); i++)
+				obj->vert_col.push_back(surf->vert_col[i]);
+			return &obj->vert_col[0];
+		case SURFACE_vert_norm :
+			for (int i=0; i<surf->vert_norm.size(); i++)
+				obj->vert_norm.push_back(surf->vert_norm[i]);
+			return &obj->vert_norm[0];
+		case SURFACE_vert_tex_coords0 :
+			for (int i=0; i<surf->vert_tex_coords0.size(); i++)
+				obj->vert_tex_coords0.push_back(surf->vert_tex_coords0[i]);
+			return &obj->vert_tex_coords0[0];
+		case SURFACE_vert_tex_coords1 :
+			for (int i=0; i<surf->vert_tex_coords1.size(); i++)
+				obj->vert_tex_coords1.push_back(surf->vert_tex_coords1[i]);
+			return &obj->vert_tex_coords1[0];
 	}
 	return NULL;
 }

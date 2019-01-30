@@ -104,32 +104,35 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
-		TGlobal.Anim_Mesh = 0 ' enable multi-surface
 		
-		Local mesh:TMesh 'anim_mesh
+		Local mesh:TMesh, anim_mesh:TMesh
 		Select ExtractExt(String(url))
 			Case "b3d"
-				mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
+				anim_mesh=TB3D.LoadAnimB3DFromStream(file, url, parent)
 			Case "md2"
-				mesh=TMD2.LoadMD2FromStream(file, url, parent)
+				anim_mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
 				If TGlobal.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
-					mesh=model.LoadAnim3DSFromStream(file, url, parent)
+					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
 				Else
 					Local model:T3DS = New T3DS
-					mesh=model.Load3DSFromStream(file, url, parent)
+					anim_mesh=model.Load3DSFromStream(file, url, parent)
 				EndIf
 		EndSelect
 		
-		'If anim_mesh=Null Then Return Null
-		'anim_mesh.HideEntity()
-		'Local mesh:TMesh=anim_mesh.CollapseAnimMesh()
-		'anim_mesh.FreeEntity()
+		If anim_mesh=Null
+			If TGlobal.Log_Mesh Then DebugLog("LoadMesh failed: "+String(url))
+			Return Null
+		EndIf
 		
-		'mesh.SetString(mesh.class_name,"Mesh")
-		'mesh.AddParent(parent)
-		'mesh.EntityListAdd(TEntity.entity_list)
+		anim_mesh.HideEntity()
+		mesh=anim_mesh.CollapseAnimMesh()
+		mesh.SetString(mesh.name, anim_mesh.GetString(anim_mesh.name))
+		mesh.SetString(mesh.class_name, "Mesh")
+		mesh.AddParent(parent)
+		mesh.EntityListAdd(TEntity.entity_list)
+		anim_mesh.FreeEntity()
 		
 		' update matrix
 		If mesh.parent<>Null
@@ -146,7 +149,6 @@ Type TMeshLoaderMax Extends TMeshLoader
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
 		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
-		TGlobal.Anim_Mesh = 1 ' enable multi-mesh
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))
@@ -163,6 +165,11 @@ Type TMeshLoaderMax Extends TMeshLoader
 					mesh=model.Load3DSFromStream(file, url, parent)
 				EndIf
 		EndSelect
+		
+		If mesh=Null
+			If TGlobal.Log_Mesh Then DebugLog("LoadAnimMesh failed: "+String(url))
+			Return Null
+		EndIf
 		
 		Return mesh
 		

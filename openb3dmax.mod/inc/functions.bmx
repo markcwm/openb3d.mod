@@ -30,7 +30,7 @@ End Rem
 Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
-		If TGlobal.Log_Mesh Then DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
+		If TGlobal.Log_Mesh Then DebugLog(" Invalid "+ExtractExt(String(url))+" stream: "+String(url))
 		Return Null
 	EndIf
 	
@@ -62,7 +62,7 @@ End Rem
 Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
-		If TGlobal.Log_Mesh Then DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
+		If TGlobal.Log_Mesh Then DebugLog(" Invalid "+ExtractExt(String(url))+" stream: "+String(url))
 		Return Null
 	EndIf
 	

@@ -111,7 +111,7 @@ public:
 	void UseFunction(void (*Enable)(void), void (*Disable)(void));
 
 	int GetProgram(){return arb_program->Program;}
-	/*void SetParameter1S(string name, float v1);
+	void SetParameter1S(string name, float v1);
 	void SetParameter2S(string name, float v1, float v2);
 	void SetParameter3S(string name, float v1, float v2, float v3);
 	void SetParameter4S(string name, float v1, float v2, float v3, float v4);
@@ -137,7 +137,7 @@ public:
 	void SetParameter1D(string name, double v1);
 	void SetParameter2D(string name, double v1, double v2);
 	void SetParameter3D(string name, double v1, double v2, double v3);
-	void SetParameter4D(string name, double v1, double v2, double v3, double v4);*/
+	void SetParameter4D(string name, double v1, double v2, double v3, double v4);
 
 };
 

@@ -64,7 +64,6 @@ Type TGlobal
 	Global Cubemap_Face:Int[12]
 	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Mesh_Transform:Int=False	' mesh transform vertices
-	Global Anim_Mesh:Int=False		' model has multiple meshes (set in LoadMesh)
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix

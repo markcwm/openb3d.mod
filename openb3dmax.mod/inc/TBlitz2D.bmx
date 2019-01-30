@@ -4,6 +4,8 @@ bbdoc: Blitz2D
 EndRem
 Type TBlitz2D
 
+	' Text function moved to b3dglgraphics.mod
+	
 	Function BeginMax2D( version:Int=1 )
 	
 		Select version
@@ -48,7 +50,7 @@ Type TBlitz2D
 			
 			glMatrixMode GL_PROJECTION
 			glLoadIdentity
-			glOrtho(0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1) ' TGlobal.w/h instead of GraphicsW/H for MaxGUI
+			glOrtho(0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1) ' TGlobal.w/h rather than GraphicsW/H for MaxGUI canvas
 			
 			glMatrixMode GL_MODELVIEW
 			glLoadIdentity
@@ -76,7 +78,7 @@ Type TBlitz2D
 			glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
 			glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
 			
-			' GLDrawText does this
+			' Max2d does this
 			'glEnable GL_BLEND
 			'glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 			'glEnable(GL_TEXTURE_2D)
@@ -107,7 +109,7 @@ Type TBlitz2D
 			
 			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
-			' set render state flags (crash if fx2 is not set)
+			' set render state flags - crash if fx2 is not set
 			TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
 			TGlobal.blend_mode[0]=1 ' force alpha blending
 			TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)
@@ -143,7 +145,7 @@ Type TBlitz2D
 			glMatrixMode(GL_COLOR)
 			glPushMatrix()
 			
-			' don't disable states after restoring stack, unless you know it will be enabled again
+			' don't disable states after restoring stack, unless you know it gets enabled again
 			'glDisable(GL_TEXTURE_CUBE_MAP)
 			'glDisable(GL_TEXTURE_GEN_S)
 			'glDisable(GL_TEXTURE_GEN_T)
@@ -155,7 +157,7 @@ Type TBlitz2D
 			
 			TGlobal.EnableStates() ' enables normals and vertex colors
 			
-			' set render state flags (crash if fx2 is not set)
+			' set render state flags - crash if fx2 is not set
 			TGlobal.alpha_enable[0]=0 ' alpha blending was disabled by Max2d (GL_BLEND)
 			TGlobal.blend_mode[0]=1 ' force alpha blending
 			TGlobal.fx1[0]=0 ' full bright/surface normals was enabled by EnableStates (GL_NORMAL_ARRAY)

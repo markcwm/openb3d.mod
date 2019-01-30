@@ -145,7 +145,70 @@ Type TSurface
 		
 	End Method
 	
-	Method SurfaceArrayCopy:Float Ptr( varid:Int,surf:TSurface )
+	Method DebugObject()
+	
+		' short
+		DebugLog " Surface instance: "+String(GetInstance(Self))
+		DebugLog " tris: "+tris
+		If tris<>Null Then DebugLog(" tris[0] = "+tris[0]+" [1] = "+tris[1]+" [2] = "+tris[2])
+		
+		' int
+		If no_verts<>Null Then DebugLog(" no_verts: "+no_verts[0]) Else DebugLog(" no_verts: 0")
+		If no_tris<>Null Then DebugLog(" no_tris: "+no_tris[0]) Else DebugLog(" no_tris: 0")
+		
+		DebugLog " vert_bone1_no: "+vert_bone1_no
+		If vert_bone1_no<>Null Then DebugLog(" vert_bone1_no[0] = "+vert_bone1_no[0]+" [1] = "+vert_bone1_no[1])
+		DebugLog " vert_bone2_no: "+vert_bone2_no
+		If vert_bone2_no<>Null Then DebugLog(" vert_bone2_no[0] = "+vert_bone2_no[0]+" [1] = "+vert_bone2_no[1])
+		DebugLog " vert_bone3_no: "+vert_bone3_no
+		If vert_bone3_no<>Null Then DebugLog(" vert_bone3_no[0] = "+vert_bone3_no[0]+" [1] = "+vert_bone3_no[1])
+		DebugLog " vert_bone4_no: "+vert_bone4_no
+		If vert_bone4_no<>Null Then DebugLog(" vert_bone4_no[0] = "+vert_bone4_no[0]+" [1] = "+vert_bone4_no[1])
+		
+		If vert_array_size<>Null Then DebugLog(" vert_array_size: "+vert_array_size[0]) Else DebugLog(" vert_array_size: 0")
+		If tri_array_size<>Null Then DebugLog(" tri_array_size: "+tri_array_size[0]) Else DebugLog(" tri_array_size: 0")
+		If vmin<>Null Then DebugLog(" vmin: "+vmin[0]) Else DebugLog(" vmin: 0")
+		If vmax<>Null Then DebugLog(" vmax: "+vert_array_size[0]) Else DebugLog(" vmax: 0")
+		If vbo_enabled<>Null Then DebugLog(" vbo_enabled: "+vert_array_size[0]) Else DebugLog(" vbo_enabled: 0")
+		If reset_vbo<>Null Then DebugLog(" reset_vbo: "+vert_array_size[0]) Else DebugLog(" reset_vbo: 0")
+		If alpha_enable<>Null Then DebugLog(" alpha_enable: "+vert_array_size[0]) Else DebugLog(" alpha_enable: 0")
+		
+		' uint
+		DebugLog " vbo_id: "+vbo_id
+		If vbo_id<>Null Then DebugLog(" vbo_id[0] = "+vbo_id[0]+" [1] = "+vbo_id[1]+" [2] = "+vbo_id[2])
+		If vbo_id<>Null Then DebugLog(" vbo_id[3] = "+vbo_id[3]+" [4] = "+vbo_id[4]+" [5] = "+vbo_id[5])
+		
+		' float
+		DebugLog " vert_coords: "+vert_coords
+		If vert_coords<>Null Then DebugLog(" vert_coords[0] = "+vert_coords[0]+" [1] = "+vert_coords[1]+" [2] = "+vert_coords[2])
+		DebugLog " vert_norm: "+vert_norm
+		If vert_norm<>Null Then DebugLog(" vert_norm[0] = "+vert_norm[0]+" [1] = "+vert_norm[1]+" [2] = "+vert_norm[2])
+		DebugLog " vert_col: "+vert_col
+		If vert_col<>Null Then DebugLog(" vert_col[0] = "+vert_col[0]+" [1] = "+vert_col[1]+" [2] = "+vert_col[2])
+		DebugLog " vert_tex_coords0: "+vert_tex_coords0
+		If vert_tex_coords0<>Null Then DebugLog(" vert_tex_coords0[0] = "+vert_tex_coords0[0]+" [1] = "+vert_tex_coords0[1])
+		DebugLog " vert_tex_coords1: "+vert_tex_coords1
+		If vert_tex_coords1<>Null Then DebugLog(" vert_tex_coords1[0] = "+vert_tex_coords1[0]+" [1] = "+vert_tex_coords1[1])
+		
+		DebugLog " vert_weight1: "+vert_weight1
+		If vert_weight1<>Null Then DebugLog(" vert_weight1[0] = "+vert_weight1[0]+" [1] = "+vert_weight1[1])
+		DebugLog " vert_weight2: "+vert_weight2
+		If vert_weight2<>Null Then DebugLog(" vert_weight2[0] = "+vert_weight2[0]+" [1] = "+vert_weight2[1])
+		DebugLog " vert_weight3: "+vert_weight3
+		If vert_weight3<>Null Then DebugLog(" vert_weight3[0] = "+vert_weight3[0]+" [1] = "+vert_weight3[1])
+		DebugLog " vert_weight4: "+vert_weight4
+		If vert_weight4<>Null Then DebugLog(" vert_weight4[0] = "+vert_weight4[0]+" [1] = "+vert_weight4[1])
+		
+		' brush
+		DebugLog " brush: "+String(TBrush.GetInstance(brush))
+		
+		' shader
+		DebugLog " ShaderMat: "+String(TShader.GetInstance(ShaderMat))
+		DebugLog ""
+		
+	End Method
+	
+	Method SurfaceFloatArrayCopy:Float Ptr( varid:Int,surf:TSurface )
 	
 		Select varid
 			Case SURFACE_vert_coords

@@ -806,8 +806,8 @@ Type TTexture
 		Local rgba%, red%, grn%, blu%, alp%
 		Local discard%=alpha * 255
 		
-		For Local iy%=0 Until PixmapHeight(map)
-			For Local ix%=0 Until PixmapWidth(map)
+		For Local iy%=0 Until PixmapHeight(map)-1
+			For Local ix%=0 Until PixmapWidth(map)-1
 				rgba=ReadPixel(map,ix,iy)
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8

@@ -241,14 +241,12 @@ Type TMesh Extends TEntity
 	
 	Method CreateAllChildren()
 	
-		Local child_ent:TEntity=Null ' this will store child entity of anim mesh
 		Local child_no%=1 ' used to select child entity
 		Local count_children%=CountAllChildren(Self) ' total no. of children belonging to entity
-		
 		For Local child_no% = 1 To count_children
 			Local count%=0
 			Local inst:Byte Ptr=GetChildFromAll_( GetInstance(Self),child_no,Varptr count,Null )
-			child_ent=GetObject(inst)
+			Local child_ent:TEntity=GetObject(inst) ' child entity of anim mesh
 			If child_ent=Null And inst<>Null Then child_ent=CreateObject(inst)
 		Next
 		
@@ -357,8 +355,8 @@ Type TMesh Extends TEntity
 	
 	Method PositionAnimMesh( px#,py#,pz# )
 	
+		Self.PositionMesh(px, py, pz)
 		Local count_children% = TEntity.CountAllChildren(Self)
-		Local pos:TVector = New TVector
 		For Local child_no% = 1 To count_children
 			Local count%=0
 			Local child_ent:TEntity = GetChildFromAll(child_no, count)
@@ -369,6 +367,7 @@ Type TMesh Extends TEntity
 	
 	Method RotateAnimMesh( rx#,ry#,rz# )
 	
+		Self.RotateMesh(rx, ry, rz)
 		Local count_children% = TEntity.CountAllChildren(Self)
 		For Local child_no% = 1 To count_children
 			Local count%=0
@@ -380,6 +379,7 @@ Type TMesh Extends TEntity
 	
 	Method ScaleAnimMesh( sx#,sy#,sz# )
 	
+		Self.ScaleMesh(sx, sy, sz)
 		Local count_children% = TEntity.CountAllChildren(Self)
 		For Local child_no% = 1 To count_children
 			Local count%=0
@@ -786,7 +786,8 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
-	 ' used by LoadMesh
+	 ' used by LoadMesh - replaced as not working right
+	Rem
 	Method CollapseAnimMesh:TMesh( mesh:TMesh=Null )
 	
 		Local inst:Byte Ptr=CollapseAnimMesh_( GetInstance(Self),GetInstance(mesh) )
@@ -794,6 +795,34 @@ Type TMesh Extends TEntity
 		If mesh2=Null And inst<>Null Then mesh2=CreateObject(inst)
 		Return mesh2
 		
+	End Method
+	EndRem
+	
+	Method CollapseAnimMesh:TMesh( parent_ent:TEntity=Null )
+	
+		Local new_mesh:TMesh=NewMesh()
+		Local child_ent:TEntity=Null
+		Local count_children%=TEntity.CountAllChildren(Self)
+		For Local child_no%=0 To count_children
+			Local count%=0
+			If child_no=0
+				child_ent=TEntity(Self)
+			Else
+				child_ent=GetChildFromAll(child_no, count)
+			EndIf
+			If TMesh(child_ent)<>Null
+				TMesh(child_ent).TransformMesh(child_ent.mat)
+				
+				For Local surf:TSurface=EachIn TMesh(child_ent).surf_list
+					Local new_surf:TSurface=surf.Copy()
+					
+					new_mesh.MeshListAdd(new_mesh.surf_list, new_surf)
+					new_mesh.no_surfs[0]=new_mesh.no_surfs[0]+1
+				Next
+			EndIf
+		Next
+		
+		Return new_mesh
 	End Method
 	
 	' used by CollapseAnimMesh
