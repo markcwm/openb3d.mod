@@ -319,7 +319,7 @@ Type TTexture
 			glGenFramebuffersEXT(1, Varptr framebuffer[0])
 			glGenRenderbuffersEXT(1, Varptr framebuffer[1])
 			If flags[0] & 128
-				For Local i:Int=0 Until 6 ' i<6
+				For Local i:Int=0 To 5 ' i<6
 					Select i
 						Case 0
 							glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA8, width[0], height[0], 0, GL_RGBA, GL_UNSIGNED_BYTE, Null)
@@ -551,10 +551,9 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
-		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
+		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		'If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
@@ -657,10 +656,9 @@ Type TTexture
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
-		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if no alpha
+		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		'If (flags & 2) And (alpha_present=False Or mask=4) Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
 		
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
@@ -778,8 +776,8 @@ Type TTexture
 		
 	End Function
 	
-	Rem
 	' quick test for Assimp to see if true alpha used in image, if true returns 2 (for tex flags)
+	' removed as it was only for b3d files with alpha texture, use native b3d loader rather than Assimp
 	Function CheckAlpha:Int( map:TPixmap )
 		Local rgba%, alp%, a0%, a1%
 		Local sqrw#=Sqr(PixmapWidth(map))
@@ -787,8 +785,8 @@ Type TTexture
 		Local sizew%=Int(PixmapWidth(map)/sqrw)
 		Local sizeh%=Int(PixmapHeight(map)/sqrh)
 		
-		For Local iy%=0 Until sizeh ' check sqrt times pixel columns
-			For Local ix%=0 Until sizew ' check sqrt times pixel rows
+		For Local iy%=0 To sizeh-1 ' check sqrt times pixel columns
+			For Local ix%=0 To sizew-1 ' check sqrt times pixel rows
 				rgba=ReadPixel(map,ix*sizew,iy*sizeh)
 				alp=(rgba & $FF000000) Shr 24
 				If alp=0 Then a0:+1
@@ -799,21 +797,21 @@ Type TTexture
 		If a0=sizew*sizeh Or a1=sizew*sizeh Then Return 4 ' mask flag, no alpha values
 		Return 2 ' alpha flag
 	End Function
-	EndRem
 	
 	' applys alpha to a pixmap based on average of colour values
 	Function ApplyAlpha:TPixmap( map:TPixmap Var,alpha# )
 		Local rgba%, red%, grn%, blu%, alp%
 		Local discard%=alpha * 255
 		
-		For Local iy%=0 Until PixmapHeight(map)-1
-			For Local ix%=0 Until PixmapWidth(map)-1
+		For Local iy%=0 To PixmapHeight(map)-1
+			For Local ix%=0 To PixmapWidth(map)-1
 				rgba=ReadPixel(map,ix,iy)
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
 				alp=(red + grn + blu) / 3.0
-				If alp < discard Then WritePixel map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24)
+				WritePixel(map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24))
+'				If alp < discard Then WritePixel(map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24))
 			Next
 		Next
 		

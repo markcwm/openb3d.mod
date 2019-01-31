@@ -425,6 +425,9 @@ Set mesh to be used as stencil.
 <tr><td class=docleft width=1%><a href=#StencilMode>StencilMode</a></td><td class=docright>
 Set stencil render modes.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#StringPtr>StringPtr</a></td><td class=docright>
+Returns string cast of byte pointer.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#SurfsRendered>SurfsRendered</a></td><td class=docright>
 Number of surfaces currently being rendered.
 </td></tr>
@@ -1329,6 +1332,11 @@ if the node is set at a higher range than the camera, its children won't be rend
 <tr><td class=docleft width=1%>Information</td><td class=docright>M is stencil action mode for glStencilOp in range -2..2 where 1 is INCR (default),
 2 is INCR for stencil shadow meshes and negative values are DECR. O is comparison operator for
 glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or GEQUAL.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=StringPtr>
+<tr><td class=doctop colspan=2>Function StringPtr:String( inst:Byte Ptr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns string cast of byte pointer.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SurfsRendered>

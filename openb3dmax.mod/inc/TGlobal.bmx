@@ -15,7 +15,7 @@ Type TGlobal
 	Global ambient_blue:Float Ptr ' 0.5
 	Global ambient_shader:TShader ' openb3d - set in AmbientShader
 	
-	' vbo_enabled is set in GraphicsInit - set to true if USE_VBO is true and the hardware supports vbos
+	' vbo_enabled is set in GraphicsInit - set to true if the hardware supports vbos
 	Global vbo_enabled:Int Ptr ' true
 	Global vbo_min_tris:Int Ptr ' 0
 	
@@ -179,9 +179,9 @@ Type TGlobal
 	Function GraphicsInit()
 	
 		TextureFilter("",9)
-		?Not opengles
+	?Not opengles
 		glewInit() ' required for ARB funcs
-		?
+	?
 		' get hardware info and set vbo_enabled accordingly
 		THardwareInfo.GetInfo()
 		vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
@@ -199,6 +199,12 @@ Type TGlobal
 		glPushMatrix()
 		
 		EnableStates()
+		
+		' set render state flags (crash if fx2 not set?)
+		TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
+		TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
+		TGlobal.fx1[0]=0			' full bright/surface normals was not enabled by EnableStates
+		TGlobal.fx2[0]=0			' vertex colors was not enabled by EnableStates
 		
 		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
@@ -223,8 +229,8 @@ Type TGlobal
 		glEnable(GL_NORMALIZE)
 		
 		glEnableClientState(GL_VERTEX_ARRAY) ' vertex coordinates
-		glEnableClientState(GL_COLOR_ARRAY) ' vertex colors
-		glEnableClientState(GL_NORMAL_ARRAY) ' surface normals
+		'glEnableClientState(GL_COLOR_ARRAY) ' vertex colors
+		'glEnableClientState(GL_NORMAL_ARRAY) ' surface normals
 	
 	End Function
 	

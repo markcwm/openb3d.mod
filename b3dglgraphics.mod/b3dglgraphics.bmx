@@ -76,10 +76,8 @@ EndRem
 Function Text( x%,y%,txt$ )
 	
 	' set active texture to texture 0 so gldrawtext will work correctly
-	If THardwareInfo.VBOSupport 'SMALLFIXES hack to prevent crash when vbo is not supported by GFX
-		glActiveTextureARB(GL_TEXTURE0)
-		glClientActiveTextureARB(GL_TEXTURE0)
-	EndIf
+	glActiveTexture(GL_TEXTURE0)
+	glClientActiveTexture(GL_TEXTURE0)
 	
 	glDisable(GL_LIGHTING)
 	glColor3ub(TGlobal.txt_r,TGlobal.txt_g,TGlobal.txt_b)

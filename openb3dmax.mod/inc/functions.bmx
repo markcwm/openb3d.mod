@@ -3,6 +3,17 @@
 ' *** Extra
 
 Rem
+bbdoc: Returns string cast of byte pointer
+End Rem
+Function StringPtr:String( inst:Byte Ptr ) 
+?bmxng
+	Return String(inst)
+?Not bmxng
+	Return String(Int(inst))
+?
+End Function
+
+Rem
 bbdoc: Returns the number of mipmaps a texture has
 End Rem
 Function Mipmaps:Int( tex:TTexture )

@@ -798,7 +798,7 @@ Type TMesh Extends TEntity
 	End Method
 	EndRem
 	
-	Method CollapseAnimMesh:TMesh( parent_ent:TEntity=Null )
+	Method CollapseAnimMesh:TMesh()
 	
 		Local new_mesh:TMesh=NewMesh()
 		Local child_ent:TEntity=Null

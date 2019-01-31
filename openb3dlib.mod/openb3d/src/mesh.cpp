@@ -65,14 +65,22 @@ void Mesh::ShadeMesh(Shader* material){
 	}
 }
 
-void Mesh::LightMesh(Mesh* m,float red,float green,float blue,float range,float light_x,float light_y,float light_z){
+void Mesh::LightMesh(Mesh* mesh,float red,float green,float blue,float range,float light_x,float light_y,float light_z){	
 	Vector rgb(red,green,blue);
 	Vector pos(light_x,light_y,-light_z); // ***ogl***
-	if( range ){
+	
+	if(range!=0){
 		float att=1.0f/range;
 		list<Surface*>::iterator it;
-		for(it=m->surf_list.begin();it!=m->surf_list.end();it++){
+		
+		for(it=mesh->surf_list.begin();it!=mesh->surf_list.end();it++){
 			Surface* surf=*it;
+			float alpha;
+			if(Mesh(*mesh).brush.alpha<1.0) // entity takes precedence over surface
+				alpha=Mesh(*mesh).brush.alpha;
+			else
+				alpha=surf->brush->alpha;
+			
 			for(int j=0;j<surf->no_verts;j++){
 				Vector v(surf->vert_coords[j*3],surf->vert_coords[j*3+1],surf->vert_coords[j*3+2]);
 				Vector lv=pos-v;
@@ -83,17 +91,19 @@ void Mesh::LightMesh(Mesh* m,float red,float green,float blue,float range,float 
 				float i=1/(d*att)*(dp/d);
 				Vector c(surf->VertexRed(j),surf->VertexGreen(j),surf->VertexBlue(j));
 				Vector color=c+rgb*i;
-				surf->VertexColor(j,color.x,color.y,color.z,surf->VertexAlpha(j));
+				surf->VertexColor(j,color.x,color.y,color.z,alpha);
 			}
 		}
-	}else{
+	}else{ // no range, reset vertex colors
 		list<Surface*>::iterator it;
-		for(it=m->surf_list.begin();it!=m->surf_list.end();it++){
+		
+		for(it=mesh->surf_list.begin();it!=mesh->surf_list.end();it++){
 			Surface* surf=*it;
+			
 			for(int j=0;j<surf->no_verts;j++){
 				Vector c(surf->VertexRed(j),surf->VertexGreen(j),surf->VertexBlue(j));
 				Vector color=c+rgb;
-				surf->VertexColor(j,color.x,color.y,color.z,surf->VertexAlpha(j));
+				surf->VertexColor(j,color.x,color.y,color.z,1.0);
 			}
 		}
 	}
@@ -2413,7 +2423,7 @@ void Mesh::Render(){
 		if(fx&1){
 			if(Global::fx1!=true){
 				Global::fx1=true;
-				//glDisableClientState(GL_NORMAL_ARRAY); // always use normals data fix
+				glEnableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2421,7 +2431,7 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
-				//glEnableClientState(GL_NORMAL_ARRAY);
+				glDisableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;
