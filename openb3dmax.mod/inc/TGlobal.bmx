@@ -186,7 +186,7 @@ Type TGlobal
 		THardwareInfo.GetInfo()
 		vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
 		
-		' save the Max2D settings for later - by Oddball
+		' save the 3D settings for later (by Oddball)
 		glPushAttrib(GL_ALL_ATTRIB_BITS)
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
 		glMatrixMode(GL_MODELVIEW)
@@ -198,22 +198,22 @@ Type TGlobal
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		EnableStates()
+		'EnableStates() ' done in Graphics3D_()
 		
 		' set render state flags (crash if fx2 not set?)
-		TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
-		TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-		TGlobal.fx1[0]=0			' full bright/surface normals was not enabled by EnableStates
-		TGlobal.fx2[0]=0			' vertex colors was not enabled by EnableStates
+		'TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
+		'TGlobal.blend_mode[0]=1	' force alpha blending (default is 1)
+		'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
+		'TGlobal.fx2[0]=1			' vertex colors was not enabled
 		
-		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
-		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
+		'glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
+		'glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
 		
-		glClearDepth(1.0)						
-		glDepthFunc(GL_LEQUAL)
-		glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST)
+		'glClearDepth(1.0)						
+		'glDepthFunc(GL_LEQUAL)
+		'glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST)
 		
-		glAlphaFunc(GL_GEQUAL,0.5)
+		'glAlphaFunc(GL_GEQUAL,0.5)
 		
 	End Function
 	
@@ -229,9 +229,9 @@ Type TGlobal
 		glEnable(GL_NORMALIZE)
 		
 		glEnableClientState(GL_VERTEX_ARRAY) ' vertex coordinates
-		'glEnableClientState(GL_COLOR_ARRAY) ' vertex colors
-		'glEnableClientState(GL_NORMAL_ARRAY) ' surface normals
-	
+		glEnableClientState(GL_NORMAL_ARRAY) ' surface normals
+		'glEnableClientState(GL_COLOR_ARRAY) ' don't enable vertex colors
+		
 	End Function
 	
 	Function Wireframe( enable:Int )

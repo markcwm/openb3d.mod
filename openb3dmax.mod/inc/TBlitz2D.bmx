@@ -102,15 +102,15 @@ Type TBlitz2D
 			glMatrixMode(GL_COLOR)
 			glPushMatrix()
 			
-			TGlobal.EnableStates() ' enables normals and vertex colors
+			TGlobal.EnableStates() ' enables normals but not vertex colors
 			
 			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
 			' set render state flags (crash if fx2 not set?)
 			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
 			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			'TGlobal.fx1[0]=0			' full bright/surface normals was not enabled by EnableStates
-			'TGlobal.fx2[0]=0			' vertex colors was not enabled by EnableStates
+			TGlobal.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
@@ -149,15 +149,15 @@ Type TBlitz2D
 			'glDisable(GL_TEXTURE_GEN_R)
 			'glDisable(GL_BLEND)
 			
-			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
+			TGlobal.EnableStates() ' enables normals but not vertex colors
 			
-			TGlobal.EnableStates() ' enables normals and vertex colors
+			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
 			' set render state flags (crash if fx2 not set?)
 			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
 			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			'TGlobal.fx1[0]=0			' full bright/surface normals was not enabled by EnableStates
-			'TGlobal.fx2[0]=0			' vertex colors was not enabled by EnableStates
+			TGlobal.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
 			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
