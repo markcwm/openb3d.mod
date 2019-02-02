@@ -22,21 +22,22 @@ Entity* Pick::picked_ent;
 Surface* Pick::picked_surface;
 int Pick::picked_triangle;
 
-Entity* Pick::CameraPick(Camera* cam,float vx,float vy){
+Entity* Pick::CameraPick(Camera* cam,float vpx,float vpy){
 	
 	cam->project_enabled=true;
+	vpy=Global::height-vpy;
 
 	float px=0.0;
 	float py=0.0;
 	float pz=0.0;
 
-	gluUnProject(vx,vy,0.0,&cam->mod_mat[0],&cam->proj_mat[0],&cam->viewport[0],&px,&py,&pz);
+	gluUnProject(vpx,vpy,0.0,&cam->mod_mat[0],&cam->proj_mat[0],&cam->viewport[0],&px,&py,&pz);
 
 	float x=px;
 	float y=py;
 	float z=-pz;
 		
-	gluUnProject(vx,vy,1.0,&cam->mod_mat[0],&cam->proj_mat[0],&cam->viewport[0],&px,&py,&pz);
+	gluUnProject(vpx,vpy,1.0,&cam->mod_mat[0],&cam->proj_mat[0],&cam->viewport[0],&px,&py,&pz);
 
 	float x2=px;
 	float y2=py;

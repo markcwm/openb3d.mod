@@ -243,8 +243,8 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
 
-	int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
-	if(flags&2 && mask==4) ApplyAlpha(tex,buffer);
+	//int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
+	if(flags&2) ApplyAlpha(tex,buffer);
 	if(flags&4) ApplyMask(tex,buffer,0,0,0);
 
 	unsigned int name;
@@ -261,7 +261,6 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 		tex->texture=name;
 	} else {
-
 
 		tex->no_frames=frame_count;
 		tex->frames=new unsigned int[frame_count];
@@ -507,22 +506,22 @@ void Texture::BackBufferToTex(int frame){
 		glBindTexture (GL_TEXTURE_CUBE_MAP,texture);
 		switch (cube_face){
 		case 0:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,0,GL_RGBA,0,0,width,height,0); //Global::height-height
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		case 1:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0,GL_RGBA,0,0,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		case 2:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,GL_RGBA,0,0,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		case 3:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,0,GL_RGBA,0,0,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		case 4:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,0,GL_RGBA,0,0,width,height,0);
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		case 5:
-			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,0,GL_RGBA,0,0,width,height,0); //...
+			glCopyTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,0,GL_RGBA,0,Global::height-height,width,height,0);
 			break;
 		}
 #ifndef GLES2
@@ -532,7 +531,7 @@ void Texture::BackBufferToTex(int frame){
 #endif
 	}else{
 		glBindTexture (GL_TEXTURE_2D,texture);
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,0,width,height,0); //Global::height-height
+		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0);
 #ifndef GLES2
 		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 #else
@@ -654,7 +653,7 @@ void Texture::TexToBuffer(unsigned char* buffer, int frame){
 void Texture::DepthBufferToTex(Camera* cam=0 ){
 	glBindTexture(GL_TEXTURE_2D,texture);
 	if (cam==0){
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,0,width,height,0); //Global::height-height
+		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,0,width,Global::height-height,0);
 #ifndef GLES2
 		glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
 #endif

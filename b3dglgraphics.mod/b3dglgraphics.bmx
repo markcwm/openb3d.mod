@@ -65,8 +65,14 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
 	
-	TGlobal.GraphicsInit()
+	glewInit() ' required for ARB funcs
 	Graphics3D_( width,height,depth,mode,rate )
+	TGlobal.GraphicsInit()
+	
+	' get hardware info and set vbo_enabled accordingly
+	THardwareInfo.GetInfo()
+	TGlobal.vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
+	TGlobal.GL_Version=Int(THardwareInfo.OGLVersion.ToFloat()*10)
 	
 End Function
 

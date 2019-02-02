@@ -10,7 +10,7 @@ Type TB3D
 		' Start file reading
 		Local file:TStream=LittleEndianStream(ReadFile(url)) 'ReadStream("littleendian::"+url)
 		If file=Null
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid B3D stream: "+String(url))
+			DebugLog " Invalid B3D stream: "+String(url)
 			Return Null
 		EndIf
 		
@@ -47,14 +47,13 @@ Type TB3D
 		ReadLong(file)
 		Local vno:Int=ReadInt(file)
 		If tag<>"BB3D"
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid B3D file: "+dir)
+			DebugLog " Invalid B3D file: "+dir
 			Return Null
 		EndIf
 		If vno/100>0
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid B3D version: "+vno)
+			DebugLog " Invalid B3D version: "+vno
 			Return Null
 		EndIf
-		If TGlobal.Log_B3D Then DebugLog("")
 		If TGlobal.Log_B3D Then DebugLog(" Dir="+dir+" file.size="+ file.Size())
 		
 		' Locals
@@ -125,7 +124,7 @@ Type TB3D
 				tag=new_tag
 				ReadInt(file)
 				size=ReadInt(file)
-				'If TGlobal.Log_B3D Then DebugLog("new_tag="+new_tag+" size="+size+" pos="+StreamPos(file))
+				'If TGlobal.Log_B3D Then DebugLog(" new_tag="+new_tag+" size="+size+" pos="+StreamPos(file))
 				
 				' deal with nested nodes
 				old_node_level=node_level
@@ -211,7 +210,7 @@ Type TB3D
 						te_v_scale=ReadFloat(file)
 						te_angle=ReadFloat(file)
 						
-						If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" file="+te_file+" flags="+te_flags+" blend="+te_blend+" tex_no="+tex_no)
+						If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" file="+te_file+" flags="+te_flags+" blend="+te_blend+" tex_no="+tex_no)
 						
 						' hidden tex coords 1 flag
 						If (te_flags & 65536)
@@ -247,7 +246,7 @@ Type TB3D
 						EndIf
 						
 						If te_file<>"" Then tex[tex_no]=LoadTexture(tex_name, te_flags, tex[tex_no]) ' wrong path crashes streams
-						If TGlobal.Log_B3D And tex[tex_no]<>Null Then DebugLog(tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0])
+						If TGlobal.Log_B3D And tex[tex_no]<>Null Then DebugLog(" "+tab+new_tag+" tex_name="+tex_name+" flags="+tex[tex_no].flags[0])
 						
 						tex_no=tex_no+1
 						tex=tex[..tex_no+1] ' resize array +1
@@ -284,7 +283,7 @@ Type TB3D
 						brush[brush_no].blend[0]=b_blend
 						brush[brush_no].fx[0]=b_fx
 						
-						If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" name="+b_name+" blend="+b_blend+" fx="+b_fx+" b_no_texs="+b_no_texs)
+						If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" name="+b_name+" blend="+b_blend+" fx="+b_fx+" b_no_texs="+b_no_texs)
 						
 						For Local ix:Int=0 To b_no_texs-1
 							b_tex_id=ReadInt(file)
@@ -296,7 +295,7 @@ Type TB3D
 									brush[brush_no].BrushFX(brush[brush_no].fx[0] | 32) ' transparency for brush alpha tex
 								EndIf
 								
-								If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id+" ix="+ix+" flags="+tex[b_tex_id].flags[0])
+								If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" brush_no="+brush_no+" b_tex_id="+b_tex_id+" ix="+ix+" flags="+tex[b_tex_id].flags[0])
 							Else
 								brush[brush_no].tex[ix]=Null
 							EndIf
@@ -334,7 +333,7 @@ Type TB3D
 					
 					new_tag=ReadTag(file)
 					
-					If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" name="+n_name+info)
+					If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" name="+n_name+info)
 					
 					If new_tag="NODE" Or new_tag="ANIM"
 					
@@ -386,7 +385,7 @@ Type TB3D
 				
 					m_brush_id=ReadInt(file)
 					
-					If TGlobal.Log_B3D Then DebugLog(tab+new_tag+" brush_id="+m_brush_id)
+					If TGlobal.Log_B3D Then DebugLog(" "+tab+new_tag+" brush_id="+m_brush_id)
 					
 					mesh=NewMesh()
 					mesh.SetString(mesh.class_name, "Mesh")
@@ -439,7 +438,7 @@ Type TB3D
 					v_tc_sets=ReadInt(file)
 					v_tc_size=ReadInt(file)
 					
-					If TGlobal.Log_B3D Then DebugLog(tab+new_tag+" flags="+v_flags+" tc_sets="+v_tc_sets+" tc_size="+v_tc_size)
+					If TGlobal.Log_B3D Then DebugLog(" "+tab+new_tag+" flags="+v_flags+" tc_sets="+v_tc_sets+" tc_size="+v_tc_size)
 					
 					v_sz=12+v_tc_sets*v_tc_size*4
 					If (v_flags & 1) Then v_sz=v_sz+12
@@ -480,7 +479,7 @@ Type TB3D
 							
 							If j=0 Or j=1
 								v_surf.VertexTexCoords(v_id, v_u, v_v, v_w, j)
-								If TGlobal.Log_B3D And v_id=0 Then DebugLog("VRTS 0: u="+v_u+" v="+v_v+" cset="+j+" nsets="+v_tc_sets)
+								If TGlobal.Log_B3D And v_id=0 Then DebugLog(" VRTS[0]: u="+v_u+" v="+v_v+" cset="+j+" nsets="+v_tc_sets)
 							EndIf
 						Next
 						
@@ -492,7 +491,7 @@ Type TB3D
 					Local old_tr_brush_id:Int=tr_brush_id
 					tr_brush_id=ReadInt(file)
 					
-					If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" tr_brush_id="+tr_brush_id)
+					If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" tr_brush_id="+tr_brush_id)
 					
 					' don't create new surface if tris chunk has same brush as chunk immediately before it
 					If prev_tag<>"TRIS" Or tr_brush_id<>old_tr_brush_id
@@ -553,7 +552,7 @@ Type TB3D
 					a_frames=ReadInt(file)
 					a_fps=ReadFloat(file)
 					
-					If TGlobal.Log_B3D Then DebugLog(tab+new_tag+" flags="+a_flags+" frames="+a_frames+" fps="+a_fps)
+					If TGlobal.Log_B3D Then DebugLog(" "+tab+new_tag+" flags="+a_flags+" frames="+a_frames+" fps="+a_fps)
 					
 					If mesh<>Null
 						mesh.anim[0]=1
@@ -602,7 +601,7 @@ Type TB3D
 						bo_vert_id=ReadInt(file)
 						bo_vert_w=ReadFloat(file)
 						
-						'If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w)
+						'If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" vert_id="+bo_vert_id+" weight="+bo_vert_w)
 						
 						' assign weight values, with the strongest weight in vert_weight[1], and weakest in vert_weight[4]
 						Local anim_surf:TSurface
@@ -738,7 +737,7 @@ Type TB3D
 					While NewTag(new_tag)<>True And Eof(file)=0
 						k_frame=ReadInt(file)
 						
-						'If TGlobal.Log_B3D Then DebugLog(tab+old_tag+" flags="+k_flags+" frame="+k_frame)
+						'If TGlobal.Log_B3D Then DebugLog(" "+tab+old_tag+" flags="+k_flags+" frame="+k_frame)
 						
 						If (k_flags & 1)
 							k_px=ReadFloat(file)
@@ -816,14 +815,15 @@ Type TB3D
 			Next
 			
 			For Local child_mesh:TMesh=EachIn temp_list
-				DebugLog "MESH name="+child_mesh.EntityName()
+				If TGlobal.Log_B3D Then DebugLog(" MESH name="+child_mesh.EntityName())
 				For Local surf:TSurface = EachIn child_mesh.surf_list
-					DebugLog "TRIS no_verts="+surf.no_verts[0]+" no_tris="+surf.no_tris[0]
+					If TGlobal.Log_B3D Then DebugLog(" TRIS no_verts="+surf.no_verts[0]+" no_tris="+surf.no_tris[0])
 				Next
 			Next
 		EndIf
 		
 		ChangeDir(cd)
+		If TGlobal.Log_B3D Then DebugLog("")
 		Return TMesh(root_ent)
 		
 	End Function

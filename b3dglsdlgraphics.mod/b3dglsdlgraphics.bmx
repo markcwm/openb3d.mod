@@ -56,6 +56,9 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 		Default
 			depth=0
 	End Select
+?linux ' prevent fullscreen if in desktop resolution due to random hangs when exiting (ubuntu)
+	If width=DesktopWidth() And height=DesktopHeight() Then depth=0
+?
 
 	TGlobal.InitGlobals()
 	TGlobal.width[0]=width
@@ -67,8 +70,14 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
 	
-	TGlobal.GraphicsInit()
+	glewInit() ' sdl init here?
 	Graphics3D_( width,height,depth,mode,rate )
+	TGlobal.GraphicsInit()
+	
+	' get hardware info and set vbo_enabled accordingly
+	THardwareInfo.GetInfo()
+	TGlobal.vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
+	TGlobal.GL_Version=Int(THardwareInfo.OGLVersion.ToFloat()*10)
 	
 End Function
 

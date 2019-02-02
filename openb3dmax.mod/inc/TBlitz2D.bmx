@@ -109,7 +109,7 @@ Type TBlitz2D
 			' set render state flags (crash if fx2 not set?)
 			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
 			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			TGlobal.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
 			'TGlobal.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
@@ -156,7 +156,7 @@ Type TBlitz2D
 			' set render state flags (crash if fx2 not set?)
 			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
 			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			TGlobal.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
 			'TGlobal.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)

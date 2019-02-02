@@ -46,24 +46,22 @@ Type TGlobal
 	' wrapper
 	Global gfx:TGraphics
 	
-	Global Log_New:Int=False		' True to DebugLog when new 3d object created
-	Global Log_Del:Int=False		' True to DebugLog when 3d object destroyed
-	Global Log_3DS:Int=False		' True to DebugLog 3DS chunks
-	Global Log_B3D:Int=False		' True to DebugLog B3D chunks
-	Global Log_MD2:Int=False		' True to DebugLog MD2 chunks
-	Global Log_Assimp:Int=False		' True to DebugLog Assimp
-	Global Log_Mesh:Int=True		' True to DebugLog mesh streams
-	Global Log_Texture:Int=True		' True to DebugLog texture streams
-	Global Log_Shader:Int=True		' True to DebugLog shader files
+	Global Log_New:Int=False		' True to debug when new 3d object created
+	Global Log_Del:Int=False		' True to debug when 3d object destroyed
+	Global Log_3DS:Int=False		' True to debug 3DS chunks
+	Global Log_B3D:Int=False		' True to debug B3D chunks
+	Global Log_MD2:Int=False		' True to debug MD2 chunks
+	Global Log_Assimp:Int=False		' True to debug Assimp
 	
+	Global GL_Version:Int=0			' current GL version as int, eg. 2.1 is 21
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Flags:Int=-1		' Assimp mesh flags
 	Global Texture_Flags:Int=9		' LoadTexture flags
+	Global Mesh_Transform:Int=False	' mesh transform vertices
+	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
-	Global Loader_3DS2:Int=False	' alternative 3DS loader
-	Global Mesh_Transform:Int=False	' mesh transform vertices
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix
@@ -111,8 +109,8 @@ Type TGlobal
 		Matrix_B3D.LoadIdentity()
 		Matrix_MD2=NewMatrix()
 		Matrix_MD2.LoadIdentity()
-		'LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - not working right on multi-mesh
-		'LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented at all
+		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as wasn't working right on multi-mesh
+		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented at all
 		LoaderMatrix "md2", 1,0,0, 0,0,1, 0,-1,0 ' swap z/y and invert y
 		
 		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
@@ -153,23 +151,23 @@ Type TGlobal
 		
 		Select status
 			Case GL_FRAMEBUFFER_COMPLETE_EXT
-				DebugLog "FBO created"
+				DebugLog " FBO created"
 			Case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT_EXT
-				DebugLog "Incomplete attachment"
+				DebugLog " Incomplete attachment"
 			Case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT_EXT
-				DebugLog "Missing attachment"
+				DebugLog " Missing attachment"
 			Case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS_EXT
-				DebugLog "Incomplete dimensions"
+				DebugLog " Incomplete dimensions"
 			Case GL_FRAMEBUFFER_INCOMPLETE_FORMATS_EXT
-				DebugLog "Incomplete formats"
+				DebugLog " Incomplete formats"
 			Case GL_FRAMEBUFFER_INCOMPLETE_DRAW_BUFFER_EXT
-				DebugLog "Incomplete draw buffer"
+				DebugLog " Incomplete draw buffer"
 			Case GL_FRAMEBUFFER_INCOMPLETE_READ_BUFFER_EXT
-				DebugLog "Incomplete read buffer"
+				DebugLog " Incomplete read buffer"
 			Case GL_FRAMEBUFFER_UNSUPPORTED_EXT
-				DebugLog "Type is not Supported"
+				DebugLog " Type is not supported"
 			Default
-				DebugLog "FBO unsuccessful: "+status
+				DebugLog " FBO failed: "+status
 		EndSelect
 		
 	End Function
@@ -178,15 +176,7 @@ Type TGlobal
 	
 	Function GraphicsInit()
 	
-		TextureFilter("",9)
-	?Not opengles
-		glewInit() ' required for ARB funcs
-	?
-		' get hardware info and set vbo_enabled accordingly
-		THardwareInfo.GetInfo()
-		vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
-		
-		' save the 3D settings for later (by Oddball)
+		' save the 3D settings for later
 		glPushAttrib(GL_ALL_ATTRIB_BITS)
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
 		glMatrixMode(GL_MODELVIEW)
@@ -198,13 +188,7 @@ Type TGlobal
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		'EnableStates() ' done in Graphics3D_()
-		
-		' set render state flags (crash if fx2 not set?)
-		'TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
-		'TGlobal.blend_mode[0]=1	' force alpha blending (default is 1)
-		'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
-		'TGlobal.fx2[0]=1			' vertex colors was not enabled
+		'EnableStates() ' done in Global::Graphics
 		
 		'glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		'glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)

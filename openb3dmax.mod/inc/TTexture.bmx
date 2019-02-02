@@ -8,16 +8,16 @@ Type TTexture
 	
 	Global tex_list:TList=CreateList() ' Texture list
 	
-	Field file:Byte Ptr ' string returned by TextureName - ""
-	Field frames:Int Ptr ' unsigned int*
+	Field file:Byte Ptr=Null ' string returned by TextureName - ""
+	Field frames:Int Ptr=Null ' unsigned int*
 	
 	Field flags:Int Ptr,blend:Int Ptr,coords:Int Ptr ' 0/2/0
 	Field u_scale:Float Ptr,v_scale:Float Ptr ' 1.0/1.0
 	Field u_pos:Float Ptr,v_pos:Float Ptr,angle:Float Ptr ' 0.0/0.0/0.0
-	Field file_abs:Byte Ptr ' string - ""
+	Field file_abs:Byte Ptr=Null ' string - ""
 	Field width:Int Ptr,height:Int Ptr ' returned by TextureWidth/TextureHeight - 0/0
 	Field no_frames:Int Ptr ' 1
-	Field framebuffer:Int Ptr ' openb3d: unsigned int* - 0
+	Field framebuffer:Int Ptr=Null ' openb3d: unsigned int* - 0
 	Field cube_face:Int Ptr,cube_mode:Int Ptr ' 0/1
 	
 	' minib3d
@@ -99,8 +99,8 @@ Type TTexture
 		' uint
 		texture=TextureUInt_( GetInstance(Self),TEXTURE_texture )
 		frames=TextureUInt_( GetInstance(Self),TEXTURE_frames )
-		gltex=frames ' as in Minib3d
 		framebuffer=TextureUInt_( GetInstance(Self),TEXTURE_framebuffer )
+		If frames=Null Then gltex=texture Else gltex=frames ' as in Minib3d
 		
 		' float
 		u_scale=TextureFloat_( GetInstance(Self),TEXTURE_u_scale )
@@ -116,6 +116,47 @@ Type TTexture
 		AddList_(tex_list)
 		AddList_(tex_list_all)
 		exists=1
+		
+	End Method
+	
+	Method DebugObject()
+	
+		DebugLog " Texture instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If flags<>Null Then DebugLog(" flags: "+flags[0]) Else DebugLog(" flags: 0")
+		If blend<>Null Then DebugLog(" blend: "+blend[0]) Else DebugLog(" blend: 0")
+		If coords<>Null Then DebugLog(" coords: "+coords[0]) Else DebugLog(" coords: 0")
+		If width<>Null Then DebugLog(" width: "+width[0]) Else DebugLog(" width: 0")
+		If height<>Null Then DebugLog(" height: "+height[0]) Else DebugLog(" height: 0")
+		If no_frames<>Null Then DebugLog(" no_frames: "+no_frames[0]) Else DebugLog(" no_frames: 0")
+		If cube_face<>Null Then DebugLog(" cube_face: "+cube_face[0]) Else DebugLog(" cube_face: 0")
+		If cube_mode<>Null Then DebugLog(" cube_mode: "+cube_mode[0]) Else DebugLog(" cube_mode: 0")
+		If no_mipmaps<>Null Then DebugLog(" no_mipmaps: "+no_mipmaps[0]) Else DebugLog(" no_mipmaps: 0")
+		
+		' uint
+		If texture<>Null Then DebugLog(" texture: "+texture[0]) Else DebugLog(" texture: 0")
+		DebugLog " frames: "+StringPtr(frames)
+		For Local id:Int=0 To no_frames[0]-1
+			If frames<>Null Then DebugLog(" frames["+id+"] = "+frames[id])
+		Next
+		DebugLog " framebuffer: "+StringPtr(framebuffer)
+		If framebuffer<>Null Then DebugLog(" framebuffer[0] = "+framebuffer[0]+" [1] = "+framebuffer[1])
+		DebugLog " gltex: "+StringPtr(gltex)
+		If gltex<>Null Then DebugLog(" gltex: "+gltex[0])
+		
+		' float
+		If u_scale<>Null Then DebugLog(" u_scale: "+u_scale[0]) Else DebugLog(" u_scale: 0")
+		If v_scale<>Null Then DebugLog(" v_scale: "+v_scale[0]) Else DebugLog(" v_scale: 0")
+		If u_pos<>Null Then DebugLog(" u_pos: "+u_pos[0]) Else DebugLog(" u_pos: 0")
+		If v_pos<>Null Then DebugLog(" v_pos: "+v_pos[0]) Else DebugLog(" v_pos: 0")
+		If angle<>Null Then DebugLog(" angle: "+angle[0]) Else DebugLog(" angle: 0")
+		
+		' string
+		If file<>Null Then DebugLog(" file: "+GetString(file)) Else DebugLog(" file: 0")
+		If file_abs<>Null Then DebugLog(" file_abs: "+GetString(file_abs)) Else DebugLog(" file_abs: 0")
+		
+		DebugLog ""
 		
 	End Method
 	
@@ -216,20 +257,20 @@ Type TTexture
 	
 	Method CameraToTex( cam:TCamera,frame:Int=0 )
 	
-		If GL_VERSION_2_1 ' GL 2.1 and above
-			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
-		Else ' GL 2.0 and below
+		If GL_Version<21 ' GL 1.4-2.0
 			CameraToTexEXT( cam )
+		Else ' GL 2.1+
+			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
 		EndIf
 		
 	End Method
 	
 	Method DepthBufferToTex( cam:TCamera=Null )
 	
-		If GL_VERSION_2_1 ' GL 2.1 and above
-			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
-		Else ' GL 2.0 and below
+		If GL_VERSION<21 ' GL 1.4-2.0
 			DepthBufferToTexEXT( cam )
+		Else ' GL 2.1+
+			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
 		EndIf
 		
 	End Method
@@ -432,7 +473,7 @@ Type TTexture
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TTexture"
+			DebugLog " New TTexture"
 		EndIf
 	
 	End Method
@@ -440,7 +481,7 @@ Type TTexture
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TTexture"
+			DebugLog " Del TTexture"
 		EndIf
 	
 	End Method
@@ -531,7 +572,7 @@ Type TTexture
 				old_tex.TextureListAdd( tex_list_all )
 				FreeObject( GetInstance(tex) ) ; tex.exists=0
 				
-				If TGlobal.Log_Texture Then DebugLog " Texture already exists: "+file
+				DebugLog " Texture already exists: "+file
 				Return old_tex
 			EndIf
 		ElseIf old_tex<>tex ' tex not pre-existing
@@ -541,7 +582,7 @@ Type TTexture
 		
 		tex.pixmap=LoadPixmap(url) ' streams
 		If tex.pixmap=Null
-			If TGlobal.Log_Texture Then DebugLog " No pixmap texture loaded: "+file
+			DebugLog " No pixmap texture loaded: "+file
 			Return tex
 		EndIf
 		
@@ -606,6 +647,7 @@ Type TTexture
 			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
 			
 			tex.texture[0]=name
+			tex.gltex=tex.texture ' as in Minib3d
 			tex.width[0]=tex.pixmap.width
 			tex.height[0]=tex.pixmap.height
 			
@@ -637,7 +679,7 @@ Type TTexture
 			old_tex.TextureListAdd( tex_list_all )
 			FreeObject( GetInstance(tex) ) ; tex.exists=0
 			
-			If TGlobal.Log_Texture Then DebugLog " Texture already exists: "+file
+			DebugLog " Texture already exists: "+file
 			Return old_tex
 		ElseIf old_tex<>tex
 			tex.TextureListAdd( tex_list )
@@ -646,7 +688,7 @@ Type TTexture
 		
 		tex.pixmap=LoadPixmap(url) ' streams
 		If tex.pixmap=Null
-			If TGlobal.Log_Texture Then DebugLog " No pixmap texture loaded: "+file
+			DebugLog " No pixmap texture loaded: "+file
 			Return tex
 		EndIf
 		
@@ -688,6 +730,7 @@ Type TTexture
 		Next
 		
 		tex.texture[0]=name
+		tex.gltex=tex.texture ' as in Minib3d
 		tex.no_frames[0]=1
 		tex.width[0]=width
 		tex.height[0]=height
@@ -714,7 +757,7 @@ Type TTexture
 			
 			stream = OpenStream(file,True,False)
 			If Not stream
-				If TGlobal.Log_Texture Then DebugLog " Invalid texture stream: "+file
+				DebugLog " Invalid texture stream: "+file
 				Return False
 			Else ' file found after strip dir
 				CloseStream(stream)

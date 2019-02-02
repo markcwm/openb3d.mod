@@ -153,7 +153,7 @@ Type TLight Extends TEntity
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TLight"
+			DebugLog " New TLight"
 		EndIf
 		
 	End Method
@@ -161,7 +161,7 @@ Type TLight Extends TEntity
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TLight"
+			DebugLog " Del TLight"
 		EndIf
 	
 	End Method

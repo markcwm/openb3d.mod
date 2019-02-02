@@ -344,7 +344,7 @@ void Global::Graphics(){
 	glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE,flag); // 0 for one sided, 1 for two sided
 #endif
 
-	Texture::AddTextureFilter("",9);
+	Texture::AddTextureFilter("",1+8);
 
 #ifndef GLES2
 	if (atof((char*)glGetString(GL_VERSION))<1.5){

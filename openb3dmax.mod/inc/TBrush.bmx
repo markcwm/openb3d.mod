@@ -92,10 +92,44 @@ Type TBrush
 			Local inst:Byte Ptr=BrushTextureArray_( GetInstance(Self),BRUSH_tex,id )
 			tex[id]=TTexture.GetObject(inst)
 			If tex[id]=Null And inst<>Null Then tex[id]=TTexture.CreateObject(inst)
-			'If tex[id]<>Null Then DebugLog "get tex="+id+" tex.file="+tex[id].GetString(tex[id].file)
+			'If tex[id]<>Null Then DebugLog " get tex="+id+" tex.file="+tex[id].GetString(tex[id].file)
 		Next
 		
 		exists=1
+		
+	End Method
+	
+	Method DebugObject()
+	
+		DebugLog " Brush instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If no_texs<>Null Then DebugLog(" no_texs: "+no_texs[0]) Else DebugLog(" no_texs: 0")
+		If blend<>Null Then DebugLog(" blend: "+blend[0]) Else DebugLog(" blend: 0")
+		If fx<>Null Then DebugLog(" fx: "+fx[0]) Else DebugLog(" fx: 0")
+		
+		' uint
+		DebugLog " cache_frame: "+StringPtr(cache_frame)
+		For Local id:Int=0 To 7
+			DebugLog(" cache_frame["+id+"] = "+cache_frame[id])
+		Next
+		
+		' float
+		If red<>Null Then DebugLog(" red: "+red[0]) Else DebugLog(" red: 0")
+		If green<>Null Then DebugLog(" green: "+green[0]) Else DebugLog(" green: 0")
+		If blue<>Null Then DebugLog(" blue: "+blue[0]) Else DebugLog(" blue: 0")
+		If alpha<>Null Then DebugLog(" alpha: "+alpha[0]) Else DebugLog(" alpha: 0")
+		If shine<>Null Then DebugLog(" shine: "+shine[0]) Else DebugLog(" shine: 0")
+		
+		' string
+		If name<>Null Then DebugLog(" name: "+GetString(name)) Else DebugLog(" name: 0")
+		
+		' texture
+		For Local id:Int=0 To 7
+			If tex[id]<>Null Then DebugLog(" tex["+id+"]: "+StringPtr(TTexture.GetInstance(tex[id])))
+		Next
+		
+		DebugLog ""
 		
 	End Method
 	
@@ -161,7 +195,7 @@ Type TBrush
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TBrush"
+			DebugLog " New TBrush"
 		EndIf
 	
 	End Method
@@ -169,7 +203,7 @@ Type TBrush
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TBrush"
+			DebugLog " Del TBrush"
 		EndIf
 		
 	End Method

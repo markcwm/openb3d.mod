@@ -122,7 +122,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 		EndSelect
 		
 		If anim_mesh=Null
-			If TGlobal.Log_Mesh Then DebugLog("LoadMesh failed: "+String(url))
+			DebugLog " LoadMesh failed: "+String(url)
 			Return Null
 		EndIf
 		
@@ -167,7 +167,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 		EndSelect
 		
 		If mesh=Null
-			If TGlobal.Log_Mesh Then DebugLog("LoadAnimMesh failed: "+String(url))
+			DebugLog " LoadAnimMesh failed: "+String(url)
 			Return Null
 		EndIf
 		

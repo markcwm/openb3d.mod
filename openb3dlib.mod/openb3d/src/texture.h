@@ -51,7 +51,7 @@ public:
 	Texture(){
 
 		//texture=NULL;
-		file="";
+		file="";frames=NULL;
 		flags=0,blend=2,coords=0;
 		u_scale=1.0,v_scale=1.0,u_pos=0.0,v_pos=0.0,angle=0.0;
 		string file_abs="";

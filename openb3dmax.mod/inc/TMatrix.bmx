@@ -112,7 +112,7 @@ Type TMatrix
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TMatrix"
+			DebugLog " New TMatrix"
 		EndIf
 		
 	End Method
@@ -120,7 +120,7 @@ Type TMatrix
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TMatrix"
+			DebugLog " Del TMatrix"
 		EndIf
 
 	End Method

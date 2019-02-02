@@ -191,7 +191,7 @@ Type TMD2
 	Function LoadMD2:TMesh( url:Object, parent_ent:TEntity=Null )
 		Local file:TStream = LittleEndianStream(ReadFile(url))
 		If file = Null
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid MD2 stream: "+String(url))
+			DebugLog " Invalid MD2 stream: "+String(url)
 			Return Null
 		EndIf
 		
@@ -204,13 +204,13 @@ Type TMD2
 	Function LoadMD2FromStream:TMesh( file:TStream,url:Object,parent_ent:TEntity=Null )
 		Local magic:Int=ReadInt(file)
 		If magic<>844121161 ' "IDP2"
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid MD2 file: "+String(url))
+			DebugLog " Invalid MD2 file: "+String(url)
 			Return Null
 		EndIf
 		
 		Local version:Int=ReadInt(file)
 		If version<>8
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid MD2 version: "+version)
+			DebugLog " Invalid MD2 version: "+version
 		EndIf
 		
 		Local mesh:TMesh=NewMesh()
@@ -342,6 +342,7 @@ Type TMD2
 		mesh.anim_seqs_last[0]=num_frames-1
 		mesh.no_surfs[0]=-1
 		
+		If TGlobal.Log_MD2 Then DebugLog("")
 		Return mesh
 	End Function
 		

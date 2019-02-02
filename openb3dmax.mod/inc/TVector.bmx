@@ -10,7 +10,7 @@ Type TVector
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TVector"
+			DebugLog " New TVector"
 		EndIf
 	
 	End Method
@@ -18,7 +18,7 @@ Type TVector
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TVector"
+			DebugLog " Del TVector"
 		EndIf
 	
 	End Method

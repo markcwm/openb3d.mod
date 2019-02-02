@@ -549,7 +549,7 @@ Type TMesh Extends TEntity
 	Method New()
 		
 		If TGlobal.Log_New
-			DebugLog "New TMesh"
+			DebugLog " New TMesh"
 		EndIf
 	
 	End Method
@@ -557,7 +557,7 @@ Type TMesh Extends TEntity
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TMesh"
+			DebugLog " Del TMesh"
 		EndIf
 	
 	End Method

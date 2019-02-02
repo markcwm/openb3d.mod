@@ -3,36 +3,36 @@
 
 Type T3DS
 	
-	Const M3D_3DS_M3DVERSION = $0002
-	Const M3D_3DS_RGB3F = $0010
-	Const M3D_3DS_RGB3B = $0011
-	Const M3D_3DS_RGBGAMMA3B = $0012
-	Const M3D_3DS_RGBGAMMA3F = $0013
-	Const M3D_3DS_PERCENTI = $0030
-	Const M3D_3DS_PERCENTF = $0031
-	Const M3D_3DS_MAIN = $4D4D
-	Const M3D_3DS_3DEDITOR = $3D3D
-	Const M3D_3DS_OBJECTBLOCK = $4000
-	Const M3D_3DS_TRIMESH = $4100
-	Const M3D_3DS_VERTEXLIST = $4110
-	Const M3D_3DS_FACELIST = $4120
-	Const M3D_3DS_FACEMATLIST = $4130
-	Const M3D_3DS_TEXCOORDS = $4140
-	Const M3D_3DS_TRANSMATRIX = $4160
-	Const M3D_3DS_BrushBLOCK = $AFFF
-	Const M3D_3DS_BrushNAME = $A000
-	Const M3D_3DS_BrushAMBIENT = $A010
-	Const M3D_3DS_BrushDIFFUSE = $A020
-	Const M3D_3DS_BrushSPECULAR = $A030
-	Const M3D_3DS_BrushSHININESS = $A040
-	Const M3D_3DS_TEXTUREMAP1 = $A200
-	Const M3D_3DS_TEXTUREMAP2 = $A33A
-	Const M3D_3DS_MAPFILENAME = $A300
-	Const M3D_3DS_MAPVSCALE = $A354
-	Const M3D_3DS_MAPUSCALE = $A356
-	Const M3D_3DS_MAPUOFFSET = $A358
-	Const M3D_3DS_MAPVOFFSET = $A35A
-	Const M3D_3DS_MAPROTATION = $A35C
+	Const M3D_3DS_M3DVERSION% = $0002
+	Const M3D_3DS_RGB3F% = $0010
+	Const M3D_3DS_RGB3B% = $0011
+	Const M3D_3DS_RGBGAMMA3B% = $0012
+	Const M3D_3DS_RGBGAMMA3F% = $0013
+	Const M3D_3DS_PERCENTI% = $0030
+	Const M3D_3DS_PERCENTF% = $0031
+	Const M3D_3DS_MAIN% = $4D4D
+	Const M3D_3DS_3DEDITOR% = $3D3D
+	Const M3D_3DS_OBJECTBLOCK% = $4000
+	Const M3D_3DS_TRIMESH% = $4100
+	Const M3D_3DS_VERTEXLIST% = $4110
+	Const M3D_3DS_FACELIST% = $4120
+	Const M3D_3DS_FACEMATLIST% = $4130
+	Const M3D_3DS_TEXCOORDS% = $4140
+	Const M3D_3DS_TRANSMATRIX% = $4160
+	Const M3D_3DS_BrushBLOCK% = $AFFF
+	Const M3D_3DS_BrushNAME% = $A000
+	Const M3D_3DS_BrushAMBIENT% = $A010
+	Const M3D_3DS_BrushDIFFUSE% = $A020
+	Const M3D_3DS_BrushSPECULAR% = $A030
+	Const M3D_3DS_BrushSHININESS% = $A040
+	Const M3D_3DS_TEXTUREMAP1% = $A200
+	Const M3D_3DS_TEXTUREMAP2% = $A33A
+	Const M3D_3DS_MAPFILENAME% = $A300
+	Const M3D_3DS_MAPVSCALE% = $A354
+	Const M3D_3DS_MAPUSCALE% = $A356
+	Const M3D_3DS_MAPUOFFSET% = $A358
+	Const M3D_3DS_MAPVOFFSET% = $A35A
+	Const M3D_3DS_MAPROTATION% = $A35C
 	
 	Field Stream:TStream
 	Field ChunkID:Short, ChunkSize:Int
@@ -325,7 +325,7 @@ Type T3DS
 	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
 		If file = Null
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid 3DS stream: "+String(url))
+			DebugLog " Invalid 3DS stream: "+String(url)
 			Return Null
 		EndIf
 		
@@ -349,7 +349,7 @@ Type T3DS
 		ReadChunk()
 		If (ChunkID <> M3D_3DS_MAIN) Or (ChunkSize <> Size)
 			Stream.Close()
-			If TGlobal.Log_Mesh Then DebugLog(" Invalid 3DS file: "+Dir)
+			DebugLog " Invalid 3DS file: "+Dir
 			Return Null
 		EndIf
 		If TGlobal.Log_3DS Then DebugLog(" Dir: "+Dir+" Size: "+Size)

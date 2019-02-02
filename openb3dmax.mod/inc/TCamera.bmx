@@ -169,7 +169,7 @@ Type TCamera Extends TEntity
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TCamera"
+			DebugLog " New TCamera"
 		EndIf
 	
 	End Method
@@ -177,7 +177,7 @@ Type TCamera Extends TEntity
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TCamera"
+			DebugLog " Del TCamera"
 		EndIf
 		
 	End Method
@@ -238,7 +238,7 @@ Type TCamera Extends TEntity
 	
 	Method CameraPick:TEntity( x:Float,y:Float ) ' same as function in TPick
 	
-		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,GraphicsHeight()-y ) ' inverted y
+		Local inst:Byte Ptr=CameraPick_( GetInstance(Self),x,y ) ' was inverted y
 		Return GetObject(inst) ' no CreateObject
 		
 	End Method

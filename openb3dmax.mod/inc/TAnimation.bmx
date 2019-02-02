@@ -190,7 +190,7 @@ Type TAnimationKeys
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TAnimationKeys"
+			DebugLog " New TAnimationKeys"
 		EndIf
 		
 	End Method
@@ -198,7 +198,7 @@ Type TAnimationKeys
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TAnimationKeys"
+			DebugLog " Del TAnimationKeys"
 		EndIf
 	
 	End Method

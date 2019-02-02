@@ -468,7 +468,7 @@ Type TEntity
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TEntity"
+			DebugLog " New TEntity"
 		EndIf
 	
 	End Method
@@ -476,7 +476,7 @@ Type TEntity
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TEntity"
+			DebugLog " Del TEntity"
 		EndIf
 	
 	End Method

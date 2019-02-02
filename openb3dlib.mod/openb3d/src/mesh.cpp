@@ -2423,7 +2423,7 @@ void Mesh::Render(){
 		if(fx&1){
 			if(Global::fx1!=true){
 				Global::fx1=true;
-				//glEnableClientState(GL_NORMAL_ARRAY); // always use normals data
+				//glEnableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;

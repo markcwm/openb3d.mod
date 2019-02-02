@@ -77,7 +77,7 @@ Type TQuaternion
 	Method New()
 	
 		If TGlobal.Log_New
-			DebugLog "New TQuaternion"
+			DebugLog " New TQuaternion"
 		EndIf
 	
 	End Method
@@ -85,7 +85,7 @@ Type TQuaternion
 	Method Delete()
 	
 		If TGlobal.Log_Del
-			DebugLog "Del TQuaternion"
+			DebugLog " Del TQuaternion"
 		EndIf
 	
 	End Method

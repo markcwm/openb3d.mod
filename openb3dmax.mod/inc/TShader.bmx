@@ -58,9 +58,7 @@ Type TShaderObject
 	
 	Function CreateFragShader:TShaderObject( shader:TShader,shaderFileName:String )
 	
-		If TGlobal.Log_Shader
-			If FileType(shaderFileName)=0 Then DebugLog " Invalid shader file: "+String(shaderFileName)
-		EndIf
+		If FileType(shaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(shaderFileName))
 		
 		Local cString:Byte Ptr=shaderFileName.ToCString()
 		Local inst:Byte Ptr=CreateFragShader_( TShader.GetInstance(shader),cString )
@@ -82,9 +80,7 @@ Type TShaderObject
 	
 	Function CreateVertShader:TShaderObject( shader:TShader,shaderFileName:String )
 	
-		If TGlobal.Log_Shader
-			If FileType(shaderFileName)=0 Then DebugLog " Invalid shader file: "+String(shaderFileName)
-		EndIf
+		If FileType(shaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(shaderFileName))
 		
 		Local cString:Byte Ptr=shaderFileName.ToCString()
 		Local inst:Byte Ptr=CreateVertShader_( TShader.GetInstance(shader),cString )
@@ -258,10 +254,8 @@ Type TShader
 	
 	Function LoadShader:TShader( ShaderName:String,VshaderFileName:String,FshaderFileName:String )
 	
-		If TGlobal.Log_Shader
-			If FileType(VshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(VshaderFileName)
-			If FileType(FshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(FshaderFileName)
-		EndIf
+		If FileType(VshaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(VshaderFileName))
+		If FileType(FshaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(FshaderFileName))
 		
 		Local cString:Byte Ptr=ShaderName.ToCString()
 		Local vcString:Byte Ptr=VshaderFileName.ToCString()
@@ -291,11 +285,9 @@ Type TShader
 	
 	Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )
 	
-		If TGlobal.Log_Shader
-			If FileType(VshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(VshaderFileName)
-			If FileType(GshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(GshaderFileName)
-			If FileType(FshaderFileName)=0 Then DebugLog " Invalid shader file: "+String(FshaderFileName)
-		EndIf
+		If FileType(VshaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(VshaderFileName))
+		If FileType(GshaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(GshaderFileName))
+		If FileType(FshaderFileName)=0 Then DebugLog(" Invalid shader file: "+String(FshaderFileName))
 		
 		Local cString:Byte Ptr=ShaderName.ToCString()
 		Local vcString:Byte Ptr=VshaderFileName.ToCString()
