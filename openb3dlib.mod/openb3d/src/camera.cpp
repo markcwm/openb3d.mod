@@ -167,8 +167,8 @@ Camera* Camera::CreateCamera(Entity* parent_ent){
 
 void Camera::CameraViewport(int x,int y,int w,int h){
 	vx=x;
-	//vy=y;
-	vy=Global::height-h-y;
+	//vy=y; // bottom-up
+	vy=Global::height-h-y; // top-down
 	vwidth=w;
 	vheight=h;
 	UpdateProjMatrix();

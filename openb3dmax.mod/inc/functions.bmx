@@ -3,6 +3,28 @@
 ' *** Extra
 
 Rem
+bbdoc: Sets global width and height of graphics gadget
+End Rem
+Function GlobalResolution( width:Int,height:Int )
+	TGlobal.width[0]=width
+	TGlobal.height[0]=height
+End Function
+
+Rem
+bbdoc: Returns global width of graphics gadget
+End Rem
+Function GlobalWidth:Int()
+	Return TGlobal.width[0]
+End Function
+
+Rem
+bbdoc: Returns global height of graphics gadget
+End Rem
+Function GlobalHeight:Int()
+	Return TGlobal.height[0]
+End Function
+
+Rem
 bbdoc: Returns string cast of byte pointer
 End Rem
 Function StringPtr:String( inst:Byte Ptr ) 

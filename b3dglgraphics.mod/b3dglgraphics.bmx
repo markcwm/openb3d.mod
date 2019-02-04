@@ -66,8 +66,8 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
 	
 	glewInit() ' required for ARB funcs
-	Graphics3D_( width,height,depth,mode,rate )
 	TGlobal.GraphicsInit()
+	Graphics3D_( width,height,depth,mode,rate )
 	
 	' get hardware info and set vbo_enabled accordingly
 	THardwareInfo.GetInfo()

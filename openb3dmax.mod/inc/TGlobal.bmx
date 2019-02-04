@@ -176,7 +176,7 @@ Type TGlobal
 	
 	Function GraphicsInit()
 	
-		' save the 3D settings for later
+		' save the Max2D settings for later
 		glPushAttrib(GL_ALL_ATTRIB_BITS)
 		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
 		glMatrixMode(GL_MODELVIEW)
@@ -188,7 +188,7 @@ Type TGlobal
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		'EnableStates() ' done in Global::Graphics
+		'EnableStates() ' init done in Global::Graphics
 		
 		'glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 		'glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
