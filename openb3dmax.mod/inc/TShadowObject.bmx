@@ -89,13 +89,18 @@ Type TShadowObject
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
-		VolumeLength=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_VolumeLength )
+		' char
 		top_caps=StaticChar_( SHADOWOBJECT_class,SHADOWOBJECT_top_caps )
+		
+		' int
 		parallel=StaticInt_( SHADOWOBJECT_class,SHADOWOBJECT_parallel )
+		midStencilVal=StaticInt_( SHADOWOBJECT_class,SHADOWOBJECT_midStencilVal )
+		
+		' float
+		VolumeLength=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_VolumeLength )
 		light_x=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_light_x )
 		light_y=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_light_y )
 		light_z=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_light_z )
-		midStencilVal=StaticInt_( SHADOWOBJECT_class,SHADOWOBJECT_midStencilVal )
 		ShadowRed=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_ShadowRed )
 		ShadowGreen=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_ShadowGreen )
 		ShadowBlue=StaticFloat_( SHADOWOBJECT_class,SHADOWOBJECT_ShadowBlue )
@@ -116,7 +121,6 @@ Type TShadowObject
 		' mesh
 		Local inst:Byte Ptr=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_Parent )
 		Parent=TMesh( TEntity.GetObject(inst) ) ' no CreateObject
-		
 		inst=ShadowObjectMesh_( GetInstance(Self),SHADOWOBJECT_ShadowMesh )
 		ShadowMesh=TMesh( TEntity.GetObject(inst) )
 		If ShadowMesh=Null And inst<>Null Then ShadowMesh=TMesh.CreateObject(inst)
@@ -129,6 +133,69 @@ Type TShadowObject
 		AddList_(shadow_list)
 		exists=1
 		
+	End Method
+	
+	Function DebugGlobals( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" ShadowObject: "
+		
+		' char
+		If top_caps<>Null Then DebugLog(pad+" top_caps: "+top_caps[0]) Else DebugLog(pad+" top_caps: Null")
+		
+		' int
+		If parallel<>Null Then DebugLog(pad+" parallel: "+parallel[0]) Else DebugLog(pad+" parallel: Null")
+		If midStencilVal<>Null Then DebugLog(pad+" midStencilVal: "+midStencilVal[0]) Else DebugLog(pad+" midStencilVal: Null")
+		
+		' float
+		If VolumeLength<>Null Then DebugLog(pad+" VolumeLength: "+VolumeLength[0]) Else DebugLog(pad+" VolumeLength: Null")
+		If light_x<>Null Then DebugLog(pad+" light_x: "+light_x[0]) Else DebugLog(pad+" light_x: Null")
+		If light_y<>Null Then DebugLog(pad+" light_y: "+light_y[0]) Else DebugLog(pad+" light_y: Null")
+		If light_z<>Null Then DebugLog(pad+" light_z: "+light_z[0]) Else DebugLog(pad+" light_z: Null")
+		If ShadowRed<>Null Then DebugLog(pad+" ShadowRed: "+ShadowRed[0]) Else DebugLog(pad+" ShadowRed: Null")
+		If ShadowGreen<>Null Then DebugLog(pad+" ShadowGreen: "+ShadowGreen[0]) Else DebugLog(pad+" ShadowGreen: Null")
+		If ShadowBlue<>Null Then DebugLog(pad+" ShadowBlue: "+ShadowBlue[0]) Else DebugLog(pad+" ShadowBlue: Null")
+		If ShadowAlpha<>Null Then DebugLog(pad+" ShadowAlpha: "+ShadowAlpha[0]) Else DebugLog(pad+" ShadowAlpha: Null")
+		
+		DebugLog ""
+		
+	End Function
+	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" ShadowObject instance: "+StringPtr(GetInstance(Self))
+		
+		' char
+		If Render<>Null Then DebugLog(pad+" Render: "+Render[0]) Else DebugLog(pad+" Render: Null")
+		If Static<>Null Then DebugLog(pad+" Static: "+Static[0]) Else DebugLog(pad+" Static: Null")
+		If VCreated<>Null Then DebugLog(pad+" VCreated: "+VCreated[0]) Else DebugLog(pad+" VCreated: Null")
+		
+		' int
+		If cnt_tris<>Null Then DebugLog(pad+" cnt_tris: "+cnt_tris[0]) Else DebugLog(pad+" cnt_tris: Null")
+		
+		' mesh
+		DebugLog pad+" Parent: "+StringPtr(TMesh.GetInstance(Parent))
+		If debug_subobjects And Parent<>Null Then Parent.DebugFields( debug_subobjects,debug_base_types )
+		DebugLog pad+" ShadowMesh: "+StringPtr(TMesh.GetInstance(ShadowMesh))
+		If debug_subobjects And ShadowMesh<>Null Then ShadowMesh.DebugFields( debug_subobjects,debug_base_types )
+		
+		DebugLog ""
+				
 	End Method
 	
 	Function AddList_( list:TList ) ' Global list

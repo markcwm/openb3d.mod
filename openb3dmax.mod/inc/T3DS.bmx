@@ -77,25 +77,25 @@ Type T3DS
 				Red = Stream.ReadFloat()*255
 				Green = Stream.ReadFloat()*255
 				Blue = Stream.ReadFloat()*255
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_RGB3F: "+Red+" "+Green+" "+Blue)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_RGB3F: "+Red+" "+Green+" "+Blue)
 				
 			Case M3D_3DS_RGB3B
 				Red = Stream.ReadByte()
 				Green = Stream.ReadByte()
 				Blue = Stream.ReadByte()
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_RGB3B: "+Red+" "+Green+" "+Blue)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_RGB3B: "+Red+" "+Green+" "+Blue)
 				
 			Case M3D_3DS_RGBGAMMA3F
 				Red = Stream.ReadFloat()*255
 				Green = Stream.ReadFloat()*255
 				Blue = Stream.ReadFloat()*255
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_RGBGAMMA3F: "+Red+" "+Green+" "+Blue)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_RGBGAMMA3F: "+Red+" "+Green+" "+Blue)
 				
 			Case M3D_3DS_RGBGAMMA3B
 				Red = Stream.ReadByte()
 				Green = Stream.ReadByte()
 				Blue = Stream.ReadByte()
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_RGBGAMMA3B: "+Red+" "+Green+" "+Blue)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_RGBGAMMA3B: "+Red+" "+Green+" "+Blue)
 				
 			Default
 				SkipChunk()
@@ -106,11 +106,11 @@ Type T3DS
 		Select Format
 			Case M3D_3DS_PERCENTI
 				Percent = Stream.ReadShort()
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_PERCENTI: "+Percent)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_PERCENTI: "+Percent)
 				
 			Case M3D_3DS_PERCENTF
 				Percent = Stream.ReadFloat()'*255
-				If TGlobal.Log_3DS Then DebugLog("- - M3D_3DS_PERCENTF: "+Percent)
+				If TGlobal.Log_3DS Then DebugLog("  M3D_3DS_PERCENTF: "+Percent)
 				
 			Default
 				SkipChunk()
@@ -122,7 +122,7 @@ Type T3DS
 		Local Index:Int, Position:Float[3]
 		
 		VertexCount = Stream.ReadShort()
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_VERTEXLIST: VertexCount = "+VertexCount)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_VERTEXLIST: VertexCount = "+VertexCount)
 		
 		For Index = 0 To VertexCount-1
 			Position[0] = Stream.ReadFloat()
@@ -139,7 +139,7 @@ Type T3DS
 		Local Index:Int, Indices:Int[3]
 		
 		TriangleCount = Stream.ReadShort()
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_FACELIST: TriangleCount = "+TriangleCount)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_FACELIST: TriangleCount = "+TriangleCount)
 		
 		For Index = 0 To TriangleCount-1
 			Indices[0] = Stream.ReadShort()
@@ -158,7 +158,7 @@ Type T3DS
 		Local CoordCount:Int, Index:Int, U:Float, V:Float
 		
 		CoordCount = Stream.ReadShort()
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_TEXCOORDS: CoordCount = "+CoordCount)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_TEXCOORDS: CoordCount = "+CoordCount)
 		
 		For Index = 0 To CoordCount-1
 			U = Stream.ReadFloat()
@@ -182,9 +182,9 @@ Type T3DS
 		Next
 		
 		If TGlobal.Log_3DS
-			DebugLog "- M3D_3DS_TRANSMATRIX"
+			DebugLog " M3D_3DS_TRANSMATRIX"
 			'For Local z% = 0 To 3
-			'	DebugLog "- "+New_matrix.grid[(4*z)+0]+","+New_matrix.grid[(4*z)+1]+","+New_matrix.grid[(4*z)+2]+","+New_matrix.grid[(4*z)+3]
+			'	DebugLog " "+New_matrix.grid[(4*z)+0]+","+New_matrix.grid[(4*z)+1]+","+New_matrix.grid[(4*z)+2]+","+New_matrix.grid[(4*z)+3]
 			'Next
 		EndIf
 	End Method
@@ -205,7 +205,7 @@ Type T3DS
 				Exit
 			EndIf
 		Next
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_FACEMATLIST: BrushName = "+BrushName)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_FACEMATLIST: BrushName = "+BrushName)
 		
 		If Found=True
 			New_mesh = NewMesh()
@@ -255,7 +255,7 @@ Type T3DS
 		If Dir.StartsWith("incbin::") Or Dir.StartsWith("zip::")
 			Texname = Filepath+"/"+StripDir(Filename)
 		EndIf
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPFILENAME: Filename = "+Filename+" Texname = "+Texname)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: Filename = "+Filename+" Texname = "+Texname)
 		
 		Texture = LoadTexture(Texname, TGlobal.Texture_Flags)
 		
@@ -269,7 +269,7 @@ Type T3DS
 	Method ReadMap(Layer:Int)
 		Texture = NewTexture()
 		TextureLayer = Layer
-		'If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
+		'If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
 	End Method
 	
 	Method ReadTriMesh()
@@ -287,7 +287,7 @@ Type T3DS
 				Mesh.FreeEntity()
 			EndIf
 		EndIf
-		If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface)
+		If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface)
 		
 		' Dummy mesh and surface
 		Mesh = NewMesh()
@@ -392,7 +392,7 @@ Type T3DS
 					ObjectNames = ObjectNames[..ObjectIndex+1]
 					ObjectNames[ObjectIndex] = ReadCString()
 					ObjectIndex:+1
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_OBJECTBLOCK: "+ObjectNames[ObjectIndex-1])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_OBJECTBLOCK: "+ObjectNames[ObjectIndex-1])
 					
 				Case M3D_3DS_BrushBLOCK
 					ReadBrushBlock()
@@ -419,7 +419,7 @@ Type T3DS
 					'Brush = CreateBrush()
 					BrushName = ReadCString()
 					Brush.SetString(Brush.name, BrushName)
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_BrushNAME: "+BrushName)
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_BrushNAME: "+BrushName)
 					
 				'Case M3D_3DS_BrushAMBIENT
 					'ReadChunk()
@@ -447,23 +447,23 @@ Type T3DS
 					
 				Case M3D_3DS_MAPVSCALE
 					Texture.v_scale[0] = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPVSCALE: "+Texture.v_scale[0])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPVSCALE: "+Texture.v_scale[0])
 					
 				Case M3D_3DS_MAPUSCALE
 					Texture.u_scale[0] = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPUSCALE: "+Texture.u_scale[0])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPUSCALE: "+Texture.u_scale[0])
 					
 				Case M3D_3DS_MAPUOFFSET
 					Texture.u_pos[0] = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPUOFFSET: "+Texture.u_pos[0])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPUOFFSET: "+Texture.u_pos[0])
 					
 				Case M3D_3DS_MAPVOFFSET
 					Texture.v_pos[0] = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPVOFFSET: "+Texture.v_pos[0])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPVOFFSET: "+Texture.v_pos[0])
 					
 				Case M3D_3DS_MAPROTATION
 					Texture.angle[0] = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("- M3D_3DS_MAPROTATION: "+Texture.angle[0])
+					If TGlobal.Log_3DS Then DebugLog(" M3D_3DS_MAPROTATION: "+Texture.angle[0])
 					
 				Default
 					If (ChunkID = M3D_3DS_TEXTUREMAP1) Or (ChunkID = M3D_3DS_TEXTUREMAP2)

@@ -8,16 +8,16 @@ Type TTexture
 	
 	Global tex_list:TList=CreateList() ' Texture list
 	
-	Field file:Byte Ptr=Null ' string returned by TextureName - ""
-	Field frames:Int Ptr=Null ' unsigned int*
+	Field file:Byte Ptr ' string returned by TextureName - ""
+	Field frames:Int Ptr ' unsigned int*
 	
 	Field flags:Int Ptr,blend:Int Ptr,coords:Int Ptr ' 0/2/0
 	Field u_scale:Float Ptr,v_scale:Float Ptr ' 1.0/1.0
 	Field u_pos:Float Ptr,v_pos:Float Ptr,angle:Float Ptr ' 0.0/0.0/0.0
-	Field file_abs:Byte Ptr=Null ' string - ""
+	Field file_abs:Byte Ptr ' string - ""
 	Field width:Int Ptr,height:Int Ptr ' returned by TextureWidth/TextureHeight - 0/0
 	Field no_frames:Int Ptr ' 1
-	Field framebuffer:Int Ptr=Null ' openb3d: unsigned int* - 0
+	Field framebuffer:Int Ptr ' openb3d: unsigned int* - 0
 	Field cube_face:Int Ptr,cube_mode:Int Ptr ' 0/1
 	
 	' minib3d
@@ -119,42 +119,50 @@ Type TTexture
 		
 	End Method
 	
-	Method DebugObject()
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
 	
-		DebugLog " Texture instance: "+StringPtr(GetInstance(Self))
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Texture instance: "+StringPtr(GetInstance(Self))
 		
 		' int
-		If flags<>Null Then DebugLog(" flags: "+flags[0]) Else DebugLog(" flags: 0")
-		If blend<>Null Then DebugLog(" blend: "+blend[0]) Else DebugLog(" blend: 0")
-		If coords<>Null Then DebugLog(" coords: "+coords[0]) Else DebugLog(" coords: 0")
-		If width<>Null Then DebugLog(" width: "+width[0]) Else DebugLog(" width: 0")
-		If height<>Null Then DebugLog(" height: "+height[0]) Else DebugLog(" height: 0")
-		If no_frames<>Null Then DebugLog(" no_frames: "+no_frames[0]) Else DebugLog(" no_frames: 0")
-		If cube_face<>Null Then DebugLog(" cube_face: "+cube_face[0]) Else DebugLog(" cube_face: 0")
-		If cube_mode<>Null Then DebugLog(" cube_mode: "+cube_mode[0]) Else DebugLog(" cube_mode: 0")
-		If no_mipmaps<>Null Then DebugLog(" no_mipmaps: "+no_mipmaps[0]) Else DebugLog(" no_mipmaps: 0")
+		If flags<>Null Then DebugLog(pad+" flags: "+flags[0]) Else DebugLog(pad+" flags: Null")
+		If blend<>Null Then DebugLog(pad+" blend: "+blend[0]) Else DebugLog(pad+" blend: Null")
+		If coords<>Null Then DebugLog(pad+" coords: "+coords[0]) Else DebugLog(pad+" coords: Null")
+		If width<>Null Then DebugLog(pad+" width: "+width[0]) Else DebugLog(pad+" width: Null")
+		If height<>Null Then DebugLog(pad+" height: "+height[0]) Else DebugLog(pad+" height: Null")
+		If no_frames<>Null Then DebugLog(pad+" no_frames: "+no_frames[0]) Else DebugLog(pad+" no_frames: Null")
+		If cube_face<>Null Then DebugLog(pad+" cube_face: "+cube_face[0]) Else DebugLog(pad+" cube_face: Null")
+		If cube_mode<>Null Then DebugLog(pad+" cube_mode: "+cube_mode[0]) Else DebugLog(pad+" cube_mode: Null")
+		If no_mipmaps<>Null Then DebugLog(pad+" no_mipmaps: "+no_mipmaps[0]) Else DebugLog(pad+" no_mipmaps: Null")
 		
 		' uint
-		If texture<>Null Then DebugLog(" texture: "+texture[0]) Else DebugLog(" texture: 0")
-		DebugLog " frames: "+StringPtr(frames)
+		If texture<>Null Then DebugLog(pad+" texture: "+texture[0]) Else DebugLog(pad+" texture: Null")
+		DebugLog pad+" frames: "+StringPtr(frames)
 		For Local id:Int=0 To no_frames[0]-1
-			If frames<>Null Then DebugLog(" frames["+id+"] = "+frames[id])
+			If frames<>Null Then DebugLog(pad+" frames["+id+"] = "+frames[id])
 		Next
-		DebugLog " framebuffer: "+StringPtr(framebuffer)
-		If framebuffer<>Null Then DebugLog(" framebuffer[0] = "+framebuffer[0]+" [1] = "+framebuffer[1])
-		DebugLog " gltex: "+StringPtr(gltex)
-		If gltex<>Null Then DebugLog(" gltex: "+gltex[0])
+		DebugLog pad+" framebuffer: "+StringPtr(framebuffer)
+		If framebuffer<>Null Then DebugLog(pad+" framebuffer[0] = "+framebuffer[0]+" [1] = "+framebuffer[1])
+		DebugLog pad+" gltex: "+StringPtr(gltex)
+		If gltex<>Null Then DebugLog(pad+" gltex: "+gltex[0])
 		
 		' float
-		If u_scale<>Null Then DebugLog(" u_scale: "+u_scale[0]) Else DebugLog(" u_scale: 0")
-		If v_scale<>Null Then DebugLog(" v_scale: "+v_scale[0]) Else DebugLog(" v_scale: 0")
-		If u_pos<>Null Then DebugLog(" u_pos: "+u_pos[0]) Else DebugLog(" u_pos: 0")
-		If v_pos<>Null Then DebugLog(" v_pos: "+v_pos[0]) Else DebugLog(" v_pos: 0")
-		If angle<>Null Then DebugLog(" angle: "+angle[0]) Else DebugLog(" angle: 0")
+		If u_scale<>Null Then DebugLog(pad+" u_scale: "+u_scale[0]) Else DebugLog(pad+" u_scale: Null")
+		If v_scale<>Null Then DebugLog(pad+" v_scale: "+v_scale[0]) Else DebugLog(pad+" v_scale: Null")
+		If u_pos<>Null Then DebugLog(pad+" u_pos: "+u_pos[0]) Else DebugLog(pad+" u_pos: Null")
+		If v_pos<>Null Then DebugLog(pad+" v_pos: "+v_pos[0]) Else DebugLog(pad+" v_pos: Null")
+		If angle<>Null Then DebugLog(pad+" angle: "+angle[0]) Else DebugLog(pad+" angle: Null")
 		
 		' string
-		If file<>Null Then DebugLog(" file: "+GetString(file)) Else DebugLog(" file: 0")
-		If file_abs<>Null Then DebugLog(" file_abs: "+GetString(file_abs)) Else DebugLog(" file_abs: 0")
+		If file<>Null Then DebugLog(pad+" file: "+GetString(file)) Else DebugLog(pad+" file: Null")
+		If file_abs<>Null Then DebugLog(pad+" file_abs: "+GetString(file_abs)) Else DebugLog(pad+" file_abs: Null")
 		
 		DebugLog ""
 		

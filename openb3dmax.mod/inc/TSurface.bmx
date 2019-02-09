@@ -145,67 +145,77 @@ Type TSurface
 		
 	End Method
 	
-	Method DebugObject()
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
 	
-		DebugLog " Surface instance: "+StringPtr(GetInstance(Self))
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Surface instance: "+StringPtr(GetInstance(Self))
 		
 		' short
-		DebugLog " tris: "+StringPtr(tris)
-		If tris<>Null Then DebugLog(" tris[0] = "+tris[0]+" [1] = "+tris[1]+" [2] = "+tris[2]+" ...")
+		DebugLog pad+" tris: "+StringPtr(tris)
+		If tris<>Null Then DebugLog(pad+" tris[0] = "+tris[0]+" [1] = "+tris[1]+" [2] = "+tris[2]+" ...")
 		
 		' int
-		If no_verts<>Null Then DebugLog(" no_verts: "+no_verts[0]) Else DebugLog(" no_verts: 0")
-		If no_tris<>Null Then DebugLog(" no_tris: "+no_tris[0]) Else DebugLog(" no_tris: 0")
+		If no_verts<>Null Then DebugLog(pad+" no_verts: "+no_verts[0]) Else DebugLog(pad+" no_verts: Null")
+		If no_tris<>Null Then DebugLog(pad+" no_tris: "+no_tris[0]) Else DebugLog(pad+" no_tris: Null")
 		
-		DebugLog " vert_bone1_no: "+StringPtr(vert_bone1_no)
-		If vert_bone1_no<>Null Then DebugLog(" vert_bone1_no[0] = "+vert_bone1_no[0]+" [1] = "+vert_bone1_no[1]+" ...")
-		DebugLog " vert_bone2_no: "+StringPtr(vert_bone2_no)
-		If vert_bone2_no<>Null Then DebugLog(" vert_bone2_no[0] = "+vert_bone2_no[0]+" [1] = "+vert_bone2_no[1]+" ...")
-		DebugLog " vert_bone3_no: "+StringPtr(vert_bone3_no)
-		If vert_bone3_no<>Null Then DebugLog(" vert_bone3_no[0] = "+vert_bone3_no[0]+" [1] = "+vert_bone3_no[1]+" ...")
-		DebugLog " vert_bone4_no: "+StringPtr(vert_bone4_no)
-		If vert_bone4_no<>Null Then DebugLog(" vert_bone4_no[0] = "+vert_bone4_no[0]+" [1] = "+vert_bone4_no[1]+" ...")
+		DebugLog pad+" vert_bone1_no: "+StringPtr(vert_bone1_no)
+		If vert_bone1_no<>Null Then DebugLog(pad+" vert_bone1_no[0] = "+vert_bone1_no[0]+" [1] = "+vert_bone1_no[1]+" ...")
+		DebugLog pad+" vert_bone2_no: "+StringPtr(vert_bone2_no)
+		If vert_bone2_no<>Null Then DebugLog(pad+" vert_bone2_no[0] = "+vert_bone2_no[0]+" [1] = "+vert_bone2_no[1]+" ...")
+		DebugLog pad+" vert_bone3_no: "+StringPtr(vert_bone3_no)
+		If vert_bone3_no<>Null Then DebugLog(pad+" vert_bone3_no[0] = "+vert_bone3_no[0]+" [1] = "+vert_bone3_no[1]+" ...")
+		DebugLog pad+" vert_bone4_no: "+StringPtr(vert_bone4_no)
+		If vert_bone4_no<>Null Then DebugLog(pad+" vert_bone4_no[0] = "+vert_bone4_no[0]+" [1] = "+vert_bone4_no[1]+" ...")
 		
-		If vert_array_size<>Null Then DebugLog(" vert_array_size: "+vert_array_size[0]) Else DebugLog(" vert_array_size: 0")
-		If tri_array_size<>Null Then DebugLog(" tri_array_size: "+tri_array_size[0]) Else DebugLog(" tri_array_size: 0")
-		If vmin<>Null Then DebugLog(" vmin: "+vmin[0]) Else DebugLog(" vmin: 0")
-		If vmax<>Null Then DebugLog(" vmax: "+vert_array_size[0]) Else DebugLog(" vmax: 0")
-		If vbo_enabled<>Null Then DebugLog(" vbo_enabled: "+vert_array_size[0]) Else DebugLog(" vbo_enabled: 0")
-		If reset_vbo<>Null Then DebugLog(" reset_vbo: "+vert_array_size[0]) Else DebugLog(" reset_vbo: 0")
-		If alpha_enable<>Null Then DebugLog(" alpha_enable: "+vert_array_size[0]) Else DebugLog(" alpha_enable: 0")
+		If vert_array_size<>Null Then DebugLog(pad+" vert_array_size: "+vert_array_size[0]) Else DebugLog(pad+" vert_array_size: Null")
+		If tri_array_size<>Null Then DebugLog(pad+" tri_array_size: "+tri_array_size[0]) Else DebugLog(pad+" tri_array_size: Null")
+		If vmin<>Null Then DebugLog(pad+" vmin: "+vmin[0]) Else DebugLog(pad+" vmin: Null")
+		If vmax<>Null Then DebugLog(pad+" vmax: "+vert_array_size[0]) Else DebugLog(pad+" vmax: Null")
+		If vbo_enabled<>Null Then DebugLog(pad+" vbo_enabled: "+vert_array_size[0]) Else DebugLog(pad+" vbo_enabled: Null")
+		If reset_vbo<>Null Then DebugLog(pad+" reset_vbo: "+vert_array_size[0]) Else DebugLog(pad+" reset_vbo: Null")
+		If alpha_enable<>Null Then DebugLog(pad+" alpha_enable: "+vert_array_size[0]) Else DebugLog(pad+" alpha_enable: Null")
 		
 		' uint
-		DebugLog " vbo_id: "+StringPtr(vbo_id)
+		DebugLog pad+" vbo_id: "+StringPtr(vbo_id)
 		For Local id:Int=0 To 5
-			DebugLog(" vbo_id["+id+"] = "+vbo_id[id])
+			DebugLog pad+" vbo_id["+id+"] = "+vbo_id[id]
 		Next
 		
 		' float
-		DebugLog " vert_coords: "+StringPtr(vert_coords)
-		If vert_coords<>Null Then DebugLog(" vert_coords[0] = "+vert_coords[0]+" [1] = "+vert_coords[1]+" [2] = "+vert_coords[2]+" ...")
-		DebugLog " vert_norm: "+StringPtr(vert_norm)
-		If vert_norm<>Null Then DebugLog(" vert_norm[0] = "+vert_norm[0]+" [1] = "+vert_norm[1]+" [2] = "+vert_norm[2]+" ...")
-		DebugLog " vert_col: "+StringPtr(vert_col)
-		If vert_col<>Null Then DebugLog(" vert_col[0] = "+vert_col[0]+" [1] = "+vert_col[1]+" [2] = "+vert_col[2]+" ...")
-		DebugLog " vert_tex_coords0: "+StringPtr(vert_tex_coords0)
-		If vert_tex_coords0<>Null Then DebugLog(" vert_tex_coords0[0] = "+vert_tex_coords0[0]+" [1] = "+vert_tex_coords0[1]+" ...")
-		DebugLog " vert_tex_coords1: "+StringPtr(vert_tex_coords1)
-		If vert_tex_coords1<>Null Then DebugLog(" vert_tex_coords1[0] = "+vert_tex_coords1[0]+" [1] = "+vert_tex_coords1[1]+" ...")
+		DebugLog pad+" vert_coords: "+StringPtr(vert_coords)
+		If vert_coords<>Null Then DebugLog(pad+" vert_coords[0] = "+vert_coords[0]+" [1] = "+vert_coords[1]+" [2] = "+vert_coords[2]+" ...")
+		DebugLog pad+" vert_norm: "+StringPtr(vert_norm)
+		If vert_norm<>Null Then DebugLog(pad+" vert_norm[0] = "+vert_norm[0]+" [1] = "+vert_norm[1]+" [2] = "+vert_norm[2]+" ...")
+		DebugLog pad+" vert_col: "+StringPtr(vert_col)
+		If vert_col<>Null Then DebugLog(pad+" vert_col[0] = "+vert_col[0]+" [1] = "+vert_col[1]+" [2] = "+vert_col[2]+" ...")
+		DebugLog pad+" vert_tex_coords0: "+StringPtr(vert_tex_coords0)
+		If vert_tex_coords0<>Null Then DebugLog(pad+" vert_tex_coords0[0] = "+vert_tex_coords0[0]+" [1] = "+vert_tex_coords0[1]+" ...")
+		DebugLog pad+" vert_tex_coords1: "+StringPtr(vert_tex_coords1)
+		If vert_tex_coords1<>Null Then DebugLog(pad+" vert_tex_coords1[0] = "+vert_tex_coords1[0]+" [1] = "+vert_tex_coords1[1]+" ...")
 		
-		DebugLog " vert_weight1: "+StringPtr(vert_weight1)
-		If vert_weight1<>Null Then DebugLog(" vert_weight1[0] = "+vert_weight1[0]+" [1] = "+vert_weight1[1]+" ...")
-		DebugLog " vert_weight2: "+StringPtr(vert_weight2)
-		If vert_weight2<>Null Then DebugLog(" vert_weight2[0] = "+vert_weight2[0]+" [1] = "+vert_weight2[1]+" ...")
-		DebugLog " vert_weight3: "+StringPtr(vert_weight3)
-		If vert_weight3<>Null Then DebugLog(" vert_weight3[0] = "+vert_weight3[0]+" [1] = "+vert_weight3[1]+" ...")
-		DebugLog " vert_weight4: "+StringPtr(vert_weight4)
-		If vert_weight4<>Null Then DebugLog(" vert_weight4[0] = "+vert_weight4[0]+" [1] = "+vert_weight4[1]+" ...")
+		DebugLog pad+" vert_weight1: "+StringPtr(vert_weight1)
+		If vert_weight1<>Null Then DebugLog(pad+" vert_weight1[0] = "+vert_weight1[0]+" [1] = "+vert_weight1[1]+" ...")
+		DebugLog pad+" vert_weight2: "+StringPtr(vert_weight2)
+		If vert_weight2<>Null Then DebugLog(pad+" vert_weight2[0] = "+vert_weight2[0]+" [1] = "+vert_weight2[1]+" ...")
+		DebugLog pad+" vert_weight3: "+StringPtr(vert_weight3)
+		If vert_weight3<>Null Then DebugLog(pad+" vert_weight3[0] = "+vert_weight3[0]+" [1] = "+vert_weight3[1]+" ...")
+		DebugLog pad+" vert_weight4: "+StringPtr(vert_weight4)
+		If vert_weight4<>Null Then DebugLog(pad+" vert_weight4[0] = "+vert_weight4[0]+" [1] = "+vert_weight4[1]+" ...")
 		
 		' brush
-		DebugLog " brush: "+StringPtr(TBrush.GetInstance(brush))
+		DebugLog pad+" brush: "+StringPtr(TBrush.GetInstance(brush))
+		If debug_subobjects And brush<>Null Then brush.DebugFields( debug_subobjects,debug_base_types )
 		
 		' shader
-		DebugLog " ShaderMat: "+StringPtr(TShader.GetInstance(ShaderMat))
+		DebugLog pad+" ShaderMat: "+StringPtr(TShader.GetInstance(ShaderMat))
+		'If debug_subobjects And ShaderMat<>Null Then ShaderMat.DebugFields( debug_subobjects,debug_base_types )
 		
 		DebugLog ""
 		

@@ -74,6 +74,55 @@ Type TMesh Extends TEntity
 				
 	End Method
 	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Mesh instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If no_surfs<>Null Then DebugLog(pad+" no_surfs: "+no_surfs[0]) Else DebugLog(pad+" no_surfs: Null")
+		If reset_col_tree<>Null Then DebugLog(pad+" reset_col_tree: "+reset_col_tree[0]) Else DebugLog(pad+" reset_col_tree: Null")
+		If reset_bounds<>Null Then DebugLog(pad+" reset_bounds: "+reset_bounds[0]) Else DebugLog(pad+" reset_bounds: Null")
+		
+		' float
+		If min_x<>Null Then DebugLog(pad+" min_x: "+min_x[0]) Else DebugLog(pad+" min_x: Null")
+		If min_y<>Null Then DebugLog(pad+" min_y: "+min_y[0]) Else DebugLog(pad+" min_y: Null")
+		If min_z<>Null Then DebugLog(pad+" min_z: "+min_z[0]) Else DebugLog(pad+" min_z: Null")
+		If max_x<>Null Then DebugLog(pad+" max_x: "+max_x[0]) Else DebugLog(pad+" max_x: Null")
+		If max_y<>Null Then DebugLog(pad+" max_y: "+max_y[0]) Else DebugLog(pad+" max_y: Null")
+		If max_z<>Null Then DebugLog(pad+" max_z: "+max_z[0]) Else DebugLog(pad+" max_z: Null")
+		
+		' matrix
+		DebugLog pad+" mat_sp: "+StringPtr(TMatrix.GetInstance(mat_sp))
+		If debug_subobjects And mat_sp<>Null Then mat_sp.DebugFields( debug_subobjects,debug_base_types )
+		
+		' lists
+		For Local surf:TSurface=EachIn surf_list
+			DebugLog pad+" surf_list: "+StringPtr(TSurface.GetInstance(surf))
+			If debug_subobjects And surf<>Null Then surf.DebugFields( debug_subobjects,debug_base_types )
+		Next
+		For Local anim_surf:TSurface=EachIn anim_surf_list
+			DebugLog pad+" anim_surf_list: "+StringPtr(TSurface.GetInstance(anim_surf))
+			If debug_subobjects And anim_surf<>Null Then anim_surf.DebugFields( debug_subobjects,debug_base_types )
+		Next
+		For Local bone:TBone=EachIn bones
+			DebugLog pad+" bones list: "+StringPtr(TBone.GetInstance(bone))
+			If debug_subobjects And bone<>Null Then bone.DebugFields( debug_subobjects,debug_base_types )
+		Next
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
+		
+	End Method
+	
 	Method AddList( list:TList ) ' Field list
 	
 		Super.AddList(list)

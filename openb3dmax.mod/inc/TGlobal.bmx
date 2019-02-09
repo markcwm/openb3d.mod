@@ -13,7 +13,6 @@ Type TGlobal
 	Global ambient_red:Float Ptr ' 0.5
 	Global ambient_green:Float Ptr ' 0.5
 	Global ambient_blue:Float Ptr ' 0.5
-	Global ambient_shader:TShader ' openb3d - set in AmbientShader
 	
 	' vbo_enabled is set in GraphicsInit - set to true if the hardware supports vbos
 	Global vbo_enabled:Int Ptr ' true
@@ -27,15 +26,13 @@ Type TGlobal
 	Global fog_enabled:Int Ptr ' false
 	
 	Global root_ent:TPivot ' new
-	
 	Global camera_in_use:TCamera ' set in CreateCamera/ShowEntity
+	Global ambient_shader:TShader ' openb3d - set in AmbientShader
 	
 	Global alpha_enable:Int Ptr ' -1
 	Global blend_mode:Int Ptr ' -1
 	Global fx1:Int Ptr ' -1
 	Global fx2:Int Ptr ' -1
-	
-	Global txt_r:Byte=255, txt_g:Byte=255, txt_b:Byte=255 ' TextColor, in bytes
 	
 	' minib3d: anti aliasing globs
 	'Global aa:Int ' anti_alias true/false
@@ -44,7 +41,9 @@ Type TGlobal
 	'Global j#[16,2]
 	
 	' wrapper
-	Global gfx:TGraphics
+	Global gfx_obj:TGraphics
+	
+	Global txt_r:Byte=255, txt_g:Byte=255, txt_b:Byte=255 ' TextColor, in bytes
 	
 	Global Log_New:Int=False		' True to debug when new 3d object created
 	Global Log_Del:Int=False		' True to debug when 3d object destroyed
@@ -69,31 +68,29 @@ Type TGlobal
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
+		' int
 		width=StaticInt_( GLOBAL_class,GLOBAL_width )
 		height=StaticInt_( GLOBAL_class,GLOBAL_height )
 		Mode=StaticInt_( GLOBAL_class,GLOBAL_mode )
 		depth=StaticInt_( GLOBAL_class,GLOBAL_depth )
 		rate=StaticInt_( GLOBAL_class,GLOBAL_rate )
-	
-		ambient_red=StaticFloat_( GLOBAL_class,GLOBAL_ambient_red )
-		ambient_green=StaticFloat_( GLOBAL_class,GLOBAL_ambient_green )
-		ambient_blue=StaticFloat_( GLOBAL_class,GLOBAL_ambient_blue )
-	
 		vbo_enabled=StaticInt_( GLOBAL_class,GLOBAL_vbo_enabled )
 		vbo_min_tris=StaticInt_( GLOBAL_class,GLOBAL_vbo_min_tris )
-	
 		Shadows_enabled=StaticInt_( GLOBAL_class,GLOBAL_Shadows_enabled )
-	
-		anim_speed=StaticFloat_( GLOBAL_class,GLOBAL_anim_speed )
-	
 		fog_enabled=StaticInt_( GLOBAL_class,GLOBAL_fog_enabled )
-	
-		root_ent=TPivot.CreateObject( StaticPivot_( GLOBAL_class,GLOBAL_root_ent ) )
-		
 		alpha_enable=StaticInt_( GLOBAL_class,GLOBAL_alpha_enable )
 		blend_mode=StaticInt_( GLOBAL_class,GLOBAL_blend_mode )
 		fx1=StaticInt_( GLOBAL_class,GLOBAL_fx1 )
 		fx2=StaticInt_( GLOBAL_class,GLOBAL_fx2 )
+		
+		' float
+		ambient_red=StaticFloat_( GLOBAL_class,GLOBAL_ambient_red )
+		ambient_green=StaticFloat_( GLOBAL_class,GLOBAL_ambient_green )
+		ambient_blue=StaticFloat_( GLOBAL_class,GLOBAL_ambient_blue )
+		anim_speed=StaticFloat_( GLOBAL_class,GLOBAL_anim_speed )
+		
+		' pivot
+		root_ent=TPivot.CreateObject( StaticPivot_( GLOBAL_class,GLOBAL_root_ent ) )
 		
 		' all other InitGlobals
 		TCamera.InitGlobals()
@@ -115,6 +112,55 @@ Type TGlobal
 		
 		TextureLoader "faces",0,1,2,3,4,5 ' lf-x, fr+z, rt+x, bk-z, up+y, dn-y
 		TextureLoader "frames",0,1,2,3,4,5
+		
+	End Function
+	
+	Function DebugGlobals( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Global: "
+		
+		' int
+		If width<>Null Then DebugLog(pad+" width: "+width[0]) Else DebugLog(pad+" width: Null")
+		If height<>Null Then DebugLog(pad+" height: "+height[0]) Else DebugLog(pad+" height: Null")
+		If Mode<>Null Then DebugLog(pad+" Mode: "+Mode[0]) Else DebugLog(pad+" Mode: Null")
+		If depth<>Null Then DebugLog(pad+" depth: "+depth[0]) Else DebugLog(pad+" depth: Null")
+		If rate<>Null Then DebugLog(pad+" rate: "+rate[0]) Else DebugLog(pad+" rate: Null")
+		If vbo_enabled<>Null Then DebugLog(pad+" vbo_enabled: "+vbo_enabled[0]) Else DebugLog(pad+" vbo_enabled: Null")
+		If vbo_min_tris<>Null Then DebugLog(pad+" vbo_min_tris: "+vbo_min_tris[0]) Else DebugLog(pad+" vbo_min_tris: Null")
+		If Shadows_enabled<>Null Then DebugLog(pad+" Shadows_enabled: "+Shadows_enabled[0]) Else DebugLog(pad+" Shadows_enabled: Null")
+		If fog_enabled<>Null Then DebugLog(pad+" fog_enabled: "+fog_enabled[0]) Else DebugLog(pad+" fog_enabled: Null")
+		If alpha_enable<>Null Then DebugLog(pad+" alpha_enable: "+alpha_enable[0]) Else DebugLog(pad+" alpha_enable: Null")
+		If blend_mode<>Null Then DebugLog(pad+" blend_mode: "+blend_mode[0]) Else DebugLog(pad+" blend_mode: Null")
+		If fx1<>Null Then DebugLog(pad+" fx1: "+fx1[0]) Else DebugLog(pad+" fx1: Null")
+		If fx2<>Null Then DebugLog(pad+" fx2: "+fx2[0]) Else DebugLog(pad+" fx2: Null")
+
+		' float
+		If ambient_red<>Null Then DebugLog(pad+" ambient_red: "+ambient_red[0]) Else DebugLog(pad+" ambient_red: Null")
+		If ambient_green<>Null Then DebugLog(pad+" ambient_green: "+ambient_green[0]) Else DebugLog(pad+" ambient_green: Null")
+		If ambient_blue<>Null Then DebugLog(pad+" ambient_blue: "+ambient_blue[0]) Else DebugLog(pad+" ambient_blue: Null")
+		If anim_speed<>Null Then DebugLog(pad+" anim_speed: "+anim_speed[0]) Else DebugLog(pad+" anim_speed: Null")
+		
+		' pivot
+		DebugLog pad+" root_ent: "+StringPtr(TPivot.GetInstance(root_ent))
+		If debug_subobjects And root_ent<>Null Then root_ent.DebugFields( debug_subobjects,debug_base_types )
+		
+		' camera
+		DebugLog pad+" camera_in_use: "+StringPtr(TCamera.GetInstance(camera_in_use))
+		If debug_subobjects And camera_in_use<>Null Then camera_in_use.DebugFields( debug_subobjects,debug_base_types )
+		
+		' shader
+		DebugLog pad+" ambient_shader: "+StringPtr(TShader.GetInstance(ambient_shader))
+		'If debug_subobjects And ambient_shader<>Null Then ambient_shader.DebugFields( debug_subobjects,debug_base_types )
+		
+		DebugLog ""
 		
 	End Function
 	
@@ -176,11 +222,11 @@ Type TGlobal
 	
 	Function GraphicsInit()
 	
-		' save the Max2D settings for later
-		glPushAttrib(GL_ALL_ATTRIB_BITS)
-		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-		glMatrixMode(GL_MODELVIEW)
-		glPushMatrix()
+		' save initial settings for Max2D
+		glPushAttrib(GL_ALL_ATTRIB_BITS) ' save all states to attribute stack (set by glEnable and others)
+		glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS) ' save client states to attribute stack (set by glEnableClientState)
+		glMatrixMode(GL_MODELVIEW) ' specify the matrix stack to use
+		glPushMatrix() ' save matrix stack
 		glMatrixMode(GL_PROJECTION)
 		glPushMatrix()
 		glMatrixMode(GL_TEXTURE)
@@ -188,16 +234,16 @@ Type TGlobal
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		'EnableStates() ' init done in Global::Graphics
+		'EnableStates() ' all done in Global::Graphics
 		
-		'glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
-		'glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
+		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
+		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
 		
-		'glClearDepth(1.0)						
+		'glClearDepth(1.0)
 		'glDepthFunc(GL_LEQUAL)
-		'glHint(GL_PERSPECTIVE_CORRECTION_HINT,GL_NICEST)
+		'glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
 		
-		'glAlphaFunc(GL_GEQUAL,0.5)
+		'glAlphaFunc(GL_GEQUAL, 0.5)
 		
 	End Function
 	
@@ -273,6 +319,8 @@ Type TGlobal
 	Function RenderWorld()
 	
 		RenderWorld_()
+		
+		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices ) ' also in UpdateTerrain
 		
 	End Function
 	

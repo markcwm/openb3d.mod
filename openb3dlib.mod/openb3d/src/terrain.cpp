@@ -30,7 +30,8 @@ static Line Ray;
 static float radius;
 
 
-static vector<float> vertices;
+//static vector<float> vertices;
+vector<float> Terrain::vertices;
 
 
 MeshInfo* Terrain::mesh_info;

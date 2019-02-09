@@ -89,18 +89,9 @@ Type TQuaternion
 		EndIf
 	
 	End Method
-
-	Function QuatToMat( w:Float,x:Float,y:Float,z:Float,mat:TMatrix )
 	
-		QuaternionToMat_( w,x,y,z,TMatrix.GetInstance(mat) )
-		
-	End Function
+	Function QuatToEuler2( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
 	
-	Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
-	
-		QuaternionToEuler_( w,x,y,z,Varptr pitch,Varptr yaw,Varptr roll )
-		
-		Rem
 		Local q:Float[4]
 		q[0]=w
 		q[1]=x
@@ -117,7 +108,7 @@ Type TQuaternion
 		Local wy#=q[0]*q[2]
 		Local wz#=q[0]*q[3]
 	
-		Local mat:TMatrix=New TMatrix
+		Local mat:TMatrix=NewMatrix()
 		
 		mat.grid[(4*0)+0]=1-2*(yy+zz)
 		mat.grid[(4*0)+1]=  2*(xy-wz)
@@ -145,14 +136,11 @@ Type TQuaternion
 		'If pitch#=nan# Then pitch#=0
 		'If yaw#  =nan# Then yaw#  =0
 		'If roll# =nan# Then roll# =0
-		EndRem
+		
 	End Function
 	
-	Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )
+	Function Slerp2:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )
 	
-		QuaternionSlerp_( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Varptr Cx,Varptr Cy,Varptr Cz,Varptr Cw,t )
-		
-		Rem
 		If Abs(ax-bx)<0.001 And Abs(ay-by)<0.001 And Abs(az-bz)<0.001 And Abs(aw-bw)<0.001
 			cx#=ax
 			cy#=ay
@@ -197,7 +185,27 @@ Type TQuaternion
 		cx#=scale0#*Ax#+scale1#*scaler_x#
 		cy#=scale0#*Ay#+scale1#*scaler_y#
 		cz#=scale0#*Az#+scale1#*scaler_z#
-		EndRem
+		
+	End Function
+	
+	' Openb3d
+	
+	Function QuatToMat( w:Float,x:Float,y:Float,z:Float,mat:TMatrix )
+	
+		QuaternionToMat_( w,x,y,z,TMatrix.GetInstance(mat) )
+		
+	End Function
+	
+	Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
+	
+		QuaternionToEuler_( w,x,y,z,Varptr pitch,Varptr yaw,Varptr roll )
+		
+	End Function
+	
+	Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )
+	
+		QuaternionSlerp_( Ax,Ay,Az,Aw,Bx,By,Bz,Bw,Varptr Cx,Varptr Cy,Varptr Cz,Varptr Cw,t )
+		
 	End Function
 		
 End Type

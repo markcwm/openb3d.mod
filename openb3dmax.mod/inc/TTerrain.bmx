@@ -7,6 +7,7 @@ Type TTerrain Extends TEntity
 	Global terrain_list:TList=CreateList() ' Terrain list
 	Global triangleindex:Int Ptr
 	'Global mesh_info:TMeshInfo ' current collision data
+	Global vertices:Float Ptr
 	
 	Field size:Float Ptr ' TerrainSize - 0
 	Field vsize:Float Ptr ' TerrainHeight
@@ -37,6 +38,7 @@ Type TTerrain Extends TEntity
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
+		' int
 		triangleindex=StaticInt_( TERRAIN_class,TERRAIN_triangleindex )
 		
 	End Function
@@ -51,7 +53,7 @@ Type TTerrain Extends TEntity
 		level2dzsize=TerrainFloat_( GetInstance(Self),TERRAIN_level2dzsize )
 		height=TerrainFloat_( GetInstance(Self),TERRAIN_height )
 		
-		' camera_
+		' camera
 		Local inst:Byte Ptr=TerrainCamera_( GetInstance(Self),TERRAIN_eyepoint )
 		eyepoint=TCamera( TEntity.GetObject(inst) ) ' no CreateObject
 		
@@ -60,6 +62,61 @@ Type TTerrain Extends TEntity
 		ShaderMat=TShader.GetObject(inst) ' no CreateObject
 		
 		AddList_(terrain_list)
+		
+	End Method
+	
+	Function DebugGlobals( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Terrain: "
+		
+		' int
+		If triangleindex<>Null Then DebugLog(pad+" triangleindex: "+triangleindex[0]) Else DebugLog(pad+" triangleindex: Null")
+		
+		' float
+		DebugLog pad+" vertices: "+StringPtr(vertices)
+		If vertices<>Null Then DebugLog(pad+" vertices[0] = "+vertices[0]+" [1] = "+vertices[1]+" [2] = "+vertices[2]+" ...")
+		
+		DebugLog ""
+		
+	End Function
+	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Terrain instance: "+StringPtr(GetInstance(Self))
+		
+		' float
+		If size<>Null Then DebugLog(pad+" size: "+size[0]) Else DebugLog(pad+" size: Null")
+		If vsize<>Null Then DebugLog(pad+" vsize: "+vsize[0]) Else DebugLog(pad+" vsize: Null")
+		If level2dzsize<>Null Then DebugLog(pad+" level2dzsize: "+level2dzsize[0]) Else DebugLog(pad+" level2dzsize: Null")
+		If height<>Null Then DebugLog(pad+" height: "+height[0]) Else DebugLog(pad+" height: Null")
+		
+		' camera
+		DebugLog pad+" eyepoint: "+StringPtr(TEntity.GetInstance(eyepoint))
+		If debug_subobjects And eyepoint<>Null Then eyepoint.DebugFields( debug_subobjects,debug_base_types )
+		
+		' shader
+		DebugLog pad+" ShaderMat: "+StringPtr(TShader.GetInstance(ShaderMat))
+		'If debug_subobjects And ShaderMat<>Null Then ShaderMat.DebugFields( debug_subobjects,debug_base_types )
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
 		
 	End Method
 	
@@ -174,6 +231,8 @@ Type TTerrain Extends TEntity
 	Method UpdateTerrain()
 	
 		UpdateTerrain_( GetInstance(Self) )
+		
+		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices ) ' also in RenderWorld
 		
 	End Method
 	

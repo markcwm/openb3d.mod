@@ -24,6 +24,7 @@ Type TPick
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
+		' float
 		picked_x=StaticFloat_( PICK_class,PICK_picked_x )
 		picked_y=StaticFloat_( PICK_class,PICK_picked_y )
 		picked_z=StaticFloat_( PICK_class,PICK_picked_z )
@@ -32,7 +33,44 @@ Type TPick
 		picked_nz=StaticFloat_( PICK_class,PICK_picked_nz )
 		picked_time=StaticFloat_( PICK_class,PICK_picked_time )
 		
+		' int
 		picked_triangle=StaticInt_( PICK_class,PICK_picked_triangle )
+		
+	End Function
+	
+	Function DebugGlobals( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Pick: "
+		
+		' float
+		If picked_x<>Null Then DebugLog(pad+" picked_x: "+picked_x[0]) Else DebugLog(pad+" picked_x: Null")
+		If picked_y<>Null Then DebugLog(pad+" picked_y: "+picked_y[0]) Else DebugLog(pad+" picked_y: Null")
+		If picked_z<>Null Then DebugLog(pad+" picked_z: "+picked_z[0]) Else DebugLog(pad+" picked_z: Null")
+		If picked_nx<>Null Then DebugLog(pad+" picked_nx: "+picked_nx[0]) Else DebugLog(pad+" picked_nx: Null")
+		If picked_ny<>Null Then DebugLog(pad+" picked_ny: "+picked_ny[0]) Else DebugLog(pad+" picked_ny: Null")
+		If picked_nz<>Null Then DebugLog(pad+" picked_nz: "+picked_nz[0]) Else DebugLog(pad+" picked_nz: Null")
+		If picked_time<>Null Then DebugLog(pad+" picked_time: "+picked_time[0]) Else DebugLog(pad+" picked_time: Null")
+		
+		' int
+		If picked_triangle<>Null Then DebugLog(pad+" picked_triangle: "+picked_triangle[0]) Else DebugLog(pad+" picked_triangle: Null")
+		
+		' entity
+		DebugLog pad+" picked_ent: "+StringPtr(TEntity.GetInstance(picked_ent))
+		If debug_subobjects And picked_ent<>Null Then picked_ent.DebugFields( debug_subobjects,debug_base_types )
+		
+		' surface
+		DebugLog pad+" picked_surface: "+StringPtr(TSurface.GetInstance(picked_surface))
+		If debug_subobjects And picked_surface<>Null Then picked_surface.DebugFields( debug_subobjects,debug_base_types )
+		
+		DebugLog ""
 		
 	End Function
 	

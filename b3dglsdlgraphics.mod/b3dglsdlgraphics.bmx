@@ -3,7 +3,7 @@
 SuperStrict
 
 Rem
-bbdoc: SDL GLGraphics backend for B3D.
+bbdoc: SDL GLGraphics backend for B3D (not working yet)
 End Rem
 Module Openb3dmax.B3dglsdlgraphics
 
@@ -68,11 +68,11 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	TGlobal.rate[0]=rate
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
-	If usecanvas=False Then TGlobal.gfx=Graphics( width,height,depth,rate,flags ) ' gfx context
+	If usecanvas=False Then TGlobal.gfx_obj=Graphics( width,height,depth,rate,flags ) ' gfx object
 	
-	glewInit() ' sdl init here?
-	TGlobal.GraphicsInit()
-	Graphics3D_( width,height,depth,mode,rate )
+	'glewInit() ' sdl or pub.opengles?
+	TGlobal.GraphicsInit() ' save states for Max2D
+	Graphics3D_( width,height,depth,mode,rate ) ' calls Global::Graphics
 	
 	' get hardware info and set vbo_enabled accordingly
 	THardwareInfo.GetInfo()

@@ -52,6 +52,7 @@ Type TLight Extends TEntity
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
+		' int
 		light_no=StaticInt_( LIGHT_class,LIGHT_light_no )
 		no_lights=StaticInt_( LIGHT_class,LIGHT_no_lights )
 		max_lights=StaticInt_( LIGHT_class,LIGHT_max_lights )
@@ -76,6 +77,58 @@ Type TLight Extends TEntity
 		outer_ang=LightFloat_( GetInstance(Self),LIGHT_outer_ang )
 		
 		AddList_(light_list)
+		
+	End Method
+	
+	Function DebugGlobals( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Light: "
+		
+		' int
+		If light_no<>Null Then DebugLog(pad+" light_no: "+light_no[0]) Else DebugLog(pad+" light_no: Null")
+		If no_lights<>Null Then DebugLog(pad+" no_lights: "+no_lights[0]) Else DebugLog(pad+" no_lights: Null")
+		If max_lights<>Null Then DebugLog(pad+" max_lights: "+max_lights[0]) Else DebugLog(pad+" max_lights: Null")
+		DebugLog pad+" gl_light: "+StringPtr(gl_light)
+		
+		DebugLog ""
+		
+	End Function
+	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Light instance: "+StringPtr(GetInstance(Self))
+		
+		' char
+		If cast_shadow<>Null Then DebugLog(pad+" cast_shadow: "+cast_shadow[0]) Else DebugLog(pad+" cast_shadow: Null")
+		If light_type<>Null Then DebugLog(pad+" light_type: "+light_type[0]) Else DebugLog(pad+" light_type: Null")
+		
+		' float
+		If Range<>Null Then DebugLog(pad+" Range: "+Range[0]) Else DebugLog(pad+" Range: Null")
+		If red<>Null Then DebugLog(pad+" red: "+red[0]) Else DebugLog(pad+" red: Null")
+		If green<>Null Then DebugLog(pad+" green: "+green[0]) Else DebugLog(pad+" green: Null")
+		If blue<>Null Then DebugLog(pad+" blue: "+blue[0]) Else DebugLog(pad+" blue: Null")
+		If inner_ang<>Null Then DebugLog(pad+" inner_ang: "+inner_ang[0]) Else DebugLog(pad+" inner_ang: Null")
+		If outer_ang<>Null Then DebugLog(pad+" outer_ang: "+outer_ang[0]) Else DebugLog(pad+" outer_ang: Null")
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
 		
 	End Method
 	

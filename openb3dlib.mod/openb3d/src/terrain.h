@@ -29,7 +29,8 @@ public:
 	static list<Terrain*> terrain_list;
 	static int triangleindex;
 	static MeshInfo* mesh_info;
-
+	static vector<float> vertices;
+	
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
 

@@ -653,7 +653,7 @@ void Texture::TexToBuffer(unsigned char* buffer, int frame){
 void Texture::DepthBufferToTex(Camera* cam=0 ){
 	glBindTexture(GL_TEXTURE_2D,texture);
 	if (cam==0){
-		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,0,width,Global::height-height,0);
+		glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,Global::height-height,width,height,0);
 #ifndef GLES2
 		glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE);
 #endif
@@ -665,11 +665,11 @@ void Texture::DepthBufferToTex(Camera* cam=0 ){
 			//glGenRenderbuffers(1, &framebuffer[1]);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT24, width, height, 0, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, 0);
 
-			//glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]); // removed as I don't think it's needed
-			//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
-		}//else{
 			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]);
-		//}
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
+		}else{
+			glBindFramebuffer(GL_FRAMEBUFFER, framebuffer[0]);
+		}
 
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, texture, 0);
 		//glBindRenderbuffer(GL_RENDERBUFFER, framebuffer[1]);

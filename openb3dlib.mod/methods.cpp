@@ -2,10 +2,12 @@
 
 #include "openb3d/src/animation.h"
 #include "openb3d/src/animation_keys.h"
+#include "openb3d/src/geom.h"
 #include "openb3d/src/pick.h"
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
 #include "openb3d/src/quaternion.h"
+#include "openb3d/src/maths_helper.h"
 #include "openb3d/src/model.h"
 
 #include <string.h>
@@ -498,6 +500,88 @@ void CopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned i
 			memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
 		}
 	}
+}
+
+// Vector
+
+Vector* VectorCopy_( Vector& v ){
+	Vector* r=new Vector;
+	r->x=v.x;
+	r->y=v.y;
+	r->z=v.z;
+	return r;
+}
+
+Vector* VectorNegate_( Vector& v ){
+	Vector r=Vector( -v.x,-v.y,-v.z );
+	return VectorCopy_(r);
+}
+
+Vector* VectorAdd_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x+q.x,v.y+q.y,v.z+q.z );
+	return VectorCopy_(r);
+}
+
+Vector* VectorSubtract_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x-q.x,v.y-q.y,v.z-q.z );
+	return VectorCopy_(r);
+}
+
+Vector* VectorMultiply_( Vector& v,float scale ){
+	Vector r=Vector( v.x*scale,v.y*scale,v.z*scale );
+	return VectorCopy_(r);
+}
+
+Vector* VectorMultiply2_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x*q.x,v.y*q.y,v.z*q.z );
+	return VectorCopy_(r);
+}
+
+Vector* VectorDivide_( Vector& v,float scale ){
+	Vector r=Vector( v.x/scale,v.y/scale,v.z/scale );
+	return VectorCopy_(r);
+}
+
+Vector* VectorDivide2_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x/q.x,v.y/q.y,v.z/q.z );
+	return VectorCopy_(r);
+}
+
+float VectorDot_( Vector& v,Vector &q ){
+	return v.x*q.x+v.y*q.y+v.z*q.z;
+}
+
+Vector* VectorCross_( Vector& v,Vector &q ){
+	Vector r=Vector( v.y*q.z-v.z*q.y,v.z*q.x-v.x*q.z,v.x*q.y-v.y*q.x );
+	return VectorCopy_(r);
+}
+
+float VectorLength_( Vector& v ){
+	return sqrtf( v.x*v.x+v.y*v.y+v.z*v.z );
+}
+
+float VectorDistance_( Vector& v,Vector &q ){
+	float dx=v.x-q.x, dy=v.y-q.y, dz=v.z-q.z;
+	return sqrtf( dx*dx+dy*dy+dz*dz );
+}
+
+Vector* VectorNormalized_( Vector& v ){
+	float l=VectorLength_(v);
+	Vector r=Vector( v.x/l,v.y/l,v.z/l );
+	return VectorCopy_(r);
+}
+
+void VectorNormalize_( Vector& v ){
+	float l=VectorLength_(v);
+	v.x=v.x/l;
+	v.y=v.y/l;
+	v.z=v.z/l;
+}
+
+void VectorClear_( Vector& v ){
+	v.x=0;
+	v.y=0;
+	v.z=0;
 }
 
 } // end extern C

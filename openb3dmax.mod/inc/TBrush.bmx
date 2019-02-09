@@ -99,34 +99,43 @@ Type TBrush
 		
 	End Method
 	
-	Method DebugObject()
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
 	
-		DebugLog " Brush instance: "+StringPtr(GetInstance(Self))
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Brush instance: "+StringPtr(GetInstance(Self))
 		
 		' int
-		If no_texs<>Null Then DebugLog(" no_texs: "+no_texs[0]) Else DebugLog(" no_texs: 0")
-		If blend<>Null Then DebugLog(" blend: "+blend[0]) Else DebugLog(" blend: 0")
-		If fx<>Null Then DebugLog(" fx: "+fx[0]) Else DebugLog(" fx: 0")
+		If no_texs<>Null Then DebugLog(pad+" no_texs: "+no_texs[0]) Else DebugLog(pad+" no_texs: Null")
+		If blend<>Null Then DebugLog(pad+" blend: "+blend[0]) Else DebugLog(pad+" blend: Null")
+		If fx<>Null Then DebugLog(pad+" fx: "+fx[0]) Else DebugLog(pad+" fx: Null")
 		
 		' uint
-		DebugLog " cache_frame: "+StringPtr(cache_frame)
+		DebugLog pad+" cache_frame: "+StringPtr(cache_frame)
 		For Local id:Int=0 To 7
-			DebugLog(" cache_frame["+id+"] = "+cache_frame[id])
+			DebugLog pad+" cache_frame["+id+"] = "+cache_frame[id]
 		Next
 		
 		' float
-		If red<>Null Then DebugLog(" red: "+red[0]) Else DebugLog(" red: 0")
-		If green<>Null Then DebugLog(" green: "+green[0]) Else DebugLog(" green: 0")
-		If blue<>Null Then DebugLog(" blue: "+blue[0]) Else DebugLog(" blue: 0")
-		If alpha<>Null Then DebugLog(" alpha: "+alpha[0]) Else DebugLog(" alpha: 0")
-		If shine<>Null Then DebugLog(" shine: "+shine[0]) Else DebugLog(" shine: 0")
+		If red<>Null Then DebugLog(pad+" red: "+red[0]) Else DebugLog(pad+" red: Null")
+		If green<>Null Then DebugLog(pad+" green: "+green[0]) Else DebugLog(pad+" green: Null")
+		If blue<>Null Then DebugLog(pad+" blue: "+blue[0]) Else DebugLog(pad+" blue: Null")
+		If alpha<>Null Then DebugLog(pad+" alpha: "+alpha[0]) Else DebugLog(pad+" alpha: Null")
+		If shine<>Null Then DebugLog(pad+" shine: "+shine[0]) Else DebugLog(pad+" shine: Null")
 		
 		' string
-		If name<>Null Then DebugLog(" name: "+GetString(name)) Else DebugLog(" name: 0")
+		If name<>Null Then DebugLog(pad+" name: "+GetString(name)) Else DebugLog(pad+" name: Null")
 		
 		' texture
 		For Local id:Int=0 To 7
-			If tex[id]<>Null Then DebugLog(" tex["+id+"]: "+StringPtr(TTexture.GetInstance(tex[id])))
+			If tex[id]<>Null Then DebugLog(pad+" tex["+id+"]: "+StringPtr(TTexture.GetInstance(tex[id])))
+			If debug_subobjects And tex[id]<>Null Then tex[id].DebugFields( debug_subobjects,debug_base_types )
 		Next
 		
 		DebugLog ""

@@ -3,7 +3,9 @@
 ' *** Extra
 
 Rem
-bbdoc: Sets global width and height of graphics gadget
+bbdoc: Sets global width and height of screen resolution
+about: Only needed when changing screen resolution, these globals are used in 
+CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.
 End Rem
 Function GlobalResolution( width:Int,height:Int )
 	TGlobal.width[0]=width
@@ -11,14 +13,14 @@ Function GlobalResolution( width:Int,height:Int )
 End Function
 
 Rem
-bbdoc: Returns global width of graphics gadget
+bbdoc: Returns global width of screen resolution
 End Rem
 Function GlobalWidth:Int()
 	Return TGlobal.width[0]
 End Function
 
 Rem
-bbdoc: Returns global height of graphics gadget
+bbdoc: Returns global height of screen resolution
 End Rem
 Function GlobalHeight:Int()
 	Return TGlobal.height[0]
@@ -432,6 +434,13 @@ bbdoc: Returns a new TQuaternion object
 End Rem
 Function NewQuaternion:TQuaternion()
 	Return TQuaternion.NewQuaternion()
+End Function
+
+Rem
+bbdoc: Returns a new TVector object
+End Rem
+Function NewVector:TVector()
+	Return TVector.NewVector()
 End Function
 
 Rem
@@ -1916,14 +1925,14 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorPitch">Online doc</a>
 'End Rem
 Function VectorPitch:Float( vx:Float,vy:Float,vz:Float )
-	Return TVector.VectorPitch( vx,vy,vz )
+	Return -VectorPitch_( vx,vy,vz ) ' inverted pitch
 End Function
 
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=VectorYaw">Online doc</a>
 'End Rem
 Function VectorYaw:Float( vx:Float,vy:Float,vz:Float )
-	Return TVector.VectorYaw( vx,vy,vz )
+	Return VectorYaw_( vx,vy,vz )
 End Function
 
 'Rem

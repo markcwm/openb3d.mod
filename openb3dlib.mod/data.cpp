@@ -395,13 +395,14 @@ const int SURFACE_alpha_enable=		26;
 const int TERRAIN_terrain_list=	1;
 const int TERRAIN_triangleindex=2;
 const int TERRAIN_mesh_info=	3;
-const int TERRAIN_size=			4;
-const int TERRAIN_vsize=		5;
-const int TERRAIN_level2dzsize=	6;
-const int TERRAIN_height=		7;
-const int TERRAIN_c_col_tree=	8;
-const int TERRAIN_eyepoint=		9;
-const int TERRAIN_ShaderMat=	10;
+const int TERRAIN_vertices=		4;
+const int TERRAIN_size=			5;
+const int TERRAIN_vsize=		6;
+const int TERRAIN_level2dzsize=	7;
+const int TERRAIN_height=		8;
+const int TERRAIN_c_col_tree=	9;
+const int TERRAIN_eyepoint=		10;
+const int TERRAIN_ShaderMat=	11;
 
 // Texture varid
 const int TEXTURE_texture=		1;
@@ -424,6 +425,11 @@ const int TEXTURE_framebuffer=	17;
 const int TEXTURE_cube_face=	18;
 const int TEXTURE_cube_mode=	19;
 const int TEXTURE_tex_list_all=	20;
+
+// Vector
+const int VECTOR_x=1;
+const int VECTOR_y=2;
+const int VECTOR_z=3;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -537,6 +543,11 @@ float* StaticFloat_( int classid,int varid ){
 				case SHADOWOBJECT_ShadowAlpha : return &ShadowObject::ShadowAlpha;
 			}
 			break;
+		case TERRAIN_class :
+			switch (varid){
+				case TERRAIN_vertices : return &Terrain::vertices[0];
+			}
+			break;
 	}
 	return NULL;
 }
@@ -568,6 +579,17 @@ Pivot* StaticPivot_( int classid,int varid ){
 		case GLOBAL_class :
 			switch (varid){
 				case GLOBAL_root_ent : return Global::root_ent;
+			}
+			break;
+	}
+	return NULL;
+}
+
+Shader* StaticShader_( int classid,int varid ){
+	switch (classid){
+		case GLOBAL_class :
+			switch (varid){
+				case GLOBAL_ambient_shader : return Global::ambient_shader;
 			}
 			break;
 	}
@@ -1656,7 +1678,7 @@ float* TerrainFloat_( Terrain* obj,int varid ){
 		case TERRAIN_size : return &obj->size;
 		case TERRAIN_vsize : return &obj->vsize;
 		case TERRAIN_level2dzsize : return &obj->level2dzsize[0];
-		case TERRAIN_height : return obj->height;		
+		case TERRAIN_height : return obj->height;
 	}
 	return NULL;
 }
@@ -1767,6 +1789,22 @@ void SetTextureString_( Texture* obj,int varid,char* cstr ){
 			obj->file_abs=str;
 			break;
 	}
+}
+
+// Vector
+
+float* VectorFloat_( Vector* obj,int varid ){
+	switch (varid){
+		case VECTOR_x : return &obj->x;
+		case VECTOR_y : return &obj->y;
+		case VECTOR_z : return &obj->z;
+	}
+	return NULL;
+}
+
+Vector* NewVector_(){
+	Vector* vec=new Vector();
+	return vec;
 }
 
 } // end extern C

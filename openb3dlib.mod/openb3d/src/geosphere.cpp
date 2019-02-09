@@ -27,7 +27,7 @@
 static Line Ray;
 static float radius;
 
-static vector<float> vertices;
+//static vector<float> vertices;
 
 
 Geosphere* Geosphere::CopyEntity(Entity* parent_ent){

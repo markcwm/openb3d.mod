@@ -25,6 +25,24 @@ Type TPivot Extends TEntity
 				
 	End Method
 	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Pivot instance: "+StringPtr(GetInstance(Self))
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
+		
+	End Method
+	
 	' Minib3d
 	
 	Method New()

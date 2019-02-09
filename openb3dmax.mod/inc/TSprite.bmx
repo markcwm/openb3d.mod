@@ -42,6 +42,35 @@ Type TSprite Extends TMesh
 		
 	End Method
 	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Sprite instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If view_mode<>Null Then DebugLog(pad+" view_mode: "+view_mode[0]) Else DebugLog(pad+" view_mode: Null")
+		If render_mode<>Null Then DebugLog(pad+" render_mode: "+render_mode[0]) Else DebugLog(pad+" render_mode: Null")
+		
+		' float
+		If angle<>Null Then DebugLog(pad+" angle: "+angle[0]) Else DebugLog(pad+" angle: Null")
+		If scale_x<>Null Then DebugLog(pad+" scale_x: "+scale_x[0]) Else DebugLog(pad+" scale_x: Null")
+		If scale_y<>Null Then DebugLog(pad+" scale_y: "+scale_y[0]) Else DebugLog(pad+" scale_y: Null")
+		If handle_x<>Null Then DebugLog(pad+" handle_x: "+handle_x[0]) Else DebugLog(pad+" handle_x: Null")
+		If handle_y<>Null Then DebugLog(pad+" handle_y: "+handle_y[0]) Else DebugLog(pad+" handle_y: Null")
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
+		
+	End Method
+	
 	' Openb3d
 	
 	Method SpriteRenderMode( Mode:Int )

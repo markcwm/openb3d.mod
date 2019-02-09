@@ -21,6 +21,7 @@ float* StaticFloat_( int classid,int varid );
 Entity* StaticEntity_( int classid,int varid );
 Camera* StaticCamera_( int classid,int varid );
 Pivot* StaticPivot_( int classid,int varid );
+Shader* StaticShader_( int classid,int varid );
 Surface* StaticSurface_( int classid,int varid );
 int StaticListSize_( int classid,int varid );
 Action* StaticIterListAction_( int classid,int varid,int &id );
@@ -146,6 +147,10 @@ list<Texture*>* TextureListTexture_( Texture* obj,int varid );
 void GlobalListPushBackTexture_( int varid,Texture* obj );
 void GlobalListRemoveTexture_( int varid,Texture* obj );
 void SetTextureString_( Texture* obj,int varid,char* cstr );
+
+// Vector
+float* VectorFloat_( Vector* obj,int varid );
+Vector* NewVector_();
 
 #ifdef __cplusplus
 }; // extern "C"

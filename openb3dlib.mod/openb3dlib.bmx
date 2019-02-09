@@ -190,6 +190,23 @@ Extern
 	Function FilterFlags_( obj:Byte Ptr )
 	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int )
 	
+	' Vector
+	Function VectorCopy_:Byte Ptr( v:Byte Ptr )
+	Function VectorNegate_:Byte Ptr( v:Byte Ptr )
+	Function VectorAdd_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VectorSubtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VectorMultiply_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function VectorMultiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VectorDivide_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function VectorDivide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VectorDot_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function VectorCross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VectorLength_:Float( v:Byte Ptr )
+	Function VectorDistance_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function VectorNormalized_:Byte Ptr( v:Byte Ptr )
+	Function VectorNormalize_( v:Byte Ptr )
+	Function VectorClear_( v:Byte Ptr )
+	
 End Extern
 
 ' data.cpp
@@ -202,6 +219,7 @@ Extern
 	Function StaticEntity_:Byte Ptr( classid:Int,varid:Int )
 	Function StaticCamera_:Byte Ptr( classid:Int,varid:Int )
 	Function StaticPivot_:Byte Ptr( classid:Int,varid:Int )
+	Function StaticShader_:Byte Ptr( classid:Int,varid:Int )
 	Function StaticSurface_:Byte Ptr( classid:Int,varid:Int )
 	Function StaticListSize_:Int( classid:Int,varid:Int )
 	Function StaticIterListAction_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
@@ -327,6 +345,10 @@ Extern
 	Function GlobalListPushBackTexture_( varid:Int,obj:Byte Ptr )
 	Function GlobalListRemoveTexture_( varid:Int,obj:Byte Ptr )
 	Function SetTextureString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
+	
+	' Vector
+	Function VectorFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewVector_:Byte Ptr()
 	
 End Extern
 
@@ -720,13 +742,14 @@ Const SURFACE_alpha_enable:Int=		26
 Const TERRAIN_terrain_list:Int=	1
 Const TERRAIN_triangleindex:Int=2
 Const TERRAIN_mesh_info:Int=	3
-Const TERRAIN_size:Int=			4
-Const TERRAIN_vsize:Int=		5
-Const TERRAIN_level2dzsize:Int=	6
-Const TERRAIN_height:Int=		7
-Const TERRAIN_c_col_tree:Int=	8
-Const TERRAIN_eyepoint:Int=		9
-Const TERRAIN_ShaderMat:Int=	10
+Const TERRAIN_vertices:Int=		4
+Const TERRAIN_size:Int=			5
+Const TERRAIN_vsize:Int=		6
+Const TERRAIN_level2dzsize:Int=	7
+Const TERRAIN_height:Int=		8
+Const TERRAIN_c_col_tree:Int=	9
+Const TERRAIN_eyepoint:Int=		10
+Const TERRAIN_ShaderMat:Int=	11
 
 ' Texture varid
 Const TEXTURE_texture:Int=		1
@@ -749,3 +772,8 @@ Const TEXTURE_framebuffer:Int=	17
 Const TEXTURE_cube_face:Int=	18
 Const TEXTURE_cube_mode:Int=	19
 Const TEXTURE_tex_list_all:Int=	20
+
+' Vector
+Const VECTOR_x:Int=1
+Const VECTOR_y:Int=2
+Const VECTOR_z:Int=3

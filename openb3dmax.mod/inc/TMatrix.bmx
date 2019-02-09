@@ -58,7 +58,30 @@ Type TMatrix
 	
 	Method InitFields() ' Once per CreateObject
 	
+		' float
 		grid=MatrixFloat_( GetInstance(Self),MATRIX_grid )
+		
+	End Method
+	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Matrix instance: "+StringPtr(GetInstance(Self))
+		
+		' float
+		DebugLog pad+" grid[0,0] = "+grid[0]+" [0,1] = "+grid[1]+" [0,2] = "+grid[2]+" [0,3] = "+grid[3]
+		DebugLog pad+" grid[1,0] = "+grid[4]+" [1,1] = "+grid[5]+" [1,2] = "+grid[6]+" [1,3] = "+grid[7]
+		DebugLog pad+" grid[2,0] = "+grid[8]+" [2,1] = "+grid[9]+" [2,2] = "+grid[10]+" [2,3] = "+grid[11]
+		DebugLog pad+" grid[3,0] = "+grid[12]+" [3,1] = "+grid[13]+" [3,2] = "+grid[14]+" [3,3] = "+grid[15]
+		
+		DebugLog ""
 		
 	End Method
 	
@@ -99,10 +122,10 @@ Type TMatrix
 	
 	Method GetMatrixScale:TVector()
 	
-		Local s:TVector=New TVector
-		s.x = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
-		s.y = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
-		s.z = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
+		Local s:TVector=NewVector()
+		s.x[0] = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
+		s.y[0] = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
+		s.z[0] = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
 		Return s
 		
 	End Method

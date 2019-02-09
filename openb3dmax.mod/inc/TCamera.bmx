@@ -25,9 +25,9 @@ Type TCamera Extends TEntity
 	Field mod_mat:Float Ptr ' array [16]
 	Field proj_mat:Float Ptr ' array [16]
 	Field Viewport:Int Ptr ' array [4]
-	Global projected_x:Float Ptr
-	Global projected_y:Float Ptr
-	Global projected_z:Float Ptr
+	Global projected_x:Float Ptr ' returned by ProjectedX
+	Global projected_y:Float Ptr ' returned by ProjectedY
+	Global projected_z:Float Ptr ' returned by ProjectedZ
 	
 	Field frustum:Float Ptr ' array [6][4]
 	
@@ -92,6 +92,57 @@ Type TCamera Extends TEntity
 		frustum=CameraFloat_( GetInstance(Self),CAMERA_frustum )
 		
 		AddList_(cam_list)
+		
+	End Method
+	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Camera instance: "+StringPtr(GetInstance(Self))
+		
+		' bool
+		If cls_color<>Null Then DebugLog(pad+" cls_color: "+cls_color[0]) Else DebugLog(pad+" cls_color: Null")
+		If cls_zbuffer<>Null Then DebugLog(pad+" cls_zbuffer: "+cls_zbuffer[0]) Else DebugLog(pad+" cls_zbuffer: Null")
+		
+		' int
+		If vx<>Null Then DebugLog(pad+" vx: "+vx[0]) Else DebugLog(pad+" vx: Null")
+		If vy<>Null Then DebugLog(pad+" vy: "+vy[0]) Else DebugLog(pad+" vy: Null")
+		If vwidth<>Null Then DebugLog(pad+" vwidth: "+vwidth[0]) Else DebugLog(pad+" vwidth: Null")
+		If vheight<>Null Then DebugLog(pad+" vheight: "+vheight[0]) Else DebugLog(pad+" vheight: Null")
+		If proj_mode<>Null Then DebugLog(pad+" proj_mode: "+proj_mode[0]) Else DebugLog(pad+" proj_mode: Null")
+		If fog_mode<>Null Then DebugLog(pad+" fog_mode: "+fog_mode[0]) Else DebugLog(pad+" fog_mode: Null")
+		If project_enabled<>Null Then DebugLog(pad+" project_enabled: "+project_enabled[0]) Else DebugLog(pad+" project_enabled: Null")
+		DebugLog pad+" Viewport: "+StringPtr(Viewport)
+		For Local id:Int=0 To 3
+			DebugLog(pad+" Viewport["+id+"] = "+Viewport[id])
+		Next
+		
+		' float
+		If cls_r<>Null Then DebugLog(pad+" cls_r: "+cls_r[0]) Else DebugLog(pad+" cls_r: Null")
+		If cls_g<>Null Then DebugLog(pad+" cls_g: "+cls_g[0]) Else DebugLog(pad+" cls_g: Null")
+		If cls_b<>Null Then DebugLog(pad+" cls_b: "+cls_b[0]) Else DebugLog(pad+" cls_b: Null")
+		If range_near<>Null Then DebugLog(pad+" range_near: "+range_near[0]) Else DebugLog(pad+" range_near: Null")
+		If range_far<>Null Then DebugLog(pad+" range_far: "+range_far[0]) Else DebugLog(pad+" range_far: Null")
+		If zoom<>Null Then DebugLog(pad+" zoom: "+zoom[0]) Else DebugLog(pad+" zoom: Null")
+		If fog_r<>Null Then DebugLog(pad+" fog_r: "+fog_r[0]) Else DebugLog(pad+" fog_r: Null")
+		If fog_g<>Null Then DebugLog(pad+" fog_g: "+fog_g[0]) Else DebugLog(pad+" fog_g: Null")
+		If fog_b<>Null Then DebugLog(pad+" fog_b: "+fog_b[0]) Else DebugLog(pad+" fog_b: Null")
+		If fog_range_near<>Null Then DebugLog(pad+" fog_range_near: "+fog_range_near[0]) Else DebugLog(pad+" fog_range_near: Null")
+		If fog_range_far<>Null Then DebugLog(pad+" fog_range_far: "+fog_range_far[0]) Else DebugLog(pad+" fog_range_far: Null")
+		DebugLog pad+" mod_mat: "+StringPtr(mod_mat)
+		DebugLog pad+" proj_mat: "+StringPtr(proj_mat)
+		DebugLog pad+" frustum: "+StringPtr(frustum)
+		
+		DebugLog ""
+		
+		If debug_base_types Then Super.DebugFields( debug_subobjects,debug_base_types )
 		
 	End Method
 	

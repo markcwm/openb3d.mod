@@ -229,6 +229,111 @@ Type TEntity
 		
 	End Method
 	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Entity instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If order<>Null Then DebugLog(pad+" order: "+order[0]) Else DebugLog(pad+" order: Null")
+		If hide<>Null Then DebugLog(pad+" hide: "+hide[0]) Else DebugLog(pad+" hide: Null")
+		If anim<>Null Then DebugLog(pad+" anim: "+anim[0]) Else DebugLog(pad+" anim: Null")
+		If anim_render<>Null Then DebugLog(pad+" anim_render: "+anim_render[0]) Else DebugLog(pad+" anim_render: Null")
+		If anim_mode<>Null Then DebugLog(pad+" anim_mode: "+anim_mode[0]) Else DebugLog(pad+" anim_mode: Null")
+		If anim_seq<>Null Then DebugLog(pad+" anim_seq: "+anim_seq[0]) Else DebugLog(pad+" anim_seq: Null")
+		If anim_trans<>Null Then DebugLog(pad+" anim_trans: "+anim_trans[0]) Else DebugLog(pad+" anim_trans: Null")
+		If anim_dir<>Null Then DebugLog(pad+" anim_dir: "+anim_dir[0]) Else DebugLog(pad+" anim_dir: Null")
+		If anim_seqs_first<>Null Then DebugLog(pad+" anim_seqs_first: "+anim_seqs_first[0]) Else DebugLog(pad+" anim_seqs_first: Null")
+		If anim_seqs_last<>Null Then DebugLog(pad+" anim_seqs_last: "+anim_seqs_last[0]) Else DebugLog(pad+" anim_seqs_last: Null")
+		If no_seqs<>Null Then DebugLog(pad+" no_seqs: "+no_seqs[0]) Else DebugLog(pad+" no_seqs: Null")
+		If anim_update<>Null Then DebugLog(pad+" anim_update: "+anim_update[0]) Else DebugLog(pad+" anim_update: Null")
+		If anim_list<>Null Then DebugLog(pad+" anim_list: "+anim_list[0]) Else DebugLog(pad+" anim_list: Null")
+		If collision_type<>Null Then DebugLog(pad+" collision_type: "+collision_type[0]) Else DebugLog(pad+" collision_type: Null")
+		If no_collisions<>Null Then DebugLog(pad+" no_collisions: "+no_collisions[0]) Else DebugLog(pad+" no_collisions: Null")
+		If new_no<>Null Then DebugLog(pad+" new_no: "+new_no[0]) Else DebugLog(pad+" new_no: Null")
+		If dynamic<>Null Then DebugLog(pad+" dynamic: "+dynamic[0]) Else DebugLog(pad+" dynamic: Null")
+		If pick_mode<>Null Then DebugLog(pad+" pick_mode: "+pick_mode[0]) Else DebugLog(pad+" pick_mode: Null")
+		If obscurer<>Null Then DebugLog(pad+" obscurer: "+obscurer[0]) Else DebugLog(pad+" obscurer: Null")
+		
+		' float
+		If px<>Null Then DebugLog(pad+" px: "+px[0]) Else DebugLog(pad+" px: Null")
+		If py<>Null Then DebugLog(pad+" py: "+py[0]) Else DebugLog(pad+" py: Null")
+		If pz<>Null Then DebugLog(pad+" pz: "+pz[0]) Else DebugLog(pad+" pz: Null")
+		If sx<>Null Then DebugLog(pad+" sx: "+sx[0]) Else DebugLog(pad+" sx: Null")
+		If sy<>Null Then DebugLog(pad+" sy: "+sy[0]) Else DebugLog(pad+" sy: Null")
+		If sz<>Null Then DebugLog(pad+" sz: "+sz[0]) Else DebugLog(pad+" sz: Null")
+		If rx<>Null Then DebugLog(pad+" rx: "+rx[0]) Else DebugLog(pad+" rx: Null")
+		If ry<>Null Then DebugLog(pad+" ry: "+ry[0]) Else DebugLog(pad+" ry: Null")
+		If rz<>Null Then DebugLog(pad+" rz: "+rz[0]) Else DebugLog(pad+" rz: Null")
+		If qw<>Null Then DebugLog(pad+" qw: "+qw[0]) Else DebugLog(pad+" qw: Null")
+		If qx<>Null Then DebugLog(pad+" qx: "+qx[0]) Else DebugLog(pad+" qx: Null")
+		If qy<>Null Then DebugLog(pad+" qy: "+qy[0]) Else DebugLog(pad+" qy: Null")
+		If qz<>Null Then DebugLog(pad+" qz: "+qz[0]) Else DebugLog(pad+" qz: Null")
+		If alpha_order<>Null Then DebugLog(pad+" alpha_order: "+alpha_order[0]) Else DebugLog(pad+" alpha_order: Null")
+		If cull_radius<>Null Then DebugLog(pad+" cull_radius: "+cull_radius[0]) Else DebugLog(pad+" cull_radius: Null")
+		If anim_time<>Null Then DebugLog(pad+" anim_time: "+anim_time[0]) Else DebugLog(pad+" anim_time: Null")
+		If anim_speed<>Null Then DebugLog(pad+" anim_speed: "+anim_speed[0]) Else DebugLog(pad+" anim_speed: Null")
+		If radius_x<>Null Then DebugLog(pad+" radius_x: "+radius_x[0]) Else DebugLog(pad+" radius_x: Null")
+		If radius_y<>Null Then DebugLog(pad+" radius_y: "+radius_y[0]) Else DebugLog(pad+" radius_y: Null")
+		If box_x<>Null Then DebugLog(pad+" box_x: "+box_x[0]) Else DebugLog(pad+" box_x: Null")
+		If box_y<>Null Then DebugLog(pad+" box_y: "+box_y[0]) Else DebugLog(pad+" box_y: Null")
+		If box_z<>Null Then DebugLog(pad+" box_z: "+box_z[0]) Else DebugLog(pad+" box_z: Null")
+		If box_w<>Null Then DebugLog(pad+" box_w: "+box_w[0]) Else DebugLog(pad+" box_w: Null")
+		If box_h<>Null Then DebugLog(pad+" box_h: "+box_h[0]) Else DebugLog(pad+" box_h: Null")
+		If box_d<>Null Then DebugLog(pad+" box_d: "+box_d[0]) Else DebugLog(pad+" box_d: Null")
+		If old_x<>Null Then DebugLog(pad+" old_x: "+old_x[0]) Else DebugLog(pad+" old_x: Null")
+		If old_y<>Null Then DebugLog(pad+" old_y: "+old_y[0]) Else DebugLog(pad+" old_y: Null")
+		If old_z<>Null Then DebugLog(pad+" old_z: "+old_z[0]) Else DebugLog(pad+" old_z: Null")
+		If old_pitch<>Null Then DebugLog(pad+" old_pitch: "+old_pitch[0]) Else DebugLog(pad+" old_pitch: Null")
+		If old_yaw<>Null Then DebugLog(pad+" old_yaw: "+old_yaw[0]) Else DebugLog(pad+" old_yaw: Null")
+		If old_roll<>Null Then DebugLog(pad+" old_roll: "+old_roll[0]) Else DebugLog(pad+" old_roll: Null")
+		If new_x<>Null Then DebugLog(pad+" new_x: "+new_x[0]) Else DebugLog(pad+" new_x: Null")
+		If new_y<>Null Then DebugLog(pad+" new_y: "+new_y[0]) Else DebugLog(pad+" new_y: Null")
+		If new_z<>Null Then DebugLog(pad+" new_z: "+new_z[0]) Else DebugLog(pad+" new_z: Null")
+		If dynamic_x<>Null Then DebugLog(pad+" dynamic_x: "+dynamic_x[0]) Else DebugLog(pad+" dynamic_x: Null")
+		If dynamic_y<>Null Then DebugLog(pad+" dynamic_y: "+dynamic_y[0]) Else DebugLog(pad+" dynamic_y: Null")
+		If dynamic_z<>Null Then DebugLog(pad+" dynamic_z: "+dynamic_z[0]) Else DebugLog(pad+" dynamic_z: Null")
+		If dynamic_yaw<>Null Then DebugLog(pad+" dynamic_yaw: "+dynamic_yaw[0]) Else DebugLog(pad+" dynamic_yaw: Null")
+		If dynamic_pitch<>Null Then DebugLog(pad+" dynamic_pitch: "+dynamic_pitch[0]) Else DebugLog(pad+" dynamic_pitch: Null")
+		If dynamic_roll<>Null Then DebugLog(pad+" dynamic_roll: "+dynamic_roll[0]) Else DebugLog(pad+" dynamic_roll: Null")
+		
+		' string
+		If name<>Null Then DebugLog(pad+" name: "+GetString(name)) Else DebugLog(pad+" name: Null")
+		If class_name<>Null Then DebugLog(pad+" class_name: "+GetString(class_name)) Else DebugLog(pad+" class_name: Null")
+		
+		' entity
+		DebugLog pad+" parent: "+StringPtr(GetInstance(parent))
+		If debug_subobjects And parent<>Null Then parent.DebugFields( debug_subobjects,debug_base_types )
+		
+		' matrix
+		DebugLog pad+" mat: "+StringPtr(TMatrix.GetInstance(mat))
+		If debug_subobjects And mat<>Null Then mat.DebugFields( debug_subobjects,debug_base_types )
+		DebugLog pad+" rotmat: "+StringPtr(TMatrix.GetInstance(rotmat))
+		If debug_subobjects And rotmat<>Null Then rotmat.DebugFields( debug_subobjects,debug_base_types )
+		DebugLog pad+" old_mat: "+StringPtr(TMatrix.GetInstance(old_mat))
+		If debug_subobjects And old_mat<>Null Then old_mat.DebugFields( debug_subobjects,debug_base_types )
+		
+		' brush
+		DebugLog pad+" brush: "+StringPtr(TBrush.GetInstance(brush))
+		If debug_subobjects And brush<>Null Then brush.DebugFields( debug_subobjects,debug_base_types )
+		
+		' lists
+		For Local child:TEntity=EachIn child_list
+			DebugLog pad+" child_list: "+StringPtr(GetInstance(child))
+			If debug_subobjects And child<>Null Then child.DebugFields( debug_subobjects,debug_base_types )
+		Next
+		
+		DebugLog ""
+		
+	End Method
+	
 	Method AddList( list:TList ) ' Field list
 	
 		Select list

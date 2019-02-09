@@ -9,11 +9,12 @@ Type TBlitz2D
 		Select version
 		
 		Case 0 ' Old begin function (by Oddball)
-			
-			glPopClientAttrib()
-			glPopAttrib()
-			glMatrixMode(GL_MODELVIEW)
-			glPopMatrix()
+		
+			' restore the last Max2D settings
+			glPopClientAttrib() ' restore last client states from attribute stack
+			glPopAttrib() ' restore last states from attribute stack
+			glMatrixMode(GL_MODELVIEW) ' specify the matrix stack to use
+			glPopMatrix() ' restore last matrix stack
 			glMatrixMode(GL_PROJECTION)
 			glPopMatrix()
 			glMatrixMode(GL_TEXTURE)
@@ -22,21 +23,22 @@ Type TBlitz2D
 			glPopMatrix()
 			
 		Case 1 ' New begin function, allows instant resolution switch (by Krischan)
-			
-			Local x:Int, y:Int, w:Int, h:Int
-			GetViewport(x, y, w, h)
-			
-			glPopClientAttrib()
-			glPopAttrib()
-			glMatrixMode(GL_MODELVIEW)
-			glPopMatrix()
+		
+			' restore the last Max2D settings
+			glPopClientAttrib() ' restore last client states from attribute stack
+			glPopAttrib() ' restore last states from attribute stack
+			glMatrixMode(GL_MODELVIEW) ' specify the matrix stack to use
+			glPopMatrix() ' restore last matrix stack
 			glMatrixMode(GL_PROJECTION)
 			glPopMatrix()
 			glMatrixMode(GL_TEXTURE)
 			glPopMatrix()
 			glMatrixMode(GL_COLOR)
 			glPopMatrix()
-			 
+			
+			Local x:Int, y:Int, w:Int, h:Int
+			GetViewport(x, y, w, h)
+			
 			glDisable(GL_LIGHTING)
 			glDisable(GL_DEPTH_TEST)
 			glDisable(GL_SCISSOR_TEST)
@@ -91,10 +93,10 @@ Type TBlitz2D
 		Case 0 ' Old end function (by Oddball)
 		
 			' save the Max2D settings for later
-			glPushAttrib(GL_ALL_ATTRIB_BITS)
-			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-			glMatrixMode(GL_MODELVIEW)
-			glPushMatrix()
+			glPushAttrib(GL_ALL_ATTRIB_BITS) ' save all states to attribute stack (set by glEnable and others)
+			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS) ' save client states to attribute stack (set by glEnableClientState)
+			glMatrixMode(GL_MODELVIEW) ' specify the matrix stack to use
+			glPushMatrix() ' save matrix stack
 			glMatrixMode(GL_PROJECTION)
 			glPushMatrix()
 			glMatrixMode(GL_TEXTURE)
@@ -131,10 +133,10 @@ Type TBlitz2D
 		Case 1 ' New end function, allows instant resolution switch (by Krischan)
 		
 			' save the Max2D settings for later
-			glPushAttrib(GL_ALL_ATTRIB_BITS)
-			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS)
-			glMatrixMode(GL_MODELVIEW)
-			glPushMatrix()
+			glPushAttrib(GL_ALL_ATTRIB_BITS) ' save all states to attribute stack (set by glEnable and others)
+			glPushClientAttrib(GL_CLIENT_ALL_ATTRIB_BITS) ' save client states to attribute stack (set by glEnableClientState)
+			glMatrixMode(GL_MODELVIEW) ' specify the matrix stack to use
+			glPushMatrix() ' save matrix stack
 			glMatrixMode(GL_PROJECTION)
 			glPushMatrix()
 			glMatrixMode(GL_TEXTURE)

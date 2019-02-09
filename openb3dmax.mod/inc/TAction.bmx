@@ -108,6 +108,39 @@ Type TAction
 		
 	End Method
 	
+	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	
+		Local pad:String
+		Local loop:Int=debug_subobjects
+		If debug_base_types>debug_subobjects Then loop=debug_base_types
+		For Local i%=1 Until loop
+			pad:+"  "
+		Next
+		If debug_subobjects Then debug_subobjects:+1
+		If debug_base_types Then debug_base_types:+1
+		DebugLog pad+" Action instance: "+StringPtr(GetInstance(Self))
+		
+		' int
+		If act<>Null Then DebugLog(pad+" act: "+act[0]) Else DebugLog(pad+" act: Null")
+		If endact<>Null Then DebugLog(pad+" endact: "+endact[0]) Else DebugLog(pad+" endact: Null")
+		If lifetime<>Null Then DebugLog(pad+" lifetime: "+lifetime[0]) Else DebugLog(pad+" lifetime: Null")
+		
+		' float
+		If rate<>Null Then DebugLog(pad+" rate: "+rate[0]) Else DebugLog(pad+" rate: Null")
+		If a<>Null Then DebugLog(pad+" a: "+a[0]) Else DebugLog(pad+" a: Null")
+		If b<>Null Then DebugLog(pad+" b: "+b[0]) Else DebugLog(pad+" b: Null")
+		If c<>Null Then DebugLog(pad+" c: "+c[0]) Else DebugLog(pad+" c: Null")
+		
+		' entity
+		DebugLog pad+" ent: "+StringPtr(TEntity.GetInstance(ent))
+		If debug_subobjects And ent<>Null Then ent.DebugFields( debug_subobjects,debug_base_types )
+		DebugLog pad+" target: "+StringPtr(TEntity.GetInstance(target))
+		If debug_subobjects And target<>Null Then target.DebugFields( debug_subobjects,debug_base_types )
+		
+		DebugLog ""
+		
+	End Method
+	
 	Function AddList_( list:TList ) ' Global list
 	
 		Select list

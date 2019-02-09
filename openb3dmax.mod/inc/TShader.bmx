@@ -509,6 +509,9 @@ Type TShader
 	Method AmbientShader()
 	
 		AmbientShader_( GetInstance(Self) )
+		Local inst:Byte Ptr=StaticShader_( GLOBAL_class,GLOBAL_ambient_shader )
+		TGlobal.ambient_shader=TShader.GetObject(inst)
+		If TGlobal.ambient_shader=Null And inst<>Null Then TGlobal.ambient_shader=TShader.CreateObject(inst)
 		
 	End Method
 	
