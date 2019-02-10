@@ -115,7 +115,7 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 	// new mesh
 	Mesh* mesh=new Mesh();
 
-	// copy contents of child list before adding parent
+	// recursively copy contents of child list before adding parent
 	list<Entity*>::iterator it;
 	for(it=child_list.begin();it!=child_list.end();it++){
 		Entity* ent=*it;
@@ -218,41 +218,10 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
 	mesh->no_surfs=no_surfs;
 
-	// copy surf list
-	list<Surface*>::iterator it2;
-	for(it2=surf_list.begin();it2!=surf_list.end();it2++){
-
-		Surface* surf=*it2;
-
-		Surface* new_surf=new Surface;
-		mesh->surf_list.push_back(new_surf);
-
-		new_surf->no_verts=surf->no_verts;
-		new_surf->no_tris=surf->no_tris;
-
-		// copy arrays
-		new_surf->vert_coords=surf->vert_coords;
-		new_surf->vert_norm=surf->vert_norm;
-		new_surf->vert_tex_coords0=surf->vert_tex_coords0;
-		new_surf->vert_tex_coords1=surf->vert_tex_coords1;
-		new_surf->vert_col=surf->vert_col;
-		new_surf->tris=surf->tris;
-
-		// copy brush
-		delete new_surf->brush;
-		new_surf->brush=surf->brush->Copy();
-
-		new_surf->vert_array_size=surf->vert_array_size;
-		new_surf->tri_array_size=surf->tri_array_size;
-		new_surf->vmin=surf->vmin;
-		new_surf->vmax=surf->vmax;
-
-		new_surf->vbo_enabled=surf->vbo_enabled;
-		new_surf->reset_vbo=-1; // (-1 = all)
-
-	}
-
+	mesh->surf_list=surf_list; //  pointer to surf list - for instancing (CopyMesh for actual 'deep' copy)
+	
 	// copy anim surf list
+	list<Surface*>::iterator it2;
 	for(it2=anim_surf_list.begin();it2!=anim_surf_list.end();it2++){
 
 		Surface* surf=*it2;
@@ -1069,13 +1038,199 @@ Mesh* Mesh::CreateCone(int segments,int solid,Entity* parent_ent){
 }
 
 Mesh* Mesh::CopyMesh(Entity* parent_ent){
+	
+	// new mesh
+	Mesh* mesh=new Mesh();
+
+	// recursively copy contents of child list before adding parent
+	Entity* parent=dynamic_cast<Entity*>(mesh);
+	list<Entity*>::iterator it;
+	for(it=child_list.begin();it!=child_list.end();it++){
+		Entity* ent=*it;
+		Mesh* child=dynamic_cast<Mesh*>(ent);
+		child->CopyMesh(parent);
+	}
+
+	// lists
+
+	// add parent, add to list
+	mesh->AddParent(parent_ent);
+	entity_list.push_back(mesh);
+
+	// add to animate list
+	if(anim_update){
+		animate_list.push_back(mesh);
+	}
+
+	// add to collision entity list
+	if(collision_type!=0){
+		CollisionPair::ent_lists[collision_type].push_back(mesh);
+	}
+
+	// add to pick entity list
+	if(pick_mode!=0){
+		Pick::ent_list.push_back(mesh);
+	}
+
+	// update matrix
+	if(mesh->parent){
+		mesh->mat.Overwrite(mesh->parent->mat);
+	}else{
+		mesh->mat.LoadIdentity();
+	}
+
+	// copy entity info
+
+	mesh->mat.Multiply(mat);
+	mesh->rotmat = rotmat;
+
+	mesh->px=px;
+	mesh->py=py;
+	mesh->pz=pz;
+	mesh->sx=sx;
+	mesh->sy=sy;
+	mesh->sz=sz;
+	mesh->rx=rx;
+	mesh->ry=ry;
+	mesh->rz=rz;
+	mesh->qw=qw;
+	mesh->qx=qx;
+	mesh->qy=qy;
+	mesh->qz=qz;
+
+	mesh->name=name;
+	mesh->class_name=class_name;
+	mesh->order=order;
+	mesh->hide=false;
+	//mesh->auto_fade=auto_fade;
+	//mesh->fade_near=fade_near;
+	//mesh->fade_far=fade_far;
+
+	//mesh->brush=NULL;
+	mesh->brush=brush;
+
+	mesh->anim=anim;
+	mesh->anim_render=anim_render;
+	mesh->anim_mode=anim_mode;
+	mesh->anim_time=anim_time;
+	mesh->anim_speed=anim_speed;
+	mesh->anim_seq=anim_seq;
+	mesh->anim_trans=anim_trans;
+	mesh->anim_dir=anim_dir;
+	mesh->anim_seqs_first=anim_seqs_first;
+	mesh->anim_seqs_last=anim_seqs_last;
+	mesh->no_seqs=no_seqs;
+	mesh->anim_update=anim_update;
+	mesh->anim_list=anim_list;
+
+	mesh->cull_radius=cull_radius;
+	mesh->radius_x=radius_x;
+	mesh->radius_y=radius_y;
+	mesh->box_x=box_x;
+	mesh->box_y=box_y;
+	mesh->box_z=box_z;
+	mesh->box_w=box_w;
+	mesh->box_h=box_h;
+	mesh->box_d=box_d;
+	mesh->collision_type=collision_type;
+	mesh->pick_mode=pick_mode;
+	mesh->obscurer=obscurer;
+
+	// copy mesh info
+
+	mesh->min_x=min_x;
+	mesh->min_y=min_y;
+	mesh->min_z=min_z;
+	mesh->max_x=max_x;
+	mesh->max_y=max_y;
+	mesh->max_z=max_z;
+
+	mesh->no_surfs=no_surfs;
+
+	// copy surf list - actual or 'deep' copy of mesh
+	list<Surface*>::iterator it2;
+	for(it2=surf_list.begin();it2!=surf_list.end();it2++){
+
+		Surface* surf=*it2;
+
+		Surface* new_surf=new Surface;
+		mesh->surf_list.push_back(new_surf);
+
+		new_surf->no_verts=surf->no_verts;
+		new_surf->no_tris=surf->no_tris;
+
+		// copy arrays
+		new_surf->vert_coords=surf->vert_coords;
+		new_surf->vert_norm=surf->vert_norm;
+		new_surf->vert_tex_coords0=surf->vert_tex_coords0;
+		new_surf->vert_tex_coords1=surf->vert_tex_coords1;
+		new_surf->vert_col=surf->vert_col;
+		new_surf->tris=surf->tris;
+
+		// copy brush
+		delete new_surf->brush;
+		new_surf->brush=surf->brush->Copy();
+
+		new_surf->vert_array_size=surf->vert_array_size;
+		new_surf->tri_array_size=surf->tri_array_size;
+		new_surf->vmin=surf->vmin;
+		new_surf->vmax=surf->vmax;
+
+		new_surf->vbo_enabled=surf->vbo_enabled;
+		new_surf->reset_vbo=-1; // (-1 = all)
+
+	}
+
+	// copy anim surf list
+	for(it2=anim_surf_list.begin();it2!=anim_surf_list.end();it2++){
+
+		Surface* surf=*it2;
+
+		Surface* new_surf=new Surface;
+		mesh->anim_surf_list.push_back(new_surf);
+
+		new_surf->no_verts=surf->no_verts;
+
+		// copy array
+		new_surf->vert_coords=surf->vert_coords;
+
+		// pointers to arrays
+		new_surf->vert_bone1_no=surf->vert_bone1_no;
+		new_surf->vert_bone2_no=surf->vert_bone2_no;
+		new_surf->vert_bone3_no=surf->vert_bone3_no;
+		new_surf->vert_bone4_no=surf->vert_bone4_no;
+		new_surf->vert_weight1=surf->vert_weight1;
+		new_surf->vert_weight2=surf->vert_weight2;
+		new_surf->vert_weight3=surf->vert_weight3;
+		new_surf->vert_weight4=surf->vert_weight4;
+
+		new_surf->vert_array_size=surf->vert_array_size;
+		new_surf->tri_array_size=surf->tri_array_size;
+		new_surf->vmin=surf->vmin;
+		new_surf->vmax=surf->vmax;
+
+		new_surf->vbo_enabled=surf->vbo_enabled;
+		new_surf->reset_vbo=-1; // (-1 = all)
+
+	}
+
+	mesh->c_col_tree=c_col_tree;
+
+	mesh->reset_bounds=reset_bounds;
+
+	//mesh->no_bones=no_bones;
+	CopyBonesList(mesh,mesh->bones);
+
+	return mesh;
+}
+
+/*Mesh* Mesh::CopyMesh(Entity* parent_ent){
 
 	Mesh* mesh=Mesh::CreateMesh(parent_ent);
-
 	AddMesh(mesh);
 	return mesh;
 
-}
+}*/
 
 Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 
@@ -1152,7 +1307,8 @@ Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 
 	}*/
 
-	mesh->surf_list=surf_list;
+	mesh->surf_list=surf_list; // pointer to surf_list - for instancing (CopyMesh for actual 'deep' copy)
+	
 	// copy anim surf list
 	if (anim!=64 && anim!=0){
 		for (int i=anim_seqs_first[0];i<=anim_seqs_last[0];i++){

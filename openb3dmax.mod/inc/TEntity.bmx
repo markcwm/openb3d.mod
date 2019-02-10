@@ -52,15 +52,15 @@ Type TEntity
 	Field box_w:Float Ptr,box_h:Float Ptr,box_d:Float Ptr ' set in EntityBox - 2.0/2.0/2.0
 	Field no_collisions:Int Ptr ' returned by CountCollisions - 0
 	'Field collision:TList=CreateList() ' CollisionImpact vector - used in CollisionX/Y/Z/NX/NY/NZ/Time/Entity/Surface/Triangle
-	Field old_x:Float Ptr,old_y:Float Ptr,old_z:Float Ptr ' used by Collisions - 0.0/0.0/0.0
-	Field old_pitch:Float Ptr,old_yaw:Float Ptr,old_roll:Float Ptr ' openb3d
-	Field new_x:Float Ptr,new_y:Float Ptr,new_z:Float Ptr ' openb3d - 0.0/0.0/0.0
-	Field new_no:Int Ptr ' openb3d - 0
+	'Field old_x:Float Ptr,old_y:Float Ptr,old_z:Float Ptr ' used by Collisions - 0.0/0.0/0.0
+	'Field old_pitch:Float Ptr,old_yaw:Float Ptr,old_roll:Float Ptr ' openb3d
+	'Field new_x:Float Ptr,new_y:Float Ptr,new_z:Float Ptr ' openb3d - 0.0/0.0/0.0
+	'Field new_no:Int Ptr ' openb3d - 0
 	
-	Field old_mat:TMatrix ' openb3d - LoadIdentity
-	Field dynamic:Int Ptr ' openb3d - false
-	Field dynamic_x:Float Ptr,dynamic_y:Float Ptr,dynamic_z:Float Ptr ' openb3d - 0.0/0.0/0.0
-	Field dynamic_yaw:Float Ptr,dynamic_pitch:Float Ptr,dynamic_roll:Float Ptr ' openb3d - 0.0/0.0/0.0
+	'Field old_mat:TMatrix ' openb3d - LoadIdentity
+	'Field dynamic:Int Ptr ' openb3d - false
+	'Field dynamic_x:Float Ptr,dynamic_y:Float Ptr,dynamic_z:Float Ptr ' openb3d - 0.0/0.0/0.0
+	'Field dynamic_yaw:Float Ptr,dynamic_pitch:Float Ptr,dynamic_roll:Float Ptr ' openb3d - 0.0/0.0/0.0
 	
 	' picking
 	Field pick_mode:Int Ptr ' set in EntityPickMode - 0
@@ -150,8 +150,8 @@ Type TEntity
 		anim_list=EntityInt_( GetInstance(Self),ENTITY_anim_list )
 		collision_type=EntityInt_( GetInstance(Self),ENTITY_collision_type )
 		no_collisions=EntityInt_( GetInstance(Self),ENTITY_no_collisions )
-		new_no=EntityInt_( GetInstance(Self),ENTITY_new_no )
-		dynamic=EntityInt_( GetInstance(Self),ENTITY_dynamic )
+		'new_no=EntityInt_( GetInstance(Self),ENTITY_new_no )
+		'dynamic=EntityInt_( GetInstance(Self),ENTITY_dynamic )
 		pick_mode=EntityInt_( GetInstance(Self),ENTITY_pick_mode )
 		obscurer=EntityInt_( GetInstance(Self),ENTITY_obscurer )
 		
@@ -181,21 +181,21 @@ Type TEntity
 		box_w=EntityFloat_( GetInstance(Self),ENTITY_box_w )
 		box_h=EntityFloat_( GetInstance(Self),ENTITY_box_h )
 		box_d=EntityFloat_( GetInstance(Self),ENTITY_box_d )
-		old_x=EntityFloat_( GetInstance(Self),ENTITY_old_x )
-		old_y=EntityFloat_( GetInstance(Self),ENTITY_old_y )
-		old_z=EntityFloat_( GetInstance(Self),ENTITY_old_z )
-		old_pitch=EntityFloat_( GetInstance(Self),ENTITY_old_pitch )
-		old_yaw=EntityFloat_( GetInstance(Self),ENTITY_old_yaw )
-		old_roll=EntityFloat_( GetInstance(Self),ENTITY_old_roll )
-		new_x=EntityFloat_( GetInstance(Self),ENTITY_new_x )
-		new_y=EntityFloat_( GetInstance(Self),ENTITY_new_y )
-		new_z=EntityFloat_( GetInstance(Self),ENTITY_new_z )
-		dynamic_x=EntityFloat_( GetInstance(Self),ENTITY_dynamic_x )
-		dynamic_y=EntityFloat_( GetInstance(Self),ENTITY_dynamic_y )
-		dynamic_z=EntityFloat_( GetInstance(Self),ENTITY_dynamic_z )
-		dynamic_yaw=EntityFloat_( GetInstance(Self),ENTITY_dynamic_yaw )
-		dynamic_pitch=EntityFloat_( GetInstance(Self),ENTITY_dynamic_pitch )
-		dynamic_roll=EntityFloat_( GetInstance(Self),ENTITY_dynamic_roll )
+		'old_x=EntityFloat_( GetInstance(Self),ENTITY_old_x )
+		'old_y=EntityFloat_( GetInstance(Self),ENTITY_old_y )
+		'old_z=EntityFloat_( GetInstance(Self),ENTITY_old_z )
+		'old_pitch=EntityFloat_( GetInstance(Self),ENTITY_old_pitch )
+		'old_yaw=EntityFloat_( GetInstance(Self),ENTITY_old_yaw )
+		'old_roll=EntityFloat_( GetInstance(Self),ENTITY_old_roll )
+		'new_x=EntityFloat_( GetInstance(Self),ENTITY_new_x )
+		'new_y=EntityFloat_( GetInstance(Self),ENTITY_new_y )
+		'new_z=EntityFloat_( GetInstance(Self),ENTITY_new_z )
+		'dynamic_x=EntityFloat_( GetInstance(Self),ENTITY_dynamic_x )
+		'dynamic_y=EntityFloat_( GetInstance(Self),ENTITY_dynamic_y )
+		'dynamic_z=EntityFloat_( GetInstance(Self),ENTITY_dynamic_z )
+		'dynamic_yaw=EntityFloat_( GetInstance(Self),ENTITY_dynamic_yaw )
+		'dynamic_pitch=EntityFloat_( GetInstance(Self),ENTITY_dynamic_pitch )
+		'dynamic_roll=EntityFloat_( GetInstance(Self),ENTITY_dynamic_roll )
 		
 		' string
 		name=EntityString_( GetInstance(Self),ENTITY_name )
@@ -214,9 +214,9 @@ Type TEntity
 		inst=EntityMatrix2_( GetInstance(Self),ENTITY_rotmat )
 		rotmat=TMatrix.GetObject(inst)
 		If rotmat=Null And inst<>Null Then rotmat=TMatrix.CreateObject(inst)
-		inst=EntityMatrix2_( GetInstance(Self),ENTITY_old_mat )
-		old_mat=TMatrix.GetObject(inst)
-		If old_mat=Null And inst<>Null Then old_mat=TMatrix.CreateObject(inst)
+		'inst=EntityMatrix2_( GetInstance(Self),ENTITY_old_mat )
+		'old_mat=TMatrix.GetObject(inst)
+		'If old_mat=Null And inst<>Null Then old_mat=TMatrix.CreateObject(inst)
 		
 		' brush
 		inst=EntityBrush_( GetInstance(Self),ENTITY_brush )
@@ -257,8 +257,8 @@ Type TEntity
 		If anim_list<>Null Then DebugLog(pad+" anim_list: "+anim_list[0]) Else DebugLog(pad+" anim_list: Null")
 		If collision_type<>Null Then DebugLog(pad+" collision_type: "+collision_type[0]) Else DebugLog(pad+" collision_type: Null")
 		If no_collisions<>Null Then DebugLog(pad+" no_collisions: "+no_collisions[0]) Else DebugLog(pad+" no_collisions: Null")
-		If new_no<>Null Then DebugLog(pad+" new_no: "+new_no[0]) Else DebugLog(pad+" new_no: Null")
-		If dynamic<>Null Then DebugLog(pad+" dynamic: "+dynamic[0]) Else DebugLog(pad+" dynamic: Null")
+		'If new_no<>Null Then DebugLog(pad+" new_no: "+new_no[0]) Else DebugLog(pad+" new_no: Null")
+		'If dynamic<>Null Then DebugLog(pad+" dynamic: "+dynamic[0]) Else DebugLog(pad+" dynamic: Null")
 		If pick_mode<>Null Then DebugLog(pad+" pick_mode: "+pick_mode[0]) Else DebugLog(pad+" pick_mode: Null")
 		If obscurer<>Null Then DebugLog(pad+" obscurer: "+obscurer[0]) Else DebugLog(pad+" obscurer: Null")
 		
@@ -288,21 +288,21 @@ Type TEntity
 		If box_w<>Null Then DebugLog(pad+" box_w: "+box_w[0]) Else DebugLog(pad+" box_w: Null")
 		If box_h<>Null Then DebugLog(pad+" box_h: "+box_h[0]) Else DebugLog(pad+" box_h: Null")
 		If box_d<>Null Then DebugLog(pad+" box_d: "+box_d[0]) Else DebugLog(pad+" box_d: Null")
-		If old_x<>Null Then DebugLog(pad+" old_x: "+old_x[0]) Else DebugLog(pad+" old_x: Null")
-		If old_y<>Null Then DebugLog(pad+" old_y: "+old_y[0]) Else DebugLog(pad+" old_y: Null")
-		If old_z<>Null Then DebugLog(pad+" old_z: "+old_z[0]) Else DebugLog(pad+" old_z: Null")
-		If old_pitch<>Null Then DebugLog(pad+" old_pitch: "+old_pitch[0]) Else DebugLog(pad+" old_pitch: Null")
-		If old_yaw<>Null Then DebugLog(pad+" old_yaw: "+old_yaw[0]) Else DebugLog(pad+" old_yaw: Null")
-		If old_roll<>Null Then DebugLog(pad+" old_roll: "+old_roll[0]) Else DebugLog(pad+" old_roll: Null")
-		If new_x<>Null Then DebugLog(pad+" new_x: "+new_x[0]) Else DebugLog(pad+" new_x: Null")
-		If new_y<>Null Then DebugLog(pad+" new_y: "+new_y[0]) Else DebugLog(pad+" new_y: Null")
-		If new_z<>Null Then DebugLog(pad+" new_z: "+new_z[0]) Else DebugLog(pad+" new_z: Null")
-		If dynamic_x<>Null Then DebugLog(pad+" dynamic_x: "+dynamic_x[0]) Else DebugLog(pad+" dynamic_x: Null")
-		If dynamic_y<>Null Then DebugLog(pad+" dynamic_y: "+dynamic_y[0]) Else DebugLog(pad+" dynamic_y: Null")
-		If dynamic_z<>Null Then DebugLog(pad+" dynamic_z: "+dynamic_z[0]) Else DebugLog(pad+" dynamic_z: Null")
-		If dynamic_yaw<>Null Then DebugLog(pad+" dynamic_yaw: "+dynamic_yaw[0]) Else DebugLog(pad+" dynamic_yaw: Null")
-		If dynamic_pitch<>Null Then DebugLog(pad+" dynamic_pitch: "+dynamic_pitch[0]) Else DebugLog(pad+" dynamic_pitch: Null")
-		If dynamic_roll<>Null Then DebugLog(pad+" dynamic_roll: "+dynamic_roll[0]) Else DebugLog(pad+" dynamic_roll: Null")
+		'If old_x<>Null Then DebugLog(pad+" old_x: "+old_x[0]) Else DebugLog(pad+" old_x: Null")
+		'If old_y<>Null Then DebugLog(pad+" old_y: "+old_y[0]) Else DebugLog(pad+" old_y: Null")
+		'If old_z<>Null Then DebugLog(pad+" old_z: "+old_z[0]) Else DebugLog(pad+" old_z: Null")
+		'If old_pitch<>Null Then DebugLog(pad+" old_pitch: "+old_pitch[0]) Else DebugLog(pad+" old_pitch: Null")
+		'If old_yaw<>Null Then DebugLog(pad+" old_yaw: "+old_yaw[0]) Else DebugLog(pad+" old_yaw: Null")
+		'If old_roll<>Null Then DebugLog(pad+" old_roll: "+old_roll[0]) Else DebugLog(pad+" old_roll: Null")
+		'If new_x<>Null Then DebugLog(pad+" new_x: "+new_x[0]) Else DebugLog(pad+" new_x: Null")
+		'If new_y<>Null Then DebugLog(pad+" new_y: "+new_y[0]) Else DebugLog(pad+" new_y: Null")
+		'If new_z<>Null Then DebugLog(pad+" new_z: "+new_z[0]) Else DebugLog(pad+" new_z: Null")
+		'If dynamic_x<>Null Then DebugLog(pad+" dynamic_x: "+dynamic_x[0]) Else DebugLog(pad+" dynamic_x: Null")
+		'If dynamic_y<>Null Then DebugLog(pad+" dynamic_y: "+dynamic_y[0]) Else DebugLog(pad+" dynamic_y: Null")
+		'If dynamic_z<>Null Then DebugLog(pad+" dynamic_z: "+dynamic_z[0]) Else DebugLog(pad+" dynamic_z: Null")
+		'If dynamic_yaw<>Null Then DebugLog(pad+" dynamic_yaw: "+dynamic_yaw[0]) Else DebugLog(pad+" dynamic_yaw: Null")
+		'If dynamic_pitch<>Null Then DebugLog(pad+" dynamic_pitch: "+dynamic_pitch[0]) Else DebugLog(pad+" dynamic_pitch: Null")
+		'If dynamic_roll<>Null Then DebugLog(pad+" dynamic_roll: "+dynamic_roll[0]) Else DebugLog(pad+" dynamic_roll: Null")
 		
 		' string
 		If name<>Null Then DebugLog(pad+" name: "+GetString(name)) Else DebugLog(pad+" name: Null")
@@ -317,8 +317,8 @@ Type TEntity
 		If debug_subobjects And mat<>Null Then mat.DebugFields( debug_subobjects,debug_base_types )
 		DebugLog pad+" rotmat: "+StringPtr(TMatrix.GetInstance(rotmat))
 		If debug_subobjects And rotmat<>Null Then rotmat.DebugFields( debug_subobjects,debug_base_types )
-		DebugLog pad+" old_mat: "+StringPtr(TMatrix.GetInstance(old_mat))
-		If debug_subobjects And old_mat<>Null Then old_mat.DebugFields( debug_subobjects,debug_base_types )
+		'DebugLog pad+" old_mat: "+StringPtr(TMatrix.GetInstance(old_mat))
+		'If debug_subobjects And old_mat<>Null Then old_mat.DebugFields( debug_subobjects,debug_base_types )
 		
 		' brush
 		DebugLog pad+" brush: "+StringPtr(TBrush.GetInstance(brush))
@@ -602,7 +602,7 @@ Type TEntity
 	
 		TMatrix.FreeObject( TMatrix.GetInstance(mat) ) ; mat=Null
 		TMatrix.FreeObject( TMatrix.GetInstance(rotmat) ) ; rotmat=Null
-		TMatrix.FreeObject( TMatrix.GetInstance(old_mat) ) ; old_mat=Null
+		'TMatrix.FreeObject( TMatrix.GetInstance(old_mat) ) ; old_mat=Null
 		TBrush.FreeObject( TBrush.GetInstance(brush) ) ; brush=Null
 		
 		ListRemove( entity_list,Self ) ; entity_list_id:-1
