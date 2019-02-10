@@ -50,12 +50,16 @@ public:
 
 	// reset flags - these are set when mesh shape is changed by various commands in TMesh
 	int reset_bounds;
-	
+		
 	float min_x,min_y,min_z,max_x,max_y,max_z;
+	
+	// extra
+	int shared_surf,shared_anim_surf; // FreeEntity
 	
 	Mesh(){
 
 		no_surfs=0;
+		shared_surf=0;shared_anim_surf=0;
 		//no_bones=0;
 		
 		c_col_tree=NULL;

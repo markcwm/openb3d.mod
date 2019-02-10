@@ -19,6 +19,9 @@ Type TMesh Extends TEntity
 	' reset flags are set when mesh shape is changed by various commands in TMesh
 	Field reset_bounds:Int Ptr ' true (reset flag) - true
 	
+	Field shared_surf:Int Ptr ' FreeEntity
+	Field shared_anim_surf:Int Ptr
+	
 	Field min_x:Float Ptr,min_y:Float Ptr,min_z:Float Ptr ' 0.0/0.0/0.0
 	Field max_x:Float Ptr,max_y:Float Ptr,max_z:Float Ptr ' 0.0/0.0/0.0
 	
@@ -58,6 +61,8 @@ Type TMesh Extends TEntity
 		no_surfs=MeshInt_( GetInstance(Self),MESH_no_surfs )
 		reset_col_tree=MeshInt_( GetInstance(Self),MESH_reset_col_tree )
 		reset_bounds=MeshInt_( GetInstance(Self),MESH_reset_bounds )
+		shared_surf=MeshInt_( GetInstance(Self),MESH_shared_surf )
+		shared_anim_surf=MeshInt_( GetInstance(Self),MESH_shared_anim_surf )
 		
 		' float
 		min_x=MeshFloat_( GetInstance(Self),MESH_min_x )
@@ -616,20 +621,27 @@ Type TMesh Extends TEntity
 		If exists
 			TMatrix.FreeObject( TMatrix.GetInstance(mat_sp) ) ; mat_sp=Null
 			
-			For Local surf:TSurface=EachIn surf_list
-				TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
-				TSurface.FreeObject( TSurface.GetInstance(surf) ) ; surf=Null
-			Next
-			For Local anim_surf:TSurface=EachIn anim_surf_list
-				TBrush.FreeObject( TBrush.GetInstance(anim_surf.brush) ) ; anim_surf.brush=Null
-				TSurface.FreeObject( TSurface.GetInstance(anim_surf) ) ; anim_surf=Null
-			Next
+			If shared_surf[0]=0
+				For Local surf:TSurface=EachIn surf_list
+					TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
+					TSurface.FreeObject( TSurface.GetInstance(surf) ) ; surf=Null
+				Next
+				
+				ClearList(surf_list) ; surf_list_id=0
+			EndIf
+			If shared_anim_surf[0]=0
+				For Local anim_surf:TSurface=EachIn anim_surf_list
+					TBrush.FreeObject( TBrush.GetInstance(anim_surf.brush) ) ; anim_surf.brush=Null
+					TSurface.FreeObject( TSurface.GetInstance(anim_surf) ) ; anim_surf=Null
+				Next
+				
+				ClearList(anim_surf_list) ; anim_surf_list_id=0
+			EndIf
+			
 			For Local bone:TBone=EachIn bones
 				bone.FreeEntity()
 			Next
 			
-			ClearList(surf_list) ; surf_list_id=0
-			ClearList(anim_surf_list) ; anim_surf_list_id=0
 			ClearList(bones) ; bones_id=0
 			
 			Super.FreeEntity()

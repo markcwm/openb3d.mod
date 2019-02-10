@@ -660,6 +660,8 @@ Const MESH_min_z:Int=			11
 Const MESH_max_x:Int=			12
 Const MESH_max_y:Int=			13
 Const MESH_max_z:Int=			14
+Const MESH_shared_surf:Int=		15
+Const MESH_shared_anim_surf:Int=16
 
 ' Pick varid
 Const PICK_ent_list:Int=		1

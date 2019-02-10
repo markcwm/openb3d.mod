@@ -313,6 +313,8 @@ const int MESH_min_z=			11;
 const int MESH_max_x=			12;
 const int MESH_max_y=			13;
 const int MESH_max_z=			14;
+const int MESH_shared_surf=		15;
+const int MESH_shared_anim_surf=16;
 
 // Pick varid
 const int PICK_ent_list=		1;
@@ -1294,6 +1296,8 @@ int* MeshInt_( Mesh* obj,int varid ){
 		case MESH_no_surfs : return &obj->no_surfs;
 		case MESH_reset_col_tree : return &obj->reset_col_tree;
 		case MESH_reset_bounds : return &obj->reset_bounds;
+		case MESH_shared_surf : return &obj->shared_surf;
+		case MESH_shared_anim_surf : return &obj->shared_anim_surf;
 	}
 	return NULL;
 }

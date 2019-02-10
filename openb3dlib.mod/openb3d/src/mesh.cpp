@@ -218,7 +218,9 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
 	mesh->no_surfs=no_surfs;
 
-	mesh->surf_list=surf_list; //  pointer to surf list - for instancing (CopyMesh for actual 'deep' copy)
+	mesh->surf_list=surf_list; //  pointer to surf list - instancing (CopyMesh for actual 'deep' copy)
+	mesh->shared_surf=1; // FreeEntity
+	shared_surf=2; // surface owner
 	
 	// copy anim surf list
 	list<Surface*>::iterator it2;
@@ -269,65 +271,65 @@ void Mesh::FreeEntity(){
 
 	if (no_surfs>=0){
 		list<Surface*>::iterator surf_it;
+		
+		if(shared_surf==0 || shared_surf==2){
+			for(surf_it=surf_list.begin();surf_it!=surf_list.end();surf_it++){
+				Surface* surf=*surf_it;
+				
+				surf->vert_coords.clear();
+				surf->vert_norm.clear();
+				surf->vert_tex_coords0.clear();
+				surf->vert_tex_coords1.clear();
+				surf->vert_col.clear();
+				surf->tris.clear();
 
-		for(surf_it=surf_list.begin();surf_it!=surf_list.end();surf_it++){
-			Surface* surf=*surf_it;
-			
-			surf->vert_coords.clear();
-			surf->vert_norm.clear();
-			surf->vert_tex_coords0.clear();
-			surf->vert_tex_coords1.clear();
-			surf->vert_col.clear();
-			surf->tris.clear();
-
-			surf->vert_bone1_no.clear();
-			surf->vert_bone2_no.clear();
-			surf->vert_bone3_no.clear();
-			surf->vert_bone4_no.clear();
-			surf->vert_weight1.clear();
-			surf->vert_weight2.clear();
-			surf->vert_weight3.clear();
-			surf->vert_weight4.clear();
-			
-			delete surf;
+				surf->vert_bone1_no.clear();
+				surf->vert_bone2_no.clear();
+				surf->vert_bone3_no.clear();
+				surf->vert_bone4_no.clear();
+				surf->vert_weight1.clear();
+				surf->vert_weight2.clear();
+				surf->vert_weight3.clear();
+				surf->vert_weight4.clear();
+				
+				if(shared_surf==0) delete surf;
+			}
+			surf_list.clear();
 		}
+		
+		if(shared_anim_surf==0 || shared_anim_surf==2){
+			for(surf_it=anim_surf_list.begin();surf_it!=anim_surf_list.end();surf_it++){
+				Surface* anim_surf=*surf_it;
+				
+				anim_surf->vert_coords.clear();
+				anim_surf->vert_norm.clear();
+				anim_surf->vert_tex_coords0.clear();
+				anim_surf->vert_tex_coords1.clear();
+				anim_surf->vert_col.clear();
+				anim_surf->tris.clear();
 
-		for(surf_it=anim_surf_list.begin();surf_it!=anim_surf_list.end();surf_it++){
-			Surface* anim_surf=*surf_it;
-			
-			anim_surf->vert_coords.clear();
-			anim_surf->vert_norm.clear();
-			anim_surf->vert_tex_coords0.clear();
-			anim_surf->vert_tex_coords1.clear();
-			anim_surf->vert_col.clear();
-			anim_surf->tris.clear();
-
-			anim_surf->vert_bone1_no.clear();
-			anim_surf->vert_bone2_no.clear();
-			anim_surf->vert_bone3_no.clear();
-			anim_surf->vert_bone4_no.clear();
-			anim_surf->vert_weight1.clear();
-			anim_surf->vert_weight2.clear();
-			anim_surf->vert_weight3.clear();
-			anim_surf->vert_weight4.clear();
-			
-			delete anim_surf;
+				anim_surf->vert_bone1_no.clear();
+				anim_surf->vert_bone2_no.clear();
+				anim_surf->vert_bone3_no.clear();
+				anim_surf->vert_bone4_no.clear();
+				anim_surf->vert_weight1.clear();
+				anim_surf->vert_weight2.clear();
+				anim_surf->vert_weight3.clear();
+				anim_surf->vert_weight4.clear();
+				
+				if(shared_surf==0) delete anim_surf;
+			}
+			anim_surf_list.clear();
 		}
-
 		delete c_col_tree;
 	}
-	surf_list.clear();
-	anim_surf_list.clear();
 
 	//vector<Bone*>::iterator bone_it;
-
 	/*for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
 		Bone* bone=*bone_it;
 		delete bone;
 	}*/
 	bones.clear();
-
-	
 
 	Entity::FreeEntity();
 
@@ -1307,7 +1309,9 @@ Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 
 	}*/
 
-	mesh->surf_list=surf_list; // pointer to surf_list - for instancing (CopyMesh for actual 'deep' copy)
+	mesh->surf_list=surf_list; // pointer to surf_list - instancing (CopyMesh for actual 'deep' copy)
+	mesh->shared_surf=1; // FreeEntity
+	shared_surf=2; // surface owner
 	
 	// copy anim surf list
 	if (anim!=64 && anim!=0){
@@ -1342,8 +1346,10 @@ Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 		anim=64;
 		mesh->anim=64;
 	} else {
-		mesh->anim_surf_list=anim_surf_list;
+		mesh->anim_surf_list=anim_surf_list; // pointer to anim_surf_list
 		mesh->anim=anim;
+		mesh->shared_anim_surf=1; // FreeEntity
+		shared_anim_surf=2; // surface owner
 	}
 
 	/*for(it2=anim_surf_list.begin();it2!=anim_surf_list.end();it2++){
