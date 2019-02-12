@@ -19,15 +19,16 @@ Type TMesh Extends TEntity
 	' reset flags are set when mesh shape is changed by various commands in TMesh
 	Field reset_bounds:Int Ptr ' true (reset flag) - true
 	
-	Field shared_surf:Int Ptr ' FreeEntity
-	Field shared_anim_surf:Int Ptr
-	
 	Field min_x:Float Ptr,min_y:Float Ptr,min_z:Float Ptr ' 0.0/0.0/0.0
 	Field max_x:Float Ptr,max_y:Float Ptr,max_z:Float Ptr ' 0.0/0.0/0.0
 	
 	' minib3d
 	'Field no_bones:Int=0
 	'Field col_tree:TColTree=New TColTree
+	
+	' extra
+	Field shared_surf:Int Ptr ' for FreeEntity
+	Field shared_anim_surf:Int Ptr
 	
 	' wrapper
 	Field surf_list_id:Int=0
@@ -621,22 +622,19 @@ Type TMesh Extends TEntity
 		If exists
 			TMatrix.FreeObject( TMatrix.GetInstance(mat_sp) ) ; mat_sp=Null
 			
-			If shared_surf[0]=0
-				For Local surf:TSurface=EachIn surf_list
-					TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
-					TSurface.FreeObject( TSurface.GetInstance(surf) ) ; surf=Null
-				Next
-				
-				ClearList(surf_list) ; surf_list_id=0
-			EndIf
-			If shared_anim_surf[0]=0
-				For Local anim_surf:TSurface=EachIn anim_surf_list
-					TBrush.FreeObject( TBrush.GetInstance(anim_surf.brush) ) ; anim_surf.brush=Null
-					TSurface.FreeObject( TSurface.GetInstance(anim_surf) ) ; anim_surf=Null
-				Next
-				
-				ClearList(anim_surf_list) ; anim_surf_list_id=0
-			EndIf
+			For Local surf:TSurface=EachIn surf_list
+				TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
+				TSurface.FreeObject( TSurface.GetInstance(surf) ) ; surf=Null
+			Next
+			
+			ClearList(surf_list) ; surf_list_id=0
+			
+			For Local anim_surf:TSurface=EachIn anim_surf_list
+				TBrush.FreeObject( TBrush.GetInstance(anim_surf.brush) ) ; anim_surf.brush=Null
+				TSurface.FreeObject( TSurface.GetInstance(anim_surf) ) ; anim_surf=Null
+			Next
+			
+			ClearList(anim_surf_list) ; anim_surf_list_id=0
 			
 			For Local bone:TBone=EachIn bones
 				bone.FreeEntity()

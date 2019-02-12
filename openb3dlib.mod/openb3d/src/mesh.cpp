@@ -218,8 +218,8 @@ Mesh* Mesh::CopyEntity(Entity* parent_ent){
 
 	mesh->no_surfs=no_surfs;
 
-	mesh->surf_list=surf_list; //  pointer to surf list - instancing (CopyMesh for actual 'deep' copy)
-	mesh->shared_surf=1; // FreeEntity
+	mesh->surf_list=surf_list; //  pointer to surf list for instancing (see CopyMesh)
+	mesh->shared_surf=1; // shared surface
 	shared_surf=2; // surface owner
 	
 	// copy anim surf list
@@ -291,8 +291,8 @@ void Mesh::FreeEntity(){
 				surf->vert_weight2.clear();
 				surf->vert_weight3.clear();
 				surf->vert_weight4.clear();
-				
-				if(shared_surf==0) delete surf;
+
+				delete surf; // crash if surface owner is freed before shared surface from CopyEntity
 			}
 			surf_list.clear();
 		}
@@ -316,21 +316,23 @@ void Mesh::FreeEntity(){
 				anim_surf->vert_weight2.clear();
 				anim_surf->vert_weight3.clear();
 				anim_surf->vert_weight4.clear();
-				
-				if(shared_surf==0) delete anim_surf;
+
+				delete anim_surf; // same crash for shared anim surface from RepeatMesh
 			}
 			anim_surf_list.clear();
 		}
 		delete c_col_tree;
 	}
 
-	//vector<Bone*>::iterator bone_it;
-	/*for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
-		Bone* bone=*bone_it;
-		delete bone;
-	}*/
-	bones.clear();
-
+	if(shared_anim_surf==0){
+		vector<Bone*>::iterator bone_it;
+		for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
+			Bone* bone=*bone_it;
+			delete bone;
+		}
+		bones.clear();
+	}
+	
 	Entity::FreeEntity();
 
 	delete this;
@@ -1045,12 +1047,10 @@ Mesh* Mesh::CopyMesh(Entity* parent_ent){
 	Mesh* mesh=new Mesh();
 
 	// recursively copy contents of child list before adding parent
-	Entity* parent=dynamic_cast<Entity*>(mesh);
 	list<Entity*>::iterator it;
 	for(it=child_list.begin();it!=child_list.end();it++){
 		Entity* ent=*it;
-		Mesh* child=dynamic_cast<Mesh*>(ent);
-		child->CopyMesh(parent);
+		dynamic_cast<Mesh*>(ent)->CopyMesh(mesh);
 	}
 
 	// lists
@@ -1149,7 +1149,7 @@ Mesh* Mesh::CopyMesh(Entity* parent_ent){
 
 	mesh->no_surfs=no_surfs;
 
-	// copy surf list - actual or 'deep' copy of mesh
+	// copy surf list - actual or 'deep' copy of mesh (see CopyEntity)
 	list<Surface*>::iterator it2;
 	for(it2=surf_list.begin();it2!=surf_list.end();it2++){
 
@@ -1302,15 +1302,12 @@ Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 	// copy surf list
 	/*list<Surface*>::iterator it2;
 	for(it2=surf_list.begin();it2!=surf_list.end();it2++){
-
 		Surface* surf=*it2;
-
 		mesh->surf_list.push_back(surf);
-
 	}*/
 
-	mesh->surf_list=surf_list; // pointer to surf_list - instancing (CopyMesh for actual 'deep' copy)
-	mesh->shared_surf=1; // FreeEntity
+	mesh->surf_list=surf_list; //  pointer to surf list for instancing (see CopyEntity)
+	mesh->shared_surf=1; // shared surface
 	shared_surf=2; // surface owner
 	
 	// copy anim surf list
@@ -1337,27 +1334,23 @@ Mesh* Mesh::RepeatMesh(Entity* parent_ent){
 
 				new_surf->vbo_enabled=surf->vbo_enabled;
 				new_surf->reset_vbo=-1; // (-1 = all)
-
 			}
 
 		}
 		anim_surf_list=mesh->anim_surf_list;
-
 		anim=64;
 		mesh->anim=64;
+		mesh->shared_anim_surf=1; // shared anim surface
+		shared_anim_surf=2; // anim surface owner
 	} else {
-		mesh->anim_surf_list=anim_surf_list; // pointer to anim_surf_list
+		mesh->anim_surf_list=anim_surf_list;
 		mesh->anim=anim;
-		mesh->shared_anim_surf=1; // FreeEntity
-		shared_anim_surf=2; // surface owner
+		mesh->shared_anim_surf=1; // shared anim surface
 	}
 
 	/*for(it2=anim_surf_list.begin();it2!=anim_surf_list.end();it2++){
-
 		Surface* surf=*it2;
-
 		mesh->anim_surf_list.push_back(surf);
-
 	}*/
 
 	TreeCheck();
