@@ -324,14 +324,12 @@ void Mesh::FreeEntity(){
 		delete c_col_tree;
 	}
 
-	if(shared_anim_surf==0){
-		vector<Bone*>::iterator bone_it;
-		for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
-			Bone* bone=*bone_it;
-			delete bone;
-		}
-		bones.clear();
-	}
+	/*vector<Bone*>::iterator bone_it;
+	for(bone_it=bones.begin();bone_it!=bones.end();bone_it++){
+		Bone* bone=*bone_it;
+		delete bone;
+	}*/
+	bones.clear(); // bones are freed in entity child_list, bones list is a copy
 	
 	Entity::FreeEntity();
 
