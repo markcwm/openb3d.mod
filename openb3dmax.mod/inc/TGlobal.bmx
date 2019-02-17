@@ -316,11 +316,15 @@ Type TGlobal
 		
 	End Function
 	
+	Function AntiAlias( samples:Int,multisample:Int=0 )
+		
+		AntiAlias_( samples,multisample )
+		
+	End Function
+	
 	Function RenderWorld()
 	
 		RenderWorld_()
-		
-		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices ) ' also in UpdateTerrain
 		
 	End Function
 	

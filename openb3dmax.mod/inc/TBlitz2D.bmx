@@ -80,7 +80,8 @@ Type TBlitz2D
 			' Max2d does this
 			'glEnable GL_BLEND
 			'glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
-			'glEnable(GL_TEXTURE_2D)
+			
+			glEnable(GL_TEXTURE_2D)
 			
 		End Select
 		

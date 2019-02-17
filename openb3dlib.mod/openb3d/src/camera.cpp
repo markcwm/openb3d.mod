@@ -240,7 +240,7 @@ void Camera::CameraProject(float x,float y,float z){
 	float pz=0.0;
 
 	gluProject(x,y,-z,&mod_mat[0],&proj_mat[0],&viewport[0],&px,&py,&pz);
-
+	
 	projected_x=-vx+px;
 	projected_y=vy+vheight-py;
 	projected_z=pz;
@@ -518,8 +518,13 @@ void Camera::Update(){
 #endif
 	
 	float ratio=(float(vwidth)/vheight);
-
-	accPerspective(atan((1.0/(zoom*ratio)))*2.0,ratio,range_near,range_far,0.0,0.0,0.0,0.0,1.0);
+	float jx=Global::j_data[Global::jitter][0];
+	float jy=Global::j_data[Global::jitter][1];
+	if(Global::aa==false){
+		jx=0; jy=0;
+	}
+	//printf("aa=%d jitter=%d x=%f y=%f\n",Global::aa,Global::jitter,jx,jy);
+	accPerspective(atan((1.0/(zoom*ratio)))*2.0,ratio,range_near,range_far,jx,jy,0.0,0.0,1.0);
 
 	Matrix new_mat;
 	mat.GetInverse(new_mat);
@@ -551,7 +556,11 @@ void Camera::Update(){
 	mod_mat[14]=new_mat.grid[3][2];
 	mod_mat[15]=new_mat.grid[3][3];
 
-	if(project_enabled){ // only get these directly after a cameraproject/camerapick call, as they are expensive calls
+	//glGetFloatv(GL_MODELVIEW_MATRIX,&mod_mat[0]);
+	//glGetFloatv(GL_PROJECTION_MATRIX,&proj_mat[0]);
+	glGetIntegerv(GL_VIEWPORT,&viewport[0]);
+
+	/*if(project_enabled){ // only get these directly after a cameraproject/camerapick call, as they are expensive calls
 	
 		// get projection/model/viewport info - for use with cameraproject/camerapick
 		//glGetFloatv(GL_MODELVIEW_MATRIX,&mod_mat[0]);
@@ -560,7 +569,7 @@ void Camera::Update(){
 		
 		project_enabled=false;
 	
-	}
+	}*/
 	
 	ExtractFrustum();
 
@@ -1028,26 +1037,29 @@ void Camera::accPerspective(float fovy,float aspect,float zNear,float zFar,float
 
 void Camera::accFrustum(float left_,float right_,float bottom,float top,float zNear,float zFar,float pixdx,float pixdy,float eyedx,float eyedy,float focus){
 	
-	//float xwsize=0.0,ywsize=0.0;
-	//float dx=0.0,dy=0.0;
+	float xwsize=0.0,ywsize=0.0;
+	float dx=0.0,dy=0.0;
 	
-	//xwsize=right_-left_;
-	//ywsize=top-bottom;
-	//dx=(pixdx*xwsize/float(viewport[2])+eyedx*zNear/focus);
-	//dy=-(pixdy*ywsize/float(viewport[3])+eyedy*zNear/focus);
-	
+	xwsize=right_-left_;
+	ywsize=top-bottom;
+	dx=-(pixdx*xwsize/float(viewport[2])+eyedx*zNear/focus);
+	dy=-(pixdy*ywsize/float(viewport[3])+eyedy*zNear/focus);
+
 #ifndef GLES2
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
+	float ratio=(float(vwidth)/vheight);
+	//gluPerspective(atan((1.0/(zoom*ratio)))*2.0,ratio,range_near,range_far);
 	
 	if (proj_mode == 1) {
-		glFrustum(left_,right_,bottom,top,zNear,zFar);
+		glFrustum(left_+dx,right_+dx,bottom+dy,top+dy,zNear,zFar);
 	}else if (proj_mode == 2){
-		glOrtho(left_,right_,bottom,top,zNear,zFar);
+		glOrtho(left_+dx,right_+dx,bottom+dy,top+dy,zNear,zFar);
 	}
 	
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
+	glTranslatef(-eyedx,-eyedy,0.0);
 #endif
 	
 }

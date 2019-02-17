@@ -91,7 +91,27 @@ public:
 
 	static Camera* camera_in_use;
 	
+	static int alpha_enable;
+	static int blend_mode;
+	static int fx1;
+	static int fx2;
+	
 	static Mesh* last_mesh;
+	
+	// anti aliasing globs
+	static int aa; // anti_alias true/false
+	static int ACSIZE; // accum size
+	static int jitter;
+	static float j_data[16][2];
+	static const float j2_data[];
+	static const float j3_data[];
+	static const float j4_data[];
+	static const float j5_data[];
+	static const float j6_data[];
+	static const float j8_data[];
+	static const float j9_data[];
+	static const float j12_data[];
+	static const float j16_data[];
 	
 	static void Graphics();
 	
@@ -103,11 +123,10 @@ public:
 	static void UpdateWorld(float anim_speed=1.0);
 	static void RenderWorld();
 	static void UpdateEntityAnim(Mesh& mesh);
+	
+	static void RenderWorldAA();
+	static void AntiAlias(int samples);
 
-	static int alpha_enable;
-	static int blend_mode;
-	static int fx1;
-	static int fx2;
 
 	
 };

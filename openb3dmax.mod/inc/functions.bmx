@@ -759,12 +759,9 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
 End Rem
-Rem
-' removed since it was too slow and used the accum buffer
-Function AntiAlias( samples:Int )
-	TGlobal.AntiAlias( samples )
+Function AntiAlias( samples:Int,multisample:Int=0 )
+	TGlobal.AntiAlias( samples,multisample )
 End Function
-EndRem
 
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=BrushAlpha">Online doc</a>

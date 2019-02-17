@@ -53,6 +53,46 @@ int Global::fx1=-1;
 
 int Global::fx2=-1;
 
+int Global::aa=false;
+
+int Global::ACSIZE;
+
+int Global::jitter=0;
+
+float Global::j_data[16][2];
+
+const float Global::j2_data[]={
+0.25,0.75,0.75,0.25
+};
+const float Global::j3_data[]={
+0.5033922635,0.8317967229,0.7806016275,0.2504380877,0.2261828938,0.4131553612
+};
+const float Global::j4_data[]={
+0.375,0.25,0.125,0.75,0.875,0.25,0.625,0.75
+};
+const float Global::j5_data[]={
+0.5,0.5,0.3,0.1,0.7,0.9,0.9,0.3,0.1,0.7
+};
+const float Global::j6_data[]={
+0.4646464646,0.4646464646,0.1313131313,0.7979797979,0.5353535353,0.8686868686,
+0.8686868686,0.5353535353,0.7979797979,0.1313131313,0.2020202020,0.2020202020
+};
+const float Global::j8_data[]={
+0.5625,0.4375,0.0625,0.9375,0.3125,0.6875,0.6875,0.8125,0.8125,0.1875,0.9375,0.5625,0.4375,0.0625,0.1875,0.3125
+};
+const float Global::j9_data[]={
+0.5,0.5,0.1666666666,0.9444444444,0.5,0.1666666666,0.5,0.8333333333,0.1666666666,
+0.2777777777,0.8333333333,0.3888888888,0.1666666666,0.6111111111,0.8333333333,0.7222222222,0.8333333333,0.0555555555
+};
+const float Global::j12_data[]={
+0.4166666666,0.625,0.9166666666,0.875,0.25,0.375,0.4166666666,0.125,0.75,0.125,0.0833333333,0.125,
+0.75,0.625,0.25,0.875,0.5833333333,0.375,0.9166666666,0.375,0.0833333333,0.625,0.5833333333,0.875
+};
+const float Global::j16_data[]={
+0.375,0.4375,0.625,0.0625,0.875,0.1875,0.125,0.0625,0.375,0.6875,0.875,0.4375,0.625,0.5625,0.375,0.9375,
+0.625,0.3125,0.125,0.5625,0.125,0.8125,0.375,0.1875,0.875,0.9375,0.875,0.6875,0.125,0.3125,0.625,0.8125
+};
+
 #ifdef GLES2
 	Global::Program Global::shaders[9][9][2];
 	Global::Program* Global::shader;
@@ -458,6 +498,13 @@ void Global::UpdateWorld(float anim_speed){
 }
 
 void Global::RenderWorld(){
+
+	// if anti-aliasing enabled then call RenderWorldAA
+	if(aa){
+		RenderWorldAA();
+		return;
+	}
+	
 	Camera::cam_list.sort(CompareEntityOrder); // sort cam list based on entity order
 	list<Camera*>::iterator it;
 	for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
@@ -480,6 +527,84 @@ void Global::RenderWorld(){
 	for(it2=PostFX::fx_list.begin();it2!=PostFX::fx_list.end();it2++){
 		PostFX* fx=*it2;
 		fx->Render();
+	}
+
+}
+
+void Global::RenderWorldAA(){
+
+	glClear(GL_ACCUM_BUFFER_BIT);
+	for(jitter=0; jitter<ACSIZE; jitter++){
+	
+		Camera::cam_list.sort(CompareEntityOrder); // sort cam list based on entity order
+		list<Camera*>::iterator it;
+		for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
+			//Camera* cam=*it;
+			camera_in_use=*it;
+			if(camera_in_use->Hidden()==true) continue;
+			camera_in_use->Render();
+		}
+		
+		if (Shadows_enabled==true){
+			for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
+				//Camera* cam=*it;
+				camera_in_use=*it;
+				if(camera_in_use->Hidden()==true) continue;
+				ShadowObject::Update(camera_in_use);
+			}
+		}
+		
+		glAccum(GL_ACCUM,1.0/ACSIZE);
+	}
+	jitter=0;
+	glAccum(GL_RETURN,1.0);
+	glFlush();
+	
+	list<PostFX*>::iterator it2;
+	for(it2=PostFX::fx_list.begin();it2!=PostFX::fx_list.end();it2++){
+		PostFX* fx=*it2;
+		fx->Render();
+	}
+	
+}
+
+void Global::AntiAlias(int samples){
+
+	aa=true;
+	if(samples==false){
+		aa=0;
+		return;
+	}
+	
+	switch (samples){
+		case 1 : ACSIZE=2; break;
+		case 2 : ACSIZE=2; break;
+		case 3 : ACSIZE=3; break;
+		case 4 : ACSIZE=4; break;
+		case 5 : ACSIZE=5; break;
+		case 6 : ACSIZE=6; break;
+		case 8 : ACSIZE=8; break;
+		case 9 : ACSIZE=9; break;
+		case 12 : ACSIZE=12; break;
+		case 16 : ACSIZE=16; break;
+		default : aa=false; ACSIZE=0; return;
+	}
+
+	for(int i=0; i<samples; i++){
+		int k=i*2;
+		switch (samples){
+			case 1 : j_data[i][0]=j2_data[k]; j_data[i][1]=j2_data[k+1]; break;
+			case 2 : j_data[i][0]=j2_data[k]; j_data[i][1]=j2_data[k+1]; break;
+			case 3 : j_data[i][0]=j3_data[k]; j_data[i][1]=j3_data[k+1]; break;
+			case 4 : j_data[i][0]=j4_data[k]; j_data[i][1]=j4_data[k+1]; break;
+			case 5 : j_data[i][0]=j5_data[k]; j_data[i][1]=j5_data[k+1]; break;
+			case 6 : j_data[i][0]=j6_data[k]; j_data[i][1]=j6_data[k+1]; break;
+			case 8 : j_data[i][0]=j8_data[k]; j_data[i][1]=j8_data[k+1]; break;
+			case 9 : j_data[i][0]=j9_data[k]; j_data[i][1]=j9_data[k+1]; break;
+			case 12 : j_data[i][0]=j12_data[k]; j_data[i][1]=j12_data[k+1]; break;
+			case 16 : j_data[i][0]=j16_data[k]; j_data[i][1]=j16_data[k+1]; break;
+		}
+		//printf("%d 0=%f 1=%f\n",i,j_data[i][0],j_data[i][1]);
 	}
 
 }

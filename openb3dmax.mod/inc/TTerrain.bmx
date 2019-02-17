@@ -232,7 +232,7 @@ Type TTerrain Extends TEntity
 	
 		UpdateTerrain_( GetInstance(Self) )
 		
-		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices ) ' also in RenderWorld
+		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices )
 		
 	End Method
 	

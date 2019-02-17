@@ -348,13 +348,16 @@ void AmbientLight_(float r,float g,float b){
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online Help</a>
 */
-void AntiAlias_(int samples){
-	//Global::AntiAlias(samples);
+void AntiAlias_(int samples,int multisample){
 #ifndef GLES2
-	if (samples==0){
-		glDisable(GL_MULTISAMPLE);
+	if(multisample){
+		if (samples==0){
+			glDisable(GL_MULTISAMPLE);
+		}else{
+			glEnable(GL_MULTISAMPLE);
+		}
 	}else{
-		glEnable(GL_MULTISAMPLE);
+		Global::AntiAlias(samples);
 	}
 #endif
 }
