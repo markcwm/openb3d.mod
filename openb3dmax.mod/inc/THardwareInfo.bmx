@@ -35,6 +35,7 @@ Type THardwareInfo ' by klepto2
 	Global SLSupport : Int			' OpenGL Shading Language 1.00 - GL 1.5
 	Global FBOSupport : Int			' Framebuffer objects - GL 1.5
 	Global DepthStencil : Int		' Packed depth-stencil buffer - GL 2.0
+	Global MultisampleSupport : Int	' Hardware multisample antialias - GL 1.2?
 	
 	Function GetInfo()
 		Local Extensions:String
@@ -46,7 +47,7 @@ Type THardwareInfo ' by klepto2
 		Extensions = String.FromCString(Byte Ptr(glGetString(GL_EXTENSIONS)))
 		THardwareInfo.Extensions = Extensions
 		
-		' Check for Extensions - note that it actually depends on the gfx card rather than gl version
+		' Check for Extensions - note that these depend on the gfx card more than gl version
 		THardwareInfo.TexBlendSupport = Extensions.Find("GL_EXT_texture_env_combine") > -1		' gl 1.1
 		THardwareInfo.AnIsoSupport = Extensions.Find("GL_EXT_texture_filter_anisotropic") > -1	' gl 1.2
 		THardwareInfo.GLTCSupport = Extensions.Find("GL_ARB_texture_compression") > -1			' gl 1.2.1
@@ -63,6 +64,7 @@ Type THardwareInfo ' by klepto2
 		THardwareInfo.SLSupport = Extensions.Find("GL_ARB_shading_language_100") > - 1			' gl 1.5
 		THardwareInfo.FBOSupport = Extensions.Find("GL_EXT_framebuffer_object") > - 1			' gl 1.5
 		THardwareInfo.DepthStencil = Extensions.Find("GL_EXT_packed_depth_stencil") > -1		' gl 2.0
+		THardwareInfo.MultisampleSupport = Extensions.Find("GL_ARB_multisample") > -1			' gl 1.2
 		
 		If THardwareInfo.VSSupport = False Or THardwareInfo.FSSupport = False
 			THardwareInfo.ShaderSupport = False

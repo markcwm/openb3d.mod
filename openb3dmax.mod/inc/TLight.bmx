@@ -76,7 +76,7 @@ Type TLight Extends TEntity
 		inner_ang=LightFloat_( GetInstance(Self),LIGHT_inner_ang )
 		outer_ang=LightFloat_( GetInstance(Self),LIGHT_outer_ang )
 		
-		AddList_(light_list)
+		CopyList_(light_list)
 		
 	End Method
 	
@@ -147,7 +147,7 @@ Type TLight Extends TEntity
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		Super.CopyList_(list) ' calls ClearList
 		

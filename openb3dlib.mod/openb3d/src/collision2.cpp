@@ -22,6 +22,7 @@
 #include <vector>
 #include <list>
 #include <iostream>
+#include <stdio.h>
 
 using namespace std;
 
@@ -29,6 +30,14 @@ extern Vector col_coords;
 
 list<CollisionPair*> CollisionPair::cp_list;
 list<Entity*> CollisionPair::ent_lists[MAX_TYPES];
+
+int CollisionPair::pivots_exist;
+Pivot* CollisionPair::piv1o;
+Pivot* CollisionPair::piv1;
+Pivot* CollisionPair::piv11;
+Pivot* CollisionPair::piv111;
+Pivot* CollisionPair::piv2o;
+Pivot* CollisionPair::piv2;
 
  // dynamic to static
 void UpdateCollisions(){
@@ -254,6 +263,30 @@ void UpdateStaticCollisions(){
 	} // end of collision pair loop
 }
 
+void FreeCollisionPivots(){
+	if(CollisionPair::pivots_exist==1){
+		CollisionPair::pivots_exist=0;
+		CollisionPair::piv1->FreeEntity();
+		CollisionPair::piv11->FreeEntity();
+		CollisionPair::piv111->FreeEntity();
+		CollisionPair::piv2->FreeEntity();
+		CollisionPair::piv1o->FreeEntity();
+		CollisionPair::piv2o->FreeEntity();
+	}
+}
+
+void LoadCollisionPivots(){
+	if(CollisionPair::pivots_exist==0){
+		CollisionPair::pivots_exist=1;
+		CollisionPair::piv1o=Pivot::CreatePivot();
+		CollisionPair::piv1=Pivot::CreatePivot(CollisionPair::piv1o);
+		CollisionPair::piv11=Pivot::CreatePivot(CollisionPair::piv1o);
+		CollisionPair::piv111=Pivot::CreatePivot(CollisionPair::piv1o);
+		CollisionPair::piv2o=Pivot::CreatePivot();
+		CollisionPair::piv2=Pivot::CreatePivot(CollisionPair::piv2o);
+	}
+}
+
 // dynamic to dynamic
 void UpdateDynamicCollisions(){
 
@@ -266,14 +299,8 @@ void UpdateDynamicCollisions(){
 
 	Transform c_tform(c_mat,c_vec_v);
 
-	static Pivot* piv1o=Pivot::CreatePivot();
-	static Pivot* piv1=Pivot::CreatePivot(piv1o);
-	static Pivot* piv11=Pivot::CreatePivot(piv1o);
-	static Pivot* piv111=Pivot::CreatePivot(piv1o);
-
-	static Pivot* piv2o=Pivot::CreatePivot();
-	static Pivot* piv2=Pivot::CreatePivot(piv2o);
-
+	LoadCollisionPivots();
+	
 	/*static Mesh* sphere=Mesh::CreateSphere();
 	sphere->HideEntity();*/
 
@@ -328,19 +355,19 @@ void UpdateDynamicCollisions(){
 				dy2=ent.old_y-ent2.old_y;
 				dz2=ent.old_z-ent2.old_z;
 
-				piv1->PositionEntity(dx,dy,dz,false);
-				piv2->PositionEntity(dx2,dy2,dz2,false);
+				CollisionPair::piv1->PositionEntity(dx,dy,dz,false);
+				CollisionPair::piv2->PositionEntity(dx2,dy2,dz2,false);
 
-				//piv1o->RotateEntity(-ent2.mat.GetPitch(),-ent2.mat.GetYaw(),-ent2.mat.GetRoll());
-				ent2.mat.GetInverse2(piv1o->mat);
-				piv1o->mat.SetTranslate(0,0,0);
-				piv1->MQ_Update();
-				piv11->MQ_Update();
-				piv111->MQ_Update();
-				//piv2o->RotateEntity(-ent2.old_pitch,-ent2.old_yaw,-ent2.old_roll);
-				ent2.old_mat.GetInverse2(piv2o->mat);
-				piv2o->mat.SetTranslate(0,0,0);
-				piv2->MQ_Update();
+				//CollisionPair::piv1o->RotateEntity(-ent2.mat.GetPitch(),-ent2.mat.GetYaw(),-ent2.mat.GetRoll());
+				ent2.mat.GetInverse2(CollisionPair::piv1o->mat);
+				CollisionPair::piv1o->mat.SetTranslate(0,0,0);
+				CollisionPair::piv1->MQ_Update();
+				CollisionPair::piv11->MQ_Update();
+				CollisionPair::piv111->MQ_Update();
+				//CollisionPair::piv2o->RotateEntity(-ent2.old_pitch,-ent2.old_yaw,-ent2.old_roll);
+				ent2.old_mat.GetInverse2(CollisionPair::piv2o->mat);
+				CollisionPair::piv2o->mat.SetTranslate(0,0,0);
+				CollisionPair::piv2->MQ_Update();
 
 				float xx=1,xy=0,xz=0;
 				float yx=0,yy=1,yz=0;
@@ -350,14 +377,14 @@ void UpdateDynamicCollisions(){
 				ent2.mat.TransformVec(yx,yy,yz);
 				ent2.mat.TransformVec(zx,zy,zz);
 
-				piv1o->sx=1/sqrt((xx*xx)+(xy*xy)+(xz*xz));
-				piv1o->sy=1/sqrt((yx*yx)+(yy*yy)+(yz*yz));
-				piv1o->sz=1/sqrt((zx*zx)+(zy*zy)+(zz*zz));
+				CollisionPair::piv1o->sx=1/sqrt((xx*xx)+(xy*xy)+(xz*xz));
+				CollisionPair::piv1o->sy=1/sqrt((yx*yx)+(yy*yy)+(yz*yz));
+				CollisionPair::piv1o->sz=1/sqrt((zx*zx)+(zy*zy)+(zz*zz));
 
 
-				Vector vec_a(piv1->EntityX(true),piv1->EntityY(true),piv1->EntityZ(true));
-				Vector vec_b(piv2->EntityX(true),piv2->EntityY(true),piv2->EntityZ(true));
-				Vector vec_radius(ent.radius_x*piv1o->sx,ent.radius_x*piv1o->sy,ent.radius_x*piv1o->sz);
+				Vector vec_a(CollisionPair::piv1->EntityX(true),CollisionPair::piv1->EntityY(true),CollisionPair::piv1->EntityZ(true));
+				Vector vec_b(CollisionPair::piv2->EntityX(true),CollisionPair::piv2->EntityY(true),CollisionPair::piv2->EntityZ(true));
+				Vector vec_radius(ent.radius_x*CollisionPair::piv1o->sx,ent.radius_x*CollisionPair::piv1o->sy,ent.radius_x*CollisionPair::piv1o->sz);
 
 				CollisionInfo* c_col_info=C_CreateCollisionInfoObject(&vec_a,&vec_b,&vec_radius);
 
@@ -429,34 +456,34 @@ void UpdateDynamicCollisions(){
 					float y=C_CollisionPosY();
 					float z=C_CollisionPosZ();
 
-					piv1o->RotateEntity(0,0,0);
+					CollisionPair::piv1o->RotateEntity(0,0,0);
 
-					piv1->PositionEntity(x,y,z,true);
-					piv11->PositionEntity(eci->x,eci->y,eci->z,true);
+					CollisionPair::piv1->PositionEntity(x,y,z,true);
+					CollisionPair::piv11->PositionEntity(eci->x,eci->y,eci->z,true);
 
-					//piv2o->RotateEntity(0,0,0,false);
-					//piv2o->ScaleEntity(1,1,1,false);
-					piv2o->mat.LoadIdentity();
-					piv2->PositionEntity(eci->nx,eci->ny,eci->nz,false);
+					//CollisionPair::piv2o->RotateEntity(0,0,0,false);
+					//CollisionPair::piv2o->ScaleEntity(1,1,1,false);
+					CollisionPair::piv2o->mat.LoadIdentity();
+					CollisionPair::piv2->PositionEntity(eci->nx,eci->ny,eci->nz,false);
 
-					//piv1o->PositionEntity(ent2.EntityX(true),ent2.EntityY(true),ent2.EntityZ(true),true);
-					//piv1o->RotateEntity(ent2.mat.GetPitch(),ent2.mat.GetYaw(),ent2.mat.GetRoll());
-					//piv1o->ScaleEntity(1, 1, 1);
-					piv1o->mat.Overwrite(ent2.mat);
-					piv1o->mat.Scale(piv1o->sx,piv1o->sy,piv1o->sz);
-					piv1->MQ_Update();
-					piv11->MQ_Update();
-
-
-					//piv2o->RotateEntity(ent2.EntityPitch(),ent2.EntityYaw(),ent2.EntityRoll());
-					piv2o->mat.Overwrite(ent2.mat);
-					piv2o->mat.SetTranslate(0,0,0);
-					piv2->MQ_Update();
+					//CollisionPair::piv1o->PositionEntity(ent2.EntityX(true),ent2.EntityY(true),ent2.EntityZ(true),true);
+					//CollisionPair::piv1o->RotateEntity(ent2.mat.GetPitch(),ent2.mat.GetYaw(),ent2.mat.GetRoll());
+					//CollisionPair::piv1o->ScaleEntity(1, 1, 1);
+					CollisionPair::piv1o->mat.Overwrite(ent2.mat);
+					CollisionPair::piv1o->mat.Scale(CollisionPair::piv1o->sx,CollisionPair::piv1o->sy,CollisionPair::piv1o->sz);
+					CollisionPair::piv1->MQ_Update();
+					CollisionPair::piv11->MQ_Update();
 
 
-					x=piv1->EntityX(true);
-					y=piv1->EntityY(true);
-					z=piv1->EntityZ(true);
+					//CollisionPair::piv2o->RotateEntity(ent2.EntityPitch(),ent2.EntityYaw(),ent2.EntityRoll());
+					CollisionPair::piv2o->mat.Overwrite(ent2.mat);
+					CollisionPair::piv2o->mat.SetTranslate(0,0,0);
+					CollisionPair::piv2->MQ_Update();
+
+
+					x=CollisionPair::piv1->EntityX(true);
+					y=CollisionPair::piv1->EntityY(true);
+					z=CollisionPair::piv1->EntityZ(true);
 
 					//sphere->PositionEntity(x,y,z,true);
 
@@ -475,12 +502,12 @@ void UpdateDynamicCollisions(){
 					//
 
 					// update stored collision impact values
-					eci->x=piv11->EntityX(true);
-					eci->y=piv11->EntityY(true);
-					eci->z=piv11->EntityZ(true);
-					eci->nx=piv2->EntityX(true);
-					eci->ny=piv2->EntityY(true);
-					eci->nz=piv2->EntityZ(true);
+					eci->x=CollisionPair::piv11->EntityX(true);
+					eci->y=CollisionPair::piv11->EntityY(true);
+					eci->z=CollisionPair::piv11->EntityZ(true);
+					eci->nx=CollisionPair::piv2->EntityX(true);
+					eci->ny=CollisionPair::piv2->EntityY(true);
+					eci->nz=CollisionPair::piv2->EntityZ(true);
 
 				}
 
@@ -489,25 +516,25 @@ void UpdateDynamicCollisions(){
 				//C_DeleteCollisionObject(c_coll);
 				C_DeleteCollisionInfoObject(c_col_info);
 
-				piv2->PositionEntity(0,0,0,true);
-				piv2->RotateEntity(0,0,0,true);
+				CollisionPair::piv2->PositionEntity(0,0,0,true);
+				CollisionPair::piv2->RotateEntity(0,0,0,true);
 
-				piv1->PositionEntity(0,0,0,true);
-				piv1->RotateEntity(0,0,0,true);
+				CollisionPair::piv1->PositionEntity(0,0,0,true);
+				CollisionPair::piv1->RotateEntity(0,0,0,true);
 
-				piv11->PositionEntity(0,0,0,true);
-				piv11->RotateEntity(0,0,0,true);
+				CollisionPair::piv11->PositionEntity(0,0,0,true);
+				CollisionPair::piv11->RotateEntity(0,0,0,true);
 
-				piv111->PositionEntity(0,0,0,true);
-				piv111->RotateEntity(0,0,0,true);
+				CollisionPair::piv111->PositionEntity(0,0,0,true);
+				CollisionPair::piv111->RotateEntity(0,0,0,true);
 
-				piv1o->PositionEntity(0,0,0,true);
-				piv1o->RotateEntity(0,0,0,true);
-				piv1o->ScaleEntity(1,1,1,true);
+				CollisionPair::piv1o->PositionEntity(0,0,0,true);
+				CollisionPair::piv1o->RotateEntity(0,0,0,true);
+				CollisionPair::piv1o->ScaleEntity(1,1,1,true);
 
-				piv2o->PositionEntity(0,0,0,true);
-				piv2o->RotateEntity(0,0,0,true);
-				piv2o->ScaleEntity(1,1,1,true);
+				CollisionPair::piv2o->PositionEntity(0,0,0,true);
+				CollisionPair::piv2o->RotateEntity(0,0,0,true);
+				CollisionPair::piv2o->ScaleEntity(1,1,1,true);
 
 			} // end of dest ent loop
 

@@ -233,9 +233,9 @@ Type TShader
 	Method FreeShader() ' Spinduluz
 	
 		If exists
+			exists=0
 			FreeShader_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method

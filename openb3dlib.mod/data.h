@@ -25,6 +25,7 @@ Shader* StaticShader_( int classid,int varid );
 Surface* StaticSurface_( int classid,int varid );
 int StaticListSize_( int classid,int varid );
 Action* StaticIterListAction_( int classid,int varid,int &id );
+Brush* StaticIterListBrush_( int classid,int varid,int &id );
 Camera* StaticIterListCamera_( int classid,int varid,int &id );
 Entity* StaticIterListEntity_( int classid,int varid,int &id );
 ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id );

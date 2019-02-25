@@ -337,10 +337,10 @@ void Texture::FreeTexture(){
 	Texture* tex=this->TexInList(tex_list);
 	
 	if(tex!=NULL && tex_all==NULL){ // tex is unique
+		glDeleteTextures(1, &texture); // delete if no other refs
+		
 		tex_list.remove(this);
 		delete this;
-		
-		glDeleteTextures (1, &texture); // delete if no other refs
 	}
 }
 

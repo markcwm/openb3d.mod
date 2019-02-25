@@ -175,13 +175,13 @@ Type TBone Extends TEntity
 	Method FreeEntity()
 	
 		If exists
+			exists=0
 			TAnimationKeys.FreeObject( TAnimationKeys.GetInstance(keys) ) ; keys=Null
 			TMatrix.FreeObject( TMatrix.GetInstance(mat2) ) ; mat2=Null
 			TMatrix.FreeObject( TMatrix.GetInstance(inv_mat) ) ; inv_mat=Null
 			TMatrix.FreeObject( TMatrix.GetInstance(tform_mat) ) ; tform_mat=Null
 			
 			FreeObject( GetInstance(Self) ) ' no FreeEntity_
-			exists=0
 		EndIf
 		
 	End Method

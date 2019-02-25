@@ -223,8 +223,8 @@ Type TEntity
 		brush=TBrush.GetObject(inst)
 		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
-		AddList_(entity_list)
-		If parent=Null And TGlobal.root_ent Then AddList(TGlobal.root_ent.child_list) ' list of all non-child/root entities
+		CopyList_(entity_list)
+		If parent=Null And TGlobal.root_ent Then CopyList_(TGlobal.root_ent.child_list) ' list of all non-child/root entities
 		exists=1
 		
 	End Method
@@ -409,7 +409,7 @@ Type TEntity
 			
 	End Method
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		ClearList list
 		
@@ -425,6 +425,13 @@ Type TEntity
 				animate_list_id=0
 				For Local id:Int=0 To StaticListSize_( ENTITY_class,ENTITY_animate_list )-1
 					Local inst:Byte Ptr=StaticIterListEntity_( ENTITY_class,ENTITY_animate_list,Varptr animate_list_id )
+					Local obj:TEntity=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				Next
+			Case TGlobal.root_ent.child_list
+				TGlobal.root_ent.child_list_id=0
+				For Local id:Int=0 To EntityListSize_( GetInstance(TGlobal.root_ent),ENTITY_child_list )-1
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr TGlobal.root_ent.child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -468,16 +475,14 @@ Type TEntity
 					ListRemove( list,value ) ; child_list_id:-1
 				EndIf
 			Case TGlobal.root_ent.child_list
-				If ent
-					EntityListRemoveEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(ent) )
-					ListRemove( list,value ) ; TGlobal.root_ent.child_list_id:-1
-				EndIf
+				EntityListRemoveEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(Self) )
+				ListRemove( list,Self ) ; TGlobal.root_ent.child_list_id:-1
 			Case entity_list
 				GlobalListRemoveEntity_( ENTITY_entity_list,GetInstance(Self) )
-				ListRemove( list,value ) ; entity_list_id:-1
+				ListRemove( list,Self ) ; entity_list_id:-1
 			Case animate_list
 				GlobalListRemoveEntity_( ENTITY_animate_list,GetInstance(Self) )
-				ListRemove( list,value ) ; animate_list_id:-1
+				ListRemove( list,Self ) ; animate_list_id:-1
 		End Select
 		
 	End Method
@@ -589,10 +594,10 @@ Type TEntity
 	Method FreeEntity()
 	
 		If exists
+			exists=0
 			Local inst:Byte Ptr=GetInstance(Self)
 			FreeEntityList()
 			FreeEntity_(inst)
-			exists=0
 		EndIf
 		
 	End Method
@@ -616,7 +621,10 @@ Type TEntity
 		EndIf
 		
 		For Local ent:TEntity=EachIn child_list
-			If ent Then ent.FreeEntityList()
+			If ent.exists
+				ent.exists=0
+				ent.FreeEntityList() ' recursive
+			EndIf
 		Next
 		
 		ClearList(child_list) ; child_list_id=0

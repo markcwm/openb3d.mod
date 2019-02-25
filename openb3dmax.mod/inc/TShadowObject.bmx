@@ -130,7 +130,7 @@ Type TShadowObject
 		'ShadowVolume=TSurface.GetObject(inst)
 		'If ShadowVolume=Null And inst<>Null Then ShadowVolume=TSurface.CreateObject(inst)
 		
-		AddList_(shadow_list)
+		CopyList_(shadow_list)
 		exists=1
 		
 	End Method
@@ -211,7 +211,7 @@ Type TShadowObject
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		ClearList list
 		
@@ -248,6 +248,7 @@ Type TShadowObject
 	Method FreeShadow()
 	
 		If exists
+			exists=0
 			ListRemove( shadow_list,Self ) ; shadow_list_id:-1
 			ListRemove( TEntity.entity_list,ShadowMesh ) ; TEntity.entity_list_id:-1
 			
@@ -256,7 +257,6 @@ Type TShadowObject
 			
 			FreeShadow_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method

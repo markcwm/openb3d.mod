@@ -31,6 +31,9 @@ void accFrustum_( Camera* obj,float left_,float right_,float bottom,float top,fl
 void UpdateProjMatrix_( Camera* obj );
 void CameraUpdateEntityRender_( Entity* ent,Entity* cam );
 
+// Collision
+void FreeCollisionPivots_();
+
 // Entity
 int CountAllChildren_( Entity* obj,int no_children );
 Entity* GetChildFromAll_( Entity* obj,int child_no,int &no_children,Entity* ent );

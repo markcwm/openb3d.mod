@@ -94,6 +94,11 @@ void CameraUpdateEntityRender_( Entity* ent,Entity* cam ){
 	UpdateEntityRender( ent,cam );
 }
 
+// Collision
+void FreeCollisionPivots_(){
+	FreeCollisionPivots();
+}
+
 // Entity
 
 int CountAllChildren_( Entity* obj,int no_children ){

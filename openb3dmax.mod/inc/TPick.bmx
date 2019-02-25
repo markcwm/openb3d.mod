@@ -87,7 +87,7 @@ Type TPick
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		ClearList list
 		

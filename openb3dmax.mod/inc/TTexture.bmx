@@ -113,8 +113,8 @@ Type TTexture
 		file=TextureString_( GetInstance(Self),TEXTURE_file )
 		file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
 		
-		AddList_(tex_list)
-		AddList_(tex_list_all)
+		CopyList_(tex_list)
+		CopyList_(tex_list_all)
 		exists=1
 		
 	End Method
@@ -187,7 +187,7 @@ Type TTexture
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		ClearList list
 		
@@ -265,7 +265,7 @@ Type TTexture
 	
 	Method CameraToTex( cam:TCamera,frame:Int=0 )
 	
-		If GL_Version<21 ' GL 1.4-2.0
+		If TGlobal.GL_Version<2.1 ' GL 1.4-2.0
 			CameraToTexEXT( cam )
 		Else ' GL 2.1+
 			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
@@ -275,7 +275,7 @@ Type TTexture
 	
 	Method DepthBufferToTex( cam:TCamera=Null )
 	
-		If GL_VERSION<21 ' GL 1.4-2.0
+		If TGlobal.GL_VERSION<2.1 ' GL 1.4-2.0
 			DepthBufferToTexEXT( cam )
 		Else ' GL 2.1+
 			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
@@ -497,6 +497,7 @@ Type TTexture
 	Method FreeTexture()
 	
 		If exists
+			exists=0
 			For Local tex:TTexture=EachIn tex_list_all
 				If tex=Self Then ListRemove( tex_list_all,Self ) ; tex_list_all_id:-1
 			Next
@@ -506,7 +507,6 @@ Type TTexture
 			
 			FreeTexture_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method
@@ -578,7 +578,8 @@ Type TTexture
 				tex.TextureListAdd( tex_list_all )
 			Else
 				old_tex.TextureListAdd( tex_list_all )
-				FreeObject( GetInstance(tex) ) ; tex.exists=0
+				tex.exists=0
+				FreeObject( GetInstance(tex) )
 				
 				DebugLog " Texture already exists: "+file
 				Return old_tex
@@ -685,7 +686,8 @@ Type TTexture
 		Local old_tex:TTexture=tex.TexInList()
 		If old_tex<>Null
 			old_tex.TextureListAdd( tex_list_all )
-			FreeObject( GetInstance(tex) ) ; tex.exists=0
+			tex.exists=0
+			FreeObject( GetInstance(tex) )
 			
 			DebugLog " Texture already exists: "+file
 			Return old_tex

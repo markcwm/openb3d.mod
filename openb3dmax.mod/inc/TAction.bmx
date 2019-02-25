@@ -103,7 +103,7 @@ Type TAction
 		inst=ActionEntity_( GetInstance(Self),ACTION_target )
 		target=TEntity.GetObject(inst)
 		
-		AddList_(action_list)
+		CopyList_(action_list)
 		exists=1
 		
 	End Method
@@ -154,7 +154,7 @@ Type TAction
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		ClearList list
 		
@@ -181,11 +181,11 @@ Type TAction
 	Method FreeAction()
 	
 		If exists And act[0]=0
+			exists=0
 			ListRemove( action_list,Self ) ; action_list_id:-1
 			
 			FreeAction_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method

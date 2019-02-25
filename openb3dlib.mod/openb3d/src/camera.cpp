@@ -523,7 +523,7 @@ void Camera::Update(){
 	if(Global::aa==false){
 		jx=0; jy=0;
 	}
-	//printf("aa=%d jitter=%d x=%f y=%f\n",Global::aa,Global::jitter,jx,jy);
+
 	accPerspective(atan((1.0/(zoom*ratio)))*2.0,ratio,range_near,range_far,jx,jy,0.0,0.0,1.0);
 
 	Matrix new_mat;
@@ -636,7 +636,8 @@ void Camera::Render(){
 	}
 	
 	if(Global::last_mesh==NULL){
-		Global::last_mesh=Mesh::CreateMesh();
+		Global::last_mesh=new Mesh;
+		Global::last_mesh->class_name="Mesh";
 		Global::last_mesh->CreateSurface();
 	}
 	Global::last_mesh->Render(); // fixes vertex color breaks if last in render_list

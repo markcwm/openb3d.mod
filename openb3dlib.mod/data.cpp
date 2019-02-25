@@ -131,6 +131,7 @@ const int BRUSH_blend=			8;
 const int BRUSH_fx=				9;
 const int BRUSH_cache_frame=	10;
 const int BRUSH_tex=			11;
+const int BRUSH_brush_list=		12;
 
 // Camera varid
 const int CAMERA_cam_list=			1;
@@ -170,6 +171,13 @@ const int COLLISIONPAIR_src_type=	3;
 const int COLLISIONPAIR_des_type=	4;
 const int COLLISIONPAIR_col_method=	5;
 const int COLLISIONPAIR_response=	6;
+const int COLLISIONPAIR_pivots_exist=7;
+const int COLLISIONPAIR_piv1o=		8;
+const int COLLISIONPAIR_piv1=		9;
+const int COLLISIONPAIR_piv11=		10;
+const int COLLISIONPAIR_piv111=		11;
+const int COLLISIONPAIR_piv2o=		12;
+const int COLLISIONPAIR_piv2=		13;
 
 // CollisionImpact varid
 const int COLLISIONIMPACT_x=	1;
@@ -453,6 +461,11 @@ char* StaticChar_( int classid,int varid ){
 
 int* StaticInt_( int classid,int varid ){
 	switch (classid){
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_pivots_exist : return &CollisionPair::pivots_exist;
+			}
+			break;
 		case GLOBAL_class :
 			switch (varid){
 				case GLOBAL_width : return &Global::width;
@@ -583,6 +596,16 @@ Pivot* StaticPivot_( int classid,int varid ){
 				case GLOBAL_root_ent : return Global::root_ent;
 			}
 			break;
+		case COLLISIONPAIR_class :
+			switch (varid){
+				case COLLISIONPAIR_piv1o : return CollisionPair::piv1o;
+				case COLLISIONPAIR_piv1 : return CollisionPair::piv1;
+				case COLLISIONPAIR_piv11 : return CollisionPair::piv11;
+				case COLLISIONPAIR_piv111 : return CollisionPair::piv111;
+				case COLLISIONPAIR_piv2o : return CollisionPair::piv2o;
+				case COLLISIONPAIR_piv2 : return CollisionPair::piv2;
+			}
+			break;
 	}
 	return NULL;
 }
@@ -618,6 +641,10 @@ int StaticListSize_( int classid,int varid ){
 				case ACTION_action_list : return Action::action_list.size();
 			}
 			break;
+		case BRUSH_class :
+			switch (varid){
+				case BRUSH_brush_list : return Brush::brush_list.size();
+			}
 		case CAMERA_class :
 			switch (varid){
 				case CAMERA_cam_list : return Camera::cam_list.size();
@@ -670,6 +697,29 @@ Action* StaticIterListAction_( int classid,int varid,int &id ){
 			switch (varid){
 				case ACTION_action_list :
 					for(it=Action::action_list.begin(); it!=Action::action_list.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
+			}
+			break;
+	}
+	
+	return obj;
+}
+
+Brush* StaticIterListBrush_( int classid,int varid,int &id ){
+	int count=0;
+	list<Brush*>::iterator it;
+	Brush* obj;
+	
+	switch (classid){
+		case BRUSH_class :
+			switch (varid){
+				case BRUSH_brush_list :
+					for(it=Brush::brush_list.begin(); it!=Brush::brush_list.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;

@@ -23,6 +23,7 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function MSAntiAlias_( multisample:Int )
 	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
 	Function TrisRendered_:Int()
@@ -69,7 +70,7 @@ Extern
 	Function AnimLength_( ent:Byte Ptr )
 	Function AnimSeq_:Int( ent:Byte Ptr )
 	Function AnimTime_:Float( ent:Byte Ptr )
-	Function AntiAlias_( samples:Int,multisample:Int )
+	Function AntiAlias_( samples:Int )
 	Function BrushAlpha_( brush:Byte Ptr,a:Float )
 	Function BrushBlend_( brush:Byte Ptr,blend:Int )
 	Function BrushColor_( brush:Byte Ptr,r:Float,g:Float,b:Float )
@@ -404,6 +405,7 @@ Const GRAPHICS_MULTISAMPLE2X:Int=$40
 Const GRAPHICS_MULTISAMPLE4X:Int=$80
 Const GRAPHICS_MULTISAMPLE8X:Int=$100
 Const GRAPHICS_MULTISAMPLE16X:Int=$200
+Const GRAPHICS_HIDDEN:Int=$400
 
 ' Texture/Brush flags - flags 1024,2048,4096,8192,16384 seem to be unassigned
 'Const TEX_COLOR:Int=1

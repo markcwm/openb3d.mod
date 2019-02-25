@@ -61,7 +61,7 @@ Type TTerrain Extends TEntity
 		inst=TerrainShader_( GetInstance(Self),TERRAIN_ShaderMat )
 		ShaderMat=TShader.GetObject(inst) ' no CreateObject
 		
-		AddList_(terrain_list)
+		CopyList_(terrain_list)
 		
 	End Method
 	
@@ -135,7 +135,7 @@ Type TTerrain Extends TEntity
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		Super.CopyList_(list) ' calls ClearList
 		

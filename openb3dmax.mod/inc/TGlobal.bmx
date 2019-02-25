@@ -34,6 +34,14 @@ Type TGlobal
 	Global fx1:Int Ptr ' -1
 	Global fx2:Int Ptr ' -1
 	
+	Global pivots_exist:Int=0
+	Global piv1o:TPivot
+	Global piv1:TPivot
+	Global piv11:TPivot
+	Global piv111:TPivot
+	Global piv2o:TPivot
+	Global piv2:TPivot
+	
 	' minib3d: anti aliasing globs
 	'Global aa:Int ' anti_alias true/false
 	'Global ACSIZE:Int ' accum size
@@ -42,7 +50,6 @@ Type TGlobal
 	
 	' wrapper
 	Global gfx_obj:TGraphics
-	
 	Global txt_r:Byte=255, txt_g:Byte=255, txt_b:Byte=255 ' TextColor, in bytes
 	
 	Global Log_New:Int=False		' True to debug when new 3d object created
@@ -52,7 +59,7 @@ Type TGlobal
 	Global Log_MD2:Int=False		' True to debug MD2 chunks
 	Global Log_Assimp:Int=False		' True to debug Assimp
 	
-	Global GL_Version:Int=0			' current GL version as int, eg. 2.1 is 21
+	Global GL_Version:Float=0		' current GL version
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Flags:Int=-1		' Assimp mesh flags
@@ -234,16 +241,45 @@ Type TGlobal
 		glMatrixMode(GL_COLOR)
 		glPushMatrix()
 		
-		'EnableStates() ' all done in Global::Graphics
+		' Global::Graphics
+		glDepthFunc(GL_LEQUAL)
+		glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
+		
+		glAlphaFunc(GL_GEQUAL,0.5)
+		'glAlphaFunc(GL_NOTEQUAL,0.0)
+		
+		glEnable(GL_LIGHTING)
+		glEnable(GL_DEPTH_TEST)
+		glDepthMask(GL_TRUE)
+		'glDisable(GL_BLEND)
+		
+		glEnable(GL_FOG)
+		glEnable(GL_CULL_FACE)
+		glEnable(GL_SCISSOR_TEST)
+		
+		glEnable(GL_NORMALIZE)
+		
+		glEnableClientState(GL_VERTEX_ARRAY)
+		glEnableClientState(GL_NORMAL_ARRAY)
+		glEnableClientState(GL_COLOR_ARRAY)
+		
+		glEnable(GL_DEPTH_TEST)
+		glDepthMask(GL_TRUE)
+		glClearDepthf(1.0)			
+		glDepthFunc(GL_LEQUAL)
+		glEnable(GL_CULL_FACE)
+		glEnable(GL_SCISSOR_TEST)
+		glEnable(GL_BLEND)
+		
+		Local amb#[]=[0.5,0.5,0.5,1.0]
+		Local flag#[]=[0.0]
+		glLightModelfv(GL_LIGHT_MODEL_AMBIENT,Varptr amb[0])
+		glLightModelfv(GL_LIGHT_MODEL_TWO_SIDE,Varptr flag[0]) ' 0 For one sided, 1 for two sided
+		
+		TextureFilter("",1+8)
 		
 		glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
 		glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
-		
-		'glClearDepth(1.0)
-		'glDepthFunc(GL_LEQUAL)
-		'glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST)
-		
-		'glAlphaFunc(GL_GEQUAL, 0.5)
 		
 	End Function
 	
@@ -276,6 +312,40 @@ Type TGlobal
 	
 	End Function
 	
+	Function FreeCollisionPivots()
+	
+		If pivots_exist=1
+			pivots_exist=0
+			If piv1.exists
+				piv1.exists=0
+				piv1.FreeEntityList()
+			EndIf
+			If piv11.exists
+				piv11.exists=0
+				piv11.FreeEntityList()
+			EndIf
+			If piv111.exists
+				piv111.exists=0
+				piv111.FreeEntityList()
+			EndIf
+			If piv2.exists
+				piv2.exists=0
+				piv2.FreeEntityList()
+			EndIf
+			If piv1o.exists
+				piv1o.exists=0
+				piv1o.FreeEntityList()
+			EndIf
+			If piv2o.exists
+				piv2o.exists=0
+				piv2o.FreeEntityList()
+			EndIf
+			
+			FreeCollisionPivots_()
+		EndIf
+		
+	End Function
+	
 	Function ClearCollisions()
 	
 		ClearCollisions_()
@@ -291,22 +361,45 @@ Type TGlobal
 	Function ClearWorld( entities:Int=True,brushes:Int=True,textures:Int=True )
 	
 		If entities
-			ClearList(TGlobal.root_ent.child_list) ; TGlobal.root_ent.child_list_id=0
+			FreeCollisionPivots()
+			Local count:Int=CountList(TEntity.entity_list)
+			FreeAllEntities(count)
 			ClearList(TEntity.entity_list) ; TEntity.entity_list_id=0
+			ClearList(TGlobal.root_ent.child_list) ; TGlobal.root_ent.child_list_id=0
 			ClearList(TEntity.animate_list) ; TEntity.animate_list_id=0
 			ClearList(TCamera.cam_list) ; TCamera.cam_list_id=0
 			ClearList(TPick.ent_list) ; TPick.ent_list_id=0
+			ClearCollisions()
+		EndIf
+		
+		If brushes
+			For Local brush:TBrush=EachIn TBrush.brush_list
+				brush.FreeBrush()
+			Next
+			ClearList(TBrush.brush_list) ; TBrush.brush_list_id=0
 		EndIf
 		
 		If textures
 			For Local tex:TTexture=EachIn TTexture.tex_list
-				TTexture.FreeObject( TTexture.GetInstance(tex) ) ' no FreeEntity
+				tex.FreeTexture()
 			Next
 			ClearList(TTexture.tex_list) ; TTexture.tex_list_id=0
 			ClearList(TTexture.tex_list_all) ; TTexture.tex_list_all_id=0
 		EndIf
 		
-		ClearWorld_( entities,brushes,textures )
+		'ClearWorld_( entities,brushes,textures )
+		
+	End Function
+	
+	Function FreeAllEntities( count:Int Var )
+	
+		For Local ent:TEntity=EachIn TEntity.entity_list
+			If ent.parent=Null
+				ent.FreeEntity()
+			EndIf
+		Next
+		count:-1
+		If count>=0 Then FreeAllEntities( count ) ' recursive
 		
 	End Function
 	
@@ -314,17 +407,33 @@ Type TGlobal
 	
 		UpdateWorld_( anim_speed )
 		
-	End Function
-	
-	Function AntiAlias( samples:Int,multisample:Int=0 )
-		
-		AntiAlias_( samples,multisample )
+		If pivots_exist=0
+			pivots_exist=1
+			piv1o=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv1o ) )
+			piv1=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv1 ) )
+			piv11=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv11 ) )
+			piv111=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv111 ) )
+			piv2o=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv2o ) )
+			piv2=TPivot.CreateObject( StaticPivot_( COLLISIONPAIR_class,COLLISIONPAIR_piv2 ) )
+		EndIf
 		
 	End Function
 	
 	Function RenderWorld()
 	
 		RenderWorld_()
+		
+	End Function
+	
+	Function AntiAlias( samples:Int )
+		
+		AntiAlias_( samples )
+		
+	End Function
+	
+	Function MSAntiAlias( multisample:Int )
+	
+		MSAntiAlias_( multisample )
 		
 	End Function
 	
@@ -358,24 +467,6 @@ Type TGlobal
 	' renamed in Openb3d to UpdateEntityRender/UpdateSprite - called by Camera::Render (in RenderWorld)
 	Function UpdateSprites( cam:TCamera,list:TList )
 
-		
-	
-	End Function
-	EndRem
-	
-	Rem
-	' removed in Openb3d since it was too slow and used the accum buffer
-	Function AntiAlias( samples:Int )
-	
-		AntiAlias_( samples )
-		
-	End Function
-	EndRem
-	
-	Rem
-	' removed in Openb3d - same as RenderWorld but with anti-aliasing
-	Function RenderWorldAA()
-	
 		
 	
 	End Function

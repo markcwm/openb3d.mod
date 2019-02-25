@@ -91,7 +91,7 @@ Type TCamera Extends TEntity
 		proj_mat=CameraFloat_( GetInstance(Self),CAMERA_proj_mat )
 		frustum=CameraFloat_( GetInstance(Self),CAMERA_frustum )
 		
-		AddList_(cam_list)
+		CopyList_(cam_list)
 		
 	End Method
 	
@@ -161,7 +161,7 @@ Type TCamera Extends TEntity
 		
 	End Function
 	
-	Function CopyList_( list:TList ) ' Global list (unused)
+	Function CopyList_( list:TList ) ' Global list
 	
 		Super.CopyList_(list) ' calls ClearList
 		

@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Enables or disables hardware multisample antialiasing if supported
+End Rem
+Function MSAntiAlias( multisample:Int=0 )
+	TGlobal.MSAntiAlias( multisample )
+End Function
+
+Rem
 bbdoc: Sets global width and height of screen resolution
 about: Only needed when changing screen resolution, these globals are used in 
 CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.
@@ -759,8 +766,8 @@ End Function
 Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
 End Rem
-Function AntiAlias( samples:Int,multisample:Int=0 )
-	TGlobal.AntiAlias( samples,multisample )
+Function AntiAlias( samples:Int )
+	TGlobal.AntiAlias( samples )
 End Function
 
 'Rem

@@ -70,6 +70,9 @@ Extern
 	Function UpdateProjMatrix_( obj:Byte Ptr )
 	Function CameraUpdateEntityRender_( ent:Byte Ptr,cam:Byte Ptr )
 	
+	' Collision
+	Function FreeCollisionPivots_()
+	
 	' Global
 	Function UpdateEntityAnim_( mesh:Byte Ptr )
 	
@@ -223,6 +226,7 @@ Extern
 	Function StaticSurface_:Byte Ptr( classid:Int,varid:Int )
 	Function StaticListSize_:Int( classid:Int,varid:Int )
 	Function StaticIterListAction_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
+	Function StaticIterListBrush_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListCamera_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListEntity_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
@@ -478,6 +482,7 @@ Const BRUSH_blend:Int=		8
 Const BRUSH_fx:Int=			9
 Const BRUSH_cache_frame:Int=10
 Const BRUSH_tex:Int=		11
+Const BRUSH_brush_list:Int=	12
 
 ' Camera varid
 Const CAMERA_cam_list:Int=			1
@@ -517,6 +522,13 @@ Const COLLISIONPAIR_src_type:Int=	3
 Const COLLISIONPAIR_des_type:Int=	4
 Const COLLISIONPAIR_col_method:Int=	5
 Const COLLISIONPAIR_response:Int=	6
+Const COLLISIONPAIR_pivots_exist:Int=7
+Const COLLISIONPAIR_piv1o:Int=		8
+Const COLLISIONPAIR_piv1:Int=		9
+Const COLLISIONPAIR_piv11:Int=		10
+Const COLLISIONPAIR_piv111:Int=		11
+Const COLLISIONPAIR_piv2o:Int=		12
+Const COLLISIONPAIR_piv2:Int=		13
 
 ' CollisionImpact varid
 Const COLLISIONIMPACT_x:Int=	1

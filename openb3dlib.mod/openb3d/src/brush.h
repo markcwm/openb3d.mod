@@ -31,6 +31,7 @@ public:
 	Texture* tex[8];
 
 	// extra
+	static list<Brush*> brush_list;
 	int glBlendFunc[2];
 	
 	Brush(){

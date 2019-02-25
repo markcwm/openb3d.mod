@@ -12,6 +12,9 @@ Type TBrush
 	Field cache_frame:Int Ptr ' openb3d: unsigned int array [8]
 	Field tex:TTexture[8] ' returned by GetBrushTexture - NULL
 	
+	' extra
+	Global brush_list:TList=CreateList() ' Brush list
+	
 	' minib3d
 	'Field tex_frame:Int ' 0
 	
@@ -23,6 +26,7 @@ Type TBrush
 	?
 	Field instance:Byte Ptr
 	
+	Global brush_list_id:Int=0
 	Field exists:Int=0 ' FreeBrush
 	
 	Function CreateObject:TBrush( inst:Byte Ptr ) ' Create and map object from C++ instance
@@ -95,6 +99,7 @@ Type TBrush
 			'If tex[id]<>Null Then DebugLog " get tex="+id+" tex.file="+tex[id].GetString(tex[id].file)
 		Next
 		
+		CopyList_(brush_list)
 		exists=1
 		
 	End Method
@@ -141,6 +146,35 @@ Type TBrush
 		DebugLog ""
 		
 	End Method
+	
+	Function AddList_( list:TList ) ' Global list
+	
+		Select list
+			Case brush_list
+				If StaticListSize_( BRUSH_class,BRUSH_brush_list )
+					Local inst:Byte Ptr=StaticIterListBrush_( BRUSH_class,BRUSH_brush_list,Varptr brush_list_id )
+					Local obj:TBrush=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				EndIf
+		End Select
+		
+	End Function
+	
+	Function CopyList_( list:TList ) ' Global list
+	
+		ClearList list
+		
+		Select list
+			Case brush_list
+				brush_list_id=0
+				For Local id:Int=0 To StaticListSize_( BRUSH_class,BRUSH_brush_list )-1
+					Local inst:Byte Ptr=StaticIterListBrush_( BRUSH_class,BRUSH_brush_list,Varptr brush_list_id )
+					Local obj:TBrush=GetObject(inst) ' no CreateObject
+					If obj Then ListAddLast( list,obj )
+				Next
+		End Select
+		
+	End Function
 	
 	' Extra
 	
@@ -221,9 +255,11 @@ Type TBrush
 	Method FreeBrush()
 	
 		If exists
+			exists=0
+			ListRemove( brush_list,Self ) ; brush_list_id:-1
+			
 			FreeBrush_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method

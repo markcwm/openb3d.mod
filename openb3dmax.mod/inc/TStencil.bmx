@@ -110,9 +110,9 @@ Type TStencil
 	Method FreeStencil() ' Spinduluz
 	
 		If exists
+			exists=0
 			FreeStencil_( GetInstance(Self) )
 			FreeObject( GetInstance(Self) )
-			exists=0
 		EndIf
 		
 	End Method

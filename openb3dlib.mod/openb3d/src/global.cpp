@@ -23,6 +23,7 @@
 #include "physics.h"
 #include "actions.h"
 #include "postfx.h"
+#include "light.h"
 
 #include <list>
 #include <stdlib.h>
@@ -439,19 +440,34 @@ void Global::Collisions(int src_no,int dest_no,int method_no,int response_no){
 void Global::ClearWorld(int entities,int brushes,int textures){
 
 	if(entities){
-		//list<Entity*>::iterator it;
-		//for(it=Entity::entity_list.begin();it!=Entity::entity_list.end();it++){
-		//	Entity* ent=*it;
-		//	ent->FreeEntity();
-		//}
-		Global::root_ent->FreeEntity();
+		FreeCollisionPivots();
+		list<Entity*>::iterator it;
+		for(it=Entity::entity_list.begin();it!=Entity::entity_list.end();it++){
+			Entity* ent=*it;
+			ent->FreeEntity(); // random crashes at delete surf
+			it=Entity::entity_list.begin();
+			it--;
+		}
+		//Global::root_ent->FreeEntity();
+		Global::root_ent->child_list.clear();
 		Entity::entity_list.clear();
 		Entity::animate_list.clear();
 		Camera::cam_list.clear();
-		ClearCollisions();
 		Pick::ent_list.clear();
+		ClearCollisions();
 	}
-
+	
+	if(brushes){
+		list<Brush*>::iterator it;
+		for(it=Brush::brush_list.begin();it!=Brush::brush_list.end();it++){
+			Brush* brush=*it;
+			brush->FreeBrush();
+			it=Brush::brush_list.begin();
+			it--;
+		}
+		Brush::brush_list.clear();
+	}
+	
 	if(textures){
 		list<Texture*>::iterator it;
 		for(it=Texture::tex_list.begin();it!=Texture::tex_list.end();it++){
@@ -604,7 +620,6 @@ void Global::AntiAlias(int samples){
 			case 12 : j_data[i][0]=j12_data[k]; j_data[i][1]=j12_data[k+1]; break;
 			case 16 : j_data[i][0]=j16_data[k]; j_data[i][1]=j16_data[k+1]; break;
 		}
-		//printf("%d 0=%f 1=%f\n",i,j_data[i][0],j_data[i][1]);
 	}
 
 }

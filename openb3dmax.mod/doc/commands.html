@@ -56,6 +56,9 @@ Set discard value (as 0..1) above which to ignore pixel's alpha value, default i
 <tr><td class=docleft width=1%><a href=#AmbientShader>AmbientShader</a></td><td class=docright>
 Set default shader for surfaces.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#AntiAlias>AntiAlias</a></td><td class=docright>
+<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
+</td></tr>
 <tr><td class=docleft width=1%><a href=#AppendAction>AppendAction</a></td><td class=docright>
 Adds action to the end of another one, where act1 happens before act2.
 </td></tr>
@@ -298,6 +301,9 @@ Returns the number of mipmaps a texture has.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#MSAntiAlias>MSAntiAlias</a></td><td class=docright>
+Enables or disables hardware multisample antialiasing if supported.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewAnimationKeys>NewAnimationKeys</a></td><td class=docright>
 Returns a new TAnimationKeys object.
@@ -696,6 +702,11 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=AmbientShader>
 <tr><td class=doctop colspan=2>Function AmbientShader( material:TShader )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set default shader for surfaces.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=AntiAlias>
+<tr><td class=doctop colspan=2>Function AntiAlias( samples:Int )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a></td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=AppendAction>
@@ -1126,6 +1137,11 @@ Use "debug" for mesh loader debug information or disable with "nodebug".</td></t
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
 <tr><td class=doctop colspan=2>Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set height of a given point, like ModifyTerrain.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=MSAntiAlias>
+<tr><td class=doctop colspan=2>Function MSAntiAlias( multisample:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Enables or disables hardware multisample antialiasing if supported.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewAnimationKeys>

@@ -9,6 +9,8 @@
 
 #include "brush.h"
 
+list<Brush*> Brush::brush_list;
+
 Brush* Brush::Copy(){
 
 	Brush* brush=new Brush();
@@ -39,12 +41,14 @@ Brush* Brush::Copy(){
 	brush->tex[6]=tex[6];
 	brush->tex[7]=tex[7];
 
+	brush_list.push_back(brush);
 	return brush;
 
 }
 
 void Brush::FreeBrush(){
 
+	brush_list.remove(this);
 	delete this;
 
 }
@@ -56,6 +60,7 @@ Brush* Brush::CreateBrush(float r,float g,float b){
 	brush->green= g/255.0;
 	brush->blue = b/255.0;
 
+	brush_list.push_back(brush);
 	return brush;
 
 }
@@ -69,6 +74,7 @@ Brush* Brush::LoadBrush(string file,int flags,float u_scale,float v_scale){
 	brush->tex[0]->u_scale=u_scale;
 	brush->tex[0]->v_scale=v_scale;
 
+	brush_list.push_back(brush);
 	return brush;
 
 }

@@ -12,6 +12,7 @@
 
 #include "entity.h"
 #include "surface.h"
+//#include "pivot.h"
 
 #include <list>
 #include <iostream>
@@ -20,6 +21,7 @@ using namespace std;
 const int MAX_TYPES=100;
 
 class Entity;
+class Pivot;
 
 class CollisionPair{
 
@@ -27,7 +29,15 @@ public:
 
 	static list<CollisionPair*> cp_list;
 	static list<Entity*> ent_lists[MAX_TYPES];
-
+	
+	static int pivots_exist;
+	static Pivot* piv1o;
+	static Pivot* piv1;
+	static Pivot* piv11;
+	static Pivot* piv111;
+	static Pivot* piv2o;
+	static Pivot* piv2;
+	
 	int src_type;
 	int des_type;
 	int col_method;
@@ -83,5 +93,7 @@ void UpdateDynamicCollisions();
 void clearCollisions();
 int PositionEntities(int update_old=true,int add_to_new=false);
 int QuickCheck(Entity& ent,Entity& ent2);
+void LoadCollisionPivots();
+void FreeCollisionPivots();
 
 #endif
