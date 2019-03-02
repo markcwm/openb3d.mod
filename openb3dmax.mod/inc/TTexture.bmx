@@ -1003,8 +1003,8 @@ Type TTexture
 			Default ' wrapper
 				Local tex:TTexture=NewTexture()
 				
-				tex.SetString(tex.file,file)
-				tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+				tex.SetString(tex.file,GetString(file))
+				tex.SetString(tex.file_abs,FileAbs(GetString(file))) ' returns absolute path of file if relative
 				tex.blend[0]=blend[0]
 				tex.coords[0]=coords[0]
 				tex.u_scale[0]=u_scale[0]

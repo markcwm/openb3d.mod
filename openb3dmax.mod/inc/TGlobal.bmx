@@ -265,7 +265,7 @@ Type TGlobal
 		
 		glEnable(GL_DEPTH_TEST)
 		glDepthMask(GL_TRUE)
-		glClearDepthf(1.0)			
+		glClearDepth(1.0)
 		glDepthFunc(GL_LEQUAL)
 		glEnable(GL_CULL_FACE)
 		glEnable(GL_SCISSOR_TEST)
