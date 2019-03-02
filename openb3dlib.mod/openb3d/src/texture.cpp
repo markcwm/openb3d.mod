@@ -24,6 +24,7 @@
 
 list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
+int Texture::isunique=0;
 
 void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
 void ApplyAlpha (Texture* tex, unsigned char *src);
@@ -33,11 +34,7 @@ int CheckAlpha(Texture* tex, unsigned char *src);
 Texture* Texture::Copy(){
 	Texture *tex=new Texture();
 	
-	tex->texture=texture;
 	tex->file=file;
-	tex->frames=frames;
-	
-	tex->flags=flags;
 	tex->blend=blend;
 	tex->coords=coords;
 	tex->u_scale=u_scale;
@@ -46,13 +43,14 @@ Texture* Texture::Copy(){
 	tex->v_pos=v_pos;
 	tex->angle=angle;
 	tex->file_abs=file_abs;
-	tex->width=width;
-	tex->height=height;
-	tex->no_frames=no_frames;
-	tex->framebuffer=framebuffer;
-	tex->cube_face=cube_face;
-	tex->cube_mode=cube_mode;
 	
+	Texture::isunique=true;
+	if(no_frames<2){
+		Texture::LoadTexture(file,flags,tex);
+	}else{
+		Texture::LoadAnimTexture(file,flags,width,height,0,no_frames,tex);
+	}
+	Texture::isunique=false;
 	return tex;
 }
 
@@ -71,7 +69,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		
 		// check to see if texture with same properties exists already, if so return existing texture
 		Texture* old_tex=tex->TexInList(tex_list);
-		if(old_tex!=NULL){
+		if(old_tex!=NULL && Texture::isunique==false){
 			delete tex;
 			tex_list_all.push_back(old_tex);
 			return old_tex;
@@ -116,7 +114,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 
 		// check to see if texture with same properties exists already, if so return existing texture
 		Texture* old_tex=tex->TexInList(tex_list);
-		if(old_tex!=NULL){
+		if(old_tex!=NULL && Texture::isunique==false){
 			delete tex;
 			tex_list_all.push_back(old_tex);
 			return old_tex;
@@ -222,7 +220,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	// check to see if texture with same properties exists already, if so return existing texture
 	Texture* old_tex=tex->TexInList(tex_list);
-	if(old_tex!=NULL){
+	if(old_tex!=NULL && Texture::isunique==false){
 		delete tex;
 		tex_list_all.push_back(old_tex);
 		return old_tex;

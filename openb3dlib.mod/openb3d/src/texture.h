@@ -45,7 +45,7 @@ public:
 	float TexEnvf[12];
 	int TexEnv_count;
 	float multitex_factor;
-	
+	static int isunique;
 	int format; // can be GL_RGBA or one of the DXT compressed ones
 
 	Texture(){

@@ -29,6 +29,7 @@ Type TTexture
 	
 	' extra
 	Global tex_list_all:TList=CreateList()
+	Global is_unique:Int=0
 	
 	' wrapper
 	?bmxng
@@ -572,7 +573,7 @@ Type TTexture
 		
 		' check to see if texture with same properties exists already, if so return existing texture
 		Local old_tex:TTexture=tex.TexInList()
-		If old_tex<>Null
+		If old_tex<>Null And TTexture.is_unique=False
 			If frame_width>0 And frame_height>0 And frame_count=1 And old_tex<>tex ' load area of same image
 				tex.TextureListAdd( tex_list )
 				tex.TextureListAdd( tex_list_all )
@@ -684,7 +685,7 @@ Type TTexture
 		
 		' check to see if texture with same properties exists already, if so return existing texture
 		Local old_tex:TTexture=tex.TexInList()
-		If old_tex<>Null
+		If old_tex<>Null And TTexture.is_unique=False
 			old_tex.TextureListAdd( tex_list_all )
 			tex.exists=0
 			FreeObject( GetInstance(tex) )
@@ -993,8 +994,35 @@ Type TTexture
 	
 	Method Copy:TTexture()
 		
-		Local inst:Byte Ptr=TextureCopy_( GetInstance(Self) )
-		Return CreateObject(inst)
+		Select TGlobal.Texture_Loader
+		
+			Case 2 ' library
+				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self) )
+				Return CreateObject(inst)
+				
+			Default ' wrapper
+				Local tex:TTexture=NewTexture()
+				
+				tex.SetString(tex.file,file)
+				tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+				tex.blend[0]=blend[0]
+				tex.coords[0]=coords[0]
+				tex.u_scale[0]=u_scale[0]
+				tex.v_scale[0]=v_scale[0]
+				tex.u_pos[0]=u_pos[0]
+				tex.v_pos[0]=v_pos[0]
+				tex.angle[0]=angle[0]
+				
+				TTexture.is_unique=True
+				If no_frames[0]<2
+					LoadAnimTextureStream(GetString(file),flags[0],0,0,0,1,tex)
+				Else
+					LoadAnimTextureStream(GetString(file),flags[0],width[0],height[0],0,no_frames[0],tex)
+				EndIf
+				TTexture.is_unique=False
+				Return tex
+				
+		EndSelect
 		
 	End Method	
 	
