@@ -114,7 +114,7 @@ Sprite* Sprite::CopyEntity(Entity* parent_ent){
 
 void Sprite::FreeEntity(){
 
-	Mesh::FreeEntity();
+	Entity::FreeEntity();
 
 	delete this;
 
