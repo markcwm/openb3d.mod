@@ -152,7 +152,7 @@ void TerrainUpdateNormals_( Terrain* obj );
 void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 
 // Texture
-Texture* TextureCopy_( Texture* obj );
+Texture* TextureCopy_( Texture* obj,int copyflags );
 Texture* TexInList_( Texture* obj,list<Texture*>& list_ref );
 void FilterFlags_( Texture* obj );
 void CopyRect_(unsigned char* src,unsigned int sW,unsigned int sH,unsigned int sX,unsigned int sY,unsigned char* dst,unsigned int dW,unsigned int dH,unsigned int bPP,int invert);

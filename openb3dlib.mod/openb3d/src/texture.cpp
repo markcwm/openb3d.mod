@@ -31,7 +31,7 @@ void ApplyAlpha (Texture* tex, unsigned char *src);
 void ApplyMask (Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu);
 int CheckAlpha(Texture* tex, unsigned char *src);
 
-Texture* Texture::Copy(){
+Texture* Texture::Copy(int copyflags){
 	Texture *tex=new Texture();
 	
 	tex->file=file;
@@ -43,6 +43,8 @@ Texture* Texture::Copy(){
 	tex->v_pos=v_pos;
 	tex->angle=angle;
 	tex->file_abs=file_abs;
+	
+	if (copyflags) flags=copyflags; // use new flags instead of the original ones
 	
 	Texture::isunique=true;
 	if(no_frames<2){

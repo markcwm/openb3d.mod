@@ -36,6 +36,8 @@ public:
 	void SpriteTexCoords(int cell_x,int cell_y,int cell_w,int cell_h,int tex_w,int tex_h,int uv_set=0);
 	void SpriteVertexColor(int v,float r,float g,float b);
 	
+	static Sprite* NewSprite();
+	
 	Sprite(){
 	
 		angle=0.0;

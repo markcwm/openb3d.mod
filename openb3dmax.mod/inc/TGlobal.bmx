@@ -423,6 +423,10 @@ Type TGlobal
 	
 		RenderWorld_()
 		
+		For Local mesh:TBatchSpriteMesh=EachIn TBatchSpriteMesh.render_list
+			mesh.Render()
+		Next
+		
 	End Function
 	
 	Function AntiAlias( samples:Int )

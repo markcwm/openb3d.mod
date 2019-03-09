@@ -482,8 +482,8 @@ void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
 
 // Texture
 
-Texture* TextureCopy_( Texture* obj ){
-	return obj->Copy();
+Texture* TextureCopy_( Texture* obj,int copyflags ){
+	return obj->Copy( copyflags );
 }
 
 Texture* TexInList_( Texture* obj,list<Texture*>& list_ref ){

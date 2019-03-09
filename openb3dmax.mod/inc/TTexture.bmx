@@ -992,12 +992,12 @@ Type TTexture
 	
 	' Internal - not recommended for general use
 	
-	Method Copy:TTexture()
+	Method Copy:TTexture( copyflags:Int=0 )
 		
 		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
-				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self) )
+				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self),copyflags )
 				Return CreateObject(inst)
 				
 			Default ' wrapper
@@ -1012,6 +1012,8 @@ Type TTexture
 				tex.u_pos[0]=u_pos[0]
 				tex.v_pos[0]=v_pos[0]
 				tex.angle[0]=angle[0]
+				
+				If copyflags Then flags[0]=copyflags ' use new flags instead of the original ones
 				
 				TTexture.is_unique=True
 				If no_frames[0]<2

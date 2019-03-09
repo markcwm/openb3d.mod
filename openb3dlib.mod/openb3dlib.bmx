@@ -188,7 +188,7 @@ Extern
 	Function col_tree_sub_( obj:Byte Ptr,l:Int,v0:Float Ptr,v1:Float Ptr,v2:Float Ptr )
 	
 	' Texture
-	Function TextureCopy_:Byte Ptr( obj:Byte Ptr )
+	Function TextureCopy_:Byte Ptr( obj:Byte Ptr,copyflags:Int )
 	Function TexInList_:Byte Ptr( obj:Byte Ptr,list_ref:Byte Ptr )
 	Function FilterFlags_( obj:Byte Ptr )
 	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int )

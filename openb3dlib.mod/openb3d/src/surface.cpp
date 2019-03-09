@@ -16,6 +16,7 @@
 
 #include <vector>
 #include <map>
+#include <stdio.h>
 using namespace std;
 
 // ***todo***
@@ -155,25 +156,40 @@ int Surface::AddVertex(float x,float y,float z,float u,float v,float w){
 
 	no_verts++;
 
-	vert_coords.push_back(x);
-	vert_coords.push_back(y);
-	vert_coords.push_back(-z); // ***ogl***
+	// resize arrays
+	if (no_verts>=vert_array_size){
+		do {
+			vert_array_size=vert_array_size*2;
+		} while (!(vert_array_size>no_verts));
+		
+		vert_coords.resize(vert_array_size*3);
+		vert_tex_coords0.resize(vert_array_size*2);
+		vert_tex_coords1.resize(vert_array_size*2);
+		vert_norm.resize(vert_array_size*3);
+		vert_col.resize(vert_array_size*4);
+	}
+	
+	int v3=no_verts*3;		
+	int v2=no_verts*2;
+	int v4=no_verts*4;
+	
+	vert_coords[v3-3]=x;
+	vert_coords[v3-2]=y;
+	vert_coords[v3-1]=-z; // ***ogl***
 
-	vert_norm.push_back(0.0);
-	vert_norm.push_back(0.0);
-	vert_norm.push_back(0.0);
+	vert_norm[v3-3]=0.0;
+	vert_norm[v3-2]=0.0;
+	vert_norm[v3-1]=0.0;
 
-	vert_col.push_back(1.0);
-	vert_col.push_back(1.0);
-	vert_col.push_back(1.0);
-	vert_col.push_back(1.0);
-
-	vert_tex_coords0.push_back(u);
-	vert_tex_coords0.push_back(v);
-
-	vert_tex_coords1.push_back(0.0);
-	vert_tex_coords1.push_back(0.0);
-
+	vert_tex_coords0[v2-2]=u;
+	vert_tex_coords0[v2-1]=v;
+	
+	// default vertex colours
+	vert_col[v4-4]=1.0;
+	vert_col[v4-3]=1.0;
+	vert_col[v4-2]=1.0;
+	vert_col[v4-1]=1.0;
+	
 	return no_verts-1;
 
 }
@@ -181,11 +197,22 @@ int Surface::AddVertex(float x,float y,float z,float u,float v,float w){
 int Surface::AddTriangle(unsigned short v0,unsigned short v1,unsigned short v2){
 
 	no_tris++;
-
-	tris.push_back(v2);
-	tris.push_back(v1);
-	tris.push_back(v0);
-
+	
+	// resize array
+	if (no_tris>=tri_array_size){
+		do {
+			tri_array_size=tri_array_size*2;
+		} while (!(tri_array_size>no_tris));
+		
+		tris.resize(tri_array_size*3);
+	}
+	
+	int v3=no_tris*3;
+	
+	tris[v3-3]=v2;
+	tris[v3-2]=v1;
+	tris[v3-1]=v0;
+	
 	reset_vbo=reset_vbo|1|2|16;
 
 	return no_tris;

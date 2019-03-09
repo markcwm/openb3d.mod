@@ -14,6 +14,7 @@
 #include "global.h"
 #include "surface.h"
 #include "texture.h"
+#include "sprite.h"
 
 #include <iostream>
 using namespace std;
@@ -102,6 +103,59 @@ public:
 			delete sprite_batch;
 		}
 		sprite_batch_list.clear();
+	
+	}
+
+};
+
+class BatchSprite;
+
+class BatchSpriteMesh : public Mesh{
+
+public:
+	Surface* surf; 
+	vector<int> free_stack; // list of available vertex
+	int num_sprites;
+	list<BatchSprite*> sprite_list;
+	int id;
+	Sprite* cam_sprite; // use this to get cam info
+	
+	static BatchSpriteMesh* Create(Entity* parent_ent=NULL);
+	void Update() {};
+	void Render();
+	
+	BatchSpriteMesh(){
+	
+		num_sprites=0; id=0;
+		free_stack.push_back(0);
+		
+	}
+
+};
+
+class BatchSprite : public Sprite{
+
+public:
+	int batch_id; // ids start at 1
+	int vertex_id;
+	//Field sprite_link:TLink
+	static float b_min_x, b_min_y, b_max_x, b_max_y, b_min_z, b_max_z;
+	static vector<BatchSpriteMesh*> mainsprite;
+	static int total_batch;
+	static Matrix temp_mat;
+
+	void FreeEntity(void);
+	static void BatchSpriteParent(int id=0, Entity* ent=NULL,int glob=true);
+	static Entity* BatchSpriteEntity(BatchSprite* batch_sprite=NULL);
+	void BatchSpriteOrigin(float x,float y,float z);
+	static BatchSpriteMesh* CreateBatchMesh( int batchid );
+	static BatchSprite* CreateSprite(Entity* parent_ent=NULL);
+	static BatchSpriteMesh* LoadBatchTexture(string tex_file,int tex_flag=1,int id=0);
+	void UpdateBatch(Sprite* cam_sprite);
+	static float Min5(float a, float b, float c, float d, float e);
+	static float Max5(float a, float b, float c, float d, float e);
+
+	BatchSprite(){
 	
 	}
 

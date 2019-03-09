@@ -14,6 +14,11 @@
 #include "pick.h"
 #include "texture.h"
 
+Sprite* Sprite::NewSprite(){
+	Sprite* spr=new Sprite();
+	return spr;
+}
+
 Sprite* Sprite::CopyEntity(Entity* parent_ent){
 
 	// new sprite
@@ -109,7 +114,7 @@ Sprite* Sprite::CopyEntity(Entity* parent_ent){
 
 void Sprite::FreeEntity(){
 
-	Entity::FreeEntity();
+	Mesh::FreeEntity();
 
 	delete this;
 

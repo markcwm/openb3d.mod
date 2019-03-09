@@ -17,6 +17,7 @@
 #include "physics.h"
 #include "actions.h"
 #include "postfx.h"
+#include "sprite_batch.h"
 
 #include <math.h>
 
@@ -25,6 +26,17 @@
 extern "C" {
 
 // Extra
+
+Entity* BatchSpriteEntity_(BatchSprite* batch_sprite){
+	return BatchSprite::BatchSpriteEntity(batch_sprite);
+}
+
+BatchSprite* CreateBatchSprite_(Entity* parent_ent){
+	return BatchSprite::CreateSprite(parent_ent);
+}
+BatchSpriteMesh* LoadBatchTexture_(char* tex_file, int tex_flag, int id){
+	return BatchSprite::LoadBatchTexture(tex_file, tex_flag, id);
+}
 
 int Mipmaps_(Texture* tex){
 	if (tex==NULL) return 0;
@@ -63,6 +75,9 @@ Bone* NewBone_(Mesh* mesh){
 	return mesh->NewBone();
 }
 
+Sprite* NewSprite_(){
+	return Sprite::NewSprite();
+}
 
 /*Shader* CreateShaderMaterial_(char* ShaderName){
 	return Shader::CreateShaderMaterial(ShaderName);

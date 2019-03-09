@@ -68,7 +68,7 @@ public:
 	static Texture* CreateTexture(int width=256,int height=256,int flags=3, int frames=0);
 	static Texture* NewTexture();
 
-	Texture* Copy();
+	Texture* Copy(int copyflags);
 	void FreeTexture();
 	void DrawTexture(int x,int y);
 	void TextureBlend(int blend_no);

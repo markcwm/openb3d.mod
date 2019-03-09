@@ -71,6 +71,13 @@ Type TSprite Extends TMesh
 		
 	End Method
 	
+	Function NewSprite:TSprite()
+	
+		Local inst:Byte Ptr=NewSprite_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	' Openb3d
 	
 	Method SpriteRenderMode( Mode:Int )

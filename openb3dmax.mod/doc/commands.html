@@ -71,6 +71,15 @@ Attaches a vertex shader object to a program object.
 <tr><td class=docleft width=1%><a href=#BackBufferToTex>BackBufferToTex</a></td><td class=docright>
 Copy the contents of the backbuffer to a texture.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#BatchSpriteEntity>BatchSpriteEntity</a></td><td class=docright>
+Return the sprite batch main mesh entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BatchSpriteOrigin>BatchSpriteOrigin</a></td><td class=docright>
+Move the batch sprite origin for depth sorting.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#BatchSpriteParent>BatchSpriteParent</a></td><td class=docright>
+Add a parent to the entire batch mesh - position only.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#BeginMax2D>BeginMax2D</a></td><td class=docright>
 Old begin function as in Minib3d is 0, new begin function is 1 (default)
 </td></tr>
@@ -103,6 +112,9 @@ Returns a copy of the new surface.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
 Returns a copy of the new texture.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateBatchSprite>CreateBatchSprite</a></td><td class=docright>
+Add a sprite to batch, batchsprites are one mesh.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
 Create blob from a fluid mesh where radius is the size of the blob.
@@ -266,6 +278,9 @@ Link shader to a program object, as created by CreateShaderMaterial.
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 Loads an anim mesh, see MeshLoader.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#LoadBatchTexture>LoadBatchTexture</a></td><td class=docright>
+Does not create sprite, just loads texture.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#LoaderMatrix>LoaderMatrix</a></td><td class=docright>
 Change model loader coordinates system, currently only 3DS supported.
 </td></tr>
@@ -319,6 +334,9 @@ Returns a new TMesh object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewQuaternion>NewQuaternion</a></td><td class=docright>
 Returns a new TQuaternion object.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#NewSprite>NewSprite</a></td><td class=docright>
+Returns a new TSprite object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewSurface>NewSurface</a></td><td class=docright>
 Returns a new TSurface object.
@@ -522,6 +540,12 @@ Action.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TAnimationKeys>TAnimationKeys</a></td><td class=docright>
 AnimationKeys data.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TBatchSprite>TBatchSprite</a></td><td class=docright>
+Batch sprite entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TBatchSpriteMesh>TBatchSpriteMesh</a></td><td class=docright>
+Batch sprite mesh entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TBlitz2D>TBlitz2D</a></td><td class=docright>
 Blitz2D.
@@ -733,6 +757,21 @@ So if you want to copy a 3D scene to a texture, first resize the camera viewport
 use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=BatchSpriteEntity>
+<tr><td class=doctop colspan=2>Function BatchSpriteEntity:TEntity( batch_sprite:TBatchSprite=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Return the sprite batch main mesh entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BatchSpriteOrigin>
+<tr><td class=doctop colspan=2>Function BatchSpriteOrigin( batch_sprite:TBatchSprite,x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Move the batch sprite origin for depth sorting.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=BatchSpriteParent>
+<tr><td class=doctop colspan=2>Function BatchSpriteParent( id:Int=0,ent:TEntity,glob:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add a parent to the entire batch mesh - position only.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=BeginMax2D>
 <tr><td class=doctop colspan=2>Function BeginMax2D( version:Int=1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Old begin function as in Minib3d is 0, new begin function is 1 (default)</td></tr>
@@ -786,8 +825,14 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyTexture>
-<tr><td class=doctop colspan=2>Function CopyTexture:TTexture( tex:TTexture )</td></tr>
+<tr><td class=doctop colspan=2>Function CopyTexture:TTexture( tex:TTexture,flags:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateBatchSprite>
+<tr><td class=doctop colspan=2>Function CreateBatchSprite:TBatchSprite( parent_ent:TEntity=Null )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add a sprite to batch, batchsprites are one mesh.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>If you want to add to specific batch controller, use BatchSpriteEntity as parent_ent.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateBlob>
@@ -1068,6 +1113,11 @@ CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.<
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads an anim mesh, see MeshLoader.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=LoadBatchTexture>
+<tr><td class=doctop colspan=2>Function LoadBatchTexture:TBatchSpriteMesh( tex_file:String,tex_flag:Int=1,id:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Does not create sprite, just loads texture.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=LoaderMatrix>
 <tr><td class=doctop colspan=2>Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Change model loader coordinates system, currently only 3DS supported.</td></tr>
@@ -1167,6 +1217,11 @@ Use "debug" for mesh loader debug information or disable with "nodebug".</td></t
 <table class=doc width=100% cellspacing=3 id=NewQuaternion>
 <tr><td class=doctop colspan=2>Function NewQuaternion:TQuaternion()</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuaternion object.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=NewSprite>
+<tr><td class=doctop colspan=2>Function NewSprite:TSprite()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TSprite object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewSurface>
@@ -1523,6 +1578,16 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <table class=doc width=100% cellspacing=3 id=TAnimationKeys>
 <tr><td class=doctop colspan=2>Type TAnimationKeys</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>AnimationKeys data.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TBatchSprite>
+<tr><td class=doctop colspan=2>Type TBatchSprite Extends TSprite</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Batch sprite entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TBatchSpriteMesh>
+<tr><td class=doctop colspan=2>Type TBatchSpriteMesh Extends TMesh</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Batch sprite mesh entity.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TBlitz2D>

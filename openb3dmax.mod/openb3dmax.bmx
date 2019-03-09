@@ -23,12 +23,16 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function BatchSpriteEntity_:Byte Ptr( batch_sprite:Byte Ptr )
+	Function CreateBatchSprite_:Byte Ptr( parent_ent:Byte Ptr )
+	Function LoadBatchTexture_:Byte Ptr( tex_file:Byte Ptr,tex_flag:Int,id:Int )
 	Function MSAntiAlias_( multisample:Int )
 	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
 	Function TrisRendered_:Int()
 	Function VertsRendered_:Int()
 	Function SurfsRendered_:Int()
+	Function NewSprite_:Byte Ptr()
 	Function NewTexture_:Byte Ptr()
 	Function NewMesh_:Byte Ptr()
 	Function NewSurface_:Byte Ptr( mesh:Byte Ptr )
@@ -516,6 +520,7 @@ Include "inc/TAction.bmx"
 Include "inc/TConstraint.bmx"
 Include "inc/TParticleBatch.bmx"
 Include "inc/TPostFX.bmx"
+Include "inc/TBatchSprite.bmx"
 
 ' functions
 Include "inc/functions.bmx"

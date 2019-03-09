@@ -3,6 +3,42 @@
 ' *** Extra
 
 Rem
+bbdoc: Add a parent to the entire batch mesh - position only
+End Rem
+Function BatchSpriteParent( id:Int=0,ent:TEntity,glob:Int=True )
+	TBatchSprite.BatchSpriteParent( id,ent,glob )
+End Function
+
+Rem
+bbdoc: Return the sprite batch main mesh entity
+End Rem
+Function BatchSpriteEntity:TEntity( batch_sprite:TBatchSprite=Null )
+	Return TBatchSprite.BatchSpriteEntity( batch_sprite )
+End Function
+
+Rem
+bbdoc: Move the batch sprite origin for depth sorting
+End Rem
+Function BatchSpriteOrigin( batch_sprite:TBatchSprite,x:Float,y:Float,z:Float )
+	batch_sprite.BatchSpriteOrigin( x,y,z )
+End Function
+
+Rem
+bbdoc: Add a sprite to batch, batchsprites are one mesh
+about: If you want to add to specific batch controller, use BatchSpriteEntity as parent_ent
+End Rem
+Function CreateBatchSprite:TBatchSprite( parent_ent:TEntity=Null )
+	Return TBatchSprite.CreateBatchSprite( parent_ent )
+End Function
+
+Rem
+bbdoc: Does not create sprite, just loads texture
+End Rem
+Function LoadBatchTexture:TBatchSpriteMesh( tex_file:String,tex_flag:Int=1,id:Int=0 )
+	Return TBatchSprite.LoadBatchTexture( tex_file,tex_flag,id )
+End Function
+
+Rem
 bbdoc: Enables or disables hardware multisample antialiasing if supported
 End Rem
 Function MSAntiAlias( multisample:Int=0 )
@@ -346,6 +382,13 @@ Function SurfsRendered:Int()
 End Function
 
 Rem
+bbdoc: Returns a new TSprite object
+End Rem
+Function NewSprite:TSprite()
+	Return TSprite.NewSprite()
+End Function
+
+Rem
 bbdoc: Returns a new TTexture object
 End Rem
 Function NewTexture:TTexture()
@@ -418,8 +461,8 @@ End Function
 Rem
 bbdoc: Returns a copy of the new texture
 End Rem
-Function CopyTexture:TTexture( tex:TTexture )
-	Return tex.Copy()
+Function CopyTexture:TTexture( tex:TTexture,flags:Int )
+	Return tex.Copy( flags )
 End Function
 
 Rem
