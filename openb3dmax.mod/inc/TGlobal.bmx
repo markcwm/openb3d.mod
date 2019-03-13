@@ -106,6 +106,7 @@ Type TGlobal
 		TPick.InitGlobals()
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
+		TBatchSprite.InitGlobals()
 		
 		Matrix_3DS=NewMatrix()
 		Matrix_3DS.LoadIdentity()
@@ -422,10 +423,6 @@ Type TGlobal
 	Function RenderWorld()
 	
 		RenderWorld_()
-		
-		For Local mesh:TBatchSpriteMesh=EachIn TBatchSpriteMesh.render_list
-			mesh.Render()
-		Next
 		
 	End Function
 	

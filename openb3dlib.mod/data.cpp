@@ -64,6 +64,7 @@ const int TOUCH_class=			55;
 const int MESHCOLLIDER_class=	56; // tree.h
 const int MESHINFO_class=		57;
 const int VOXELSPRITE_class=	58;
+const int BATCHSPRITE_class=	59;
 
 // Action varid
 const int ACTION_action_list=	1;
@@ -92,6 +93,18 @@ const int ANIMATIONKEYS_qw=		9;
 const int ANIMATIONKEYS_qx=		10;
 const int ANIMATIONKEYS_qy=		11;
 const int ANIMATIONKEYS_qz=		12;
+
+// Batch Sprite varid
+const int BATCHSPRITE_batch_id=		1;
+const int BATCHSPRITE_vertex_id=	2;
+const int BATCHSPRITE_b_min_x=		3;
+const int BATCHSPRITE_b_min_y=		4;
+const int BATCHSPRITE_b_min_z=		5;
+const int BATCHSPRITE_b_max_x=		6;
+const int BATCHSPRITE_b_max_y=		7;
+const int BATCHSPRITE_b_max_z=		8;
+const int BATCHSPRITE_mainsprite=	9;
+const int BATCHSPRITE_total_batch=	10;
 
 // Bone varid
 const int BONE_n_px=		1;
@@ -459,8 +472,19 @@ char* StaticChar_( int classid,int varid ){
 	return NULL;
 }
 
+int* BatchSpriteInt_( BatchSprite* obj,int varid ){
+	switch (varid){
+	}
+	return NULL;
+}
+
 int* StaticInt_( int classid,int varid ){
 	switch (classid){
+		case BATCHSPRITE_class :
+			switch (varid){
+				case BATCHSPRITE_total_batch : return &BatchSprite::total_batch;
+			}
+			break;
 		case COLLISIONPAIR_class :
 			switch (varid){
 				case COLLISIONPAIR_pivots_exist : return &CollisionPair::pivots_exist;
@@ -639,6 +663,11 @@ int StaticListSize_( int classid,int varid ){
 		case ACTION_class :
 			switch (varid){
 				case ACTION_action_list : return Action::action_list.size();
+			}
+			break;
+		case BATCHSPRITE_class :
+			switch (varid){
+				case BATCHSPRITE_mainsprite : return BatchSprite::mainsprite.size();
 			}
 			break;
 		case BRUSH_class :
@@ -863,6 +892,29 @@ Texture* StaticIterListTexture_( int classid,int varid,int &id ){
 					break;
 				case TEXTURE_tex_list_all :
 					for(it=Texture::tex_list_all.begin(); it!=Texture::tex_list_all.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
+			}
+			break;
+	}
+	
+	return obj;
+}
+
+BatchSpriteMesh* StaticIterVectorBatchSpriteMesh_( int classid,int varid,int &id ){
+	int count=0;
+	vector<BatchSpriteMesh*>::iterator it;
+	BatchSpriteMesh* obj;
+	
+	switch (classid){
+		case BATCHSPRITE_class :
+			switch (varid){
+				case BATCHSPRITE_mainsprite :
+					for(it=BatchSprite::mainsprite.begin(); it!=BatchSprite::mainsprite.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;

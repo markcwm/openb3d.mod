@@ -6,6 +6,7 @@
 #include "openb3d/src/light.h"
 #include "openb3d/src/shadow.h"
 #include "openb3d/src/quaternion.h"
+#include "openb3d/src/sprite_batch.h"
 
 #include <vector>
 #include <list>
@@ -31,6 +32,7 @@ Entity* StaticIterListEntity_( int classid,int varid,int &id );
 ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id );
 Terrain* StaticIterListTerrain_( int classid,int varid,int &id );
 Texture* StaticIterListTexture_( int classid,int varid,int &id );
+BatchSpriteMesh* StaticIterVectorBatchSpriteMesh_( int classid,int varid,int &id );
 Light* StaticIterVectorLight_( int classid,int varid,int &id );
 
 // Action

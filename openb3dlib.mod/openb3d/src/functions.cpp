@@ -27,17 +27,6 @@ extern "C" {
 
 // Extra
 
-Entity* BatchSpriteEntity_(BatchSprite* batch_sprite){
-	return BatchSprite::BatchSpriteEntity(batch_sprite);
-}
-
-BatchSprite* CreateBatchSprite_(Entity* parent_ent){
-	return BatchSprite::CreateSprite(parent_ent);
-}
-BatchSpriteMesh* LoadBatchTexture_(char* tex_file, int tex_flag, int id){
-	return BatchSprite::LoadBatchTexture(tex_file, tex_flag, id);
-}
-
 int Mipmaps_(Texture* tex){
 	if (tex==NULL) return 0;
 	return 1 + (int)(floor(log2(max(tex->width, tex->height))));
@@ -2044,7 +2033,31 @@ int EndMax2D(){
 	TBlitz2D.EndMax2D();
 }
 */
+
 //' ***extras***
+
+void BatchSpriteParent_(int id, Entity* ent,int glob){
+	BatchSprite::BatchSpriteParent(id, ent, glob);
+}
+
+Entity* BatchSpriteEntity_(BatchSprite* batch_sprite){
+	return BatchSprite::BatchSpriteEntity(batch_sprite);
+}
+
+void BatchSpriteOrigin_(BatchSprite* batch_sprite,float x,float y,float z){
+	batch_sprite->BatchSpriteOrigin(x, y, z);
+}
+
+BatchSpriteMesh* CreateBatchMesh_(int batchid){
+	return BatchSprite::CreateBatchMesh(batchid);
+}
+
+BatchSprite* CreateBatchSprite_(Entity* parent_ent){
+	return BatchSprite::CreateBatchSprite(parent_ent);
+}
+BatchSpriteMesh* LoadBatchTexture_(char* tex_file, int tex_flag, int id){
+	return BatchSprite::LoadBatchTexture(tex_file, tex_flag, id);
+}
 
 float EntityScaleX_(Entity* ent,bool glob){
 	return ent->EntityScaleX(glob);

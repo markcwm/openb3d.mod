@@ -4,6 +4,8 @@
  *
  *  Created by Simon Harrison.
  *  Copyright Si Design. All rights reserved.
+ *  
+ *  Batch Sprites from Minib3d-Monkey by Adam Redwoods
  *
  */
 
@@ -11,8 +13,6 @@
 #include <stdio.h>
 
 list<SpriteBatch*> SpriteBatch::sprite_batch_list;
-
-// note: this code isn't finished
 
 float BatchSprite::b_min_x, BatchSprite::b_min_y, BatchSprite::b_min_z;
 float BatchSprite::b_max_x, BatchSprite::b_max_y, BatchSprite::b_max_z;
@@ -22,11 +22,12 @@ Matrix BatchSprite::temp_mat;
 
 BatchSpriteMesh* BatchSpriteMesh::Create(Entity* parent_ent){
 	
-	BatchSpriteMesh* mesh = new BatchSpriteMesh;
+	BatchSpriteMesh* mesh=new BatchSpriteMesh;
+	mesh->free_stack.push_back(0);
 	
 	mesh->AddParent(parent_ent);
 	entity_list.push_back(mesh);
-//printf("parent_ent=%p,mesh=%p\n",parent_ent,mesh);
+	
 	// update matrix
 	if(mesh->parent!=0){
 		mesh->mat.Overwrite(mesh->parent->mat);
@@ -40,7 +41,6 @@ BatchSpriteMesh* BatchSpriteMesh::Create(Entity* parent_ent){
 	//mesh->surf->vbo_dyn = true;
 	mesh->num_sprites = 0;
 	//mesh.free_stack = new IntStack
-	
 	mesh->EntityFX(1+2+32); // full bright + use vertex colors + alpha
 	mesh->brush.shine=0.0;
 	
@@ -53,11 +53,12 @@ BatchSpriteMesh* BatchSpriteMesh::Create(Entity* parent_ent){
 	mesh->cam_sprite=Sprite::CreateSprite(mesh);
 	Surface* sf=dynamic_cast<Surface*>(mesh->cam_sprite->surf_list.front());
 	mesh->cam_sprite->EntityFX(3+32);
+
 	sf->VertexColor(0, 0, 0, 0, 0);
 	sf->VertexColor(1, 0, 0, 0, 0);
 	sf->VertexColor(2, 0, 0, 0, 0);
 	sf->VertexColor(3, 0, 0, 0, 0);
-//printf("create tb=%d\n",BatchSprite::total_batch);
+	
 	return mesh;
 	
 }
@@ -79,7 +80,7 @@ void BatchSpriteMesh::Render(){
 	list<BatchSprite*>::iterator it;
 	for (it=sprite_list.begin();it!=sprite_list.end();it++){
 		BatchSprite* ent=*it;
-		//printf("ent=%p\n",ent);
+		
 		ent->UpdateBatch(cam_sprite);
 		surf->reset_vbo=surf->reset_vbo | 16;
 	}
@@ -110,7 +111,6 @@ void BatchSpriteMesh::Render(){
 		max_x = BatchSprite::b_max_x;
 		max_y = BatchSprite::b_max_y;
 		max_z = BatchSprite::b_max_z;
-		//printf("rad=%f min_x=%f\n",cull_radius,min_x);
 		
 		//if (brush.tex[0]) brush.tex[0].flags=brush.tex[0].flags | 16 | 32; // always clamp
 		//if (surf.brush.tex[0]) surf.brush.tex[0].flags=surf.brush.tex[0].flags | 16 | 32; // always clamp
@@ -136,12 +136,11 @@ void BatchSprite::FreeEntity(){
 	mainsprite[batch_id]->surf->VertexColor(vertex_id+3, 0, 0, 0, 0);
 	
 	//mainsprite[batch_id]->free_stack.push_back(vertex_id);
-	
 	// stack push
 	int st=mainsprite[batch_id]->free_stack.size();
 	mainsprite[batch_id]->free_stack.resize(st+1);
 	mainsprite[batch_id]->free_stack[st]=vertex_id;
-	mainsprite[batch_id]->num_sprites=-1;
+	mainsprite[batch_id]->num_sprites-=1;
 	
 	list<BatchSprite*>::iterator it;
 	for (it=mainsprite[batch_id]->sprite_list.begin();it!=mainsprite[batch_id]->sprite_list.end();it++){
@@ -167,7 +166,7 @@ void BatchSprite::FreeEntity(){
 	mat.LoadIdentity();
 	//brush=NULL;
 	
-	//Sprite::FreeEntity();
+	Entity::FreeEntity();
 	
 }
 
@@ -196,11 +195,11 @@ void BatchSprite::BatchSpriteOrigin(float x,float y,float z){
 BatchSpriteMesh* BatchSprite::CreateBatchMesh(int batchid){
 	
 	while (total_batch < batchid || total_batch == 0){
-		total_batch=+1;
+		total_batch+=1;
 		if (total_batch >= mainsprite.size()){
 			mainsprite.resize(total_batch+5);
 		}
-//printf("tb=%d ms.size=%d bi=%d\n",total_batch,mainsprite.size(),batchid);
+		
 		mainsprite[total_batch]=BatchSpriteMesh::Create();
 		mainsprite[total_batch]->id=total_batch;
 	}
@@ -209,7 +208,7 @@ BatchSpriteMesh* BatchSprite::CreateBatchMesh(int batchid){
 	
 }
 
-BatchSprite* BatchSprite::CreateSprite(Entity* parent_ent){
+BatchSprite* BatchSprite::CreateBatchSprite(Entity* parent_ent){
 
 	// never added to entity_list
 	// if idx=0 add to last created batch
@@ -238,11 +237,9 @@ BatchSprite* BatchSprite::CreateSprite(Entity* parent_ent){
 	// create main mesh
 	BatchSpriteMesh* mesh;
 	if (id>total_batch){
-//printf("id=%d,total_batch=%d\n",id,total_batch);
 		mesh=CreateBatchMesh(id);
 		if (id==0) id=1;
 	}else{
-//printf("else id=%d,total_batch=%d\n",id,total_batch);
 		mesh=mainsprite[id];
 	}
 	
@@ -250,20 +247,20 @@ BatchSprite* BatchSprite::CreateSprite(Entity* parent_ent){
 	int v, v0;
 	if (mesh->free_stack.size()<1){
 	
-		mesh->num_sprites=+1;
+		mesh->num_sprites+=1;
 		v=(mesh->num_sprites-1) * 4; // 4 vertex per quad
-		//v=(mesh->num_sprites-1) * 3; // 3 vertex per sprite
-		
 		mesh->surf->AddVertex(-1,-1, 0, 0, 1); // v0
 		mesh->surf->AddVertex(-1, 1, 0, 0, 0);
 		mesh->surf->AddVertex( 1, 1, 0, 1, 0);
 		mesh->surf->AddVertex( 1,-1, 0, 1, 1);
+		//v=(mesh->num_sprites-1) * 3; // 3 vertex per sprite
 		//mesh->surf->AddVertex(-1,-3, 0, 0, 2); // v0
 		//mesh->surf->AddVertex(-1,-1, 0, 0, 0);
 		//mesh->surf->AddVertex( 3,-1, 0, 2, 0);
+		
+		// v isnt guaranteed to be v0, but seems to match up
 		mesh->surf->AddTriangle(0+v, 1+v, 2+v);
 		mesh->surf->AddTriangle(0+v, 2+v, 3+v);
-		// v isnt guarateed to be v0, but seems to match up
 		
 		// since vbo expands, make sure to reset so we dont use subbuffer
 		mesh->surf->reset_vbo=-1;
@@ -273,7 +270,7 @@ BatchSprite* BatchSprite::CreateSprite(Entity* parent_ent){
 		int st=mesh->free_stack.size();
 		v=mesh->free_stack[st-1]; // pop stack
 		mesh->free_stack.resize(st-1);
-		mesh->num_sprites=+1;
+		mesh->num_sprites+=1;
 		
 	}	
 	
@@ -302,10 +299,9 @@ BatchSpriteMesh* BatchSprite::LoadBatchTexture(string tex_file,int tex_flag,int 
 	
 	Texture* tex=Texture::LoadTexture(tex_file, tex_flag);
 	mainsprite[id]->EntityTexture(tex);
-//printf("tex=%p file=%s\n",tex,tex_file);
 	
 	// additive blend if sprite doesn't have alpha or masking flags set
-	if (tex_flag & 2==0 && tex_flag & 4==0){
+	if ((tex_flag & 2)==0 && (tex_flag & 4)==0){
 		mainsprite[id]->EntityBlend(3);
 	}
 	
@@ -384,13 +380,6 @@ void BatchSprite::UpdateBatch(Sprite* cam_sprite){
 	mainsprite[batch_id]->surf->VertexCoords(vertex_id+1, p1[0], p1[1], p1[2]);
 	mainsprite[batch_id]->surf->VertexCoords(vertex_id+2, p2[0], p2[1], p2[2]);
 	mainsprite[batch_id]->surf->VertexCoords(vertex_id+3, p3[0], p3[1], p3[2]);
-	
-		//	Surface* s=mainsprite[batch_id]->surf;
-		//	printf("x=%f y=%f z=%f\n", s->VertexX(vertex_id+0),s->VertexY(vertex_id+0),s->VertexZ(vertex_id+0));
-		//	printf("x=%f y=%f z=%f\n", s->VertexX(vertex_id+1),s->VertexY(vertex_id+1),s->VertexZ(vertex_id+1));
-		//	printf("x=%f y=%f z=%f\n", s->VertexX(vertex_id+2),s->VertexY(vertex_id+2),s->VertexZ(vertex_id+2));
-		//	printf("x=%f y=%f z=%f\n", s->VertexX(vertex_id+3),s->VertexY(vertex_id+3),s->VertexZ(vertex_id+3));
-	
 	
 	float r=brush.red; //* brush.alpha
 	float g=brush.green; //* brush.alpha

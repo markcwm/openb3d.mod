@@ -23,9 +23,6 @@ Import Brl.Map
 Extern
 
 	' *** Extra
-	Function BatchSpriteEntity_:Byte Ptr( batch_sprite:Byte Ptr )
-	Function CreateBatchSprite_:Byte Ptr( parent_ent:Byte Ptr )
-	Function LoadBatchTexture_:Byte Ptr( tex_file:Byte Ptr,tex_flag:Int,id:Int )
 	Function MSAntiAlias_( multisample:Int )
 	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
@@ -306,6 +303,14 @@ Extern
 	Function AppendAction_( act1:Byte Ptr,act2:Byte Ptr )
 	Function FreeAction_( act:Byte Ptr )
 	Function EndAction_( act:Byte Ptr )
+	
+	' *** BatchSprite
+	Function BatchSpriteParent_( id:Int,ent:Byte Ptr,glob:Int )
+	Function BatchSpriteEntity_:Byte Ptr( batch_sprite:Byte Ptr )
+	Function BatchSpriteOrigin_( batch_sprite:Byte Ptr,x:Float,y:Float,z:Float )
+	Function CreateBatchMesh_:Byte Ptr( batchid:Int )
+	Function CreateBatchSprite_:Byte Ptr( parent_ent:Byte Ptr )
+	Function LoadBatchTexture_:Byte Ptr( tex_file:Byte Ptr,tex_flag:Int,id:Int )
 	
 	' *** Constraint
 	Function CreateConstraint_:Byte Ptr( p1:Byte Ptr,p2:Byte Ptr,l:Float )
