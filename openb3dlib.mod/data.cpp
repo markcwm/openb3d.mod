@@ -472,12 +472,6 @@ char* StaticChar_( int classid,int varid ){
 	return NULL;
 }
 
-int* BatchSpriteInt_( BatchSprite* obj,int varid ){
-	switch (varid){
-	}
-	return NULL;
-}
-
 int* StaticInt_( int classid,int varid ){
 	switch (classid){
 		case BATCHSPRITE_class :

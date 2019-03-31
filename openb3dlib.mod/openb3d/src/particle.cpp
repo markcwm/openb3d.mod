@@ -23,7 +23,7 @@ void ParticleBatch::Render(){
 
 	if(Global::fx1!=true){
 		Global::fx1=true;
-		glDisableClientState(GL_NORMAL_ARRAY);
+		//glDisableClientState(GL_NORMAL_ARRAY);
 	}
 
 	if(Global::fx2!=true){

@@ -189,7 +189,7 @@ void PostFX::Render(){
 
 	if(Global::fx1!=true){
 		Global::fx1=true;
-		glDisableClientState(GL_NORMAL_ARRAY);
+		//glDisableClientState(GL_NORMAL_ARRAY);
 	}
 	if(Global::fx2!=false){
 		Global::fx2=false;
@@ -216,6 +216,7 @@ void PostFX::Render(){
 #endif
 
 	for (int it=0; it<no_passes; it++){
+		
 		if(it==no_passes-1){
 			glBindFramebuffer(GL_FRAMEBUFFER, 0);
 			//glBindRenderbuffer(GL_RENDERBUFFER, 0);
@@ -239,9 +240,11 @@ void PostFX::Render(){
 		//Display render image
 		if (pass[it].ShaderFX!=0){
 #ifndef GLES2
-			pass[it].ShaderFX->ProgramAttriBegin();
+			pass[it].ShaderFX->TurnOn(cam->mat, 0, 0, 0);
+			//pass[it].ShaderFX->ProgramAttriBegin();
 #else
-			pass[it].ShaderFX->ProgramAttriBegin();
+			pass[it].ShaderFX->TurnOn(cam->mat, 0, 0, 0);
+			//pass[it].ShaderFX->ProgramAttriBegin();
 			glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 			glEnableVertexAttribArray(0);
 
@@ -262,13 +265,15 @@ void PostFX::Render(){
 		}
 
 		if (pass[it].ShaderFX!=0){
-			pass[it].ShaderFX->ProgramAttriEnd();
+			pass[it].ShaderFX->TurnOff();
+			//pass[it].ShaderFX->ProgramAttriEnd();
 		}
 		for (unsigned int it2=0; it2<pass[it].buffer_in_out.size();it2+=2){
 			glActiveTexture(GL_TEXTURE0 + pass[it].buffer_in_out[it2]);
 			//glClientActiveTexture(GL_TEXTURE0 + pass[it].buffer_in_out[it2]);
 			glDisable(GL_TEXTURE_2D);
 		}
+		
 	}
 
 	glEnable(GL_DEPTH_TEST);

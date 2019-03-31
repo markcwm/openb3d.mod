@@ -170,7 +170,7 @@ void Stencil::UseStencil(){
 		glEnd();*/
 		if(Global::fx1!=true){
 			Global::fx1=true;
-			glDisableClientState(GL_NORMAL_ARRAY);
+			//glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		if(Global::fx2!=false){
 			Global::fx2=false;
