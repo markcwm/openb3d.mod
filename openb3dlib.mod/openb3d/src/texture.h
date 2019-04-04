@@ -16,11 +16,10 @@
 #include <string>
 #include <iostream>
 
-#include "dds.h"
-
 using namespace std;
 
 class Camera;
+class DirectDrawSurface;
 
 class Texture{
 

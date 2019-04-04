@@ -454,8 +454,8 @@ DirectDrawSurface::DirectDrawSurface()
 ,target(0){
 }
 
-void DirectDrawSurface::FreeDirectDrawSurface(){
-	if(buffer) delete[] buffer;
+void DirectDrawSurface::FreeDirectDrawSurface(int free_buffer){
+	if(free_buffer!=0) delete[] buffer;
 	// If we're using for GetDirectDrawSurfacePtr
 	mipmaps.clear();
 	width=0;

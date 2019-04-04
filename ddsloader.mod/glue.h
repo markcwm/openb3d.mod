@@ -1,7 +1,7 @@
 #ifndef data_h
 #define data_h
 
-#include "src/dds.h"
+#include "../openb3dlib.mod/openb3d/src/dds.h"
 
 #include <vector>
 #include <list>
@@ -17,7 +17,7 @@ unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid );
 
 // methods
 DirectDrawSurface* LoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize);
-void FreeDirectDrawSurface_(DirectDrawSurface* surface);
+void FreeDirectDrawSurface_(DirectDrawSurface* surface,int free_buffer);
 
 #ifdef __cplusplus
 }; // extern "C"

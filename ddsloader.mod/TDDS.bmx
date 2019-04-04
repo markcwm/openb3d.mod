@@ -140,7 +140,7 @@ Type TDDS
 	
 		If exists
 			exists=0
-			DDS_FreeDirectDrawSurface( GetInstance(Self) )
+			DDS_FreeDirectDrawSurface( GetInstance(Self),False ) ' don't free buffer, it was freed earlier
 			FreeObject( GetInstance(Self) )
 		EndIf
 		

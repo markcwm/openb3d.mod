@@ -28,7 +28,7 @@ public:
 	DirectDrawSurface();
 	~DirectDrawSurface() {}
 
-	void FreeDirectDrawSurface();
+	void FreeDirectDrawSurface(int free_buffer=0);
 
 	bool IsCompressed();
 	void Flip();

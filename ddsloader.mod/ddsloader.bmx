@@ -70,7 +70,7 @@ Extern' "C"
 	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
 	?
 	Function DDS_UploadTexture( surface:Byte Ptr,tex:Byte Ptr )
-	Function DDS_FreeDirectDrawSurface( surface:Byte Ptr )
+	Function DDS_FreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Int )
 	
 End Extern
 
@@ -118,7 +118,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			EndIf
 			
 			CloseStream(ram)
-			'MemFree(buffer) ' buffer must be freed later by DDS_FreeDirectDrawSurface
+			MemFree(buffer)
 		EndIf
 		
 		Return pixmap

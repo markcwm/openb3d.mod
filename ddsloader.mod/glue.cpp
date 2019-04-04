@@ -58,8 +58,8 @@ DirectDrawSurface* DDS_LoadSurface(char* filename,int flip,unsigned char* buffer
 	return DirectDrawSurface::LoadSurface(filename,flip,buffer,bufsize);
 }
 
-void DDS_FreeDirectDrawSurface(DirectDrawSurface* surface){
-	surface->FreeDirectDrawSurface();
+void DDS_FreeDirectDrawSurface(DirectDrawSurface* surface,int free_buffer){
+	surface->FreeDirectDrawSurface(free_buffer);
 }
 
 } // end extern C

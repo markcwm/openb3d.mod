@@ -17,7 +17,7 @@
 #include "file.h"
 #include "global.h"
 #include "shadow.h"
-//#include "dds.h"
+#include "dds.h"
 
 #include <string.h>
 #include <math.h>
@@ -112,7 +112,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		
 		// uses glTexImage2D or glCompressedTexImage2D
 		DDSUploadTexture(dds,tex);
-		dds->FreeDirectDrawSurface();
+		dds->FreeDirectDrawSurface(true); // true to free buffer
 		
 		tex->texture=name;
 		return tex;
