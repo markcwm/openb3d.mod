@@ -60,7 +60,7 @@ Import "openb3d/src/functions.cpp"
 
 Import "openb3d/src/GLee.c" ' 5.4
 Import "openb3d/src/collidetri.c"
-'Import "openb3d/src/stb_image.c" ' moved to stbimageloader.mod
+Import "openb3d/src/stb_image.c" ' also in stbimageloader.mod
 
 Import "methods.cpp" ' must be imported from this file in Mac
 Import "data.cpp"

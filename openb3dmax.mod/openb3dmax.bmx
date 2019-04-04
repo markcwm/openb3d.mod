@@ -14,6 +14,7 @@ ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 
 Import Openb3dmax.Openb3dlib
+Import Openb3dmax.DDSloader
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import Brl.Retro			' imports BRL.Basic

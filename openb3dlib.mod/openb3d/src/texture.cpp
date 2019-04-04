@@ -22,6 +22,21 @@
 #include <string.h>
 #include <math.h>
 
+extern "C" {
+
+void DDS_UploadTexture(DirectDrawSurface* surface,Texture* tex){
+	tex->format=surface->format;
+	tex->width=surface->width;
+	tex->height=surface->height;
+	if(surface->target==GL_TEXTURE_CUBE_MAP){
+		surface->UploadTextureCubeMap();
+		tex->flags|=128;
+	} else 
+		surface->UploadTexture2D();
+}
+
+}
+
 list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 int Texture::isunique=0;
@@ -80,7 +95,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 			tex_list.push_back(tex);
 		}
 		
-		DirectDrawSurface *dds=DirectDrawSurface::LoadSurface(filename,false);
+		DirectDrawSurface *dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
 		if(!dds) return NULL;
 		
 		if(flags&2) ApplyAlpha(tex,dds->buffer);
@@ -91,7 +106,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		glBindTexture(dds->target,name);
 		
 		// uses glTexImage2D or glCompressedTexImage2D
-		dds->UploadTexture(tex);
+		DDS_UploadTexture(dds,tex);
 		dds->FreeDirectDrawSurface();
 		
 		tex->texture=name;

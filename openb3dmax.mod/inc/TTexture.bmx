@@ -652,9 +652,16 @@ Type TTexture
 			'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' these functions are too slow, flip in an editor
 			'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap)
 			
-			glGenTextures(1,Varptr name)
-			glBindtexture(GL_TEXTURE_2D,name)
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
+			If ExtractExt(String(url))="dds"
+				glGenTextures(1,Varptr name)
+				glBindTexture(TDDS.current_surface.target[0],name)
+				DDS_UploadTexture(TDDS.GetInstance(TDDS.current_surface),TTexture.GetInstance(tex))
+				TDDS.current_surface.FreeDDS()
+			Else
+				glGenTextures(1,Varptr name)
+				glBindtexture(GL_TEXTURE_2D,name)
+				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
+			EndIf
 			
 			tex.texture[0]=name
 			tex.gltex=tex.texture ' as in Minib3d
