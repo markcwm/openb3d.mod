@@ -1,6 +1,7 @@
 // glue.cpp
 
 #include "glue.h"
+#include "../openb3dlib.mod/openb3d/src/dds.h"
 
 #include <stdio.h>
 #include <string.h>

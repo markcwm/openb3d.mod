@@ -118,7 +118,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			EndIf
 			
 			CloseStream(ram)
-			MemFree(buffer)
+			'MemFree(buffer)
 		EndIf
 		
 		Return pixmap

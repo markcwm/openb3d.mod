@@ -1,10 +1,10 @@
 #ifndef data_h
 #define data_h
 
-#include "../openb3dlib.mod/openb3d/src/dds.h"
-
 #include <vector>
 #include <list>
+
+class DirectDrawSurface;
 
 #ifdef __cplusplus
 extern "C" {

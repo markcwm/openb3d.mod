@@ -136,11 +136,11 @@ Type TDDS
 		
 	End Method
 	
-	Method FreeDDS()
+	Method FreeDDS( free_buffer:Int=0 )
 	
 		If exists
 			exists=0
-			DDS_FreeDirectDrawSurface( GetInstance(Self),False ) ' don't free buffer, it was freed earlier
+			DDS_FreeDirectDrawSurface( GetInstance(Self),free_buffer ) ' don't free buffer, it was freed earlier
 			FreeObject( GetInstance(Self) )
 		EndIf
 		
