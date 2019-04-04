@@ -5,6 +5,7 @@ End Rem
 Type TDDS
 
 	Global current_surface:TDDS
+	Global current_buffer:Byte Ptr
 	
 	Field buffer:Byte Ptr
 	'vector<DirectDrawSurface> Mipmaps
@@ -136,11 +137,12 @@ Type TDDS
 		
 	End Method
 	
-	Method FreeDDS( free_buffer:Int=0 )
+	Method FreeDDS()
 	
 		If exists
 			exists=0
-			DDS_FreeDirectDrawSurface( GetInstance(Self),free_buffer ) ' don't free buffer, it was freed earlier
+			MemFree(current_buffer)
+			DDS_FreeDirectDrawSurface( GetInstance(Self),0 ) ' don't free buffer, it was freed in Bmax
 			FreeObject( GetInstance(Self) )
 		EndIf
 		

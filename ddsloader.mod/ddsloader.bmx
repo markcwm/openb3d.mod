@@ -91,7 +91,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		
 		Local pixmap:TPixmap, imgPtr:Byte Ptr, width:Int, height:Int, channels:Int
 		
-		Local file:String="b"
+		Local file:String=""
 		Local cString:Byte Ptr=file.ToCString()
 		imgPtr=DDS_LoadSurface( cString,False,buffer,bufLen ) ' force RGBA
 		MemFree cString
@@ -118,7 +118,8 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			EndIf
 			
 			CloseStream(ram)
-			'MemFree(buffer)
+			TDDS.current_buffer=buffer
+			'MemFree(buffer) ' freed later in FreeDDS
 		EndIf
 		
 		Return pixmap

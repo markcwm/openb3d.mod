@@ -656,7 +656,7 @@ Type TTexture
 				glGenTextures(1,Varptr name)
 				glBindTexture(TDDS.current_surface.target[0],name)
 				DDS_UploadTexture(TDDS.GetInstance(TDDS.current_surface),TTexture.GetInstance(tex))
-				TDDS.current_surface.FreeDDS(True)
+				TDDS.current_surface.FreeDDS()
 			Else
 				glGenTextures(1,Varptr name)
 				glBindtexture(GL_TEXTURE_2D,name)
