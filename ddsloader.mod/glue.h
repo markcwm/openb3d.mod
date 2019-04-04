@@ -16,7 +16,7 @@ int* DirectDrawSurfaceInt_( DirectDrawSurface* obj,int varid );
 unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid );
 
 // methods
-DirectDrawSurface* LoadSurface_(char* filename,bool flip,unsigned char *buffer,int bufsize);
+DirectDrawSurface* LoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize);
 void FreeDirectDrawSurface_(DirectDrawSurface* surface);
 
 #ifdef __cplusplus

@@ -18,7 +18,24 @@ ModuleInfo "Credits: Mark Mcvittie"
 ModuleInfo "History: 1.00 - DirectDrawSurface pixmap factory loader"
 ModuleInfo "History: Initial Release - Apr 2019"
 
+?debug
+ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
+?win32
+ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
+
 Import Pub.Glew
+Import Pub.OpenGL ' order is important, glew before OpenGL
+?macos
+Import Pub.Glew
+Import Pub.OpenGL
+?linux
+Import Pub.Glew
+Import Pub.OpenGL
+?opengles
+ModuleInfo "CC_OPTS: -UGLES2" ' untested!
+
+Import Pub.OpenGLES
+?
 Import Brl.Pixmap
 Import Brl.RamStream
 Import Brl.Map
@@ -48,9 +65,9 @@ Extern' "C"
 	
 	' methods
 	?bmxng
-	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Byte Ptr,buffer:Byte Ptr,bufsize:Size_T )
+	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Size_T,buffer:Byte Ptr,bufsize:Size_T )
 	?Not bmxng
-	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Byte Ptr,buffer:Byte Ptr,bufsize:Int )
+	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
 	?
 	Function DDS_UploadTexture( surface:Byte Ptr,tex:Byte Ptr )
 	Function DDS_FreeDirectDrawSurface( surface:Byte Ptr )
@@ -74,7 +91,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		
 		Local pixmap:TPixmap, imgPtr:Byte Ptr, width:Int, height:Int, channels:Int
 		
-		Local file:String=""
+		Local file:String="b"
 		Local cString:Byte Ptr=file.ToCString()
 		imgPtr=DDS_LoadSurface( cString,False,buffer,bufLen ) ' force RGBA
 		MemFree cString

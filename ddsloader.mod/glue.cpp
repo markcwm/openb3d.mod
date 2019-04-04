@@ -54,7 +54,7 @@ unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid ){
 
 // methods
 
-DirectDrawSurface* DDS_LoadSurface(char* filename,bool flip,unsigned char *buffer,int bufsize){
+DirectDrawSurface* DDS_LoadSurface(char* filename,int flip,unsigned char* buffer,int bufsize){
 	return DirectDrawSurface::LoadSurface(filename,flip,buffer,bufsize);
 }
 

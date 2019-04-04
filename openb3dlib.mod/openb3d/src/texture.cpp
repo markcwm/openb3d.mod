@@ -17,7 +17,7 @@
 #include "file.h"
 #include "global.h"
 #include "shadow.h"
-#include "dds.h"
+//#include "dds.h"
 
 #include <string.h>
 #include <math.h>
@@ -25,14 +25,7 @@
 extern "C" {
 
 void DDS_UploadTexture(DirectDrawSurface* surface,Texture* tex){
-	tex->format=surface->format;
-	tex->width=surface->width;
-	tex->height=surface->height;
-	if(surface->target==GL_TEXTURE_CUBE_MAP){
-		surface->UploadTextureCubeMap();
-		tex->flags|=128;
-	} else 
-		surface->UploadTexture2D();
+	Texture::DDSUploadTexture(surface,tex);
 }
 
 }
@@ -71,6 +64,18 @@ Texture* Texture::Copy(int copyflags){
 	return tex;
 }
 
+void Texture::DDSUploadTexture(DirectDrawSurface* surface,Texture* tex){
+	tex->format=surface->format;
+	tex->width=surface->width;
+	tex->height=surface->height;
+	
+	if(surface->target==GL_TEXTURE_CUBE_MAP){
+		surface->UploadTextureCubeMap();
+		tex->flags|=128;
+	} else 
+		surface->UploadTexture2D();
+}
+
 Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 	filename=File::ResourceFilePath(filename);
 	if(filename.empty()) return NULL;
@@ -106,7 +111,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		glBindTexture(dds->target,name);
 		
 		// uses glTexImage2D or glCompressedTexImage2D
-		DDS_UploadTexture(dds,tex);
+		DDSUploadTexture(dds,tex);
 		dds->FreeDirectDrawSurface();
 		
 		tex->texture=name;
