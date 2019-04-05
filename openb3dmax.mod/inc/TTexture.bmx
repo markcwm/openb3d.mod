@@ -655,7 +655,7 @@ Type TTexture
 			If ExtractExt(String(url))="dds"
 				glGenTextures(1,Varptr name)
 				glBindTexture(TDDS.current_surface.target[0],name)
-				DDS_UploadTexture(TDDS.GetInstance(TDDS.current_surface),TTexture.GetInstance(tex))
+				DDSUploadTexture(TDDS.GetInstance(TDDS.current_surface),TTexture.GetInstance(tex))
 				TDDS.current_surface.FreeDDS()
 			Else
 				glGenTextures(1,Varptr name)

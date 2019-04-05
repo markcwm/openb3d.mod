@@ -18,12 +18,18 @@
 #include "actions.h"
 #include "postfx.h"
 #include "sprite_batch.h"
+#include "dds.h"
 
 #include <math.h>
 
 //#include "functions.h"
 
 extern "C" {
+
+void DDSUploadTexture(DirectDrawSurface* surface,Texture* tex){
+	//Texture::DDSUploadTexture(surface,tex);
+	surface->UploadTexture(tex);
+}
 
 // Extra
 

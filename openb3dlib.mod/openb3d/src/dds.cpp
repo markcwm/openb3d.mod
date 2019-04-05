@@ -540,7 +540,6 @@ void DirectDrawSurface::Flip(){
 	}
 }
 
-/*
 void DirectDrawSurface::UploadTexture(Texture *tex){
 	tex->format=format;
 	tex->width=width;
@@ -551,7 +550,6 @@ void DirectDrawSurface::UploadTexture(Texture *tex){
 	} else 
 		UploadTexture2D();
 }
-*/
 
 void DirectDrawSurface::UploadTexture2D(){
 	if(IsCompressed()){

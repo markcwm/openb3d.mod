@@ -1,5 +1,5 @@
-#ifndef data_h
-#define data_h
+#ifndef glue_h
+#define glue_h
 
 #include <vector>
 #include <list>
@@ -16,8 +16,8 @@ int* DirectDrawSurfaceInt_( DirectDrawSurface* obj,int varid );
 unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid );
 
 // methods
-DirectDrawSurface* LoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize);
-void FreeDirectDrawSurface_(DirectDrawSurface* surface,int free_buffer);
+DirectDrawSurface* DDSLoadSurface(char* filename,int flip,unsigned char* buffer,int bufsize);
+void DDSFreeDirectDrawSurface(DirectDrawSurface* surface,int free_buffer);
 
 #ifdef __cplusplus
 }; // extern "C"

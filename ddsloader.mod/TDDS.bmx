@@ -142,7 +142,7 @@ Type TDDS
 		If exists
 			exists=0
 			MemFree(current_buffer)
-			DDS_FreeDirectDrawSurface( GetInstance(Self),0 ) ' don't free buffer, it was freed in Bmax
+			DDSFreeDirectDrawSurface( GetInstance(Self),0 ) ' don't free buffer, it was freed in Bmax
 			FreeObject( GetInstance(Self) )
 		EndIf
 		

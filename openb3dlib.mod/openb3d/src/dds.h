@@ -33,7 +33,7 @@ public:
 	bool IsCompressed();
 	void Flip();
 
-	//void UploadTexture(Texture *tex);
+	void UploadTexture(Texture *tex);
 	void UploadTexture2D();
 	void UploadTextureCubeMap();
 };

@@ -64,7 +64,6 @@ public:
 		TexEnv_count=0,multitex_factor=0.5;
 	};
 
-	static void DDSUploadTexture(DirectDrawSurface* surface,Texture* tex);
 	static Texture* LoadTexture(string filename,int flags=0,Texture* tex=NULL);
 	static Texture* LoadAnimTexture(string filename,int flags=0, int frame_width=0,int frame_height=0,int first_frame=0,int frame_count=1,Texture* tex=NULL);
 	static Texture* CreateTexture(int width=256,int height=256,int flags=3, int frames=0);

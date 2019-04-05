@@ -22,14 +22,6 @@
 #include <string.h>
 #include <math.h>
 
-extern "C" {
-
-void DDS_UploadTexture(DirectDrawSurface* surface,Texture* tex){
-	Texture::DDSUploadTexture(surface,tex);
-}
-
-}
-
 list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 int Texture::isunique=0;
@@ -62,18 +54,6 @@ Texture* Texture::Copy(int copyflags){
 	}
 	Texture::isunique=false;
 	return tex;
-}
-
-void Texture::DDSUploadTexture(DirectDrawSurface* surface,Texture* tex){
-	tex->format=surface->format;
-	tex->width=surface->width;
-	tex->height=surface->height;
-	
-	if(surface->target==GL_TEXTURE_CUBE_MAP){
-		surface->UploadTextureCubeMap();
-		tex->flags|=128;
-	} else 
-		surface->UploadTexture2D();
 }
 
 Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
@@ -111,7 +91,7 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		glBindTexture(dds->target,name);
 		
 		// uses glTexImage2D or glCompressedTexImage2D
-		DDSUploadTexture(dds,tex);
+		dds->UploadTexture(tex);
 		dds->FreeDirectDrawSurface(true); // true to free buffer
 		
 		tex->texture=name;

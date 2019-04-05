@@ -65,12 +65,12 @@ Extern' "C"
 	
 	' methods
 	?bmxng
-	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Size_T,buffer:Byte Ptr,bufsize:Size_T )
+	Function DDSLoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Size_T,buffer:Byte Ptr,bufsize:Size_T )
+	Function DDSFreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Size_T )
 	?Not bmxng
-	Function DDS_LoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
+	Function DDSLoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
+	Function DDSFreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Int )
 	?
-	Function DDS_UploadTexture( surface:Byte Ptr,tex:Byte Ptr )
-	Function DDS_FreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Int )
 	
 End Extern
 
@@ -91,13 +91,13 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		
 		Local pixmap:TPixmap, imgPtr:Byte Ptr, width:Int, height:Int, channels:Int
 		
-		Local file:String=""
-		Local cString:Byte Ptr=file.ToCString()
-		imgPtr=DDS_LoadSurface( cString,False,buffer,bufLen ) ' force RGBA
+		Local file:String = ""
+		Local cString:Byte Ptr = file.ToCString()
+		imgPtr = DDSLoadSurface(cString, 0, buffer, bufLen) ' 0 to not flip image
 		MemFree cString
 		
-		TDDS.current_surface=TDDS.CreateObject(imgPtr)
-		channels=TDDS.current_surface.components[0] ' may be 24 or 32-bit
+		TDDS.current_surface = TDDS.CreateObject(imgPtr)
+		channels = TDDS.current_surface.components[0] ' may be 24 or 32-bit
 		
 		If imgPtr
 			Local pf:Int
@@ -118,7 +118,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			EndIf
 			
 			CloseStream(ram)
-			TDDS.current_buffer=buffer
+			TDDS.current_buffer = buffer
 			'MemFree(buffer) ' freed later in FreeDDS
 		EndIf
 		

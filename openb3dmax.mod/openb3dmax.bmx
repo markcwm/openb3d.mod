@@ -24,6 +24,7 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function DDSUploadTexture( surface:Byte Ptr,tex:Byte Ptr )
 	Function MSAntiAlias_( multisample:Int )
 	Function Mipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )

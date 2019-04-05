@@ -56,16 +56,15 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 		
 		Local pixmap:TPixmap, imgPtr:Byte Ptr, width:Int, height:Int, channels:Int
 		
-		Local test:Int=b3d_stbi_info_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels )
+		Local test:Int = b3d_stbi_info_from_memory(buffer, bufLen, Varptr width, Varptr height, Varptr channels)
 		
-		If test=True ' prevents crash
-			imgPtr=b3d_stbi_load_from_memory( buffer,bufLen,Varptr width,Varptr height,Varptr channels,4 ) ' force RGBA
-			If channels=3 Then channels=4 ' for uncompressed BMP, may be 24 or 32-bit
+		If test = True ' prevents crash
+			imgPtr = b3d_stbi_load_from_memory(buffer, bufLen, Varptr width, Varptr height, Varptr channels, 4) ' force RGBA
+			If channels = 3 Then channels = 4 ' for uncompressed BMP, may be 24 or 32-bit
 		EndIf
 		
 		If imgPtr
 			Local pf:Int
-			
 			Select channels
 				Case B3D_STBI_grey ' 1
 					pf = PF_I8
@@ -76,12 +75,12 @@ Type TPixmapLoaderB3D Extends TPixmapLoader
 				Case B3D_STBI_grey_alpha ' 2
 					Local src:Byte Ptr = imgPtr
 					Local dst:Byte Ptr = pixmap.pixels
-					pixmap = CreatePixmap( width,height,PF_RGBA8888 )
+					pixmap = CreatePixmap(width, height, PF_RGBA8888)
 					
 					For Local y:Int = 0 Until height
 						For Local x:Int = 0 Until width
-							Local a:Int=src[0]
-							Local i:Int=src[1]
+							Local a:Int = src[0]
+							Local i:Int = src[1]
 							dst[0] = i
 							dst[1] = i
 							dst[2] = i
