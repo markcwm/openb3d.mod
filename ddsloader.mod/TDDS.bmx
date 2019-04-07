@@ -1,5 +1,34 @@
 
 Rem
+bbdoc: Loads a DDS file as a Max2D image in DXT1/3/5 compressed or RGB/RGBA uncompressed formats
+End Rem
+Function LoadImageDDS:TImage( url:Object,flags%=-1,mr%=0,mg%=0,mb%=0 )
+
+	Local pixmap:TPixmap=LoadPixmap(url)
+	Local dds:TDDS=TDDS.current_surface
+	If dds.pixmap=Null
+		DebugLog " No pixmap image loaded: "+String(url)
+		Return Null
+	EndIf
+	
+	Local name:Int
+	glGenTextures(1, Varptr name)
+	glBindTexture(GL_TEXTURE_2D, name)
+	
+	dds.UploadTexture2D()
+	
+	glBindTexture(GL_TEXTURE_2D, name)
+	glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, dds.pixmap.pixels)
+	
+	Local img:TImage=TImage.Create( dds.pixmap.width,dds.pixmap.height,1,flags,mr,mg,mb )
+	img.SetPixmap 0,dds.pixmap
+	
+	dds.FreeDDS()
+	Return img
+	
+End Function
+
+Rem
 bbdoc: DirectDrawSurface
 End Rem
 Type TDDS
@@ -8,7 +37,7 @@ Type TDDS
 	Global current_buffer:Byte Ptr
 	
 	Field buffer:Byte Ptr
-	'vector<DirectDrawSurface> Mipmaps
+	Field mipmaps_array:TDDS[1]
 	
 	Field width:Int Ptr
 	Field height:Int Ptr
@@ -21,6 +50,8 @@ Type TDDS
 	Field format:Int Ptr
 	Field components:Int Ptr
 	Field target:Int Ptr
+	
+	Field pixmap:TPixmap
 	
 	' wrapper
 	?bmxng
@@ -76,8 +107,8 @@ Type TDDS
 	Method InitFields() ' Once per CreateObject
 	
 		' char
-		buffer=DirectDrawSurfaceChar_( GetInstance(Self),DDS_buffer )
-		dxt=DirectDrawSurfaceChar_( GetInstance(Self),DDS_dxt )
+		buffer=DirectDrawSurfaceUChar_( GetInstance(Self),DDS_buffer )
+		dxt=DirectDrawSurfaceUChar_( GetInstance(Self),DDS_dxt )
 		
 		' int
 		width=DirectDrawSurfaceInt_( GetInstance(Self),DDS_width )
@@ -92,16 +123,26 @@ Type TDDS
 		components=DirectDrawSurfaceUInt_( GetInstance(Self),DDS_components )
 		target=DirectDrawSurfaceUInt_( GetInstance(Self),DDS_target )
 		
+		' dds
+		mipmaps_array=mipmaps_array[..mipmapcount[0]+1]
+		For Local id:Int=0 Until mipmapcount[0]
+			Local inst:Byte Ptr=DirectDrawSurfaceArray_( GetInstance(Self),DDS_mipmaps,id )
+			mipmaps_array[id]=GetObject(inst)
+			If mipmaps_array[id]=Null And inst<>Null Then mipmaps_array[id]=CreateObject(inst)
+		Next
+		
 		exists=1
 		
 	End Method
 	
-	Function StringPtr:String( inst:Byte Ptr ) 
-	?bmxng
+	Function StringPtr:String( inst:Byte Ptr )
+	
+		?bmxng
 		Return String(inst)
-	?Not bmxng
+		?Not bmxng
 		Return String(Int(inst))
-	?
+		?
+		
 	End Function
 	
 	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
@@ -137,6 +178,8 @@ Type TDDS
 		
 	End Method
 	
+	' Openb3d
+	
 	Method FreeDDS()
 	
 		If exists
@@ -144,6 +187,54 @@ Type TDDS
 			MemFree(current_buffer)
 			DDSFreeDirectDrawSurface( GetInstance(Self),0 ) ' don't free buffer, it was freed in Bmax
 			FreeObject( GetInstance(Self) )
+		EndIf
+		
+	End Method
+	
+	Method IsCompressed:Int()
+	
+		If format[0]=GL_COMPRESSED_RGB_S3TC_DXT1_EXT Or format[0]=GL_COMPRESSED_RGBA_S3TC_DXT3_EXT Or format[0]=GL_COMPRESSED_RGBA_S3TC_DXT5_EXT
+			Return True
+		EndIf
+		
+	End Method
+	
+	Method UploadTexture2D()
+	
+		If IsCompressed()
+			'glTexParameteri(target,GL_GENERATE_MIPMAP,GL_TRUE)
+			glCompressedTexImage2D(GL_TEXTURE_2D,0,format[0],width[0],height[0],0,size[0],dxt)
+			For Local j:Int=0 Until mipmapcount[0]
+				Local mip:TDDS=mipmaps_array[j]
+				glCompressedTexImage2D(GL_TEXTURE_2D,j+1,format[0],mip.width[0],mip.height[0],0,mip.size[0],mip.dxt)
+			Next
+		Else
+			glTexImage2D(GL_TEXTURE_2D,0,components[0],width[0],height[0],0,format[0],GL_UNSIGNED_BYTE,dxt)
+			For Local j:Int=0 Until mipmapcount[0]
+				Local mip:TDDS=mipmaps_array[j]
+				glTexImage2D(GL_TEXTURE_2D,j+1,components[0],mip.width[0],mip.height[0],0,format[0],GL_UNSIGNED_BYTE,mip.dxt)
+			Next
+		EndIf
+		
+	End Method
+	
+	Method UploadTextureCubeMap( i:Int,face:Int )
+	
+		Local surf:TDDS=mipmaps_array[i]
+		If IsCompressed()
+			glCompressedTexImage2D(face,0,format[0],surf.width[0],surf.height[0],0,surf.size[0],surf.dxt)
+			'DebugLog "sw="+surf.width[0]+" sh="+surf.height[0]+" f="+format[0]+" ss="+surf.size[0]+" x="+Hex(Long(surf.dxt))+" smc="+surf.mipmapcount[0]
+			For Local j:Int=0 Until surf.mipmapcount[0]
+				Local mip:TDDS=surf.mipmaps_array[j]
+				glCompressedTexImage2D(face,j+1,format[0],mip.width[0],mip.height[0],0,mip.size[0],mip.dxt)
+			Next
+		Else
+			glTexImage2D(face,0,components[0],surf.width[0],surf.height[0],0,format[0],GL_UNSIGNED_BYTE,surf.dxt)
+			'DebugLog "sw="+surf.width[0]+" sh="+surf.height[0]+" f="+format[0]+" c="+components[0]+" x="+Hex(Long(surf.dxt))+" smc="+surf.mipmapcount[0]
+			For Local j:Int=0 Until surf.mipmapcount[0]
+				Local mip:TDDS=surf.mipmaps_array[j]
+				glTexImage2D(face,j+1,components[0],mip.width[0],mip.height[0],0,format[0],GL_UNSIGNED_BYTE,mip.dxt)
+			Next
 		EndIf
 		
 	End Method

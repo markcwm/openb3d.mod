@@ -448,6 +448,7 @@ const int TEXTURE_framebuffer=	17;
 const int TEXTURE_cube_face=	18;
 const int TEXTURE_cube_mode=	19;
 const int TEXTURE_tex_list_all=	20;
+const int TEXTURE_format=		21;
 
 // Vector
 const int VECTOR_x=1;
@@ -1809,6 +1810,7 @@ int* TextureInt_( Texture* obj,int varid ){
 		case TEXTURE_no_frames : return &obj->no_frames;
 		case TEXTURE_cube_face : return &obj->cube_face;
 		case TEXTURE_cube_mode : return &obj->cube_mode;
+		case TEXTURE_format : return &obj->format;
 	}
 	return NULL;
 }

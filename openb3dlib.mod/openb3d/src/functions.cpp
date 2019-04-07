@@ -27,7 +27,6 @@
 extern "C" {
 
 void DDSUploadTexture(DirectDrawSurface* surface,Texture* tex){
-	//Texture::DDSUploadTexture(surface,tex);
 	surface->UploadTexture(tex);
 }
 

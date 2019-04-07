@@ -12,14 +12,12 @@ Module Openb3dmax.DDSloader
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "Author: Spinduluz"
+ModuleInfo "Wrapper: Mark Mcvittie"
 ModuleInfo "License: zlib/libpng"
-ModuleInfo "Credits: Mark Mcvittie"
 
-ModuleInfo "History: 1.00 - DirectDrawSurface pixmap factory loader"
+ModuleInfo "History: 1.00 - DirectDrawSurface pixmap loader"
 ModuleInfo "History: Initial Release - Apr 2019"
 
-?debug
-ModuleInfo "CC_OPTS: -DOPENB3D_DEBUG" ' use C++ debug logger (by Spinduluz)
 ?win32
 ModuleInfo "CC_OPTS: -DGLEW_STATIC" ' build static .a otherwise .dll (Win only)
 
@@ -36,6 +34,7 @@ ModuleInfo "CC_OPTS: -UGLES2" ' untested!
 
 Import Pub.OpenGLES
 ?
+Import Brl.GLMax2D
 Import Brl.Pixmap
 Import Brl.RamStream
 Import Brl.Map
@@ -44,7 +43,7 @@ Import "source.bmx"
 
 ' DirectDrawSurface varid
 Const DDS_buffer:Int=		1
-Const DDS_mipmap:Int=		2
+Const DDS_mipmaps:Int=		2
 Const DDS_width:Int=		3
 Const DDS_height:Int=		4
 Const DDS_depth:Int=		5
@@ -59,9 +58,10 @@ Const DDS_target:Int=		12
 Extern' "C"
 
 	' data
-	Function DirectDrawSurfaceChar_:Byte Ptr( obj:Byte Ptr,varid:Int )
+	Function DirectDrawSurfaceUChar_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function DirectDrawSurfaceInt_:Int Ptr( obj:Byte Ptr,varid:Int )
 	Function DirectDrawSurfaceUInt_:Int Ptr( obj:Byte Ptr,varid:Int )
+	Function DirectDrawSurfaceArray_:Byte Ptr( obj:Byte Ptr,varid:Int,index:Int )
 	
 	' methods
 	?bmxng
@@ -96,10 +96,12 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		imgPtr = DDSLoadSurface(cString, 0, buffer, bufLen) ' 0 to not flip image
 		MemFree cString
 		
-		TDDS.current_surface = TDDS.CreateObject(imgPtr)
-		channels = TDDS.current_surface.components[0] ' may be 24 or 32-bit
-		
 		If imgPtr
+			TDDS.current_surface = TDDS.CreateObject(imgPtr)
+			channels = TDDS.current_surface.components[0] ' may be 24 or 32-bit
+			width = TDDS.current_surface.width[0]
+			height = TDDS.current_surface.height[0]
+			
 			Local pf:Int
 			Select channels
 				Case 3
@@ -110,11 +112,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			
 			If pf
 				pixmap = CreatePixmap(width, height, pf, BytesPerPixel[pf])
-				?bmxng
-				MemCopy(pixmap.pixels, imgPtr, Size_T(width * height * BytesPerPixel[pf]))
-				?Not bmxng
-				MemCopy(pixmap.pixels, imgPtr, Int(width * height * BytesPerPixel[pf]))
-				?
+				TDDS.current_surface.pixmap = pixmap
 			EndIf
 			
 			CloseStream(ram)

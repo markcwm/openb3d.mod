@@ -8,7 +8,7 @@
 
 // DirectDrawSurface varid
 const int DDS_buffer=		1;
-const int DDS_mipmap=		2;
+const int DDS_mipmaps=		2;
 const int DDS_width=		3;
 const int DDS_height=		4;
 const int DDS_depth=		5;
@@ -24,10 +24,10 @@ extern "C" {
 
 // data
 
-char* DirectDrawSurfaceChar_( DirectDrawSurface* obj,int varid ){
+unsigned char* DirectDrawSurfaceUChar_( DirectDrawSurface* obj,int varid ){
 	switch (varid){
-		case DDS_buffer : return (char*)&obj->buffer;
-		case DDS_dxt : return (char*)&obj->dxt;
+		case DDS_buffer : return (unsigned char*)&obj->buffer[0];
+		case DDS_dxt : return (unsigned char*)&obj->dxt[0];
 	}
 	return NULL;
 }
@@ -49,6 +49,13 @@ unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid ){
 		case DDS_format : return &obj->format;
 		case DDS_components : return &obj->components;
 		case DDS_target : return &obj->target;
+	}
+	return NULL;
+}
+
+DirectDrawSurface* DirectDrawSurfaceArray_( DirectDrawSurface* obj,int varid,int index ){
+	switch (varid){
+		case DDS_mipmaps : return &obj->mipmaps[index];
 	}
 	return NULL;
 }

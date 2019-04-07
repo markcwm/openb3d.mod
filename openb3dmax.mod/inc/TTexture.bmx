@@ -30,6 +30,7 @@ Type TTexture
 	' extra
 	Global tex_list_all:TList=CreateList()
 	Global is_unique:Int=0
+	Field format:Int Ptr
 	
 	' wrapper
 	?bmxng
@@ -95,6 +96,7 @@ Type TTexture
 		no_frames=TextureInt_( GetInstance(Self),TEXTURE_no_frames )
 		cube_face=TextureInt_( GetInstance(Self),TEXTURE_cube_face )
 		cube_mode=TextureInt_( GetInstance(Self),TEXTURE_cube_mode )
+		format=TextureInt_( GetInstance(Self),TEXTURE_format )
 		no_mipmaps[0]=Mipmaps() ' calculate number of mipmaps
 		
 		' uint
@@ -479,12 +481,12 @@ Type TTexture
 	
 	' Minib3d
 	
-	Method New()
+	Method New:TTexture()
 	
 		If TGlobal.Log_New
 			DebugLog " New TTexture"
 		EndIf
-	
+		
 	End Method
 	
 	Method Delete()
@@ -601,6 +603,21 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
+		Local name:Int
+		If ExtractExt(file.ToLower())="dds"
+			glGenTextures(1, Varptr name)
+			glBindtexture(GL_TEXTURE_2D, name)
+			
+			tex.format[0]=TDDS.current_surface.format[0]
+			TDDS.current_surface.UploadTexture2D()
+			TDDS.current_surface.FreeDDS()
+			
+			glBindTexture(GL_TEXTURE_2D, name)
+			glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
+			
+			glDeleteTextures(1, Varptr name)
+		EndIf
+		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
 		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
@@ -610,7 +627,6 @@ Type TTexture
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
 		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0
 		
-		Local name:Int
 		If frame_width>0 And frame_height>0 ' anim texture
 		
 			Local animmap:TPixmap=CreatePixmap(frame_width,frame_height,tex.pixmap.format) ' format=PF_RGBA8888
@@ -648,20 +664,12 @@ Type TTexture
 			tex.height[0]=height
 			
 		Else ' whole image
-		
 			'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' these functions are too slow, flip in an editor
 			'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap)
 			
-			If ExtractExt(String(url))="dds"
-				glGenTextures(1,Varptr name)
-				glBindTexture(TDDS.current_surface.target[0],name)
-				DDSUploadTexture(TDDS.GetInstance(TDDS.current_surface),TTexture.GetInstance(tex))
-				TDDS.current_surface.FreeDDS()
-			Else
-				glGenTextures(1,Varptr name)
-				glBindtexture(GL_TEXTURE_2D,name)
-				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
-			EndIf
+			glGenTextures(1,Varptr name)
+			glBindtexture(GL_TEXTURE_2D,name)
+			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
 			
 			tex.texture[0]=name
 			tex.gltex=tex.texture ' as in Minib3d
@@ -715,6 +723,21 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
+		Local name:Int
+		If ExtractExt(file.ToLower())="dds"
+			glGenTextures(1, Varptr name)
+			glBindtexture(GL_TEXTURE_2D, name)
+			
+			tex.format[0]=TDDS.current_surface.format[0]
+			TDDS.current_surface.UploadTexture2D()
+			TDDS.current_surface.FreeDDS()
+			
+			glBindTexture(GL_TEXTURE_2D, name)
+			glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
+			
+			glDeleteTextures(1, Varptr name)
+		EndIf
+		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
 		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
@@ -733,9 +756,8 @@ Type TTexture
 		
 		Local cubemap:TPixmap=CreatePixmap(width,height,tex.pixmap.format) ' format=PF_RGBA8888
 		
-		Local name:Int
 		glGenTextures(1,Varptr name)
-		glBindtexture(GL_TEXTURE_CUBE_MAP,name)
+		glBindtexture(GL_TEXTURE_CUBE_MAP, name)
 		
 		For Local i:Int=0 To 5 ' copy tex.pixmap rect to cubemap
 			cubeid=TGlobal.Cubemap_Frame[i]

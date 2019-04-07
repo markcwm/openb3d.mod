@@ -801,6 +801,7 @@ Const TEXTURE_framebuffer:Int=	17
 Const TEXTURE_cube_face:Int=	18
 Const TEXTURE_cube_mode:Int=	19
 Const TEXTURE_tex_list_all:Int=	20
+Const TEXTURE_format:Int=		21
 
 ' Vector
 Const VECTOR_x:Int=1

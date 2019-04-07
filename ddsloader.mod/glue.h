@@ -11,9 +11,10 @@ extern "C" {
 #endif
 
 // data
-char* DirectDrawSurfaceChar_( DirectDrawSurface* obj,int varid );
+unsigned char* DirectDrawSurfaceUChar_( DirectDrawSurface* obj,int varid );
 int* DirectDrawSurfaceInt_( DirectDrawSurface* obj,int varid );
 unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid );
+DirectDrawSurface* DirectDrawSurfaceArray_( DirectDrawSurface* obj,int varid,int index );
 
 // methods
 DirectDrawSurface* DDSLoadSurface(char* filename,int flip,unsigned char* buffer,int bufsize);

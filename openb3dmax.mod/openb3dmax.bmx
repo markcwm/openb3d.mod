@@ -528,6 +528,7 @@ Include "inc/TConstraint.bmx"
 Include "inc/TParticleBatch.bmx"
 Include "inc/TPostFX.bmx"
 Include "inc/TBatchSprite.bmx"
+'Include "inc/geom.bmx"
 
 ' functions
 Include "inc/functions.bmx"

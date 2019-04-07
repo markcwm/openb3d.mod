@@ -37,11 +37,11 @@ Rem
 bbdoc: Returns string cast of byte pointer
 End Rem
 Function StringPtr:String( inst:Byte Ptr ) 
-?bmxng
+	?bmxng
 	Return String(inst)
-?Not bmxng
+	?Not bmxng
 	Return String(Int(inst))
-?
+	?
 End Function
 
 Rem

@@ -3,51 +3,55 @@
 
 ## Introduction
 
-OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on Blitz3D. Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [MiniB3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html).
+OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on [Blitz3D](https://github.com/blitz-research/blitz3d). Since the standard commands are the same, the Blitz3d manual should be used as a partial reference. Help can be found at the SyntaxBomb [Minib3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html) or the BlitzCoder [Openb3dmax Board](https://www.blitzcoder.org/forum/topics.php?category=16).
 
-## Features 
+## Features
 
-* Works with [BlitzMax NG](https://github.com/bmx-ng/bmx-ng/releases) in 32-bit or 64-bit on Windows, Mac or Linux (currently no mobile platforms)
-* The wrapper is object-oriented with a procedural interface as in Minib3d
-* Minib3d types are the same but all fields are pointers apart from lists, also variable names may not be the same
-* Since entities are objects not integer handles as in Blitz3D you need to specify their type at creation
-* The coordinate system is flipped from OpenGL orientation to be left-handed as in Blitz3d and Minib3d
-* Works with BRL.MaxGui as in Minib3d, for control of application windows
-* BRL.Max2d is used for 2D-in-3D rendering which along with BRL.Graphics is like Blitz3d's graphics commands
-* Image loading is done by the STB image library which supports JPG, PNG, TGA, BMP, GIF and others
-* Loads DDS files with mipmaps or compressed textures
-* Supports streams like Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod) with Blitz image loaders and mesh loaders
-* 3D Model formats include 3DS (currently no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
-* Several more formats can be loaded using the Assimp library wrapper (currently no animation)
-* Collision detection consists of Blitz3d's ellipsoid-to-something collisions, also includes dynamic collisions
-* Realtime textures are created with BackBufferToTex (cubemapping) or CameraToTex for use in post-processing effects
-* Quaternions are used for rotations instead of Eulers as in Minib3d, this avoids gimbal lock
-* Terrains are much like Blitz3D but UpdateNormals replaces TerrainShading and TerrainDetail is a constant
+* Works with [BRL BlitzMax](https://github.com/blitz-research/blitzmax) and [BlitzMax NG](https://github.com/bmx-ng/bmx-ng/releases) in 32-bit or 64-bit on Windows, Mac or Linux (no mobile platforms)
+* The wrapper is object-oriented with a procedural interface like in Minib3d
+* Since entities are objects and not integer handles like in Blitz3D, you must specify their type at creation
+* Minib3d types are the same but Type fields are pointers except for lists, also variable names may not be the same
+* The coordinate system is not OpenGL orientation, it is left-handed like in Blitz3d and Minib3d
+* Works with BRL.MaxGui like in Minib3d, allowing more control of application windows
+* BRL.Max2d is used for 2D-in-3D rendering which along with BRL.Graphics is similar to Blitz3d's 2D commands
+* The STB Image library is used to load many formats, it supports TGA, BMP, GIF and PSD (also PNG and JPG)
+* BRL image loaders are used with PNG and JPG as they are the most complete
+* DDS files can also be loaded with support for compressed textures, mipmaps and cubemaps
+* File streams are supported by image and mesh loaders, allowing Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod)
+* 3D model formats include 3DS (no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
+* Several more 3D formats can be loaded using the Assimp library wrapper (no animation)
+* Collision detection consists of Blitz3d's ellipsoid-to-something collisions, dynamic collisions are also possible
+* Realtime textures are created with BackBufferToTex (for cubemaps) or CameraToTex, also DepthBufferToTex
+* Shader post-processing using CameraToTex to render to screen sprites or with PostFX render functions
+* Quaternions are used for rotations instead of Eulers as Minib3d uses, this avoids the gimbal lock bug
+* Terrains are similar to Blitz3D but UpdateNormals replaces TerrainShading (and TerrainDetail is a constant)
 * Vertex and Fragment shaders are supported with examples written to comply with GLSL 1.10 (GL 2.0) syntax
-* Shader effects currently include bump mapping, toon shading, blur and bloom
-* Dynamic lighting and linear fog either with fixed function or programmable graphics pipelines (ie. shaders)
-* Realtime volumetric stencil shadows with self-shadowing from multiple lights
+* Shader effects available include bump map, toon, blur, anti alias, colorgrading, depth of field, god rays, bloom
+* Dynamic lighting and linear fog either with fixed function or programmable graphics pipelines (shaders)
+* Realtime volumetric stencil shadows with self-shadowing from multiple lights (no soft shadows)
 * Stencil commands for rendering mirror or portal effects
-* Particle emitter system with support for custom effects by using a callback function
-* CSG (constructive solid geometry) creates a new mesh from existing ones (combine, subtract or intersect)
-* Actions are an event-based entity control system, they are triggered once and then automatically updated
-* Simple physics system consisting of constraints and rigid bodies
-* 3D sound module using Brl.Audio, similar to the Blitz3D commands but sounds can be qued, stopped, paused and resumed per entity.
+* CSG (constructive solid geometry) creates a new mesh from existing ones (combine, subtract, intersect)
+* Actions using an event-based entity control system, triggered once and then automatically updated
+* Basic physics system consisting of constraints and rigid bodies
+* Particle emitter system with callback function to allow complete control
+* Alternative particle system using batch sprites from Monkey-Minib3d
+* Software anti-alias like in Minib3d, also multisample hardware anti-alias (only in Windows)
+* 3D sound module using Brl.Audio, similar to Blitz3D but sounds can be qued, stopped, paused and resumed per entity
 
 ## Installation
-* Click on the Github Download Zip link, then extract contents to your `BlitzMax/mod` folder
+* Click on the Github Download zip link, then extract contents to your `BlitzMax/mod` folder
 * Remove **-master** from the main **openb3dmax.mod-master** folder (module names must end in **.mod**)
 * Also, check the contents of **openb3dmax.mod** contains several different folders with **b3d** in the name
 * If on Windows, make sure you have a working version of the MinGW compiler
 * If on Mac, make sure you have an appropriate version of XCode installed
 * If on Linux, read this guide: [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
 * To build the mod for BRL Blitzmax, open Command/Terminal, cd to `BlitzMax/bin` and type `bmk makemods -d openb3dmax`
-* For NG Blitzmax in 64-bit you would use `bmk makemods -d -w -g x64 openb3dmax` (on Mac/Linux you need `./bmk`)
+* For Blitzmax NG in 64-bit you use `bmk makemods -d -w -g x64 openb3dmax` (on Mac/Linux you need `./bmk`)
 * Or from MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
 
 ## Status
 
-After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I will probably try to add Android support from NG, but this is not a priority. It should work with the latest NG release (currently 0.93) but please note it is not working with modern compilers like GCC 7.x or Clang/LLVM, so for now you need an older compiler.
+After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I may try to add Android support from NG, but this is not a big priority. It should work with the latest NG release (currently 0.99) but please note it is not working with modern compilers like GCC 7.x (or later Clang/LLVM) so for now you need an older compiler.
 
 ## License
 
