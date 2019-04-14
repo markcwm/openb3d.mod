@@ -481,7 +481,7 @@ Type TTexture
 	
 	' Minib3d
 	
-	Method New:TTexture()
+	Method New()
 	
 		If TGlobal.Log_New
 			DebugLog " New TTexture"
