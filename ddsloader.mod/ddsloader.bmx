@@ -37,6 +37,7 @@ Import Pub.OpenGLES
 Import Brl.GLMax2D
 Import Brl.Pixmap
 Import Brl.RamStream
+Import Brl.Retro
 Import Brl.Map
 
 Import "source.bmx"
@@ -64,13 +65,10 @@ Extern' "C"
 	Function DirectDrawSurfaceArray_:Byte Ptr( obj:Byte Ptr,varid:Int,index:Int )
 	
 	' methods
-	?bmxng
-	Function DDSLoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Size_T,buffer:Byte Ptr,bufsize:Size_T )
-	Function DDSFreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Size_T )
-	?Not bmxng
-	Function DDSLoadSurface:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
-	Function DDSFreeDirectDrawSurface( surface:Byte Ptr,free_buffer:Int )
-	?
+	Function DDSLoadSurface_:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
+	Function DDSFreeDirectDrawSurface_( surface:Byte Ptr,free_buffer:Int )
+	Function DDSCountMipmaps_:Int( width:Int,height:Int )
+	Function DDSCopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int,format:Int )
 	
 End Extern
 
@@ -93,7 +91,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		
 		Local file:String = ""
 		Local cString:Byte Ptr = file.ToCString()
-		imgPtr = DDSLoadSurface(cString, 0, buffer, bufLen) ' 0 to not flip image
+		imgPtr = DDSLoadSurface_(cString, 0, buffer, bufLen) ' 0 to not flip image
 		MemFree cString
 		
 		If imgPtr
@@ -117,7 +115,7 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			
 			CloseStream(ram)
 			TDDS.current_buffer = buffer
-			'MemFree(buffer) ' freed later in FreeDDS
+			'MemFree(buffer) ' must be freed later in FreeDDS
 		EndIf
 		
 		Return pixmap

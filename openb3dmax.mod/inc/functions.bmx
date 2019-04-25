@@ -47,8 +47,8 @@ End Function
 Rem
 bbdoc: Returns the number of mipmaps a texture has
 End Rem
-Function Mipmaps:Int( tex:TTexture )
-	Return tex.Mipmaps()
+Function CountMipmaps:Int( tex:TTexture )
+	Return tex.CountMipmaps()
 End Function
 
 Rem

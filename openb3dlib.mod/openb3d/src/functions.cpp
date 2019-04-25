@@ -26,13 +26,13 @@
 
 extern "C" {
 
-void DDSUploadTexture(DirectDrawSurface* surface,Texture* tex){
+void DDSUploadTexture_(DirectDrawSurface* surface,Texture* tex){
 	surface->UploadTexture(tex);
 }
 
 // Extra
 
-int Mipmaps_(Texture* tex){
+int CountMipmaps_(Texture* tex){
 	if (tex==NULL) return 0;
 	return 1 + (int)(floor(log2(max(tex->width, tex->height))));
 }

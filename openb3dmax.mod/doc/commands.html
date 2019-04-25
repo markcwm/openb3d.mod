@@ -113,6 +113,9 @@ Returns a copy of the new surface.
 <tr><td class=docleft width=1%><a href=#CopyTexture>CopyTexture</a></td><td class=docright>
 Returns a copy of the new texture.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CountMipmaps>CountMipmaps</a></td><td class=docright>
+Returns the number of mipmaps a texture has.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBatchSprite>CreateBatchSprite</a></td><td class=docright>
 Add a sprite to batch, batchsprites are one mesh.
 </td></tr>
@@ -310,9 +313,6 @@ Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cul
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshLoader>MeshLoader</a></td><td class=docright>
 Set mesh loaders to use, default is "bmx"
-</td></tr>
-<tr><td class=docleft width=1%><a href=#Mipmaps>Mipmaps</a></td><td class=docright>
-Returns the number of mipmaps a texture has.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
@@ -829,6 +829,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a copy of the new texture.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=CountMipmaps>
+<tr><td class=doctop colspan=2>Function CountMipmaps:Int( tex:TTexture )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the number of mipmaps a texture has.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=CreateBatchSprite>
 <tr><td class=doctop colspan=2>Function CreateBatchSprite:TBatchSprite( parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Add a sprite to batch, batchsprites are one mesh.</td></tr>
@@ -1177,11 +1182,6 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
 Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
 Use "debug" for mesh loader debug information or disable with "nodebug".</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=Mipmaps>
-<tr><td class=doctop colspan=2>Function Mipmaps:Int( tex:TTexture )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the number of mipmaps a texture has.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>

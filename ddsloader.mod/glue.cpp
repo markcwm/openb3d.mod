@@ -5,6 +5,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <math.h>
 
 // DirectDrawSurface varid
 const int DDS_buffer=		1;
@@ -19,6 +20,11 @@ const int DDS_dxt=			9;
 const int DDS_format=		10;
 const int DDS_components=	11;
 const int DDS_target=		12;
+
+#define COMPRESSED_RGB_S3TC_DXT1_EXT 0x83F0
+#define COMPRESSED_RGBA_S3TC_DXT1_EXT 0x83F1
+#define COMPRESSED_RGBA_S3TC_DXT3_EXT 0x83F2
+#define COMPRESSED_RGBA_S3TC_DXT5_EXT 0x83F3
 
 extern "C" {
 
@@ -62,12 +68,44 @@ DirectDrawSurface* DirectDrawSurfaceArray_( DirectDrawSurface* obj,int varid,int
 
 // methods
 
-DirectDrawSurface* DDSLoadSurface(char* filename,int flip,unsigned char* buffer,int bufsize){
+DirectDrawSurface* DDSLoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize){
 	return DirectDrawSurface::LoadSurface(filename,flip,buffer,bufsize);
 }
 
-void DDSFreeDirectDrawSurface(DirectDrawSurface* surface,int free_buffer){
+void DDSFreeDirectDrawSurface_(DirectDrawSurface* surface,int free_buffer){
 	surface->FreeDirectDrawSurface(free_buffer);
+}
+
+int DDSCountMipmaps_(int width, int height){
+	return 1 + (int)(floor(log2(max(width, height))));
+}
+
+void DDSCopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert,int format){
+	unsigned int y;
+	unsigned int srcX4=srcX/4;
+	unsigned int srcY4=srcY/4;
+	unsigned int srcW4=srcW/4;
+	unsigned int srcH4=srcH/4;
+	unsigned int dstW4=dstW/4;
+	unsigned int dstH4=dstH/4;
+	unsigned int bPT=16;
+	
+	if (format==COMPRESSED_RGB_S3TC_DXT1_EXT) bPT=8;
+	if (format==0){
+		if (invert != 0){
+			for (y = 0; y < dstH; y++){
+				memcpy(dst + y * dstW * bPP, src + (((dstH - 1 - y) + srcY) * srcW + srcX) * bPP, dstW * bPP);
+			}
+		}else{
+			for (y = 0; y < dstH; y++){
+				memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
+			}
+		}
+	}else{ // can't invert texels
+		for (y = 0; y < dstH4; y++){
+			memcpy(dst + y * dstW4 * bPT, src + ((y + srcY4) * srcW4 + srcX4) * bPT, dstW4 * bPT);
+		}
+	}
 }
 
 } // end extern C

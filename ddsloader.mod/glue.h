@@ -17,8 +17,10 @@ unsigned int* DirectDrawSurfaceUInt_( DirectDrawSurface* obj,int varid );
 DirectDrawSurface* DirectDrawSurfaceArray_( DirectDrawSurface* obj,int varid,int index );
 
 // methods
-DirectDrawSurface* DDSLoadSurface(char* filename,int flip,unsigned char* buffer,int bufsize);
-void DDSFreeDirectDrawSurface(DirectDrawSurface* surface,int free_buffer);
+DirectDrawSurface* DDSLoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize);
+void DDSFreeDirectDrawSurface_(DirectDrawSurface* surface,int free_buffer);
+int DDSCountMipmaps_(int width, int height);
+void DDSCopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert,int format);
 
 #ifdef __cplusplus
 }; // extern "C"

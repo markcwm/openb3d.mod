@@ -11,14 +11,14 @@ Type TTexture
 	Field file:Byte Ptr ' string returned by TextureName - ""
 	Field frames:Int Ptr ' unsigned int*
 	
-	Field flags:Int Ptr,blend:Int Ptr,coords:Int Ptr ' 0/2/0
-	Field u_scale:Float Ptr,v_scale:Float Ptr ' 1.0/1.0
-	Field u_pos:Float Ptr,v_pos:Float Ptr,angle:Float Ptr ' 0.0/0.0/0.0
+	Field flags:Int Ptr, blend:Int Ptr, coords:Int Ptr ' 0/2/0
+	Field u_scale:Float Ptr, v_scale:Float Ptr ' 1.0/1.0
+	Field u_pos:Float Ptr, v_pos:Float Ptr, angle:Float Ptr ' 0.0/0.0/0.0
 	Field file_abs:Byte Ptr ' string - ""
-	Field width:Int Ptr,height:Int Ptr ' returned by TextureWidth/TextureHeight - 0/0
+	Field width:Int Ptr, height:Int Ptr ' returned by TextureWidth/TextureHeight - 0/0
 	Field no_frames:Int Ptr ' 1
 	Field framebuffer:Int Ptr ' openb3d: unsigned int* - 0
-	Field cube_face:Int Ptr,cube_mode:Int Ptr ' 0/1
+	Field cube_face:Int Ptr, cube_mode:Int Ptr ' 0/1
 	
 	' minib3d
 	Field pixmap:TPixmap
@@ -40,7 +40,7 @@ Type TTexture
 	?
 	Field instance:Byte Ptr
 	
-	Global tex_list_id:Int=0,tex_list_all_id:Int=0
+	Global tex_list_id:Int=0, tex_list_all_id:Int=0
 	Field exists:Int=0 ' FreeTexture
 	
 	Function CreateObject:TTexture( inst:Byte Ptr ) ' Create and map object from C++ instance
@@ -48,9 +48,9 @@ Type TTexture
 		If inst=Null Then Return Null
 		Local obj:TTexture=New TTexture
 		?bmxng
-		tex_map.Insert( inst,obj )
+		tex_map.Insert( inst, obj )
 		?Not bmxng
-		tex_map.Insert( String(Int(inst)),obj )
+		tex_map.Insert( String(Int(inst)), obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -88,33 +88,33 @@ Type TTexture
 	Method InitFields() ' Once per CreateObject
 	
 		' int
-		flags=TextureInt_( GetInstance(Self),TEXTURE_flags )
-		blend=TextureInt_( GetInstance(Self),TEXTURE_blend )
-		coords=TextureInt_( GetInstance(Self),TEXTURE_coords )
-		width=TextureInt_( GetInstance(Self),TEXTURE_width )
-		height=TextureInt_( GetInstance(Self),TEXTURE_height )
-		no_frames=TextureInt_( GetInstance(Self),TEXTURE_no_frames )
-		cube_face=TextureInt_( GetInstance(Self),TEXTURE_cube_face )
-		cube_mode=TextureInt_( GetInstance(Self),TEXTURE_cube_mode )
-		format=TextureInt_( GetInstance(Self),TEXTURE_format )
-		no_mipmaps[0]=Mipmaps() ' calculate number of mipmaps
+		flags=TextureInt_( GetInstance(Self), TEXTURE_flags )
+		blend=TextureInt_( GetInstance(Self), TEXTURE_blend )
+		coords=TextureInt_( GetInstance(Self), TEXTURE_coords )
+		width=TextureInt_( GetInstance(Self), TEXTURE_width )
+		height=TextureInt_( GetInstance(Self), TEXTURE_height )
+		no_frames=TextureInt_( GetInstance(Self), TEXTURE_no_frames )
+		cube_face=TextureInt_( GetInstance(Self), TEXTURE_cube_face )
+		cube_mode=TextureInt_( GetInstance(Self), TEXTURE_cube_mode )
+		format=TextureInt_( GetInstance(Self), TEXTURE_format )
+		no_mipmaps[0]=CountMipmaps() ' calculate number of mipmaps
 		
 		' uint
-		texture=TextureUInt_( GetInstance(Self),TEXTURE_texture )
-		frames=TextureUInt_( GetInstance(Self),TEXTURE_frames )
-		framebuffer=TextureUInt_( GetInstance(Self),TEXTURE_framebuffer )
+		texture=TextureUInt_( GetInstance(Self), TEXTURE_texture )
+		frames=TextureUInt_( GetInstance(Self), TEXTURE_frames )
+		framebuffer=TextureUInt_( GetInstance(Self), TEXTURE_framebuffer )
 		If frames=Null Then gltex=texture Else gltex=frames ' as in Minib3d
 		
 		' float
-		u_scale=TextureFloat_( GetInstance(Self),TEXTURE_u_scale )
-		v_scale=TextureFloat_( GetInstance(Self),TEXTURE_v_scale )
-		u_pos=TextureFloat_( GetInstance(Self),TEXTURE_u_pos )
-		v_pos=TextureFloat_( GetInstance(Self),TEXTURE_v_pos )
-		angle=TextureFloat_( GetInstance(Self),TEXTURE_angle )
+		u_scale=TextureFloat_( GetInstance(Self), TEXTURE_u_scale )
+		v_scale=TextureFloat_( GetInstance(Self), TEXTURE_v_scale )
+		u_pos=TextureFloat_( GetInstance(Self), TEXTURE_u_pos )
+		v_pos=TextureFloat_( GetInstance(Self), TEXTURE_v_pos )
+		angle=TextureFloat_( GetInstance(Self), TEXTURE_angle )
 		
 		' string
-		file=TextureString_( GetInstance(Self),TEXTURE_file )
-		file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
+		file=TextureString_( GetInstance(Self), TEXTURE_file )
+		file_abs=TextureString_( GetInstance(Self), TEXTURE_file_abs )
 		
 		CopyList_(tex_list)
 		CopyList_(tex_list_all)
@@ -122,7 +122,7 @@ Type TTexture
 		
 	End Method
 	
-	Method DebugFields( debug_subobjects:Int=0,debug_base_types:Int=0 )
+	Method DebugFields( debug_subobjects:Int=0, debug_base_types:Int=0 )
 	
 		Local pad:String
 		Local loop:Int=debug_subobjects
@@ -175,16 +175,16 @@ Type TTexture
 	
 		Select list
 			Case tex_list
-				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list )
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_id )
+				If StaticListSize_( TEXTURE_class, TEXTURE_tex_list )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class, TEXTURE_tex_list, Varptr tex_list_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
-					If obj Then ListAddLast( list,obj )
+					If obj Then ListAddLast( list, obj )
 				EndIf
 			Case tex_list_all
-				If StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_all_id )
+				If StaticListSize_( TEXTURE_class, TEXTURE_tex_list_all )
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class, TEXTURE_tex_list, Varptr tex_list_all_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
-					If obj Then ListAddLast( list,obj )
+					If obj Then ListAddLast( list, obj )
 				EndIf
 		End Select
 		
@@ -197,17 +197,17 @@ Type TTexture
 		Select list
 			Case tex_list
 				tex_list_id=0
-				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list )-1
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list,Varptr tex_list_id )
+				For Local id:Int=0 To StaticListSize_( TEXTURE_class, TEXTURE_tex_list )-1
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class, TEXTURE_tex_list, Varptr tex_list_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
-					If obj Then ListAddLast( list,obj )
+					If obj Then ListAddLast( list, obj )
 				Next
 			Case tex_list_all
 				tex_list_all_id=0
-				For Local id:Int=0 To StaticListSize_( TEXTURE_class,TEXTURE_tex_list_all )-1
-					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class,TEXTURE_tex_list_all,Varptr tex_list_all_id )
+				For Local id:Int=0 To StaticListSize_( TEXTURE_class, TEXTURE_tex_list_all )-1
+					Local inst:Byte Ptr=StaticIterListTexture_( TEXTURE_class, TEXTURE_tex_list_all, Varptr tex_list_all_id )
 					Local obj:TTexture=GetObject(inst) ' no CreateObject
-					If obj Then ListAddLast( list,obj )
+					If obj Then ListAddLast( list, obj )
 				Next
 		End Select
 		
@@ -217,10 +217,10 @@ Type TTexture
 	
 		Select list
 			Case tex_list
-				GlobalListPushBackTexture_( TEXTURE_tex_list,GetInstance(Self) )
+				GlobalListPushBackTexture_( TEXTURE_tex_list, GetInstance(Self) )
 				AddList_(list)
 			Case tex_list_all
-				GlobalListPushBackTexture_( TEXTURE_tex_list_all,GetInstance(Self) )
+				GlobalListPushBackTexture_( TEXTURE_tex_list_all, GetInstance(Self) )
 				AddList_(list)
 		End Select
 		
@@ -230,11 +230,11 @@ Type TTexture
 	
 		Select list
 			Case tex_list
-				GlobalListRemoveTexture_( TEXTURE_tex_list,GetInstance(Self) )
-				ListRemove( list,Self ) ; tex_list_id:-1
+				GlobalListRemoveTexture_( TEXTURE_tex_list, GetInstance(Self) )
+				ListRemove( list, Self ) ; tex_list_id:-1
 			Case tex_list_all
-				GlobalListRemoveTexture_( TEXTURE_tex_list_all,GetInstance(Self) )
-				ListRemove( list,Self ) ; tex_list_all_id:-1
+				GlobalListRemoveTexture_( TEXTURE_tex_list_all, GetInstance(Self) )
+				ListRemove( list, Self ) ; tex_list_all_id:-1
 		End Select
 		
 	End Method
@@ -246,32 +246,32 @@ Type TTexture
 		
 	End Function
 	
-	Method Mipmaps:Int()
+	Method CountMipmaps:Int()
 	
-		Return Mipmaps_( GetInstance(Self) )
+		Return CountMipmaps_( GetInstance(Self) )
 		
 	End Method
 	
 	' Openb3d
 	
-	Method BufferToTex( buffer:Byte Ptr,frame:Int=0 )
+	Method BufferToTex( buffer:Byte Ptr, frame:Int=0 )
 	
-		BufferToTex_( GetInstance(Self),buffer,frame )
+		BufferToTex_( GetInstance(Self), buffer, frame )
 		
 	End Method
 	
-	Method TexToBuffer( buffer:Byte Ptr,frame:Int=0 )
+	Method TexToBuffer( buffer:Byte Ptr, frame:Int=0 )
 	
-		TexToBuffer_( GetInstance(Self),buffer,frame )
+		TexToBuffer_( GetInstance(Self), buffer, frame )
 		
 	End Method
 	
-	Method CameraToTex( cam:TCamera,frame:Int=0 )
+	Method CameraToTex( cam:TCamera, frame:Int=0 )
 	
 		If TGlobal.GL_Version<2.1 ' GL 1.4-2.0
 			CameraToTexEXT( cam )
 		Else ' GL 2.1+
-			CameraToTex_( GetInstance(Self),TCamera.GetInstance(cam),frame )
+			CameraToTex_( GetInstance(Self), TCamera.GetInstance(cam), frame )
 		EndIf
 		
 	End Method
@@ -281,7 +281,7 @@ Type TTexture
 		If TGlobal.GL_VERSION<2.1 ' GL 1.4-2.0
 			DepthBufferToTexEXT( cam )
 		Else ' GL 2.1+
-			DepthBufferToTex_( GetInstance(Self),TCamera.GetInstance(cam) )
+			DepthBufferToTex_( GetInstance(Self), TCamera.GetInstance(cam) )
 		EndIf
 		
 	End Method
@@ -298,28 +298,28 @@ Type TTexture
 	' Set texture flags, see LoadTexture for values
 	Method TextureFlags( flags:Int )
 	
-		TextureFlags_( GetInstance(Self),flags )
+		TextureFlags_( GetInstance(Self), flags )
 		
 	End Method
 	
 	' GL equivalent, param is a const, limited to 12 calls per texture, experimental
-	Method TextureGLTexEnvi( target:Int,pname:Int,param:Int )
+	Method TextureGLTexEnvi( target:Int, pname:Int, param:Int )
 	
-		TextureGLTexEnvi_( GetInstance(Self),target,pname,param )
+		TextureGLTexEnvi_( GetInstance(Self), target, pname, param )
 		
 	End Method
 	
 	' GL equivalent, param is a float, limited to 12 calls per texture, experimental
-	Method TextureGLTexEnvf( target:Int,pname:Int,param:Float )
+	Method TextureGLTexEnvf( target:Int, pname:Int, param:Float )
 	
-		TextureGLTexEnvf_( GetInstance(Self),target,pname,param )
+		TextureGLTexEnvf_( GetInstance(Self), target, pname, param )
 		
 	End Method
 	
 	' Set texture multitex factor, used in interpolate and custom TexBlend options
 	Method TextureMultitex( f:Float )
 	
-		TextureMultitex_( GetInstance(Self),f )
+		TextureMultitex_( GetInstance(Self), f )
 		
 	End Method
 	
@@ -328,9 +328,9 @@ Type TTexture
 	
 		Select strPtr
 			Case file
-				Return String.FromCString( TextureString_( GetInstance(Self),TEXTURE_file ) )
+				Return String.FromCString( TextureString_( GetInstance(Self), TEXTURE_file ) )
 			Case file_abs
-				Return String.FromCString( TextureString_( GetInstance(Self),TEXTURE_file_abs ) )
+				Return String.FromCString( TextureString_( GetInstance(Self), TEXTURE_file_abs ) )
 		End Select
 		
 	End Method
@@ -341,20 +341,20 @@ Type TTexture
 		Select strPtr
 			Case file
 				Local cString:Byte Ptr=strValue.ToCString()
-				SetTextureString_( GetInstance(Self),TEXTURE_file,cString )
+				SetTextureString_( GetInstance(Self), TEXTURE_file, cString )
 				MemFree cString
-				file=TextureString_( GetInstance(Self),TEXTURE_file )
+				file=TextureString_( GetInstance(Self), TEXTURE_file )
 			Case file_abs
 				Local cString:Byte Ptr=strValue.ToCString()
-				SetTextureString_( GetInstance(Self),TEXTURE_file_abs,cString )
+				SetTextureString_( GetInstance(Self), TEXTURE_file_abs, cString )
 				MemFree cString
-				file_abs=TextureString_( GetInstance(Self),TEXTURE_file_abs )
+				file_abs=TextureString_( GetInstance(Self), TEXTURE_file_abs )
 		End Select
 	
 	End Method
 	
 	' GL 2.0 support
-	Method CameraToTexEXT( cam:TCamera,frame:Int=0 )
+	Method CameraToTexEXT( cam:TCamera, frame:Int=0 )
 	
 		TGlobal.camera_in_use=cam
 		
@@ -427,7 +427,7 @@ Type TTexture
 		'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
 		
 		' Generate mipmaps for texture, need to bind after Render
-		glBindTexture(target,texture[0])
+		glBindTexture(target, texture[0])
 		glGenerateMipmapEXT(target)
 		glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
 		glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
@@ -435,13 +435,13 @@ Type TTexture
 	End Method
 	
 	' GL 2.0 support
-	Method DepthBufferToTexEXT( cam:TCamera=Null,frame:Int=0 )
+	Method DepthBufferToTexEXT( cam:TCamera=Null, frame:Int=0 )
 	
 		' Copy viewport to texture
 		glBindTexture(GL_TEXTURE_2D, texture[0])	
 		If cam=Null
-			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_DEPTH_COMPONENT,0,TGlobal.height[0]-height[0],width[0],height[0],0)
-			glTexParameteri(GL_TEXTURE_2D,GL_GENERATE_MIPMAP_SGIS,GL_TRUE)
+			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, TGlobal.height[0]-height[0], width[0], height[0], 0)
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE)
 		Else
 			TGlobal.camera_in_use=cam
 			
@@ -471,7 +471,7 @@ Type TTexture
 			'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
 			
 			' Generate mipmaps for texture, need to bind after Render
-			glBindTexture(GL_TEXTURE_2D,texture[0])
+			glBindTexture(GL_TEXTURE_2D, texture[0])
 			glGenerateMipmapEXT(GL_TEXTURE_2D)
 			glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, 0)
 			glBindRenderbufferEXT(GL_RENDERBUFFER_EXT, 0)
@@ -481,7 +481,7 @@ Type TTexture
 	
 	' Minib3d
 	
-	Method New:TTexture()
+	Method New()
 	
 		If TGlobal.Log_New
 			DebugLog " New TTexture"
@@ -502,10 +502,10 @@ Type TTexture
 		If exists
 			exists=0
 			For Local tex:TTexture=EachIn tex_list_all
-				If tex=Self Then ListRemove( tex_list_all,Self ) ; tex_list_all_id:-1
+				If tex=Self Then ListRemove( tex_list_all, Self ) ; tex_list_all_id:-1
 			Next
 			
-			ListRemove( tex_list,Self ) ; tex_list_id:-1
+			ListRemove( tex_list, Self ) ; tex_list_id:-1
 			pixmap=Null
 			
 			FreeTexture_( GetInstance(Self) )
@@ -514,60 +514,60 @@ Type TTexture
 		
 	End Method
 	
-	Function CreateTexture:TTexture( width:Int,height:Int,flags:Int=9,frames:Int=1 )
+	Function CreateTexture:TTexture( width:Int, height:Int, flags:Int=9, frames:Int=1 )
 	
-		Local inst:Byte Ptr=CreateTexture_( width,height,flags,frames )
+		Local inst:Byte Ptr=CreateTexture_( width, height, flags, frames )
 		Return CreateObject(inst)
 		
 	End Function
 	
-	Function LoadTexture:TTexture( file:String,flags:Int=9,tex:TTexture=Null )
+	Function LoadTexture:TTexture( file:String, flags:Int=9, tex:TTexture=Null )
 	
 		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
 				Local map:TPixmap=Null, name%
 				Local cString:Byte Ptr=file.ToCString()
-				Local inst:Byte Ptr=LoadTexture_( cString,flags,GetInstance(tex) )
+				Local inst:Byte Ptr=LoadTexture_( cString, flags, GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
 				Return tex
 				
 			Default ' wrapper
-				Return LoadAnimTextureStream(file,flags,0,0,0,1,tex)
+				Return LoadAnimTextureStream(file, flags, 0, 0, 0, 1, tex)
 				
 		EndSelect
 		
 	End Function
 	
-	Function LoadAnimTexture:TTexture( file:String,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	Function LoadAnimTexture:TTexture( file:String, flags%, frame_width%, frame_height%, first_frame%, frame_count%, tex:TTexture=Null )
 	
 		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=file.ToCString()
-				Local inst:Byte Ptr=LoadAnimTexture_( cString,flags,frame_width,frame_height,first_frame,frame_count,GetInstance(tex) )
+				Local inst:Byte Ptr=LoadAnimTexture_( cString, flags, frame_width, frame_height, first_frame, frame_count, GetInstance(tex) )
 				If tex=Null Then tex=CreateObject(inst)
 				MemFree cString
 				Return tex
 				
 			Default ' wrapper
-				Return LoadAnimTextureStream(file,flags,frame_width,frame_height,first_frame,frame_count,tex)
+				Return LoadAnimTextureStream(file, flags, frame_width, frame_height, first_frame, frame_count, tex)
 				
 		EndSelect
 		
 	End Function
+		
+	Function LoadAnimTextureStream:TTexture( url:Object, flags%, frame_width%, frame_height%, first_frame%, frame_count%, tex:TTexture=Null )
 	
-	Function LoadAnimTextureStream:TTexture( url:Object,flags%,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
-	
-		If (flags & 128) Then Return LoadCubeMapTextureStream(url,flags,frame_width,frame_height,first_frame,frame_count,tex)
+		If (flags & 128) Then Return LoadCubeMapTextureStream(url, flags, frame_width, frame_height, first_frame, frame_count, tex)
 		
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
 		If tex=Null Then tex=NewTexture()
-		tex.SetString(tex.file,file)
-		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+		tex.SetString(tex.file, file)
+		tex.SetString(tex.file_abs, FileAbs(file)) ' returns absolute path of file if relative
 		
 		' set tex.flags before TexInList
 		tex.flags[0]=flags
@@ -603,36 +603,21 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local name:Int
-		If ExtractExt(file.ToLower())="dds"
-			glGenTextures(1, Varptr name)
-			glBindtexture(GL_TEXTURE_2D, name)
-			
-			tex.format[0]=TDDS.current_surface.format[0]
-			TDDS.current_surface.UploadTexture2D()
-			TDDS.current_surface.FreeDDS()
-			
-			glBindTexture(GL_TEXTURE_2D, name)
-			glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
-			
-			glDeleteTextures(1, Varptr name)
-		EndIf
-		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
 		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
 		
-		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
 		
+		Local name:Int
 		If frame_width>0 And frame_height>0 ' anim texture
 		
-			Local animmap:TPixmap=CreatePixmap(frame_width,frame_height,tex.pixmap.format) ' format=PF_RGBA8888
-			
+			Local animmap:TPixmap=CreatePixmap(frame_width, frame_height, tex.pixmap.format) ' format=PF_RGBA8888
 			tex.no_frames[0]=frame_count
-			tex.frames=TextureNewUIntArray_( GetInstance(tex),TEXTURE_frames,frame_count )
+			tex.frames=TextureNewUIntArray_( GetInstance(tex), TEXTURE_frames, frame_count )
 			tex.gltex=tex.frames ' as in Minib3d
 			
 			Local width:Int=frame_width
@@ -644,7 +629,19 @@ Type TTexture
 			Local y:Int=(first_frame/xframes) Mod yframes
 			
 			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to animmap pixels
-				CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,animmap.pixels,width,height,4,0)
+				If ExtractExt(file.ToLower())="dds"
+					glGenTextures(1, Varptr name)
+					glBindtexture(GL_TEXTURE_2D, name)
+					
+					TDDS.current_surface.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels, 1)
+				Else
+					CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, animmap.pixels, width, height, 4, 0)
+					
+					glGenTextures(1, Varptr name)
+					glBindtexture(GL_TEXTURE_2D, name)
+					
+					gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, animmap.pixels)
+				EndIf
 				
 				x=x+1 ' left-right frames
 				If x>=xframes ' top-bottom frames
@@ -652,12 +649,14 @@ Type TTexture
 					y=y+1
 				EndIf
 				
-				glGenTextures(1,Varptr name)
-				glBindtexture(GL_TEXTURE_2D,name)
-				gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,animmap.pixels)
-				
 				tex.frames[i]=name
 			Next
+			
+			If ExtractExt(file.ToLower())="dds"
+				tex.format[0]=TDDS.current_surface.format[0]
+				
+				TDDS.current_surface.FreeDDS()
+			EndIf
 			
 			tex.texture[0]=tex.frames[0]
 			tex.width[0]=width
@@ -667,9 +666,23 @@ Type TTexture
 			'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' these functions are too slow, flip in an editor
 			'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap)
 			
-			glGenTextures(1,Varptr name)
-			glBindtexture(GL_TEXTURE_2D,name)
-			gluBuild2DMipmaps(GL_TEXTURE_2D,GL_RGBA,tex.pixmap.width,tex.pixmap.height,GL_RGBA,GL_UNSIGNED_BYTE,tex.pixmap.pixels)
+			If ExtractExt(file.ToLower())="dds"
+				glGenTextures(1, Varptr name)
+				glBindTexture(GL_TEXTURE_2D, name)
+				
+				TDDS.current_surface.UploadTexture2D(1) ' upload texture and mipmaps to GPU
+			Else
+				glGenTextures(1, Varptr name)
+				glBindtexture(GL_TEXTURE_2D, name)
+				
+				gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, tex.pixmap.width, tex.pixmap.height, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
+			EndIf
+			
+			If ExtractExt(file.ToLower())="dds"
+				tex.format[0]=TDDS.current_surface.format[0]
+				
+				TDDS.current_surface.FreeDDS()
+			EndIf
 			
 			tex.texture[0]=name
 			tex.gltex=tex.texture ' as in Minib3d
@@ -678,21 +691,21 @@ Type TTexture
 			
 		EndIf
 		
-		tex.no_mipmaps[0]=tex.Mipmaps() ' calculate number of mipmaps
+		tex.no_mipmaps[0]=tex.CountMipmaps() ' calculate number of mipmaps
 		
 		Return tex
 		
 	End Function
 	
 	' Load cubemaps in 4 * 3 cross rather than single strip
-	Function LoadCubeMapTextureStream:TTexture( url:Object,flags:Int,frame_width%,frame_height%,first_frame%,frame_count%,tex:TTexture=Null )
+	Function LoadCubeMapTextureStream:TTexture( url:Object, flags:Int, frame_width%, frame_height%, first_frame%, frame_count%, tex:TTexture=Null )
 	
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
 		If tex=Null Then tex=NewTexture()
-		tex.SetString(tex.file,file)
-		tex.SetString(tex.file_abs,FileAbs(file)) ' returns absolute path of file if relative
+		tex.SetString(tex.file, file)
+		tex.SetString(tex.file_abs, FileAbs(file)) ' returns absolute path of file if relative
 		
 		' set tex.flags before TexInList
 		tex.flags[0]=flags
@@ -723,40 +736,25 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		Local name:Int
-		If ExtractExt(file.ToLower())="dds"
-			glGenTextures(1, Varptr name)
-			glBindtexture(GL_TEXTURE_2D, name)
-			
-			tex.format[0]=TDDS.current_surface.format[0]
-			TDDS.current_surface.UploadTexture2D()
-			TDDS.current_surface.FreeDDS()
-			
-			glBindTexture(GL_TEXTURE_2D, name)
-			glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
-			
-			glDeleteTextures(1, Varptr name)
-		EndIf
-		
 		'Local mask:Int=CheckAlpha(tex.pixmap)
 		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
 		
 		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap,tex.discard)
+		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
 		
-		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0 - set with ClsColor?
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap,0,0,0) ' mask any pixel at 0,0,0
+		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
+		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
 		
 		Local width:Int=frame_width
 		Local height:Int=frame_height
 		Local xframes:Int=tex.pixmap.width/width
 		Local yframes:Int=tex.pixmap.height/height
 		Local x:Int, y:Int, cubeid:Int
-		Local bpp:Int=BytesPerPixel[tex.pixmap.format]
 		
-		Local cubemap:TPixmap=CreatePixmap(width,height,tex.pixmap.format) ' format=PF_RGBA8888
+		Local cubemap:TPixmap=CreatePixmap(width, height, tex.pixmap.format) ' format=PF_RGBA8888
 		
-		glGenTextures(1,Varptr name)
+		Local name:Int
+		glGenTextures(1, Varptr name)
 		glBindtexture(GL_TEXTURE_CUBE_MAP, name)
 		
 		For Local i:Int=0 To 5 ' copy tex.pixmap rect to cubemap
@@ -764,17 +762,27 @@ Type TTexture
 			x=cubeid Mod xframes ' left-right frames
 			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
-			CopyRect_(tex.pixmap.pixels,tex.pixmap.width,tex.pixmap.height,x*width,y*height,cubemap.pixels,width,height,bpp,1)
-			
-			gluBuild2DMipmaps(TGlobal.Cubemap_Face[i],GL_RGBA,width,height,GL_RGBA,GL_UNSIGNED_BYTE,cubemap.pixels)
+			If ExtractExt(file.ToLower())="dds"
+				TDDS.current_surface.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, 1, TGlobal.Cubemap_Face[i])
+			Else
+				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, 1)
+				
+				gluBuild2DMipmaps(TGlobal.Cubemap_Face[i], GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, cubemap.pixels)
+			EndIf
 		Next
+		
+		If ExtractExt(file.ToLower())="dds"
+			tex.format[0]=TDDS.current_surface.format[0]
+			
+			TDDS.current_surface.FreeDDS()
+		EndIf
 		
 		tex.texture[0]=name
 		tex.gltex=tex.texture ' as in Minib3d
 		tex.no_frames[0]=1
 		tex.width[0]=width
 		tex.height[0]=height
-		tex.no_mipmaps[0]=tex.Mipmaps() ' calculate number of mipmaps
+		tex.no_mipmaps[0]=tex.CountMipmaps() ' calculate number of mipmaps
 		
 		Return tex
 		
@@ -784,18 +792,18 @@ Type TTexture
 	' fixes FileFind not finding incbin or zip paths, topic=88901 (SLotman)
 	Function FileFind:Int( file:String Var )
 	
-		'Local TS:TStream = OpenFile(file,True,False)
+		'Local TS:TStream = OpenFile(file, True, False)
 		Local stream:TStream = ReadFile(file)
 		If Not stream
 			Repeat ' strip \ dirs (Win)
-				file=Right(file,(Len(file)-Instr(file,"\",1)))
-			Until Instr(file,"\",1)=0
+				file=Right(file, (Len(file)-Instr(file, "\", 1)))
+			Until Instr(file, "\", 1)=0
 			
 			Repeat ' strip / dirs
-				file=Right(file,(Len(file)-Instr(file,"/",1)))
-			Until Instr(file,"/",1)=0
+				file=Right(file, (Len(file)-Instr(file, "/", 1)))
+			Until Instr(file, "/", 1)=0
 			
-			stream = OpenStream(file,True,False)
+			stream = OpenStream(file, True, False)
 			If Not stream
 				DebugLog " Invalid texture stream: "+file
 				Return False
@@ -817,12 +825,12 @@ Type TTexture
 	
 		Local file_abs$
 		
-		If Instr(file,":")=False ' not incbin or zip
+		If Instr(file, ":")=False ' not incbin or zip
 			file_abs=CurrentDir()+"/"+file
 		Else
 			file_abs=file
 		EndIf
-		file_abs=Replace(file_abs,"\","/")
+		file_abs=Replace(file_abs, "\", "/")
 		
 		Return file_abs
 		
@@ -840,8 +848,8 @@ Type TTexture
 		' check that width and height size are valid (not too big)
 		Repeat
 			Local t
-			glTexImage2D GL_PROXY_TEXTURE_2D,0,4,width,height,0,GL_RGBA,GL_UNSIGNED_BYTE,Null
-			glGetTexLevelParameteriv GL_PROXY_TEXTURE_2D,0,GL_TEXTURE_WIDTH,Varptr t
+			glTexImage2D GL_PROXY_TEXTURE_2D, 0, 4, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, Null
+			glGetTexLevelParameteriv GL_PROXY_TEXTURE_2D, 0, GL_TEXTURE_WIDTH, Varptr t
 			If t Exit
 			If width=1 And height=1 RuntimeError "Unable to calculate tex size"
 			If width>1 width:/2
@@ -851,7 +859,7 @@ Type TTexture
 		
 		' if width or height have changed then resize pixmap
 		If width<>pixmap.width Or height<>pixmap.height
-			pixmap=ResizePixmap(pixmap,width,height)
+			pixmap=ResizePixmap(pixmap, width, height)
 		EndIf
 		
 		' return pixmap
@@ -870,7 +878,7 @@ Type TTexture
 		
 		For Local iy%=0 To sizeh-1 ' check sqrt times pixel columns
 			For Local ix%=0 To sizew-1 ' check sqrt times pixel rows
-				rgba=ReadPixel(map,ix*sizew,iy*sizeh)
+				rgba=ReadPixel(map, ix*sizew, iy*sizeh)
 				alp=(rgba & $FF000000) Shr 24
 				If alp=0 Then a0:+1
 				If alp=255 Then a1:+1
@@ -882,19 +890,19 @@ Type TTexture
 	End Function
 	
 	' applys alpha to a pixmap based on average of colour values
-	Function ApplyAlpha:TPixmap( map:TPixmap Var,alpha# )
+	Function ApplyAlpha:TPixmap( map:TPixmap Var, alpha# )
 		Local rgba%, red%, grn%, blu%, alp%
 		Local discard%=alpha * 255
 		
 		For Local iy%=0 To PixmapHeight(map)-1
 			For Local ix%=0 To PixmapWidth(map)-1
-				rgba=ReadPixel(map,ix,iy)
+				rgba=ReadPixel(map, ix, iy)
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
 				alp=(red + grn + blu) / 3.0
-				WritePixel(map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24))
-'				If alp < discard Then WritePixel(map,ix,iy,(rgba & $00FFFFFF)|(alp Shl 24))
+				WritePixel(map, ix, iy, (rgba & $00FFFFFF)|(alp Shl 24))
+'				If alp < discard Then WritePixel(map, ix, iy, (rgba & $00FFFFFF)|(alp Shl 24))
 			Next
 		Next
 		
@@ -908,12 +916,12 @@ Type TTexture
 		
 		For Local iy%=0 To PixmapHeight(map)-1
 			For Local ix%=0 To PixmapWidth(map)-1
-				rgba=ReadPixel(map,ix,iy)
+				rgba=ReadPixel(map, ix, iy)
 				red=rgba & $000000FF
 				grn=(rgba & $0000FF00) Shr 8
 				blu=(rgba & $00FF0000) Shr 16
 				If red = maskred And grn = maskgrn And blu = maskblu
-					WritePixel map,ix,iy,(rgba & $00FFFFFF)
+					WritePixel map, ix, iy, (rgba & $00FFFFFF)
 				EndIf
 			Next
 		Next
@@ -934,31 +942,31 @@ Type TTexture
 	
 	Method TextureBlend( blend:Int )
 	
-		TextureBlend_( GetInstance(Self),blend )
+		TextureBlend_( GetInstance(Self), blend )
 		
 	End Method
 	
 	Method TextureCoords( coords:Int )
 	
-		TextureCoords_( GetInstance(Self),coords )
+		TextureCoords_( GetInstance(Self), coords )
 		
 	End Method
 	
-	Method ScaleTexture( u_scale:Float,v_scale:Float )
+	Method ScaleTexture( u_scale:Float, v_scale:Float )
 	
-		ScaleTexture_( GetInstance(Self),u_scale,v_scale )
+		ScaleTexture_( GetInstance(Self), u_scale, v_scale )
 		
 	End Method
 	
-	Method PositionTexture( u_pos:Float,v_pos:Float )
+	Method PositionTexture( u_pos:Float, v_pos:Float )
 	
-		PositionTexture_( GetInstance(Self),u_pos,v_pos )
+		PositionTexture_( GetInstance(Self), u_pos, v_pos )
 		
 	End Method
 	
 	Method RotateTexture( ang:Float )
 	
-		RotateTexture_( GetInstance(Self),ang )
+		RotateTexture_( GetInstance(Self), ang )
 		
 	End Method
 	
@@ -980,9 +988,9 @@ Type TTexture
 		
 	End Method
 	
-	Function GetBrushTexture:TTexture( brush:TBrush,index:Int=0 ) ' same as method in TBrush
+	Function GetBrushTexture:TTexture( brush:TBrush, index:Int=0 ) ' same as method in TBrush
 	
-		Local inst:Byte Ptr=GetBrushTexture_( TBrush.GetInstance(brush),index )
+		Local inst:Byte Ptr=GetBrushTexture_( TBrush.GetInstance(brush), index )
 		Return GetObject(inst) ' no CreateObject
 		
 	End Function
@@ -993,29 +1001,29 @@ Type TTexture
 		
 	End Function
 	
-	Function TextureFilter( match_text:String,flags:Int )
+	Function TextureFilter( match_text:String, flags:Int )
 	
 		Local cString:Byte Ptr=match_text.ToCString()
-		TextureFilter_( cString,flags )
+		TextureFilter_( cString, flags )
 		MemFree cString
 		
 	End Function
 	
 	Method SetCubeFace( face:Int )
 	
-		SetCubeFace_( GetInstance(Self),face )
+		SetCubeFace_( GetInstance(Self), face )
 		
 	End Method
 	
 	Method SetCubeMode( Mode:Int )
 	
-		SetCubeMode_( GetInstance(Self),Mode )
+		SetCubeMode_( GetInstance(Self), Mode )
 		
 	End Method
 	
 	Method BackBufferToTex( frame:Int=0 )
 	
-		BackBufferToTex_( GetInstance(Self),frame )
+		BackBufferToTex_( GetInstance(Self), frame )
 		
 	End Method
 	
@@ -1026,14 +1034,14 @@ Type TTexture
 		Select TGlobal.Texture_Loader
 		
 			Case 2 ' library
-				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self),copyflags )
+				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self), copyflags )
 				Return CreateObject(inst)
 				
 			Default ' wrapper
 				Local tex:TTexture=NewTexture()
 				
-				tex.SetString(tex.file,GetString(file))
-				tex.SetString(tex.file_abs,FileAbs(GetString(file))) ' returns absolute path of file if relative
+				tex.SetString(tex.file, GetString(file))
+				tex.SetString(tex.file_abs, FileAbs(GetString(file))) ' returns absolute path of file if relative
 				tex.blend[0]=blend[0]
 				tex.coords[0]=coords[0]
 				tex.u_scale[0]=u_scale[0]
@@ -1046,9 +1054,9 @@ Type TTexture
 				
 				TTexture.is_unique=True
 				If no_frames[0]<2
-					LoadAnimTextureStream(GetString(file),flags[0],0,0,0,1,tex)
+					LoadAnimTextureStream(GetString(file), flags[0], 0, 0, 0, 1, tex)
 				Else
-					LoadAnimTextureStream(GetString(file),flags[0],width[0],height[0],0,no_frames[0],tex)
+					LoadAnimTextureStream(GetString(file), flags[0], width[0], height[0], 0, no_frames[0], tex)
 				EndIf
 				TTexture.is_unique=False
 				Return tex
@@ -1060,8 +1068,8 @@ Type TTexture
 	' check if tex already exists in tex_list and if so return it
 	Method TexInList:TTexture()
 	
-		Local list_ref:Byte Ptr=TextureListTexture_( GetInstance(Self),TEXTURE_tex_list )
-		Local inst:Byte Ptr=TexInList_( GetInstance(Self),list_ref )
+		Local list_ref:Byte Ptr=TextureListTexture_( GetInstance(Self), TEXTURE_tex_list )
+		Local inst:Byte Ptr=TexInList_( GetInstance(Self), list_ref )
 		Return GetObject(inst) ' no CreateObject
 		
 	End Method
