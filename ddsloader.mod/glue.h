@@ -20,6 +20,7 @@ DirectDrawSurface* DirectDrawSurfaceArray_( DirectDrawSurface* obj,int varid,int
 DirectDrawSurface* DDSLoadSurface_(char* filename,int flip,unsigned char* buffer,int bufsize);
 void DDSFreeDirectDrawSurface_(DirectDrawSurface* surface,int free_buffer);
 int DDSCountMipmaps_(int width, int height);
+void DDSInvertTexel_(unsigned char* tex, int format);
 void DDSCopyRect_(unsigned char* src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY,unsigned char* dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert,int format);
 
 #ifdef __cplusplus

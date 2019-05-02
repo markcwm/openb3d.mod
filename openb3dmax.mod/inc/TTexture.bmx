@@ -612,6 +612,9 @@ Type TTexture
 		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
 		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
 		
+		Local dds:TDDS
+		If ExtractExt(file.ToLower())="dds" Then dds = TDDS(TDDS.dds_list.Last())
+		
 		Local name:Int
 		If frame_width>0 And frame_height>0 ' anim texture
 		
@@ -633,7 +636,7 @@ Type TTexture
 					glGenTextures(1, Varptr name)
 					glBindtexture(GL_TEXTURE_2D, name)
 					
-					TDDS.current_surface.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels, 1)
+					dds.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels)
 				Else
 					CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, animmap.pixels, width, height, 4, 0)
 					
@@ -653,9 +656,9 @@ Type TTexture
 			Next
 			
 			If ExtractExt(file.ToLower())="dds"
-				tex.format[0]=TDDS.current_surface.format[0]
+				tex.format[0]=dds.format[0]
 				
-				TDDS.current_surface.FreeDDS()
+				dds.FreeDDS()
 			EndIf
 			
 			tex.texture[0]=tex.frames[0]
@@ -670,7 +673,7 @@ Type TTexture
 				glGenTextures(1, Varptr name)
 				glBindTexture(GL_TEXTURE_2D, name)
 				
-				TDDS.current_surface.UploadTexture2D(1) ' upload texture and mipmaps to GPU
+				dds.UploadTexture2D() ' upload texture and mipmaps to GPU
 			Else
 				glGenTextures(1, Varptr name)
 				glBindtexture(GL_TEXTURE_2D, name)
@@ -679,9 +682,9 @@ Type TTexture
 			EndIf
 			
 			If ExtractExt(file.ToLower())="dds"
-				tex.format[0]=TDDS.current_surface.format[0]
+				tex.format[0]=dds.format[0]
 				
-				TDDS.current_surface.FreeDDS()
+				dds.FreeDDS()
 			EndIf
 			
 			tex.texture[0]=name
@@ -753,6 +756,9 @@ Type TTexture
 		
 		Local cubemap:TPixmap=CreatePixmap(width, height, tex.pixmap.format) ' format=PF_RGBA8888
 		
+		Local dds:TDDS
+		If ExtractExt(file.ToLower())="dds" Then dds = TDDS(TDDS.dds_list.Last())
+		
 		Local name:Int
 		glGenTextures(1, Varptr name)
 		glBindtexture(GL_TEXTURE_CUBE_MAP, name)
@@ -763,7 +769,7 @@ Type TTexture
 			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
 			If ExtractExt(file.ToLower())="dds"
-				TDDS.current_surface.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, 1, TGlobal.Cubemap_Face[i])
+				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, TGlobal.Cubemap_Face[i], 1)
 			Else
 				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, 1)
 				
@@ -772,9 +778,9 @@ Type TTexture
 		Next
 		
 		If ExtractExt(file.ToLower())="dds"
-			tex.format[0]=TDDS.current_surface.format[0]
+			tex.format[0]=dds.format[0]
 			
-			TDDS.current_surface.FreeDDS()
+			dds.FreeDDS()
 		EndIf
 		
 		tex.texture[0]=name

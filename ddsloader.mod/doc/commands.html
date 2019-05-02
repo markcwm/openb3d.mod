@@ -30,13 +30,13 @@ DirectDrawSurface.
 <table class=doc width=100% cellspacing=3 id=LoadAnimImageDDS>
 <tr><td class=doctop colspan=2>Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_cell%, cell_count%, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb%=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a DDS file as a Max2D multi-frame image.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Loads compressed DXT1/3/5 or uncompressed RGB/RGBA, images will be uncompressed as Max2D doesn't support compression.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Loads compressed DXT1/3/5 or uncompressed RGB/RGBA/BGR/BGRA.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadImageDDS>
 <tr><td class=doctop colspan=2>Function LoadImageDDS:TImage( url:Object, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb%=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a DDS file as a Max2D image.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Loads compressed DXT1/3/5 or uncompressed RGB/RGBA, images will be uncompressed as Max2D doesn't support compression.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Loads compressed DXT1/3/5 or uncompressed RGB/RGBA/BGR/BGRA.</td></tr>
 </table>
 <br>
 <h2
@@ -56,5 +56,4 @@ DirectDrawSurface.
 <tr><th width=1%>History</th><td>1.00 - DirectDrawSurface pixmap loader</td></tr>
 <tr><th width=1%>History</th><td>Initial Release - Apr 2019</td></tr>
 <tr><th width=1%>CC_OPTS</th><td>-DGLEW_STATIC</td></tr>
-<tr><th width=1%>CC_OPTS</th><td>-UGLES2</td></tr>
 </body></html>

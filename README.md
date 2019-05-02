@@ -51,7 +51,7 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 
 ## Status
 
-After returning to work on this wrapper in my spare time, my plan is to get it into a finished and bug-free state. Since Angros has a working GLES2/WebGL version I may try to add Android support from NG, but this is not a big priority. It should work with the latest NG release (currently 0.99) but please note it is not working with modern compilers like GCC 7.x (or later Clang/LLVM) so for now you need an older compiler.
+This wrapper is in a late beta stage of development, so there are still some bugs and missing features (the author accepts no responsibility for any loss that occurs when using this software). The library has a working GLES2 (WebGL) version but the wrapper doesn't support this yet. The latest version should work with BRL or NG BlitzMax (currently tested with 0.99 release) but note there is an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so for now you need an older compiler.
 
 ## License
 

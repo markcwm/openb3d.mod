@@ -29,10 +29,6 @@ Import Pub.OpenGL
 ?linux
 Import Pub.Glew
 Import Pub.OpenGL
-?opengles
-ModuleInfo "CC_OPTS: -UGLES2" ' untested!
-
-Import Pub.OpenGLES
 ?
 Import Brl.GLMax2D
 Import Brl.Pixmap
@@ -95,10 +91,11 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 		MemFree cString
 		
 		If imgPtr
-			TDDS.current_surface = TDDS.CreateObject(imgPtr)
-			channels = TDDS.current_surface.components[0] ' may be 24 or 32-bit
-			width = TDDS.current_surface.width[0]
-			height = TDDS.current_surface.height[0]
+			Local dds:TDDS = TDDS.CreateObject(imgPtr)
+			ListAddLast TDDS.dds_list, dds
+			channels = dds.components[0] ' may be 24 or 32-bit
+			width = dds.width[0]
+			height = dds.height[0]
 			
 			Local pf:Int
 			Select channels
@@ -110,11 +107,12 @@ Type TPixmapLoaderDDS Extends TPixmapLoader
 			
 			If pf
 				pixmap = CreatePixmap(width, height, pf, BytesPerPixel[pf])
-				TDDS.current_surface.pixmap = pixmap
+				DDSCopyRect_(dds.dxt, dds.width[0], dds.height[0], 0, 0, pixmap.pixels, dds.width[0], dds.height[0], dds.components[0], 0, dds.format[0])
+				dds.pixmap = pixmap
 			EndIf
 			
 			CloseStream(ram)
-			TDDS.current_buffer = buffer
+			dds.bmx_buffer = buffer
 			'MemFree(buffer) ' must be freed later in FreeDDS
 		EndIf
 		
