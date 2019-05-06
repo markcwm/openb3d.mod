@@ -205,6 +205,10 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 			TGlobal.Cubemap_Face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
 			TGlobal.Cubemap_Face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
 			TGlobal.Cubemap_Face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
+		Case "noflipcubemap"
+			TGlobal.Flip_Cubemap=0
+		Case "flipcubemap"
+			TGlobal.Flip_Cubemap=1
 	EndSelect
 End Function
 

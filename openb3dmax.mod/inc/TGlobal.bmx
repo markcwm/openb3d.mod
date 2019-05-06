@@ -68,6 +68,7 @@ Type TGlobal
 	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
+	Global Flip_Cubemap:Int=1		' flip cubic environment map orientation
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix

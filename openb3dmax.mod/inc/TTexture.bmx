@@ -769,9 +769,9 @@ Type TTexture
 			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
 			If ExtractExt(file.ToLower())="dds"
-				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, TGlobal.Cubemap_Face[i], 1)
+				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, TGlobal.Cubemap_Face[i], TGlobal.Flip_Cubemap)
 			Else
-				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, 1)
+				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, TGlobal.Flip_Cubemap)
 				
 				gluBuild2DMipmaps(TGlobal.Cubemap_Face[i], GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, cubemap.pixels)
 			EndIf
