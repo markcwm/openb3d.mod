@@ -616,7 +616,7 @@ Type TTexture
 		If ExtractExt(file.ToLower())="dds" Then dds = TDDS(TDDS.dds_list.Last())
 		
 		Local name:Int
-		If frame_width>0 And frame_height>0 ' anim texture
+		If frame_count>1 Or (frame_width>0 And frame_height>0) ' anim texture
 		
 			Local animmap:TPixmap=CreatePixmap(frame_width, frame_height, tex.pixmap.format) ' format=PF_RGBA8888
 			tex.no_frames[0]=frame_count
@@ -655,12 +655,6 @@ Type TTexture
 				tex.frames[i]=name
 			Next
 			
-			If ExtractExt(file.ToLower())="dds"
-				tex.format[0]=dds.format[0]
-				
-				dds.FreeDDS()
-			EndIf
-			
 			tex.texture[0]=tex.frames[0]
 			tex.width[0]=width
 			tex.height[0]=height
@@ -681,17 +675,16 @@ Type TTexture
 				gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, tex.pixmap.width, tex.pixmap.height, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
 			EndIf
 			
-			If ExtractExt(file.ToLower())="dds"
-				tex.format[0]=dds.format[0]
-				
-				dds.FreeDDS()
-			EndIf
-			
 			tex.texture[0]=name
 			tex.gltex=tex.texture ' as in Minib3d
 			tex.width[0]=tex.pixmap.width
 			tex.height[0]=tex.pixmap.height
 			
+		EndIf
+		
+		If ExtractExt(file.ToLower())="dds"
+			tex.format[0]=dds.format[0]
+			dds.FreeDDS()
 		EndIf
 		
 		tex.no_mipmaps[0]=tex.CountMipmaps() ' calculate number of mipmaps
@@ -700,7 +693,6 @@ Type TTexture
 		
 	End Function
 	
-	' Load cubemaps in 4 * 3 cross rather than single strip
 	Function LoadCubeMapTextureStream:TTexture( url:Object, flags:Int, frame_width%, frame_height%, first_frame%, frame_count%, tex:TTexture=Null )
 	
 		Local file$=String(url)
@@ -779,7 +771,6 @@ Type TTexture
 		
 		If ExtractExt(file.ToLower())="dds"
 			tex.format[0]=dds.format[0]
-			
 			dds.FreeDDS()
 		EndIf
 		

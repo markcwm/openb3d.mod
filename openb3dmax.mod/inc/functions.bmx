@@ -192,6 +192,9 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 		Case "cpp", "c++", "lib", "library"
 			TGlobal.Texture_Loader=2
 		Case "frame", "frames"
+			Local cString:Byte Ptr = texid.ToCString()
+			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
+			MemFree cString
 			TGlobal.Cubemap_Frame[0] = lf0
 			TGlobal.Cubemap_Frame[1] = fr1
 			TGlobal.Cubemap_Frame[2] = rt2
@@ -199,6 +202,9 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 			TGlobal.Cubemap_Frame[4] = dn4
 			TGlobal.Cubemap_Frame[5] = up5
 		Case "face", "faces"
+			Local cString:Byte Ptr = texid.ToCString()
+			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
+			MemFree cString
 			TGlobal.Cubemap_Face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left (B3D layout)
 			TGlobal.Cubemap_Face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
 			TGlobal.Cubemap_Face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right

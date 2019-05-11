@@ -38,6 +38,7 @@ public:
 	static int width,height,mode,depth,rate;
 	static float ambient_red,ambient_green,ambient_blue;
 	static Shader* ambient_shader;
+	static int cubemap_face[12],cubemap_frame[12],flip_cubemap;
 #ifdef GLES2
 #define GLuint unsigned int
 	struct Program{
@@ -127,7 +128,7 @@ public:
 	static void RenderWorldAA();
 	static void AntiAlias(int samples);
 
-
+	static void TextureLoader( char* texid,int lf0,int fr1,int rt2,int bk3,int dn4,int up5 );
 	
 };
 

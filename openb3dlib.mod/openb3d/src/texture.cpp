@@ -19,6 +19,7 @@
 #include "shadow.h"
 #include "dds.h"
 
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 
@@ -26,9 +27,9 @@ list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 int Texture::isunique=0;
 
-void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
-void ApplyAlpha (Texture* tex, unsigned char *src);
-void ApplyMask (Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu);
+void CopyPixels(unsigned char *src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY, unsigned char *dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert);
+void ApplyAlpha(Texture* tex, unsigned char *src);
+void ApplyMask(Texture* tex, unsigned char *src, unsigned char maskred, unsigned char maskgrn, unsigned char maskblu);
 int CheckAlpha(Texture* tex, unsigned char *src);
 
 Texture* Texture::Copy(int copyflags){
@@ -60,47 +61,13 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 	filename=File::ResourceFilePath(filename);
 	if(filename.empty()) return NULL;
 	
-	// Try to load DDS file first
-	if(Right(filename,4)==".dds"){
-		if(tex==NULL) tex=new Texture();
-		tex->file=filename;
-		
-		// set tex.flags before TexInList
-		tex->flags=flags;
-		tex->FilterFlags();
-		
-		// check to see if texture with same properties exists already, if so return existing texture
-		Texture* old_tex=tex->TexInList(tex_list);
-		if(old_tex!=NULL && Texture::isunique==false){
-			delete tex;
-			tex_list_all.push_back(old_tex);
-			return old_tex;
-		}else{
-			tex_list_all.push_back(tex);
-			tex_list.push_back(tex);
-		}
-		
-		DirectDrawSurface *dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
-		if(!dds) return NULL;
-		
-		if(flags&2) ApplyAlpha(tex,dds->buffer);
-		if(flags&4) ApplyMask(tex,dds->buffer,0,0,0);
-		
-		unsigned int name;
-		glGenTextures (1,&name);
-		glBindTexture(dds->target,name);
-		
-		// uses glTexImage2D or glCompressedTexImage2D
-		dds->UploadTexture(tex);
-		dds->FreeDirectDrawSurface(true); // true to free buffer
-		
-		tex->texture=name;
-		return tex;
-	}
-	
-	if (flags&128) {
+	return Texture::LoadAnimTexture(filename,flags,0,0,0,1,tex);
+}
+
+Texture* Texture::LoadCubemapTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
+
 		//filename=Strip(filename); // get rid of path info
-		//filename=File::ResourceFilePath(filename);
+		filename=File::ResourceFilePath(filename);
 
 		/*if (filename==""){
 			cout << "Error: Cannot Find Texture: " << filename << endl;
@@ -129,44 +96,68 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 		string filename_right=Right(filename,3);
 		//const char* c_filename_left=filename_left.c_str();
 		//const char* c_filename_right=filename_right.c_str();
+		
 		unsigned char* buffer;
-		buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
-
+		DirectDrawSurface *dds;
+		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+			dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
+			if(!dds) return NULL;
+			
+			tex->width=dds->width;
+			tex->height=dds->height;
+		}else{
+			buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
+			if(!buffer) return NULL;
+		}
+		
 		unsigned int name;
 		tex->no_frames=1;
-		tex->width=tex->width/6;
+		//tex->width=tex->width/6;
 		tex->frames=new unsigned int[6];
 
-		unsigned char* dstbuffer=new unsigned char[tex->width*tex->height*4];
+		unsigned char* dstbuffer=new unsigned char[frame_width*frame_height*4];
 		glGenTextures (1,&name);
 		glBindTexture (GL_TEXTURE_CUBE_MAP,name);
 
+		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
+		int yframes=tex->height/frame_height;
+		int x,y,cubeid;
+		
 		//tex.gltex=tex.gltex[..tex.no_frames]
 		for (int i=0;i<6;i++){
-			CopyPixels (buffer,tex->width*6, tex->height,tex->width*i, 0, dstbuffer, tex->width, tex->height, 4);
+			cubeid=Global::cubemap_frame[i];
+			x=cubeid % xframes; // left-right frames
+			y=(cubeid/xframes) % yframes; // top-bottom frames
+			
+			if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+				dds->UploadTextureSubImage2D(frame_width*x, frame_height*y, frame_width, frame_height, dstbuffer, Global::cubemap_face[i], Global::flip_cubemap);
+			}else{
+				CopyPixels(buffer, tex->width, tex->height, frame_width*x, frame_height*y, dstbuffer, frame_width, frame_height, 4, Global::flip_cubemap);
 #ifndef GLES2
-			switch(i){
+				gluBuild2DMipmaps(Global::cubemap_face[i], GL_RGBA, frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+				/*switch(i){
 				case 0:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
 				case 1:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
 				case 2:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
 				case 3:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
 				case 4:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
 				case 5:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
-			}
+				}*/
 #else
-			switch(i){
+				glTexImage2D(Global::cubemap_face[i], 0, GL_RGBA, frame_width, frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+				/*switch(i){
 				case 0:
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
@@ -185,27 +176,30 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 				case 5:
 					glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 					break;
-			}
-			glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+				}*/
+				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 #endif
+			}
 		}
-		delete[] dstbuffer;
-		stbi_image_free(buffer);
 
 		tex->texture=name;
+		delete[] dstbuffer;
+		
+		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+			tex->format=dds->format;
+			dds->FreeDirectDrawSurface(true);
+		}else{
+			stbi_image_free(buffer);
+		}
+		
 		return tex;
-	}
-	else
-	{
-	  return Texture::LoadAnimTexture(filename,flags,0,0,0,1,tex);
-	}
 }
-
 
 Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
 
+	if (flags&128) return Texture::LoadCubemapTexture(filename,flags,frame_width,frame_height,first_frame,frame_count,tex);
+	
 	//filename=Strip(filename); // get rid of path info
-
 	filename=File::ResourceFilePath(filename);
 
 	/*if (filename==""){
@@ -237,27 +231,46 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	//const char* c_filename_left=filename_left.c_str();
 	//const char* c_filename_right=filename_right.c_str();
 
-
-
 	unsigned char* buffer;
-
-	buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
-
-	//int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
-	if(flags&2) ApplyAlpha(tex,buffer);
-	if(flags&4) ApplyMask(tex,buffer,0,0,0);
+	DirectDrawSurface *dds;
+	if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+		dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
+		if(!dds) return NULL;
+		
+		tex->width=dds->width;
+		tex->height=dds->height;
+		
+		if(!dds->IsCompressed()){
+			if(flags&2) ApplyAlpha(tex,dds->buffer);
+			if(flags&4) ApplyMask(tex,dds->buffer,0,0,0);
+		}
+	}else{
+		buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
+		if(!buffer) return NULL;
+		
+		//int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
+		if(flags&2) ApplyAlpha(tex,buffer);
+		if(flags&4) ApplyMask(tex,buffer,0,0,0);
+	}
 
 	unsigned int name;
-	if (frame_count<2){
-		glGenTextures (1,&name);
-		glBindTexture (GL_TEXTURE_2D,name);
-		//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+	if (frame_count<2 || (frame_width==0 && frame_height==0)){
+		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+			glGenTextures (1,&name);
+			glBindTexture (dds->target,name);
+			
+			dds->UploadTexture(tex);
+		}else{
+			glGenTextures (1,&name);
+			glBindTexture (GL_TEXTURE_2D,name);
 #ifndef GLES2
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA,tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 #else
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-		glGenerateMipmap(GL_TEXTURE_2D);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			glGenerateMipmap(GL_TEXTURE_2D);
 #endif
+		}
 
 		tex->texture=name;
 	} else {
@@ -267,42 +280,54 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 		unsigned char* dstbuffer=new unsigned char[frame_width*frame_height*4];
 
-
 		//tex.gltex=tex.gltex[..tex.no_frames]
 
 		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
 		int yframes=tex->height/frame_height;
 		int x=first_frame % xframes;
-		int y=(first_frame / xframes) % yframes;
-
+		int y=(first_frame/xframes) % yframes;
+		
 		for (int i=0;i<frame_count;i++){
-			CopyPixels(buffer,tex->width, tex->height, x*frame_width, y*frame_height, dstbuffer, frame_width, frame_height, 4);
+			if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+				glGenTextures (1,&name);
+				glBindTexture (GL_TEXTURE_2D,name);
+				
+				dds->UploadTextureSubImage2D(x*frame_width, y*frame_height, frame_width, frame_height, dstbuffer, GL_TEXTURE_2D, 0);
+			}else{
+				CopyPixels(buffer,tex->width, tex->height, x*frame_width, y*frame_height, dstbuffer, frame_width, frame_height, 4, 0);
+				
+				glGenTextures (1,&name);
+				glBindTexture (GL_TEXTURE_2D,name);
+#ifndef GLES2
+				gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA,frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+#else
+				glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frame_width, frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+				glGenerateMipmap(GL_TEXTURE_2D);
+#endif
+			}
+			
 			x=x+1; // left-right frames
 			if (x>=xframes){ // top-bottom frames
 				x=0;
 				y=y+1;
 			}
 			
-			glGenTextures (1,&name);
-			glBindTexture (GL_TEXTURE_2D,name);
-#ifndef GLES2
-			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA,frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-#else
-			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, frame_width, frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-			glGenerateMipmap(GL_TEXTURE_2D);
-#endif
-
 			tex->frames[i]=name;
 		}
-
+		
 		tex->texture=tex->frames[0];
 		tex->width=frame_width;
 		tex->height=frame_height;
 		delete[] dstbuffer;
-
 	}
-	stbi_image_free(buffer);
-
+	
+	if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+		tex->format=dds->format;
+		dds->FreeDirectDrawSurface(true);
+	}else{
+		stbi_image_free(buffer);
+	}
+	
 	return tex;
 
 }
@@ -684,12 +709,17 @@ void Texture::DepthBufferToTex(Camera* cam=0 ){
 	}
 }
 
-
-void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel) {
-  // Copy image data line by line
-  unsigned int y;
-  for (y = 0; y < dstHeight; y++)
-    memcpy (dst + y * dstWidth * bytesPerPixel, src + ((y + srcY) * srcWidth + srcX) * bytesPerPixel, dstWidth * bytesPerPixel);
+void CopyPixels(unsigned char *src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY, unsigned char *dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert) {
+	unsigned int y;
+	if (invert != 0){
+		for (y = 0; y < dstH; y++){
+			memcpy(dst + y * dstW * bPP, src + (((dstH - 1 - y) + srcY) * srcW + srcX) * bPP, dstW * bPP);
+		}
+	}else{
+		for (y = 0; y < dstH; y++){
+			memcpy(dst + y * dstW * bPP, src + ((y + srcY) * srcW + srcX) * bPP, dstW * bPP);
+		}
+	}
 }
 
 void ApplyAlpha(Texture* tex, unsigned char *src) {

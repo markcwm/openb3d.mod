@@ -49,6 +49,8 @@ USE_FUNCTION,
 USE_ENTITY_COORDS
 };
 
+void CopyPixels(unsigned char *src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY, unsigned char *dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert);
+
 void Shader::FreeShader(){
 	if(!arb_program->Program) return;
 	arb_program->DeActivate(); // Ensure the shader is not used
@@ -1682,9 +1684,6 @@ void ProgramObject::DetachShader(ShaderObject* myShader, int shadertype){
 	
 }
 
-void CopyPixels (unsigned char *src, unsigned int srcWidth, unsigned int srcHeight, unsigned int srcX, unsigned int srcY, unsigned char *dst, unsigned int dstWidth, unsigned int dstHeight, unsigned int bytesPerPixel);
-
-
 Material* Material::LoadMaterial(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count){
 
 	filename=File::ResourceFilePath(filename);
@@ -1737,10 +1736,8 @@ Material* Material::LoadMaterial(string filename,int flags, int frame_width,int 
 	int frames_in_row=tex->width/frame_width;
 
 	for (int i=0;i<frame_count;i++){
-		CopyPixels (buffer,tex->width, tex->height,frame_width*(i%frames_in_row), frame_height*(i/frames_in_row),
-		dstbuffer+i*(frame_width * frame_height * 4), frame_width, frame_height, 4);
-
-
+		CopyPixels(buffer,tex->width, tex->height,frame_width*(i%frames_in_row), frame_height*(i/frames_in_row), 
+			dstbuffer+i*(frame_width * frame_height * 4), frame_width, frame_height, 4, 0);
 	}
 
 	glTexParameteri(GL_TEXTURE_3D, GL_GENERATE_MIPMAP, GL_TRUE);
