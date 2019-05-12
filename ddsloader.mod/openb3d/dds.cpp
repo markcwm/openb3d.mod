@@ -324,8 +324,7 @@ inline int DDS_GetPitch(int width,unsigned int format,int components){
 	return width * components;
 }
 
-// FIXME:
-//	It it might not be much point in doing this.
+//	It might not be much point in doing this (unused)
 inline DirectDrawSurface* GetDirectDrawSurfacePtr(){
 	static DirectDrawSurface dds[16];
 	static int index=0;
@@ -518,7 +517,7 @@ DirectDrawSurface::DirectDrawSurface()
 
 void DirectDrawSurface::FreeDirectDrawSurface(int free_buffer){
 	if(free_buffer!=0) delete[] buffer;
-	// If we're using for GetDirectDrawSurfacePtr
+	// If we're using for GetDirectDrawSurfacePtr (?)
 	mipmaps.clear();
 	width=0;
 	height=0;

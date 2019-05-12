@@ -64,137 +64,6 @@ Texture* Texture::LoadTexture(string filename,int flags,Texture* tex){
 	return Texture::LoadAnimTexture(filename,flags,0,0,0,1,tex);
 }
 
-Texture* Texture::LoadCubemapTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
-
-		//filename=Strip(filename); // get rid of path info
-		filename=File::ResourceFilePath(filename);
-
-		/*if (filename==""){
-			cout << "Error: Cannot Find Texture: " << filename << endl;
-			return NULL;
-		}*/
-
-		if(tex==NULL) tex=new Texture();
-		tex->file=filename;
-
-		// set tex.flags before TexInList
-		tex->flags=flags;
-		tex->FilterFlags();
-
-		// check to see if texture with same properties exists already, if so return existing texture
-		Texture* old_tex=tex->TexInList(tex_list);
-		if(old_tex!=NULL && Texture::isunique==false){
-			delete tex;
-			tex_list_all.push_back(old_tex);
-			return old_tex;
-		}else{
-			tex_list_all.push_back(tex);
-			tex_list.push_back(tex);
-		}
-
-		string filename_left=Left(filename,Len(filename)-4);
-		string filename_right=Right(filename,3);
-		//const char* c_filename_left=filename_left.c_str();
-		//const char* c_filename_right=filename_right.c_str();
-		
-		unsigned char* buffer;
-		DirectDrawSurface *dds;
-		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
-			dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
-			if(!dds) return NULL;
-			
-			tex->width=dds->width;
-			tex->height=dds->height;
-		}else{
-			buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
-			if(!buffer) return NULL;
-		}
-		
-		unsigned int name;
-		tex->no_frames=1;
-		//tex->width=tex->width/6;
-		tex->frames=new unsigned int[6];
-
-		unsigned char* dstbuffer=new unsigned char[frame_width*frame_height*4];
-		glGenTextures (1,&name);
-		glBindTexture (GL_TEXTURE_CUBE_MAP,name);
-
-		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
-		int yframes=tex->height/frame_height;
-		int x,y,cubeid;
-		
-		//tex.gltex=tex.gltex[..tex.no_frames]
-		for (int i=0;i<6;i++){
-			cubeid=Global::cubemap_frame[i];
-			x=cubeid % xframes; // left-right frames
-			y=(cubeid/xframes) % yframes; // top-bottom frames
-			
-			if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
-				dds->UploadTextureSubImage2D(frame_width*x, frame_height*y, frame_width, frame_height, dstbuffer, Global::cubemap_face[i], Global::flip_cubemap);
-			}else{
-				CopyPixels(buffer, tex->width, tex->height, frame_width*x, frame_height*y, dstbuffer, frame_width, frame_height, 4, Global::flip_cubemap);
-#ifndef GLES2
-				gluBuild2DMipmaps(Global::cubemap_face[i], GL_RGBA, frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-				/*switch(i){
-				case 0:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 1:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 2:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_X, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 3:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 4:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 5:
-					gluBuild2DMipmaps(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, GL_RGBA, tex->width, tex->height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				}*/
-#else
-				glTexImage2D(Global::cubemap_face[i], 0, GL_RGBA, frame_width, frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-				/*switch(i){
-				case 0:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 1:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 2:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 3:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 4:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				case 5:
-					glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, GL_RGBA, tex->width, tex->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-					break;
-				}*/
-				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
-#endif
-			}
-		}
-
-		tex->texture=name;
-		delete[] dstbuffer;
-		
-		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
-			tex->format=dds->format;
-			dds->FreeDirectDrawSurface(true);
-		}else{
-			stbi_image_free(buffer);
-		}
-		
-		return tex;
-}
-
 Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
 
 	if (flags&128) return Texture::LoadCubemapTexture(filename,flags,frame_width,frame_height,first_frame,frame_count,tex);
@@ -233,9 +102,14 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	unsigned char* buffer;
 	DirectDrawSurface *dds;
+	bool dds_ext=false;
 	if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
 		dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
-		if(!dds) return NULL;
+		if (!dds){
+			cout << "Error: Can't Load File '"+filename+"'" << endl;
+			return NULL;
+		}
+		dds_ext=true;
 		
 		tex->width=dds->width;
 		tex->height=dds->height;
@@ -246,7 +120,10 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		}
 	}else{
 		buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
-		if(!buffer) return NULL;
+		if (!buffer){
+			cout << "Error: Can't Load File '"+filename+"'" << endl;
+			return NULL;
+		}
 		
 		//int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
 		if(flags&2) ApplyAlpha(tex,buffer);
@@ -255,7 +132,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 
 	unsigned int name;
 	if (frame_count<2 || (frame_width==0 && frame_height==0)){
-		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+		if (dds_ext){
 			glGenTextures (1,&name);
 			glBindTexture (dds->target,name);
 			
@@ -288,7 +165,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		int y=(first_frame/xframes) % yframes;
 		
 		for (int i=0;i<frame_count;i++){
-			if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+			if (dds_ext){
 				glGenTextures (1,&name);
 				glBindTexture (GL_TEXTURE_2D,name);
 				
@@ -321,7 +198,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		delete[] dstbuffer;
 	}
 	
-	if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+	if (dds_ext){
 		tex->format=dds->format;
 		dds->FreeDirectDrawSurface(true);
 	}else{
@@ -330,6 +207,104 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 	
 	return tex;
 
+}
+
+Texture* Texture::LoadCubemapTexture(string filename,int flags, int frame_width,int frame_height,int first_frame,int frame_count,Texture* tex){
+
+		//filename=Strip(filename); // get rid of path info
+		filename=File::ResourceFilePath(filename);
+
+		/*if (filename==""){
+			cout << "Error: Cannot Find Texture: " << filename << endl;
+			return NULL;
+		}*/
+
+		if(tex==NULL) tex=new Texture();
+		tex->file=filename;
+
+		// set tex.flags before TexInList
+		tex->flags=flags;
+		tex->FilterFlags();
+
+		// check to see if texture with same properties exists already, if so return existing texture
+		Texture* old_tex=tex->TexInList(tex_list);
+		if(old_tex!=NULL && Texture::isunique==false){
+			delete tex;
+			tex_list_all.push_back(old_tex);
+			return old_tex;
+		}else{
+			tex_list_all.push_back(tex);
+			tex_list.push_back(tex);
+		}
+
+		string filename_left=Left(filename,Len(filename)-4);
+		string filename_right=Right(filename,3);
+		//const char* c_filename_left=filename_left.c_str();
+		//const char* c_filename_right=filename_right.c_str();
+		
+		unsigned char* buffer;
+		DirectDrawSurface *dds;
+		bool dds_ext=false;
+		if (Right(filename,4)==".dds" || Right(filename,4)==".DDS"){
+			dds=DirectDrawSurface::LoadSurface(filename,false,NULL,0);
+			if (!dds){
+				cout << "Error: Can't Load File '"+filename+"'" << endl;
+				return NULL;
+			}
+			dds_ext=true;
+			
+			tex->width=dds->width;
+			tex->height=dds->height;
+		}else{
+			buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
+			if (!buffer){
+				cout << "Error: Can't Load File '"+filename+"'" << endl;
+				return NULL;
+			}
+		}
+		
+		unsigned int name;
+		tex->no_frames=1;
+		tex->frames=new unsigned int[6];
+
+		unsigned char* dstbuffer=new unsigned char[frame_width*frame_height*4];
+		glGenTextures (1,&name);
+		glBindTexture (GL_TEXTURE_CUBE_MAP,name);
+
+		int xframes=tex->width/frame_width; // fixes not loading yframes/columns
+		int yframes=tex->height/frame_height;
+		int x,y,cubeid;
+		
+		//tex.gltex=tex.gltex[..tex.no_frames]
+		for (int i=0;i<6;i++){
+			cubeid=Global::cubemap_frame[i];
+			x=cubeid % xframes; // left-right frames
+			y=(cubeid/xframes) % yframes; // top-bottom frames
+			
+			if (dds_ext){
+				dds->UploadTextureSubImage2D(frame_width*x, frame_height*y, frame_width, frame_height, dstbuffer, Global::cubemap_face[i], Global::flip_cubemap);
+			}else{
+				CopyPixels(buffer, tex->width, tex->height, frame_width*x, frame_height*y, dstbuffer, frame_width, frame_height, 4, Global::flip_cubemap);
+#ifndef GLES2
+				gluBuild2DMipmaps(Global::cubemap_face[i], GL_RGBA, frame_width, frame_height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+#else
+				glTexImage2D(Global::cubemap_face[i], 0, GL_RGBA, frame_width, frame_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+				glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+#endif
+			}
+		}
+
+		tex->texture=name;
+		delete[] dstbuffer;
+		
+		if (dds_ext){
+			tex->format=dds->format;
+			dds->FreeDirectDrawSurface(true);
+		}else{
+			stbi_image_free(buffer);
+		}
+		
+		return tex;
 }
 
 Texture* Texture::CreateTexture(int width,int height,int flags, int frames){

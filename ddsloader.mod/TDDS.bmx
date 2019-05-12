@@ -12,7 +12,7 @@ Function LoadImageDDS:TImage( url:Object, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb
 		Return Null
 	EndIf
 	
-	Local img:TImage = TImage.Create(dds.pixmap.width, dds.pixmap.height, 1, flags, mr, mg, mb)
+	Local img:TImageDDS = TImageDDS.Create(dds.pixmap.width, dds.pixmap.height, 1, flags, mr, mg, mb)
 	
 	Local pix_format% = dds.format[0]
 	If dds.format[0] = GL_COMPRESSED_RGB_S3TC_DXT1_EXT Then pix_format = GL_RGB
@@ -27,15 +27,13 @@ Function LoadImageDDS:TImage( url:Object, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb
 	
 	dds.UploadTexture2D()
 	
-	If RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
+	If TDDS.DDS_Image = 0 'RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
 		glGetTexImage(GL_TEXTURE_2D, 0, pix_format, GL_UNSIGNED_BYTE, dds.pixmap.pixels)
 		glDeleteTextures(1, Varptr name)
-	Else
-		GreenBitsPerPixel[0] = dds.format[0] ' store dds format
-		BlueBitsPerPixel[0] = name ' store texture name
 	EndIf
 	
 	img.SetPixmap(0, dds.pixmap)
+	img.SetFormat(dds.pixmap, dds.format[0], name)
 	
 	dds.FreeDDS()
 	Return img
@@ -59,13 +57,12 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 	Local y_cells% = dds.pixmap.height / cell_height
 	If (first_cell+cell_count) > (x_cells*y_cells) Then Return Null
 	
-	Local img:TImage = TImage.Create(cell_width, cell_height, cell_count, flags, mr, mg, mb)
+	Local img:TImageDDS = TImageDDS.Create(cell_width, cell_height, cell_count, flags, mr, mg, mb)
 	
 	Local pix_format% = dds.format[0]
 	If dds.format[0] = GL_COMPRESSED_RGB_S3TC_DXT1_EXT Then pix_format = GL_RGB
 	If dds.format[0] = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT Then pix_format = GL_RGBA
 	If dds.format[0] = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT Then pix_format = GL_RGBA
-	
 	
 	Local name:Int
 	For Local cell% = first_cell To (first_cell+cell_count-1)
@@ -81,16 +78,15 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 		
 		dds.UploadTextureSubImage2D(x, y, cell_width, cell_height, animmap.pixels)
 		
-		If RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
+		If TDDS.DDS_Image = 0 'RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
 			glGetTexImage(GL_TEXTURE_2D, 0, pix_format, GL_UNSIGNED_BYTE, animmap.pixels)
 			glDeleteTextures(1, Varptr name)
 		Else
 			DDSCopyRect_(dds.dxt, dds.width[0], dds.height[0], x, y, animmap.pixels, cell_width, cell_height, dds.components[0], 0, dds.format[0])
-			GreenBitsPerPixel[0] = dds.format[0] ' store dds format
-			BlueBitsPerPixel[0] = name ' store texture name
 		EndIf
 		
 		img.SetPixmap(cell-first_cell, animmap)
+		img.SetFormat(animmap, dds.format[0], name)
 	Next
 	
 	dds.FreeDDS()
@@ -99,11 +95,50 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 End Function
 
 Rem
+bbdoc: Set image loader to use, "ddsimage" for compressed textures and "noddsimage" for decompressed textures
+End Rem
+Function ImageLoader( imageid:String )
+	Select imageid.ToLower()
+		Case "noddsimage"
+			TDDS.DDS_Image=0
+		Case "ddsimage"
+			TDDS.DDS_Image=1
+	EndSelect
+End Function
+
+Rem
+bbdoc: DDS Image
+End Rem
+Type TImageDDS Extends TImage
+
+	Function Create:TImageDDS( width%,height%,frames%,flags%,mr%,mg%,mb% )
+		Local t:TImageDDS=New TImageDDS
+		t.width=width
+		t.height=height
+		t.flags=flags
+		t.mask_r=mr
+		t.mask_g=mg
+		t.mask_b=mb
+		t.pixmaps=New TPixmap[frames]
+		t.frames=New TImageFrame[frames]
+		t.seqs=New Int[frames]
+		Return t
+	End Function
+	
+	Method SetFormat( pixmap:TPixmap,dds_fmt%,tex_name% )
+		pixmap.dds_fmt=dds_fmt ' set dds format
+		pixmap.tex_name=tex_name ' set texture name
+	End Method
+	
+End Type
+
+Rem
 bbdoc: DirectDrawSurface
 End Rem
 Type TDDS
 
 	Global dds_list:TList = CreateList()
+	Global DDS_Image:Int=0
 	
 	Field buffer:Byte Ptr
 	Field mipmaps:TDDS[1]
