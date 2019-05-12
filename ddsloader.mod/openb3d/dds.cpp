@@ -613,14 +613,17 @@ void DirectDrawSurface::UploadTexture(Texture *tex){
 }
 
 void DirectDrawSurface::UploadTexture2D(){
-	int row;
+	int row, mmc = mipmapcount;
+	
+	if (mipmapcount > CountMipmaps(width, height)) mmc = CountMipmaps(width, height); // fix too many mipmaps
+	
 	if(IsCompressed()){
 		//glTexParameteri(target,GL_GENERATE_MIPMAP,GL_TRUE);
 		row = DDS_GetPitch(width, format, 0);
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
 		glCompressedTexImage2D(GL_TEXTURE_2D,0,format,width,height,0,size,dxt);
 		
-		for(int i=0; i<mipmapcount; i++){
+		for(int i=0; i<mmc; i++){
 			DirectDrawSurface& mip=mipmaps[i];
 			row = DDS_GetPitch(mip.width, format, 0);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
@@ -632,7 +635,7 @@ void DirectDrawSurface::UploadTexture2D(){
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components);
 		glTexImage2D(GL_TEXTURE_2D,0,components,width,height,0,format,GL_UNSIGNED_BYTE,dxt);
 		
-		for(int i=0; i<mipmapcount; i++){
+		for(int i=0; i<mmc; i++){
 			DirectDrawSurface& mip=mipmaps[i];
 			row = DDS_GetPitch(mip.width, format, components);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components);
@@ -644,11 +647,10 @@ void DirectDrawSurface::UploadTexture2D(){
 
 void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int iheight, unsigned char* pixels, int target, int inv ){
 
-		int mwidth, mheight, row, height4;
-		int mmc = mipmapcount;
+		int mwidth, mheight, row, height4, mmc = mipmapcount;
 		
-		// fix for too many mipmaps (anim image strips)
-		if (mipmapcount > CountMipmaps(iwidth, iheight)) mmc = CountMipmaps(iwidth, iheight);
+		
+		if (mipmapcount > CountMipmaps(iwidth, iheight)) mmc = CountMipmaps(iwidth, iheight); // fix too many mipmaps (anim image)
 
 		if (IsCompressed()){
 			row = DDS_GetPitch(iwidth, format, 0);

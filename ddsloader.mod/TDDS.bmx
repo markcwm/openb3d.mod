@@ -229,8 +229,8 @@ Type TDDS
 		DebugLog pad+" DDS instance: "+StringPtr(GetInstance(Self))
 		
 		' char
-		If buffer <> Null Then DebugLog(pad+" buffer: "+buffer[0]) Else DebugLog(pad+" buffer: Null")
-		If dxt <> Null Then DebugLog(pad+" dxt: "+dxt[0]) Else DebugLog(pad+" dxt: Null")
+		If buffer <> Null Then DebugLog(pad+" buffer: "+StringPtr(buffer)) Else DebugLog(pad+" buffer: Null")
+		If dxt <> Null Then DebugLog(pad+" dxt: "+StringPtr(dxt)) Else DebugLog(pad+" dxt: Null")
 		
 		' int
 		If width <> Null Then DebugLog(pad+" width: "+width[0]) Else DebugLog(pad+" width: Null")
@@ -257,9 +257,9 @@ Type TDDS
 			exists = 0
 			GreenBitsPerPixel[0] = 0
 			BlueBitsPerPixel[0] = 0
-			MemFree(bmx_buffer)
 			ListRemove TDDS.dds_list, Self
 			DDSFreeDirectDrawSurface_( GetInstance(Self), 0 ) ' don't free buffer, it was freed in Bmax
+			If bmx_buffer<>Null And width[0]>0 And height[0]>0 Then MemFree(bmx_buffer) ' checks avoid crash in GL 2.0
 			For Local id:Int = 0 Until mipmapcount[0]
 				If mipmaps[id] <> Null Then FreeObject( GetInstance(mipmaps[id]) )
 			Next
@@ -314,14 +314,18 @@ Type TDDS
 	
 	Method UploadTexture2D()
 	
-		Local row%
+		Local row%, mmc% = mipmapcount[0]
+		
+		If mipmapcount[0] > DDSCountMipmaps_(width[0], height[0]) ' fix too many mipmaps
+			mmc = DDSCountMipmaps_(width[0], height[0])
+		EndIf
 		
 		If IsCompressed()
 			row = GetPitch(width[0], format[0], 0)
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row)
 			glCompressedTexImage2D(GL_TEXTURE_2D, 0, format[0], width[0], height[0], 0, size[0], dxt)
 			
-			For Local j:Int = 0 Until mipmapcount[0]
+			For Local j:Int = 0 Until mmc
 				Local mip:TDDS = mipmaps[j]
 				row = GetPitch(mip.width[0], format[0], 0)
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row)
@@ -333,7 +337,7 @@ Type TDDS
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components[0])
 			glTexImage2D(GL_TEXTURE_2D, 0, components[0], width[0], height[0], 0, format[0], GL_UNSIGNED_BYTE, dxt)
 			
-			For Local j:Int = 0 Until mipmapcount[0]
+			For Local j:Int = 0 Until mmc
 				Local mip:TDDS = mipmaps[j]
 				row = GetPitch(mip.width[0], format[0], components[0])
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components[0])
@@ -347,10 +351,9 @@ Type TDDS
 	
 	Method UploadTextureSubImage2D( ix%, iy%, iwidth%, iheight%, pixels:Byte Ptr=Null, target%=GL_TEXTURE_2D, inv%=0 )
 		
-		Local mwidth%, mheight%, row%, height4%
-		Local mmc% = mipmapcount[0]
+		Local mwidth%, mheight%, row%, height4%, mmc% = mipmapcount[0]
 		
-		If mipmapcount[0] > DDSCountMipmaps_(iwidth, iheight) ' fix for too many mipmaps (anim image strips)
+		If mipmapcount[0] > DDSCountMipmaps_(iwidth, iheight) ' fix too many mipmaps (anim image)
 			mmc = DDSCountMipmaps_(iwidth, iheight)
 		EndIf
 		
