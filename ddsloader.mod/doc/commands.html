@@ -12,9 +12,6 @@
 The stb image loader module provides the ability to load different image format <a href=#pixmaps>pixmaps</a>.
 Supported formats include, BMP, PSD, TGA, GIF, HDR, PIC and PNM.
 <h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
-<tr><td class=docleft width=1%><a href=#ImageLoader>ImageLoader</a></td><td class=docright>
-Set image loader to use, "ddsimage" for compressed textures and "noddsimage" for decompressed textures.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadAnimImageDDS>LoadAnimImageDDS</a></td><td class=docright>
 Loads a DDS file as a Max2D multi-frame image.
 </td></tr>
@@ -26,18 +23,10 @@ Loads a DDS file as a Max2D image.
 <tr><td class=docleft width=1%><a href=#TDDS>TDDS</a></td><td class=docright>
 DirectDrawSurface.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TImageDDS>TImageDDS</a></td><td class=docright>
-DDS Image.
-</td></tr>
 </table>
 <h2
  id=functionsdet>Functions
 </h2>
-<table class=doc width=100% cellspacing=3 id=ImageLoader>
-<tr><td class=doctop colspan=2>Function ImageLoader( imgid:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set image loader to use, "ddsimage" for compressed textures and "noddsimage" for decompressed textures.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimImageDDS>
 <tr><td class=doctop colspan=2>Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_cell%, cell_count%, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb%=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a DDS file as a Max2D multi-frame image.</td></tr>
@@ -56,11 +45,6 @@ DDS Image.
 <table class=doc width=100% cellspacing=3 id=TDDS>
 <tr><td class=doctop colspan=2>Type TDDS</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>DirectDrawSurface.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=TImageDDS>
-<tr><td class=doctop colspan=2>Type TImageDDS Extends TImage</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>DDS Image.</td></tr>
 </table>
 <br>
 <h2 id=modinfo>Module Information</h2>
