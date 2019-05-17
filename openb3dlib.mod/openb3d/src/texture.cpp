@@ -116,6 +116,7 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		
 		if(!dds->IsCompressed()){
 			if(flags&2) ApplyAlpha(tex,dds->buffer);
+			
 			if(flags&4) ApplyMask(tex,dds->buffer,0,0,0);
 		}
 	}else{
@@ -125,8 +126,10 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 			return NULL;
 		}
 		
-		//int mask=CheckAlpha(tex,buffer); // if mask=4 image has no alpha values
+		//int mask=CheckAlpha(tex,buffer); // assimp hack to determine tex flags, if mask=4 image has no alpha values
+		
 		if(flags&2) ApplyAlpha(tex,buffer);
+		
 		if(flags&4) ApplyMask(tex,buffer,0,0,0);
 	}
 
@@ -135,8 +138,13 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 		if (dds_ext){
 			glGenTextures (1,&name);
 			glBindTexture (dds->target,name);
+			dds->TextureParameters(tex->flags);
 			
-			dds->UploadTexture(tex);
+			if(dds->target==GL_TEXTURE_CUBE_MAP){
+				dds->UploadTextureCubeMap();
+				tex->flags|=128;
+			}else
+				dds->UploadTexture2D(tex->flags&8);
 		}else{
 			glGenTextures (1,&name);
 			glBindTexture (GL_TEXTURE_2D,name);
@@ -169,7 +177,8 @@ Texture* Texture::LoadAnimTexture(string filename,int flags, int frame_width,int
 				glGenTextures (1,&name);
 				glBindTexture (GL_TEXTURE_2D,name);
 				
-				dds->UploadTextureSubImage2D(x*frame_width, y*frame_height, frame_width, frame_height, dstbuffer, GL_TEXTURE_2D, 0);
+				dds->TextureParameters(tex->flags);
+				dds->UploadTextureSubImage2D(x*frame_width, y*frame_height, frame_width, frame_height, dstbuffer, tex->flags&8, GL_TEXTURE_2D, 0);
 			}else{
 				CopyPixels(buffer,tex->width, tex->height, x*frame_width, y*frame_height, dstbuffer, frame_width, frame_height, 4, 0);
 				
@@ -255,12 +264,24 @@ Texture* Texture::LoadCubemapTexture(string filename,int flags, int frame_width,
 			
 			tex->width=dds->width;
 			tex->height=dds->height;
+			
+			if(!dds->IsCompressed()){
+				if(flags&2) ApplyAlpha(tex,dds->buffer);
+				
+				if(flags&4) ApplyMask(tex,dds->buffer,0,0,0);
+			}
 		}else{
 			buffer=stbi_load(filename.c_str(),&tex->width,&tex->height,0,4);
 			if (!buffer){
 				cout << "Error: Can't Load File '"+filename+"'" << endl;
 				return NULL;
 			}
+			
+			//int mask=CheckAlpha(tex,buffer); // assimp hack to determine tex flags, if mask=4 image has no alpha values
+			
+			if(flags&2) ApplyAlpha(tex,buffer);
+			
+			if(flags&4) ApplyMask(tex,buffer,0,0,0);
 		}
 		
 		unsigned int name;
@@ -282,7 +303,8 @@ Texture* Texture::LoadCubemapTexture(string filename,int flags, int frame_width,
 			y=(cubeid/xframes) % yframes; // top-bottom frames
 			
 			if (dds_ext){
-				dds->UploadTextureSubImage2D(frame_width*x, frame_height*y, frame_width, frame_height, dstbuffer, Global::cubemap_face[i], Global::flip_cubemap);
+				dds->TextureParameters(tex->flags);
+				dds->UploadTextureSubImage2D(frame_width*x, frame_height*y, frame_width, frame_height, dstbuffer, tex->flags&8, Global::cubemap_face[i], Global::flip_cubemap);
 			}else{
 				CopyPixels(buffer, tex->width, tex->height, frame_width*x, frame_height*y, dstbuffer, frame_width, frame_height, 4, Global::flip_cubemap);
 #ifndef GLES2

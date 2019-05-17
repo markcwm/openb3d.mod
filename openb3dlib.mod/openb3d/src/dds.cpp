@@ -601,7 +601,32 @@ void DirectDrawSurface::Flip(){
 	}
 }
 
-void DirectDrawSurface::UploadTexture(Texture *tex){
+void DirectDrawSurface::TextureParameters( int tex_flags ){
+	// mipmapping texture flag
+	if(tex_flags&8){
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+	}else{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //GL_LINEAR
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //GL_LINEAR
+	}
+	
+	// clamp u flag
+	if(tex_flags&16){
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+	}else{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_REPEAT);
+	}	
+	
+	// clamp v flag
+	if(tex_flags&32){
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+	}else{
+		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_T,GL_REPEAT);
+	}
+}
+
+/*void DirectDrawSurface::UploadTexture(Texture *tex){
 	tex->format=format;
 	tex->width=width;
 	tex->height=height;
@@ -609,53 +634,53 @@ void DirectDrawSurface::UploadTexture(Texture *tex){
 		UploadTextureCubeMap();
 		tex->flags|=128;
 	} else 
-		UploadTexture2D();
-}
+		UploadTexture2D(tex->flags&8);
+}*/
 
-void DirectDrawSurface::UploadTexture2D(){
+void DirectDrawSurface::UploadTexture2D( int mipmap_flag ){
 	int row, mmc = mipmapcount;
 	
-	if (mipmapcount > CountMipmaps(width, height)) mmc = CountMipmaps(width, height); // fix too many mipmaps
+	if (mipmapcount > CountMipmaps(width, height)) mmc = CountMipmaps(width, height); // fix if too many mipmaps
 	
 	if(IsCompressed()){
-		//glTexParameteri(target,GL_GENERATE_MIPMAP,GL_TRUE);
 		row = DDS_GetPitch(width, format, 0);
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
-		glCompressedTexImage2D(GL_TEXTURE_2D,0,format,width,height,0,size,dxt);
+		glCompressedTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, size, dxt);
 		
 		for(int i=0; i<mmc; i++){
 			DirectDrawSurface& mip=mipmaps[i];
+			if (mip.width == 0 || mip.height == 0 || mipmap_flag == 0) break;
 			row = DDS_GetPitch(mip.width, format, 0);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
-			glCompressedTexImage2D(GL_TEXTURE_2D,i+1,format,mip.width,mip.height,0,mip.size,mip.dxt);
+			glCompressedTexImage2D(GL_TEXTURE_2D, i+1, format, mip.width, mip.height, 0, mip.size, mip.dxt);
 		}
 	} else {
 		glPixelStorei(GL_UNPACK_ALIGNMENT, components);
 		row = DDS_GetPitch(width, format, components);
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components);
-		glTexImage2D(GL_TEXTURE_2D,0,components,width,height,0,format,GL_UNSIGNED_BYTE,dxt);
+		glTexImage2D(GL_TEXTURE_2D, 0, components, width, height, 0, format, GL_UNSIGNED_BYTE, dxt);
 		
 		for(int i=0; i<mmc; i++){
 			DirectDrawSurface& mip=mipmaps[i];
+			if (mip.width == 0 || mip.height == 0 || mipmap_flag == 0) break;
 			row = DDS_GetPitch(mip.width, format, components);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components);
-			glTexImage2D(GL_TEXTURE_2D,i+1,components,mip.width,mip.height,0,format,GL_UNSIGNED_BYTE,mip.dxt);
+			glTexImage2D(GL_TEXTURE_2D, i+1, components, mip.width, mip.height, 0, format, GL_UNSIGNED_BYTE, mip.dxt);
 		}
 	}
 	glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 }
 
-void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int iheight, unsigned char* pixels, int target, int inv ){
+void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int iheight, unsigned char* pixels, int mipmap_flag, int target, int inv ){
 
 		int mwidth, mheight, row, height4, mmc = mipmapcount;
 		
-		
-		if (mipmapcount > CountMipmaps(iwidth, iheight)) mmc = CountMipmaps(iwidth, iheight); // fix too many mipmaps (anim image)
+		if (mipmapcount > CountMipmaps(iwidth, iheight)) mmc = CountMipmaps(iwidth, iheight); // fix if too many mipmaps (anim strip)
 
 		if (IsCompressed()){
+			if (iheight > 4) height4 = iheight/4; else height4 = 1;
 			row = DDS_GetPitch(iwidth, format, 0);
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
-			if (iheight > 4) height4 = iheight/4; else height4 = 1;
 			CopyRect(dxt, width, height, ix, iy, pixels, iwidth, iheight, 0, inv, format);
 			glCompressedTexImage2D(target, 0, format, iwidth, iheight, 0, row*height4, pixels);
 			
@@ -663,10 +688,10 @@ void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int
 				DirectDrawSurface& mip=mipmaps[j];
 				int pow2 = pow(2, j+1); // 2/4/8
 				mwidth = iwidth / pow2; mheight = iheight / pow2;
-				if (mwidth == 0 || mheight == 0) break;
+				if (mheight > 4) height4 = mheight/4; else height4 = 1;
+				if (mwidth == 0 || mheight == 0 || mipmap_flag == 0) break;
 				row = DDS_GetPitch(mwidth, format, 0);
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row);
-				if (mheight > 4) height4 = mheight/4; else height4 = 1;
 				CopyRect(mip.dxt, mip.width, mip.height, ix/pow2, iy/pow2, pixels, mwidth, mheight, 0, inv, format);
 				glCompressedTexImage2D(target, j+1, format, mwidth, mheight, 0, row*height4, pixels);
 			}
@@ -681,7 +706,7 @@ void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int
 				DirectDrawSurface& mip=mipmaps[j];
 				int pow2 = pow(2, j+1); // 2/4/8
 				mwidth = iwidth / pow2; mheight = iheight / pow2;
-				if (mwidth == 0 || mheight == 0) break;
+				if (mwidth == 0 || mheight == 0 || mipmap_flag == 0) break;
 				row = DDS_GetPitch(mwidth, format, components);
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components);
 				CopyRect(mip.dxt, mip.width, mip.height, ix/pow2, iy/pow2, pixels, mwidth, mheight, components, inv, format);
@@ -692,7 +717,7 @@ void DirectDrawSurface::UploadTextureSubImage2D( int ix, int iy, int iwidth, int
 		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 }
 
-void DirectDrawSurface::UploadTextureCubeMap(){
+void DirectDrawSurface::UploadTextureCubeMap(){ // not tested (DDS cubemap-in-mipmaps format)
 	DirectDrawSurface *s;
 	unsigned int t=0;
 

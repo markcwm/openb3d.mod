@@ -12,6 +12,10 @@ Function LoadImageDDS:TImage( url:Object, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb
 		Return Null
 	EndIf
 	
+	If RedBitsPerPixel[0] = 0
+		DebugLog " Max2d not compressed textures version"
+	EndIf
+	
 	Local img:TImage = TImage.Create(dds.pixmap.width, dds.pixmap.height, 1, flags, mr, mg, mb)
 	
 	Local pix_format% = dds.format[0]
@@ -19,15 +23,14 @@ Function LoadImageDDS:TImage( url:Object, flags%=FILTEREDIMAGE, mr%=0, mg%=0, mb
 	If dds.format[0] = GL_COMPRESSED_RGBA_S3TC_DXT3_EXT Then pix_format = GL_RGBA
 	If dds.format[0] = GL_COMPRESSED_RGBA_S3TC_DXT5_EXT Then pix_format = GL_RGBA
 	
-	dds.TextureParameters(flags)
-	
 	Local name:Int
 	glGenTextures(1, Varptr name)
 	glBindTexture(GL_TEXTURE_2D, name)
 	
-	dds.UploadTexture2D()
+	dds.ImageParameters(flags)
+	dds.UploadTexture2D(flags & MIPMAPPEDIMAGE)
 	
-	If RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
+	If RedBitsPerPixel[0] = 0
 		glGetTexImage(GL_TEXTURE_2D, 0, pix_format, GL_UNSIGNED_BYTE, dds.pixmap.pixels)
 		glDeleteTextures(1, Varptr name)
 	Else
@@ -55,6 +58,10 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 		Return Null
 	EndIf
 	
+	If RedBitsPerPixel[0] = 0
+		DebugLog " Max2d not compressed textures version"
+	EndIf
+	
 	Local x_cells% = dds.pixmap.width / cell_width
 	Local y_cells% = dds.pixmap.height / cell_height
 	If (first_cell+cell_count) > (x_cells*y_cells) Then Return Null
@@ -73,14 +80,13 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 		
 		Local animmap:TPixmap = CreatePixmap(cell_width, cell_height, dds.pixmap.format, BytesPerPixel[dds.pixmap.format])
 		
-		dds.TextureParameters(flags)
-		
 		glGenTextures(1, Varptr name)
 		glBindtexture(GL_TEXTURE_2D, name)
 		
-		dds.UploadTextureSubImage2D(x, y, cell_width, cell_height, animmap.pixels)
+		dds.ImageParameters(flags)
+		dds.UploadTextureSubImage2D(x, y, cell_width, cell_height, animmap.pixels, flags & MIPMAPPEDIMAGE)
 		
-		If RedBitsPerPixel[0] = 0 ' Max2d not compressed textures version
+		If RedBitsPerPixel[0] = 0
 			glGetTexImage(GL_TEXTURE_2D, 0, pix_format, GL_UNSIGNED_BYTE, animmap.pixels)
 			glDeleteTextures(1, Varptr name)
 		Else
@@ -259,7 +265,9 @@ Type TDDS
 			BlueBitsPerPixel[0] = 0
 			ListRemove TDDS.dds_list, Self
 			DDSFreeDirectDrawSurface_( GetInstance(Self), 0 ) ' don't free buffer, it was freed in Bmax
-			If bmx_buffer<>Null And width[0]>0 And height[0]>0 Then MemFree(bmx_buffer) ' checks avoid crash in GL 2.0
+			If bmx_buffer <> Null And width[0]>0 And height[0]>0 ' check avoids crash in GL 2.0
+				MemFree(bmx_buffer)
+			EndIf
 			For Local id:Int = 0 Until mipmapcount[0]
 				If mipmaps[id] <> Null Then FreeObject( GetInstance(mipmaps[id]) )
 			Next
@@ -288,22 +296,22 @@ Type TDDS
 		
 	End Method
 	
-	Method TextureParameters( flags%=FILTEREDIMAGE )
+	Method ImageParameters( flags%=FILTEREDIMAGE )
 	
 		' set texture parameters
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
 		
-		If flags & FILTEREDIMAGE
+		If (flags & FILTEREDIMAGE)
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
-			If flags & MIPMAPPEDIMAGE
+			If (flags & MIPMAPPEDIMAGE)
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
 			Else
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR)
 			EndIf
 		Else
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST)
-			If flags & MIPMAPPEDIMAGE
+			If (flags & MIPMAPPEDIMAGE)
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST)
 			Else
 				glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST)
@@ -312,11 +320,38 @@ Type TDDS
 		
 	End Method
 	
-	Method UploadTexture2D()
+	Method TextureParameters( tex_flags%=9 )
+	
+		' mipmapping texture flag
+		If (tex_flags & 8)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR)
+		Else ' no mipmaps
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST) 'GL_LINEAR
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST) 'GL_LINEAR
+		EndIf
+		
+		' clamp u flag
+		If (tex_flags & 16)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE)
+		Else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT)
+		EndIf
+		
+		' clamp v flag
+		If (tex_flags & 32)
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE)
+		Else
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT)
+		EndIf
+		
+	End Method
+	
+	Method UploadTexture2D( mipmap_flag%=0 )
 	
 		Local row%, mmc% = mipmapcount[0]
 		
-		If mipmapcount[0] > DDSCountMipmaps_(width[0], height[0]) ' fix too many mipmaps
+		If mipmapcount[0] > DDSCountMipmaps_(width[0], height[0]) ' fix if too many mipmaps
 			mmc = DDSCountMipmaps_(width[0], height[0])
 		EndIf
 		
@@ -327,6 +362,7 @@ Type TDDS
 			
 			For Local j:Int = 0 Until mmc
 				Local mip:TDDS = mipmaps[j]
+				If mip.width[0] = 0 Or mip.height[0] = 0 Or mipmap_flag = 0 Then Exit
 				row = GetPitch(mip.width[0], format[0], 0)
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row)
 				glCompressedTexImage2D(GL_TEXTURE_2D, j+1, format[0], mip.width[0], mip.height[0], 0, mip.size[0], mip.dxt)
@@ -339,6 +375,7 @@ Type TDDS
 			
 			For Local j:Int = 0 Until mmc
 				Local mip:TDDS = mipmaps[j]
+				If mip.width[0] = 0 Or mip.height[0] = 0 Or mipmap_flag = 0 Then Exit
 				row = GetPitch(mip.width[0], format[0], components[0])
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components[0])
 				glTexImage2D(GL_TEXTURE_2D, j+1, components[0], mip.width[0], mip.height[0], 0, format[0], GL_UNSIGNED_BYTE, mip.dxt)
@@ -349,18 +386,18 @@ Type TDDS
 		
 	End Method
 	
-	Method UploadTextureSubImage2D( ix%, iy%, iwidth%, iheight%, pixels:Byte Ptr=Null, target%=GL_TEXTURE_2D, inv%=0 )
+	Method UploadTextureSubImage2D( ix%, iy%, iwidth%, iheight%, pixels:Byte Ptr=Null, mipmap_flag%=0, target%=GL_TEXTURE_2D, inv%=0 )
 		
 		Local mwidth%, mheight%, row%, height4%, mmc% = mipmapcount[0]
 		
-		If mipmapcount[0] > DDSCountMipmaps_(iwidth, iheight) ' fix too many mipmaps (anim image)
+		If mipmapcount[0] > DDSCountMipmaps_(iwidth, iheight) ' fix if too many mipmaps (anim strip)
 			mmc = DDSCountMipmaps_(iwidth, iheight)
 		EndIf
 		
 		If IsCompressed()
+			If iheight > 4 Then height4 = iheight/4 Else height4 = 1
 			row = GetPitch(iwidth, format[0], 0)
 			glPixelStorei(GL_UNPACK_ROW_LENGTH, row)
-			If iheight > 4 Then height4 = iheight/4 Else height4 = 1
 			DDSCopyRect_(dxt, width[0], height[0], ix, iy, pixels, iwidth, iheight, 0, inv, format[0])
 			glCompressedTexImage2D(target, 0, format[0], iwidth, iheight, 0, row*height4, pixels)
 			
@@ -368,10 +405,10 @@ Type TDDS
 				Local mip:TDDS = mipmaps[j]
 				Local pow2% = 2 ^ (j+1) ' 2/4/8
 				mwidth = iwidth / pow2 ; mheight = iheight / pow2
-				If mwidth = 0 Or mheight = 0 Then Exit
+				If mheight > 4 Then height4 = mheight/4 Else height4 = 1
+				If mwidth = 0 Or mheight = 0 Or mipmap_flag = 0 Then Exit
 				row = GetPitch(mwidth, format[0], 0)
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row)
-				If mheight > 4 Then height4 = mheight/4 Else height4 = 1
 				DDSCopyRect_(mip.dxt, mip.width[0], mip.height[0], ix/pow2, iy/pow2, pixels, mwidth, mheight, 0, inv, format[0])
 				glCompressedTexImage2D(target, j+1, format[0], mwidth, mheight, 0, row*height4, pixels)
 			Next
@@ -386,7 +423,7 @@ Type TDDS
 				Local mip:TDDS = mipmaps[j]
 				Local pow2% = 2 ^ (j+1) ' 2/4/8
 				mwidth = iwidth / pow2 ; mheight = iheight / pow2
-				If mwidth = 0 Or mheight = 0 Then Exit
+				If mwidth = 0 Or mheight = 0 Or mipmap_flag = 0 Then Exit
 				row = GetPitch(mwidth, format[0], components[0])
 				glPixelStorei(GL_UNPACK_ROW_LENGTH, row / components[0])
 				DDSCopyRect_(mip.dxt, mip.width[0], mip.height[0], ix/pow2, iy/pow2, pixels, mwidth, mheight, components[0], inv, format[0])
@@ -398,23 +435,26 @@ Type TDDS
 		
 	End Method
 	
-	Method UploadTextureCubeMap( i%, face% ) ' not used or tested - DDS cubemap-in-mipmaps format
+	Method UploadTextureCubeMap() ' not tested (DDS cubemap-in-mipmaps format)
 	
-		Local surf:TDDS=mipmaps[i]
-		
-		If IsCompressed()
-			glCompressedTexImage2D(face, 0, format[0], surf.width[0], surf.height[0], 0, surf.size[0], surf.dxt)
-			For Local j:Int=0 Until surf.mipmapcount[0]
-				Local mip:TDDS=surf.mipmaps[j]
-				glCompressedTexImage2D(face, j+1, format[0], mip.width[0], mip.height[0], 0, mip.size[0], mip.dxt)
-			Next
-		Else
-			glTexImage2D(face, 0, components[0], surf.width[0], surf.height[0], 0, format[0], GL_UNSIGNED_BYTE, surf.dxt)
-			For Local j:Int=0 Until surf.mipmapcount[0]
-				Local mip:TDDS=surf.mipmaps[j]
-				glTexImage2D(face, j+1, components[0], mip.width[0], mip.height[0], 0, format[0], GL_UNSIGNED_BYTE, mip.dxt)
-			Next
-		EndIf
+		For Local i%=0 To 5
+			Local face% = GL_TEXTURE_CUBE_MAP_POSITIVE_X+i
+			Local surf:TDDS = mipmaps[i]
+			
+			If IsCompressed()
+				glCompressedTexImage2D(face, 0, format[0], surf.width[0], surf.height[0], 0, surf.size[0], surf.dxt)
+				For Local j:Int=0 Until surf.mipmapcount[0]
+					Local mip:TDDS=surf.mipmaps[j]
+					glCompressedTexImage2D(face, j+1, format[0], mip.width[0], mip.height[0], 0, mip.size[0], mip.dxt)
+				Next
+			Else
+				glTexImage2D(face, 0, components[0], surf.width[0], surf.height[0], 0, format[0], GL_UNSIGNED_BYTE, surf.dxt)
+				For Local j:Int=0 Until surf.mipmapcount[0]
+					Local mip:TDDS=surf.mipmaps[j]
+					glTexImage2D(face, j+1, components[0], mip.width[0], mip.height[0], 0, format[0], GL_UNSIGNED_BYTE, mip.dxt)
+				Next
+			EndIf
+		Next
 		
 	End Method
 	

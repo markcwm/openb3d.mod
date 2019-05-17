@@ -2,7 +2,7 @@
 #include <memory.h>
 #include <vector>
 #include <iostream>
-#include "texture.h"
+//#include "texture.h"
 
 using namespace std;
 
@@ -35,9 +35,10 @@ public:
 	bool IsCompressed();
 	void Flip();
 
-	void UploadTexture(Texture *tex);
-	void UploadTexture2D();
-	void UploadTextureSubImage2D( int ix, int iy, int iwidth, int iheight, unsigned char* pixels, int target, int inv );
+	void TextureParameters( int tex_flags );
+	//void UploadTexture(Texture *tex);
+	void UploadTexture2D(int mipmap_flag);
+	void UploadTextureSubImage2D(int ix, int iy, int iwidth, int iheight, unsigned char* pixels, int mipmap_flag, int target, int inv);
 	void UploadTextureCubeMap();
 	
 };

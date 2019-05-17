@@ -603,17 +603,26 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		'Local mask:Int=CheckAlpha(tex.pixmap)
-		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
-		
-		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
-		
-		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
-		
-		Local dds:TDDS
-		If ExtractExt(file.ToLower())="dds" Then dds = TDDS(TDDS.dds_list.Last())
+		Local dds:TDDS, dds_ext% = False
+		If ExtractExt(file.ToLower())="dds"
+			dds = TDDS(TDDS.dds_list.Last())
+			dds_ext = True
+			
+			If Not dds.IsCompressed()
+				If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
+				
+				If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
+			EndIf
+		Else
+			'Local mask:Int=CheckAlpha(tex.pixmap)
+			'If (flags & 2048) Then flags=flags | mask ' assimp hack to determine tex flags, 4 if image has no alpha values
+			
+			' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+			If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
+			
+			'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
+			If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
+		EndIf
 		
 		Local name:Int
 		If frame_count>1 Or (frame_width>0 And frame_height>0) ' anim texture
@@ -632,11 +641,12 @@ Type TTexture
 			Local y:Int=(first_frame/xframes) Mod yframes
 			
 			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to animmap pixels
-				If ExtractExt(file.ToLower())="dds"
+				If dds_ext
 					glGenTextures(1, Varptr name)
 					glBindtexture(GL_TEXTURE_2D, name)
 					
-					dds.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels)
+					dds.TextureParameters(tex.flags[0])
+					dds.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels, tex.flags[0] & 8)
 				Else
 					CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, animmap.pixels, width, height, 4, 0)
 					
@@ -663,11 +673,17 @@ Type TTexture
 			'If (flags & 8192) Then tex.pixmap=XFlipPixmap(tex.pixmap) ' these functions are too slow, flip in an editor
 			'If (flags & 16384) Then tex.pixmap=YFlipPixmap(tex.pixmap)
 			
-			If ExtractExt(file.ToLower())="dds"
+			If dds_ext
 				glGenTextures(1, Varptr name)
 				glBindTexture(GL_TEXTURE_2D, name)
+				dds.TextureParameters(tex.flags[0])
 				
-				dds.UploadTexture2D() ' upload texture and mipmaps to GPU
+				If dds.target[0] = GL_TEXTURE_CUBE_MAP
+					dds.UploadTextureCubeMap()
+					tex.flags[0] = tex.flags[0] | 128
+				Else 
+					dds.UploadTexture2D(tex.flags[0] & 8) ' upload texture and mipmaps to GPU
+				EndIf
 			Else
 				glGenTextures(1, Varptr name)
 				glBindtexture(GL_TEXTURE_2D, name)
@@ -682,7 +698,7 @@ Type TTexture
 			
 		EndIf
 		
-		If ExtractExt(file.ToLower())="dds"
+		If dds_ext
 			tex.format[0]=dds.format[0]
 			dds.FreeDDS()
 		EndIf
@@ -731,14 +747,26 @@ Type TTexture
 		If tex.pixmap.format=PF_RGBA8888 Or tex.pixmap.format=PF_BGRA8888 Or tex.pixmap.format=PF_A8 Then alpha_present=True
 		If tex.pixmap.format<>PF_RGBA8888 Then tex.pixmap=tex.pixmap.Convert(PF_RGBA8888)
 		
-		'Local mask:Int=CheckAlpha(tex.pixmap)
-		'If (flags & 2048) Then flags=flags | mask ' determine tex flags, 4 if image has no alpha values
-		
-		' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
-		If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
-		
-		'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
-		If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
+		Local dds:TDDS, dds_ext% = False
+		If ExtractExt(file.ToLower())="dds"
+			dds = TDDS(TDDS.dds_list.Last())
+			dds_ext = True
+			
+			If Not dds.IsCompressed()
+				If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
+				
+				If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
+			EndIf
+		Else
+			'Local mask:Int=CheckAlpha(tex.pixmap)
+			'If (flags & 2048) Then flags=flags | mask ' assimp hack to determine tex flags, 4 if image has no alpha values
+			
+			' if alpha flag is true and pixmap doesn't contain alpha info, apply alpha based on color values
+			If (flags & 2) And alpha_present=False Then tex.pixmap=ApplyAlpha(tex.pixmap, tex.discard)
+			
+			'If (flags & 4) Then tex.pixmap=MaskPixmap(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0 - set with ClsColor?
+			If (flags & 4) Then tex.pixmap=ApplyMask(tex.pixmap, 0, 0, 0) ' mask any pixel at 0, 0, 0
+		EndIf
 		
 		Local width:Int=frame_width
 		Local height:Int=frame_height
@@ -747,9 +775,6 @@ Type TTexture
 		Local x:Int, y:Int, cubeid:Int
 		
 		Local cubemap:TPixmap=CreatePixmap(width, height, tex.pixmap.format) ' format=PF_RGBA8888
-		
-		Local dds:TDDS
-		If ExtractExt(file.ToLower())="dds" Then dds = TDDS(TDDS.dds_list.Last())
 		
 		Local name:Int
 		glGenTextures(1, Varptr name)
@@ -760,8 +785,9 @@ Type TTexture
 			x=cubeid Mod xframes ' left-right frames
 			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
-			If ExtractExt(file.ToLower())="dds"
-				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, TGlobal.Cubemap_Face[i], TGlobal.Flip_Cubemap)
+			If dds_ext
+				dds.TextureParameters(tex.flags[0])
+				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, tex.flags[0] & 8, TGlobal.Cubemap_Face[i], TGlobal.Flip_Cubemap)
 			Else
 				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, TGlobal.Flip_Cubemap)
 				
@@ -769,7 +795,7 @@ Type TTexture
 			EndIf
 		Next
 		
-		If ExtractExt(file.ToLower())="dds"
+		If dds_ext
 			tex.format[0]=dds.format[0]
 			dds.FreeDDS()
 		EndIf

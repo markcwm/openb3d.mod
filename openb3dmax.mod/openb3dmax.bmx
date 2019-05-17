@@ -25,7 +25,6 @@ Extern
 
 	' *** Extra
 	Function TextureLoader_( texid:Byte Ptr,lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
-	Function DDSUploadTexture_( surface:Byte Ptr,tex:Byte Ptr )
 	Function MSAntiAlias_( multisample:Int )
 	Function CountMipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )
