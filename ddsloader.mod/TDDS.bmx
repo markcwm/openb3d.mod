@@ -81,7 +81,7 @@ Function LoadAnimImageDDS:TImage( url:Object, cell_width%, cell_height%, first_c
 		Local animmap:TPixmap = CreatePixmap(cell_width, cell_height, dds.pixmap.format, BytesPerPixel[dds.pixmap.format])
 		
 		glGenTextures(1, Varptr name)
-		glBindtexture(GL_TEXTURE_2D, name)
+		glBindTexture(GL_TEXTURE_2D, name)
 		
 		dds.ImageParameters(flags)
 		dds.UploadTextureSubImage2D(x, y, cell_width, cell_height, animmap.pixels, flags & MIPMAPPEDIMAGE)

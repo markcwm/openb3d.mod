@@ -643,7 +643,7 @@ Type TTexture
 			For Local i:Int=0 To frame_count-1 ' copy tex.pixmap rect to animmap pixels
 				If dds_ext
 					glGenTextures(1, Varptr name)
-					glBindtexture(GL_TEXTURE_2D, name)
+					glBindTexture(GL_TEXTURE_2D, name)
 					
 					dds.TextureParameters(tex.flags[0])
 					dds.UploadTextureSubImage2D(x*width, y*height, width, height, animmap.pixels, tex.flags[0] & 8)
@@ -651,7 +651,7 @@ Type TTexture
 					CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, animmap.pixels, width, height, 4, 0)
 					
 					glGenTextures(1, Varptr name)
-					glBindtexture(GL_TEXTURE_2D, name)
+					glBindTexture(GL_TEXTURE_2D, name)
 					
 					gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, animmap.pixels)
 				EndIf
@@ -686,7 +686,7 @@ Type TTexture
 				EndIf
 			Else
 				glGenTextures(1, Varptr name)
-				glBindtexture(GL_TEXTURE_2D, name)
+				glBindTexture(GL_TEXTURE_2D, name)
 				
 				gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, tex.pixmap.width, tex.pixmap.height, GL_RGBA, GL_UNSIGNED_BYTE, tex.pixmap.pixels)
 			EndIf
@@ -778,7 +778,7 @@ Type TTexture
 		
 		Local name:Int
 		glGenTextures(1, Varptr name)
-		glBindtexture(GL_TEXTURE_CUBE_MAP, name)
+		glBindTexture(GL_TEXTURE_CUBE_MAP, name)
 		
 		For Local i:Int=0 To 5 ' copy tex.pixmap rect to cubemap
 			cubeid=TGlobal.Cubemap_Frame[i]
