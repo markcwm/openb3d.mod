@@ -1758,7 +1758,7 @@ void TextureFilter_(char* match_text,int flags){
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=TextureName">Online Help</a>
 */
 const char* TextureName_(Texture* tex){
-	return tex->TextureName().c_str();
+	return tex->file.c_str();
 }
 
 /*
