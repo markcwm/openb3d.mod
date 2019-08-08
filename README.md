@@ -18,8 +18,8 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * BRL image loaders are used with PNG and JPG as they are the most complete
 * DDS files can also be loaded with support for compressed textures, mipmaps and cubemaps
 * File streams are supported by image and mesh loaders, allowing Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod)
-* 3D model formats include 3DS (no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
-* Several more 3D formats can be loaded using the Assimp library wrapper (no animation)
+* Native 3D model formats are 3DS (no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
+* Several more 3D formats can be loaded using the Assimp library wrapper (but no animation)
 * Collision detection consists of Blitz3d's ellipsoid-to-something collisions, dynamic collisions are also possible
 * Realtime textures are created with BackBufferToTex (for cubemaps) or CameraToTex, also DepthBufferToTex
 * Shader post-processing using CameraToTex to render to screen sprites or with PostFX render functions
@@ -35,8 +35,12 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * Basic physics system consisting of constraints and rigid bodies
 * Particle emitter system with callback function to allow complete control
 * Alternative particle system using batch sprites from Monkey-Minib3d
-* Software anti-alias like in Minib3d, also multisample hardware anti-alias (only in Windows)
+* Software anti-alias like in Minib3d, also multisample hardware anti-alias (only Windows)
 * 3D sound module using Brl.Audio, similar to Blitz3D but sounds can be qued, stopped, paused and resumed per entity
+
+## Status
+
+This wrapper is in a late beta stage of development, so there are still some bugs and missing features. The library has a working GLES2 (WebGL) version but the wrapper doesn't support this yet. The latest version should work with BRL or NG BlitzMax (currently tested with 0.99 release) but you should note that there is an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so for now you will probably need an older compiler.
 
 ## Installation
 * Click on the Github Download zip link, then extract contents to your `BlitzMax/mod` folder
@@ -49,13 +53,9 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * For Blitzmax NG in 64-bit you use `bmk makemods -d -w -g x64 openb3dmax` (on Mac/Linux you need `./bmk`)
 * Or from MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
 
-## Status
-
-This wrapper is in a late beta stage of development, so there are still some bugs and missing features (the author accepts no responsibility for any loss that occurs when using this software). The library has a working GLES2 (WebGL) version but the wrapper doesn't support this yet. The latest version should work with BRL or NG BlitzMax (currently tested with 0.99 release) but note there is an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so for now you need an older compiler.
-
 ## License
 
-The library is licensed with the GNU LGPL 2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and one module with the BSD-2-Clause license.
+The library is licensed with the GNU LGPL 2.1 or later with an exception by the author to allow static linking. The wrapper is licensed with the zlib license and one module has the BSD-2-Clause license.
 
 ## Credits
 
@@ -67,4 +67,5 @@ The OpenB3D library is based on source from iMiniB3D with other core parts from 
 * MiniB3D Extended by Benjamin Rössig
 * Blitz3D by Mark Sibly
 * bOGL 2 by Alex Gilding
+* Code contributors and/or Beta testers: RonTek, Krischan, KippyKip, Hezkore, RustiKristi, BlitzSupport, Spinduluz
 
