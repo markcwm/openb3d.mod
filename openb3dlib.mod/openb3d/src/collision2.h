@@ -88,6 +88,7 @@ public:
 //const int COLLISION_RESPONSE_SLIDEXZ=3;
 
 void UpdateCollisions();
+void ClearStaticCollisions();
 void UpdateStaticCollisions();
 void UpdateDynamicCollisions();
 void clearCollisions();
