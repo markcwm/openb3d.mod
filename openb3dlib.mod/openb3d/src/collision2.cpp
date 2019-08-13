@@ -102,10 +102,9 @@ void clearCollisions(){
 	}
 }
 
-//Added this seperately, because otherwise it gets mucked up within the for loops in the UpdateStaticCollisions function.
+// Added seperately because clearing collisions within loop in UpdateStaticCollisions was buggy (by KippyKip)
 void ClearStaticCollisions(){
 	list<CollisionPair*>::iterator cp_it;
-	//int col_once=0;
 
 	for(cp_it=CollisionPair::cp_list.begin();cp_it!=CollisionPair::cp_list.end();cp_it++){
 		CollisionPair col_pair=**cp_it;
@@ -118,6 +117,7 @@ void ClearStaticCollisions(){
 
 		for(src_ent_it=CollisionPair::ent_lists[col_pair.src_type].begin();src_ent_it!=CollisionPair::ent_lists[col_pair.src_type].end();src_ent_it++){
 			Entity& ent=**src_ent_it;
+			
 			// clear collisions
 			ent.no_collisions=0;
 			for(unsigned int ix=0;ix<ent.collision.size();ix++){
@@ -125,12 +125,12 @@ void ClearStaticCollisions(){
 			}
 			ent.collision.clear();
 		}
+		
 	}
 }
 
 void UpdateStaticCollisions(){
 	list<CollisionPair*>::iterator cp_it;
-	//int col_once=0;
 
 	for(cp_it=CollisionPair::cp_list.begin();cp_it!=CollisionPair::cp_list.end();cp_it++){
 		CollisionPair col_pair=**cp_it;
@@ -254,7 +254,6 @@ void UpdateStaticCollisions(){
 
 				}else{
 
-					//if(ent.no_collisions==0) col_once=0; // fixes collisions needing reset or keeps adding
 					break;
 
 				}
