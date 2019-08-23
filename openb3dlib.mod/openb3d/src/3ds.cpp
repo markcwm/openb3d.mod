@@ -219,7 +219,7 @@ void LoadMap(){
   //Stops OpenB3D crashing if a texture file is missing/null
   if(texture_check)
   {
-	  texture = Texture::LoadTexture(Filename,4);
+	  texture = texture_check;
 	  if (TextureLayer == M3D_3DS_TEXTUREMAP1){
 		// Layer 0
 		brush->BrushTexture(texture, 0, 0);
