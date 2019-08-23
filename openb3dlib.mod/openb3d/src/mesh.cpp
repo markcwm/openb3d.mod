@@ -2572,11 +2572,11 @@ void Mesh::Render(){
 #ifndef GLES2
 		// fx modes
 
-		// fx flag 1 - full bright ***todo*** disable all lights?
+		// fx flag 1 - full bright
 		if(fx&1){
 			if(Global::fx1!=true){
-				Global::fx1=true;
-				//glEnableClientState(GL_NORMAL_ARRAY);
+				Global::fx1=true;				
+				glDisableClientState(GL_NORMAL_ARRAY); // Disable lights when if the full-bright FX is on the entity.
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2584,7 +2584,7 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
-				//glDisableClientState(GL_NORMAL_ARRAY);
+				glEnableClientState(GL_NORMAL_ARRAY); // Enable lights when if the full-bright FX ISN'T on the entity.
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;
