@@ -527,6 +527,11 @@ int* StaticInt_( int classid,int varid ){
 				case TERRAIN_triangleindex : return &Terrain::triangleindex;
 			}
 			break;
+		case TEXTURE_class :
+			switch (varid){
+				case TEXTURE_AnIsoSupport : return &Texture::AnIsoSupport;
+			}
+			break;
 	}
 	return NULL;
 }
@@ -581,11 +586,6 @@ float* StaticFloat_( int classid,int varid ){
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_vertices : return &Terrain::vertices[0];
-			}
-			break;
-		case TEXTURE_class :
-			switch (varid){
-				case TEXTURE_AnIsoSupport : return &Texture::AnIsoSupport;
 			}
 			break;
 	}

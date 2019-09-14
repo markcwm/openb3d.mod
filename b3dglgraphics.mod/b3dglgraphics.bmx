@@ -72,6 +72,7 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	' get hardware info and set vbo_enabled accordingly
 	THardwareInfo.GetInfo()
 	TGlobal.vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
+	TTexture.AnIsoSupport[0]=THardwareInfo.AnIsoSupport
 	TGlobal.GL_Version=THardwareInfo.OGLVersion.ToFloat()
 	
 End Function

@@ -31,7 +31,7 @@ Type TTexture
 	Global tex_list_all:TList=CreateList()
 	Global is_unique:Int=0
 	Field format:Int Ptr
-	Global AnIsoSupport:Float Ptr
+	Global AnIsoSupport:Int Ptr
 	
 	' wrapper
 	?bmxng
@@ -88,8 +88,8 @@ Type TTexture
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
-		' float
-		AnIsoSupport=StaticFloat_( TEXTURE_class,TEXTURE_AnIsoSupport )
+		' int
+		AnIsoSupport=StaticInt_( TEXTURE_class,TEXTURE_AnIsoSupport )
 		
 	End Function
 	
