@@ -368,7 +368,7 @@ void Terrain::UpdateTerrain(){
 				int tex_flags=0,tex_blend=0;
 				float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 				int tex_cube_mode=0;
-
+				float tex_anisotropy=0;
 
 				texture=brush.cache_frame[ix];
 				tex_flags=brush.tex[ix]->flags;
@@ -406,12 +406,17 @@ void Terrain::UpdateTerrain(){
 #endif
 
 				// mipmapping texture flag
-				if(tex_flags&8){
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+				if(tex_flags&1024 && Texture::AnIsoSupport!=0){
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_anisotropy);
+					glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_anisotropy); // anisotropic
 				}else{
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+					if(tex_flags&8){
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); // trilinear
+					}else{
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // point-sampling
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+					}
 				}
 
 				// clamp u flag

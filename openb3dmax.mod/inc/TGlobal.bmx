@@ -108,6 +108,7 @@ Type TGlobal
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
 		TBatchSprite.InitGlobals()
+		TTexture.InitGlobals()
 		
 		Matrix_3DS=NewMatrix()
 		Matrix_3DS.LoadIdentity()

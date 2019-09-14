@@ -48,7 +48,8 @@ public:
 	float multitex_factor;
 	static int isunique;
 	int format; // can be GL_RGBA or one of the DXT compressed ones
-
+	static float AnIsoSupport;
+	
 	Texture(){
 
 		//texture=NULL;
