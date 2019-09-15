@@ -324,6 +324,13 @@ Type TTexture
 		
 	End Method
 	
+	' Set texture anisotropic factor, usually from 2-16
+	Method TextureAnIsotropic( f:Float )
+	
+		TextureAnIsotropic_( GetInstance(Self), f )
+		
+	End Method
+	
 	' Set texture multitex factor, used in interpolate and custom TexBlend options
 	Method TextureMultitex( f:Float )
 	

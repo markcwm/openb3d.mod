@@ -27,6 +27,10 @@
 extern "C" {
 
 // Extra
+
+void TextureAnIsotropic_(Texture* tex, float f){
+	tex->TextureAnIsotropic(f);
+}
 	
 void TextureLoader_( char* texid,int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
 	Global::TextureLoader( texid,lf0,fr1,rt2,bk3,dn4,up5 );

@@ -30,6 +30,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <stdio.h>
 
 
 #ifdef GLES2
@@ -2806,7 +2807,7 @@ void Mesh::Render(){
 					float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 					int tex_cube_mode=0;
 					Texture* bte=NULL;
-					float tex_anisotropy=0;
+					float tex_anisotropy=0.0,tex_max_aniso=0.0;
 					//int frame=0;
 	
 					if(brush.tex[ix]){
@@ -2823,6 +2824,7 @@ void Mesh::Render(){
 						//frame=brush.tex_frame;
 						bte=brush.tex[ix];
 						texenv_color[3]=brush.tex[ix]->multitex_factor;
+						tex_max_aniso=brush.tex[ix]->max_anisotropic;
 					}else{
 						texture=surf.brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
 						tex_flags=surf.brush->tex[ix]->flags;
@@ -2837,6 +2839,7 @@ void Mesh::Render(){
 						//frame=surf.brush.tex_frame;
 						bte=surf.brush->tex[ix];
 						texenv_color[3]=surf.brush->tex[ix]->multitex_factor;
+						tex_max_aniso=surf.brush->tex[ix]->max_anisotropic;
 					}
 	
 #ifndef GLES2
@@ -2861,12 +2864,18 @@ void Mesh::Render(){
 						glDisable(GL_ALPHA_TEST);
 					}
 #endif
-	
-					// mipmapping texture flag
-					if(tex_flags&1024 && Texture::AnIsoSupport!=0){
+
+					if(Texture::AnIsoSupport!=0){
 						glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_anisotropy);
-						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_anisotropy); // anisotropic
+						if(tex_anisotropy>tex_max_aniso && tex_max_aniso>1.0) tex_anisotropy=tex_max_aniso;
+						if(tex_flags&1024){
+							glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_anisotropy); // anisotropic
+						}else{
+							glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
+						}
 					}
+					
+					// mipmapping texture flag
 					if(tex_flags&8){
 						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); // trilinear

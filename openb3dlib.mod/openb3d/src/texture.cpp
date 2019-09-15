@@ -779,3 +779,7 @@ int CheckAlpha(Texture* tex, unsigned char *src){
 void Texture::TextureMultitex(float f){
 	multitex_factor = f;
 }
+
+void Texture::TextureAnIsotropic(float f){
+	max_anisotropic = f;
+}
