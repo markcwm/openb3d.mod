@@ -259,10 +259,12 @@ Type T3DS
 		
 		Texture = LoadTexture(Texname, TGlobal.Texture_Flags)
 		
-		If TextureLayer = M3D_3DS_TEXTUREMAP1
-			Brush.BrushTexture(Texture, 0, 0) ' Layer 0
-		Else
-			Brush.BrushTexture(Texture, 0, 1) ' Layer 1
+		If Texture<>Null ' stops crash if texture file is missing
+			If TextureLayer = M3D_3DS_TEXTUREMAP1
+				Brush.BrushTexture(Texture, 0, 0) ' Layer 0
+			Else
+				Brush.BrushTexture(Texture, 0, 1) ' Layer 1
+			EndIf
 		EndIf
 	End Method
 	
