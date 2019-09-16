@@ -368,7 +368,7 @@ void Terrain::UpdateTerrain(){
 				int tex_flags=0,tex_blend=0;
 				float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 				int tex_cube_mode=0;
-				float tex_anisotropy=0.0,tex_max_aniso=0.0;
+				float tex_aniso=0.0,tex_max_aniso=0.0;
 
 				texture=brush.cache_frame[ix];
 				tex_flags=brush.tex[ix]->flags;
@@ -380,7 +380,7 @@ void Terrain::UpdateTerrain(){
 				tex_v_pos=brush.tex[ix]->v_pos;
 				tex_ang=brush.tex[ix]->angle;
 				tex_cube_mode=brush.tex[ix]->cube_mode;
-				tex_max_aniso=brush.tex[ix]->max_anisotropic;
+				tex_max_aniso=brush.tex[ix]->tex_anisotropic;
 				//frame=brush.tex_frame;
 
 #ifndef GLES2
@@ -407,10 +407,11 @@ void Terrain::UpdateTerrain(){
 #endif
 
 				if(Texture::AnIsoSupport!=0){
-					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_anisotropy);
-					if(tex_anisotropy>tex_max_aniso && tex_max_aniso>1.0) tex_anisotropy=tex_max_aniso;
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
+					if(tex_aniso>Texture::max_anisotropic && Texture::max_anisotropic>0) tex_aniso=Texture::max_anisotropic;
+					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
 					if(tex_flags&1024){
-						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_anisotropy); // anisotropic
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
 					}else{
 						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
 					}

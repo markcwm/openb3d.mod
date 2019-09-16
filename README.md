@@ -61,11 +61,11 @@ The library is licensed with the GNU LGPL 2.1 or later with an exception by the 
 
 The OpenB3D library is based on source from iMiniB3D with other core parts from Warner Engine and MiniB3D Extended.
 
-* OpenB3D by Angelo Rosina
-* MiniB3D and iMiniB3D by Simon Harrison
-* Warner Engine by Bram den Hond
-* MiniB3D Extended by Benjamin Rössig
-* Blitz3D by Mark Sibly
-* bOGL 2 by Alex Gilding
-* Code contributors and/or Beta testers: RonTek, Krischan, KippyKip, Hezkore, RustiKristi, BlitzSupport, Spinduluz
+* [Blitz3D](https://github.com/blitz-research/blitz3d) by Mark Sibly
+* [MiniB3D](https://github.com/si-design) and iMiniB3D by Simon Harrison
+* [OpenB3D](https://sourceforge.net/projects/minib3d/) by Angelo Rosina (Angros47)
+* [Warner Engine](https://code.google.com/archive/p/warner-engine/) by Bram den Hond
+* [MiniB3D Extended](https://code.google.com/archive/p/minib3dextended/) by Benjamin Rössig (klepto2)
+* [bOGL 2](https://github.com/Leushenko/bOGL-2) by Alex Gilding (Leushenko)
+* Other code contributors and/or Beta testers: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Hezkore](https://bitbucket.org/Hezkore/), [DruggedBunny](https://github.com/DruggedBunny), RustiKristi(?), [Spinduluz](https://github.com/Spinduluz)
 

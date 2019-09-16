@@ -430,7 +430,6 @@ Const GRAPHICS_HIDDEN:Int=$400
 'Const TEX_CUBEMAP:Int=128
 'Const TEX_VRAM:Int=256
 'Const TEX_HIGHCOLOR:Int=512
-'Const TEX_ANISOTROPIC:Int=1024
 'Const TEX_SECONDUV:Int=65536
 
 ' *** Wrapper functions

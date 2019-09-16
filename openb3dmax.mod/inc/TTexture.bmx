@@ -32,6 +32,7 @@ Type TTexture
 	Global is_unique:Int=0
 	Field format:Int Ptr
 	Global AnIsoSupport:Int Ptr
+	Global max_anisotropic:Float Ptr
 	
 	' wrapper
 	?bmxng
@@ -90,6 +91,9 @@ Type TTexture
 	
 		' int
 		AnIsoSupport=StaticInt_( TEXTURE_class,TEXTURE_AnIsoSupport )
+		
+		' float
+		max_anisotropic=StaticFloat_( TEXTURE_class,TEXTURE_max_anisotropic )
 		
 	End Function
 	
@@ -321,6 +325,13 @@ Type TTexture
 	Method TextureGLTexEnvf( target:Int, pname:Int, param:Float )
 	
 		TextureGLTexEnvf_( GetInstance(Self), target, pname, param )
+		
+	End Method
+	
+	' Set maximum (global) texture anisotropic factor, TextureAnIsotropic overrides it
+	Method MaxAnIsotropic( f:Float )
+	
+		max_anisotropic[0]=f
 		
 	End Method
 	

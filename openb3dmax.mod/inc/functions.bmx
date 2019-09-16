@@ -328,6 +328,13 @@ Function SetString:String( obj:Object,strPtr:Byte Ptr,strValue:String )
 End Function
 
 Rem
+bbdoc: Set maximum (Global) texture anisotropic factor, TextureAnIsotropic overrides it
+EndRem
+Function MaxAnIsotropic( f:Float )
+	TTexture.max_anisotropic[0]=f
+End Function
+
+Rem
 bbdoc: Set texture anisotropic factor, usually from 2-16
 End Rem
 Function TextureAnIsotropic( tex:TTexture,f:Float )

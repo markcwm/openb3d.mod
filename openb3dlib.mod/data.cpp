@@ -450,6 +450,7 @@ const int TEXTURE_cube_mode=	19;
 const int TEXTURE_tex_list_all=	20;
 const int TEXTURE_format=		21;
 const int TEXTURE_AnIsoSupport=	22;
+const int TEXTURE_max_anisotropic=23;
 
 // Vector
 const int VECTOR_x=1;
@@ -586,6 +587,11 @@ float* StaticFloat_( int classid,int varid ){
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_vertices : return &Terrain::vertices[0];
+			}
+			break;
+		case TEXTURE_class :
+			switch (varid){
+				case TEXTURE_max_anisotropic : return &Texture::max_anisotropic;
 			}
 			break;
 	}

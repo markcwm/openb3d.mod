@@ -49,7 +49,8 @@ public:
 	static int isunique;
 	int format; // can be GL_RGBA or one of the DXT compressed ones
 	static int AnIsoSupport;
-	float max_anisotropic;
+	static float max_anisotropic;
+	float tex_anisotropic;
 	
 	Texture(){
 
@@ -63,7 +64,7 @@ public:
 		framebuffer=0;
 		cube_face=0,cube_mode=1;
 
-		TexEnv_count=0,multitex_factor=0.5,max_anisotropic=1.0;
+		TexEnv_count=0,multitex_factor=0.5,tex_anisotropic=0;
 	};
 
 	static Texture* LoadTexture(string filename,int flags=0,Texture* tex=NULL);

@@ -27,6 +27,7 @@ list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 int Texture::isunique=0;
 int Texture::AnIsoSupport=0;
+float Texture::max_anisotropic=0.0;
 
 void CopyPixels(unsigned char *src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY, unsigned char *dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert);
 void ApplyAlpha(Texture* tex, unsigned char *src);
