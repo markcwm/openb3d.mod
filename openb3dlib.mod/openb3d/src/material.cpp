@@ -493,7 +493,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 				tex_v_pos=Shader_Tex[ix]->texture->v_pos;
 				tex_ang=Shader_Tex[ix]->texture->angle;
 				tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
-				tex_max_aniso=Shader_Tex[ix]->texture->tex_anisotropic;
+				tex_max_aniso=Shader_Tex[ix]->texture->tex_aniso;
 			}
 			
 			glActiveTexture(GL_TEXTURE0+ix);
@@ -506,7 +506,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 				
 				if(Texture::AnIsoSupport!=0){
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
-					if(tex_aniso>Texture::max_anisotropic && Texture::max_anisotropic>0) tex_aniso=Texture::max_anisotropic;
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
 					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
 					if(tex_flags&1024){
 						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
@@ -529,7 +529,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 				
 				if(Texture::AnIsoSupport!=0){
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
-					if(tex_aniso>Texture::max_anisotropic && Texture::max_anisotropic>0) tex_aniso=Texture::max_anisotropic;
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
 					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
 					if(tex_flags&1024){
 						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic

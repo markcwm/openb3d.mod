@@ -380,7 +380,7 @@ void Terrain::UpdateTerrain(){
 				tex_v_pos=brush.tex[ix]->v_pos;
 				tex_ang=brush.tex[ix]->angle;
 				tex_cube_mode=brush.tex[ix]->cube_mode;
-				tex_max_aniso=brush.tex[ix]->tex_anisotropic;
+				tex_max_aniso=brush.tex[ix]->tex_aniso;
 				//frame=brush.tex_frame;
 
 #ifndef GLES2
@@ -408,7 +408,7 @@ void Terrain::UpdateTerrain(){
 
 				if(Texture::AnIsoSupport!=0){
 					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
-					if(tex_aniso>Texture::max_anisotropic && Texture::max_anisotropic>0) tex_aniso=Texture::max_anisotropic;
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
 					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
 					if(tex_flags&1024){
 						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic

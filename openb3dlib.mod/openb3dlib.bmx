@@ -803,7 +803,7 @@ Const TEXTURE_cube_mode:Int=	19
 Const TEXTURE_tex_list_all:Int=	20
 Const TEXTURE_format:Int=		21
 Const TEXTURE_AnIsoSupport:Int=	22
-Const TEXTURE_max_anisotropic:Int=23
+Const TEXTURE_global_aniso:Int=	23
 
 ' Vector
 Const VECTOR_x:Int=1

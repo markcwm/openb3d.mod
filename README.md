@@ -17,7 +17,7 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * The STB Image library is used to load many formats, it supports TGA, BMP, GIF and PSD (also PNG and JPG)
 * BRL image loaders are used with PNG and JPG as they are the most complete
 * DDS files can also be loaded with support for compressed textures, mipmaps and cubemaps
-* File streams are supported by image and mesh loaders, allowing Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod)
+* File streams are supported by image and mesh loaders, allowing Incbin and [Koriolis.Zipstream](https://github.com/maxmods/koriolis.mod)
 * Native 3D model formats are 3DS (no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
 * Several more 3D formats can be loaded using the Assimp library wrapper (but no animation)
 * Collision detection consists of Blitz3d's ellipsoid-to-something collisions, dynamic collisions are also possible

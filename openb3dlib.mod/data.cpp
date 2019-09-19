@@ -450,7 +450,7 @@ const int TEXTURE_cube_mode=	19;
 const int TEXTURE_tex_list_all=	20;
 const int TEXTURE_format=		21;
 const int TEXTURE_AnIsoSupport=	22;
-const int TEXTURE_max_anisotropic=23;
+const int TEXTURE_global_aniso=	23;
 
 // Vector
 const int VECTOR_x=1;
@@ -591,7 +591,7 @@ float* StaticFloat_( int classid,int varid ){
 			break;
 		case TEXTURE_class :
 			switch (varid){
-				case TEXTURE_max_anisotropic : return &Texture::max_anisotropic;
+				case TEXTURE_global_aniso : return &Texture::global_aniso;
 			}
 			break;
 	}

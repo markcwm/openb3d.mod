@@ -263,6 +263,9 @@ Get a shader program object reference.
 <tr><td class=docleft width=1%><a href=#GetString>GetString</a></td><td class=docright>
 Gets a Blitz string from a C string.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#GlobalAnIsotropic>GlobalAnIsotropic</a></td><td class=docright>
+Set global texture anisotropic (default for all), TextureAnIsotropic overrides it.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#GlobalHeight>GlobalHeight</a></td><td class=docright>
 Returns global height of screen resolution.
 </td></tr>
@@ -304,9 +307,6 @@ Load shader from two files, vertex and fragment.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadShaderVGF>LoadShaderVGF</a></td><td class=docright>
 Load shader from three files, vertex, geometry and fragment.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#MaxAnIsotropic>MaxAnIsotropic</a></td><td class=docright>
-Set maximum (Global) texture anisotropic factor, TextureAnIsotropic overrides it.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
@@ -1090,6 +1090,11 @@ use RenderWorld to render the camera, then use this command.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Gets a Blitz string from a C string.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=GlobalAnIsotropic>
+<tr><td class=doctop colspan=2>Function GlobalAnIsotropic( f:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set global texture anisotropic (default for all), TextureAnIsotropic overrides it.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=GlobalHeight>
 <tr><td class=doctop colspan=2>Function GlobalHeight:Int()</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns global height of screen resolution.</td></tr>
@@ -1165,11 +1170,6 @@ first frame is the index of the slice and frame count is how many slices.</td></
 <table class=doc width=100% cellspacing=3 id=LoadShaderVGF>
 <tr><td class=doctop colspan=2>Function LoadShaderVGF:TShader( ShaderName:String,VshaderFileName:String,GshaderFileName:String,FshaderFileName:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load shader from three files, vertex, geometry and fragment.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=MaxAnIsotropic>
-<tr><td class=doctop colspan=2>Function MaxAnIsotropic( f:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set maximum (Global) texture anisotropic factor, TextureAnIsotropic overrides it.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>

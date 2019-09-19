@@ -2824,7 +2824,7 @@ void Mesh::Render(){
 						//frame=brush.tex_frame;
 						bte=brush.tex[ix];
 						texenv_color[3]=brush.tex[ix]->multitex_factor;
-						tex_max_aniso=brush.tex[ix]->tex_anisotropic;
+						tex_max_aniso=brush.tex[ix]->tex_aniso;
 					}else{
 						texture=surf.brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
 						tex_flags=surf.brush->tex[ix]->flags;
@@ -2839,7 +2839,7 @@ void Mesh::Render(){
 						//frame=surf.brush.tex_frame;
 						bte=surf.brush->tex[ix];
 						texenv_color[3]=surf.brush->tex[ix]->multitex_factor;
-						tex_max_aniso=surf.brush->tex[ix]->tex_anisotropic;
+						tex_max_aniso=surf.brush->tex[ix]->tex_aniso;
 					}
 	
 #ifndef GLES2
@@ -2867,7 +2867,7 @@ void Mesh::Render(){
 
 					if(Texture::AnIsoSupport!=0){
 						glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
-						if(tex_aniso>Texture::max_anisotropic && Texture::max_anisotropic>0) tex_aniso=Texture::max_anisotropic;
+						if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
 						if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
 						if(tex_flags&1024){
 							glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
