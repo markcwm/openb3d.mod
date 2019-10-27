@@ -17,7 +17,7 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 * The STB Image library is used to load many formats, it supports TGA, BMP, GIF and PSD (also PNG and JPG)
 * BRL image loaders are used with PNG and JPG as they are the most complete
 * DDS files can also be loaded with support for compressed textures, mipmaps and cubemaps
-* File streams are supported by image and mesh loaders, allowing Incbin and [Zipstream](https://github.com/maxmods/koriolis.mod)
+* File streams are supported by image and mesh loaders, allowing Incbin and [Koriolis.Zipstream](https://github.com/maxmods/koriolis.mod)
 * Native 3D model formats are 3DS (no animation), B3D (skeletal animation) and MD2 (vertex interpolation)
 * Several more 3D formats can be loaded using the Assimp library wrapper (but no animation)
 * Collision detection consists of Blitz3d's ellipsoid-to-something collisions, dynamic collisions are also possible
@@ -61,11 +61,11 @@ The library is licensed with the GNU LGPL 2.1 or later with an exception by the 
 
 The OpenB3D library is based on source from iMiniB3D with other core parts from Warner Engine and MiniB3D Extended.
 
-* OpenB3D by Angelo Rosina
-* MiniB3D and iMiniB3D by Simon Harrison
-* Warner Engine by Bram den Hond
-* MiniB3D Extended by Benjamin Rössig
-* Blitz3D by Mark Sibly
-* bOGL 2 by Alex Gilding
-* Code contributors and/or Beta testers: RonTek, Krischan, KippyKip, Hezkore, RustiKristi, BlitzSupport, Spinduluz
+* [Blitz3D](https://github.com/blitz-research/blitz3d) by Mark Sibly
+* [MiniB3D](https://github.com/si-design) and iMiniB3D by Simon Harrison
+* [OpenB3D](https://sourceforge.net/projects/minib3d/) by Angelo Rosina (Angros47)
+* [Warner Engine](https://code.google.com/archive/p/warner-engine/) by Bram den Hond
+* [MiniB3D Extended](https://code.google.com/archive/p/minib3dextended/) by Benjamin Rössig (klepto2)
+* [bOGL 2](https://github.com/Leushenko/bOGL-2) by Alex Gilding (Leushenko)
+* Code contributors: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Hezkore](https://bitbucket.org/Hezkore/), [DruggedBunny](https://github.com/DruggedBunny), [Spinduluz](https://github.com/Spinduluz), RustiKristi
 

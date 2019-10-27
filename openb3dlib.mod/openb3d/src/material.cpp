@@ -481,6 +481,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			int tex_flags=0,tex_blend=0,tex_coords=0;
 			float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 			int tex_cube_mode=0;//,frame=0;
+			float tex_aniso=0.0,tex_max_aniso=0.0;
 			if (Shader_Tex[ix]->texture!=0){
 				texture=Shader_Tex[ix]->texture->texture;
 				tex_flags=Shader_Tex[ix]->texture->flags;
@@ -492,6 +493,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 				tex_v_pos=Shader_Tex[ix]->texture->v_pos;
 				tex_ang=Shader_Tex[ix]->texture->angle;
 				tex_cube_mode=Shader_Tex[ix]->texture->cube_mode;
+				tex_max_aniso=Shader_Tex[ix]->texture->tex_aniso;
 			}
 			
 			glActiveTexture(GL_TEXTURE0+ix);
@@ -501,17 +503,41 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 			if (Shader_Tex[ix]->is3D==0){
 				glEnable(GL_TEXTURE_2D);
 				glBindTexture(GL_TEXTURE_2D,texture); // call before glTexParameteri
+				
+				if(Texture::AnIsoSupport!=0){
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
+					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
+					if(tex_flags&1024){
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
+					}else{
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
+					}
+				}
+				
 				// mipmapping texture flag
 				if(tex_flags&8){
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); // trilinear
 				}else{
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //GL_LINEAR
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //GL_LINEAR
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // point-sampling
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 				}
 			}else{
 				glEnable(GL_TEXTURE_3D);
 				glBindTexture(GL_TEXTURE_3D,texture); // call before glTexParameteri
+				
+				if(Texture::AnIsoSupport!=0){
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
+					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
+					if(tex_flags&1024){
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
+					}else{
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
+					}
+				}
+				
 				// mipmapping texture flag
 				if(tex_flags&8){
 					glTexParameteri(GL_TEXTURE_3D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);

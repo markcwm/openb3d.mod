@@ -31,6 +31,8 @@ Type TTexture
 	Global tex_list_all:TList=CreateList()
 	Global is_unique:Int=0
 	Field format:Int Ptr
+	Global AnIsoSupport:Int Ptr
+	Global global_aniso:Float Ptr
 	
 	' wrapper
 	?bmxng
@@ -82,6 +84,16 @@ Type TTexture
 	
 		If obj=Null Then Return Null ' Attempt to pass null object to function
 		Return obj.instance
+		
+	End Function
+	
+	Function InitGlobals() ' Once per Graphics3D
+	
+		' int
+		AnIsoSupport=StaticInt_( TEXTURE_class,TEXTURE_AnIsoSupport )
+		
+		' float
+		global_aniso=StaticFloat_( TEXTURE_class,TEXTURE_global_aniso )
 		
 	End Function
 	
@@ -313,6 +325,20 @@ Type TTexture
 	Method TextureGLTexEnvf( target:Int, pname:Int, param:Float )
 	
 		TextureGLTexEnvf_( GetInstance(Self), target, pname, param )
+		
+	End Method
+	
+	' Set global texture anisotropic (default for all), TextureAnIsotropic overrides it
+	Method GlobalAnIsotropic( f:Float )
+	
+		global_aniso[0]=f
+		
+	End Method
+	
+	' Set texture anisotropic factor, usually from 2-16
+	Method TextureAnIsotropic( f:Float )
+	
+		TextureAnIsotropic_( GetInstance(Self), f )
 		
 	End Method
 	

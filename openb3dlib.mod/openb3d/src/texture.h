@@ -48,7 +48,10 @@ public:
 	float multitex_factor;
 	static int isunique;
 	int format; // can be GL_RGBA or one of the DXT compressed ones
-
+	static int AnIsoSupport;
+	static float global_aniso;
+	float tex_aniso;
+	
 	Texture(){
 
 		//texture=NULL;
@@ -61,7 +64,7 @@ public:
 		framebuffer=0;
 		cube_face=0,cube_mode=1;
 
-		TexEnv_count=0,multitex_factor=0.5;
+		TexEnv_count=0,multitex_factor=0.5,tex_aniso=0;
 	};
 
 	static Texture* LoadTexture(string filename,int flags=0,Texture* tex=NULL);
@@ -85,6 +88,7 @@ public:
 	void DepthBufferToTex(Camera* cam);
 	string TextureName();
 	void TextureMultitex(float f);
+	void TextureAnIsotropic(float f);
 	static void ClearTextureFilters();
 	static void AddTextureFilter(string text_match,int flags);
 	Texture* TexInList(list<Texture*>& list_ref);

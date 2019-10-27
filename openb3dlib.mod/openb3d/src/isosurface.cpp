@@ -1142,7 +1142,7 @@ void Fluid::Render(){
 	if (brush.fx & 1){
 		if(Global::fx1!=true){
 			Global::fx1=true;
-			//glDisableClientState(GL_NORMAL_ARRAY);
+			glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		ambient_red  =1.0;
 		ambient_green=1.0;
@@ -1150,7 +1150,7 @@ void Fluid::Render(){
 	}else{
 		if(Global::fx1!=false){
 			Global::fx1=false;
-			//glEnableClientState(GL_NORMAL_ARRAY);
+			glEnableClientState(GL_NORMAL_ARRAY);
 		}
 		ambient_red  =Global::ambient_red;
 		ambient_green=Global::ambient_green;

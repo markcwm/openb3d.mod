@@ -328,6 +328,20 @@ Function SetString:String( obj:Object,strPtr:Byte Ptr,strValue:String )
 End Function
 
 Rem
+bbdoc: Set global texture anisotropic (default for all), TextureAnIsotropic overrides it
+EndRem
+Function GlobalAnIsotropic( f:Float )
+	TTexture.global_aniso[0]=f
+End Function
+
+Rem
+bbdoc: Set texture anisotropic factor, usually from 2-16
+End Rem
+Function TextureAnIsotropic( tex:TTexture,f:Float )
+	TextureAnIsotropic_( TTexture.GetInstance(tex),f )
+End Function
+
+Rem
 bbdoc: Set texture multitex factor, used in interpolate and custom TexBlend options
 End Rem
 Function TextureMultitex( tex:TTexture,f:Float )

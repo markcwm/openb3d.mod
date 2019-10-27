@@ -224,7 +224,7 @@ void Terrain::UpdateTerrain(){
 	if (brush.fx & 1){
 		if(Global::fx1!=true){
 			Global::fx1=true;
-			//glDisableClientState(GL_NORMAL_ARRAY);
+			glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		ambient_red  =1.0;
 		ambient_green=1.0;
@@ -232,7 +232,7 @@ void Terrain::UpdateTerrain(){
 	}else{
 		if(Global::fx1!=false){
 			Global::fx1=false;
-			//glEnableClientState(GL_NORMAL_ARRAY);
+			glEnableClientState(GL_NORMAL_ARRAY);
 		}
 		ambient_red  =Global::ambient_red;
 		ambient_green=Global::ambient_green;
@@ -368,7 +368,7 @@ void Terrain::UpdateTerrain(){
 				int tex_flags=0,tex_blend=0;
 				float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 				int tex_cube_mode=0;
-
+				float tex_aniso=0.0,tex_max_aniso=0.0;
 
 				texture=brush.cache_frame[ix];
 				tex_flags=brush.tex[ix]->flags;
@@ -380,6 +380,7 @@ void Terrain::UpdateTerrain(){
 				tex_v_pos=brush.tex[ix]->v_pos;
 				tex_ang=brush.tex[ix]->angle;
 				tex_cube_mode=brush.tex[ix]->cube_mode;
+				tex_max_aniso=brush.tex[ix]->tex_aniso;
 				//frame=brush.tex_frame;
 
 #ifndef GLES2
@@ -405,12 +406,23 @@ void Terrain::UpdateTerrain(){
 				}
 #endif
 
+				if(Texture::AnIsoSupport!=0){
+					glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
+					if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
+					if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
+					if(tex_flags&1024){
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
+					}else{
+						glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
+					}
+				}
+				
 				// mipmapping texture flag
 				if(tex_flags&8){
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); // trilinear
 				}else{
-					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR); // point-sampling
 					glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 				}
 

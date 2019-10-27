@@ -26,6 +26,8 @@
 list<Texture*> Texture::tex_list;
 list<Texture*> Texture::tex_list_all;
 int Texture::isunique=0;
+int Texture::AnIsoSupport=0;
+float Texture::global_aniso=0.0;
 
 void CopyPixels(unsigned char *src,unsigned int srcW,unsigned int srcH,unsigned int srcX,unsigned int srcY, unsigned char *dst,unsigned int dstW,unsigned int dstH,unsigned int bPP,int invert);
 void ApplyAlpha(Texture* tex, unsigned char *src);
@@ -777,4 +779,8 @@ int CheckAlpha(Texture* tex, unsigned char *src){
 
 void Texture::TextureMultitex(float f){
 	multitex_factor = f;
+}
+
+void Texture::TextureAnIsotropic(float f){
+	global_aniso = f;
 }
