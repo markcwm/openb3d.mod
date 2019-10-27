@@ -30,6 +30,7 @@
 #include <vector>
 #include <list>
 #include <map>
+#include <stdio.h>
 
 
 #ifdef GLES2
@@ -2572,11 +2573,11 @@ void Mesh::Render(){
 #ifndef GLES2
 		// fx modes
 
-		// fx flag 1 - full bright
+		// fx flag 1 - full bright ***todo*** disable all lights?
 		if(fx&1){
 			if(Global::fx1!=true){
-				Global::fx1=true;				
-				glDisableClientState(GL_NORMAL_ARRAY); // Disable lights when if the full-bright FX is on the entity.
+				Global::fx1=true;
+				glEnableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2584,7 +2585,7 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
-				glEnableClientState(GL_NORMAL_ARRAY); // Enable lights when if the full-bright FX ISN'T on the entity.
+				glDisableClientState(GL_NORMAL_ARRAY);
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;
@@ -2806,6 +2807,7 @@ void Mesh::Render(){
 					float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 					int tex_cube_mode=0;
 					Texture* bte=NULL;
+					float tex_aniso=0.0,tex_max_aniso=0.0;
 					//int frame=0;
 	
 					if(brush.tex[ix]){
@@ -2822,6 +2824,7 @@ void Mesh::Render(){
 						//frame=brush.tex_frame;
 						bte=brush.tex[ix];
 						texenv_color[3]=brush.tex[ix]->multitex_factor;
+						tex_max_aniso=brush.tex[ix]->tex_aniso;
 					}else{
 						texture=surf.brush->cache_frame[ix];//surf.brush->tex[ix]->texture;
 						tex_flags=surf.brush->tex[ix]->flags;
@@ -2836,6 +2839,7 @@ void Mesh::Render(){
 						//frame=surf.brush.tex_frame;
 						bte=surf.brush->tex[ix];
 						texenv_color[3]=surf.brush->tex[ix]->multitex_factor;
+						tex_max_aniso=surf.brush->tex[ix]->tex_aniso;
 					}
 	
 #ifndef GLES2
@@ -2860,16 +2864,27 @@ void Mesh::Render(){
 						glDisable(GL_ALPHA_TEST);
 					}
 #endif
-	
+
+					if(Texture::AnIsoSupport!=0){
+						glGetFloatv(GL_MAX_TEXTURE_MAX_ANISOTROPY_EXT, &tex_aniso);
+						if(tex_aniso>Texture::global_aniso && Texture::global_aniso>0) tex_aniso=Texture::global_aniso;
+						if(tex_aniso>tex_max_aniso && tex_max_aniso>0) tex_aniso=tex_max_aniso;
+						if(tex_flags&1024){
+							glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, tex_aniso); // anisotropic
+						}else{
+							glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAX_ANISOTROPY_EXT, 1.0); // isotropic	
+						}
+					}
+					
 					// mipmapping texture flag
 					if(tex_flags&8){
 						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR); // trilinear
 					}else{
-						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); //GL_LINEAR
-						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST); //GL_LINEAR
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_NEAREST); // point-sampling
+						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_NEAREST);
 					}
-	
+					
 					// clamp u flag
 					if(tex_flags&16){
 						glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);

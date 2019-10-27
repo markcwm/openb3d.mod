@@ -210,25 +210,16 @@ void ReadTexCoords(){
 
 void LoadMap(){
   string Filename;
-  //int Pixmap;
   Filename = ReadCString();
-  //Pixmap = FileType(Filename)
-  //If Pixmap <> 0 Then
-  Texture*       texture_check;
-  texture_check = Texture::LoadTexture(Filename,4);
-  //Stops OpenB3D crashing if a texture file is missing/null
-  if(texture_check)
-  {
-	  texture = texture_check;
-	  if (TextureLayer == M3D_3DS_TEXTUREMAP1){
-		// Layer 0
-		brush->BrushTexture(texture, 0, 0);
-	  }else{
-		// Layer 1
-		brush->BrushTexture(texture, 0, 1);
-	  }
+  texture = Texture::LoadTexture(Filename, 4);
+  
+  if(texture != NULL){ // stops crash if texture file is missing
+    if (TextureLayer == M3D_3DS_TEXTUREMAP1){
+      brush->BrushTexture(texture, 0, 0); // Layer 0
+    }else{
+      brush->BrushTexture(texture, 0, 1); // Layer 1
+    }
   }
-  //EndIf
 }
 
 void ReadMap(int Layer){
