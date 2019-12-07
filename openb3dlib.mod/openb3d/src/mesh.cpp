@@ -25,6 +25,7 @@
 #include "3ds.h"
 #include "x.h"
 #include "md2.h"
+#include "light.h"
 
 #include <iostream>
 #include <vector>
@@ -1049,7 +1050,12 @@ Mesh* Mesh::CopyMesh(Entity* parent_ent){
 	list<Entity*>::iterator it;
 	for(it=child_list.begin();it!=child_list.end();it++){
 		Entity* ent=*it;
-		dynamic_cast<Mesh*>(ent)->CopyMesh(mesh);
+		// Kippykip - check if child is mesh fix
+		if(dynamic_cast<Mesh*>(ent)!=0){
+			dynamic_cast<Mesh*>(ent)->CopyMesh(mesh);
+		}else{
+			ent->CopyEntity(mesh);
+		}
 	}
 
 	// lists
@@ -2574,10 +2580,19 @@ void Mesh::Render(){
 		// fx modes
 
 		// fx flag 1 - full bright ***todo*** disable all lights?
+		vector<Light*>::iterator light_it;
 		if(fx&1){
 			if(Global::fx1!=true){
 				Global::fx1=true;
-				glEnableClientState(GL_NORMAL_ARRAY);
+				//glDisableClientState(GL_NORMAL_ARRAY);
+				glDisable(GL_LIGHT0); // KippyKip - properly disabled lights, before only normal maps were disabled
+				glDisable(GL_LIGHT1);
+				glDisable(GL_LIGHT2);
+				glDisable(GL_LIGHT3);
+				glDisable(GL_LIGHT4);
+				glDisable(GL_LIGHT5);
+				glDisable(GL_LIGHT6);
+				glDisable(GL_LIGHT7);
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2585,7 +2600,17 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
-				glDisableClientState(GL_NORMAL_ARRAY);
+				//glEnableClientState(GL_NORMAL_ARRAY);
+				// Kippykip - re-enable and update all lights again
+				for(light_it=Light::light_list.begin();light_it!=Light::light_list.end();++light_it){
+					Light &light=**light_it;
+					//light.Update(); // Do hidden code manually so it doesn't break light rotations/positions
+					if(light.hide==true){
+						glDisable(Light::gl_light[light.light_no-1]);
+					}else{
+						glEnable(Light::gl_light[light.light_no-1]);
+					}
+				}
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;

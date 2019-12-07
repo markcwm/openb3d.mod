@@ -13,7 +13,7 @@
 #include "brush.h"
 #include "terrain.h"
 #include "pick.h"
-
+#include "light.h"
 
 #include "stb_image.h"
 #include "string_helper.h"
@@ -221,10 +221,19 @@ void Terrain::UpdateTerrain(){
 
 #ifndef GLES2
 	// fx flag 1 - full bright ***todo*** disable all lights?
+	vector<Light*>::iterator light_it;
 	if (brush.fx & 1){
 		if(Global::fx1!=true){
 			Global::fx1=true;
-			glDisableClientState(GL_NORMAL_ARRAY);
+			//glDisableClientState(GL_NORMAL_ARRAY);
+			glDisable(GL_LIGHT0); // KippyKip - properly disabled lights, before only normal maps were disabled
+			glDisable(GL_LIGHT1);
+			glDisable(GL_LIGHT2);
+			glDisable(GL_LIGHT3);
+			glDisable(GL_LIGHT4);
+			glDisable(GL_LIGHT5);
+			glDisable(GL_LIGHT6);
+			glDisable(GL_LIGHT7);
 		}
 		ambient_red  =1.0;
 		ambient_green=1.0;
@@ -232,7 +241,17 @@ void Terrain::UpdateTerrain(){
 	}else{
 		if(Global::fx1!=false){
 			Global::fx1=false;
-			glEnableClientState(GL_NORMAL_ARRAY);
+			//glEnableClientState(GL_NORMAL_ARRAY);
+			// Kippykip - re-enable and update all lights again
+			for(light_it=Light::light_list.begin();light_it!=Light::light_list.end();++light_it){
+				Light &light=**light_it;
+				//light.Update(); // Do hidden code manually so it doesn't break light rotations/positions
+				if(light.hide==true){
+					glDisable(Light::gl_light[light.light_no-1]);
+				}else{
+					glEnable(Light::gl_light[light.light_no-1]);
+				}
+			}
 		}
 		ambient_red  =Global::ambient_red;
 		ambient_green=Global::ambient_green;

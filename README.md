@@ -67,5 +67,5 @@ The OpenB3D library is based on source from iMiniB3D with other core parts from 
 * [Warner Engine](https://code.google.com/archive/p/warner-engine/) by Bram den Hond
 * [MiniB3D Extended](https://code.google.com/archive/p/minib3dextended/) by Benjamin Rössig (klepto2)
 * [bOGL 2](https://github.com/Leushenko/bOGL-2) by Alex Gilding (Leushenko)
-* Code contributors: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Hezkore](https://bitbucket.org/Hezkore/), [DruggedBunny](https://github.com/DruggedBunny), [Spinduluz](https://github.com/Spinduluz), RustiKristi
+* Code contributors: [RonTek](https://www.blitzcoder.org/forum/), [KippyKip](https://github.com/Kippykip), [Krischan](https://github.com/Krischan74), [Hezkore](https://bitbucket.org/Hezkore/), [DruggedBunny](https://github.com/DruggedBunny), [Spinduluz](https://github.com/Spinduluz), RustiKristi
 
