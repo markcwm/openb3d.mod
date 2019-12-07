@@ -2584,6 +2584,7 @@ void Mesh::Render(){
 		if(fx&1){
 			if(Global::fx1!=true){
 				Global::fx1=true;
+<<<<<<< HEAD
 				//glDisableClientState(GL_NORMAL_ARRAY);
 				glDisable(GL_LIGHT0); // KippyKip - properly disabled lights, before only normal maps were disabled
 				glDisable(GL_LIGHT1);
@@ -2593,6 +2594,9 @@ void Mesh::Render(){
 				glDisable(GL_LIGHT5);
 				glDisable(GL_LIGHT6);
 				glDisable(GL_LIGHT7);
+=======
+				glDisableClientState(GL_NORMAL_ARRAY);
+>>>>>>> c43e78e2e117dba8e880fe7fafdb3bc17e845360
 			}
 			ambient_red  =1.0;
 			ambient_green=1.0;
@@ -2600,6 +2604,7 @@ void Mesh::Render(){
 		}else{
 			if(Global::fx1!=false){
 				Global::fx1=false;
+<<<<<<< HEAD
 				//glEnableClientState(GL_NORMAL_ARRAY);
 				// Kippykip - re-enable and update all lights again
 				for(light_it=Light::light_list.begin();light_it!=Light::light_list.end();++light_it){
@@ -2611,6 +2616,9 @@ void Mesh::Render(){
 						glEnable(Light::gl_light[light.light_no-1]);
 					}
 				}
+=======
+				glEnableClientState(GL_NORMAL_ARRAY);
+>>>>>>> c43e78e2e117dba8e880fe7fafdb3bc17e845360
 			}
 			ambient_red  =Global::ambient_red;
 			ambient_green=Global::ambient_green;
