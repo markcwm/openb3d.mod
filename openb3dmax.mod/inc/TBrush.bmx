@@ -237,7 +237,7 @@ Type TBrush
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TBrush"
 		EndIf
 	
@@ -245,7 +245,7 @@ Type TBrush
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TBrush"
 		EndIf
 		

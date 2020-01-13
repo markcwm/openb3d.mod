@@ -50,7 +50,7 @@ Type TBlitz2D
 			
 			glMatrixMode GL_PROJECTION
 			glLoadIdentity
-			glOrtho(0, TGlobal.width[0], TGlobal.height[0], 0, -1, 1) ' TGlobal.w/h rather than GraphicsW/H for MaxGUI canvas
+			glOrtho(0, TGlobal3D.width[0], TGlobal3D.height[0], 0, -1, 1) ' TGlobal3D.w/h rather than GraphicsW/H for MaxGUI canvas
 			
 			glMatrixMode GL_MODELVIEW
 			glLoadIdentity
@@ -74,8 +74,8 @@ Type TBlitz2D
 			
 			glActiveTexture(GL_TEXTURE0)
 			
-			glViewport(0, 0, TGlobal.width[0], TGlobal.height[0])
-			glScissor(0, 0, TGlobal.width[0], TGlobal.height[0])
+			glViewport(0, 0, TGlobal3D.width[0], TGlobal3D.height[0])
+			glScissor(0, 0, TGlobal3D.width[0], TGlobal3D.height[0])
 			
 			' Max2d does this
 			'glEnable GL_BLEND
@@ -105,15 +105,15 @@ Type TBlitz2D
 			glMatrixMode(GL_COLOR)
 			glPushMatrix()
 			
-			TGlobal.EnableStates() ' enables normals but not vertex colors
+			TGlobal3D.EnableStates() ' enables normals but not vertex colors
 			
 			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
 			' set render state flags (crash if fx2 not set?)
-			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
-			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
-			'TGlobal.fx2[0]=1			' vertex colors was not enabled
+			TGlobal3D.alpha_enable[0]=0	' alpha blending was disabled by Max2d
+			TGlobal3D.blend_mode[0]=1		' force alpha blending (default is 1)
+			'TGlobal3D.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal3D.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL,GL_SEPARATE_SPECULAR_COLOR)
 			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
@@ -125,7 +125,7 @@ Type TBlitz2D
 			glAlphaFunc(GL_GEQUAL,0.5)
 			
 			For Local cam:TCamera=EachIn TCamera.cam_list
-				If cam=TGlobal.camera_in_use ' active camera - was if cam.hide[0]=0
+				If cam=TGlobal3D.camera_in_use ' active camera - was if cam.hide[0]=0
 					cam.UpdateFog() ' fog with Max2d fix
 					Exit
 				EndIf
@@ -152,15 +152,15 @@ Type TBlitz2D
 			'glDisable(GL_TEXTURE_GEN_R)
 			'glDisable(GL_BLEND)
 			
-			TGlobal.EnableStates() ' enables normals but not vertex colors
+			TGlobal3D.EnableStates() ' enables normals but not vertex colors
 			
 			glDisable(GL_TEXTURE_2D) ' needed as Draw in Max2d enables it, but doesn't disable after use
 			
 			' set render state flags (crash if fx2 not set?)
-			TGlobal.alpha_enable[0]=0	' alpha blending was disabled by Max2d
-			TGlobal.blend_mode[0]=1		' force alpha blending (default is 1)
-			'TGlobal.fx1[0]=0			' full bright/surface normals was enabled
-			'TGlobal.fx2[0]=1			' vertex colors was not enabled
+			TGlobal3D.alpha_enable[0]=0	' alpha blending was disabled by Max2d
+			TGlobal3D.blend_mode[0]=1		' force alpha blending (default is 1)
+			'TGlobal3D.fx1[0]=0			' full bright/surface normals was enabled
+			'TGlobal3D.fx2[0]=1			' vertex colors was not enabled
 			
 			glLightModeli(GL_LIGHT_MODEL_COLOR_CONTROL, GL_SEPARATE_SPECULAR_COLOR)
 			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER,GL_TRUE)
@@ -172,7 +172,7 @@ Type TBlitz2D
 			glAlphaFunc(GL_GEQUAL, 0.5)
 			
 			For Local cam:TCamera=EachIn TCamera.cam_list ' active camera - was if cam.hide[0]=0
-				If cam = TGlobal.camera_in_use ' fog with Max2d fix
+				If cam = TGlobal3D.camera_in_use ' fog with Max2d fix
 					cam.UpdateFog()
 					Exit
 				EndIf

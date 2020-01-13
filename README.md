@@ -40,7 +40,7 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 
 ## Status
 
-This wrapper is in a late beta stage of development, so there are still some bugs and missing features. The library has a working GLES2 (WebGL) version but the wrapper doesn't support this yet. The latest version should work with BRL or NG BlitzMax (currently tested with 0.99 release) but you should note that there is an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so for now you will probably need an older compiler.
+This wrapper is in beta stage of development, so there are still a few bugs and missing features. It is not being maintained as regularly now but fixes are still made or accepted. The library has a working GLES2 (WebGL) version but the wrapper still doesn't support this, maybe later! The latest version should work with BRL or NG BlitzMax (currently tested with 0.99 release) but you should note that there is an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so for now you will probably need an older compiler.
 
 ## Installation
 * Click on the Github Download zip link, then extract contents to your `BlitzMax/mod` folder

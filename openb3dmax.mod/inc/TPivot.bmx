@@ -47,7 +47,7 @@ Type TPivot Extends TEntity
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TPivot"
 		EndIf
 		
@@ -55,7 +55,7 @@ Type TPivot Extends TEntity
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TPivot"
 		EndIf
 	

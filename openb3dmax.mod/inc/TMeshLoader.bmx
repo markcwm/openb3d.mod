@@ -61,7 +61,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 2)) Then Return Null
+		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 2)) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadMesh_( cString,TEntity.GetInstance(parent) )
@@ -74,7 +74,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 2)) Then Return Null
+		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 2)) Then Return Null
 		
 		Local cString:Byte Ptr=String(url).ToCString()
 		Local inst:Byte Ptr=LoadAnimMesh_( cString,TEntity.GetInstance(parent) )
@@ -103,7 +103,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
+		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 1)) Then Return Null
 		
 		Local mesh:TMesh, anim_mesh:TMesh
 		Select ExtractExt(String(url))
@@ -112,7 +112,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "md2"
 				anim_mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				If TGlobal.Loader_3DS2
+				If TGlobal3D.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
 					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
 				Else
@@ -148,7 +148,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 	
 	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
 	
-		If Not (TGlobal.Mesh_Loader=0 Or (TGlobal.Mesh_Loader & 1)) Then Return Null
+		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 1)) Then Return Null
 		
 		Local mesh:TMesh
 		Select ExtractExt(String(url))
@@ -157,7 +157,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "md2"
 				mesh=TMD2.LoadMD2FromStream(file, url, parent)
 			Case "3ds"
-				If TGlobal.Loader_3DS2
+				If TGlobal3D.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
 					mesh=model.LoadAnim3DSFromStream(file, url, parent)
 				Else

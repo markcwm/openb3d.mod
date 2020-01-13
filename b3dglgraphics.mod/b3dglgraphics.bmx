@@ -55,25 +55,25 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	If width=DesktopWidth() And height=DesktopHeight() Then depth=0
 ?
 
-	TGlobal.InitGlobals()
-	TGlobal.width[0]=width
-	TGlobal.height[0]=height
-	TGlobal.depth[0]=depth
-	TGlobal.mode[0]=mode
-	TGlobal.rate[0]=rate
+	TGlobal3D.InitGlobals()
+	TGlobal3D.width[0]=width
+	TGlobal3D.height[0]=height
+	TGlobal3D.depth[0]=depth
+	TGlobal3D.mode[0]=mode
+	TGlobal3D.rate[0]=rate
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
-	If usecanvas=False Then TGlobal.gfx_obj=Graphics( width,height,depth,rate,flags ) ' gfx object
+	If usecanvas=False Then TGlobal3D.gfx_obj=Graphics( width,height,depth,rate,flags ) ' gfx object
 	
 	glewInit() ' required for ARB funcs
-	TGlobal.GraphicsInit() ' save initial settings for Max2D
+	TGlobal3D.GraphicsInit() ' save initial settings for Max2D
 	Graphics3D_( width,height,depth,mode,rate ) ' calls Global::Graphics
 	
 	' get hardware info and set vbo_enabled accordingly
 	THardwareInfo.GetInfo()
-	TGlobal.vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
+	TGlobal3D.vbo_enabled[0]=THardwareInfo.VBOSupport ' vertex buffer objects
 	TTexture.AnIsoSupport[0]=THardwareInfo.AnIsoSupport
-	TGlobal.GL_Version=THardwareInfo.OGLVersion.ToFloat()
+	TGlobal3D.GL_Version=THardwareInfo.OGLVersion.ToFloat()
 	
 End Function
 
@@ -87,7 +87,7 @@ Function Text( x%,y%,txt$ )
 	glClientActiveTexture(GL_TEXTURE0)
 	
 	glDisable(GL_LIGHTING)
-	glColor3ub(TGlobal.txt_r,TGlobal.txt_g,TGlobal.txt_b)
+	glColor3ub(TGlobal3D.txt_r,TGlobal3D.txt_g,TGlobal3D.txt_b)
 	
 	' enable blend to hide text background
 	glEnable(GL_BLEND)
@@ -107,8 +107,8 @@ bbdoc: Set draw text color, in bytes
 EndRem
 Function TextColor( r:Byte,g:Byte,b:Byte )
 
-	TGlobal.txt_r=r
-	TGlobal.txt_g=g
-	TGlobal.txt_b=b
+	TGlobal3D.txt_r=r
+	TGlobal3D.txt_g=g
+	TGlobal3D.txt_b=b
 	
 End Function

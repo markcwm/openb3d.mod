@@ -280,7 +280,7 @@ Type TTexture
 	
 	Method CameraToTex( cam:TCamera, frame:Int=0 )
 	
-		If TGlobal.GL_Version<2.1 ' GL 1.4-2.0
+		If TGlobal3D.GL_Version<2.1 ' GL 1.4-2.0
 			CameraToTexEXT( cam )
 		Else ' GL 2.1+
 			CameraToTex_( GetInstance(Self), TCamera.GetInstance(cam), frame )
@@ -290,7 +290,7 @@ Type TTexture
 	
 	Method DepthBufferToTex( cam:TCamera=Null )
 	
-		If TGlobal.GL_VERSION<2.1 ' GL 1.4-2.0
+		If TGlobal3D.GL_VERSION<2.1 ' GL 1.4-2.0
 			DepthBufferToTexEXT( cam )
 		Else ' GL 2.1+
 			DepthBufferToTex_( GetInstance(Self), TCamera.GetInstance(cam) )
@@ -382,7 +382,7 @@ Type TTexture
 	' GL 2.0 support
 	Method CameraToTexEXT( cam:TCamera, frame:Int=0 )
 	
-		TGlobal.camera_in_use=cam
+		TGlobal3D.camera_in_use=cam
 		
 		Local target:Int
 		If flags[0] & 128
@@ -448,7 +448,7 @@ Type TTexture
 		
 		cam.Render()
 		
-		If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+		If TGlobal3D.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
 		
 		'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
 		
@@ -466,10 +466,10 @@ Type TTexture
 		' Copy viewport to texture
 		glBindTexture(GL_TEXTURE_2D, texture[0])	
 		If cam=Null
-			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, TGlobal.height[0]-height[0], width[0], height[0], 0)
+			glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, 0, TGlobal3D.height[0]-height[0], width[0], height[0], 0)
 			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE)
 		Else
-			TGlobal.camera_in_use=cam
+			TGlobal3D.camera_in_use=cam
 			
 			If framebuffer=Null ' Create texture image
 				framebuffer=Int Ptr(MemAlloc(8))
@@ -492,7 +492,7 @@ Type TTexture
 			
 			cam.Render()
 			
-			If TGlobal.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
+			If TGlobal3D.Shadows_enabled[0]=True Then TShadowObject.Update(cam)
 		
 			'If THardwareInfo.DepthStencil=True Then glFramebufferRenderbufferEXT( GL_FRAMEBUFFER_EXT, GL_STENCIL_ATTACHMENT_EXT, GL_RENDERBUFFER_EXT, 0)
 			
@@ -509,7 +509,7 @@ Type TTexture
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TTexture"
 		EndIf
 		
@@ -517,7 +517,7 @@ Type TTexture
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TTexture"
 		EndIf
 	
@@ -549,7 +549,7 @@ Type TTexture
 	
 	Function LoadTexture:TTexture( file:String, flags:Int=9, tex:TTexture=Null )
 	
-		Select TGlobal.Texture_Loader
+		Select TGlobal3D.Texture_Loader
 		
 			Case 2 ' library
 				Local map:TPixmap=Null, name%
@@ -568,7 +568,7 @@ Type TTexture
 	
 	Function LoadAnimTexture:TTexture( file:String, flags%, frame_width%, frame_height%, first_frame%, frame_count%, tex:TTexture=Null )
 	
-		Select TGlobal.Texture_Loader
+		Select TGlobal3D.Texture_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=file.ToCString()
@@ -807,17 +807,17 @@ Type TTexture
 		glBindTexture(GL_TEXTURE_CUBE_MAP, name)
 		
 		For Local i:Int=0 To 5 ' copy tex.pixmap rect to cubemap
-			cubeid=TGlobal.Cubemap_Frame[i]
+			cubeid=TGlobal3D.Cubemap_Frame[i]
 			x=cubeid Mod xframes ' left-right frames
 			y=(cubeid/xframes) Mod yframes ' top-bottom frames
 			
 			If dds_ext
 				dds.TextureParameters(tex.flags[0])
-				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, tex.flags[0] & 8, TGlobal.Cubemap_Face[i], TGlobal.Flip_Cubemap)
+				dds.UploadTextureSubImage2D(x*width, y*height, width, height, cubemap.pixels, tex.flags[0] & 8, TGlobal3D.Cubemap_Face[i], TGlobal3D.Flip_Cubemap)
 			Else
-				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, TGlobal.Flip_Cubemap)
+				CopyRect_(tex.pixmap.pixels, tex.pixmap.width, tex.pixmap.height, x*width, y*height, cubemap.pixels, width, height, 4, TGlobal3D.Flip_Cubemap)
 				
-				gluBuild2DMipmaps(TGlobal.Cubemap_Face[i], GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, cubemap.pixels)
+				gluBuild2DMipmaps(TGlobal3D.Cubemap_Face[i], GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, cubemap.pixels)
 			EndIf
 		Next
 		
@@ -1080,7 +1080,7 @@ Type TTexture
 	
 	Method Copy:TTexture( copyflags:Int=0 )
 		
-		Select TGlobal.Texture_Loader
+		Select TGlobal3D.Texture_Loader
 		
 			Case 2 ' library
 				Local inst:Byte Ptr=TextureCopy_( GetInstance(Self), copyflags )

@@ -1,8 +1,9 @@
 
 Rem
 bbdoc: Global
+about: Renamed to fix conflict with BRL.Reflection.
 End Rem
-Type TGlobal
+Type TGlobal3D
 
 	Global width:Int Ptr
 	Global height:Int Ptr
@@ -368,7 +369,7 @@ Type TGlobal
 			Local count:Int=CountList(TEntity.entity_list)
 			FreeAllEntities(count)
 			ClearList(TEntity.entity_list) ; TEntity.entity_list_id=0
-			ClearList(TGlobal.root_ent.child_list) ; TGlobal.root_ent.child_list_id=0
+			ClearList(TGlobal3D.root_ent.child_list) ; TGlobal3D.root_ent.child_list_id=0
 			ClearList(TEntity.animate_list) ; TEntity.animate_list_id=0
 			ClearList(TCamera.cam_list) ; TCamera.cam_list_id=0
 			ClearList(TPick.ent_list) ; TPick.ent_list_id=0

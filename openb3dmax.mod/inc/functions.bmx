@@ -6,7 +6,7 @@ Rem
 bbdoc: Enables or disables hardware multisample antialiasing if supported
 End Rem
 Function MSAntiAlias( multisample:Int=0 )
-	TGlobal.MSAntiAlias( multisample )
+	TGlobal3D.MSAntiAlias( multisample )
 End Function
 
 Rem
@@ -15,22 +15,22 @@ about: Only needed when changing screen resolution, these globals are used in
 CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.
 End Rem
 Function GlobalResolution( width:Int,height:Int )
-	TGlobal.width[0]=width
-	TGlobal.height[0]=height
+	TGlobal3D.width[0]=width
+	TGlobal3D.height[0]=height
 End Function
 
 Rem
 bbdoc: Returns global width of screen resolution
 End Rem
 Function GlobalWidth:Int()
-	Return TGlobal.width[0]
+	Return TGlobal3D.width[0]
 End Function
 
 Rem
 bbdoc: Returns global height of screen resolution
 End Rem
 Function GlobalHeight:Int()
-	Return TGlobal.height[0]
+	Return TGlobal3D.height[0]
 End Function
 
 Rem
@@ -140,38 +140,38 @@ End Rem
 Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()
 		Case "all"
-			TGlobal.Mesh_Loader=0
+			TGlobal3D.Mesh_Loader=0
 		Case "bmxassimp", "assimpbmx", "stream", "streams"
-			TGlobal.Mesh_Loader=1+8
-			TGlobal.Mesh_Flags=flags
+			TGlobal3D.Mesh_Loader=1+8
+			TGlobal3D.Mesh_Flags=flags
 		Case "bmx", "max", "blitzmax"
-			TGlobal.Mesh_Loader=1
+			TGlobal3D.Mesh_Loader=1
 		Case "cpp", "lib", "library"
-			TGlobal.Mesh_Loader=2
+			TGlobal3D.Mesh_Loader=2
 		Case "assimp"
-			TGlobal.Mesh_Loader=4
-			TGlobal.Mesh_Flags=flags
+			TGlobal3D.Mesh_Loader=4
+			TGlobal3D.Mesh_Flags=flags
 		Case "assimpstream"
-			TGlobal.Mesh_Loader=8
-			TGlobal.Mesh_Flags=flags
+			TGlobal3D.Mesh_Loader=8
+			TGlobal3D.Mesh_Flags=flags
 		Case "3ds"
-			TGlobal.Loader_3DS2=0
+			TGlobal3D.Loader_3DS2=0
 		Case "3ds2"
-			TGlobal.Loader_3DS2=1
+			TGlobal3D.Loader_3DS2=1
 		Case "notrans"
-			TGlobal.Mesh_Transform=0
+			TGlobal3D.Mesh_Transform=0
 		Case "trans"
-			TGlobal.Mesh_Transform=1
+			TGlobal3D.Mesh_Transform=1
 		Case "debug"
-			TGlobal.Log_3DS=1
-			TGlobal.Log_B3D=1
-			TGlobal.Log_MD2=1
-			TGlobal.Log_Assimp=1
+			TGlobal3D.Log_3DS=1
+			TGlobal3D.Log_B3D=1
+			TGlobal3D.Log_MD2=1
+			TGlobal3D.Log_Assimp=1
 		Case "nodebug"
-			TGlobal.Log_3DS=0
-			TGlobal.Log_B3D=0
-			TGlobal.Log_MD2=0
-			TGlobal.Log_Assimp=0
+			TGlobal3D.Log_3DS=0
+			TGlobal3D.Log_B3D=0
+			TGlobal3D.Log_MD2=0
+			TGlobal3D.Log_Assimp=0
 	EndSelect
 End Function
 
@@ -184,37 +184,37 @@ End Rem
 Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
 	Select texid.ToLower()
 		Case "bb", "bmx", "blitzmax"
-			TGlobal.Texture_Loader=1
-			TGlobal.Texture_Flags=lf0
+			TGlobal3D.Texture_Loader=1
+			TGlobal3D.Texture_Flags=lf0
 		Case "assimp", "assimpstream", "bmxassimp", "assimpbmx", "stream", "streams"
-			TGlobal.Texture_Loader=1
-			TGlobal.Texture_Flags=lf0
+			TGlobal3D.Texture_Loader=1
+			TGlobal3D.Texture_Flags=lf0
 		Case "cpp", "c++", "lib", "library"
-			TGlobal.Texture_Loader=2
+			TGlobal3D.Texture_Loader=2
 		Case "frame", "frames"
 			Local cString:Byte Ptr = texid.ToCString()
 			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
 			MemFree cString
-			TGlobal.Cubemap_Frame[0] = lf0
-			TGlobal.Cubemap_Frame[1] = fr1
-			TGlobal.Cubemap_Frame[2] = rt2
-			TGlobal.Cubemap_Frame[3] = bk3
-			TGlobal.Cubemap_Frame[4] = dn4
-			TGlobal.Cubemap_Frame[5] = up5
+			TGlobal3D.Cubemap_Frame[0] = lf0
+			TGlobal3D.Cubemap_Frame[1] = fr1
+			TGlobal3D.Cubemap_Frame[2] = rt2
+			TGlobal3D.Cubemap_Frame[3] = bk3
+			TGlobal3D.Cubemap_Frame[4] = dn4
+			TGlobal3D.Cubemap_Frame[5] = up5
 		Case "face", "faces"
 			Local cString:Byte Ptr = texid.ToCString()
 			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
 			MemFree cString
-			TGlobal.Cubemap_Face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left (B3D layout)
-			TGlobal.Cubemap_Face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
-			TGlobal.Cubemap_Face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
-			TGlobal.Cubemap_Face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
-			TGlobal.Cubemap_Face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
-			TGlobal.Cubemap_Face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
+			TGlobal3D.Cubemap_Face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left (B3D layout)
+			TGlobal3D.Cubemap_Face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
+			TGlobal3D.Cubemap_Face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
+			TGlobal3D.Cubemap_Face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
+			TGlobal3D.Cubemap_Face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
+			TGlobal3D.Cubemap_Face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
 		Case "noflipcubemap"
-			TGlobal.Flip_Cubemap=0
+			TGlobal3D.Flip_Cubemap=0
 		Case "flipcubemap"
-			TGlobal.Flip_Cubemap=1
+			TGlobal3D.Flip_Cubemap=1
 	EndSelect
 End Function
 
@@ -251,13 +251,13 @@ bbdoc: Change model loader coordinates system, currently only 3DS supported
 End Rem
 Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 	If ext.ToLower()="3ds" Or ext.ToLower()=".3ds"
-		'TGlobal.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		'TGlobal3D.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="b3d" Or ext.ToLower()=".b3d"
-		'TGlobal.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		'TGlobal3D.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
-		TGlobal.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+		TGlobal3D.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
 	EndIf
 End Function
 
@@ -756,7 +756,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AmbientLight">Online doc</a>
 'End Rem
 Function AmbientLight( r:Float,g:Float,b:Float )
-	TGlobal.AmbientLight( r,g,b )
+	TGlobal3D.AmbientLight( r,g,b )
 End Function
 
 'Rem
@@ -798,7 +798,7 @@ Rem
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=AntiAlias">Online doc</a>
 End Rem
 Function AntiAlias( samples:Int )
-	TGlobal.AntiAlias( samples )
+	TGlobal3D.AntiAlias( samples )
 End Function
 
 'Rem
@@ -924,7 +924,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearCollisions">Online doc</a>
 'End Rem
 Function ClearCollisions()
-	TGlobal.ClearCollisions()
+	TGlobal3D.ClearCollisions()
 End Function
 
 'Rem
@@ -945,7 +945,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=ClearWorld">Online doc</a>
 'End Rem
 Function ClearWorld( entities:Int=True,brushes:Int=True,textures:Int=True )
-	TGlobal.ClearWorld( entities,brushes,textures )
+	TGlobal3D.ClearWorld( entities,brushes,textures )
 End Function
 
 'Rem
@@ -980,7 +980,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Collisions">Online doc</a>
 'End Rem
 Function Collisions( src_no:Int,dest_no:Int,method_no:Int,response_no:Int=0 )
-	TGlobal.Collisions( src_no,dest_no,method_no,response_no )
+	TGlobal3D.Collisions( src_no,dest_no,method_no,response_no )
 End Function
 
 'Rem
@@ -1736,7 +1736,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=RenderWorld">Online doc</a>
 'End Rem
 Function RenderWorld()
-	TGlobal.RenderWorld()
+	TGlobal3D.RenderWorld()
 End Function
 
 'Rem
@@ -1953,7 +1953,7 @@ End Function
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=UpdateWorld">Online doc</a>
 'End Rem
 Function UpdateWorld( anim_speed:Float=1 )
-	TGlobal.UpdateWorld( anim_speed )
+	TGlobal3D.UpdateWorld( anim_speed )
 End Function
 
 'Rem
@@ -2802,7 +2802,7 @@ Rem
 bbdoc: Set default shader for surfaces
 End Rem
 Function AmbientShader( material:TShader )
-	TGlobal.ambient_shader=material
+	TGlobal3D.ambient_shader=material
 	material.AmbientShader()
 End Function
 

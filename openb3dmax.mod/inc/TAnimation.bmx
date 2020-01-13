@@ -232,7 +232,7 @@ Type TAnimationKeys
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TAnimationKeys"
 		EndIf
 		
@@ -240,7 +240,7 @@ Type TAnimationKeys
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TAnimationKeys"
 		EndIf
 	

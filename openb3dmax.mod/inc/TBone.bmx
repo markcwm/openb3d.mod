@@ -158,7 +158,7 @@ Type TBone Extends TEntity
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TBone"
 		EndIf
 		
@@ -166,7 +166,7 @@ Type TBone Extends TEntity
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TBone"
 		EndIf
 	

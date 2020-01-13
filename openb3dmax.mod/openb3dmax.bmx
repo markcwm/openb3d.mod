@@ -411,7 +411,7 @@ Extern
 	
 End Extern
 
-' *** Globals moved to TGlobal
+' *** Globals moved to TGlobal3D
 
 Const GRAPHICS_MULTISAMPLE2X:Int=$40
 Const GRAPHICS_MULTISAMPLE4X:Int=$80
@@ -453,7 +453,7 @@ bbdoc: Copy a list or vector. To copy a field list use as a method
 about: Use either mesh with surf_list/anim_surf_list/bones or ent with child_list.
 End Rem
 Function CopyList( list:TList )
-	TGlobal.CopyList( list )
+	TGlobal3D.CopyList( list )
 End Function
 
 'Rem
@@ -461,7 +461,7 @@ End Function
 'about: Only field lists currently supported, either mesh with surf_list, anim_surf_list, bones or ent with child_list.
 'EndRem
 'Function EntityListAdd( list:TList,value:Object,ent:TEntity )
-'	TGlobal.EntityListAdd( list,value,ent )
+'	TGlobal3D.EntityListAdd( list,value,ent )
 'End Function
 
 Rem
@@ -478,7 +478,7 @@ End Function
 ' *** Includes
 
 ' global
-Include "inc/TGlobal.bmx"
+Include "inc/TGlobal3D.bmx"
 
 ' entity
 Include "inc/TEntity.bmx"

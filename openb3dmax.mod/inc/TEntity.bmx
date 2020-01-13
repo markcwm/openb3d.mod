@@ -224,7 +224,7 @@ Type TEntity
 		If brush=Null And inst<>Null Then brush=TBrush.CreateObject(inst)
 		
 		CopyList_(entity_list)
-		If parent=Null And TGlobal.root_ent Then CopyList_(TGlobal.root_ent.child_list) ' list of all non-child/root entities
+		If parent=Null And TGlobal3D.root_ent Then CopyList_(TGlobal3D.root_ent.child_list) ' list of all non-child/root entities
 		exists=1
 		
 	End Method
@@ -343,9 +343,9 @@ Type TEntity
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				EndIf
-			Case TGlobal.root_ent.child_list
-				If EntityListSize_( GetInstance(TGlobal.root_ent),ENTITY_child_list )
-					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr TGlobal.root_ent.child_list_id )
+			Case TGlobal3D.root_ent.child_list
+				If EntityListSize_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list )
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list,Varptr TGlobal3D.root_ent.child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj And ListContains( list,obj )=0 Then ListAddLast( list,obj )
 				EndIf
@@ -428,10 +428,10 @@ Type TEntity
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
-			Case TGlobal.root_ent.child_list
-				TGlobal.root_ent.child_list_id=0
-				For Local id:Int=0 To EntityListSize_( GetInstance(TGlobal.root_ent),ENTITY_child_list )-1
-					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,Varptr TGlobal.root_ent.child_list_id )
+			Case TGlobal3D.root_ent.child_list
+				TGlobal3D.root_ent.child_list_id=0
+				For Local id:Int=0 To EntityListSize_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list )-1
+					Local inst:Byte Ptr=EntityIterListEntity_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list,Varptr TGlobal3D.root_ent.child_list_id )
 					Local obj:TEntity=GetObject(inst) ' no CreateObject
 					If obj Then ListAddLast( list,obj )
 				Next
@@ -449,9 +449,9 @@ Type TEntity
 					EntityListPushBackEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
 					AddList(list)
 				EndIf
-			Case TGlobal.root_ent.child_list
+			Case TGlobal3D.root_ent.child_list
 				If ent
-					EntityListPushBackEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(ent) )
+					EntityListPushBackEntity_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list,GetInstance(ent) )
 					AddList(list)
 				EndIf
 			Case entity_list
@@ -474,9 +474,9 @@ Type TEntity
 					EntityListRemoveEntity_( GetInstance(Self),ENTITY_child_list,GetInstance(ent) )
 					ListRemove( list,value ) ; child_list_id:-1
 				EndIf
-			Case TGlobal.root_ent.child_list
-				EntityListRemoveEntity_( GetInstance(TGlobal.root_ent),ENTITY_child_list,GetInstance(Self) )
-				ListRemove( list,Self ) ; TGlobal.root_ent.child_list_id:-1
+			Case TGlobal3D.root_ent.child_list
+				EntityListRemoveEntity_( GetInstance(TGlobal3D.root_ent),ENTITY_child_list,GetInstance(Self) )
+				ListRemove( list,Self ) ; TGlobal3D.root_ent.child_list_id:-1
 			Case entity_list
 				GlobalListRemoveEntity_( ENTITY_entity_list,GetInstance(Self) )
 				ListRemove( list,Self ) ; entity_list_id:-1
@@ -577,7 +577,7 @@ Type TEntity
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TEntity"
 		EndIf
 	
@@ -585,7 +585,7 @@ Type TEntity
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TEntity"
 		EndIf
 	
@@ -616,8 +616,8 @@ Type TEntity
 		
 		If parent
 			ListRemove( parent.child_list,Self ) ; parent.child_list_id:-1
-		ElseIf ListContains( TGlobal.root_ent.child_list,Self )
-			ListRemove( TGlobal.root_ent.child_list,Self ) ; TGlobal.root_ent.child_list_id:-1
+		ElseIf ListContains( TGlobal3D.root_ent.child_list,Self )
+			ListRemove( TGlobal3D.root_ent.child_list,Self ) ; TGlobal3D.root_ent.child_list_id:-1
 		EndIf
 		
 		For Local ent:TEntity=EachIn child_list
@@ -639,7 +639,7 @@ Type TEntity
 			parent.EntityListRemove( parent.child_list,Self )
 			parent=Null
 		Else
-			TGlobal.root_ent.EntityListRemove( TGlobal.root_ent.child_list,Self )
+			TGlobal3D.root_ent.EntityListRemove( TGlobal3D.root_ent.child_list,Self )
 		EndIf
 		
 		AddParent( new_par )
@@ -816,7 +816,7 @@ Type TEntity
 	
 	Method ShowEntity()
 	
-		If TCamera(Self) Then TGlobal.camera_in_use=TCamera(Self)
+		If TCamera(Self) Then TGlobal3D.camera_in_use=TCamera(Self)
 		ShowEntity_( GetInstance(Self) )
 		
 	End Method
@@ -1219,7 +1219,7 @@ Type TEntity
 		If parent<>Null
 			parent.CopyList(parent.child_list)
 		Else
-			TGlobal.root_ent.CopyList(TGlobal.root_ent.child_list)
+			TGlobal3D.root_ent.CopyList(TGlobal3D.root_ent.child_list)
 		EndIf
 		
 	End Method

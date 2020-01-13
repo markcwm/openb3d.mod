@@ -202,7 +202,7 @@ Type TCamera Extends TEntity
 	' fog with Max2d fix - needed on Linux
 	Method UpdateFog()
 	
-		If TGlobal.fog_enabled[0]=1
+		If TGlobal3D.fog_enabled[0]=1
 			glEnable(GL_FOG)
 			glFogf(GL_FOG_MODE,GL_LINEAR)
 			glFogf(GL_FOG_START,fog_range_near[0])
@@ -219,7 +219,7 @@ Type TCamera Extends TEntity
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TCamera"
 		EndIf
 	
@@ -227,7 +227,7 @@ Type TCamera Extends TEntity
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TCamera"
 		EndIf
 		
@@ -246,7 +246,7 @@ Type TCamera Extends TEntity
 	
 		Local inst:Byte Ptr=CreateCamera_( GetInstance(parent) )
 		Local cam:TCamera=CreateObject(inst)
-		TGlobal.camera_in_use=cam
+		TGlobal3D.camera_in_use=cam
 		Return cam
 		
 	End Function
@@ -383,7 +383,7 @@ Type TCamera Extends TEntity
 	
 	' Adds mesh to a render list, and inserts mesh into correct position
 	' within list depending on order and alpha values - called by Render
-	Method RenderListAdd( mesh:TMesh ) ' moved from TGlobal.bmx
+	Method RenderListAdd( mesh:TMesh ) ' moved from TGlobal3D.bmx
 	
 		RenderListAdd_( GetInstance(Self),TMesh.GetInstance(mesh) )
 		

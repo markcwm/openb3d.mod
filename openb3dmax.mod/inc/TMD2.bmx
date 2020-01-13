@@ -239,18 +239,18 @@ Type TMD2
 		Local tris:TMD2Triangle[]=New TMD2Triangle[num_tris]
 		Local coords:TMD2TexCoords[]=New TMD2TexCoords[num_st]
 		
-		If TGlobal.Log_MD2 Then DebugLog(" skinwidth: "+skinwidth)
-		If TGlobal.Log_MD2 Then DebugLog(" skinheight: "+skinheight)
-		If TGlobal.Log_MD2 Then DebugLog(" framesize: "+framesize)
-		If TGlobal.Log_MD2 Then DebugLog(" num_skins: "+num_skins)
-		If TGlobal.Log_MD2 Then DebugLog(" num_vertices: "+num_vertices)
-		If TGlobal.Log_MD2 Then DebugLog(" num_st: "+num_st)
-		If TGlobal.Log_MD2 Then DebugLog(" num_tris: "+num_tris)
-		If TGlobal.Log_MD2 Then DebugLog(" num_frames: "+num_frames)
-		If TGlobal.Log_MD2 Then DebugLog(" offset_skins: "+offset_skins)
-		If TGlobal.Log_MD2 Then DebugLog(" offset_st: "+offset_st)
-		If TGlobal.Log_MD2 Then DebugLog(" offset_tris: "+offset_tris)
-		If TGlobal.Log_MD2 Then DebugLog(" offset_frames: "+offset_frames)
+		If TGlobal3D.Log_MD2 Then DebugLog(" skinwidth: "+skinwidth)
+		If TGlobal3D.Log_MD2 Then DebugLog(" skinheight: "+skinheight)
+		If TGlobal3D.Log_MD2 Then DebugLog(" framesize: "+framesize)
+		If TGlobal3D.Log_MD2 Then DebugLog(" num_skins: "+num_skins)
+		If TGlobal3D.Log_MD2 Then DebugLog(" num_vertices: "+num_vertices)
+		If TGlobal3D.Log_MD2 Then DebugLog(" num_st: "+num_st)
+		If TGlobal3D.Log_MD2 Then DebugLog(" num_tris: "+num_tris)
+		If TGlobal3D.Log_MD2 Then DebugLog(" num_frames: "+num_frames)
+		If TGlobal3D.Log_MD2 Then DebugLog(" offset_skins: "+offset_skins)
+		If TGlobal3D.Log_MD2 Then DebugLog(" offset_st: "+offset_st)
+		If TGlobal3D.Log_MD2 Then DebugLog(" offset_tris: "+offset_tris)
+		If TGlobal3D.Log_MD2 Then DebugLog(" offset_frames: "+offset_frames)
 		
 		Local surf:TSurface=mesh.CreateSurface()
 		surf.no_verts[0]=num_vertices
@@ -309,9 +309,9 @@ Type TMD2
 			frames[i].name=Trim( ReadString(file, 16) )
 			If i=0 Then mesh.SetString(mesh.name, frames[i].name)
 			
-			If TGlobal.Log_MD2 Then DebugLog(" frames["+i+"].name: "+frames[i].name)
-			If TGlobal.Log_MD2 Then DebugLog(" scale: "+frames[i].sx+", "+frames[i].sy+", "+frames[i].sz)
-			If TGlobal.Log_MD2 Then DebugLog(" trans: "+frames[i].tx+", "+frames[i].ty+", "+frames[i].tz)
+			If TGlobal3D.Log_MD2 Then DebugLog(" frames["+i+"].name: "+frames[i].name)
+			If TGlobal3D.Log_MD2 Then DebugLog(" scale: "+frames[i].sx+", "+frames[i].sy+", "+frames[i].sz)
+			If TGlobal3D.Log_MD2 Then DebugLog(" trans: "+frames[i].tx+", "+frames[i].ty+", "+frames[i].tz)
 			
 			frames[i].verts=New TMD2Vertex[num_vertices]
 			For Local v:Int=0 Until num_vertices
@@ -321,9 +321,9 @@ Type TMD2
 				frames[i].verts[v].z=Float(ReadByte(file)) * frames[i].sz + frames[i].tz
 				frames[i].verts[v].normalindex=ReadByte(file)
 				
-				'If TGlobal.Log_MD2 And v=0 Then DebugLog(" v[0]: "+frames[i].verts[v].x+", "+frames[i].verts[v].y+", "+frames[i].verts[v].z+", ni="+frames[i].verts[v].normalindex)
+				'If TGlobal3D.Log_MD2 And v=0 Then DebugLog(" v[0]: "+frames[i].verts[v].x+", "+frames[i].verts[v].y+", "+frames[i].verts[v].z+", ni="+frames[i].verts[v].normalindex)
 				
-				TGlobal.Matrix_MD2.TransformVec(frames[i].verts[v].x, frames[i].verts[v].y, frames[i].verts[v].z, 1) ' transform by LoaderMatrix
+				TGlobal3D.Matrix_MD2.TransformVec(frames[i].verts[v].x, frames[i].verts[v].y, frames[i].verts[v].z, 1) ' transform by LoaderMatrix
 				
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].x) ' AddVertex
 				surf.SurfaceFloatArrayAdd(SURFACE_vert_coords, frames[i].verts[v].y)
@@ -342,7 +342,7 @@ Type TMD2
 		mesh.anim_seqs_last[0]=num_frames-1
 		mesh.no_surfs[0]=-1
 		
-		If TGlobal.Log_MD2 Then DebugLog("")
+		If TGlobal3D.Log_MD2 Then DebugLog("")
 		Return mesh
 	End Function
 		

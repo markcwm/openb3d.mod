@@ -164,7 +164,7 @@ Type TBatchSprite Extends TSprite
 	
 	Function LoadBatchTexture:TBatchSpriteMesh( tex_file$, tex_flag:Int=1, id:Int=0 )
 	
-		Select TGlobal.Texture_Loader
+		Select TGlobal3D.Texture_Loader
 		
 			Case 2 ' library
 				Local cString:Byte Ptr=tex_file.ToCString()

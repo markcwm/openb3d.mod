@@ -16,7 +16,7 @@ ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
 ' *** Types
 
 ' global
-Type TGlobal
+Type TGlobal3D
 End Type
 
 ' entity

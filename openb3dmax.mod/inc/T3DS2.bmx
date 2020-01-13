@@ -50,7 +50,7 @@ End Type
 
 Type T3DS2
 
-	'TGlobal.Mesh_Transform: 0=disable, 1=disabled if dummy found, 2=always - manually set by MeshLoader "trans"
+	'TGlobal3D.Mesh_Transform: 0=disable, 1=disabled if dummy found, 2=always - manually set by MeshLoader "trans"
 	'Global Master_Scale:Float = 0 ' internal - manually set with ScaleMesh/ScaleAnimMesh
 	
 	Const CHUNK_M3DVERSION% = $0002
@@ -165,7 +165,7 @@ Type T3DS2
 		If index < 0 Return Null
 		If index >= Objlist.Count() Return Null
 		
-		'If TGlobal.Log_3DS Then DebugLog(" GetObject name"+TEntity(Objlist.ToArray()[index]).EntityName())
+		'If TGlobal3D.Log_3DS Then DebugLog(" GetObject name"+TEntity(Objlist.ToArray()[index]).EntityName())
 		Return TEntity(Objlist.ToArray()[index])
 	End Method
 	
@@ -266,12 +266,12 @@ Type T3DS2
 			
 			Select chunk.id
 				Case CHUNK_FACEMATLIST ' $4130 - faces material list
-					If TGlobal.Log_3DS Then DebugLog("     CHUNK_FACEMATLIST")
+					If TGlobal3D.Log_3DS Then DebugLog("     CHUNK_FACEMATLIST")
 					ParseFaceMatList(surface, parent)
 					
 				'Case CHUNK_SMOOTHLIST ' $4150 - smoothing groups list
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("     CHUNK_SMOOTHLIST")
+				'	If TGlobal3D.Log_3DS Then DebugLog("     CHUNK_SMOOTHLIST")
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -291,69 +291,69 @@ Type T3DS2
 			Select chunk.id
 				Case CHUNK_MAPFILENAME ' $A300 - map filename
 					texname = ParseString()
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPFILENAME: "+texname)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPFILENAME: "+texname)
 					
 				'Case CHUNK_AUTOREFLECTION ' $A310
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_AUTOREFLECTION")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_AUTOREFLECTION")
 				
 				'Case CHUNK_MAPPARAMETERS ' $A351
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPPARAMETERS")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPPARAMETERS")
 					
 				'Case CHUNK_BLUR ' $A353 - percent
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_BLUR")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_BLUR")
 					
 				Case CHUNK_MAPVSCALE ' $A354
 					val = Stream.ReadFloat()
 					tex = TTexture(MapValueForKey( Materialmap, texname ))
 					If tex<>Null Then tex.v_scale[0] = val
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPVSCALE: "+val)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPVSCALE: "+val)
 					
 				Case CHUNK_MAPUSCALE ' $A356
 					val = Stream.ReadFloat()
 					tex = TTexture(MapValueForKey( Materialmap, texname ))
 					If tex<>Null Then tex.u_scale[0] = val
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPUSCALE: "+val)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPUSCALE: "+val)
 					
 				Case CHUNK_MAPUOFFSET ' $A358
 					val = Stream.ReadFloat()
 					tex = TTexture(MapValueForKey( Materialmap, texname ))
 					If tex<>Null Then tex.u_pos[0] = val
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPUOFFSET: "+val)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPUOFFSET: "+val)
 					
 				Case CHUNK_MAPVOFFSET ' $A35A
 					val = Stream.ReadFloat()
 					tex = TTexture(MapValueForKey( Materialmap, texname ))
 					If tex<>Null Then tex.v_pos[0] = val
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPVOFFSET: "+val)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPVOFFSET: "+val)
 					
 				Case CHUNK_MAPROTATION ' $A35C
 					val = Stream.ReadFloat()
 					tex = TTexture(MapValueForKey( Materialmap, texname ))
 					If tex<>Null Then tex.angle[0] = val
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPROTATION: "+val)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPROTATION: "+val)
 				
 				'Case CHUNK_RGBALPHATINT1 ' $A360
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_RGBALPHATINT1")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_RGBALPHATINT1")
 					
 				'Case CHUNK_RGBALPHATINT2 ' $A362
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_RGBALPHATINT2")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_RGBALPHATINT2")
 				
 				'Case CHUNK_RGBTINTR ' $A364
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_RGBTINTR")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_RGBTINTR")
 					
 				'Case CHUNK_RGBTINTG ' $A366
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_RGBTINTG")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_RGBTINTG")
 					
 				'Case CHUNK_RGBTINTB ' $A368
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("    CHUNK_RGBTINTB")
+				'	If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_RGBTINTB")
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -375,17 +375,17 @@ Type T3DS2
 				Case CHUNK_VERTEXLIST ' $4110
 					If surface = Null Then surface = mesh.CreateSurface()
 					count = ParseVertexList(surface, parent)
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_VERTEXLIST: "+count)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_VERTEXLIST: "+count)
 					
 				Case CHUNK_FACELIST ' $4120
 					If surface = Null Then surface = mesh.CreateSurface()
 					count = ParseFaceList(surface, parent, chunk.endchunk)
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_FACELIST: "+count)
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_FACELIST: "+count)
 					
 				Case CHUNK_MAPLIST ' $4140 - tex coords
 					If surface = Null Then surface = mesh.CreateSurface()
 					ParseMapList(surface, parent)
-					If TGlobal.Log_3DS Then DebugLog("    CHUNK_MAPLIST")
+					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPLIST")
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
 					matrix = NewMatrix()
@@ -397,7 +397,7 @@ Type T3DS2
 						Next
 					Next
 					
-					If TGlobal.Log_3DS
+					If TGlobal3D.Log_3DS
 						DebugLog "    CHUNK_TRANSMATRIX"
 						'For Local z% = 0 To 3
 						'	DebugLog "    "+matrix.grid[(4*z)+0]+","+matrix.grid[(4*z)+1]+","+matrix.grid[(4*z)+2]+","+matrix.grid[(4*z)+3]
@@ -445,7 +445,7 @@ Type T3DS2
 					y = Stream.ReadFloat()
 					z = Stream.ReadFloat()
 					animKeys[time].pos = [x, y, z]
-					'If TGlobal.Log_3DS Then DebugLog("   CHUNK_POSTRACK: "+x+","+y+","+z)
+					'If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_POSTRACK: "+x+","+y+","+z)
 					
 				Case CHUNK_ROTTRACK ' $B021
 					ang = -Stream.ReadFloat() / 0.0175
@@ -465,14 +465,14 @@ Type T3DS2
 					'	animKeys[time].rot = quat
 					'EndIf
 					'animKeys[time].rot = quat
-					'If TGlobal.Log_3DS Then DebugLog("   CHUNK_ROTTRACK: "+x+","+y+","+z)
+					'If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_ROTTRACK: "+x+","+y+","+z)
 					
 				Case CHUNK_SCALETRACK ' $B022
 					x = Stream.ReadFloat()
 					y = Stream.ReadFloat()
 					z = Stream.ReadFloat()
 					animKeys[time].size = [x, y, z]
-					'If TGlobal.Log_3DS Then DebugLog("   CHUNK_SCALETRACK: "+x+","+y+","+z)
+					'If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SCALETRACK: "+x+","+y+","+z)
 			End Select
 		Next
 		
@@ -493,7 +493,7 @@ Type T3DS2
 			Select chunk.id
 				Case CHUNK_HIERPOS ' $B030 - node id
 					id = Stream.ReadShort()
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_HIERPOS: "+id)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_HIERPOS: "+id)
 					
 				Case CHUNK_HIERINFO ' $B010 - node header
 					'DebugLog "CHUNK_HIERINFO .size="+chunk.size+" .endchunk="+Hex(chunk.endchunk)+" .pos="+Hex(Stream.Pos())
@@ -503,21 +503,21 @@ Type T3DS2
 					parid = Stream.ReadShort()
 					
 					'SeekStream(Stream, chunk.endchunk)
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_HIERINFO: "+objname+", parent="+parid)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_HIERINFO: "+objname+", parent="+parid)
 					
 				Case CHUNK_INSTNAME ' $B011 - dummy name object
 					instname = ParseString()
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_INSTNAME: "+instname)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_INSTNAME: "+instname)
 					
 				Case CHUNK_PIVOT ' $B013
 					piv_x = Stream.ReadFloat()
 					piv_y = Stream.ReadFloat()
 					piv_z = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_PIVOT: "+piv_x+","+piv_y+","+piv_z)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_PIVOT: "+piv_x+","+piv_y+","+piv_z)
 					
 				'Case CHUNK_BOUNDBOX ' $B014
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_BOUNDBOX")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_BOUNDBOX")
 					
 				Case CHUNK_POSTRACK ' $B020
 					animkeys = ParseAnimKeys(parent, endchunk, animkeys, chunk.id)
@@ -539,7 +539,7 @@ Type T3DS2
 			mesh.SetString(mesh.class_name,"Mesh")
 			mesh.AddParent(parent)
 			mesh.EntityListAdd(TEntity.entity_list)
-			'If TGlobal.Mesh_Transform = 1 Then TGlobal.Mesh_Transform = 0 ' disable transform vertices
+			'If TGlobal3D.Mesh_Transform = 1 Then TGlobal3D.Mesh_Transform = 0 ' disable transform vertices
 		'Else
 			Rem
 			For Local ent:TEntity = EachIn Objlist
@@ -564,7 +564,7 @@ Type T3DS2
 					Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
 					
 					If parid <> 65535 And matrix = Null 'And mesh.no_surfs[0] = 0 ' if any dummy child mesh found
-						If TGlobal.Mesh_Transform = 1 Then TGlobal.Mesh_Transform = 0 ' don't transform vertices
+						If TGlobal3D.Mesh_Transform = 1 Then TGlobal3D.Mesh_Transform = 0 ' don't transform vertices
 					EndIf
 					
 					Exit
@@ -585,7 +585,7 @@ Type T3DS2
 			
 			Select chunk.id
 				Case CHUNK_TRIMESH ' $4100 - triangular mesh
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_TRIMESH: "+objname)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRIMESH: "+objname)
 					mesh = NewMesh()
 					mesh.SetString(mesh.name,objname)
 					mesh.SetString(mesh.class_name,"Mesh")
@@ -596,11 +596,11 @@ Type T3DS2
 					
 				'Case CHUNK_LIGHT ' $4600
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_LIGHT")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_LIGHT")
 					
 				'Case CHUNK_CAMERA ' $4700
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_CAMERA")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_CAMERA")
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -619,11 +619,11 @@ Type T3DS2
 			Select chunk.id
 			Case CHUNK_PERCENTI ' $0030
 				pc = Float(Stream.ReadShort())/100.0
-				If TGlobal.Log_3DS Then DebugLog(" CHUNK_PERCENTI: "+pc)
+				If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_PERCENTI: "+pc)
 				
 			Case CHUNK_PERCENTF ' $0031
 				pc = Stream.ReadFloat()/100.0
-				If TGlobal.Log_3DS Then DebugLog(" CHUNK_PERCENTF: "+pc)
+				If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_PERCENTF: "+pc)
 				
 			Default
 				SeekStream(Stream, chunk.endchunk)
@@ -645,25 +645,25 @@ Type T3DS2
 					r = Stream.ReadFloat() * 255
 					g = Stream.ReadFloat() * 255
 					b = Stream.ReadFloat() * 255
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_RGB3F: "+r+","+g+","+b)
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_RGB3F: "+r+","+g+","+b)
 					
 				Case CHUNK_RGB3B ' $0011 - 0..255
 					r = Stream.ReadByte()
 					g = Stream.ReadByte()
 					b = Stream.ReadByte()
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_RGB3B: "+r+","+g+","+b)
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_RGB3B: "+r+","+g+","+b)
 					
 				Case CHUNK_RGBGAMMA3F ' $0013 - 0..1
 					r = Stream.ReadFloat() * 255
 					g = Stream.ReadFloat() * 255
 					b = Stream.ReadFloat() * 255
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_RGBGAMMA3F: "+r+","+g+","+b)
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_RGBGAMMA3F: "+r+","+g+","+b)
 					
 				Case CHUNK_RGBGAMMA3B ' $0012 - 0.255
 					r = Stream.ReadByte()
 					g = Stream.ReadByte()
 					b = Stream.ReadByte()
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_RGBGAMMA3B: "+r+","+g+","+b)
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_RGBGAMMA3B: "+r+","+g+","+b)
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -685,157 +685,157 @@ Type T3DS2
 			Select chunk.id		
 				Case CHUNK_MATNAME ' $A000
 					matname = ParseString()
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_MATNAME: "+matname)
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MATNAME: "+matname)
 					
 				'Case CHUNK_AMBIENT ' $A010
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_AMBIENT") ' ignore, same as diffuse
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_AMBIENT") ' ignore, same as diffuse
 					
 				Case CHUNK_DIFFUSE ' $A020
 					col = ParseColor(parent, chunk.endchunk)
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_DIFFUSE: "+col[0]+" "+col[1]+" "+col[2])
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_DIFFUSE: "+col[0]+" "+col[1]+" "+col[2])
 					
 				'Case CHUNK_SPECULAR ' $A030
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SPECULAR") ' specular set by shininess
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SPECULAR") ' specular set by shininess
 					
 				Case CHUNK_SHININESS ' $A040
 					shine[0] = ParsePercent(parent, chunk.endchunk)
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_SHININESS: "+shine[0])
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SHININESS: "+shine[0])
 					
 				'Case CHUNK_SHININESSSTRENGTH ' $A041
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SHININESSSTRENGTH")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SHININESSSTRENGTH")
 					
 				'Case CHUNK_TRANSPARENCY ' $A050
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_TRANSPARENCY")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRANSPARENCY")
 					
 				'Case CHUNK_TRANSFALLOFF ' $A052
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFF")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFF")
 					
 				'Case CHUNK_REFLECTIONBLUR ' $A053
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_REFLECTIONBLUR")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_REFLECTIONBLUR")
 					
 				'Case CHUNK_TWOSIDED ' $A081
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_TWOSIDED")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TWOSIDED")
 					
 				'Case CHUNK_ADDTRANSPARENCY ' $A083
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_ADDTRANSPARENCY")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_ADDTRANSPARENCY")
 					
 				'Case CHUNK_SELFILLUM ' $A084
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SELFILLUM")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SELFILLUM")
 					
 				'Case CHUNK_WIREFRAMEON ' $A085
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_WIREFRAMEON")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_WIREFRAMEON")
 					
 				'Case CHUNK_WIRETHICKNESS ' $A087 ' float
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_WIRETHICKNESS")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_WIRETHICKNESS")
 					
 				'Case CHUNK_FACEMAP ' $A088
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_FACEMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_FACEMAP")
 					
 				'Case CHUNK_TRANSFALLOFFIN ' $A08A
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFFIN")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFFIN")
 					
 				'Case CHUNK_SOFTEN ' $A08C
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SOFTEN")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SOFTEN")
 					
 				'Case CHUNK_WIRETHICKNESSUNITS ' $A08E
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_WIRETHICKNESSUNITS")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_WIRETHICKNESSUNITS")
 					
 				'Case CHUNK_RENDERTYPE ' $A100 - short, 1=flat 2=gouraud 3=phong 4=metal
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_RENDERTYPE")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_RENDERTYPE")
 					
 				'Case CHUNK_TRANSFALLOFF2 ' $A240
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFF2")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRANSFALLOFF2")
 					
 				'Case CHUNK_REFLECTIONBLUR2 ' $A250
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_REFLECTIONBLUR2")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_REFLECTIONBLUR2")
 					
 				'Case CHUNK_BUMPMAPPERCENT ' $A252
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_BUMPMAPPERCENT")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_BUMPMAPPERCENT")
 					
 				Case CHUNK_TEXTUREMAP1 ' $A200
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_TEXTUREMAP1")
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TEXTUREMAP1")
 					layer[0] = 0
 					texname = ParseMap(parent, chunk.endchunk)
 					
 				Case CHUNK_TEXTUREMAP2 ' $A33A
-					If TGlobal.Log_3DS Then DebugLog("   CHUNK_TEXTUREMAP2")
+					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TEXTUREMAP2")
 					layer[0] = 1
 					texname = ParseMap(parent, chunk.endchunk)
 					
 				'Case CHUNK_SPECULARMAP ' $A204
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SPECULARMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SPECULARMAP")
 					
 				'Case CHUNK_OPACITYMAP ' $A210
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_OPACITYMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_OPACITYMAP")
 					
 				'Case CHUNK_REFLECTIONMAP ' $A220
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_REFLECTIONMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_REFLECTIONMAP")
 					
 				'Case CHUNK_BUMPMAP ' $A230
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_BUMPMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_BUMPMAP")
 					
 				'Case CHUNK_SHININESSMAP ' $A33C
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SHININESSMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SHININESSMAP")
 					
 				'Case CHUNK_SELFILLUMMAP ' $A33D
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_SELFILLUMMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_SELFILLUMMAP")
 					
 				'Case CHUNK_MASKTEXTUREMAP1 ' $A33E
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKTEXTUREMAP1")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKTEXTUREMAP1")
 					
 				'Case CHUNK_MASKTEXTUREMAP2 ' $A340
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKTEXTUREMAP2")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKTEXTUREMAP2")
 					
 				'Case CHUNK_MASKOPACITYMAP ' $A342
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKOPACITYMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKOPACITYMAP")
 					
 				'Case CHUNK_MASKBUMPMAP ' $A344
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKBUMPMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKBUMPMAP")
 					
 				'Case CHUNK_MASKSHININESSMAP ' $A346
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKSHININESSMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKSHININESSMAP")
 					
 				'Case CHUNK_MASKSPECULARMAP ' $A348
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKSPECULARMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKSPECULARMAP")
 					
 				'Case CHUNK_MASKSELFILLUMMAP ' $A34A
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKSELFILLUMMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKSELFILLUMMAP")
 					
 				'Case CHUNK_MASKREFLECTIONMAP ' $A34C
 				'	SeekStream(Stream, chunk.endchunk)
-				'	If TGlobal.Log_3DS Then DebugLog("   CHUNK_MASKREFLECTIONMAP")
+				'	If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_MASKREFLECTIONMAP")
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -848,8 +848,8 @@ Type T3DS2
 			name = Filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture = LoadTexture(name, TGlobal.Texture_Flags) ' check material has texture, bad path crash streams
-		If TGlobal.Log_3DS Then DebugLog(" MAT TEX name="+name+" matname="+matname+" texname="+texname)
+		Local tex:TTexture = LoadTexture(name, TGlobal3D.Texture_Flags) ' check material has texture, bad path crash streams
+		If TGlobal3D.Log_3DS Then DebugLog(" MAT TEX name="+name+" matname="+matname+" texname="+texname)
 		
 		MapInsert Materialmap, matname, tex
 		MapInsert Materialcolormap, matname, col
@@ -876,7 +876,7 @@ Type T3DS2
 			
 			Select chunk.id
 			Case CHUNK_MESHINFO ' $B002 - mesh information
-				If TGlobal.Log_3DS Then DebugLog("  CHUNK_MESHINFO")
+				If TGlobal3D.Log_3DS Then DebugLog("  CHUNK_MESHINFO")
 				ParseMeshInfo(parent, chunk.endchunk)
 				
 			Default
@@ -894,16 +894,16 @@ Type T3DS2
 			
 			Select chunk.id
 				Case CHUNK_OBJECTBLOCK ' $4000
-					If TGlobal.Log_3DS Then DebugLog("  CHUNK_OBJECTBLOCK")
+					If TGlobal3D.Log_3DS Then DebugLog("  CHUNK_OBJECTBLOCK")
 					ParseObject(parent, chunk.endchunk)
 					
 				Case CHUNK_MATBLOCK ' $AFFF - material block
-					If TGlobal.Log_3DS Then DebugLog("  CHUNK_MATBLOCK")
+					If TGlobal3D.Log_3DS Then DebugLog("  CHUNK_MATBLOCK")
 					ParseMaterial(parent, chunk.endchunk)
 				
 				Case CHUNK_MASTERSCALE ' $0100
 					Local scale# = Stream.ReadFloat()
-					If TGlobal.Log_3DS Then DebugLog("  CHUNK_MASTERSCALE: "+scale)
+					If TGlobal3D.Log_3DS Then DebugLog("  CHUNK_MASTERSCALE: "+scale)
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -934,16 +934,16 @@ Type T3DS2
 			
 			Select chunk.id
 				Case CHUNK_3DEDITOR ' $3D3D
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_3DEDITOR")
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_3DEDITOR")
 					ParseScene(parent, chunk.endchunk)
 					
 				Case CHUNK_KEYFRAMER ' $B000
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_KEYFRAMER")
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_KEYFRAMER")
 					ParseKeyFrames(parent, chunk.endchunk)
 					
 				Case CHUNK_M3DVERSION ' $0002
 					Local version% = Stream.ReadInt()
-					If TGlobal.Log_3DS Then DebugLog(" CHUNK_M3DVERSION: "+version)
+					If TGlobal3D.Log_3DS Then DebugLog(" CHUNK_M3DVERSION: "+version)
 					
 				Default
 					SeekStream(Stream, chunk.endchunk)
@@ -989,12 +989,12 @@ Type T3DS2
 			DebugLog " Invalid 3DS file: "+Filename
 			Return Null
 		EndIf
-		If TGlobal.Log_3DS Then DebugLog(" Filename: "+Filename)
+		If TGlobal3D.Log_3DS Then DebugLog(" Filename: "+Filename)
 		
 		Root = ParseFile(url, parent_ent)
 		
-		'If TGlobal.Log_3DS Then DebugLog(" Mesh_Transform: "+TGlobal.Mesh_Transform)
-		'If TGlobal.Log_3DS Then DebugLog(" Texture_Flags: "+TGlobal.Texture_Flags)
+		'If TGlobal3D.Log_3DS Then DebugLog(" Mesh_Transform: "+TGlobal3D.Mesh_Transform)
+		'If TGlobal3D.Log_3DS Then DebugLog(" Texture_Flags: "+TGlobal3D.Texture_Flags)
 		
 		ChangeDir(olddir)
 		
@@ -1003,7 +1003,7 @@ Type T3DS2
 			'Local mesh:TMesh = TMesh(ent)
 			'Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
 			
-			'If matrix<>Null And TGlobal.Mesh_Transform > 0
+			'If matrix<>Null And TGlobal3D.Mesh_Transform > 0
 			'	vec = matrix.GetMatrixScale()
 			'	If vec.x > Master_Scale Then Master_Scale = vec.x
 			'	If vec.y > Master_Scale Then Master_Scale = vec.y
@@ -1011,13 +1011,13 @@ Type T3DS2
 			'EndIf
 		'Next
 		
-		'If TGlobal.Log_3DS Then DebugLog(" Master_Scale:"+Master_Scale)
+		'If TGlobal3D.Log_3DS Then DebugLog(" Master_Scale:"+Master_Scale)
 		
 		'For Local ent:TEntity = EachIn Objlist ' normalize matrix (scale down) if too large
 			'Local mesh:TMesh = TMesh(ent)
 			'Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
 			
-			'If matrix<>Null And TGlobal.Mesh_Transform > 0 And Master_Scale > 1.0 ' if < 1 it would scale up
+			'If matrix<>Null And TGlobal3D.Mesh_Transform > 0 And Master_Scale > 1.0 ' if < 1 it would scale up
 			'	matrix.Scale(1.0 / Master_Scale, 1.0 / Master_Scale, 1.0 / Master_Scale)
 			'EndIf
 		'Next
@@ -1034,7 +1034,7 @@ Type T3DS2
 					Local py:Float = surf2.vert_coords[(v*3)+1]
 					Local pz:Float = -surf2.vert_coords[(v*3)+2]
 					
-					If TGlobal.Mesh_Transform > 0
+					If TGlobal3D.Mesh_Transform > 0
 						invmat.TransformVec(px, py, pz, 1)
 						surf2.vert_coords[(v*3)+0] = px
 						surf2.vert_coords[(v*3)+1] = py
@@ -1045,7 +1045,7 @@ Type T3DS2
 			Next
 			
 			mesh2.cull_radius[0] = 0.0
-			'If TGlobal.Log_3DS Then DebugLog(" ent.name:"+ent.EntityName()+" Root.name:"+ent.Root.EntityName())
+			'If TGlobal3D.Log_3DS Then DebugLog(" ent.name:"+ent.EntityName()+" Root.name:"+ent.Root.EntityName())
 		Next
 		
 		Rem ' animation
@@ -1076,7 +1076,7 @@ Type T3DS2
 		Next
 		EndRem
 		
-		If TGlobal.Log_3DS Then DebugLog("")
+		If TGlobal3D.Log_3DS Then DebugLog("")
 		Return Root
 	End Method
 	

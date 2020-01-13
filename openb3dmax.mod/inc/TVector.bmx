@@ -77,7 +77,7 @@ Type TVector
 	
 	Method New()
 	
-		If TGlobal.Log_New
+		If TGlobal3D.Log_New
 			DebugLog " New TVector"
 		EndIf
 	
@@ -85,7 +85,7 @@ Type TVector
 	
 	Method Delete()
 	
-		If TGlobal.Log_Del
+		If TGlobal3D.Log_Del
 			DebugLog " Del TVector"
 		EndIf
 	
