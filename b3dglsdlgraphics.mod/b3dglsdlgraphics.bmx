@@ -69,6 +69,7 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal3D.gfx_obj=Graphics( width,height,depth,rate,flags ) ' gfx object
+	If height>GraphicsHeight() Then height=GraphicsHeight() ' deduct titlebar height (win32 only)
 	
 	'glewInit() ' sdl or pub.opengles?
 	TGlobal3D.GraphicsInit() ' save states for Max2D
