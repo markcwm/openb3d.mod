@@ -525,7 +525,7 @@ void Texture::BufferToTex(unsigned char* buffer, int frame){
 
 }
 
-void Texture::BackBufferToTex(int frame, bool fastinvert){
+void Texture::BackBufferToTex(int mipmap_no, int frame, bool fastinvert){
 	if(flags&128){
 		glBindTexture (GL_TEXTURE_CUBE_MAP,texture);
 #ifndef GLES2
@@ -566,8 +566,6 @@ void Texture::BackBufferToTex(int frame, bool fastinvert){
 		}else{
 			unsigned char *srcbuffer = new unsigned char[width * height * 4]; // fix for inverted back buffer
 			unsigned char *dstbuffer = new unsigned char[width * height * 4];
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
-			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 			glReadPixels(0, Global::height-height, width, height, GL_RGBA, GL_UNSIGNED_BYTE, srcbuffer); // copy back buffer to src
 			CopyPixels(srcbuffer, width, height, 0, 0, dstbuffer, width, height, 4, 1); // invert to dst
 #ifndef GLES2
@@ -575,7 +573,6 @@ void Texture::BackBufferToTex(int frame, bool fastinvert){
 #else
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 #endif
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
 			delete[] srcbuffer;
 			delete[] dstbuffer;
 		}

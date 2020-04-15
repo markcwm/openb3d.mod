@@ -594,10 +594,11 @@ bbdoc: Copy the contents of the backbuffer to a texture
 about: OpenB3DMax does not have the same buffer commands as Blitz3D.
 The region copied from the backbuffer will start at 0,0 and end at the texture's width and height.
 So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size, 
-use RenderWorld to render the camera, then use this command.
+use RenderWorld to render the camera, then use this command. 
+Back buffer is upside-down so set fastinvert to True to invert texture uvs, False to flip texture data (slower).
 End Rem
-Function BackBufferToTex( tex:TTexture,frame:Int=0, fastinvert:Int=True )
-	tex.BackBufferToTex( frame, fastinvert ) ' frame currently does nothing
+Function BackBufferToTex( tex:TTexture,mipmap_no:Int=0,frame:Int=0,fastinvert:Int=True )
+	tex.BackBufferToTex( mipmap_no,frame,fastinvert ) ' frame currently does nothing
 End Function
 
 Rem

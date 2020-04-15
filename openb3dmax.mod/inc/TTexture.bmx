@@ -1070,9 +1070,9 @@ Type TTexture
 		
 	End Method
 	
-	Method BackBufferToTex( frame:Int=0, fastinvert:Int=True )
+	Method BackBufferToTex( mipmap_no:Int=0, frame:Int=0, fastinvert:Int=True )
 	
-		BackBufferToTex_( GetInstance(Self), frame, fastinvert )
+		BackBufferToTex_( GetInstance(Self), mipmap_no, frame, fastinvert )
 		
 	End Method
 	

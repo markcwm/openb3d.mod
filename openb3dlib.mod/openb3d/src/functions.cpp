@@ -291,8 +291,8 @@ void BufferToTex_(Texture* tex,unsigned char* buffer, int frame){
 	tex->BufferToTex(buffer,frame);
 }
 
-void BackBufferToTex_(Texture* tex,int frame, bool fastinvert){
-	tex->BackBufferToTex(frame,fastinvert);
+void BackBufferToTex_(Texture* tex, int mipmap_no, int frame, bool fastinvert){
+	tex->BackBufferToTex(mipmap_no,frame,fastinvert);
 }
 
 void CameraToTex_(Texture* tex, Camera* cam, int frame){
