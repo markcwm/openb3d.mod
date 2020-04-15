@@ -58,7 +58,7 @@ Extern
 	Function LightMesh_( m:Byte Ptr,red:Float,green:Float,blue:Float,range:Float,light_x:Float,light_y:Float,light_z:Float )
 	
 	' *** Minib3d only
-	Function BackBufferToTex_( tex:Byte Ptr,frame:Int )
+	Function BackBufferToTex_( tex:Byte Ptr,frame:Int,fastinvert:Int )
 	Function MeshCullRadius_( ent:Byte Ptr,radius:Float )
 	Function EntityScaleX_:Float( ent:Byte Ptr,glob:Int )
 	Function EntityScaleY_:Float( ent:Byte Ptr,glob:Int )

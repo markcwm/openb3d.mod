@@ -1070,9 +1070,9 @@ Type TTexture
 		
 	End Method
 	
-	Method BackBufferToTex( frame:Int=0 )
+	Method BackBufferToTex( frame:Int=0, fastinvert:Int=True )
 	
-		BackBufferToTex_( GetInstance(Self), frame )
+		BackBufferToTex_( GetInstance(Self), frame, fastinvert )
 		
 	End Method
 	

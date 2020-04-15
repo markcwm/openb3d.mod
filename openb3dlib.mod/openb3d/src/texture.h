@@ -83,7 +83,7 @@ public:
 	void RotateTexture(float ang);
 	void BufferToTex(unsigned char* buffer, int frames=0);
 	void TexToBuffer(unsigned char* buffer, int frames=0);
-	void BackBufferToTex(int frames=0);
+	void BackBufferToTex(int frames=0,bool fastinvert=true);
 	void CameraToTex(Camera* cam, int frames=0);
 	void DepthBufferToTex(Camera* cam);
 	string TextureName();

@@ -596,8 +596,8 @@ The region copied from the backbuffer will start at 0,0 and end at the texture's
 So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size, 
 use RenderWorld to render the camera, then use this command.
 End Rem
-Function BackBufferToTex( tex:TTexture,frame:Int=0 )
-	tex.BackBufferToTex( frame ) ' frame currently does nothing
+Function BackBufferToTex( tex:TTexture,frame:Int=0, fastinvert:Int=True )
+	tex.BackBufferToTex( frame, fastinvert ) ' frame currently does nothing
 End Function
 
 Rem

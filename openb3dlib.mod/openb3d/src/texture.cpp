@@ -525,7 +525,7 @@ void Texture::BufferToTex(unsigned char* buffer, int frame){
 
 }
 
-void Texture::BackBufferToTex(int frame){
+void Texture::BackBufferToTex(int frame, bool fastinvert){
 	if(flags&128){
 		glBindTexture (GL_TEXTURE_CUBE_MAP,texture);
 #ifndef GLES2
@@ -554,27 +554,31 @@ void Texture::BackBufferToTex(int frame){
 			break;
 		}
 	}else{
-		glBindTexture (GL_TEXTURE_2D,texture);
+			glBindTexture (GL_TEXTURE_2D,texture);
 #ifndef GLES2
-		glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
+			glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP_SGIS, GL_TRUE);
 #else
-		glGenerateMipmap(GL_TEXTURE_2D);
+			glGenerateMipmap(GL_TEXTURE_2D);
 #endif
-		unsigned char *srcbuffer = new unsigned char[width * height * 4]; // fix for inverted back buffer
-		unsigned char *dstbuffer = new unsigned char[width * height * 4];
-		glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-		glReadPixels(0, Global::height-height, width, height, GL_RGBA, GL_UNSIGNED_BYTE, srcbuffer); // copy back buffer to src
-		CopyPixels(srcbuffer, width, height, 0, 0, dstbuffer, width, height, 4, 1); // invert to dst
+		if(fastinvert==true){
+			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0);
+			this->ScaleTexture(1.0,-1.0); // fix by Ked
+		}else{
+			unsigned char *srcbuffer = new unsigned char[width * height * 4]; // fix for inverted back buffer
+			unsigned char *dstbuffer = new unsigned char[width * height * 4];
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+			glReadPixels(0, Global::height-height, width, height, GL_RGBA, GL_UNSIGNED_BYTE, srcbuffer); // copy back buffer to src
+			CopyPixels(srcbuffer, width, height, 0, 0, dstbuffer, width, height, 4, 1); // invert to dst
 #ifndef GLES2
-		gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
-        //glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0); // old way
+			gluBuild2DMipmaps(GL_TEXTURE_2D, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 #else
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, dstbuffer);
 #endif
-		glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-		delete[] srcbuffer;
-		delete[] dstbuffer;
+			glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+			delete[] srcbuffer;
+			delete[] dstbuffer;
+		}
 	}
 }
 
