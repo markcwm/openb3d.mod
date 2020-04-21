@@ -61,7 +61,11 @@ Extern' "C"
 	Function DirectDrawSurfaceArray_:Byte Ptr( obj:Byte Ptr,varid:Int,index:Int )
 	
 	' methods
+	?bmxng
+	Function DDSLoadSurface_:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Size_T )
+	?Not bmxng
 	Function DDSLoadSurface_:Byte Ptr( filename:Byte Ptr,Flip:Int,buffer:Byte Ptr,bufsize:Int )
+	?
 	Function DDSFreeDirectDrawSurface_( surface:Byte Ptr,free_buffer:Int )
 	Function DDSCountMipmaps_:Int( width:Int,height:Int )
 	Function DDSCopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int,format:Int )
