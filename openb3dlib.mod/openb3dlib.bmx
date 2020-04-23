@@ -3,7 +3,7 @@
 SuperStrict
 
 Rem
-bbdoc: 
+bbdoc: OpenB3D library wrapper
 End Rem
 Module Openb3dmax.Openb3dlib
 

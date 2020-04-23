@@ -3,8 +3,7 @@
 Strict
 
 Rem
-bbdoc: OpenB3DMax extended functions, not found in Blitz3D
-about: Descriptions and some extra information.
+bbdoc: OpenB3DMax extended functions, not in B3D
 End Rem
 Module Openb3dmax.Openb3dmax
 

@@ -3,7 +3,7 @@
 SuperStrict
 
 Rem
-bbdoc: SDL GLGraphics backend for B3D (not working yet)
+bbdoc: SDL GLGraphics backend (not working)
 End Rem
 Module Openb3dmax.B3dglsdlgraphics
 

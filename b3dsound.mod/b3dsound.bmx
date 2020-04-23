@@ -3,7 +3,7 @@
 SuperStrict
 
 Rem
-bbdoc: 3D Sound for Openb3d
+bbdoc: 3D sound
 about: You must stop all sounds associated with an entity before freeing it.
 Call #EntityStop3DSound before freeing an entity if there is a chance it could be playing a sound. 
 Failure to stop sounds associated with a non-existent entity can cause your program to crash.

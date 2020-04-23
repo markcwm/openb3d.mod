@@ -3,10 +3,9 @@
 SuperStrict
 
 Rem
-bbdoc: Graphics/Stb Image loader
+bbdoc: DDS image loader
 about:
-The stb image loader module provides the ability to load different image format #pixmaps.
-Supported formats include, BMP, PSD, TGA, GIF, HDR, PIC and PNM
+The DDS loader module provides the ability to load compressed and uncompressed images as #pixmaps.
 End Rem
 Module Openb3dmax.DDSloader
 

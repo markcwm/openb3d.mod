@@ -5,8 +5,8 @@ SuperStrict
 Rem
 bbdoc: Graphics/Stb Image loader
 about:
-The stb image loader module provides the ability to load different image format #pixmaps.
-Supported formats include, BMP, PSD, TGA, GIF, HDR, PIC and PNM
+The stb image loader module provides the ability to load different image formats as #pixmaps.
+Supported formats include: BMP, PSD, TGA, GIF, HDR, PIC and PNM
 End Rem
 Module Openb3dmax.Stbimageloader
 

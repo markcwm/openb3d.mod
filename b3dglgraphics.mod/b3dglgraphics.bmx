@@ -3,7 +3,7 @@
 SuperStrict
 
 Rem
-bbdoc: GLGraphics backend for B3D.
+bbdoc: GLGraphics backend
 End Rem
 Module Openb3dmax.B3dglgraphics
 
