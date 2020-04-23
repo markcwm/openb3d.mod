@@ -4,6 +4,8 @@ Strict
 
 Rem
 bbdoc: OpenB3DMax extended functions, not in B3D
+about:
+The wrapper with declarations for library functions
 End Rem
 Module Openb3dmax.Openb3dmax
 

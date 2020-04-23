@@ -4,6 +4,8 @@ SuperStrict
 
 Rem
 bbdoc: OpenB3D library wrapper
+about:
+The library source with declarations for methods and fields
 End Rem
 Module Openb3dmax.Openb3dlib
 

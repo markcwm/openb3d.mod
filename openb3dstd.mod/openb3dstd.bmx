@@ -4,7 +4,8 @@ Strict
 
 Rem
 bbdoc: OpenB3DMax standard functions, as in B3D
-about: Blitz3D documentation todo!
+about: 
+Links currently point to kippykip.com
 End Rem
 Module Openb3dmax.Openb3dstd
 
