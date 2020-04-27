@@ -413,7 +413,7 @@ Entity* DLL_EXPORT EntityCollided_(Entity* ent,int type_no);
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityColor">Online Help</a>
 */
-void DLL_EXPORT EntityColor_(Entity* ent,float red,float green,float blue);
+void DLL_EXPORT EntityColor_(Entity* ent,float red,float green,float blue,float alpha,int recursive);
 
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityDistance">Online Help</a>
