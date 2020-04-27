@@ -198,7 +198,7 @@ public:
 	float EntityScaleY(int glob=false);
 	float EntityScaleZ(int glob=false);
 	// material
-	void EntityColor(float r,float g,float b,float a,int recursive=false);
+	void EntityColor(float r,float g,float b,float a=0.0,int recursive=false);
 	void EntityColor(float r,float g,float b,int recursive=false);
 	void EntityRed(float r,int recursive=false);
 	void EntityGreen(float g,int recursive=false);

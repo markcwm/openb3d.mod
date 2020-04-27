@@ -564,7 +564,7 @@ void Texture::BackBufferToTex(int mipmap_no, int frame, bool fastinvert){
 			glCopyTexImage2D(GL_TEXTURE_2D,0,GL_RGBA,0,Global::height-height,width,height,0);
 			this->ScaleTexture(1.0,-1.0); // fix by Ked
 		}else{
-			unsigned char *srcbuffer = new unsigned char[width * height * 4]; // fix for inverted back buffer
+			unsigned char *srcbuffer = new unsigned char[width * height * 4]; // fix for inverted back buffer texture
 			unsigned char *dstbuffer = new unsigned char[width * height * 4];
 			glReadPixels(0, Global::height-height, width, height, GL_RGBA, GL_UNSIGNED_BYTE, srcbuffer); // copy back buffer to src
 			CopyPixels(srcbuffer, width, height, 0, 0, dstbuffer, width, height, 4, 1); // invert to dst

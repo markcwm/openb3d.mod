@@ -1221,8 +1221,8 @@ End Function
 'Rem
 'bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityColor">Online doc</a>
 'End Rem
-Function EntityColor( ent:TEntity,red:Float,green:Float,blue:Float )
-	ent.EntityColor( red,green,blue )
+Function EntityColor( ent:TEntity,red:Float,green:Float,blue:Float,alpha:Float=0.0,recursive:Int=True )
+	ent.EntityColor( red,green,blue,alpha,recursive )
 End Function
 
 'Rem
