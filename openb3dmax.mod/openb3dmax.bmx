@@ -135,7 +135,7 @@ Extern
 	Function EntityBox_( ent:Byte Ptr,x:Float,y:Float,z:Float,w:Float,h:Float,d:Float )
 	Function EntityClass_:Byte Ptr( ent:Byte Ptr )
 	Function EntityCollided_:Byte Ptr( ent:Byte Ptr,type_no:Int )
-	Function EntityColor_( ent:Byte Ptr,red:Float,green:Float,blue:Float,alpha:Float,recursive:Int )
+	Function EntityColor_( ent:Byte Ptr,red:Float,green:Float,blue:Float,recursive:Int )
 	Function EntityDistance_:Float( ent1:Byte Ptr,ent2:Byte Ptr )
 	Function EntityFX_( ent:Byte Ptr,fx:Int )
 	Function EntityInView_:Int( ent:Byte Ptr,cam:Byte Ptr )

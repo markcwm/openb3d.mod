@@ -913,8 +913,8 @@ Entity* EntityCollided_(Entity* ent,int type_no){
 /*
 bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=EntityColor">Online Help</a>
 */
-void EntityColor_(Entity* ent,float red,float green,float blue,float a,int recursive){
-	ent->EntityColor(red,green,blue,a,recursive);
+void EntityColor_(Entity* ent,float red,float green,float blue,int recursive){
+	ent->EntityColor(red,green,blue,recursive);
 }
 
 /*

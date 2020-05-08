@@ -448,7 +448,7 @@ float Entity::EntityScaleZ(int glob){
 }
 
 // material
-void Entity::EntityColor(float r,float g,float b,float a,int recursive){
+/*void Entity::EntityColor(float r,float g,float b,float a,int recursive){
 	brush.red  =r/255.0;
 	brush.green=g/255.0;
 	brush.blue =b/255.0;
@@ -460,9 +460,21 @@ void Entity::EntityColor(float r,float g,float b,float a,int recursive){
 			ent.EntityColor(r,g,b,a,true);
 		}
 	}
-}
+}*/
 
-//void Entity::EntityColor(float r,float g,float b,int recursive){}
+void Entity::EntityColor(float r,float g,float b,int recursive){
+	brush.red  =r/255.0;
+	brush.green=g/255.0;
+	brush.blue =b/255.0;
+
+	if(recursive==true){
+		list<Entity*>::iterator it;
+		for(it=child_list.begin();it!=child_list.end();it++){
+			Entity& ent=**it;
+			ent.EntityColor(r,g,b,true);
+		}
+	}
+}
 
 void Entity::EntityRed(float r,int recursive){
 	brush.red=r/255.0;

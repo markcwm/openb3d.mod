@@ -469,7 +469,7 @@ End Function
 Rem
 bbdoc: <a href="https://kippykip.com/b3ddocs/commands/3d_commands/EntityColor.htm">Online doc</a>
 End Rem
-Function EntityColor( ent:TEntity,red:Float,green:Float,blue:Float,alpha:Float,recursive:Int )
+Function EntityColor( ent:TEntity,red:Float,green:Float,blue:Float,recursive:Int )
 End Function
 
 Rem

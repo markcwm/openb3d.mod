@@ -140,7 +140,7 @@ void Action::Update(){
 			float g=dg/n*act->rate + act->ent->brush.green*255.0;
 			float b=db/n*act->rate + act->ent->brush.blue*255.0;
 
-			act->ent->EntityColor(r,g,b,0);
+			act->ent->EntityColor(r,g,b);
 
 			break;}
 		case ACT_TRACK_BY_POINT:{

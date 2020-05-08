@@ -748,9 +748,9 @@ Type TEntity
 	
 	' Entity control (material)
 	
-	Method EntityColor( red:Float,green:Float,blue:Float,alpha:Float=0.0,recursive:Int=True )
+	Method EntityColor( red:Float,green:Float,blue:Float,recursive:Int=True )
 	
-		EntityColor_( GetInstance(Self),red,green,blue,alpha,recursive )
+		EntityColor_( GetInstance(Self),red,green,blue,recursive )
 		
 	End Method
 	

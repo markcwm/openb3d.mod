@@ -55,7 +55,7 @@ ShadowObject* ShadowObject::Create(Mesh* Parent, char Static){
 		Global::root_ent->child_list.remove(S->ShadowMesh);
 		S->ShadowMesh->EntityBlend(0);
 		S->ShadowMesh->EntityAlpha(0.2);
-		S->ShadowMesh->EntityColor(255, 0, 0, 0);
+		S->ShadowMesh->EntityColor(255, 0, 0);
 		S->ShadowMesh->EntityFX(17);
 		S->ShadowVolume = S->ShadowMesh->CreateSurface();
 		S->Parent = Parent;
