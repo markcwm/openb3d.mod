@@ -81,14 +81,14 @@ End Function
 Rem
 bbdoc: Draw text, doesn't need BeginMax2D
 EndRem
-Function Text( x%,y%,txt$ )
+Function Text( x:Int,y:Int,txt:String )
 	
 	' set active texture to texture 0 so gldrawtext will work correctly
 	glActiveTexture(GL_TEXTURE0)
 	glClientActiveTexture(GL_TEXTURE0)
 	
 	glDisable(GL_LIGHTING)
-	glColor3ub(TGlobal3D.txt_r,TGlobal3D.txt_g,TGlobal3D.txt_b)
+	glColor3ub(TGlobal3D.txt_red,TGlobal3D.txt_green,TGlobal3D.txt_blue)
 	
 	' enable blend to hide text background
 	glEnable(GL_BLEND)
@@ -104,12 +104,31 @@ Function Text( x%,y%,txt$ )
 End Function
 
 Rem
+bbdoc: Draw text with a shadow, doesn't need BeginMax2D
+EndRem
+Function ShadowText:Int(msg:String, x:Int, y:Int)
+
+	Local red:Int, green:Int, blue:Int
+	
+	GetColor red, green, blue
+	
+	SetColor 0, 0, 0
+	DrawText msg, x + 1, y + 1
+	
+	SetColor 255, 255, 255
+	DrawText msg, x, y
+	
+	SetColor red, green, blue
+	
+End Function
+
+Rem
 bbdoc: Set draw text color, in bytes
 EndRem
-Function TextColor( r:Byte,g:Byte,b:Byte )
+Function TextColor( red:Byte,green:Byte,blue:Byte )
 
-	TGlobal3D.txt_r=r
-	TGlobal3D.txt_g=g
-	TGlobal3D.txt_b=b
+	TGlobal3D.txt_red=red
+	TGlobal3D.txt_green=green
+	TGlobal3D.txt_blue=blue
 	
 End Function

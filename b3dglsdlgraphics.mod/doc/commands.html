@@ -13,6 +13,9 @@
 <tr><td class=docleft width=1%><a href=#Graphics3D>Graphics3D</a></td><td class=docright>
 <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
 </td></tr>
+<tr><td class=docleft width=1%><a href=#ShadowText>ShadowText</a></td><td class=docright>
+Draw text with a shadow, doesn't need BeginMax2D.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Text>Text</a></td><td class=docright>
 Draw text, doesn't need BeginMax2D.
 </td></tr>
@@ -35,13 +38,18 @@ Debug functions.
 Set usecanvas to true if using maxgui with a canvas context.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=ShadowText>
+<tr><td class=doctop colspan=2>Function ShadowText:Int(msg:String, x:Int, y:Int)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Draw text with a shadow, doesn't need BeginMax2D.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=Text>
-<tr><td class=doctop colspan=2>Function Text( x%,y%,txt$ )</td></tr>
+<tr><td class=doctop colspan=2>Function Text( x:Int,y:Int,txt:String )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Draw text, doesn't need BeginMax2D.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TextColor>
-<tr><td class=doctop colspan=2>Function TextColor( r:Byte,g:Byte,b:Byte )</td></tr>
+<tr><td class=doctop colspan=2>Function TextColor( red:Byte,green:Byte,blue:Byte )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set draw text color, in bytes.</td></tr>
 </table>
 <br>

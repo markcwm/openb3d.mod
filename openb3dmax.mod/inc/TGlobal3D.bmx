@@ -51,7 +51,7 @@ Type TGlobal3D
 	
 	' wrapper
 	Global gfx_obj:TGraphics
-	Global txt_r:Byte=255, txt_g:Byte=255, txt_b:Byte=255 ' TextColor, in bytes
+	Global txt_red:Byte=255, txt_green:Byte=255, txt_blue:Byte=255 ' TextColor, in bytes
 	
 	Global Log_New:Int=False		' True to debug when new 3d object created
 	Global Log_Del:Int=False		' True to debug when 3d object destroyed

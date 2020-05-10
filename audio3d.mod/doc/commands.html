@@ -1,0 +1,288 @@
+<html><head><title>3D sound with Brl.Audio reference</title>
+<link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
+</head><body>
+<table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
+<td class=small width=1%><b>Openb3dmax.Audio3d:</b></td>
+<td class=small width=1%><a href=#functions class=small>Functions</a></td>
+<td class=small width=1%><a href=#types class=small>Types</a></td>
+<td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
+<td class=small width=1%><a href='../../../../mod/openb3dmax.mod/audio3d.mod/audio3d.bmx' class=small>Source</a></td>
+<td class=small>&nbsp;</td></tr></table>
+<h1>3D sound with Brl.Audio</h1>
+You must stop all sounds associated with an entity before freeing it.
+Call <a href=#EntityStop3DSound>EntityStop3DSound</a> before freeing an entity if there is a chance it could be playing a sound.
+Failure to stop sounds associated with a non-existent entity can cause your program to crash.
+<p>
+If you set any SoundPoint "bump" field to UPDATE_DISABLED then it will no longer be updated and can be
+directly modified. For example, setting VolumeBump = UPDATE_DISABLED will stop Volume field from updating.
+<h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#DopplerFrameSkip>DopplerFrameSkip</a></td><td class=docright>
+Stops doppler effect for all objects for 1 update.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityPause3DSound>EntityPause3DSound</a></td><td class=docright>
+Pauses all entity sounds.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityResume3DSound>EntityResume3DSound</a></td><td class=docright>
+Resumes all paused entity sounds.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EntityStop3DSound>EntityStop3DSound</a></td><td class=docright>
+Stops all entity sounds.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Init3DSound>Init3DSound</a></td><td class=docright>
+Set up the 3D sound system.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#List3DSounds>List3DSounds</a></td><td class=docright>
+Finds sounds associated with an entity.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Pause3DSound>Pause3DSound</a></td><td class=docright>
+Pauses a 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Que3DSound>Que3DSound</a></td><td class=docright>
+Attaches a sound to an entity but does not start it playing.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Resume3DSound>Resume3DSound</a></td><td class=docright>
+Resumes a paused 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Start3DSound>Start3DSound</a></td><td class=docright>
+Attaches a sound to an entity and starts it playing.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Stop3DSound>Stop3DSound</a></td><td class=docright>
+Stops a single 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Update3DSounds>Update3DSounds</a></td><td class=docright>
+Updates all the 3D sound channels.
+</td></tr>
+</table>
+<h2><a name=types></a>Types Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#SoundPoint>SoundPoint</a></td><td class=docright>
+SoundPoint.
+</td></tr>
+</table>
+<h2
+ id=functionsdet>Functions
+</h2>
+<table class=doc width=100% cellspacing=3 id=DopplerFrameSkip>
+<tr><td class=doctop colspan=2>Function DopplerFrameSkip()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Stops doppler effect for all objects for 1 update.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>If you need to move your listen point in a way that you do not want to affect the doppler
+effect then call this before your next call to <a href=#Update3DSounds>Update3DSounds</a>. For example, if you have a camera
+looking at an object from a distance and then "change view" by moving the camera close and
+behind the object. This would normally be a very fast move and cause a large doppler effect.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityPause3DSound>
+<tr><td class=doctop colspan=2>Function EntityPause3DSound(NoisyEntity:TEntity)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pauses all entity sounds.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Pauses all sounds attached to an entity through the internal 3D SoundPoint list.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityResume3DSound>
+<tr><td class=doctop colspan=2>Function EntityResume3DSound(NoisyEntity:TEntity)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Resumes all paused entity sounds.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Resumes all paused sounds attached to an entity through the internal 3D sound point list.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EntityStop3DSound>
+<tr><td class=doctop colspan=2>Function EntityStop3DSound(NoisyEntity:TEntity)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Stops all entity sounds.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Stops all sounds attached to an entity through the internal 3D SoundPoint list.
+You must stop all sounds associated with an entity before freeing it. Call <a href=#EntityStop3DSound>EntityStop3DSound</a>
+before freeing an entity if there is a chance it could be playing a sound.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Init3DSound>
+<tr><td class=doctop colspan=2>Function Init3DSound(ListeningEntity:TEntity, MaxRange:Float, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set up the 3D sound system.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Call this before any other 3D sound calls. The sound system can be re-initialized later
+without loosing the sounds currently playing.
+<p>
+<b>ListeningEntity</b> is the entity you will hear sound through. <b>MaxRange</b> is the maximum distance a sound
+will be before it is silent. <b>ExaggerateDopplerScale</b> (optional) is the amount to exaggerate the doppler
+effect by. Setting it to DOPPLER_DISABLED or leaving it blank will disable the doppler effect.
+A value of 1 will use an accurate doppler effect (1 unit = 1 meter). An appropriate value will be
+dependent on the speed of objects in your program.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=List3DSounds>
+<tr><td class=doctop colspan=2>Function List3DSounds:TList(NoisyEntity:TEntity)</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>TList of SoundPoints attached to the entity.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Finds sounds associated with an entity.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Finds and returns all sound points attached to the given entity.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Pause3DSound>
+<tr><td class=doctop colspan=2>Function Pause3DSound(TheSoundPoint:SoundPoint)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pauses a 3D sound.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Wrapper for SoundPoint.Pause = True for more logical programming.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Que3DSound>
+<tr><td class=doctop colspan=2>Function Que3DSound:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, Loudness:Float=1, Volume:Float=1)</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>SoundPoint so you can control the sound further. You can ignore the value as it is held in.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a sound to an entity but does not start it playing.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Resume3DSound>
+<tr><td class=doctop colspan=2>Function Resume3DSound(TheSoundPoint:SoundPoint)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Resumes a paused 3D sound.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Wrapper for SoundPoint.Pause = False for more logical programming.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Start3DSound>
+<tr><td class=doctop colspan=2>Function Start3DSound:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, Loudness:Float=1, Volume:Float=1)</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>SoundPoint so you can control it further. You can ignore the return value as it is held in.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Attaches a sound to an entity and starts it playing.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Stop3DSound>
+<tr><td class=doctop colspan=2>Function Stop3DSound(TheSoundPoint:SoundPoint)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Stops a single 3D sound.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Wrapper for SoundPoint.Stop for more logical programming.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=Update3DSounds>
+<tr><td class=doctop colspan=2>Function Update3DSounds()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Updates all the 3D sound channels.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Should be called (optimally) once per loop, preferably after positions and collisions have
+been handled.</td></tr>
+</table>
+<br>
+<h2
+ id=typesdet>Types
+</h2>
+<table class=doc width=100% cellspacing=3 id=SoundPoint>
+<tr><td class=doctop colspan=2>Type SoundPoint</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>SoundPoint.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>A point that plays a sound in 3D space.</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=SoundPoint_fields></a>Fields Summary</th></tr><tr><td colspan=2>
+<a href=#Depth>Depth</a>
+, 
+<a href=#DepthBump>DepthBump</a>
+, 
+<a href=#EmiterObject>EmiterObject</a>
+, 
+<a href=#Loudness>Loudness</a>
+, 
+<a href=#MasterVolume>MasterVolume</a>
+, 
+<a href=#Pan>Pan</a>
+, 
+<a href=#PanBump>PanBump</a>
+, 
+<a href=#Paused>Paused</a>
+, 
+<a href=#Rate>Rate</a>
+, 
+<a href=#RateBump>RateBump</a>
+, 
+<a href=#SoundChannel>SoundChannel</a>
+, 
+<a href=#Volume>Volume</a>
+, 
+<a href=#VolumeBump>VolumeBump</a>
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=SoundPoint_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#Stop>Stop</a></td><td class=docright>
+Stops a sound and removes it from the sound system.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Update>Update</a></td><td class=docright>
+Updates the sound channel and positional information and clears the channel if the sound is done playing.
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=SoundPoint_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
+Creates a new sound point.
+</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Depth>
+<tr><td class=doctop colspan=2>Field Depth:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Depth point of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=DepthBump>
+<tr><td class=doctop colspan=2>Field DepthBump:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Depth bump.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>When calculating the sound channels depth this number will be added to the new pan.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=EmiterObject>
+<tr><td class=doctop colspan=2>Field EmiterObject:TEntity</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Entity emitting the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Loudness>
+<tr><td class=doctop colspan=2>Field Loudness:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loudness factor of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=MasterVolume>
+<tr><td class=doctop colspan=2>Field MasterVolume:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Base volume of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Pan>
+<tr><td class=doctop colspan=2>Field Pan:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pan point of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=PanBump>
+<tr><td class=doctop colspan=2>Field PanBump:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pan bump.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>When calculating the sound channels pan, this number will be added to the new pan.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Paused>
+<tr><td class=doctop colspan=2>Field Paused:Byte = False</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pause status.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>If a song is paused it will still be updated and held, but will not play.
+To pause a sound, change it's paused value to true and update the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Rate>
+<tr><td class=doctop colspan=2>Field Rate:Float = 1</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Play rate of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=RateBump>
+<tr><td class=doctop colspan=2>Field RateBump:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Play rate bump.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>When calculating the sound channels play rate this number will be added to the new rate.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SoundChannel>
+<tr><td class=doctop colspan=2>Field SoundChannel:TChannel</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Channel the sound is playing in.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Volume>
+<tr><td class=doctop colspan=2>Field Volume:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Volume of the sound.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=VolumeBump>
+<tr><td class=doctop colspan=2>Field VolumeBump:Float</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Volume bump.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>When calculating the sound channels volume this number will be added to the new volume.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Stop>
+<tr><td class=doctop colspan=2>Method Stop()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Stops a sound and removes it from the sound system.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>This will stop a sound point while playing and free it's resources.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Update>
+<tr><td class=doctop colspan=2>Method Update()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Updates the sound channel and positional information and clears the channel if the sound is done playing.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>To update all sounds at once use <a href=#Update3DSounds>Update3DSounds</a>.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Create>
+<tr><td class=doctop colspan=2>Function Create:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, EntityLoudness:Float=1, Volume:Float=1, Qued:Byte = False)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a new sound point.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>To create a sound use <a href=#Start3DSound>Start3DSound</a>, this allows for future changes to the system.</td></tr>
+</table>
+<br>
+<h2 id=modinfo>Module Information</h2>
+<table width=100%>
+<tr><th width=1%>Version</th><td>1.3</td></tr>
+<tr><th width=1%>License</th><td>Public Domain (You are free to use this code as you please)</td></tr>
+<tr><th width=1%>Copyright</th><td>2007 Logan Chittenden</td></tr>
+<tr><th width=1%>History</th><td>1.3 Release (markcwm)</td></tr>
+<tr><th width=1%>History</th><td>Init3DSound HearingPoint fix, updated documentation</td></tr>
+<tr><th width=1%>History</th><td>1.2 Release</td></tr>
+<tr><th width=1%>History</th><td>Added Stop3DSound, EntityStop3DSound, Pause3DSound, EntityPause3DSound,</td></tr>
+<tr><th width=1%>History</th><td>Resume3DSound, EntityResume3DSound, fixed some memory bugs, removed redundant lines,</td></tr>
+<tr><th width=1%>History</th><td>minor speed optimizations, internal restructuring, updated documentation</td></tr>
+<tr><th width=1%>History</th><td>1.1 Release</td></tr>
+<tr><th width=1%>History</th><td>Added DopplerFrameSkip, Que3DSound, UPDATE_DISABLED option, List3DSounds,</td></tr>
+<tr><th width=1%>History</th><td>SoundPoint playing, fixed unnecessarily confusing dopper effect</td></tr>
+<tr><th width=1%>History</th><td>1.0 Initial Release</td></tr>
+</body></html>

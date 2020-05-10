@@ -1,0 +1,72 @@
+<html><head><title>OpenB3DMax Newton wrapper reference</title>
+<link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
+</head><body>
+<table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
+<td class=small width=1%><b>Openb3dmax.Newtonb3d:</b></td>
+<td class=small width=1%><a href=#functions class=small>Functions</a></td>
+<td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
+<td class=small width=1%><a href='../../../../mod/openb3dmax.mod/newtonb3d.mod/newtonb3d.bmx' class=small>Source</a></td>
+<td class=small>&nbsp;</td></tr></table>
+<h1>OpenB3DMax Newton wrapper</h1>
+The wrapper using declarations from Newton.Dynamics module.
+<h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#CreateNewtonCubeMesh>CreateNewtonCubeMesh</a></td><td class=docright>
+Creates a Newton cube, attach a mesh, set the mass, true to create a stencil shadow.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateNewtonGround>CreateNewtonGround</a></td><td class=docright>
+Creates a flat Newton ground from cube, set the width, height and depth.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateNewtonSphereMesh>CreateNewtonSphereMesh</a></td><td class=docright>
+Creates a Newton sphere, attach a mesh, set the mass, true to create a stencil shadow.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#CreateNewtonWorld>CreateNewtonWorld</a></td><td class=docright>
+Creates a Newton world object, set autofail (optional) to False to manually handle Null return.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#ResetNewtonWorld>ResetNewtonWorld</a></td><td class=docright>
+Resets all the internal states of the Newton world.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UpdateNewtonWorld>UpdateNewtonWorld</a></td><td class=docright>
+Updates the Newton world, set update_rate (optional) to affect the engine timestep.
+</td></tr>
+</table>
+<h2
+ id=functionsdet>Functions
+</h2>
+<table class=doc width=100% cellspacing=3 id=CreateNewtonCubeMesh>
+<tr><td class=doctop colspan=2>Function CreateNewtonCubeMesh:TNewtonCube(world:TNWorld, mesh:TMesh, mass:Float, shadow:Int)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a Newton cube, attach a mesh, set the mass, true to create a stencil shadow.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateNewtonGround>
+<tr><td class=doctop colspan=2>Function CreateNewtonGround:TNewtonGround(world:TNWorld, width:Float = 1.0, height:Float = 1.0, depth:Float = 1.0)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a flat Newton ground from cube, set the width, height and depth.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateNewtonSphereMesh>
+<tr><td class=doctop colspan=2>Function CreateNewtonSphereMesh:TNewtonSphere(world:TNWorld, mesh:TMesh, mass:Float, shadow:Int)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a Newton sphere, attach a mesh, set the mass, true to create a stencil shadow.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CreateNewtonWorld>
+<tr><td class=doctop colspan=2>Function CreateNewtonWorld:TNWorld(autofail:Int = True)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a Newton world object, set autofail (optional) to False to manually handle Null return.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ResetNewtonWorld>
+<tr><td class=doctop colspan=2>Function ResetNewtonWorld(world:TNWorld)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Resets all the internal states of the Newton world.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UpdateNewtonWorld>
+<tr><td class=doctop colspan=2>Function UpdateNewtonWorld(world:TNWorld, update_rate:Float=1.0)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Updates the Newton world, set update_rate (optional) to affect the engine timestep.</td></tr>
+</table>
+<br>
+<h2 id=modinfo>Module Information</h2>
+<table width=100%>
+<tr><th width=1%>Version</th><td>1.00</td></tr>
+<tr><th width=1%>License</th><td>zlib</td></tr>
+<tr><th width=1%>Copyright</th><td>Newton Dynamics - 2003-2011 Julio Jerez and Alain Suero</td></tr>
+<tr><th width=1%>Copyright</th><td>Newton Wrapper - 2015-2016 Bruce A Henderson</td></tr>
+<tr><th width=1%>Copyright</th><td>NewtonB3D Wrapper - 2016 James Boyd (HiToro/DruggedBunny)</td></tr>
+</body></html>
