@@ -14,10 +14,10 @@ End Rem
 Module Openb3dmax.Audio3d
 
 ModuleInfo "Version: 1.3"
-ModuleInfo "License: Public Domain (You are free to use this code as you please)"
+ModuleInfo "License: zlib (You are free to use this code as you please)"
 ModuleInfo "Copyright: 2007 Logan Chittenden"
 
-ModuleInfo "History: 1.3 Release (markcwm)"
+ModuleInfo "History: 1.3 Release (by markcwm)"
 ModuleInfo "History: Init3DSound HearingPoint fix, updated documentation"
 ModuleInfo "History: 1.2 Release"
 ModuleInfo "History: Added Stop3DSound, EntityStop3DSound, Pause3DSound, EntityPause3DSound,"
