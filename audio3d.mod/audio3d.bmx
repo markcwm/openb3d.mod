@@ -29,7 +29,16 @@ ModuleInfo "History: SoundPoint playing, fixed unnecessarily confusing dopper ef
 ModuleInfo "History: 1.0 Initial Release"
 
 Import Openb3dmax.Openb3dmax
-Import Brl.Audio
+Import Brl.OpenAlAudio
+?Linux
+Import "-ldl"
+?Not Win32
+Import Brl.FreeAudioAudio
+?Win32
+Import Brl.DirectSoundAudio
+?
+Import Brl.WavLoader
+Import Brl.OggLoader
 
 '### Constants
 Const UPDATE_DISABLED:Float = -2
@@ -291,7 +300,7 @@ effect by. Setting it to DOPPLER_DISABLED or leaving it blank will disable the d
 A value of 1 will use an accurate doppler effect (1 unit = 1 meter). An appropriate value will be
 dependent on the speed of objects in your program.
 End Rem
-Function Init3DSound(ListeningEntity:TEntity, MaxRange:Float, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)
+Function Init3DSound:TEntity(ListeningEntity:TEntity, MaxRange:Float=30, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)
 	Local tempSoundPoint:SoundPoint
 	Local OldListeningEntity:TEntity
 
@@ -322,6 +331,14 @@ Function Init3DSound(ListeningEntity:TEntity, MaxRange:Float, ExaggerateDopplerS
 	Else
 		SoundPointsList = CreateList()
 	End If
+	Return HearingPoint.ListenPoint
+End Function
+
+Rem
+bbdoc: Like Init3DSound
+End Rem
+Function CreateListener:TEntity(ListeningEntity:TEntity, MaxRange:Float=30, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)
+	Return Init3DSound(ListeningEntity, MaxRange, ExaggerateDopplerScale)
 End Function
 
 Rem
@@ -353,6 +370,26 @@ Function DopplerFrameSkip()
 End Function
 
 Rem
+bbdoc: Load a 3d sound
+returns: A sound object
+about:
+@url can be either a string, a stream or a #TAudioSample object.
+The returned sound can be played using #PlaySound or #CueSound.
+
+The @flags parameter can be any combination of:
+
+[ @{Flag value} | @Effect
+* SOUND_LOOP | The sound should loop when played back.
+* SOUND_HARDWARE | The sound should be placed in onboard soundcard memory if possible.
+]
+
+To combine flags, use the binary 'or' operator: '|'.
+End Rem
+Function Load3DSound:TSound( url:Object,flags:Int=0 )
+	Return LoadSound( url,flags )
+End Function
+
+Rem
 bbdoc: Attaches a sound to an entity and starts it playing
 returns: SoundPoint so you can control it further. You can ignore the return value as it is held in
 the sound system.
@@ -367,6 +404,13 @@ Function Start3DSound:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, Loudness:
 	tempSoundPoint = SoundPoint.Create(TheSound, NoisyEntity, Loudness, Volume)
 	
 	Return(tempSoundPoint)
+End Function
+
+Rem
+bbdoc: Like Start3DSound
+End Rem
+Function EmitSound:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, Loudness:Float=1, Volume:Float=1)
+	Return Start3DSound(TheSound, NoisyEntity, Loudness, Volume)
 End Function
 
 Rem
@@ -427,6 +471,34 @@ about: Wrapper for SoundPoint.Pause = False for more logical programming.
 End Rem
 Function Resume3DSound(TheSoundPoint:SoundPoint)
 	TheSoundPoint.Paused = False
+End Function
+
+Rem
+bbdoc: Set loudness for a 3D sound
+End Rem
+Function SetLoudness3DSound(TheSoundPoint:SoundPoint, Loudness:Float)
+	TheSoundPoint.Loudness = Loudness
+End Function
+
+Rem
+bbdoc: Set pan bump for a 3D sound
+End Rem
+Function SetPanBump3DSound(TheSoundPoint:SoundPoint, PanBump:Float)
+	TheSoundPoint.PanBump = PanBump
+End Function
+
+Rem
+bbdoc: Set pan point for a 3D sound
+End Rem
+Function SetPan3DSound(TheSoundPoint:SoundPoint, Pan:Float)
+	TheSoundPoint.Pan = Pan
+End Function
+
+Rem
+bbdoc: Set rate bump for a 3D sound
+End Rem
+Function SetRateBump3DSound(TheSoundPoint:SoundPoint, RateBump:Float)
+	TheSoundPoint.RateBump = RateBump
 End Function
 
 Rem
