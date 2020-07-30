@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Set terrain levels of detail, maximum and default is 20
+End Rem
+Function TerrainDetail( terr:TTerrain,detail_level:Int )
+	TerrainDetail_( TEntity.GetInstance(terr),detail_level )
+End Function
+
+Rem
 bbdoc: Enables or disables hardware multisample antialiasing if supported
 End Rem
 Function MSAntiAlias( multisample:Int=0 )

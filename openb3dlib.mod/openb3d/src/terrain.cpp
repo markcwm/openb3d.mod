@@ -25,14 +25,13 @@
 #endif
 
 int Terrain::triangleindex;
+int Terrain::Roam_LMax = 20;
 
 static Line Ray;
 static float radius;
 
-
 //static vector<float> vertices;
 vector<float> Terrain::vertices;
-
 
 MeshInfo* Terrain::mesh_info;
 list<Terrain*> Terrain::terrain_list;
@@ -115,7 +114,7 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 
 	terr->size=size;
 	terr->vsize=vsize;
-	for (int i = 0; i<= ROAM_LMAX+1; i++){
+	for (int i = 0; i<= Roam_LMax+1; i++){
 		terr->level2dzsize[i] = level2dzsize[i];
 	}
 	int tsize=size;
@@ -147,11 +146,11 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 	Terrain* terr=new Terrain;
 
-	for (int i = 0; i<= ROAM_LMAX; i++){
+	for (int i = 0; i<= Roam_LMax; i++){
 		terr->level2dzsize[i] = 0;
 	}
         int lmax=tsize/100+10;
-	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
+	if (lmax>=Roam_LMax) lmax=Roam_LMax;
 
 	for (int i = 0; i<= lmax; i++){
 		terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <-------------terrain detail here
@@ -771,7 +770,7 @@ void Terrain::drawsub(int l, float v0[], float v1[], float v2[]){
 	float rd;	/* squared sphere bound radius */
 	float rc;	/* squared distance from vc To camera position */
 
-	if (l < ROAM_LMAX) {
+	if (l < Roam_LMax) {
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
@@ -1018,7 +1017,7 @@ void Terrain::col_tree_sub(int l, float v0[], float v1[], float v2[]){
 	float rd;	/* squared sphere bound radius */
 	float rc;	/* squared distance from vc To camera position */
 
-	if (l < ROAM_LMAX) {
+	if (l < Roam_LMax) {
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
@@ -1148,6 +1147,12 @@ float Terrain::TerrainY (float x, float y, float z){
 float Terrain::TerrainZ (float x, float y, float z){
 	TFormPoint(x, y, z, 0, this);
 	return tformed_z;
+}
+
+void Terrain::TerrainDetail(float detail_level){
+	if(detail_level>=0){
+		Terrain::Roam_LMax=detail_level;
+	}
 }
 
 void Terrain::FreeEntity(){

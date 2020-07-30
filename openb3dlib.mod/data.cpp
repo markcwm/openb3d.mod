@@ -426,6 +426,7 @@ const int TERRAIN_height=		8;
 const int TERRAIN_c_col_tree=	9;
 const int TERRAIN_eyepoint=		10;
 const int TERRAIN_ShaderMat=	11;
+const int TERRAIN_Roam_LMax=	12;
 
 // Texture varid
 const int TEXTURE_texture=		1;
@@ -526,6 +527,7 @@ int* StaticInt_( int classid,int varid ){
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_triangleindex : return &Terrain::triangleindex;
+				case TERRAIN_Roam_LMax : return &Terrain::Roam_LMax;
 			}
 			break;
 		case TEXTURE_class :

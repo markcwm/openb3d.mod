@@ -28,6 +28,10 @@ extern "C" {
 
 // Extra
 
+void TerrainDetail_(Terrain* terr, int detail_level){
+   terr->TerrainDetail(detail_level);
+}
+
 void TextureAnIsotropic_(Texture* tex, float f){
 	tex->TextureAnIsotropic(f);
 }

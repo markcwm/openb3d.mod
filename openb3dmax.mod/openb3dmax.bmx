@@ -25,6 +25,7 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function TerrainDetail_( terr:Byte Ptr,detail_level:Int )
 	Function TextureAnIsotropic_( tex:Byte Ptr,f:Float )
 	Function TextureLoader_( texid:Byte Ptr,lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
 	Function MSAntiAlias_( multisample:Int )

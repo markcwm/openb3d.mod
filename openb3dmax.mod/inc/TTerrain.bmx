@@ -8,6 +8,7 @@ Type TTerrain Extends TEntity
 	Global triangleindex:Int Ptr
 	'Global mesh_info:TMeshInfo ' current collision data
 	Global vertices:Float Ptr
+	Global Roam_LMax:Int Ptr ' terrain detail
 	
 	Field size:Float Ptr ' TerrainSize - 0
 	Field vsize:Float Ptr ' TerrainHeight
@@ -40,6 +41,7 @@ Type TTerrain Extends TEntity
 	
 		' int
 		triangleindex=StaticInt_( TERRAIN_class,TERRAIN_triangleindex )
+		Roam_LMax=StaticInt_( TERRAIN_class,TERRAIN_Roam_LMax )
 		
 	End Function
 	
@@ -79,6 +81,7 @@ Type TTerrain Extends TEntity
 		
 		' int
 		If triangleindex<>Null Then DebugLog(pad+" triangleindex: "+triangleindex[0]) Else DebugLog(pad+" triangleindex: Null")
+		If Roam_LMax<>Null Then DebugLog(pad+" Roam_LMax: "+Roam_LMax[0]) Else DebugLog(pad+" Roam_LMax: Null")
 		
 		' float
 		DebugLog pad+" vertices: "+StringPtr(vertices)
@@ -153,6 +156,12 @@ Type TTerrain Extends TEntity
 	
 	' Openb3d
 	
+	Method TerrainDetail( detail_level:Int )
+	
+		TerrainDetail_( GetInstance(Self),detail_level )
+		
+	End Method
+
 	Method FreeEntity()
 	
 		If exists

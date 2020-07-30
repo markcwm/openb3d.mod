@@ -17,7 +17,7 @@
 
 using namespace std;
 
-const int ROAM_LMAX = 20; 		//<-----------terrain detail here	
+//const int ROAM_LMAX = 20; 		//<-----------terrain detail here	
 
 class Terrain : public Entity{
 private:
@@ -30,11 +30,12 @@ public:
 	static int triangleindex;
 	static MeshInfo* mesh_info;
 	static vector<float> vertices;
+	static int Roam_LMax; 	//terrain detail
 	
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
-
-	float level2dzsize[ROAM_LMAX+1]; 	/* Max midpoint displacement per level     */
+	
+	float level2dzsize[20+1]; 	// Max midpoint displacement per level (only 20 LODs)
 	float* height; 				//heightmap
 	MeshCollider* c_col_tree;
 
@@ -61,7 +62,8 @@ public:
 	float TerrainX (float x, float y, float z);
 	float TerrainY (float x, float y, float z);
 	float TerrainZ (float x, float y, float z);
-
+	void TerrainDetail(float td);
+	
 	Terrain(){
 		size=0;
 		ShaderMat=0;

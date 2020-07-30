@@ -781,6 +781,7 @@ Const TERRAIN_height:Int=		8
 Const TERRAIN_c_col_tree:Int=	9
 Const TERRAIN_eyepoint:Int=		10
 Const TERRAIN_ShaderMat:Int=	11
+Const TERRAIN_Roam_LMax:Int=	12
 
 ' Texture varid
 Const TEXTURE_texture:Int=		1
