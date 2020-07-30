@@ -111,7 +111,7 @@ Geosphere* Geosphere::CopyEntity(Entity* parent_ent){
 	geo->size=size;
 	geo->vsize=vsize;
 	geo->hsize=hsize;
-	for (int i = 0; i<= Terrain::Roam_LMax+1; i++){
+	for (int i = 0; i<= ROAM_LMAX+1; i++){
 		geo->level2dzsize[i] = level2dzsize[i];
 	}
 	int tsize=size;
@@ -142,12 +142,11 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 
 	Geosphere* geo=new Geosphere;
 
-	for (int i = 0; i<= Terrain::Roam_LMax; i++){
+	for (int i = 0; i<= 20; i++){
 		geo->level2dzsize[i] = 0;
 	}
-        int lmax=(int)(log(tsize)/log(2)-3.0);
-	if (lmax>=Terrain::Roam_LMax) lmax=Terrain::Roam_LMax;
-
+    int lmax=(int)(log(tsize)/log(2)-3.0);
+	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
 
 	const float LOD[20]={1700000,800000,40000,10000,5000,1000,200,10,1,0.1,0.005,
 	0.001,0.0005,0.0002,0.0001,0.00005,0.00002,0.00001,0.000005,0.000002};
@@ -782,7 +781,7 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 	float nx[3],ny[3], nz[3];
 	float rc, rc0, rc1, rc2;	/* squared distance from vc To camera position */
 
-	if (l < Terrain::Roam_LMax) {
+	if (l < ROAM_LMAX) {
 		ds = level2dzsize[l];
 
 		/* compute radius of diamond bounding sphere (squared) */
@@ -1388,7 +1387,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 	float rd;	/* squared sphere bound radius */
 	float rc;	/* squared distance from vc To camera position */
 
-	if (l < Terrain::Roam_LMax) {
+	if (l < ROAM_LMAX) {
 		ds = level2dzsize[l];
 
 		/* compute radius of diamond bounding sphere (squared) */

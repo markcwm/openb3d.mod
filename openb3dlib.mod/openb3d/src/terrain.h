@@ -17,7 +17,7 @@
 
 using namespace std;
 
-//const int ROAM_LMAX = 20; 		//<-----------terrain detail here	
+const int ROAM_LMAX = 20; 		//<-----------terrain levels of detail, maximum is 20
 
 class Terrain : public Entity{
 private:
@@ -30,7 +30,7 @@ public:
 	static int triangleindex;
 	static MeshInfo* mesh_info;
 	static vector<float> vertices;
-	static int Roam_LMax; 	//terrain detail
+	static float Roam_Detail;
 	
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
@@ -62,8 +62,8 @@ public:
 	float TerrainX (float x, float y, float z);
 	float TerrainY (float x, float y, float z);
 	float TerrainZ (float x, float y, float z);
-	void TerrainDetail(float td);
-	
+	void TerrainDetail(float detail_level);
+
 	Terrain(){
 		size=0;
 		ShaderMat=0;

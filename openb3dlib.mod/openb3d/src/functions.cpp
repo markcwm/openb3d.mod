@@ -28,7 +28,7 @@ extern "C" {
 
 // Extra
 
-void TerrainDetail_(Terrain* terr, int detail_level){
+void TerrainDetail_(Terrain* terr, float detail_level){
    terr->TerrainDetail(detail_level);
 }
 

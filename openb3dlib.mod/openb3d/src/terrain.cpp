@@ -24,8 +24,10 @@
 #include "light.h"
 #endif
 
+#include <stdio.h>
+
 int Terrain::triangleindex;
-int Terrain::Roam_LMax = 20;
+float Terrain::Roam_Detail = 50.0;
 
 static Line Ray;
 static float radius;
@@ -114,7 +116,7 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 
 	terr->size=size;
 	terr->vsize=vsize;
-	for (int i = 0; i<= Roam_LMax+1; i++){
+	for (int i = 0; i<= ROAM_LMAX+1; i++){
 		terr->level2dzsize[i] = level2dzsize[i];
 	}
 	int tsize=size;
@@ -145,15 +147,15 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 	Terrain* terr=new Terrain;
-
-	for (int i = 0; i<= Roam_LMax; i++){
+	
+	for (int i = 0; i<= 20; i++){
 		terr->level2dzsize[i] = 0;
 	}
-        int lmax=tsize/100+10;
-	if (lmax>=Roam_LMax) lmax=Roam_LMax;
-
+    int lmax=(tsize/100)+10;
+	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
 	for (int i = 0; i<= lmax; i++){
-		terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <-------------terrain detail here
+		//terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <---- original terrain detail
+		terr->level2dzsize[i] = (float)pow((float)tsize/512 / sqrt((float)((500/(int)Roam_Detail) << i)), 2);
 	}
 
 	terr->ShaderMat=Global::ambient_shader;
@@ -169,7 +171,6 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 		terr->vsize=30;
 		terr->height=new float[(tsize+1)*(tsize+1)];
 		terr->NormalsMap=new float[(tsize+1)*(tsize+1)*3];
-
 	}
 
 #ifdef GLES2
@@ -770,7 +771,7 @@ void Terrain::drawsub(int l, float v0[], float v1[], float v2[]){
 	float rd;	/* squared sphere bound radius */
 	float rc;	/* squared distance from vc To camera position */
 
-	if (l < Roam_LMax) {
+	if (l < ROAM_LMAX) {
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
@@ -1017,7 +1018,7 @@ void Terrain::col_tree_sub(int l, float v0[], float v1[], float v2[]){
 	float rd;	/* squared sphere bound radius */
 	float rc;	/* squared distance from vc To camera position */
 
-	if (l < Roam_LMax) {
+	if (l < ROAM_LMAX) {
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
@@ -1150,15 +1151,26 @@ float Terrain::TerrainZ (float x, float y, float z){
 }
 
 void Terrain::TerrainDetail(float detail_level){
-	if(detail_level>=0){
-		Terrain::Roam_LMax=detail_level;
+
+	if(detail_level>=1.0){
+		Roam_Detail = detail_level;
+	}
+	
+	for (int i = 0; i<= 20; i++){
+		level2dzsize[i] = 0;
+	}
+    int lmax=((int)size/100)+10;
+	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
+    int tsize=(int)size;
+	for (int i = 0; i<= lmax; i++){
+		level2dzsize[i] = (float)pow((float)tsize/512 / sqrt((float)((500/(int)Roam_Detail) << i)), 2);
 	}
 }
 
 void Terrain::FreeEntity(){
 
 	delete[] height;
-	delete[] NormalsMap;		
+	delete[] NormalsMap;
 
 	terrain_list.remove(this);
 	delete c_col_tree;
