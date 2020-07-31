@@ -27,7 +27,7 @@
 #include <stdio.h>
 
 int Terrain::triangleindex;
-float Terrain::Roam_Detail = 50.0;
+float Terrain::Roam_Detail = 100.0;
 
 static Line Ray;
 static float radius;
@@ -153,9 +153,10 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	}
     int lmax=(tsize/100)+10;
 	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
+	
 	for (int i = 0; i<= lmax; i++){
-		//terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <---- original terrain detail
-		terr->level2dzsize[i] = (float)pow((float)tsize/512 / sqrt((float)((500/(int)Roam_Detail) << i)), 2);
+		//terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <---- terrain detail here
+		terr->level2dzsize[i] = (float)pow((float)tsize/256 / sqrt((float)((int)(2000.0/Roam_Detail) << i)), 2);
 	}
 
 	terr->ShaderMat=Global::ambient_shader;
@@ -166,6 +167,7 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	C_DeleteMeshInfo(mesh_info);
 	terr->AddParent(parent_ent);
 	terrain_list.push_back(terr);
+	
 	if (tsize!=0){
 		terr->size=tsize;
 		terr->vsize=30;
@@ -1152,7 +1154,7 @@ float Terrain::TerrainZ (float x, float y, float z){
 
 void Terrain::TerrainDetail(float detail_level){
 
-	if(detail_level>=1.0){
+	if(detail_level>=4 && detail_level<=2000){
 		Roam_Detail = detail_level;
 	}
 	
@@ -1162,8 +1164,9 @@ void Terrain::TerrainDetail(float detail_level){
     int lmax=((int)size/100)+10;
 	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
     int tsize=(int)size;
+    
 	for (int i = 0; i<= lmax; i++){
-		level2dzsize[i] = (float)pow((float)tsize/512 / sqrt((float)((500/(int)Roam_Detail) << i)), 2);
+		level2dzsize[i] = (float)pow((float)tsize/256 / sqrt((float)((int)(2000.0/Roam_Detail) << i)), 2);
 	}
 }
 

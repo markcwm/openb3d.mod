@@ -35,7 +35,7 @@ public:
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
 	
-	float level2dzsize[20+1]; 	// Max midpoint displacement per level (only 20 LODs)
+	float level2dzsize[ROAM_LMAX+1]; 	// Max midpoint displacement per level
 	float* height; 				//heightmap
 	MeshCollider* c_col_tree;
 

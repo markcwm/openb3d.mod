@@ -3,7 +3,7 @@
 ' *** Extra
 
 Rem
-bbdoc: Set terrain level of detail pop/switch distance as percent, default is 50
+bbdoc: Set terrain level of detail pop/switch distance, default is 100 and maximum is 2000
 End Rem
 Function TerrainDetail( terr:TTerrain,detail_level:Int )
 	terr.TerrainDetail( detail_level )
