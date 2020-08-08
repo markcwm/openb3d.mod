@@ -148,6 +148,22 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 	Terrain* terr=new Terrain;
 	
+	terr->eyepoint_piv=new Pivot;
+	terr->eyepoint_piv->class_name="Pivot";
+	list<Camera*>::iterator it;
+	for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
+		Global::camera_in_use=*it;
+		if(Global::camera_in_use->Hidden()==true) continue;
+	}
+	terr->eyepoint_piv->AddParent(Global::camera_in_use);
+	// update matrix
+	if(terr->eyepoint_piv->parent!=NULL){
+		terr->eyepoint_piv->mat.Overwrite(terr->eyepoint_piv->parent->mat);
+		terr->eyepoint_piv->UpdateMat();
+	}else{
+		terr->eyepoint_piv->UpdateMat(true);
+	}
+	
 	for (int i = 0; i<= 20; i++){
 		terr->level2dzsize[i] = 0;
 	}
@@ -716,7 +732,8 @@ void Terrain::RecreateROAM(){
 	ycf = eyepoint->EntityY();
 	zcf = -eyepoint->EntityZ();*/
 
-	TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
+	//TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
+	TFormPoint(eyepoint_piv->EntityX(true), eyepoint_piv->EntityY(true), eyepoint_piv->EntityZ(true), 0, this);
 	xcf = tformed_x;
 	ycf = tformed_y;
 	zcf = -tformed_z;
@@ -1167,6 +1184,12 @@ void Terrain::TerrainDetail(float detail_level){
     
 	for (int i = 0; i<= lmax; i++){
 		level2dzsize[i] = (float)pow((float)tsize/256 / sqrt((float)((int)(2000.0/Roam_Detail) << i)), 2);
+	}
+}
+
+void Terrain::TerrainRange(float camera_range){
+	if(camera_range>0 && camera_range<100.0){
+		eyepoint_piv->PositionEntity(0,0,camera_range);
 	}
 }
 

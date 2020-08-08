@@ -2,10 +2,18 @@
 
 ' *** Extra
 
+
 Rem
-bbdoc: Set terrain level of detail pop/switch distance, default is 100 and maximum is 2000
+bbdoc: Set terrain camera range to alter pop/switch distance, a value from 0 to 100
 End Rem
-Function TerrainDetail( terr:TTerrain,detail_level:Int )
+Function TerrainRange( terr:TTerrain,camera_range:Float )
+	terr.TerrainRange( camera_range )
+End Function
+
+Rem
+bbdoc: Set terrain level of detail, default is 100 and maximum is 2000
+End Rem
+Function TerrainDetail( terr:TTerrain,detail_level:Float )
 	terr.TerrainDetail( detail_level )
 End Function
 

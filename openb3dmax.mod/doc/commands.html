@@ -471,7 +471,10 @@ Returns string cast of byte pointer.
 Number of surfaces currently being rendered.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TerrainDetail>TerrainDetail</a></td><td class=docright>
-Set terrain level of detail pop/switch distance, default is 100 and maximum is 2000.
+Set terrain level of detail, default is 100 and maximum is 2000.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TerrainRange>TerrainRange</a></td><td class=docright>
+Set terrain camera range to alter pop/switch distance, a value from 0 to 100.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TexToBuffer>TexToBuffer</a></td><td class=docright>
 Copy texture to a pixmap buffer, buffer must be a byte ptr.
@@ -1468,8 +1471,13 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TerrainDetail>
-<tr><td class=doctop colspan=2>Function TerrainDetail( terr:TTerrain,detail_level:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set terrain level of detail pop/switch distance, default is 100 and maximum is 2000.</td></tr>
+<tr><td class=doctop colspan=2>Function TerrainDetail( terr:TTerrain,detail_level:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set terrain level of detail, default is 100 and maximum is 2000.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TerrainRange>
+<tr><td class=doctop colspan=2>Function TerrainRange( terr:TTerrain,camera_range:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set terrain camera range to alter pop/switch distance, a value from 0 to 100.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TexToBuffer>

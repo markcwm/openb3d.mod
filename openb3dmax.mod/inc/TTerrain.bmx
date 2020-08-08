@@ -158,6 +158,12 @@ Type TTerrain Extends TEntity
 	
 	' Openb3d
 	
+	Method TerrainRange( camera_range:Float )
+	
+		TerrainRange_( GetInstance(Self),camera_range )
+		
+	End Method
+	
 	Method TerrainDetail( detail_level:Float )
 	
 		TerrainDetail_( GetInstance(Self),detail_level )

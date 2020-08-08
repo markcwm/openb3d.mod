@@ -28,6 +28,10 @@ extern "C" {
 
 // Extra
 
+void TerrainRange_(Terrain* terr, float camera_range){
+   terr->TerrainRange(camera_range);
+}
+
 void TerrainDetail_(Terrain* terr, float detail_level){
    terr->TerrainDetail(detail_level);
 }

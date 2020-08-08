@@ -40,6 +40,7 @@ public:
 	MeshCollider* c_col_tree;
 
 	Camera* eyepoint; 			//reference to camera
+	Pivot* eyepoint_piv;
 #ifdef GLES2
 	unsigned int vbo_id;
 #endif
@@ -63,6 +64,7 @@ public:
 	float TerrainY (float x, float y, float z);
 	float TerrainZ (float x, float y, float z);
 	void TerrainDetail(float detail_level);
+	void TerrainRange(float camera_range);
 
 	Terrain(){
 		size=0;
