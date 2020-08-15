@@ -53,18 +53,18 @@ Type TGlobal3D
 	Global gfx_obj:TGraphics
 	Global txt_red:Byte=255, txt_green:Byte=255, txt_blue:Byte=255 ' TextColor, in bytes
 	
-	Global Log_New:Int=False		' True to debug when new 3d object created
-	Global Log_Del:Int=False		' True to debug when 3d object destroyed
-	Global Log_3DS:Int=False		' True to debug 3DS chunks
-	Global Log_B3D:Int=False		' True to debug B3D chunks
-	Global Log_MD2:Int=False		' True to debug MD2 chunks
+	Global Log_New:Int=False		' True to debug when object created
+	Global Log_Del:Int=False		' True to debug when object destroyed
+	Global Log_3DS:Int=False		' True to debug 3DS
+	Global Log_B3D:Int=False		' True to debug B3D
+	Global Log_MD2:Int=False		' True to debug MD2
 	Global Log_Assimp:Int=False		' True to debug Assimp
+	Global Log_OBJ:Int=False		' True to debug OBJ
 	
 	Global GL_Version:Float=0		' current GL version
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Flags:Int=-1		' Assimp mesh flags
-	Global Texture_Flags:Int=9		' LoadTexture flags
 	Global Mesh_Transform:Int=False	' mesh transform vertices
 	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Cubemap_Frame:Int[12]

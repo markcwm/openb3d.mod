@@ -182,11 +182,13 @@ Function MeshLoader( meshid:String,flags:Int=-1 )
 			TGlobal3D.Log_B3D=1
 			TGlobal3D.Log_MD2=1
 			TGlobal3D.Log_Assimp=1
+			TGlobal3D.Log_OBJ=1
 		Case "nodebug"
 			TGlobal3D.Log_3DS=0
 			TGlobal3D.Log_B3D=0
 			TGlobal3D.Log_MD2=0
 			TGlobal3D.Log_Assimp=0
+			TGlobal3D.Log_OBJ=0
 	EndSelect
 End Function
 
@@ -200,10 +202,8 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 	Select texid.ToLower()
 		Case "bb", "bmx", "blitzmax"
 			TGlobal3D.Texture_Loader=1
-			TGlobal3D.Texture_Flags=lf0
 		Case "assimp", "assimpstream", "bmxassimp", "assimpbmx", "stream", "streams"
 			TGlobal3D.Texture_Loader=1
-			TGlobal3D.Texture_Flags=lf0
 		Case "cpp", "c++", "lib", "library"
 			TGlobal3D.Texture_Loader=2
 		Case "frame", "frames"

@@ -98,6 +98,8 @@ Type TMeshLoaderMax Extends TMeshLoader
 				Return True
 			Case "3ds"
 				Return True
+			Case "obj"
+				Return True
 		End Select
 	End Method
 	
@@ -119,6 +121,8 @@ Type TMeshLoaderMax Extends TMeshLoader
 					Local model:T3DS = New T3DS
 					anim_mesh=model.Load3DSFromStream(file, url, parent)
 				EndIf
+			Case "obj"
+				anim_mesh=TOBJ.LoadOBJFromStream(file, url, parent)
 		EndSelect
 		
 		If anim_mesh=Null
@@ -164,6 +168,8 @@ Type TMeshLoaderMax Extends TMeshLoader
 					Local model:T3DS = New T3DS
 					mesh=model.Load3DSFromStream(file, url, parent)
 				EndIf
+			Case "obj"
+				mesh=TOBJ.LoadOBJFromStream(file, url, parent)
 		EndSelect
 		
 		If mesh=Null

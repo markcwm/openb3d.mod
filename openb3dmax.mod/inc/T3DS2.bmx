@@ -160,6 +160,7 @@ Type T3DS2
 	Field Stream:TStream
 	Field Defaultbrush:TBrush
 	Field Root:TMesh
+	Field TexFlags:Int
 	
 	Method GetObject:TEntity( index% )
 		If index < 0 Return Null
@@ -848,7 +849,7 @@ Type T3DS2
 			name = Filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture = LoadTexture(name, TGlobal3D.Texture_Flags) ' check material has texture, bad path crash streams
+		Local tex:TTexture = LoadTexture(name, TexFlags) ' check material has texture, bad path crash streams
 		If TGlobal3D.Log_3DS Then DebugLog(" MAT TEX name="+name+" matname="+matname+" texname="+texname)
 		
 		MapInsert Materialmap, matname, tex
@@ -953,7 +954,7 @@ Type T3DS2
 		Return parent
 	End Method
 	
-	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
+	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null, flags:Int = 9 )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
 		If file = Null
 			DebugLog " Invalid 3DS stream: "+String(url)
@@ -967,9 +968,10 @@ Type T3DS2
 		Return mesh
 	End Function
 	
-	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null )
+	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null, flags:Int = 9 )
 	
 		Stream = file
+		TexFlags = flags
 		Objlist = CreateList()
 		Materialmap = CreateMap()
 		Materialcolormap = CreateMap()
@@ -994,7 +996,7 @@ Type T3DS2
 		Root = ParseFile(url, parent_ent)
 		
 		'If TGlobal3D.Log_3DS Then DebugLog(" Mesh_Transform: "+TGlobal3D.Mesh_Transform)
-		'If TGlobal3D.Log_3DS Then DebugLog(" Texture_Flags: "+TGlobal3D.Texture_Flags)
+		'If TGlobal3D.Log_3DS Then DebugLog(" TexFlags: "+TexFlags)
 		
 		ChangeDir(olddir)
 		

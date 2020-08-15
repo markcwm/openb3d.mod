@@ -501,6 +501,7 @@ Include "inc/TB3D.bmx"
 Include "inc/TMD2.bmx"
 Include "inc/T3DS.bmx"
 Include "inc/T3DS2.bmx"
+Include "inc/TOBJ.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"
