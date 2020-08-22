@@ -173,7 +173,7 @@ Type T3DS
 	End Method
 	
 	Method ReadTransMatrix()
-		New_matrix = NewMatrix()
+		New_matrix = TMatrix.Create()
 		New_matrix.LoadIdentity() ' set grid[x,3]
 		
 		For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -209,7 +209,7 @@ Type T3DS
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_FACEMATLIST: BrushName = "+BrushName)
 		
 		If Found=True
-			New_mesh = NewMesh()
+			New_mesh = TMesh.Create()
 			If ObjectIndex>0 Then New_mesh.SetString(New_mesh.name,ObjectNames[ObjectIndex-1])
 			New_mesh.SetString(New_mesh.class_name,"Mesh")
 			New_mesh.AddParent(Root)
@@ -270,7 +270,7 @@ Type T3DS
 	End Method
 	
 	Method ReadMap(Layer:Int)
-		Texture = NewTexture()
+		Texture = TTexture.Create()
 		TextureLayer = Layer
 		'If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
 	End Method
@@ -293,7 +293,7 @@ Type T3DS
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface)
 		
 		' Dummy mesh and surface
-		Mesh = NewMesh()
+		Mesh = TMesh.Create()
 		If ObjectIndex>0 Then Mesh.SetString(Mesh.name,ObjectNames[ObjectIndex-1])
 		Mesh.SetString(Mesh.class_name,"Mesh")
 		Mesh.AddParent(Root)
@@ -381,7 +381,7 @@ Type T3DS
 		If Filepath<>"" Then ChangeDir(Filepath)
 		If TGlobal3D.Log_3DS Then DebugLog(" OldDir: "+OldDir)
 		
-		Root = NewMesh()
+		Root = TMesh.Create()
 		Root.SetString(Root.name,"ROOT")
 		Root.SetString(Root.class_name, "Mesh")
 		Root.AddParent(parent_ent)
@@ -505,7 +505,7 @@ Type T3DS
 		
 		For Local mesh2:TMesh = EachIn Meshes ' transform vertices, re-positions mesh by matrix
 			Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, mesh2 ))
-			Local invmat:TMatrix = NewMatrix()
+			Local invmat:TMatrix = TMatrix.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list

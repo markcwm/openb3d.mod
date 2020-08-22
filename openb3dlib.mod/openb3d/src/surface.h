@@ -70,6 +70,7 @@ public:
 
 	Surface();
 	~Surface();
+	static Surface* NewSurface();
 	Surface* Copy();
 	void ClearSurface(int clear_verts=true,int clear_tris=true);			
 	int AddVertex(float x,float y,float z,float u=0.0,float v=0.0,float w=0.0);

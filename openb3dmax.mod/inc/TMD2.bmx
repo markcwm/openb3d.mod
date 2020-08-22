@@ -213,7 +213,7 @@ Type TMD2
 			DebugLog " Invalid MD2 version: "+version
 		EndIf
 		
-		Local mesh:TMesh=NewMesh()
+		Local mesh:TMesh=TMesh.Create()
 		mesh.SetString(mesh.class_name, "Mesh")
 		mesh.AddParent(parent_ent)
 		mesh.EntityListAdd(TEntity.entity_list)
@@ -258,7 +258,7 @@ Type TMD2
 		surf.vert_tex_coords1=surf.SurfaceFloatArrayResize(SURFACE_vert_tex_coords1, num_vertices*2)
 		surf.vert_col=surf.SurfaceFloatArrayResize(SURFACE_vert_col, num_vertices*4)
 		
-		Local anim_surf:TSurface=mesh.NewSurface()
+		Local anim_surf:TSurface=TSurface.Create()
 		mesh.MeshListAdd(mesh.anim_surf_list, anim_surf)
 		anim_surf.no_verts[0]=surf.no_verts[0]
 		anim_surf.vert_coords=anim_surf.SurfaceFloatArrayResize(SURFACE_vert_coords, num_vertices*3)

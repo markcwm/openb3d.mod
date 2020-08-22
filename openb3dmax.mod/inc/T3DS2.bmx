@@ -389,7 +389,7 @@ Type T3DS2
 					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPLIST")
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
-					matrix = NewMatrix()
+					matrix = TMatrix.Create()
 					matrix.LoadIdentity() ' set grid[x,3]
 					
 					For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -535,7 +535,7 @@ Type T3DS2
 		Wend
 		
 		If objname = "$$$DUMMY"
-			mesh = NewMesh()
+			mesh = TMesh.Create()
 			mesh.SetString(mesh.name,instname)
 			mesh.SetString(mesh.class_name,"Mesh")
 			mesh.AddParent(parent)
@@ -587,7 +587,7 @@ Type T3DS2
 			Select chunk.id
 				Case CHUNK_TRIMESH ' $4100 - triangular mesh
 					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRIMESH: "+objname)
-					mesh = NewMesh()
+					mesh = TMesh.Create()
 					mesh.SetString(mesh.name,objname)
 					mesh.SetString(mesh.class_name,"Mesh")
 					mesh.AddParent(parent)
@@ -915,7 +915,7 @@ Type T3DS2
 	
 	Method ParseFile:TMesh( url:Object, parent_ent:TEntity=Null )
 	
-		Local parent:TMesh = NewMesh()
+		Local parent:TMesh = TMesh.Create()
 		parent.SetString(parent.name,"ROOT")
 		parent.SetString(parent.class_name,"Mesh")
 		parent.AddParent(parent_ent)
@@ -1027,7 +1027,7 @@ Type T3DS2
 		For Local ent:TEntity = EachIn Objlist ' transform vertices, re-positions mesh by matrix
 			Local mesh2:TMesh = TMesh(ent)
 			Local mat:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh2 ))
-			Local invmat:TMatrix = NewMatrix()
+			Local invmat:TMatrix = TMatrix.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list

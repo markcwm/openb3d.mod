@@ -112,11 +112,11 @@ Type TGlobal3D
 		TBatchSprite.InitGlobals()
 		TTexture.InitGlobals()
 		
-		Matrix_3DS=NewMatrix()
+		Matrix_3DS=TMatrix.Create()
 		Matrix_3DS.LoadIdentity()
-		Matrix_B3D=NewMatrix()
+		Matrix_B3D=TMatrix.Create()
 		Matrix_B3D.LoadIdentity()
-		Matrix_MD2=NewMatrix()
+		Matrix_MD2=TMatrix.Create()
 		Matrix_MD2.LoadIdentity()
 		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as wasn't working right on multi-mesh
 		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented at all

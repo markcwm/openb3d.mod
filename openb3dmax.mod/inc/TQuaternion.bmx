@@ -72,6 +72,13 @@ Type TQuaternion
 		
 	End Function
 	
+	Function Create:TQuaternion()
+	
+		Local inst:Byte Ptr=NewQuaternion_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	' Minib3d
 	
 	Method New()
@@ -108,7 +115,7 @@ Type TQuaternion
 		Local wy#=q[0]*q[2]
 		Local wz#=q[0]*q[3]
 	
-		Local mat:TMatrix=NewMatrix()
+		Local mat:TMatrix=TMatrix.Create()
 		
 		mat.grid[(4*0)+0]=1-2*(yy+zz)
 		mat.grid[(4*0)+1]=  2*(xy-wz)

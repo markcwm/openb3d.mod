@@ -48,7 +48,7 @@ Mesh* Mesh::NewMesh(){
 	return mesh;
 }
 
-Surface* Mesh::NewSurface(){
+/*Surface* Mesh::NewSurface(){
 	Surface* surf=new Surface();
 	return surf;
 }
@@ -57,7 +57,7 @@ Bone* Mesh::NewBone(){
 	Bone* bone=new Bone();
 	//bone->keys=new AnimationKeys();
 	return bone;
-}
+}*/
 
 void Mesh::ShadeMesh(Shader* material){
 	for(int s=1;s<=CountSurfaces();s++){

@@ -87,7 +87,14 @@ Type TMatrix
 	
 	Function NewMatrix:TMatrix()
 	
-		Local inst:Byte Ptr=NewMatrix_() ' and LoadIdentity
+		Local inst:Byte Ptr=NewMatrix_() ' calls LoadIdentity
+		Return CreateObject(inst)
+		
+	End Function
+	
+	Function Create:TMatrix()
+	
+		Local inst:Byte Ptr=NewMatrix_()
 		Return CreateObject(inst)
 		
 	End Function
@@ -122,7 +129,7 @@ Type TMatrix
 	
 	Method GetMatrixScale:TVector()
 	
-		Local s:TVector=NewVector()
+		Local s:TVector=TVector.Create()
 		s.x[0] = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
 		s.y[0] = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
 		s.z[0] = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
@@ -181,7 +188,7 @@ Type TMatrix
 	' from minib3d
 	Method Inverse:TMatrix()
 	
-		Local mat:TMatrix=NewMatrix()
+		Local mat:TMatrix=Create()
 		Local tx#=0, ty#=0, tz#=0
 		
 	  	' The rotational part of the matrix is simply the transpose of the original matrix.

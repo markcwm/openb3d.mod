@@ -40,6 +40,7 @@ public:
 
 	}
 
+	static Bone* NewBone();
 	Bone* CopyEntity(Entity* parent_ent=NULL);
 	void FreeEntity(void);
 

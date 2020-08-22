@@ -65,6 +65,10 @@ int SurfsRendered_(){
 	return Camera::SurfsRendered();
 }
 
+Sprite* NewSprite_(){
+	return Sprite::NewSprite();
+}
+
 Texture* NewTexture_(){
 	return Texture::NewTexture();
 }
@@ -73,16 +77,20 @@ Mesh* NewMesh_(){
 	return Mesh::NewMesh();
 }
 
-Surface* NewSurface_(Mesh* mesh){
+/*Surface* NewSurface_(Mesh* mesh){
 	return mesh->NewSurface();
 }
 
 Bone* NewBone_(Mesh* mesh){
 	return mesh->NewBone();
+}*/
+
+Surface* NewSurface_(){
+	return Surface::NewSurface();
 }
 
-Sprite* NewSprite_(){
-	return Sprite::NewSprite();
+Bone* NewBone_(){
+	return Bone::NewBone();
 }
 
 /*Shader* CreateShaderMaterial_(char* ShaderName){

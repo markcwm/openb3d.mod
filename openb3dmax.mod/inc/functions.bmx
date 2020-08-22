@@ -390,35 +390,63 @@ Rem
 bbdoc: Returns a new TSprite object
 End Rem
 Function NewSprite:TSprite()
-	Return TSprite.NewSprite()
+	Return TSprite.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TTexture object
 End Rem
 Function NewTexture:TTexture()
-	Return TTexture.NewTexture()
+	Return TTexture.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TMesh object
 End Rem
 Function NewMesh:TMesh()
-	Return TMesh.NewMesh()
+	Return TMesh.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TSurface object
 End Rem
-Function NewSurface:TSurface( mesh:TMesh )
-	Return mesh.NewSurface()
+Function NewSurface:TSurface()
+	Return TSurface.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TBone object
 End Rem
-Function NewBone:TBone( mesh:TMesh )
-	Return mesh.NewBone()
+Function NewBone:TBone()
+	Return TBone.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TAnimationKeys object
+End Rem
+Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
+	Return TAnimationKeys.Create( bone )
+End Function
+
+Rem
+bbdoc: Returns a new TMatrix object
+End Rem
+Function NewMatrix:TMatrix()
+	Return TMatrix.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TQuaternion object
+End Rem
+Function NewQuaternion:TQuaternion()
+	Return TQuaternion.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TVector object
+End Rem
+Function NewVector:TVector()
+	Return TVector.Create()
 End Function
 
 Rem
@@ -468,34 +496,6 @@ bbdoc: Returns a copy of the new texture
 End Rem
 Function CopyTexture:TTexture( tex:TTexture,flags:Int )
 	Return tex.Copy( flags )
-End Function
-
-Rem
-bbdoc: Returns a new TAnimationKeys object
-End Rem
-Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
-	Return TAnimationKeys.NewAnimationKeys( bone )
-End Function
-
-Rem
-bbdoc: Returns a new TMatrix object
-End Rem
-Function NewMatrix:TMatrix()
-	Return TMatrix.NewMatrix()
-End Function
-
-Rem
-bbdoc: Returns a new TQuaternion object
-End Rem
-Function NewQuaternion:TQuaternion()
-	Return TQuaternion.NewQuaternion()
-End Function
-
-Rem
-bbdoc: Returns a new TVector object
-End Rem
-Function NewVector:TVector()
-	Return TVector.NewVector()
 End Function
 
 Rem

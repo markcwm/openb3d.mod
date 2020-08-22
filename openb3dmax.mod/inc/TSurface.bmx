@@ -312,6 +312,20 @@ Type TSurface
 		
 	End Method
 	
+	Function NewSurface:TSurface()
+	
+		Local inst:Byte Ptr=NewSurface_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	Function Create:TSurface() ' use MeshListAdd(list,value)
+	
+		Local inst:Byte Ptr=NewSurface_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	' Extra
 	
 	Method FreeSurface()

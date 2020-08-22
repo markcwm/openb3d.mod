@@ -258,6 +258,13 @@ Type TTexture
 		
 	End Function
 	
+	Function Create:TTexture()
+	
+		Local inst:Byte Ptr=NewTexture_()
+		Return CreateObject(inst)
+		
+	End Function
+	
 	Method CountMipmaps:Int()
 	
 		Return CountMipmaps_( GetInstance(Self) )
@@ -591,7 +598,7 @@ Type TTexture
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
-		If tex=Null Then tex=NewTexture()
+		If tex=Null Then tex=TTexture.Create()
 		tex.SetString(tex.file, file)
 		tex.SetString(tex.file_abs, FileAbs(file)) ' returns absolute path of file if relative
 		
@@ -740,7 +747,7 @@ Type TTexture
 		Local file$=String(url)
 		If FileFind(file)=False Then Return Null ' strips any directories from file
 		
-		If tex=Null Then tex=NewTexture()
+		If tex=Null Then tex=TTexture.Create()
 		tex.SetString(tex.file, file)
 		tex.SetString(tex.file_abs, FileAbs(file)) ' returns absolute path of file if relative
 		
@@ -1087,7 +1094,7 @@ Type TTexture
 				Return CreateObject(inst)
 				
 			Default ' wrapper
-				Local tex:TTexture=NewTexture()
+				Local tex:TTexture=TTexture.Create()
 				
 				tex.SetString(tex.file, GetString(file))
 				tex.SetString(tex.file_abs, FileAbs(GetString(file))) ' returns absolute path of file if relative

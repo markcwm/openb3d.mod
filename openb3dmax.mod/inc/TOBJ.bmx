@@ -100,7 +100,7 @@ Type TOBJ
 		Local ri:Int
 		Local id:Int
 		
-		Local root:TMesh = NewMesh()
+		Local root:TMesh = TMesh.Create()
 		root.SetString(root.name, "ROOT")
 		root.SetString(root.class_name, "Mesh")
 		root.AddParent(parent_ent)
@@ -161,7 +161,7 @@ Type TOBJ
 						meshonce=1
 						If TGlobal3D.Log_OBJ Then DebugLog "--vertexnew "
 						
-						mesh = NewMesh()
+						mesh = TMesh.Create()
 						mesh.SetString(mesh.class_name, "Mesh")
 						mesh.AddParent(root)
 						mesh.EntityListAdd(TEntity.entity_list)

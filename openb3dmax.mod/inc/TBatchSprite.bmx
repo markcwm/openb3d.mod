@@ -38,7 +38,8 @@ Type TBatchSpriteMesh Extends TMesh
 	' create batch controller
 	Function Create:TBatchSpriteMesh( parent_ent:TEntity=Null )
 	
-		
+		'Local inst:Byte Ptr=New_()
+		'Return CreateObject(inst)
 		
 	EndFunction
 	
