@@ -46,7 +46,7 @@ Type T3DS
 	Field Red:Byte, Green:Byte, Blue:Byte, Percent:Int
 	Field Meshes:TList, MatrixMap:TMap
 	Field New_matrix:TMatrix
-	Field TexFlags:Int
+	Field override_texflags:Int
 	
 	Method ReadChunk()
 		If Stream.Eof() Return
@@ -258,7 +258,7 @@ Type T3DS
 		EndIf
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: Filename = "+Filename+" Texname = "+Texname)
 		
-		Texture = LoadTexture(Texname, TexFlags)
+		Texture = LoadTexture(Texname, override_texflags)
 		
 		If Texture<>Null ' stops crash if texture file is missing
 			If TextureLayer = M3D_3DS_TEXTUREMAP1
@@ -325,7 +325,7 @@ Type T3DS
 		MatrixMap = CreateMap()
 	End Method
 	
-	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null, flags:Int = 9 )
+	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null, texflags:Int = -1 )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
 		If file = Null
 			DebugLog " Invalid 3DS stream: "+String(url)
@@ -333,21 +333,21 @@ Type T3DS
 		EndIf
 		
 		Local model:T3DS = New T3DS
-		Local mesh:TMesh = model.Load3DSFromStream(file, url, parent_ent_ext, flags)
+		Local mesh:TMesh = model.Load3DSFromStream(file, url, parent_ent_ext, texflags)
 		
 		file.Close()
 		Return mesh
 	End Function
 	
-	Method Load3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null, flags:Int = 9 )
+	Method Load3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null, texflags:Int = -1 )
 		Local Size:Int, OldDir:String, Filepath:String, Dir:String
 		Local Pixmap:TPixmap, BrushName:String
 		
 		Stream = file
 		Size = Stream.Size()
-		TexFlags = flags
 		Dir = String(url)
 		OldDir = CurrentDir()
+		If texflags = -1 Then override_texflags = TGlobal3D.Texture_Flags Else override_texflags = texflags
 		
 		' Read Main-Chunk
 		ReadChunk()

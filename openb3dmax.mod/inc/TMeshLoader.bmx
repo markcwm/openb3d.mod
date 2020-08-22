@@ -37,12 +37,12 @@ Type TMeshLoader
 	Rem
 	bbdoc: Call mesh loader implementation.
 	End Rem
-	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract
+	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1) Abstract
 
 	Rem
 	bbdoc: Call animated mesh loader implementation
 	End Rem
-	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract
+	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1) Abstract
 	
 End Type
 
@@ -59,7 +59,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 		End Select
 	End Method
 	
-	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
+	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1)
 	
 		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 2)) Then Return Null
 		
@@ -72,7 +72,7 @@ Type TMeshLoaderOpenB3D Extends TMeshLoader
 		
 	End Method
 	
-	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
+	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1)
 	
 		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 2)) Then Return Null
 		
@@ -103,7 +103,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 		End Select
 	End Method
 	
-	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
+	Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1)
 	
 		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 1)) Then Return Null
 		
@@ -116,13 +116,13 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "3ds"
 				If TGlobal3D.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
-					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent)
+					anim_mesh=model.LoadAnim3DSFromStream(file, url, parent, flags)
 				Else
 					Local model:T3DS = New T3DS
-					anim_mesh=model.Load3DSFromStream(file, url, parent)
+					anim_mesh=model.Load3DSFromStream(file, url, parent, flags)
 				EndIf
 			Case "obj"
-				anim_mesh=TOBJ.LoadOBJFromStream(file, url, parent)
+				anim_mesh=TOBJ.LoadOBJFromStream(file, url, parent, flags)
 		EndSelect
 		
 		If anim_mesh=Null
@@ -150,7 +150,7 @@ Type TMeshLoaderMax Extends TMeshLoader
 		
 	End Method
 	
-	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null)
+	Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1)
 	
 		If Not (TGlobal3D.Mesh_Loader=0 Or (TGlobal3D.Mesh_Loader & 1)) Then Return Null
 		
@@ -163,13 +163,13 @@ Type TMeshLoaderMax Extends TMeshLoader
 			Case "3ds"
 				If TGlobal3D.Loader_3DS2
 					Local model:T3DS2 = New T3DS2
-					mesh=model.LoadAnim3DSFromStream(file, url, parent)
+					mesh=model.LoadAnim3DSFromStream(file, url, parent, flags)
 				Else
 					Local model:T3DS = New T3DS
-					mesh=model.Load3DSFromStream(file, url, parent)
+					mesh=model.Load3DSFromStream(file, url, parent, flags)
 				EndIf
 			Case "obj"
-				mesh=TOBJ.LoadOBJFromStream(file, url, parent)
+				mesh=TOBJ.LoadOBJFromStream(file, url, parent, flags)
 		EndSelect
 		
 		If mesh=Null

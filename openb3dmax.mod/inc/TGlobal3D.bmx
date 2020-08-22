@@ -70,6 +70,7 @@ Type TGlobal3D
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
 	Global Flip_Cubemap:Int=1		' flip cubic environment map orientation
+	Global Texture_Flags:Int=9		' override texture flags, use TextureLoader "flags"
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix

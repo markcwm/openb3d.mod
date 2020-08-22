@@ -84,7 +84,7 @@ Rem
 bbdoc: Loads an anim mesh, see MeshLoader
 returns: A mesh object with child meshes if any
 End Rem
-Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
+Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
 		DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
@@ -102,7 +102,7 @@ Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
 	While loader
 		stream.Seek pos
 		Try
-			mesh=loader.LoadAnimMesh( stream,url,parent )
+			mesh=loader.LoadAnimMesh( stream,url,parent,flags )
 		Catch ex:TStreamException
 		End Try
 		If mesh Then Exit
@@ -116,7 +116,7 @@ Rem
 bbdoc: Loads a single mesh, see MeshLoader
 returns: A mesh object
 End Rem
-Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
+Function LoadMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
 		DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
@@ -135,7 +135,7 @@ Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
 	While loader
 		stream.Seek pos
 		Try
-			mesh=loader.LoadMesh( stream,url,parent )
+			mesh=loader.LoadMesh( stream,url,parent,flags )
 		Catch ex:TStreamException
 		End Try
 		If mesh Then Exit
@@ -230,6 +230,8 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 			TGlobal3D.Flip_Cubemap=0
 		Case "flipcubemap"
 			TGlobal3D.Flip_Cubemap=1
+		Case "flags", "texflags"
+			TGlobal3D.Texture_Flags=lf0
 	EndSelect
 End Function
 
