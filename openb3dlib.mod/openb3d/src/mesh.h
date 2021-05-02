@@ -73,8 +73,8 @@ public:
 	
 	// Extra
 	static Mesh* NewMesh();
-	Surface* NewSurface();
-	Bone* NewBone();
+	//Surface* NewSurface();
+	//Bone* NewBone();
 	void ShadeMesh(Shader* material);
 	static void LightMesh(Mesh* m,float red,float green,float blue,float range,float light_x,float light_y,float light_z);
 

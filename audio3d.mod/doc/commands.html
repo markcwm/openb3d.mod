@@ -16,8 +16,14 @@ Failure to stop sounds associated with a non-existent entity can cause your prog
 If you set any SoundPoint "bump" field to UPDATE_DISABLED then it will no longer be updated and can be
 directly modified. For example, setting VolumeBump = UPDATE_DISABLED will stop Volume field from updating.
 <h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
+<tr><td class=docleft width=1%><a href=#CreateListener>CreateListener</a></td><td class=docright>
+Like Init3DSound.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#DopplerFrameSkip>DopplerFrameSkip</a></td><td class=docright>
 Stops doppler effect for all objects for 1 update.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitSound>EmitSound</a></td><td class=docright>
+Like Start3DSound.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EntityPause3DSound>EntityPause3DSound</a></td><td class=docright>
 Pauses all entity sounds.
@@ -34,6 +40,9 @@ Set up the 3D sound system.
 <tr><td class=docleft width=1%><a href=#List3DSounds>List3DSounds</a></td><td class=docright>
 Finds sounds associated with an entity.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#Load3DSound>Load3DSound</a></td><td class=docright>
+Load a 3d sound.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Pause3DSound>Pause3DSound</a></td><td class=docright>
 Pauses a 3D sound.
 </td></tr>
@@ -42,6 +51,18 @@ Attaches a sound to an entity but does not start it playing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Resume3DSound>Resume3DSound</a></td><td class=docright>
 Resumes a paused 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetLoudness3DSound>SetLoudness3DSound</a></td><td class=docright>
+Set loudness for a 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetPan3DSound>SetPan3DSound</a></td><td class=docright>
+Set pan point for a 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetPanBump3DSound>SetPanBump3DSound</a></td><td class=docright>
+Set pan bump for a 3D sound.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetRateBump3DSound>SetRateBump3DSound</a></td><td class=docright>
+Set rate bump for a 3D sound.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Start3DSound>Start3DSound</a></td><td class=docright>
 Attaches a sound to an entity and starts it playing.
@@ -61,6 +82,11 @@ SoundPoint.
 <h2
  id=functionsdet>Functions
 </h2>
+<table class=doc width=100% cellspacing=3 id=CreateListener>
+<tr><td class=doctop colspan=2>Function CreateListener:TEntity(ListeningEntity:TEntity, MaxRange:Float=30, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Like Init3DSound.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=DopplerFrameSkip>
 <tr><td class=doctop colspan=2>Function DopplerFrameSkip()</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Stops doppler effect for all objects for 1 update.</td></tr>
@@ -68,6 +94,11 @@ SoundPoint.
 effect then call this before your next call to <a href=#Update3DSounds>Update3DSounds</a>. For example, if you have a camera
 looking at an object from a distance and then "change view" by moving the camera close and
 behind the object. This would normally be a very fast move and cause a large doppler effect.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitSound>
+<tr><td class=doctop colspan=2>Function EmitSound:SoundPoint(TheSound:TSound, NoisyEntity:TEntity, Loudness:Float=1, Volume:Float=1)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Like Start3DSound.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EntityPause3DSound>
@@ -91,7 +122,7 @@ before freeing an entity if there is a chance it could be playing a sound.</td><
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=Init3DSound>
-<tr><td class=doctop colspan=2>Function Init3DSound(ListeningEntity:TEntity, MaxRange:Float, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)</td></tr>
+<tr><td class=doctop colspan=2>Function Init3DSound:TEntity(ListeningEntity:TEntity, MaxRange:Float=30, ExaggerateDopplerScale:Float=DOPPLER_DISABLED)</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set up the 3D sound system.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Call this before any other 3D sound calls. The sound system can be re-initialized later
 without loosing the sounds currently playing.
@@ -110,6 +141,23 @@ dependent on the speed of objects in your program.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Finds and returns all sound points attached to the given entity.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=Load3DSound>
+<tr><td class=doctop colspan=2>Function Load3DSound:TSound( url:Object,flags:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Returns</td><td class=docright>A sound object.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Load a 3d sound.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright><b>url</b> can be either a string, a stream or a <a href=#TAudioSample>TAudioSample</a> object.
+The returned sound can be played using <a href=#PlaySound>PlaySound</a> or <a href=#CueSound>CueSound</a>.
+<p>
+The <b>flags</b> parameter can be any combination of:
+<p>
+<table><tr><td> <b>Flag value</b></td><td><b>Effect</b>
+</td></tr><tr><td>SOUND_LOOP</td><td>The sound should loop when played back.
+</td></tr><tr><td>SOUND_HARDWARE</td><td>The sound should be placed in onboard soundcard memory if possible.</table>
+<p>
+
+To combine flags, use the binary 'or' operator: '|'.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=Pause3DSound>
 <tr><td class=doctop colspan=2>Function Pause3DSound(TheSoundPoint:SoundPoint)</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Pauses a 3D sound.</td></tr>
@@ -126,6 +174,26 @@ dependent on the speed of objects in your program.</td></tr>
 <tr><td class=doctop colspan=2>Function Resume3DSound(TheSoundPoint:SoundPoint)</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Resumes a paused 3D sound.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Wrapper for SoundPoint.Pause = False for more logical programming.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetLoudness3DSound>
+<tr><td class=doctop colspan=2>Function SetLoudness3DSound(TheSoundPoint:SoundPoint, Loudness:Float)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set loudness for a 3D sound.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetPan3DSound>
+<tr><td class=doctop colspan=2>Function SetPan3DSound(TheSoundPoint:SoundPoint, Pan:Float)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set pan point for a 3D sound.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetPanBump3DSound>
+<tr><td class=doctop colspan=2>Function SetPanBump3DSound(TheSoundPoint:SoundPoint, PanBump:Float)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set pan bump for a 3D sound.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=SetRateBump3DSound>
+<tr><td class=doctop colspan=2>Function SetRateBump3DSound(TheSoundPoint:SoundPoint, RateBump:Float)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set rate bump for a 3D sound.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=Start3DSound>
@@ -273,9 +341,9 @@ To pause a sound, change it's paused value to true and update the sound.</td></t
 <h2 id=modinfo>Module Information</h2>
 <table width=100%>
 <tr><th width=1%>Version</th><td>1.3</td></tr>
-<tr><th width=1%>License</th><td>Public Domain (You are free to use this code as you please)</td></tr>
+<tr><th width=1%>License</th><td>zlib (You are free to use this code as you please)</td></tr>
 <tr><th width=1%>Copyright</th><td>2007 Logan Chittenden</td></tr>
-<tr><th width=1%>History</th><td>1.3 Release (markcwm)</td></tr>
+<tr><th width=1%>History</th><td>1.3 Release (by markcwm)</td></tr>
 <tr><th width=1%>History</th><td>Init3DSound HearingPoint fix, updated documentation</td></tr>
 <tr><th width=1%>History</th><td>1.2 Release</td></tr>
 <tr><th width=1%>History</th><td>Added Stop3DSound, EntityStop3DSound, Pause3DSound, EntityPause3DSound,</td></tr>

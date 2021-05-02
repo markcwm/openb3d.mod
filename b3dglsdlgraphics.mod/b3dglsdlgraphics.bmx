@@ -23,6 +23,7 @@ Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
 Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
 'Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
 'Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
+Import Openb3dmax.Audio3d
 
 Include "TDebug.bmx"
 
@@ -69,7 +70,9 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 	
 	SetGraphicsDriver( GLMax2DDriver(),flags ) ' mixed 2d/3d
 	If usecanvas=False Then TGlobal3D.gfx_obj=Graphics( width,height,depth,rate,flags ) ' gfx object
-	If height>GraphicsHeight() Then height=GraphicsHeight() ' deduct titlebar height (win32 only)
+	If usecanvas=False And (mode=2 Or (mode=0 And depth=0)) ' if fullsize windowed mode
+		If GraphicsHeight()>0 Then height=GraphicsHeight() ' subtract titlebar height (fix for texture rendering in win32)
+	EndIf
 	
 	'glewInit() ' sdl or pub.opengles?
 	TGlobal3D.GraphicsInit() ' save states for Max2D

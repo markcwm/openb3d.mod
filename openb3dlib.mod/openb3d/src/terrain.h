@@ -17,7 +17,7 @@
 
 using namespace std;
 
-const int ROAM_LMAX = 20; 		//<-----------terrain detail here	
+const int ROAM_LMAX = 20; 		//<-----------terrain levels of detail, maximum is 20
 
 class Terrain : public Entity{
 private:
@@ -30,15 +30,17 @@ public:
 	static int triangleindex;
 	static MeshInfo* mesh_info;
 	static vector<float> vertices;
+	static float Roam_Detail;
 	
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
-
-	float level2dzsize[ROAM_LMAX+1]; 	/* Max midpoint displacement per level     */
+	
+	float level2dzsize[ROAM_LMAX+1]; 	// Max midpoint displacement per level
 	float* height; 				//heightmap
 	MeshCollider* c_col_tree;
 
 	Camera* eyepoint; 			//reference to camera
+	Pivot* eyepoint_piv;
 #ifdef GLES2
 	unsigned int vbo_id;
 #endif
@@ -61,6 +63,8 @@ public:
 	float TerrainX (float x, float y, float z);
 	float TerrainY (float x, float y, float z);
 	float TerrainZ (float x, float y, float z);
+	void TerrainDetail(float detail_level);
+	void TerrainRange(float camera_range);
 
 	Terrain(){
 		size=0;

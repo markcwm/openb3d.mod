@@ -11,6 +11,12 @@
 
 #include "global.h"
 
+Bone* Bone::NewBone(){
+	Bone* bone=new Bone();
+	//bone->keys=new AnimationKeys();
+	return bone;
+}
+
 Bone* Bone::CopyEntity(Entity* parent_ent){
 
 	// new bone

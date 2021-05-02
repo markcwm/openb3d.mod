@@ -68,6 +68,11 @@ Surface::~Surface(){
 
 }
 
+Surface* Surface::NewSurface(){
+	Surface* surf=new Surface();
+	return surf;
+}
+
 Surface* Surface::Copy(){
 
 	Surface* surf=new Surface();

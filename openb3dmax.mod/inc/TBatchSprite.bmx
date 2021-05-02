@@ -36,17 +36,13 @@ Type TBatchSpriteMesh Extends TMesh
 	End Method
 	
 	' create batch controller
-	Function Create:TBatchSpriteMesh( parent_ent:TEntity=Null )
+	'Function Create:TBatchSpriteMesh()
 	
-		
-		
-	EndFunction
+	'EndFunction
 	
-	Method Render()
+	'Method Render()
 	
-		
-		
-	EndMethod
+	'EndMethod
 	
 EndType
 
@@ -195,10 +191,8 @@ Type TBatchSprite Extends TSprite
 		
 	EndFunction
 	
-	Method UpdateBatch( cam_sprite:TSprite )
+	'Method UpdateBatch( cam_sprite:TSprite )
 	
-		
-		
-	End Method
+	'End Method
 	
 EndType

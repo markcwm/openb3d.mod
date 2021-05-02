@@ -25,6 +25,8 @@ Import Brl.Map
 Extern
 
 	' *** Extra
+	Function TerrainRange_( terr:Byte Ptr,camera_range:Float )
+	Function TerrainDetail_( terr:Byte Ptr,detail_level:Float )
 	Function TextureAnIsotropic_( tex:Byte Ptr,f:Float )
 	Function TextureLoader_( texid:Byte Ptr,lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
 	Function MSAntiAlias_( multisample:Int )
@@ -36,8 +38,8 @@ Extern
 	Function NewSprite_:Byte Ptr()
 	Function NewTexture_:Byte Ptr()
 	Function NewMesh_:Byte Ptr()
-	Function NewSurface_:Byte Ptr( mesh:Byte Ptr )
-	Function NewBone_:Byte Ptr( mesh:Byte Ptr )
+	Function NewSurface_:Byte Ptr()
+	Function NewBone_:Byte Ptr()
 	Function CreateShaderMaterial_:Byte Ptr( ShaderName:Byte Ptr )
 	Function CreateFragShader_:Byte Ptr( shader:Byte Ptr,shaderFileName:Byte Ptr )
 	Function CreateFragShaderFromString_:Byte Ptr( shader:Byte Ptr,shadercode:Byte Ptr )
@@ -499,6 +501,7 @@ Include "inc/TB3D.bmx"
 Include "inc/TMD2.bmx"
 Include "inc/T3DS.bmx"
 Include "inc/T3DS2.bmx"
+Include "inc/TOBJ.bmx"
 
 ' picking/collision
 Include "inc/TPick.bmx"

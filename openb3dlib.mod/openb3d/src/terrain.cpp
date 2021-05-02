@@ -24,15 +24,16 @@
 #include "light.h"
 #endif
 
+#include <stdio.h>
+
 int Terrain::triangleindex;
+float Terrain::Roam_Detail = 100.0;
 
 static Line Ray;
 static float radius;
 
-
 //static vector<float> vertices;
 vector<float> Terrain::vertices;
-
 
 MeshInfo* Terrain::mesh_info;
 list<Terrain*> Terrain::terrain_list;
@@ -146,15 +147,32 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 	Terrain* terr=new Terrain;
-
-	for (int i = 0; i<= ROAM_LMAX; i++){
+	
+	terr->eyepoint_piv=new Pivot;
+	terr->eyepoint_piv->class_name="Pivot";
+	list<Camera*>::iterator it;
+	for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
+		Global::camera_in_use=*it;
+		if(Global::camera_in_use->Hidden()==true) continue;
+	}
+	terr->eyepoint_piv->AddParent(Global::camera_in_use);
+	// update matrix
+	if(terr->eyepoint_piv->parent!=NULL){
+		terr->eyepoint_piv->mat.Overwrite(terr->eyepoint_piv->parent->mat);
+		terr->eyepoint_piv->UpdateMat();
+	}else{
+		terr->eyepoint_piv->UpdateMat(true);
+	}
+	
+	for (int i = 0; i<= 20; i++){
 		terr->level2dzsize[i] = 0;
 	}
-        int lmax=tsize/100+10;
+    int lmax=(tsize/100)+10;
 	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
-
+	
 	for (int i = 0; i<= lmax; i++){
-		terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <-------------terrain detail here
+		//terr->level2dzsize[i] = (float)pow((float)tsize/2048 / sqrt((float)(1 << i)),2);	// <---- terrain detail here
+		terr->level2dzsize[i] = (float)pow((float)tsize/256 / sqrt((float)((int)(2000.0/Roam_Detail) << i)), 2);
 	}
 
 	terr->ShaderMat=Global::ambient_shader;
@@ -165,12 +183,12 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	C_DeleteMeshInfo(mesh_info);
 	terr->AddParent(parent_ent);
 	terrain_list.push_back(terr);
+	
 	if (tsize!=0){
 		terr->size=tsize;
 		terr->vsize=30;
 		terr->height=new float[(tsize+1)*(tsize+1)];
 		terr->NormalsMap=new float[(tsize+1)*(tsize+1)*3];
-
 	}
 
 #ifdef GLES2
@@ -714,7 +732,8 @@ void Terrain::RecreateROAM(){
 	ycf = eyepoint->EntityY();
 	zcf = -eyepoint->EntityZ();*/
 
-	TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
+	//TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
+	TFormPoint(eyepoint_piv->EntityX(true), eyepoint_piv->EntityY(true), eyepoint_piv->EntityZ(true), 0, this);
 	xcf = tformed_x;
 	ycf = tformed_y;
 	zcf = -tformed_z;
@@ -1150,10 +1169,34 @@ float Terrain::TerrainZ (float x, float y, float z){
 	return tformed_z;
 }
 
+void Terrain::TerrainDetail(float detail_level){
+
+	if(detail_level>=4 && detail_level<=2000){
+		Roam_Detail = detail_level;
+	}
+	
+	for (int i = 0; i<= 20; i++){
+		level2dzsize[i] = 0;
+	}
+    int lmax=((int)size/100)+10;
+	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
+    int tsize=(int)size;
+    
+	for (int i = 0; i<= lmax; i++){
+		level2dzsize[i] = (float)pow((float)tsize/256 / sqrt((float)((int)(2000.0/Roam_Detail) << i)), 2);
+	}
+}
+
+void Terrain::TerrainRange(float camera_range){
+	if(camera_range>0 && camera_range<100.0){
+		eyepoint_piv->PositionEntity(0,0,camera_range);
+	}
+}
+
 void Terrain::FreeEntity(){
 
 	delete[] height;
-	delete[] NormalsMap;		
+	delete[] NormalsMap;
 
 	terrain_list.remove(this);
 	delete c_col_tree;

@@ -2,6 +2,21 @@
 
 ' *** Extra
 
+
+Rem
+bbdoc: Set terrain camera range to alter pop/switch distance, a value from 0 to 100
+End Rem
+Function TerrainRange( terr:TTerrain,camera_range:Float )
+	terr.TerrainRange( camera_range )
+End Function
+
+Rem
+bbdoc: Set terrain level of detail, default is 100 and maximum is 2000
+End Rem
+Function TerrainDetail( terr:TTerrain,detail_level:Float )
+	terr.TerrainDetail( detail_level )
+End Function
+
 Rem
 bbdoc: Enables or disables hardware multisample antialiasing if supported
 End Rem
@@ -69,7 +84,7 @@ Rem
 bbdoc: Loads an anim mesh, see MeshLoader
 returns: A mesh object with child meshes if any
 End Rem
-Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
+Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
 		DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
@@ -87,7 +102,7 @@ Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )
 	While loader
 		stream.Seek pos
 		Try
-			mesh=loader.LoadAnimMesh( stream,url,parent )
+			mesh=loader.LoadAnimMesh( stream,url,parent,flags )
 		Catch ex:TStreamException
 		End Try
 		If mesh Then Exit
@@ -101,7 +116,7 @@ Rem
 bbdoc: Loads a single mesh, see MeshLoader
 returns: A mesh object
 End Rem
-Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
+Function LoadMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Local stream:TStream=LittleEndianStream(ReadFile(url))
 	If Not stream
 		DebugLog " Invalid "+ExtractExt(String(url))+" stream: "+String(url)
@@ -120,7 +135,7 @@ Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )
 	While loader
 		stream.Seek pos
 		Try
-			mesh=loader.LoadMesh( stream,url,parent )
+			mesh=loader.LoadMesh( stream,url,parent,flags )
 		Catch ex:TStreamException
 		End Try
 		If mesh Then Exit
@@ -167,11 +182,13 @@ Function MeshLoader( meshid:String,flags:Int=-1 )
 			TGlobal3D.Log_B3D=1
 			TGlobal3D.Log_MD2=1
 			TGlobal3D.Log_Assimp=1
+			TGlobal3D.Log_OBJ=1
 		Case "nodebug"
 			TGlobal3D.Log_3DS=0
 			TGlobal3D.Log_B3D=0
 			TGlobal3D.Log_MD2=0
 			TGlobal3D.Log_Assimp=0
+			TGlobal3D.Log_OBJ=0
 	EndSelect
 End Function
 
@@ -185,10 +202,8 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 	Select texid.ToLower()
 		Case "bb", "bmx", "blitzmax"
 			TGlobal3D.Texture_Loader=1
-			TGlobal3D.Texture_Flags=lf0
 		Case "assimp", "assimpstream", "bmxassimp", "assimpbmx", "stream", "streams"
 			TGlobal3D.Texture_Loader=1
-			TGlobal3D.Texture_Flags=lf0
 		Case "cpp", "c++", "lib", "library"
 			TGlobal3D.Texture_Loader=2
 		Case "frame", "frames"
@@ -215,6 +230,8 @@ Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4
 			TGlobal3D.Flip_Cubemap=0
 		Case "flipcubemap"
 			TGlobal3D.Flip_Cubemap=1
+		Case "flags", "texflags"
+			TGlobal3D.Texture_Flags=lf0
 	EndSelect
 End Function
 
@@ -373,35 +390,63 @@ Rem
 bbdoc: Returns a new TSprite object
 End Rem
 Function NewSprite:TSprite()
-	Return TSprite.NewSprite()
+	Return TSprite.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TTexture object
 End Rem
 Function NewTexture:TTexture()
-	Return TTexture.NewTexture()
+	Return TTexture.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TMesh object
 End Rem
 Function NewMesh:TMesh()
-	Return TMesh.NewMesh()
+	Return TMesh.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TSurface object
 End Rem
-Function NewSurface:TSurface( mesh:TMesh )
-	Return mesh.NewSurface()
+Function NewSurface:TSurface()
+	Return TSurface.Create()
 End Function
 
 Rem
 bbdoc: Returns a new TBone object
 End Rem
-Function NewBone:TBone( mesh:TMesh )
-	Return mesh.NewBone()
+Function NewBone:TBone()
+	Return TBone.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TAnimationKeys object
+End Rem
+Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
+	Return TAnimationKeys.Create( bone )
+End Function
+
+Rem
+bbdoc: Returns a new TMatrix object
+End Rem
+Function NewMatrix:TMatrix()
+	Return TMatrix.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TQuaternion object
+End Rem
+Function NewQuaternion:TQuaternion()
+	Return TQuaternion.Create()
+End Function
+
+Rem
+bbdoc: Returns a new TVector object
+End Rem
+Function NewVector:TVector()
+	Return TVector.Create()
 End Function
 
 Rem
@@ -451,34 +496,6 @@ bbdoc: Returns a copy of the new texture
 End Rem
 Function CopyTexture:TTexture( tex:TTexture,flags:Int )
 	Return tex.Copy( flags )
-End Function
-
-Rem
-bbdoc: Returns a new TAnimationKeys object
-End Rem
-Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
-	Return TAnimationKeys.NewAnimationKeys( bone )
-End Function
-
-Rem
-bbdoc: Returns a new TMatrix object
-End Rem
-Function NewMatrix:TMatrix()
-	Return TMatrix.NewMatrix()
-End Function
-
-Rem
-bbdoc: Returns a new TQuaternion object
-End Rem
-Function NewQuaternion:TQuaternion()
-	Return TQuaternion.NewQuaternion()
-End Function
-
-Rem
-bbdoc: Returns a new TVector object
-End Rem
-Function NewVector:TVector()
-	Return TVector.NewVector()
 End Function
 
 Rem

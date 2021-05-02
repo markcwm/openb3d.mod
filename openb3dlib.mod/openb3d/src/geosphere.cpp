@@ -142,12 +142,11 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 
 	Geosphere* geo=new Geosphere;
 
-	for (int i = 0; i<= ROAM_LMAX; i++){
+	for (int i = 0; i<= 20; i++){
 		geo->level2dzsize[i] = 0;
 	}
-        int lmax=(int)(log(tsize)/log(2)-3.0);
+    int lmax=(int)(log(tsize)/log(2)-3.0);
 	if (lmax>=ROAM_LMAX) lmax=ROAM_LMAX;
-
 
 	const float LOD[20]={1700000,800000,40000,10000,5000,1000,200,10,1,0.1,0.005,
 	0.001,0.0005,0.0002,0.0001,0.00005,0.00002,0.00001,0.000005,0.000002};

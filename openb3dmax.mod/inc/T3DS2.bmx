@@ -160,6 +160,7 @@ Type T3DS2
 	Field Stream:TStream
 	Field Defaultbrush:TBrush
 	Field Root:TMesh
+	Field override_texflags:Int
 	
 	Method GetObject:TEntity( index% )
 		If index < 0 Return Null
@@ -388,7 +389,7 @@ Type T3DS2
 					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPLIST")
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
-					matrix = NewMatrix()
+					matrix = TMatrix.Create()
 					matrix.LoadIdentity() ' set grid[x,3]
 					
 					For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -534,7 +535,7 @@ Type T3DS2
 		Wend
 		
 		If objname = "$$$DUMMY"
-			mesh = NewMesh()
+			mesh = TMesh.Create()
 			mesh.SetString(mesh.name,instname)
 			mesh.SetString(mesh.class_name,"Mesh")
 			mesh.AddParent(parent)
@@ -586,7 +587,7 @@ Type T3DS2
 			Select chunk.id
 				Case CHUNK_TRIMESH ' $4100 - triangular mesh
 					If TGlobal3D.Log_3DS Then DebugLog("   CHUNK_TRIMESH: "+objname)
-					mesh = NewMesh()
+					mesh = TMesh.Create()
 					mesh.SetString(mesh.name,objname)
 					mesh.SetString(mesh.class_name,"Mesh")
 					mesh.AddParent(parent)
@@ -848,7 +849,7 @@ Type T3DS2
 			name = Filepath + "/" + StripDir(texname)
 		EndIf
 		
-		Local tex:TTexture = LoadTexture(name, TGlobal3D.Texture_Flags) ' check material has texture, bad path crash streams
+		Local tex:TTexture = LoadTexture(name, override_texflags) ' check material has texture, bad path crash streams
 		If TGlobal3D.Log_3DS Then DebugLog(" MAT TEX name="+name+" matname="+matname+" texname="+texname)
 		
 		MapInsert Materialmap, matname, tex
@@ -914,7 +915,7 @@ Type T3DS2
 	
 	Method ParseFile:TMesh( url:Object, parent_ent:TEntity=Null )
 	
-		Local parent:TMesh = NewMesh()
+		Local parent:TMesh = TMesh.Create()
 		parent.SetString(parent.name,"ROOT")
 		parent.SetString(parent.class_name,"Mesh")
 		parent.AddParent(parent_ent)
@@ -953,7 +954,7 @@ Type T3DS2
 		Return parent
 	End Method
 	
-	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
+	Function LoadAnim3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null, texflags:Int = -1 )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
 		If file = Null
 			DebugLog " Invalid 3DS stream: "+String(url)
@@ -961,13 +962,13 @@ Type T3DS2
 		EndIf
 		
 		Local model:T3DS2 = New T3DS2
-		Local mesh:TMesh=model.LoadAnim3DSFromStream(file, url, parent_ent_ext)
+		Local mesh:TMesh=model.LoadAnim3DSFromStream(file, url, parent_ent_ext, texflags)
 		
 		file.Close()
 		Return mesh
 	End Function
 	
-	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null )
+	Method LoadAnim3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null, texflags:Int = -1 )
 	
 		Stream = file
 		Objlist = CreateList()
@@ -977,6 +978,7 @@ Type T3DS2
 		Materiallayermap = CreateMap()
 		Matrixmap = CreateMap()
 		Defaultbrush = CreateBrush()
+		If texflags = -1 Then override_texflags = TGlobal3D.Texture_Flags Else override_texflags = texflags
 		
 		Filename = String(url)
 		Filepath = ExtractDir(String(url))
@@ -994,7 +996,7 @@ Type T3DS2
 		Root = ParseFile(url, parent_ent)
 		
 		'If TGlobal3D.Log_3DS Then DebugLog(" Mesh_Transform: "+TGlobal3D.Mesh_Transform)
-		'If TGlobal3D.Log_3DS Then DebugLog(" Texture_Flags: "+TGlobal3D.Texture_Flags)
+		'If TGlobal3D.Log_3DS Then DebugLog(" override_texflags: "+override_texflags)
 		
 		ChangeDir(olddir)
 		
@@ -1025,7 +1027,7 @@ Type T3DS2
 		For Local ent:TEntity = EachIn Objlist ' transform vertices, re-positions mesh by matrix
 			Local mesh2:TMesh = TMesh(ent)
 			Local mat:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh2 ))
-			Local invmat:TMatrix = NewMatrix()
+			Local invmat:TMatrix = TMatrix.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list

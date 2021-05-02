@@ -272,11 +272,19 @@ Type TMesh Extends TEntity
 		
 	End Function
 	
+	Function Create:TMesh()
+	
+		Local inst:Byte Ptr=NewMesh_()
+		Return CreateObject(inst)
+		
+	End Function
+	
+	Rem
 	Method NewSurface:TSurface() ' use MeshListAdd(list,value)
 	
 		Local inst:Byte Ptr=NewSurface_( GetInstance(Self) )
 		Return TSurface.CreateObject(inst)
-				
+		
 	End Method
 	
 	Method NewBone:TBone()
@@ -285,6 +293,7 @@ Type TMesh Extends TEntity
 		Return TBone.CreateObject(inst)
 		
 	End Method
+	EndRem
 	
 	' Extra
 	
@@ -859,7 +868,7 @@ Type TMesh Extends TEntity
 	
 	Method CollapseAnimMesh:TMesh()
 	
-		Local new_mesh:TMesh=NewMesh()
+		Local new_mesh:TMesh=Create()
 		Local child_ent:TEntity=Null
 		Local count_children%=TEntity.CountAllChildren(Self)
 		For Local child_no%=0 To count_children

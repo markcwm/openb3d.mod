@@ -73,6 +73,21 @@ Type TVector
 		
 	End Function
 	
+	Rem
+	bbdoc: Create a new vector from three float values, returns a new vector
+	about: new_vec=TVector.Create(x,y,z)
+	EndRem
+	Function Create:TVector( x:Float=0,y:Float=0,z:Float=0 )
+	
+		Local inst:Byte Ptr=NewVector_()
+		Local new_vec:TVector=CreateObject(inst)
+		new_vec.x[0]=x
+		new_vec.y[0]=y
+		new_vec.z[0]=z
+		Return new_vec
+		
+	End Function
+	
 	' Minib3d
 	
 	Method New()
@@ -104,20 +119,6 @@ Type TVector
 		Local ang:Float=ATan2(Sqr(vx*vx + vz*vz), vy)-90.0
 		If ang<=EPSILON And ang>=-EPSILON Then ang=0
 		Return ang
-		
-	End Function
-	
-	Rem
-	bbdoc: Create a new vector from three float values, returns a new vector
-	about: new_vec=TVector.Create(x,y,z)
-	EndRem
-	Function Create:TVector( x:Float,y:Float,z:Float )
-	
-		Local new_vec:TVector=NewVector()
-		new_vec.x[0]=x
-		new_vec.y[0]=y
-		new_vec.z[0]=z
-		Return new_vec
 		
 	End Function
 	

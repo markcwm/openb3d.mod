@@ -53,23 +53,24 @@ Type TGlobal3D
 	Global gfx_obj:TGraphics
 	Global txt_red:Byte=255, txt_green:Byte=255, txt_blue:Byte=255 ' TextColor, in bytes
 	
-	Global Log_New:Int=False		' True to debug when new 3d object created
-	Global Log_Del:Int=False		' True to debug when 3d object destroyed
-	Global Log_3DS:Int=False		' True to debug 3DS chunks
-	Global Log_B3D:Int=False		' True to debug B3D chunks
-	Global Log_MD2:Int=False		' True to debug MD2 chunks
+	Global Log_New:Int=False		' True to debug when object created
+	Global Log_Del:Int=False		' True to debug when object destroyed
+	Global Log_3DS:Int=False		' True to debug 3DS
+	Global Log_B3D:Int=False		' True to debug B3D
+	Global Log_MD2:Int=False		' True to debug MD2
 	Global Log_Assimp:Int=False		' True to debug Assimp
+	Global Log_OBJ:Int=False		' True to debug OBJ
 	
 	Global GL_Version:Float=0		' current GL version
 	Global Texture_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Loader:Int=1		' 1=blitzmax, 2=library
 	Global Mesh_Flags:Int=-1		' Assimp mesh flags
-	Global Texture_Flags:Int=9		' LoadTexture flags
 	Global Mesh_Transform:Int=False	' mesh transform vertices
 	Global Loader_3DS2:Int=False	' alternative 3DS loader
 	Global Cubemap_Frame:Int[12]
 	Global Cubemap_Face:Int[12]
 	Global Flip_Cubemap:Int=1		' flip cubic environment map orientation
+	Global Texture_Flags:Int=9		' override texture flags, use TextureLoader "flags"
 	
 	Global Matrix_3DS:TMatrix
 	Global Matrix_B3D:TMatrix
@@ -111,11 +112,11 @@ Type TGlobal3D
 		TBatchSprite.InitGlobals()
 		TTexture.InitGlobals()
 		
-		Matrix_3DS=NewMatrix()
+		Matrix_3DS=TMatrix.Create()
 		Matrix_3DS.LoadIdentity()
-		Matrix_B3D=NewMatrix()
+		Matrix_B3D=TMatrix.Create()
 		Matrix_B3D.LoadIdentity()
-		Matrix_MD2=NewMatrix()
+		Matrix_MD2=TMatrix.Create()
 		Matrix_MD2.LoadIdentity()
 		LoaderMatrix "3ds", 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as wasn't working right on multi-mesh
 		LoaderMatrix "b3d", 1,0,0, 0,1,0, 0,0,1 ' not implemented at all

@@ -46,6 +46,7 @@ Type T3DS
 	Field Red:Byte, Green:Byte, Blue:Byte, Percent:Int
 	Field Meshes:TList, MatrixMap:TMap
 	Field New_matrix:TMatrix
+	Field override_texflags:Int
 	
 	Method ReadChunk()
 		If Stream.Eof() Return
@@ -172,7 +173,7 @@ Type T3DS
 	End Method
 	
 	Method ReadTransMatrix()
-		New_matrix = NewMatrix()
+		New_matrix = TMatrix.Create()
 		New_matrix.LoadIdentity() ' set grid[x,3]
 		
 		For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -208,7 +209,7 @@ Type T3DS
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_FACEMATLIST: BrushName = "+BrushName)
 		
 		If Found=True
-			New_mesh = NewMesh()
+			New_mesh = TMesh.Create()
 			If ObjectIndex>0 Then New_mesh.SetString(New_mesh.name,ObjectNames[ObjectIndex-1])
 			New_mesh.SetString(New_mesh.class_name,"Mesh")
 			New_mesh.AddParent(Root)
@@ -257,7 +258,7 @@ Type T3DS
 		EndIf
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: Filename = "+Filename+" Texname = "+Texname)
 		
-		Texture = LoadTexture(Texname, TGlobal3D.Texture_Flags)
+		Texture = LoadTexture(Texname, override_texflags)
 		
 		If Texture<>Null ' stops crash if texture file is missing
 			If TextureLayer = M3D_3DS_TEXTUREMAP1
@@ -269,7 +270,7 @@ Type T3DS
 	End Method
 	
 	Method ReadMap(Layer:Int)
-		Texture = NewTexture()
+		Texture = TTexture.Create()
 		TextureLayer = Layer
 		'If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_MAPFILENAME: TextureLayer = "+Hex(TextureLayer)
 	End Method
@@ -292,7 +293,7 @@ Type T3DS
 		If TGlobal3D.Log_3DS Then DebugLog(" M3D_3DS_TRIMESH: CheckSurface = "+CheckSurface)
 		
 		' Dummy mesh and surface
-		Mesh = NewMesh()
+		Mesh = TMesh.Create()
 		If ObjectIndex>0 Then Mesh.SetString(Mesh.name,ObjectNames[ObjectIndex-1])
 		Mesh.SetString(Mesh.class_name,"Mesh")
 		Mesh.AddParent(Root)
@@ -324,7 +325,7 @@ Type T3DS
 		MatrixMap = CreateMap()
 	End Method
 	
-	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null )
+	Function Load3DS:TMesh( url:Object, parent_ent_ext:TEntity=Null, texflags:Int = -1 )
 		Local file:TStream=LittleEndianStream(ReadFile(url))
 		If file = Null
 			DebugLog " Invalid 3DS stream: "+String(url)
@@ -332,13 +333,13 @@ Type T3DS
 		EndIf
 		
 		Local model:T3DS = New T3DS
-		Local mesh:TMesh = model.Load3DSFromStream(file, url, parent_ent_ext)
+		Local mesh:TMesh = model.Load3DSFromStream(file, url, parent_ent_ext, texflags)
 		
 		file.Close()
 		Return mesh
 	End Function
 	
-	Method Load3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null )
+	Method Load3DSFromStream:TMesh( file:TStream, url:Object, parent_ent:TEntity=Null, texflags:Int = -1 )
 		Local Size:Int, OldDir:String, Filepath:String, Dir:String
 		Local Pixmap:TPixmap, BrushName:String
 		
@@ -346,6 +347,7 @@ Type T3DS
 		Size = Stream.Size()
 		Dir = String(url)
 		OldDir = CurrentDir()
+		If texflags = -1 Then override_texflags = TGlobal3D.Texture_Flags Else override_texflags = texflags
 		
 		' Read Main-Chunk
 		ReadChunk()
@@ -379,7 +381,7 @@ Type T3DS
 		If Filepath<>"" Then ChangeDir(Filepath)
 		If TGlobal3D.Log_3DS Then DebugLog(" OldDir: "+OldDir)
 		
-		Root = NewMesh()
+		Root = TMesh.Create()
 		Root.SetString(Root.name,"ROOT")
 		Root.SetString(Root.class_name, "Mesh")
 		Root.AddParent(parent_ent)
@@ -503,7 +505,7 @@ Type T3DS
 		
 		For Local mesh2:TMesh = EachIn Meshes ' transform vertices, re-positions mesh by matrix
 			Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, mesh2 ))
-			Local invmat:TMatrix = NewMatrix()
+			Local invmat:TMatrix = TMatrix.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list

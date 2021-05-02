@@ -225,7 +225,7 @@ Type TB3D
 						
 						' *todo* - Load tex after setting values
 						' create texture object so we can set texture values before loading texture
-						tex[tex_no]=NewTexture()
+						tex[tex_no]=TTexture.Create()
 						
 						' .flags and .file set in LoadTexture
 						tex[tex_no].blend[0]=te_blend
@@ -338,7 +338,7 @@ Type TB3D
 					If new_tag="NODE" Or new_tag="ANIM"
 					
 						' make 'piv' entity a mesh, not a pivot, as B3D does
-						Local piv:TMesh=NewMesh()
+						Local piv:TMesh=TMesh.Create()
 						piv.SetString(piv.class_name, "Mesh")
 						piv.SetString(piv.name, n_name)
 						piv.px[0]=n_px
@@ -387,7 +387,7 @@ Type TB3D
 					
 					If TGlobal3D.Log_B3D Then DebugLog(" "+tab+new_tag+" brush_id="+m_brush_id)
 					
-					mesh=NewMesh()
+					mesh=TMesh.Create()
 					mesh.SetString(mesh.class_name, "Mesh")
 					mesh.SetString(mesh.name, n_name)
 					mesh.px[0]=n_px
@@ -432,7 +432,7 @@ Type TB3D
 					If v_mesh<>Null Then v_mesh=Null
 					If v_surf<>Null Then v_surf=Null
 					
-					v_mesh=NewMesh()
+					v_mesh=TMesh.Create()
 					v_surf=v_mesh.CreateSurface()
 					v_flags=ReadInt(file)
 					v_tc_sets=ReadInt(file)
@@ -563,7 +563,7 @@ Type TB3D
 						
 						' create anim surfs, copy vertex coords array, add to anim_surf_list
 						For Local surf:TSurface=EachIn mesh.surf_list
-							Local anim_surf:TSurface=mesh.NewSurface()
+							Local anim_surf:TSurface=TSurface.Create()
 							mesh.MeshListAdd(mesh.anim_surf_list, anim_surf)
 							
 							anim_surf.no_verts[0]=surf.no_verts[0]
@@ -593,7 +593,7 @@ Type TB3D
 					old_tag=new_tag
 					new_tag=ReadTag(file)
 					
-					bo_bone=mesh.NewBone()
+					bo_bone=TBone.Create()
 					bo_no_bones=bo_no_bones+1
 					
 					While NewTag(new_tag)<>True And Eof(file)=0
@@ -681,7 +681,7 @@ Type TB3D
 					bo_bone.n_qy[0]=n_qy
 					bo_bone.n_qz[0]=n_qz
 					
-					bo_bone.keys=NewAnimationKeys(bo_bone)
+					bo_bone.keys=TAnimationKeys.Create(bo_bone)
 					bo_bone.keys.frames[0]=a_frames
 					
 					bo_bone.keys.flags=bo_bone.keys.AnimationKeysIntArrayResize(ANIMATIONKEYS_flags, a_frames+1)
