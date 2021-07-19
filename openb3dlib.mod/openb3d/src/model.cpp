@@ -919,7 +919,7 @@ Mesh* LoadAnimB3D(string f_name,Entity* parent_ent_ext){
 
 	for(it=brush.begin();it!=brush.end();it++){
 		Brush* b=*it;
-		delete b;
+		b->FreeBrush();
 	}
 
 	if(v_mesh!=NULL) {

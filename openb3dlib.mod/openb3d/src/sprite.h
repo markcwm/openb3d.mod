@@ -16,6 +16,7 @@
 using namespace std;
 
 class Sprite : public Mesh{
+	static Surface* surf;
 
 public:
 

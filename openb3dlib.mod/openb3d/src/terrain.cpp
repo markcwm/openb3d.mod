@@ -182,6 +182,7 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	terr->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
 	terr->AddParent(parent_ent);
+	entity_list.push_back(terr);
 	terrain_list.push_back(terr);
 	
 	if (tsize!=0){

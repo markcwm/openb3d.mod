@@ -46,17 +46,10 @@ void Entity::FreeEntity(void){
 	}
 
 	// free child entities
-	list<Entity*>::iterator it;
-
-	for(it=child_list.begin();it!=child_list.end();it++){
-		if(child_list.size()){
-			Entity* ent=*it;
-			ent->FreeEntity();
-			it=child_list.begin();
-			it--;
-		}else{
-			break;
-		}
+	
+	while(!child_list.empty()){
+		Entity* e=*child_list.begin();
+		e->FreeEntity();
 	}
 }
 

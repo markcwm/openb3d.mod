@@ -59,6 +59,7 @@ public:
 
 class Shader {//: public MaterialPlugin{
 public:
+	static list<Shader*> shader_list;
 	static int ShaderIDCount;
 
 	int texCount;
@@ -80,8 +81,8 @@ public:
 	static Shader* CreateShaderMaterial(string Name = "");
 	void TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices=0, Brush* brush=0);
 	void TurnOff();
-	int AddShader(string shaderFilename, int shadertype);
-	int AddShaderFromString(string shaderFilename, int shadertype);
+	int AddShader(string _shader, int type);
+	int AddShaderFromString(string _shader, int type);
 	int Link();
 	Texture* AddSampler(string Name, int Slot, Texture* Tex, int is3D);
 	void ProgramAttriBegin();

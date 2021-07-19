@@ -16,6 +16,7 @@
 list<ShaderObject*> ShaderObject::ShaderObjectList;
 list<ProgramObject*> ProgramObject::ProgramObjectList;
 int Shader::ShaderIDCount;
+list<Shader*> Shader::shader_list;
 
 static int default_program=0;
 
@@ -70,11 +71,18 @@ void Shader::FreeShader(){
 	}
 	
 	glDeleteProgram(arb_program->Program);
+	
+	delete arb_program;
+	for(int ix=0; ix<texCount; ix++){
+		delete Shader_Tex[ix];
+	}
+	shader_list.remove(this);
+	
 	delete this;
 }
 
 
-ShaderObject* ShaderObject::CreateShader(string shaderFileName, int shadertype){
+ShaderObject* ShaderObject::CreateShader(string shaderFileName, int type){
 	// Load the shader and dump it into a Byte Array
 	File* file=File::ReadFile(shaderFileName); // opens as ASCII!
 	if(file==0) {
@@ -107,48 +115,48 @@ ShaderObject* ShaderObject::CreateShader(string shaderFileName, int shadertype){
 	shaderSrc[i] = 0;  // 0-terminate it at the correct position
 	file->CloseFile();
 
-	ShaderObject* myShader = new ShaderObject;
+	ShaderObject* s = new ShaderObject;
 	
-	myShader->ShaderObj = glCreateShader(shadertype);
-	//myShader->ShaderType = shadertype; // 1 = Vert, 2 = Frag
+	s->ShaderObj = glCreateShader(type);
+	//s->ShaderType = type; // 1 = Vert, 2 = Frag
 
 	// Send shader to ShaderObject, then compile it
-	glShaderSource(myShader->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
-	glCompileShader(myShader->ShaderObj);
+	glShaderSource(s->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
+	glCompileShader(s->ShaderObj);
 
 	// Did the shader compile successfuly?
 	int compiled;
-	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
+	glGetShaderiv(s->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
 		int maxLength = 0; // maxLength includes the NULL character
-		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		glGetShaderiv(s->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
 		
 		vector<char> infoLog(maxLength);
-		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+		glGetShaderInfoLog(s->ShaderObj, maxLength, &maxLength, &infoLog[0]);
 #ifdef OPENB3D_DEBUG
 		DebugLog("%s; %s",shaderFileName.c_str(),&infoLog[0]);
 #endif
 		// don't leak the shader
-		myShader->DeleteShader(myShader, shadertype);
+		s->DeleteShader(s, type);
 		
 		delete [] shaderSrc;
-		delete myShader;
+		delete s;
 		return 0;
 	}
 
 
-	//myShader.Attached = New TList
-	myShader->shaderName = shaderFileName;
-	ShaderObject::ShaderObjectList.push_back(myShader);
+	//s.Attached = New TList
+	s->shaderName = shaderFileName;
+	ShaderObject::ShaderObjectList.push_back(s);
 	delete [] shaderSrc;
 	
-	return myShader;
+	return s;
 }
 
 
 
-ShaderObject* ShaderObject::CreateShaderFromString(string shadercode, int shadertype){
+ShaderObject* ShaderObject::CreateShaderFromString(string shadercode, int type){
 	// Load the shader and dump it into a Byte Array
 	if (shadercode == ""){
 		return 0;
@@ -161,10 +169,10 @@ ShaderObject* ShaderObject::CreateShaderFromString(string shadercode, int shader
 		return 0;
 	}
 
-	ShaderObject* myShader = new ShaderObject;
+	ShaderObject* s = new ShaderObject;
 	
-	myShader->ShaderObj = glCreateShader(shadertype);
-	//myShader->ShaderType = shadertype; // 1 = Vert, 2 = Frag
+	s->ShaderObj = glCreateShader(type);
+	//s->ShaderType = type; // 1 = Vert, 2 = Frag
 
 	//Create a Byte Array to which the Shader Source will be copied to
 	//The extra Array Byte (FileLength+1) is so we can Null terminate the array
@@ -188,43 +196,43 @@ ShaderObject* ShaderObject::CreateShaderFromString(string shadercode, int shader
 
 
 	// Send shader to ShaderObject, then compile it
-	glShaderSource(myShader->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
-	glCompileShader(myShader->ShaderObj);
+	glShaderSource(s->ShaderObj,1, (const GLchar**)&shaderSrc, 0);
+	glCompileShader(s->ShaderObj);
 
 	// Did the shader compile successfuly?
 	int compiled;
-	glGetShaderiv(myShader->ShaderObj,GL_COMPILE_STATUS, &compiled);
+	glGetShaderiv(s->ShaderObj,GL_COMPILE_STATUS, &compiled);
 
 	if (!compiled){
 		int maxLength = 0; // maxLength includes the NULL character
-		glGetShaderiv(myShader->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
+		glGetShaderiv(s->ShaderObj, GL_INFO_LOG_LENGTH, &maxLength);
 		
 		vector<char> infoLog(maxLength);
-		glGetShaderInfoLog(myShader->ShaderObj, maxLength, &maxLength, &infoLog[0]);
+		glGetShaderInfoLog(s->ShaderObj, maxLength, &maxLength, &infoLog[0]);
 #ifdef OPENB3D_DEBUG
 		DebugLog("%s; %s",shadercode.c_str(),&infoLog[0]);
 #endif
 		// don't leak the shader
-		myShader->DeleteShader(myShader, shadertype);
+		s->DeleteShader(s, type);
 		
 		delete [] shaderSrc;
-		delete myShader;
+		delete s;
 		return 0;
 	}
 
 
-	//myShader.Attached = New TList
-	//myShader->shaderName = shaderFileName;
-	ShaderObject::ShaderObjectList.push_back(myShader);
+	//s.Attached = New TList
+	//s->shaderName = shaderFileName;
+	ShaderObject::ShaderObjectList.push_back(s);
 	delete [] shaderSrc;
 	
-	return myShader;
+	return s;
 }
 
-void ShaderObject::DeleteShader(ShaderObject* myShader, int shadertype){
-	if (myShader==0) return;
+void ShaderObject::DeleteShader(ShaderObject* s, int type){
+	if (s==0) return;
 
-	ShaderObject::ShaderObjectList.remove(myShader);
+	ShaderObject::ShaderObjectList.remove(s);
 	
 	// Detach this ShaderObject from all ProgramObjects it was attached to
 	list<ProgramObject*>::iterator it;
@@ -232,12 +240,12 @@ void ShaderObject::DeleteShader(ShaderObject* myShader, int shadertype){
 	for(it=ProgramObject::ProgramObjectList.begin();it!=ProgramObject::ProgramObjectList.end();it++){
 		ProgramObject* p=*it;
 		
-		p->DetachShader(myShader, shadertype);
+		p->DetachShader(s, type);
 	}
 	
 	// Delete the shader
-	glDeleteShader(myShader->ShaderObj);
-	delete myShader;
+	glDeleteShader(s->ShaderObj);
+	delete s;
 }
 
 //ShaderMat
@@ -251,7 +259,6 @@ Sampler* Sampler::Create(int Slot, Texture* Tex){
 }
 
 
-	
 Shader* Shader::CreateShaderMaterial(string Name){
 	Shader* s= new Shader;
 	s->texCount=0;
@@ -275,6 +282,7 @@ Shader* Shader::CreateShaderMaterial(string Name){
 
 	return s;
 }
+
 	
 /*void Shader::UpdateData(Surface* surf) {
 	for (unsigned int i=0;i<Parameters.size();i++){
@@ -816,58 +824,60 @@ void Shader::TurnOff(){
 '			arb_program.attachFragShader(frag)
 '		EndIf
 '	End Method*/
-	
-int Shader::AddShader(string shaderFilename, int shadertype){
+
+int Shader::AddShader(string _shader, int type){
 	if (arb_program == 0) return 0;
 	
-	if (shaderFilename != ""){
-		ShaderObject* myShader = ShaderObject::CreateShader(shaderFilename, shadertype);
-		if (myShader!=0) {
-			glAttachShader(arb_program->Program, myShader->ShaderObj);
+	if (_shader != ""){
+		ShaderObject* s = ShaderObject::CreateShader(_shader, type);
+		if (s!=0) {
+			glAttachShader(arb_program->Program, s->ShaderObj);
 			
 			//Add this ShaderObject to this ProgramObjects list
-			switch (shadertype){
-				case GL_VERTEX_SHADER : arb_program->vList.push_back(myShader);
+			switch (type){
+				case GL_VERTEX_SHADER : arb_program->vList.push_back(s);
 				break;
-				case GL_FRAGMENT_SHADER : arb_program->fList.push_back(myShader);
+				case GL_FRAGMENT_SHADER : arb_program->fList.push_back(s);
 				break;
-				case GL_GEOMETRY_SHADER : arb_program->gList.push_back(myShader);
+				case GL_GEOMETRY_SHADER : arb_program->gList.push_back(s);
 				break;
 			}
 			
 			//Add this ProgramObject to this Shaders 'attached to' list
-			myShader->Attached.push_back(arb_program);
+			s->Attached.push_back(arb_program);
 
-			return 1; // success
+			return s->ShaderObj;
 		}
 	}
 	return 0;	
 }
-	
-int Shader::AddShaderFromString(string shaderFilename, int shadertype){
+
+
+int Shader::AddShaderFromString(string _shader, int type){
 	if (arb_program == 0) return 0;
 		
-	ShaderObject* myShader = ShaderObject::CreateShaderFromString(shaderFilename, shadertype);
-	if (myShader!=0) {
-		glAttachShader(arb_program->Program, myShader->ShaderObj);
+	ShaderObject* s = ShaderObject::CreateShaderFromString(_shader, type);
+	if (s!=0) {
+		glAttachShader(arb_program->Program, s->ShaderObj);
 		
 		//Add this ShaderObject to this ProgramObjects list
-		switch (shadertype){
-			case GL_VERTEX_SHADER : arb_program->vList.push_back(myShader);
+		switch (type){
+			case GL_VERTEX_SHADER : arb_program->vList.push_back(s);
 			break;
-			case GL_FRAGMENT_SHADER : arb_program->fList.push_back(myShader);
+			case GL_FRAGMENT_SHADER : arb_program->fList.push_back(s);
 			break;
-			case GL_GEOMETRY_SHADER : arb_program->gList.push_back(myShader);
+			case GL_GEOMETRY_SHADER : arb_program->gList.push_back(s);
 			break;
 		}
 		
 		//Add this ProgramObject to this Shaders 'attached to' list
-		myShader->Attached.push_back(arb_program);
+		s->Attached.push_back(arb_program);
 		
-		return 1; // success
+		return s->ShaderObj;
 	}
 	return 0;
 }
+
 
 // Link a Shader to this ProgramObject
 int Shader::Link(){
@@ -1252,7 +1262,7 @@ ProgramObject* ProgramObject::Create(string name){
 	
 	//This Program Objects Name
 	p->progName = name;
-		
+	
 	/*-----------------------------
 	'Add this Program Object to the
 	'Global list of ProgramObjects
@@ -1650,58 +1660,58 @@ void ProgramObject::SetMatrix4F(int name, float* m){
 }
 
 // Like AddShader but without CreateShader
-void ProgramObject::AttachShader(ShaderObject* myShader, int shadertype){
+void ProgramObject::AttachShader(ShaderObject* s, int type){
 
-	if (myShader!=0) {
-		glAttachShader(Program, myShader->ShaderObj);
+	if (s!=0) {
+		glAttachShader(Program, s->ShaderObj);
 		
 		//Add this ShaderObject to this ProgramObjects list
-		switch (shadertype){
-			case GL_VERTEX_SHADER : vList.push_back(myShader);
+		switch (type){
+			case GL_VERTEX_SHADER : vList.push_back(s);
 			break;
-			case GL_FRAGMENT_SHADER : fList.push_back(myShader);
+			case GL_FRAGMENT_SHADER : fList.push_back(s);
 			break;
-			case GL_GEOMETRY_SHADER : gList.push_back(myShader);
+			case GL_GEOMETRY_SHADER : gList.push_back(s);
 			break;
 		}
 				
 		//Add this ProgramObject to this Shaders 'attached to' list
-		myShader->Attached.push_back(this);
+		s->Attached.push_back(this);
 	}
 }
 
 // Detach a shader:tShaderObject from a tProgramObject
-void ProgramObject::DetachShader(ShaderObject* myShader, int shadertype){
+void ProgramObject::DetachShader(ShaderObject* s, int type){
 	list<ShaderObject*>::iterator it;
 
 	//Add this ShaderObject to this ProgramObjects list
-	switch (shadertype){
+	switch (type){
 		case GL_VERTEX_SHADER :
 			for(it=vList.begin();it!=vList.end();it++){
-				if (myShader==*it){
-					glDetachShader(Program, myShader->ShaderObj);
-					//vList.remove(myShader);
-					myShader->Attached.remove(this);
+				if (s==*it){
+					glDetachShader(Program, s->ShaderObj);
+					//vList.remove(s);
+					s->Attached.remove(this);
 					break;
 				}
 			}
 			break;
 		case GL_FRAGMENT_SHADER :
 			for(it=fList.begin();it!=fList.end();it++){
-				if (myShader==*it){
-					glDetachShader(Program, myShader->ShaderObj);
-					//fList.remove(myShader);
-					myShader->Attached.remove(this);
+				if (s==*it){
+					glDetachShader(Program, s->ShaderObj);
+					//fList.remove(s);
+					s->Attached.remove(this);
 					break;
 				}
 			}
 			break;
 		case GL_GEOMETRY_SHADER :
 			for(it=gList.begin();it!=gList.end();it++){
-				if (myShader==*it){
-					glDetachShader(Program, myShader->ShaderObj);
-					//gList.remove(myShader);
-					myShader->Attached.remove(this);
+				if (s==*it){
+					glDetachShader(Program, s->ShaderObj);
+					//gList.remove(s);
+					s->Attached.remove(this);
 					break;
 				}
 			}
@@ -1736,7 +1746,7 @@ Material* Material::LoadMaterial(string filename,int flags, int frame_width,int 
 
 	//const char* c_filename_left=filename_left.c_str();
 	//const char* c_filename_right=filename_right.c_str();
-
+	tex_list.push_back(tex);
 
 	unsigned char* buffer;
 

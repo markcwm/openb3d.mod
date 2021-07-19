@@ -228,7 +228,7 @@ void ParticleEmitter::Update(){
 			particle.vy+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance))-variance/2;
 			particle.vz+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance))-variance/2;
 		}
-		rotmat.TransformVec(particle.vx,particle.vy,particle.vz);
+		mat.TransformVec(particle.vx,particle.vy,particle.vz);
 		particles.push_back(particle);
 	}
 

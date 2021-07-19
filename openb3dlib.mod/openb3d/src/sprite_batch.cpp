@@ -20,6 +20,8 @@ vector<BatchSpriteMesh*> BatchSprite::mainsprite;
 int BatchSprite::total_batch=0;
 Matrix BatchSprite::temp_mat;
 
+Surface* BatchSpriteMesh::batchsurf=0;
+
 BatchSpriteMesh* BatchSpriteMesh::Create(Entity* parent_ent){
 	
 	BatchSpriteMesh* mesh=new BatchSpriteMesh;
@@ -36,7 +38,14 @@ BatchSpriteMesh* BatchSpriteMesh::Create(Entity* parent_ent){
 		mesh->UpdateMat(true);
 	}
 	
-	mesh->surf = mesh->CreateSurface();
+	//mesh->surf = mesh->CreateSurface();
+	if (batchsurf==0){
+		batchsurf=new Surface();
+	}
+	mesh->surf=batchsurf;
+	mesh->surf_list.push_back(mesh->surf);
+	mesh->no_surfs=1;
+	
 	mesh->surf->ClearSurface();
 	//mesh->surf->vbo_dyn = true;
 	mesh->num_sprites = 0;

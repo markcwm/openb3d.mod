@@ -20,9 +20,9 @@ class ShaderObject{
 	list<ProgramObject*> Attached;	// Shaders can be attached, or 'referenced by', more than 1 ProgramObject
 	string shaderName;
 
-	static ShaderObject* CreateShader(string shaderFileName, int shadertype);
-	static ShaderObject* CreateShaderFromString(string shadercode, int shadertype);
-	static void DeleteShader(ShaderObject* myShader, int shadertype);
+	static ShaderObject* CreateShader(string shaderFileName, int type);
+	static ShaderObject* CreateShaderFromString(string shadercode, int type);
+	static void DeleteShader(ShaderObject* s, int type);
 
 };
 
@@ -31,10 +31,11 @@ class ProgramObject{
 	static list<ProgramObject*> ProgramObjectList;
 
 	int Program;		// The ProgramObject
-	list<ShaderObject*> vList;	// Vertex shader list. A List of what Vert shaders are attached to this ProgramObject
+	//list<int> sList;	// A List of what Vert shaders are attached to this ProgramObject
+	string progName;
+	list<ShaderObject*> vList;	// Vert shader list. A List of what Vert shaders are attached to this ProgramObject
 	list<ShaderObject*> fList;	// Frag shader list. A List of what Frag shaders are attached to this ProgramObject
 	list<ShaderObject*> gList;	// Geom shader list. A List of what Geom shaders are attached to this ProgramObject
-	string progName;
 	
 	int vertShaderCount;
 	int fragShaderCount;
@@ -114,10 +115,10 @@ class ProgramObject{
 	void SetMatrix4F(int name, float* m);
 
 	//Attach & Link a Shader Object to this ProgramObject
-	void AttachShader(ShaderObject* myShader, int shadertype);
+	void AttachShader(ShaderObject* s, int type);
 	
 	//Detach a Shader:tShaderObject from a tProgramObject
-	void DetachShader(ShaderObject* myShader, int shadertype);
+	void DetachShader(ShaderObject* s, int type);
 
 };
 

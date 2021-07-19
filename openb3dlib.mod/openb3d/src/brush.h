@@ -21,6 +21,7 @@ using namespace std;
 class Brush{
 
 public:
+	static list<Brush*> brush_list;
 
 	int no_texs;
 	string name;
@@ -31,7 +32,6 @@ public:
 	Texture* tex[8];
 
 	// extra
-	static list<Brush*> brush_list;
 	int glBlendFunc[2];
 	
 	Brush(){

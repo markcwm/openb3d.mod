@@ -113,6 +113,7 @@ public:
 class BatchSprite;
 
 class BatchSpriteMesh : public Mesh{
+	static Surface* batchsurf;
 
 public:
 	Surface* surf; 
