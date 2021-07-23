@@ -9,10 +9,10 @@ The wrapper with declarations for library functions
 End Rem
 Module Openb3dmax.Openb3dmax
 
-ModuleInfo "Version: 1.25"
+ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
-ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2021 Mark Mcvittie, Bruce A Henderson"
+ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
 Import Openb3dmax.Openb3dlib
 Import Openb3dmax.DDSloader
@@ -28,7 +28,9 @@ Extern
 	Function TerrainRange_( terr:Byte Ptr,camera_range:Float )
 	Function TerrainDetail_( terr:Byte Ptr,detail_level:Float )
 	Function TextureAnIsotropic_( tex:Byte Ptr,f:Float )
-	Function TextureLoader_( texid:Byte Ptr,lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
+	Function UseTextureFrames_( lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
+	Function UseTextureFaces_( lf0:Int,fr1:Int,rt2:Int,bk3:Int,dn4:Int,up5:Int )
+	Function UseCubemapFlip_( flag:Int )
 	Function MSAntiAlias_( multisample:Int )
 	Function CountMipmaps_:Int( tex:Byte Ptr )
 	Function TextureMultitex_( tex:Byte Ptr,f:Float )

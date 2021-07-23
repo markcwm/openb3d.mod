@@ -756,29 +756,35 @@ void Global::UpdateEntityAnim(Mesh& mesh){
 
 }
 
-void Global::TextureLoader( char* texid,int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
 
-	if (strcmp(texid,"frames") == 0){
-		Global::cubemap_frame[0] = lf0;
-		Global::cubemap_frame[1] = fr1;
-		Global::cubemap_frame[2] = rt2;
-		Global::cubemap_frame[3] = bk3;
-		Global::cubemap_frame[4] = dn4;
-		Global::cubemap_frame[5] = up5;
-	}else if (strcmp(texid,"faces") == 0){
-		Global::cubemap_face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X; // left (B3D layout)
-		Global::cubemap_face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z; // front
-		Global::cubemap_face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X; // right
-		Global::cubemap_face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; // back
-		Global::cubemap_face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y; // up
-		Global::cubemap_face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y; // down
-	}else if (strcmp(texid,"noflipcubemap") == 0){
-		Global::flip_cubemap = 0;
-	}else if (strcmp(texid,"flipcubemap") == 0){
-		Global::flip_cubemap = 1;
-	}
+void Global::UseTextureFrames( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
+
+	Global::cubemap_frame[0] = lf0;
+	Global::cubemap_frame[1] = fr1;
+	Global::cubemap_frame[2] = rt2;
+	Global::cubemap_frame[3] = bk3;
+	Global::cubemap_frame[4] = dn4;
+	Global::cubemap_frame[5] = up5;
 	
 }
+
+void Global::UseTextureFaces( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
+
+	Global::cubemap_face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X; // left (B3D layout)
+	Global::cubemap_face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z; // front
+	Global::cubemap_face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X; // right
+	Global::cubemap_face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z; // back
+	Global::cubemap_face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y; // up
+	Global::cubemap_face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y; // down
+	
+}
+
+void Global::UseCubemapFlip( int flag ){
+
+	Global::flip_cubemap = flag;
+	
+}
+
 
 bool CompareEntityOrder(Entity* ent1,Entity* ent2){
 

@@ -98,6 +98,9 @@ undocumented.
 <tr><td class=docleft width=1%><a href=#CameraToTex>CameraToTex</a></td><td class=docright>
 Copy rendered camera view to texture.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#CheckFramebufferStatus>CheckFramebufferStatus</a></td><td class=docright>
+Check for framebuffer errors.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#CopyBrush>CopyBrush</a></td><td class=docright>
 Returns a copy of the new brush.
 </td></tr>
@@ -287,9 +290,6 @@ Loads an anim mesh, see MeshLoader.
 <tr><td class=docleft width=1%><a href=#LoadBatchTexture>LoadBatchTexture</a></td><td class=docright>
 Does not create sprite, just loads texture.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoaderMatrix>LoaderMatrix</a></td><td class=docright>
-Change model loader coordinates system, currently only 3DS supported.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
 </td></tr>
@@ -313,9 +313,6 @@ Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns
 </td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCullRadius>MeshCullRadius</a></td><td class=docright>
 Equivalent of Blitz3D's MeshCullBox command. It sets the radius of a mesh's 'cull sphere'
-</td></tr>
-<tr><td class=docleft width=1%><a href=#MeshLoader>MeshLoader</a></td><td class=docright>
-Set mesh loaders to use, default is "bmx"
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ModifyGeosphere>ModifyGeosphere</a></td><td class=docright>
 Set height of a given point, like ModifyTerrain.
@@ -491,9 +488,6 @@ GL equivalent, param is a float, limited to 12 calls per texture, experimental.
 <tr><td class=docleft width=1%><a href=#TextureGLTexEnvi>TextureGLTexEnvi</a></td><td class=docright>
 GL equivalent, param is a const, limited to 12 calls per texture, experimental.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TextureLoader>TextureLoader</a></td><td class=docright>
-Set texture loaders to use (default is streamed), also sets cubemap faces or frames.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#TextureMultitex>TextureMultitex</a></td><td class=docright>
 Set texture multitex factor, used in interpolate and custom TexBlend options.
 </td></tr>
@@ -502,6 +496,12 @@ Number of triangles currently being rendered.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UpdateTexCoords>UpdateTexCoords</a></td><td class=docright>
 Recalculates the surface's uvw coord set 1 based on vertices.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseAssimpStreamMeshes>UseAssimpStreamMeshes</a></td><td class=docright>
+Loader flags for Assimp meshes.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseCubemapFlip>UseCubemapFlip</a></td><td class=docright>
+Flip cubemap texture flag.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseEntity>UseEntity</a></td><td class=docright>
 undocumented.
@@ -530,14 +530,41 @@ Bind 3 integer variables to a shader variable name of a uniform ivec3 type.
 <tr><td class=docleft width=1%><a href=#UseInteger4>UseInteger4</a></td><td class=docright>
 Bind 4 integer variables to a shader variable name of a uniform ivec4 type.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#UseLibraryMeshes>UseLibraryMeshes</a></td><td class=docright>
+Loader flag for meshes.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseLibraryTextures>UseLibraryTextures</a></td><td class=docright>
+Loader flag for textures.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#UseMatrix>UseMatrix</a></td><td class=docright>
 Sends matrix data to a shader variable name of a uniform mat4 type.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseMatrix3DS>UseMatrix3DS</a></td><td class=docright>
+Set 3DS model loader coordinates system (matrix), values should be 0,1,-1.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseMatrixMD2>UseMatrixMD2</a></td><td class=docright>
+Set MD2 model loader coordinates system (matrix), values should be 0,1,-1.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseMeshDebugLog>UseMeshDebugLog</a></td><td class=docright>
+Debug all mesh loaders.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseMeshTextureFlags>UseMeshTextureFlags</a></td><td class=docright>
+Set mesh texture flags.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseMeshTransform>UseMeshTransform</a></td><td class=docright>
+Transform mesh loaders.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseStencil>UseStencil</a></td><td class=docright>
 Stencil to use, set to Null to disable stencil.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#UseSurface>UseSurface</a></td><td class=docright>
 Sends surface data to a shader variable name.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseTextureFaces>UseTextureFaces</a></td><td class=docright>
+Order for cubemap faces.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#UseTextureFrames>UseTextureFrames</a></td><td class=docright>
+Order for anim texture frames.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#VertsRendered>VertsRendered</a></td><td class=docright>
 Number of vertices currently being rendered.
@@ -654,6 +681,9 @@ Terrain entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TTexture>TTexture</a></td><td class=docright>
 Texture.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#TUse>TUse</a></td><td class=docright>
+Loader flags for meshes and textures.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TVector>TVector</a></td><td class=docright>
 Vector functions.
@@ -813,6 +843,11 @@ Back buffer is upside-down so set fastinvert to True to invert texture uvs, Fals
 <table class=doc width=100% cellspacing=3 id=CameraToTex>
 <tr><td class=doctop colspan=2>Function CameraToTex( tex:TTexture,cam:TCamera,frame:Int=0 ) ' frame currently does nothing</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy rendered camera view to texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=CheckFramebufferStatus>
+<tr><td class=doctop colspan=2>Function CheckFramebufferStatus( target% )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Check for framebuffer errors.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CopyBrush>
@@ -1131,7 +1166,7 @@ CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.<
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
-<tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
+<tr><td class=doctop colspan=2>Function LoadAnimMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )</td></tr>
 <tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object with child meshes if any.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads an anim mesh, see MeshLoader.</td></tr>
 </table>
@@ -1139,11 +1174,6 @@ CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.<
 <table class=doc width=100% cellspacing=3 id=LoadBatchTexture>
 <tr><td class=doctop colspan=2>Function LoadBatchTexture:TBatchSpriteMesh( tex_file:String,tex_flag:Int=1,id:Int=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Does not create sprite, just loads texture.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=LoaderMatrix>
-<tr><td class=doctop colspan=2>Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Change model loader coordinates system, currently only 3DS supported.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>
@@ -1164,7 +1194,7 @@ first frame is the index of the slice and frame count is how many slices.</td></
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=LoadMesh>
-<tr><td class=doctop colspan=2>Function LoadMesh:TMesh( url:Object,parent:TEntity=Null )</td></tr>
+<tr><td class=doctop colspan=2>Function LoadMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )</td></tr>
 <tr><td class=docleft width=1%>Returns</td><td class=docright>A mesh object.</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads a single mesh, see MeshLoader.</td></tr>
 </table>
@@ -1193,15 +1223,6 @@ One time you may have to use it is for animated meshes where the default cull ra
 account all animation positions, resulting in the mesh being wrongly culled at extreme positions.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=MeshLoader>
-<tr><td class=doctop colspan=2>Function MeshLoader( meshid:String,flags:Int=-1 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh loaders to use, default is "bmx"</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library
-mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
-Use "debug" for mesh loader debug information or disable with "nodebug".</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=ModifyGeosphere>
 <tr><td class=doctop colspan=2>Function ModifyGeosphere( geo:TGeosphere,x:Int,z:Int,new_height:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set height of a given point, like ModifyTerrain.</td></tr>
@@ -1218,7 +1239,7 @@ Use "debug" for mesh loader debug information or disable with "nodebug".</td></t
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewBone>
-<tr><td class=doctop colspan=2>Function NewBone:TBone( mesh:TMesh )</td></tr>
+<tr><td class=doctop colspan=2>Function NewBone:TBone()</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TBone object.</td></tr>
 </table>
 <br>
@@ -1243,7 +1264,7 @@ Use "debug" for mesh loader debug information or disable with "nodebug".</td></t
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=NewSurface>
-<tr><td class=doctop colspan=2>Function NewSurface:TSurface( mesh:TMesh )</td></tr>
+<tr><td class=doctop colspan=2>Function NewSurface:TSurface()</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TSurface object.</td></tr>
 </table>
 <br>
@@ -1505,14 +1526,6 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <tr><td class=docleft width=1%>Description</td><td class=docright>GL equivalent, param is a const, limited to 12 calls per texture, experimental.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=TextureLoader>
-<tr><td class=doctop colspan=2>Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set texture loaders to use (default is streamed), also sets cubemap faces or frames.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" for
-Openb3d library textures (only loads local files). As an extra feature you can define the cubemap face order
-with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,2,3,4,5 (these are the default layouts).</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=TextureMultitex>
 <tr><td class=doctop colspan=2>Function TextureMultitex( tex:TTexture,f:Float )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Set texture multitex factor, used in interpolate and custom TexBlend options.</td></tr>
@@ -1526,6 +1539,19 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <table class=doc width=100% cellspacing=3 id=UpdateTexCoords>
 <tr><td class=doctop colspan=2>Function UpdateTexCoords( surf:TSurface )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Recalculates the surface's uvw coord set 1 based on vertices.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseAssimpStreamMeshes>
+<tr><td class=doctop colspan=2>Function UseAssimpStreamMeshes( flag:Int=True,meshflags:Int=-1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loader flags for Assimp meshes.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Assimp direct loaders, default is True for Assimp streamed loaders.
+Set meshflags to -2 for flat shaded normals, default is smooth.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseCubemapFlip>
+<tr><td class=doctop colspan=2>Function UseCubemapFlip( flag:Int=False )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Flip cubemap texture flag.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to True to flip cubemap textures, default is False to not flip (invert).</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseEntity>
@@ -1573,9 +1599,49 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Bind 4 integer variables to a shader variable name of a uniform ivec4 type.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=UseLibraryMeshes>
+<tr><td class=doctop colspan=2>Function UseLibraryMeshes( flag:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loader flag for meshes.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseLibraryTextures>
+<tr><td class=doctop colspan=2>Function UseLibraryTextures( flag:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loader flag for textures.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=UseMatrix>
 <tr><td class=doctop colspan=2>Function UseMatrix( material:TShader,name:String,Mode:Int )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends matrix data to a shader variable name of a uniform mat4 type.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseMatrix3DS>
+<tr><td class=doctop colspan=2>Function UseMatrix3DS( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set 3DS model loader coordinates system (matrix), values should be 0,1,-1.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseMatrixMD2>
+<tr><td class=doctop colspan=2>Function UseMatrixMD2( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set MD2 model loader coordinates system (matrix), values should be 0,1,-1.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseMeshDebugLog>
+<tr><td class=doctop colspan=2>Function UseMeshDebugLog( flag:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Debug all mesh loaders.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to not debug Blitzmax mesh loaders, default is True to enable debug log.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseMeshTextureFlags>
+<tr><td class=doctop colspan=2>Function UseMeshTextureFlags( texflags:Int=-1 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set mesh texture flags.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Override mesh texture flags manually, default is -1 (only for 3DS and OBJ).</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseMeshTransform>
+<tr><td class=doctop colspan=2>Function UseMeshTransform( flag:Int=True )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Transform mesh loaders.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to not transform meshes, default is True to enable transforms (Blitzmax 3DS only).</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseStencil>
@@ -1588,6 +1654,18 @@ with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,
 <tr><td class=docleft width=1%>Description</td><td class=docright>Sends surface data to a shader variable name.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Vbo is in range 1..6 which selects what vertex buffer data to access, where 1 is vertex positions,
 2/3 is tex coords 0/1, 4 is vertex normals, 5 is vertex color, 6 is triangles.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseTextureFaces>
+<tr><td class=doctop colspan=2>Function UseTextureFaces( lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Order for cubemap faces.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Define the order to load cubemap faces, default is 0,1,2,3,4,5 (B3D layout).</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=UseTextureFrames>
+<tr><td class=doctop colspan=2>Function UseTextureFrames( lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Order for anim texture frames.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Define the order to load anim texture frames, default is 0,1,2,3,4,5.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=VertsRendered>
@@ -1713,11 +1791,11 @@ Call mesh loader implementation.
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=LoadAnimMesh>
-<tr><td class=doctop colspan=2>Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract</td></tr>
+<tr><td class=doctop colspan=2>Method LoadAnimMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1) Abstract</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Call animated mesh loader implementation.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=LoadMesh>
-<tr><td class=doctop colspan=2>Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null) Abstract</td></tr>
+<tr><td class=doctop colspan=2>Method LoadMesh:TMesh(file:TStream, url:Object, parent:TEntity = Null, flags:Int = -1) Abstract</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Call mesh loader implementation.</td></tr>
 </table>
 <br>
@@ -1799,6 +1877,11 @@ Call mesh loader implementation.
 <table class=doc width=100% cellspacing=3 id=TTexture>
 <tr><td class=doctop colspan=2>Type TTexture</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Texture.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=TUse>
+<tr><td class=doctop colspan=2>Type TUse</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Loader flags for meshes and textures.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TVector>
@@ -1952,7 +2035,7 @@ Magnitude (or length) of a vector from three float values, returns a float.
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Yaw()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
-<tr><td class=doctop colspan=2>Function Create:TVector( x:Float,y:Float,z:Float )</td></tr>
+<tr><td class=doctop colspan=2>Function Create:TVector( x:Float=0,y:Float=0,z:Float=0 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create a new vector from three float values, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=TVector.Create(x,y,z)</td></tr>
 </table>
@@ -1969,8 +2052,8 @@ Magnitude (or length) of a vector from three float values, returns a float.
 <br>
 <h2 id=modinfo>Module Information</h2>
 <table width=100%>
-<tr><th width=1%>Version</th><td>1.25</td></tr>
+<tr><th width=1%>Version</th><td>1.26</td></tr>
 <tr><th width=1%>License</th><td>zlib</td></tr>
-<tr><th width=1%>Copyright</th><td>Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson</td></tr>
-<tr><th width=1%>Copyright</th><td>Library - 2010-2018 Angelo Rosina</td></tr>
+<tr><th width=1%>Copyright</th><td>Wrapper - 2014-2021 Mark Mcvittie, Bruce A Henderson</td></tr>
+<tr><th width=1%>Copyright</th><td>Library - 2010-2021 Angelo Rosina</td></tr>
 </body></html>

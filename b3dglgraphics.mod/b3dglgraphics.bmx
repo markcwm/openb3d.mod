@@ -7,10 +7,10 @@ bbdoc: GLGraphics backend
 End Rem
 Module Openb3dmax.B3dglgraphics
 
-ModuleInfo "Version: 1.25"
+ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie, Bruce A Henderson"
-ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2021 Mark Mcvittie, Bruce A Henderson"
+ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
 Import Openb3dmax.Openb3dmax
 Import Openb3dmax.Stbimageloader' imports Brl.Pixmap, Brl.RamStream

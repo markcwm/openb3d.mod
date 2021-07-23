@@ -368,9 +368,13 @@ int C_CollisionResponse(CollisionInfo* ci,Collision* coll,int response){
 		ci->td_xz*=1-coll->time;
 	}
 
-	if( response==COLLISION_RESPONSE_NONE ){
+	/*if( response==COLLISION_RESPONSE_NONE ){
 		return false;
 	}else if( response==COLLISION_RESPONSE_STOP ){
+		ci->dv=ci->sv;
+		return false;
+	}*/
+	if( response==COLLISION_RESPONSE_STOP ){
 		ci->dv=ci->sv;
 		return false;
 	}

@@ -39,9 +39,17 @@ void TerrainDetail_(Terrain* terr, float detail_level){
 void TextureAnIsotropic_(Texture* tex, float f){
 	tex->TextureAnIsotropic(f);
 }
-	
-void TextureLoader_( char* texid,int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
-	Global::TextureLoader( texid,lf0,fr1,rt2,bk3,dn4,up5 );
+
+void UseTextureFrames_( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
+	Global::UseTextureFrames( lf0, fr1, rt2, bk3, dn4, up5 );
+}
+
+void UseTextureFaces_( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 ){
+	Global::UseTextureFaces( lf0, fr1, rt2, bk3, dn4, up5 );
+}
+
+void UseCubemapFlip_( int flag ){
+	Global::UseCubemapFlip( flag );
 }
 
 int CountMipmaps_(Texture* tex){

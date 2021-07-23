@@ -9,16 +9,18 @@ The library source with declarations for methods and fields
 End Rem
 Module Openb3dmax.Openb3dlib
 
-ModuleInfo "Version: 1.25"
+ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
-ModuleInfo "Copyright: Wrapper - 2014-2018 Mark Mcvittie"
-ModuleInfo "Copyright: Library - 2010-2018 Angelo Rosina"
+ModuleInfo "Copyright: Wrapper - 2014-2021 Mark Mcvittie"
+ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
-ModuleInfo "History: 1.12 Release - update on Mar 2016"
-ModuleInfo "History: 1.1 Release - update on Sep 2015"
-ModuleInfo "History: 1.0 Release - update on Jun 2015"
-ModuleInfo "History: 0.9 Release - update on Nov 2014"
-ModuleInfo "History: 0.8 Initial Release - Oct 2014"
+ModuleInfo "History: 1.26 Release - Jul 2021"
+ModuleInfo "History: 1.25 Release - Jan 2019"
+ModuleInfo "History: 1.12 Release - Mar 2016"
+ModuleInfo "History: 1.1 Release - Sep 2015"
+ModuleInfo "History: 1.0 Release - Jun 2015"
+ModuleInfo "History: 0.9 Release - Nov 2014"
+ModuleInfo "History: 0.8 Release - Initial commit Oct 2014"
 
 'ModuleInfo "CC_OPTS: -std=c++11" ' just a reminder that forcing C++11 standard fails on older compilers
 'ModuleInfo "CC_OPTS: -DOPENB3D_GLEE" ' force use of GLee instead of Glew

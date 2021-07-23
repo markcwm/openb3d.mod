@@ -2,6 +2,12 @@
 
 ' *** Extra
 
+Rem
+bbdoc: Check for framebuffer errors
+End Rem
+Function CheckFramebufferStatus( target% )
+	TGlobal3D.CheckFramebufferStatus( target )
+End Function
 
 Rem
 bbdoc: Set terrain camera range to alter pop/switch distance, a value from 0 to 100
@@ -145,13 +151,13 @@ Function LoadMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Return mesh
 End Function
 
+
 Rem
-bbdoc: Set mesh loaders to use, default is "bmx"
-about: Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
+ Set mesh loaders to use, default is "bmx"
+ Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
 mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
 Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
 Use "debug" for mesh loader debug information or disable with "nodebug".
-End Rem
 Function MeshLoader( meshid:String,flags:Int=-1 )
 	Select meshid.ToLower()
 		Case "all"
@@ -159,81 +165,110 @@ Function MeshLoader( meshid:String,flags:Int=-1 )
 		Case "bmxassimp", "assimpbmx", "stream", "streams"
 			TGlobal3D.Mesh_Loader=1+8
 			TGlobal3D.Mesh_Flags=flags
-		Case "bmx", "max", "blitzmax"
-			TGlobal3D.Mesh_Loader=1
-		Case "cpp", "lib", "library"
-			TGlobal3D.Mesh_Loader=2
-		Case "assimp"
-			TGlobal3D.Mesh_Loader=4
-			TGlobal3D.Mesh_Flags=flags
-		Case "assimpstream"
-			TGlobal3D.Mesh_Loader=8
-			TGlobal3D.Mesh_Flags=flags
-		Case "3ds"
-			TGlobal3D.Loader_3DS2=0
-		Case "3ds2"
-			TGlobal3D.Loader_3DS2=1
-		Case "notrans"
-			TGlobal3D.Mesh_Transform=0
-		Case "trans"
-			TGlobal3D.Mesh_Transform=1
-		Case "debug"
-			TGlobal3D.Log_3DS=1
-			TGlobal3D.Log_B3D=1
-			TGlobal3D.Log_MD2=1
-			TGlobal3D.Log_Assimp=1
-			TGlobal3D.Log_OBJ=1
-		Case "nodebug"
-			TGlobal3D.Log_3DS=0
-			TGlobal3D.Log_B3D=0
-			TGlobal3D.Log_MD2=0
-			TGlobal3D.Log_Assimp=0
-			TGlobal3D.Log_OBJ=0
 	EndSelect
+End Function
+EndRem
+
+Rem
+bbdoc: Loader flag for meshes
+about: Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
+End Rem
+Function UseLibraryMeshes( flag:Int=True )
+	TUse.LibraryMeshes( flag )
 End Function
 
 Rem
-bbdoc: Set texture loaders to use (default is streamed), also sets cubemap faces or frames
-about: Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" for 
+bbdoc: Loader flags for Assimp meshes
+about: Set flag to False to use Assimp direct loaders, default is True for Assimp streamed loaders.
+Set meshflags to -2 for flat shaded normals, default is smooth.
+End Rem
+Function UseAssimpStreamMeshes( flag:Int=True,meshflags:Int=-1 )
+	TUse.AssimpStreamMeshes( flag,meshflags )
+End Function
+
+Rem
+bbdoc: Debug all mesh loaders
+about: Set flag to False to not debug Blitzmax mesh loaders, default is True to enable debug log.
+End Rem
+Function UseMeshDebugLog( flag:Int=True )
+	TUse.MeshDebugLog( flag )
+End Function
+
+Rem
+bbdoc: Transform mesh loaders
+about: Set flag to False to not transform meshes, default is True to enable transforms (Blitzmax 3DS only).
+End Rem
+Function UseMeshTransform( flag:Int=True )
+	TUse.MeshTransform( flag )
+End Function
+
+Rem
+bbdoc: Set 3DS model loader coordinates system (matrix), values should be 0,1,-1
+End Rem
+Function UseMatrix3DS( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
+	TUse.Matrix3DS( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+End Function
+
+Rem
+bbdoc: Set MD2 model loader coordinates system (matrix), values should be 0,1,-1
+End Rem
+Function UseMatrixMD2( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
+	TUse.MatrixMD2( xx,xy,xz,yx,yy,yz,zx,zy,zz )
+End Function
+
+Rem
+ Set texture loaders to use (default is streamed), also sets cubemap faces or frames
+ Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" for 
 Openb3d library textures (only loads local files). As an extra feature you can define the cubemap face order 
 with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,2,3,4,5 (these are the default layouts).
-End Rem
 Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
 	Select texid.ToLower()
-		Case "bb", "bmx", "blitzmax"
-			TGlobal3D.Texture_Loader=1
-		Case "assimp", "assimpstream", "bmxassimp", "assimpbmx", "stream", "streams"
-			TGlobal3D.Texture_Loader=1
-		Case "cpp", "c++", "lib", "library"
-			TGlobal3D.Texture_Loader=2
-		Case "frame", "frames"
-			Local cString:Byte Ptr = texid.ToCString()
-			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
-			MemFree cString
-			TGlobal3D.Cubemap_Frame[0] = lf0
-			TGlobal3D.Cubemap_Frame[1] = fr1
-			TGlobal3D.Cubemap_Frame[2] = rt2
-			TGlobal3D.Cubemap_Frame[3] = bk3
-			TGlobal3D.Cubemap_Frame[4] = dn4
-			TGlobal3D.Cubemap_Frame[5] = up5
-		Case "face", "faces"
-			Local cString:Byte Ptr = texid.ToCString()
-			TextureLoader_( cString,lf0,fr1,rt2,bk3,dn4,up5 )
-			MemFree cString
-			TGlobal3D.Cubemap_Face[lf0] = GL_TEXTURE_CUBE_MAP_NEGATIVE_X ' left (B3D layout)
-			TGlobal3D.Cubemap_Face[fr1] = GL_TEXTURE_CUBE_MAP_POSITIVE_Z ' front
-			TGlobal3D.Cubemap_Face[rt2] = GL_TEXTURE_CUBE_MAP_POSITIVE_X ' right
-			TGlobal3D.Cubemap_Face[bk3] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Z ' back
-			TGlobal3D.Cubemap_Face[dn4] = GL_TEXTURE_CUBE_MAP_POSITIVE_Y ' up
-			TGlobal3D.Cubemap_Face[up5] = GL_TEXTURE_CUBE_MAP_NEGATIVE_Y ' down
-		Case "noflipcubemap"
-			TGlobal3D.Flip_Cubemap=0
-		Case "flipcubemap"
-			TGlobal3D.Flip_Cubemap=1
 		Case "flags", "texflags"
 			TGlobal3D.Texture_Flags=lf0
 	EndSelect
 End Function
+EndRem
+
+Rem
+bbdoc: Loader flag for textures
+about: Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
+End Rem
+Function UseLibraryTextures( flag:Int=True )
+	TUse.LibraryTextures( flag )
+End Function
+
+Rem
+bbdoc: Order for anim texture frames
+about: Define the order to load anim texture frames, default is 0,1,2,3,4,5.
+End Rem
+Function UseTextureFrames( lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
+	TUse.TextureFrames( lf0,fr1,rt2,bk3,dn4,up5 )
+End Function
+
+Rem
+bbdoc: Order for cubemap faces
+about: Define the order to load cubemap faces, default is 0,1,2,3,4,5 (B3D layout).
+End Rem
+Function UseTextureFaces( lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
+	TUse.TextureFaces( lf0,fr1,rt2,bk3,dn4,up5 )
+End Function
+
+Rem
+bbdoc: Flip cubemap texture flag
+about: Set flag to True to flip cubemap textures, default is False to not flip (invert).
+End Rem
+Function UseCubemapFlip( flag:Int=False )
+	TUse.CubemapFlip( flag )
+End Function
+
+Rem
+bbdoc: Set mesh texture flags
+about: Override mesh texture flags manually, default is -1 (only for 3DS and OBJ).
+End Rem
+Function UseMeshTextureFlags( texflags:Int=-1 )
+	TUse.MeshTextureFlags( texflags )
+End Function
+
 
 Rem
 bbdoc: Frees all brush textures, FreeBrush does not free textures
@@ -261,21 +296,6 @@ bbdoc: Scales all vertices of mesh and every child mesh
 End Rem
 Function ScaleAnimMesh( mesh:TMesh,sx#,sy#,sz# )
 	mesh.ScaleAnimMesh( sx#,sy#,sz# )
-End Function
-
-Rem
-bbdoc: Change model loader coordinates system, currently only 3DS supported
-End Rem
-Function LoaderMatrix( ext$,xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
-	If ext.ToLower()="3ds" Or ext.ToLower()=".3ds"
-		'TGlobal3D.Matrix_3DS.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
-	EndIf
-	If ext.ToLower()="b3d" Or ext.ToLower()=".b3d"
-		'TGlobal3D.Matrix_B3D.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
-	EndIf
-	If ext.ToLower()="md2" Or ext.ToLower()=".md2"
-		TGlobal3D.Matrix_MD2.SetIdentity( xx,xy,xz,yx,yy,yz,zx,zy,zz )
-	EndIf
 End Function
 
 Rem

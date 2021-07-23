@@ -128,7 +128,9 @@ public:
 	static void RenderWorldAA();
 	static void AntiAlias(int samples);
 
-	static void TextureLoader( char* texid,int lf0,int fr1,int rt2,int bk3,int dn4,int up5 );
+	static void UseTextureFrames( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 );
+	static void UseTextureFaces( int lf0,int fr1,int rt2,int bk3,int dn4,int up5 );
+	static void UseCubemapFlip( int flag );
 	
 };
 
