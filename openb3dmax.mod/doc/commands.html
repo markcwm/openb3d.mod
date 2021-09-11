@@ -71,15 +71,6 @@ Attaches a vertex shader object to a program object.
 <tr><td class=docleft width=1%><a href=#BackBufferToTex>BackBufferToTex</a></td><td class=docright>
 Copy the contents of the backbuffer to a texture.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#BatchSpriteEntity>BatchSpriteEntity</a></td><td class=docright>
-Return the sprite batch main mesh entity.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#BatchSpriteOrigin>BatchSpriteOrigin</a></td><td class=docright>
-Move the batch sprite origin for depth sorting.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#BatchSpriteParent>BatchSpriteParent</a></td><td class=docright>
-Add a parent to the entire batch mesh - position only.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#BeginMax2D>BeginMax2D</a></td><td class=docright>
 Old begin function as in Minib3d is 0, new begin function is 1 (default)
 </td></tr>
@@ -119,9 +110,6 @@ Returns a copy of the new texture.
 <tr><td class=docleft width=1%><a href=#CountMipmaps>CountMipmaps</a></td><td class=docright>
 Returns the number of mipmaps a texture has.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#CreateBatchSprite>CreateBatchSprite</a></td><td class=docright>
-Add a sprite to batch, batchsprites are one mesh.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#CreateBlob>CreateBlob</a></td><td class=docright>
 Create blob from a fluid mesh where radius is the size of the blob.
 </td></tr>
@@ -147,7 +135,7 @@ Create geodesic sphere and set terrain size.
 Create octree and set its width, height and depth.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreateParticleEmitter>CreateParticleEmitter</a></td><td class=docright>
-Create particle emitter from sprite.
+Create particle emitter and set sprite for it to use.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#CreatePostFX>CreatePostFX</a></td><td class=docright>
 undocumented.
@@ -191,23 +179,35 @@ Deletes a vert shader object from a program object.
 <tr><td class=docleft width=1%><a href=#DepthBufferToTex>DepthBufferToTex</a></td><td class=docright>
 Copy the contents of the depth buffer to a texture.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleAlpha>EmitterParticleAlpha</a></td><td class=docright>
+Set particles alpha at start and end, range is 0..1.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleColor>EmitterParticleColor</a></td><td class=docright>
+Set particles RGB color at start and end, default is 255,255,255.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterParticleFunction>EmitterParticleFunction</a></td><td class=docright>
-Set custom rendering callback function for particle emitter.
+Points to callback function for emitter.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterParticleLife>EmitterParticleLife</a></td><td class=docright>
-Particle lifespan in frames.
+Set particles start, end and random lifespan.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleRotate>EmitterParticleRotate</a></td><td class=docright>
+Set particles rotation angle at start and end.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#EmitterParticleScale>EmitterParticleScale</a></td><td class=docright>
+Set particles scale at start and end, default is 1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterParticleSpeed>EmitterParticleSpeed</a></td><td class=docright>
-Set initial speed, use Rotate/TurnEntity to change direction.
+Set particles start and end speed.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterRate>EmitterRate</a></td><td class=docright>
-Rate between each emission in range 0..1, smaller is slower.
+Rate between each emission, range is 0.01..1.01.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterVariance>EmitterVariance</a></td><td class=docright>
-Set randomness of emission (direction and speed)
+Set random variance of particles, range is 0.001..0.1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EmitterVector>EmitterVector</a></td><td class=docright>
-Set vector (direction and speed) for wind or gravity effects.
+Set emitters start and end 3d vectors.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#EndAction>EndAction</a></td><td class=docright>
 Ends action so it can be freed, 1 = automatically ended, 2 = manually ended.
@@ -287,9 +287,6 @@ Link shader to a program object, as created by CreateShaderMaterial.
 <tr><td class=docleft width=1%><a href=#LoadAnimMesh>LoadAnimMesh</a></td><td class=docright>
 Loads an anim mesh, see MeshLoader.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#LoadBatchTexture>LoadBatchTexture</a></td><td class=docright>
-Does not create sprite, just loads texture.
-</td></tr>
 <tr><td class=docleft width=1%><a href=#LoadGeosphere>LoadGeosphere</a></td><td class=docright>
 Load geodesic sphere terrain from heightmap image.
 </td></tr>
@@ -354,13 +351,13 @@ Place mesh into a node of an octree, the mesh can be duplicated using no more me
 Place mesh into a node of an octree, the mesh can't be duplicated so to do that use CopyEntity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ParticleColor>ParticleColor</a></td><td class=docright>
-Set color of particle trails.
+Sets color of batch particle trails.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ParticleTrail>ParticleTrail</a></td><td class=docright>
-Set number of particles in trail.
+Sets number of batch particles in trail.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ParticleVector>ParticleVector</a></td><td class=docright>
-Set vector (direction and speed) of particle trails.
+Sets 3d vector of batch particle trails.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#PositionAnimMesh>PositionAnimMesh</a></td><td class=docright>
 Moves all vertices of mesh and every child mesh.
@@ -441,10 +438,10 @@ Load a texture for 2D texture sampling.
 Apply shader to a surface.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SkinMesh>SkinMesh</a></td><td class=docright>
-Set animated surface (vid is vertex index) for each of the bone no and weights arrays.
+Set animated surface for each of the bone no and weights arrays.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SpriteRenderMode>SpriteRenderMode</a></td><td class=docright>
-If mode is 1 rendering is normal, 2 is batch sprites on a single surface, 3 is batch particles.
+If mode is 1 rendering is normal, 2 is for batch sprites like particles.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#StencilAlpha>StencilAlpha</a></td><td class=docright>
 Set stencil alpha value.
@@ -579,12 +576,6 @@ Action.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TAnimationKeys>TAnimationKeys</a></td><td class=docright>
 AnimationKeys data.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#TBatchSprite>TBatchSprite</a></td><td class=docright>
-Batch sprite entity.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#TBatchSpriteMesh>TBatchSpriteMesh</a></td><td class=docright>
-Batch sprite mesh entity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TBlitz2D>TBlitz2D</a></td><td class=docright>
 Blitz2D.
@@ -800,21 +791,6 @@ use RenderWorld to render the camera, then use this command.
 Back buffer is upside-down so set fastinvert to True to invert texture uvs, False to flip texture data (slower).</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=BatchSpriteEntity>
-<tr><td class=doctop colspan=2>Function BatchSpriteEntity:TEntity( batch_sprite:TBatchSprite=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Return the sprite batch main mesh entity.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=BatchSpriteOrigin>
-<tr><td class=doctop colspan=2>Function BatchSpriteOrigin( batch_sprite:TBatchSprite,x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Move the batch sprite origin for depth sorting.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=BatchSpriteParent>
-<tr><td class=doctop colspan=2>Function BatchSpriteParent( id:Int=0,ent:TEntity,glob:Int=True )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Add a parent to the entire batch mesh - position only.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=BeginMax2D>
 <tr><td class=doctop colspan=2>Function BeginMax2D( version:Int=1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Old begin function as in Minib3d is 0, new begin function is 1 (default)</td></tr>
@@ -882,12 +858,6 @@ Back buffer is upside-down so set fastinvert to True to invert texture uvs, Fals
 <tr><td class=docleft width=1%>Description</td><td class=docright>Returns the number of mipmaps a texture has.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=CreateBatchSprite>
-<tr><td class=doctop colspan=2>Function CreateBatchSprite:TBatchSprite( parent_ent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Add a sprite to batch, batchsprites are one mesh.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>If you want to add to specific batch controller, use BatchSpriteEntity as parent_ent.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=CreateBlob>
 <tr><td class=doctop colspan=2>Function CreateBlob:TBlob( fluid:TFluid,radius:Float,parent_ent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Create blob from a fluid mesh where radius is the size of the blob.</td></tr>
@@ -930,7 +900,7 @@ Back buffer is upside-down so set fastinvert to True to invert texture uvs, Fals
 <br>
 <table class=doc width=100% cellspacing=3 id=CreateParticleEmitter>
 <tr><td class=doctop colspan=2>Function CreateParticleEmitter:TParticleEmitter( particle:TEntity,parent_ent:TEntity=Null )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create particle emitter from sprite.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create particle emitter and set sprite for it to use.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=CreatePostFX>
@@ -1003,35 +973,61 @@ Back buffer is upside-down so set fastinvert to True to invert texture uvs, Fals
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy the contents of the depth buffer to a texture.</td></tr>
 </table>
 <br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleAlpha>
+<tr><td class=doctop colspan=2>Function EmitterParticleAlpha( emit:TParticleEmitter,starta:Float,enda:Float,mida:Float=0,midlife:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles alpha at start and end, range is 0..1.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleColor>
+<tr><td class=doctop colspan=2>Function EmitterParticleColor( emit:TParticleEmitter,startr:Float,startg:Float,startb:Float,endr:Float,endg:Float,endb:Float,midr:Float=255,midg:Float=255,midb:Float=255,midlife:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles RGB color at start and end, default is 255,255,255.</td></tr>
+</table>
+<br>
 <table class=doc width=100% cellspacing=3 id=EmitterParticleFunction>
 <tr><td class=doctop colspan=2>Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set custom rendering callback function for particle emitter.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>This gives access to each particle sprite (as byte ptr) and it's current lifetime left.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Points to callback function for emitter.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>This gives access to each particle and also current life left.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterParticleLife>
-<tr><td class=doctop colspan=2>Function EmitterParticleLife( emit:TParticleEmitter,l:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Particle lifespan in frames.</td></tr>
+<tr><td class=doctop colspan=2>Function EmitterParticleLife( emit:TParticleEmitter,startl:Int,endl:Int,randl:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles start, end and random lifespan.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>startl sets when a particle becomes visible, endl is full life and randl is the random range.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleRotate>
+<tr><td class=doctop colspan=2>Function EmitterParticleRotate( emit:TParticleEmitter,startr:Float,endr:Float,midr:Float=0,midlife:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles rotation angle at start and end.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Minus values will rotate clockwise.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=EmitterParticleScale>
+<tr><td class=doctop colspan=2>Function EmitterParticleScale( emit:TParticleEmitter,startx:Float,starty:Float,endx:Float,endy:Float,midsx:Float=1,midsy:Float=1,midlife:Int=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles scale at start and end, default is 1.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterParticleSpeed>
-<tr><td class=doctop colspan=2>Function EmitterParticleSpeed( emit:TParticleEmitter,s:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set initial speed, use Rotate/TurnEntity to change direction.</td></tr>
+<tr><td class=doctop colspan=2>Function EmitterParticleSpeed( emit:TParticleEmitter,starts:Float,ends:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set particles start and end speed.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Minus end values can be used to slow particles down.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterRate>
 <tr><td class=doctop colspan=2>Function EmitterRate( emit:TParticleEmitter,r:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rate between each emission in range 0..1, smaller is slower.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rate between each emission, range is 0.01..1.01.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>This is a way to slow particle emissions down. A rate of 1.01 is full rate.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterVariance>
 <tr><td class=doctop colspan=2>Function EmitterVariance( emit:TParticleEmitter,v:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set randomness of emission (direction and speed)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set random variance of particles, range is 0.001..0.1.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Variance will be increasing chaotic above 0.1.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EmitterVector>
-<tr><td class=doctop colspan=2>Function EmitterVector( emit:TParticleEmitter,x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set vector (direction and speed) for wind or gravity effects.</td></tr>
+<tr><td class=doctop colspan=2>Function EmitterVector( emit:TParticleEmitter,startx:Float,starty:Float,startz:Float,endx:Float,endy:Float,endz:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set emitters start and end 3d vectors.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Vectors are affected by speed. Minus end values can be used to slow particles.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=EndAction>
@@ -1171,11 +1167,6 @@ CreateCamera, CameraViewport, CameraPick, BackBufferToTex and DepthBufferToTex.<
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loads an anim mesh, see MeshLoader.</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=LoadBatchTexture>
-<tr><td class=doctop colspan=2>Function LoadBatchTexture:TBatchSpriteMesh( tex_file:String,tex_flag:Int=1,id:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Does not create sprite, just loads texture.</td></tr>
-</table>
-<br>
 <table class=doc width=100% cellspacing=3 id=LoadGeosphere>
 <tr><td class=doctop colspan=2>Function LoadGeosphere:TGeosphere( file:String,parent:TEntity=Null )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Load geodesic sphere terrain from heightmap image.</td></tr>
@@ -1296,17 +1287,20 @@ if the node is set at a higher range than the camera, its children won't be rend
 <br>
 <table class=doc width=100% cellspacing=3 id=ParticleColor>
 <tr><td class=doctop colspan=2>Function ParticleColor( sprite:TSprite,r:Float,g:Float,b:Float,a:Float=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set color of particle trails.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets color of batch particle trails.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Batch particle render mode (3) is not working.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ParticleTrail>
 <tr><td class=doctop colspan=2>Function ParticleTrail( sprite:TSprite,length:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set number of particles in trail.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets number of batch particles in trail.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Batch particle render mode (3) is not working.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ParticleVector>
 <tr><td class=doctop colspan=2>Function ParticleVector( sprite:TSprite,x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set vector (direction and speed) of particle trails.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets 3d vector of batch particle trails.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Batch particle render mode (3) is not working.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=PositionAnimMesh>
@@ -1441,13 +1435,14 @@ if the node is set at a higher range than the camera, its children won't be rend
 <br>
 <table class=doc width=100% cellspacing=3 id=SkinMesh>
 <tr><td class=doctop colspan=2>Function SkinMesh( mesh:TMesh,surf_no_get:Int,vid:Int,bone1:Int,weight1:Float=1.0,bone2:Int=0,weight2:Float=0,bone3:Int=0,weight3:Float=0,bone4:Int=0,weight4:Float=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set animated surface (vid is vertex index) for each of the bone no and weights arrays.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set animated surface for each of the bone no and weights arrays.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>bone no references the bones list in a mesh, weights is a normalizing value.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=SpriteRenderMode>
 <tr><td class=doctop colspan=2>Function SpriteRenderMode( sprite:TSprite,Mode:Int )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>If mode is 1 rendering is normal, 2 is batch sprites on a single surface, 3 is batch particles.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>If mode is 1 rendering is normal, 2 is for batch sprites like particles.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Batch particle render mode (3) is not working.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=StencilAlpha>
@@ -1545,7 +1540,7 @@ glStencilFunc in range 0..3 which stands for one of NOTEQUAL, EQUAL, LEQUAL or G
 <tr><td class=doctop colspan=2>Function UseAssimpStreamMeshes( flag:Int=True,meshflags:Int=-1 )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loader flags for Assimp meshes.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Assimp direct loaders, default is True for Assimp streamed loaders.
-Set meshflags to -2 for flat shaded normals, default is smooth.</td></tr>
+Set meshflags to -1 for smooth normals, -2 for flat shaded normals and -4 to load as single mesh.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseCubemapFlip>
@@ -1602,13 +1597,13 @@ Set meshflags to -2 for flat shaded normals, default is smooth.</td></tr>
 <table class=doc width=100% cellspacing=3 id=UseLibraryMeshes>
 <tr><td class=doctop colspan=2>Function UseLibraryMeshes( flag:Int=True )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loader flag for meshes.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False for Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseLibraryTextures>
 <tr><td class=doctop colspan=2>Function UseLibraryTextures( flag:Int=True )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Loader flag for textures.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>Set flag to False for Blitzmax streamed loaders, default is True for Openb3d library direct loaders.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=UseMatrix>
@@ -1689,16 +1684,6 @@ Set meshflags to -2 for flat shaded normals, default is smooth.</td></tr>
 <table class=doc width=100% cellspacing=3 id=TAnimationKeys>
 <tr><td class=doctop colspan=2>Type TAnimationKeys</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>AnimationKeys data.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=TBatchSprite>
-<tr><td class=doctop colspan=2>Type TBatchSprite Extends TSprite</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Batch sprite entity.</td></tr>
-</table>
-<br>
-<table class=doc width=100% cellspacing=3 id=TBatchSpriteMesh>
-<tr><td class=doctop colspan=2>Type TBatchSpriteMesh Extends TMesh</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Batch sprite mesh entity.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TBlitz2D>

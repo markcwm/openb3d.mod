@@ -236,7 +236,7 @@ Extern
 	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListTerrain_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
-	Function StaticIterVectorBatchSpriteMesh_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
+	'Function StaticIterVectorBatchSpriteMesh_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	
 	' Action
@@ -420,7 +420,7 @@ Const TOUCH_class:Int=			55
 Const MESHCOLLIDER_class:Int=	56 ' tree.h
 Const MESHINFO_class:Int=		57
 Const VOXELSPRITE_class:Int=	58 ' voxel.h
-Const BATCHSPRITE_class:Int=	59
+'Const BATCHSPRITE_class:Int=	59
 
 ' Action varid
 Const ACTION_action_list:Int=	1
@@ -451,17 +451,17 @@ Const ANIMATIONKEYS_qy:Int=		11
 Const ANIMATIONKEYS_qz:Int=		12
 
 
-' Batch Sprite varid
-Const BATCHSPRITE_batch_id:Int=		1
-Const BATCHSPRITE_vertex_id:Int=	2
-Const BATCHSPRITE_b_min_x:Int=		3
-Const BATCHSPRITE_b_min_y:Int=		4
-Const BATCHSPRITE_b_min_z:Int=		5
-Const BATCHSPRITE_b_max_x:Int=		6
-Const BATCHSPRITE_b_max_y:Int=		7
-Const BATCHSPRITE_b_max_z:Int=		8
-Const BATCHSPRITE_mainsprite:Int=	9
-Const BATCHSPRITE_total_batch:Int=	10
+' Batch Sprite varid (deprecated)
+'Const BATCHSPRITE_batch_id:Int=	1
+'Const BATCHSPRITE_vertex_id:Int=	2
+'Const BATCHSPRITE_b_min_x:Int=		3
+'Const BATCHSPRITE_b_min_y:Int=		4
+'Const BATCHSPRITE_b_min_z:Int=		5
+'Const BATCHSPRITE_b_max_x:Int=		6
+'Const BATCHSPRITE_b_max_y:Int=		7
+'Const BATCHSPRITE_b_max_z:Int=		8
+'Const BATCHSPRITE_mainsprite:Int=	9
+'Const BATCHSPRITE_total_batch:Int=	10
 
 ' Bone varid
 Const BONE_n_px:Int=		1

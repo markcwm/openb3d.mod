@@ -312,14 +312,6 @@ Extern
 	Function FreeAction_( act:Byte Ptr )
 	Function EndAction_( act:Byte Ptr )
 	
-	' *** BatchSprite
-	Function BatchSpriteParent_( id:Int,ent:Byte Ptr,glob:Int )
-	Function BatchSpriteEntity_:Byte Ptr( batch_sprite:Byte Ptr )
-	Function BatchSpriteOrigin_( batch_sprite:Byte Ptr,x:Float,y:Float,z:Float )
-	Function CreateBatchMesh_:Byte Ptr( batchid:Int )
-	Function CreateBatchSprite_:Byte Ptr( parent_ent:Byte Ptr )
-	Function LoadBatchTexture_:Byte Ptr( tex_file:Byte Ptr,tex_flag:Int,id:Int )
-	
 	' *** Constraint
 	Function CreateConstraint_:Byte Ptr( p1:Byte Ptr,p2:Byte Ptr,l:Float )
 	Function CreateRigidBody_:Byte Ptr( body:Byte Ptr,p1:Byte Ptr,p2:Byte Ptr,p3:Byte Ptr,p4:Byte Ptr )
@@ -344,12 +336,16 @@ Extern
 	
 	' *** Particle
 	Function CreateParticleEmitter_:Byte Ptr( particle:Byte Ptr,parent_ent:Byte Ptr )
-	Function EmitterVector_( emit:Byte Ptr,x:Float,y:Float,z:Float )
+	Function EmitterVector_( emit:Byte Ptr,startx:Float,starty:Float,startz:Float,endx:Float,endy:Float,endz:Float )
 	Function EmitterRate_( emit:Byte Ptr,r:Float )
-	Function EmitterParticleLife_( emit:Byte Ptr,l:Int )
+	Function EmitterParticleLife_( emit:Byte Ptr,startl:Int,endl:Int,randl:Int )
 	Function EmitterParticleFunction_( emit:Byte Ptr,EmitterFunction( ent:Byte Ptr,life:Int ) )
-	Function EmitterParticleSpeed_( emit:Byte Ptr,s:Float )
+	Function EmitterParticleSpeed_( emit:Byte Ptr,starts:Float,ends:Float )
 	Function EmitterVariance_( emit:Byte Ptr,v:Float )
+	Function EmitterParticleAlpha_( emit:Byte Ptr,starta:Float,enda:Float,mida:Float,midlife:Int )
+	Function EmitterParticleScale_( emit:Byte Ptr,startsx:Float,startsy:Float,endsx:Float,endsy:Float,midsx:Float,midsy:Float,midlife:Int )
+	Function EmitterParticleColor_( emit:Byte Ptr,startr:Float,startg:Float,startb:Float,endr:Float,endg:Float,endb:Float,midr:Float,midg:Float,midb:Float,midlife:Int )
+	Function EmitterParticleRotate_( emit:Byte Ptr,startr:Float,endr:Float,midr:Float,midlife:Int )
 	Function ParticleColor_( sprite:Byte Ptr,r:Float,g:Float,b:Float,a:Float )
 	Function ParticleVector_( sprite:Byte Ptr,x:Float,y:Float,z:Float )
 	Function ParticleTrail_( sprite:Byte Ptr,length:Int )
@@ -534,7 +530,6 @@ Include "inc/TAction.bmx"
 Include "inc/TConstraint.bmx"
 Include "inc/TParticleBatch.bmx"
 Include "inc/TPostFX.bmx"
-Include "inc/TBatchSprite.bmx"
 'Include "inc/geom.bmx"
 
 ' functions

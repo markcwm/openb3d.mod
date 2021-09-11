@@ -1,6 +1,6 @@
 
 #include <stdlib.h> 
-
+#include "stdio.h"
 #include "glew_glee.h" // glee or glew
 
 
@@ -12,6 +12,37 @@
 list<ParticleBatch*> ParticleBatch::particle_batch_list;
 list<ParticleEmitter*> ParticleEmitter::emitter_list;
 
+ParticleBatch* ParticleBatch::GetParticleBatch(Texture* tex,int blend,int order){
+
+		ParticleBatch* particle_batch=NULL;
+	
+		// check if particle batch already exists for specified texture, if so return it
+		list<ParticleBatch*>::iterator it;
+		for(it=particle_batch_list.begin();it!=particle_batch_list.end();it++){
+			particle_batch=*it;
+			if(particle_batch->brush.tex[0]==tex && particle_batch->brush.blend==blend && particle_batch->order==order){
+				return particle_batch;		//*particle_batch->surf_list.begin();
+			}
+		}
+		
+		// if no particle batch surface exists, create new particle batch with new surface
+		particle_batch=new ParticleBatch;
+		Surface* surf=new Surface;
+		surf->vbo_enabled=false;
+		surf->ShaderMat=Global::ambient_shader;
+		particle_batch->surf_list.push_back(surf);
+		particle_batch->hide=false;
+		entity_list.push_back(particle_batch);
+		Global::root_ent->child_list.push_back(particle_batch);
+
+
+		particle_batch->brush.tex[0]=tex;
+		particle_batch->brush.blend=blend;
+		particle_batch->order=order;
+		particle_batch_list.push_back(particle_batch);
+		return particle_batch;
+
+}
 
 void ParticleBatch::Render(){
 	int depth_mask_disabled=false;
@@ -204,7 +235,7 @@ void ParticleBatch::Render(){
 
 }
 
-
+//todo: variance
 void ParticleEmitter::Update(){
 	list<ParticleData>::iterator it;
 
@@ -213,20 +244,33 @@ void ParticleEmitter::Update(){
 		rate_counter=0;
 		ParticleData particle;
 		particle.ent=particle_base->CopyEntity(0);
-		particle.ent->hide=false;
-		particle.particleLife=lifetime;
+		particle.ent->hide=true;
+		
+		int plus=lastlife - midlife; // end - endplus
+		if (plus==0){
+			particle.particleLife=midlife; // no random
+		}else{
+			particle.particleLife=midlife + (rand() % plus);
+		}
+		initlife=particle.particleLife;
 		particle.vx=0;
 		particle.vy=0;
-		particle.vz=particleSpeed;
-
+		particle.vz=firstspeed;
+		particle.fgx=firstgx;
+		particle.fgy=firstgy;
+		particle.fgz=firstgz;
+		particle.lgx=lastgx;
+		particle.lgy=lastgy;
+		particle.lgz=lastgz;
+		
 		particle.ent->px=mat.grid[3][0];
 		particle.ent->py=mat.grid[3][1];
 		particle.ent->pz=-mat.grid[3][2];
-
-		if (variance>.000000001){
-			particle.vx+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance))-variance/2;
-			particle.vy+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance))-variance/2;
-			particle.vz+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance))-variance/2;
+		
+		if (variance>0.000000001){ // RAND_MAX = 32767 constant
+			particle.vx+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance)) - (variance/2);
+			particle.vy+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance)) - (variance/2);
+			particle.vz+=static_cast <float> (rand()) / (static_cast <float> (RAND_MAX/variance)) - (variance/2);
 		}
 		mat.TransformVec(particle.vx,particle.vy,particle.vz);
 		particles.push_back(particle);
@@ -234,21 +278,61 @@ void ParticleEmitter::Update(){
 
 	for(it=particles.begin();it!=particles.end();it++){
 		ParticleData &particle=*it;
-
+		
 		if (particle.particleLife<=0){
 			particle.ent->FreeEntity();
-
 			it=particles.erase(it);
 			continue;
 		}
-
+		
+		// new: default functions
+		float lifeleft=static_cast <float> (particle.particleLife) / static_cast <float> (lastlife);
+		float invlifeleft=1.0 - lifeleft;
+		
+		if (particle.particleLife==(initlife - firstlife)){ // end - start
+			particle.ent->hide=false; // show
+		}
+		
+		float fla=(firsta * lifeleft) + (lasta * invlifeleft); // if only start/end values, blend first with last
+		if (midlifea>0){ // if mid values, blend first+mid with mid+last
+			fla=(((firsta * lifeleft) + (halfa * invlifeleft)) * lifeleft) + (((halfa * lifeleft) + (lasta * invlifeleft)) * invlifeleft);
+		}
+		if (fla>1) fla=1;
+		if (fla>0) particle.ent->EntityAlpha(fla);
+		
+		float flsx=(firstsx * lifeleft) + (lastsx * invlifeleft);
+		float flsy=(firstsy * lifeleft) + (lastsy * invlifeleft);
+		if (midlifes>0){
+			flsx=(((firstsx * lifeleft) + (halfsx * invlifeleft)) * lifeleft) + (((halfsx * lifeleft) + (lastsx * invlifeleft)) * invlifeleft);
+			flsy=(((firstsy * lifeleft) + (halfsy * invlifeleft)) * lifeleft) + (((halfsy * lifeleft) + (lastsy * invlifeleft)) * invlifeleft);
+		}
+		if (flsx>0 && flsy>0) dynamic_cast<Sprite*>(particle.ent)->ScaleSprite(flsx, flsy);
+		
+		float flr=(firstr * lifeleft) + (lastr * invlifeleft);
+		float flg=(firstg * lifeleft) + (lastg * invlifeleft);
+		float flb=(firstb * lifeleft) + (lastb * invlifeleft);
+		if (midlifec>0){
+			flr=(((firstr * lifeleft) + (halfr * invlifeleft)) * lifeleft) + (((halfr * lifeleft) + (lastr * invlifeleft)) * invlifeleft);
+			flg=(((firstg * lifeleft) + (halfg * invlifeleft)) * lifeleft) + (((halfg * lifeleft) + (lastg * invlifeleft)) * invlifeleft);
+			flb=(((firstb * lifeleft) + (halfb * invlifeleft)) * lifeleft) + (((halfb * lifeleft) + (lastb * invlifeleft)) * invlifeleft);
+		}
+		particle.ent->EntityColor(flr, flg, flb, false);
+		
+		float flrt=(firstrt * lifeleft) + (lastrt * invlifeleft);
+		if (midlifert>0){
+			flrt=(((firstrt * lifeleft) + (halfrt * invlifeleft)) * lifeleft) + (((halfrt * lifeleft) + (lastrt * invlifeleft)) * invlifeleft);
+		}
+		float rt=fmod(dynamic_cast<Sprite*>(particle.ent)->angle + flrt, 360);
+		if (rt>-360 && rt<360) dynamic_cast<Sprite*>(particle.ent)->RotateSprite(rt);
+		
+		// callback function overrides default functions
 		if (UpdateParticle!=0){
 			UpdateParticle (particle.ent, particle.particleLife);
 		}
-
-		particle.vx+=gx;
-		particle.vy+=gy;
-		particle.vz+=gz;
+		
+		particle.vx+=(particle.fgx * lifeleft) + (particle.lgx * invlifeleft);
+		particle.vy+=(particle.fgy * lifeleft) + (particle.lgy * invlifeleft);
+		particle.vz+=(particle.fgz * lifeleft) + (particle.lgz * invlifeleft);
 
 		particle.ent->px+=particle.vx;
 		particle.ent->py+=particle.vy;
@@ -260,7 +344,7 @@ void ParticleEmitter::Update(){
 	}
 }
 
-ParticleEmitter* ParticleEmitter::CreateParticleEmitter(Entity* particle, Entity* parent_ent){
+ParticleEmitter* ParticleEmitter::CreateParticleEmitter (Entity* particle, Entity* parent_ent){
 	if(parent_ent==NULL) parent_ent=Global::root_ent;
 
 	ParticleEmitter* emitter=new ParticleEmitter;
@@ -285,7 +369,7 @@ ParticleEmitter* ParticleEmitter::CreateParticleEmitter(Entity* particle, Entity
 	return emitter;
 }
 
-ParticleEmitter* ParticleEmitter::CopyEntity(Entity* parent_ent){
+ParticleEmitter* ParticleEmitter::CopyEntity (Entity* parent_ent){
 	if(parent_ent==NULL) parent_ent=Global::root_ent;
 
 	ParticleEmitter* emitter=new ParticleEmitter;
@@ -320,7 +404,6 @@ ParticleEmitter* ParticleEmitter::CopyEntity(Entity* parent_ent){
 	
 	// copy entity info
 
-
 	emitter->px=px;
 	emitter->py=py;
 	emitter->pz=pz;
@@ -340,7 +423,6 @@ ParticleEmitter* ParticleEmitter::CopyEntity(Entity* parent_ent){
 	emitter->order=order;
 	emitter->hide=false;
 
-
 	emitter->radius_x=radius_x;
 	emitter->radius_y=radius_y;
 	emitter->box_x=box_x;
@@ -353,25 +435,54 @@ ParticleEmitter* ParticleEmitter::CopyEntity(Entity* parent_ent){
 	emitter->pick_mode=pick_mode;
 	emitter->obscurer=obscurer;
 
-
 	emitter_list.push_back(emitter);
 
 	emitter->particle_base=particle_base;
 
-
 	emitter->rate=rate;
-	emitter->lifetime=lifetime;
-
-	emitter->gx=gx;
-	emitter->gy=gy;
-	emitter->gz=gz;
+	emitter->firstlife=firstlife;
+	emitter->midlife=midlife; // added
+	emitter->lastlife=lastlife;
+	emitter->initlife=initlife;
+	emitter->firstgx=firstgx;
+	emitter->firstgy=firstgy;
+	emitter->firstgz=firstgz;
+	emitter->lastgx=lastgx;
+	emitter->lastgy=lastgy;
+	emitter->lastgz=lastgz;
 	emitter->variance=variance;
-	emitter->particleSpeed=particleSpeed;
+	emitter->firstspeed=firstspeed;
+	emitter->lastspeed=lastspeed;
 
 	emitter->UpdateParticle=UpdateParticle;
-
+	
+	emitter->firsta=firsta; // new
+	emitter->lasta=lasta;
+	emitter->halfa=halfa;
+	emitter->midlifea=midlifea;
+	emitter->firstsx=firstsx;
+	emitter->firstsy=firstsy;
+	emitter->lastsx=lastsx;
+	emitter->lastsy=lastsy;
+	emitter->halfsx=halfsx;
+	emitter->halfsy=halfsy;
+	emitter->midlifes=midlifes;
+	emitter->firstr=firstr;
+	emitter->firstg=firstg;
+	emitter->firstb=firstb;
+	emitter->lastr=lastr;
+	emitter->lastg=lastg;
+	emitter->lastb=lastb;
+	emitter->halfr=halfr;
+	emitter->halfg=halfg;
+	emitter->halfb=halfb;
+	emitter->midlifec=midlifec;
+	emitter->firstrt=firstrt;
+	emitter->lastrt=lastrt;
+	emitter->halfrt=halfrt;
+	emitter->midlifert=midlifert;
+	
 	return emitter;
-
 
 }
 
@@ -391,14 +502,16 @@ void ParticleEmitter::FreeEntity (){
 
 	Entity::FreeEntity();
 	delete this;
-return;
 	return;
 }
 
-void ParticleEmitter::EmitterVector(float x, float y, float z){
-	gx=x;
-	gy=y;
-	gz=z;
+void ParticleEmitter::EmitterVector (float startx, float starty, float startz, float endx, float endy, float endz){
+	firstgx=startx * firstspeed; // new: multiply by speed
+	firstgy=starty * firstspeed;
+	firstgz=startz * firstspeed;
+	lastgx=endx * lastspeed;
+	lastgy=endy * lastspeed;
+	lastgz=endz * lastspeed;
 }
 
 void ParticleEmitter::EmitterRate (float r){
@@ -409,14 +522,54 @@ void ParticleEmitter::EmitterVariance (float v){
 	variance=v;
 }
 
-void ParticleEmitter::EmitterParticleLife (int l){
-	lifetime=l;
+void ParticleEmitter::EmitterParticleLife (int startl, int endl, int randl){
+	firstlife=startl;
+	midlife=endl;
+	lastlife=endl + randl;
 }
 
-void ParticleEmitter::EmitterParticleSpeed (float s){
-	particleSpeed=s;
+void ParticleEmitter::EmitterParticleSpeed (float starts, float ends){
+	firstspeed=starts;
+	lastspeed=ends;
 }
 
-void ParticleEmitter::EmitterParticleFunction(void (*EmitterFunction)(Entity*, int)){
+void ParticleEmitter::EmitterParticleFunction (void (*EmitterFunction)(Entity*, int)){
 	UpdateParticle=EmitterFunction;
+}
+
+void ParticleEmitter::EmitterParticleAlpha (float starta, float enda, float mida, int midlife){ // new
+	firsta=starta;
+	lasta=enda;
+	halfa=mida;
+	midlifea=midlife;
+}
+
+void ParticleEmitter::EmitterParticleColor (float startr, float startg, float startb,float endr, float endg, float endb, float midr, float midg, float midb, int midlife){ // new
+	firstr=startr;
+	firstg=startg;
+	firstb=startb;
+	lastr=endr;
+	lastg=endg;
+	lastb=endb;
+	halfr=midr;
+	halfg=midg;
+	halfb=midb;
+	midlifec=midlife;
+}
+
+void ParticleEmitter::EmitterParticleScale (float startsx, float startsy, float endsx, float endsy, float midsx, float midsy, int midlife){ // new
+	firstsx=startsx;
+	firstsy=startsy;
+	lastsx=endsx;
+	lastsy=endsy;
+	halfsx=midsx;
+	halfsy=midsy;
+	midlifes=midlife;
+}
+
+void ParticleEmitter::EmitterParticleRotate (float startr, float endr, float midr, int midlife){ // new
+	firstrt=startr;
+	lastrt=endr;
+	halfrt=midr;
+	midlifert=midlife;
 }

@@ -357,6 +357,18 @@ public:
 		grid[2][3] = 0;
 		grid[3][3] = 1;
 	}
+
+	void TranslateVec(float &rx,float &ry,float &rz,int addTranslation = 0 ){
+
+		float  w = 1.0/ ( grid[0][3] + grid[1][3] + grid[2][3] + grid[3][3] );
+
+		addTranslation = addTranslation & 1;
+
+		rx =  ( ( grid[0][0] ) + ( grid[1][0] ) + ( grid[2][0] ) + grid[3][0] * addTranslation ) * w;
+		ry =  ( ( grid[0][1] ) + ( grid[1][1] ) + ( grid[2][1] ) + grid[3][1] * addTranslation ) * w;
+		rz = -( ( grid[0][2] ) + ( grid[1][2] ) + ( grid[2][2] ) + grid[3][2] * addTranslation ) * w;
+	}
+
 	void TransformVec(float &rx,float &ry,float &rz,int addTranslation = 0 ){
 
 		float  w = 1.0/ ( grid[0][3] + grid[1][3] + grid[2][3] + grid[3][3] );
@@ -369,7 +381,6 @@ public:
 		rx =  ( ( grid[0][0]*ix ) + ( grid[1][0]*iy ) + ( grid[2][0]*iz ) + grid[3][0] * addTranslation ) * w;
 		ry =  ( ( grid[0][1]*ix ) + ( grid[1][1]*iy ) + ( grid[2][1]*iz ) + grid[3][1] * addTranslation ) * w;
 		rz = -( ( grid[0][2]*ix ) + ( grid[1][2]*iy ) + ( grid[2][2]*iz ) + grid[3][2] * addTranslation ) * w;
-
 	}
 
 	void Transpose(){

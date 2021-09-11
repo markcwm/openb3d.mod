@@ -151,27 +151,33 @@ Function LoadMesh:TMesh( url:Object,parent:TEntity=Null,flags:Int = -1 )
 	Return mesh
 End Function
 
+' warning: Mesh/TextureLoader have now replaced with UseLibraryMeshes and other functions starting 
+' with "Use", this is because these functions were not easy to understand.
 
-Rem
- Set mesh loaders to use, default is "bmx"
- Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" for standard Openb3d library 
-mesh loaders, use "all" for all available loaders. Use "3ds2" for alternative 3DS loader or "3ds" for default 3DS loader.
-Use "trans" to transform mesh vertices (if supported) or disable with "notrans" (only for 3DS files).
-Use "debug" for mesh loader debug information or disable with "nodebug".
-Function MeshLoader( meshid:String,flags:Int=-1 )
-	Select meshid.ToLower()
-		Case "all"
-			TGlobal3D.Mesh_Loader=0
-		Case "bmxassimp", "assimpbmx", "stream", "streams"
-			TGlobal3D.Mesh_Loader=1+8
-			TGlobal3D.Mesh_Flags=flags
-	EndSelect
-End Function
-EndRem
+'Rem
+'bbdoc: Set mesh loaders to use, default is "bmx"
+'about: Set meshid to "bmx" or "max" for Blitzmax streamed mesh loaders, use "cpp" or "lib" 
+'for standard Openb3d library mesh loaders, use "all" for all available loaders. Use "3ds2" 
+'for alternative 3DS loader or "3ds" for default 3DS loader. Use "trans" to transform mesh 
+'vertices (if supported) or disable with "notrans" (only for 3DS files). Use "debug" for mesh 
+'loader debug information or disable with "nodebug".
+'EndRem
+'Function MeshLoader( meshid:String,flags:Int=-1 )
+'End Function
+
+'Rem
+'bbdoc: Set texture loaders to use (default is streamed), also sets cubemap faces or frames
+'about: Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" 
+'for Openb3d library textures (only loads local files). As an extra feature you can define the 
+'cubemap face order with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with 
+'"frames",0,1,2,3,4,5 (these are the default layouts).
+'EndRem
+'Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
+'End Function
 
 Rem
 bbdoc: Loader flag for meshes
-about: Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
+about: Set flag to False for Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
 End Rem
 Function UseLibraryMeshes( flag:Int=True )
 	TUse.LibraryMeshes( flag )
@@ -180,7 +186,7 @@ End Function
 Rem
 bbdoc: Loader flags for Assimp meshes
 about: Set flag to False to use Assimp direct loaders, default is True for Assimp streamed loaders.
-Set meshflags to -2 for flat shaded normals, default is smooth.
+Set meshflags to -1 for smooth normals, -2 for flat shaded normals and -4 to load as single mesh.
 End Rem
 Function UseAssimpStreamMeshes( flag:Int=True,meshflags:Int=-1 )
 	TUse.AssimpStreamMeshes( flag,meshflags )
@@ -217,21 +223,8 @@ Function UseMatrixMD2( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 End Function
 
 Rem
- Set texture loaders to use (default is streamed), also sets cubemap faces or frames
- Set texid to "bb" or "bmx" for Blitzmax streamed textures, use "cpp", "lib" or "open" for 
-Openb3d library textures (only loads local files). As an extra feature you can define the cubemap face order 
-with "faces",0,1,2,3,4,5 and cubemap anim texture frame order with "frames",0,1,2,3,4,5 (these are the default layouts).
-Function TextureLoader( texid:String,lf0:Int=0,fr1:Int=0,rt2:Int=0,bk3:Int=0,dn4:Int=0,up5:Int=0 )
-	Select texid.ToLower()
-		Case "flags", "texflags"
-			TGlobal3D.Texture_Flags=lf0
-	EndSelect
-End Function
-EndRem
-
-Rem
 bbdoc: Loader flag for textures
-about: Set flag to False to use Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
+about: Set flag to False for Blitzmax streamed loaders, default is True for Openb3d library direct loaders.
 End Rem
 Function UseLibraryTextures( flag:Int=True )
 	TUse.LibraryTextures( flag )
@@ -269,7 +262,6 @@ Function UseMeshTextureFlags( texflags:Int=-1 )
 	TUse.MeshTextureFlags( texflags )
 End Function
 
-
 Rem
 bbdoc: Frees all brush textures, FreeBrush does not free textures
 End Rem
@@ -300,7 +292,7 @@ End Function
 
 Rem
 bbdoc: Copy rectangle of source pixmap pixels to destination, not exactly like B3D
-about: srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4
+about: srcW/H is src size, srcX/srcY top-left position, dstW/H is dst size, bytes per pixel defaults to 4.
 End Rem
 Function CopyRect( srcX:Int,srcY:Int,srcW:Int,srcH:Int,dstW:Int,dstH:Int,src:Byte Ptr,dst:Byte Ptr,bPP:Int=4,invert:Int=0 )
 	CopyRect_( src,srcW,srcH,srcX,srcY,dst,dstW,dstH,bPP,invert )
@@ -725,7 +717,7 @@ Function RepeatMesh:TMesh( mesh:TMesh,parent:TEntity=Null )
 End Function
 
 Rem
-bbdoc: Set animated surface (vid is vertex index) for each of the bone no and weights arrays
+bbdoc: Set animated surface for each of the bone no and weights arrays
 about: bone no references the bones list in a mesh, weights is a normalizing value.
 End Rem
 Function SkinMesh( mesh:TMesh,surf_no_get:Int,vid:Int,bone1:Int,weight1:Float=1.0,bone2:Int=0,weight2:Float=0,bone3:Int=0,weight3:Float=0,bone4:Int=0,weight4:Float=0 )
@@ -733,7 +725,8 @@ Function SkinMesh( mesh:TMesh,surf_no_get:Int,vid:Int,bone1:Int,weight1:Float=1.
 End Function
 
 Rem
-bbdoc: If mode is 1 rendering is normal, 2 is batch sprites on a single surface, 3 is batch particles
+bbdoc: If mode is 1 rendering is normal, 2 is for batch sprites like particles
+about: Batch particle render mode (3) is not working.
 End Rem
 Function SpriteRenderMode( sprite:TSprite,Mode:Int )
 	sprite.SpriteRenderMode( Mode )
@@ -2360,44 +2353,6 @@ Function EndAction( act:TAction )
 	act.EndAction()
 End Function
 
-' *** BatchSprite
-
-Rem
-bbdoc: Add a parent to the entire batch mesh - position only
-End Rem
-Function BatchSpriteParent( id:Int=0,ent:TEntity,glob:Int=True )
-	TBatchSprite.BatchSpriteParent( id,ent,glob )
-End Function
-
-Rem
-bbdoc: Return the sprite batch main mesh entity
-End Rem
-Function BatchSpriteEntity:TEntity( batch_sprite:TBatchSprite=Null )
-	Return TBatchSprite.BatchSpriteEntity( batch_sprite )
-End Function
-
-Rem
-bbdoc: Move the batch sprite origin for depth sorting
-End Rem
-Function BatchSpriteOrigin( batch_sprite:TBatchSprite,x:Float,y:Float,z:Float )
-	batch_sprite.BatchSpriteOrigin( x,y,z )
-End Function
-
-Rem
-bbdoc: Add a sprite to batch, batchsprites are one mesh
-about: If you want to add to specific batch controller, use BatchSpriteEntity as parent_ent
-End Rem
-Function CreateBatchSprite:TBatchSprite( parent_ent:TEntity=Null )
-	Return TBatchSprite.CreateBatchSprite( parent_ent )
-End Function
-
-Rem
-bbdoc: Does not create sprite, just loads texture
-End Rem
-Function LoadBatchTexture:TBatchSpriteMesh( tex_file:String,tex_flag:Int=1,id:Int=0 )
-	Return TBatchSprite.LoadBatchTexture( tex_file,tex_flag,id )
-End Function
-
 ' *** Constraint
 
 Rem
@@ -2513,71 +2468,108 @@ End Function
 ' *** Particle
 
 Rem
-bbdoc: Create particle emitter from sprite
+bbdoc: Create particle emitter and set sprite for it to use
 End Rem
 Function CreateParticleEmitter:TParticleEmitter( particle:TEntity,parent_ent:TEntity=Null )
 	Return TParticleEmitter.CreateParticleEmitter( particle,parent_ent )
 End Function
 
 Rem
-bbdoc: Set vector (direction and speed) for wind or gravity effects
+bbdoc: Set emitters start and end 3d vectors
+about: Vectors are affected by speed. Minus end values can be used to slow particles.
 End Rem
-Function EmitterVector( emit:TParticleEmitter,x:Float,y:Float,z:Float )
-	emit.EmitterVector( x,y,z )
+Function EmitterVector( emit:TParticleEmitter,startx:Float,starty:Float,startz:Float,endx:Float,endy:Float,endz:Float )
+	emit.EmitterVector( startx,starty,startz,endx,endy,endz )
 End Function
 
 Rem
-bbdoc: Rate between each emission in range 0..1, smaller is slower
+bbdoc: Rate between each emission, range is 0.01..1.01
+about: This is a way to slow particle emissions down. A rate of 1.01 is full rate.
 End Rem
 Function EmitterRate( emit:TParticleEmitter,r:Float )
 	emit.EmitterRate( r )
 End Function
 
 Rem
-bbdoc: Particle lifespan in frames
+bbdoc: Set particles start, end and random lifespan
+about: startl sets when a particle becomes visible, endl is full life and randl is the random range.
 End Rem
-Function EmitterParticleLife( emit:TParticleEmitter,l:Int )
-	emit.EmitterParticleLife( l )
+Function EmitterParticleLife( emit:TParticleEmitter,startl:Int,endl:Int,randl:Int=0 )
+	emit.EmitterParticleLife( startl,endl,randl )
 End Function
 
 Rem
-bbdoc: Set custom rendering callback function for particle emitter
-about: This gives access to each particle sprite (as byte ptr) and it's current lifetime left.
+bbdoc: Points to callback function for emitter
+about: This gives access to each particle and also current life left.
 End Rem
 Function EmitterParticleFunction( emit:TParticleEmitter,EmitterFunction( ent:Byte Ptr,life:Int ) )
 	emit.EmitterParticleFunction( EmitterFunction ) ' note: use TEntity.GetInstance(ent)
 End Function
 
 Rem
-bbdoc: Set initial speed, use Rotate/TurnEntity to change direction
+bbdoc: Set particles start and end speed
+about: Minus end values can be used to slow particles down.
 End Rem
-Function EmitterParticleSpeed( emit:TParticleEmitter,s:Float )
-	emit.EmitterParticleSpeed( s )
+Function EmitterParticleSpeed( emit:TParticleEmitter,starts:Float,ends:Float=0 )
+	emit.EmitterParticleSpeed( starts,ends )
 End Function
 
 Rem
-bbdoc: Set randomness of emission (direction and speed)
+bbdoc: Set random variance of particles, range is 0.001..0.1
+about: Variance will be increasing chaotic above 0.1.
 End Rem
 Function EmitterVariance( emit:TParticleEmitter,v:Float )
 	emit.EmitterVariance( v )
 End Function
 
 Rem
-bbdoc: Set color of particle trails
+bbdoc: Set particles alpha at start and end, range is 0..1
+End Rem
+Function EmitterParticleAlpha( emit:TParticleEmitter,starta:Float,enda:Float,mida:Float=0,midlife:Int=0 )
+	emit.EmitterParticleAlpha( starta,enda,mida,midlife )
+End Function
+
+Rem
+bbdoc: Set particles scale at start and end, default is 1
+End Rem
+Function EmitterParticleScale( emit:TParticleEmitter,startx:Float,starty:Float,endx:Float,endy:Float,midsx:Float=1,midsy:Float=1,midlife:Int=0 )
+	emit.EmitterParticleScale( startx,starty,endx,endy,midsx,midsy,midlife )
+End Function
+
+Rem
+bbdoc: Set particles RGB color at start and end, default is 255,255,255
+End Rem
+Function EmitterParticleColor( emit:TParticleEmitter,startr:Float,startg:Float,startb:Float,endr:Float,endg:Float,endb:Float,midr:Float=255,midg:Float=255,midb:Float=255,midlife:Int=0 )
+	emit.EmitterParticleColor( startr,startg,startb,endr,endg,endb,midr,midg,midb,midlife )
+End Function
+
+Rem
+bbdoc: Set particles rotation angle at start and end
+about: Minus values will rotate clockwise
+End Rem
+Function EmitterParticleRotate( emit:TParticleEmitter,startr:Float,endr:Float,midr:Float=0,midlife:Int=0 )
+	emit.EmitterParticleRotate( startr,endr,midr,midlife )
+End Function
+
+Rem
+bbdoc: Sets color of batch particle trails
+about: Batch particle render mode (3) is not working.
 End Rem
 Function ParticleColor( sprite:TSprite,r:Float,g:Float,b:Float,a:Float=0 )
 	ParticleColor_( TSprite.GetInstance(sprite),r,g,b,a )
 End Function
 
 Rem
-bbdoc: Set vector (direction and speed) of particle trails
+bbdoc: Sets 3d vector of batch particle trails
+about: Batch particle render mode (3) is not working.
 End Rem
 Function ParticleVector( sprite:TSprite,x:Float,y:Float,z:Float )
 	ParticleVector_( TSprite.GetInstance(sprite),x,y,z )
 End Function
 
 Rem
-bbdoc: Set number of particles in trail
+bbdoc: Sets number of batch particles in trail
+about: Batch particle render mode (3) is not working.
 End Rem
 Function ParticleTrail( sprite:TSprite,length:Int )
 	ParticleTrail_( TSprite.GetInstance(sprite),length )

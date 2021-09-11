@@ -66,9 +66,9 @@ Type TParticleEmitter Extends TEntity
 		
 	End Function
 	
-	Method EmitterVector( x:Float,y:Float,z:Float )
+	Method EmitterVector( startx:Float,starty:Float,startz:Float,endx:Float,endy:Float,endz:Float )
 	
-		EmitterVector_( GetInstance(Self),x,y,z )
+		EmitterVector_( GetInstance(Self),startx,starty,startz,endx,endy,endz )
 		
 	End Method
 	
@@ -78,9 +78,9 @@ Type TParticleEmitter Extends TEntity
 		
 	End Method
 	
-	Method EmitterParticleLife( l:Int )
+	Method EmitterParticleLife( startl:Int,endl:Int,randl:Int=0 )
 	
-		EmitterParticleLife_( GetInstance(Self),l )
+		EmitterParticleLife_( GetInstance(Self),startl,endl,randl )
 		
 	End Method
 	
@@ -90,15 +90,39 @@ Type TParticleEmitter Extends TEntity
 		
 	End Method
 	
-	Method EmitterParticleSpeed( s:Float )
+	Method EmitterParticleSpeed( starts:Float,ends:Float=0 )
 	
-		EmitterParticleSpeed_( GetInstance(Self),s )
+		EmitterParticleSpeed_( GetInstance(Self),starts,ends )
 		
 	End Method
 	
 	Method EmitterVariance( v:Float )
 	
 		EmitterVariance_( GetInstance(Self),v )
+		
+	End Method
+	
+	Method EmitterParticleAlpha( starta:Float,enda:Float,mida:Float=0,midlife:Int=0 )
+	
+		EmitterParticleAlpha_( GetInstance(Self),starta,enda,mida,midlife )
+		
+	End Method
+	
+	Method EmitterParticleScale( startsx:Float,startsy:Float,endsx:Float,endsy:Float,midsx:Float=1,midsy:Float=1,midlife:Int=0 )
+	
+		EmitterParticleScale_( GetInstance(Self),startsx,startsy,endsx,endsy,midsx,midsy,midlife )
+		
+	End Method
+	
+	Method EmitterParticleColor( startr:Float,startg:Float,startb:Float,endr:Float,endg:Float,endb:Float,midr:Float=255,midg:Float=255,midb:Float=255,midlife:Int=0 )
+	
+		EmitterParticleColor_( GetInstance(Self),startr,startg,startb,endr,endg,endb,midr,midg,midb,midlife )
+		
+	End Method
+	
+	Method EmitterParticleRotate( startr:Float,endr:Float,midr:Float=0,midlife:Int=0 )
+	
+		EmitterParticleRotate_( GetInstance(Self),startr,endr,midr,midlife )
 		
 	End Method
 	

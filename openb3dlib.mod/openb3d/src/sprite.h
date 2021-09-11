@@ -16,9 +16,9 @@
 using namespace std;
 
 class Sprite : public Mesh{
-	static Surface* surf;
 
 public:
+	static Surface* surf;
 
 	float angle;
 	float scale_x,scale_y;

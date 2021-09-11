@@ -108,7 +108,6 @@ Type TGlobal3D
 		TPick.InitGlobals()
 		TShadowObject.InitGlobals()
 		TTerrain.InitGlobals()
-		TBatchSprite.InitGlobals()
 		TTexture.InitGlobals()
 		
 		Matrix_3DS=TMatrix.Create()

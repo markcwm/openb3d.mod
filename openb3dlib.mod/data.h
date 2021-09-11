@@ -32,7 +32,6 @@ Entity* StaticIterListEntity_( int classid,int varid,int &id );
 ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id );
 Terrain* StaticIterListTerrain_( int classid,int varid,int &id );
 Texture* StaticIterListTexture_( int classid,int varid,int &id );
-BatchSpriteMesh* StaticIterVectorBatchSpriteMesh_( int classid,int varid,int &id );
 Light* StaticIterVectorLight_( int classid,int varid,int &id );
 
 // Action

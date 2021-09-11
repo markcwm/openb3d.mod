@@ -27,7 +27,7 @@ public:
 	int trail;
 
 	void Render();
-
+	static ParticleBatch* GetParticleBatch(Texture* tex,int blend,int order);
 	
 	ParticleBatch(){
 		no_surfs=1;
@@ -42,94 +42,75 @@ public:
 		min_x=-999999999;;min_y=-999999999;;min_z=-999999999;;max_x=999999999;;max_y=999999999;;max_z=999999999;;
 	};
 	
-	static ParticleBatch* GetParticleBatch(Texture* tex,int blend,int order){
-	
-		ParticleBatch* particle_batch=NULL;
-	
-		// check if particle batch already exists for specified texture, if so return it
-		list<ParticleBatch*>::iterator it;
-		for(it=particle_batch_list.begin();it!=particle_batch_list.end();it++){
-			particle_batch=*it;
-			if(particle_batch->brush.tex[0]==tex && particle_batch->brush.blend==blend && particle_batch->order==order){
-				return particle_batch;		//*particle_batch->surf_list.begin();
-			}
-		}
-		
-		// if no particle batch surface exists, create new particle batch with new surface
-		particle_batch=new ParticleBatch;
-		Surface* surf=new Surface;
-		surf->vbo_enabled=false;
-		surf->ShaderMat=Global::ambient_shader;
-		particle_batch->surf_list.push_back(surf);
-		particle_batch->hide=false;
-		entity_list.push_back(particle_batch);
-		Global::root_ent->child_list.push_back(particle_batch);
-
-
-		particle_batch->brush.tex[0]=tex;
-		particle_batch->brush.blend=blend;
-		particle_batch->order=order;
-		particle_batch_list.push_back(particle_batch);
-		return particle_batch;
-		
-	}
-
-
-
 };
 
 class ParticleEmitter: public Entity{
 
 private:
 	int rate_counter;
-
+	
+public:
 	struct ParticleData{
 		Entity* ent;
 		int particleLife;
 		float vx,vy,vz;
+		float fgx,fgy,fgz,lgx,lgy,lgz; // gravity
 	};
 
 	list<ParticleData> particles;
 
-public:
+//public:
 	static list<ParticleEmitter*> emitter_list;
 
 	Entity* particle_base;
 
 
 	int rate;
-	int lifetime;
+	int firstlife,midlife,lastlife,initlife;
 
-	float gx,gy,gz;		//Gravity
+	float firstgx,firstgy,firstgz,lastgx,lastgy,lastgz;		// gravity
 	float variance;
-	float particleSpeed;
-
+	float firstspeed,lastspeed;
+	float firsta,lasta,halfa,midlifea; //alpha
+	float firstr,firstg,firstb,lastr,lastg,lastb,halfr,halfg,halfb,midlifec; // color
+	float firstsx,firstsy,lastsx,lastsy,halfsx,halfsy,midlifes; // scale
+	float firstrt,lastrt,halfrt,midlifert; // rotation
+	
 	void (*UpdateParticle)(Entity* ent, int life);
 
 	void Update();
 
 	ParticleEmitter(){
 		rate=1;
-		particleSpeed=1;
+		firstspeed=0.005;lastspeed=0;
 		rate_counter=0;
-		lifetime=0;
-		gx=0;gy=0;gz=0;
+		firstlife=0;midlife=0;lastlife=0;initlife=0;
+		firstgx=0;firstgy=0;firstgz=0;lastgx=0;lastgy=0;lastgz=0;
 		variance=0;
 		UpdateParticle=0;
+		firsta=0;lasta=0;halfa=0;midlifea=0;
+		firstr=255;firstg=255;firstb=255;
+		lastr=255;lastg=255;lastb=255;
+		halfr=255;halfg=255;halfb=255;midlifec=0;
+		firstsx=1;firstsy=1;lastsx=1;lastsy=1;halfsx=1;halfsy=1;midlifes=0;
+		firstrt=0;lastrt=0;halfrt=0;midlifert=0;
 	}
 
 	ParticleEmitter* CopyEntity(Entity* parent_ent=NULL);
 	static ParticleEmitter* CreateParticleEmitter(Entity* particle, Entity* parent_ent=NULL);
 	void FreeEntity(void);
 
-	void EmitterVector(float x, float y, float z);
+	void EmitterVector(float startx, float starty, float startz, float endx, float endy, float endz);
 	void EmitterRate (float r);
 	void EmitterVariance (float v);
-	void EmitterParticleLife (int l);
-	void EmitterParticleSpeed (float s);
+	void EmitterParticleLife (int startl, int endl, int randl=0);
+	void EmitterParticleSpeed (float starts, float ends=0);
 	void EmitterParticleFunction(void (*EmitterFunction)(Entity*, int));
+	void EmitterParticleAlpha(float starta, float enda, float mida=0, int midlife=0);
+	void EmitterParticleScale(float startsx, float startsy, float endsx, float endsy, float midsx=0, float midsy=0, int midlife=0);
+	void EmitterParticleColor(float startr, float startg, float startb, float endr, float endg, float endb, float midr=0, float midg=0, float midb=0, int midlife=0);
+	void EmitterParticleRotate(float startr, float endr, float midr=0, int midlife=0);
 
-	
 };
 
 #endif

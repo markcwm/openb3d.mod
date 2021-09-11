@@ -5,8 +5,6 @@
  *  Created by Simon Harrison.
  *  Copyright Si Design. All rights reserved.
  *
- *  Batch Sprites from Minib3d-Monkey by Adam Redwoods
- * 
  */
 
 #ifndef SPRITE_BATCH_H
@@ -106,62 +104,6 @@ public:
 		}
 		sprite_batch_list.clear();
 	
-	}
-
-};
-
-class BatchSprite;
-
-class BatchSpriteMesh : public Mesh{
-	static Surface* batchsurf;
-
-public:
-	Surface* surf; 
-	vector<int> free_stack; // list of available vertex
-	int num_sprites;
-	list<BatchSprite*> sprite_list;
-	int id;
-	Sprite* cam_sprite; // use this to get cam info
-	
-	static BatchSpriteMesh* Create(Entity* parent_ent=NULL);
-	void Update() {};
-	void Render();
-	
-	BatchSpriteMesh(){
-		
-		surf=NULL; cam_sprite=NULL;
-		num_sprites=0; id=0;
-		
-	}
-
-};
-
-class BatchSprite : public Sprite{
-
-public:
-	int batch_id; // ids start at 1
-	int vertex_id;
-	
-	static float b_min_x, b_min_y, b_min_z, b_max_x, b_max_y, b_max_z;
-	static vector<BatchSpriteMesh*> mainsprite;
-	static int total_batch;
-	static Matrix temp_mat;
-
-	void FreeEntity(void);
-	static void BatchSpriteParent(int id=0, Entity* ent=NULL,int glob=true);
-	static Entity* BatchSpriteEntity(BatchSprite* batch_sprite=NULL);
-	void BatchSpriteOrigin(float x,float y,float z);
-	static BatchSpriteMesh* CreateBatchMesh( int batchid );
-	static BatchSprite* CreateBatchSprite(Entity* parent_ent=NULL);
-	static BatchSpriteMesh* LoadBatchTexture(string tex_file,int tex_flag=1,int id=0);
-	void UpdateBatch(Sprite* cam_sprite);
-	static float Min5(float a, float b, float c, float d, float e);
-	static float Max5(float a, float b, float c, float d, float e);
-
-	BatchSprite(){
-		
-		batch_id=0; vertex_id=0;
-		
 	}
 
 };

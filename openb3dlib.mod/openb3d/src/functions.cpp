@@ -865,31 +865,46 @@ float DeltaYaw_(Entity* ent1,Entity* ent2){
 	return ent1->DeltaYaw(ent2);
 }
 
-void EmitterVector_(ParticleEmitter* emit, float x, float y, float z){
-	emit->EmitterVector(x, y, z);
+
+void EmitterVector_(ParticleEmitter* emit, float startx, float starty, float startz, float endx, float endy, float endz){
+	emit->EmitterVector(startx, starty, startz, endx, endy, endz);
 }
 
 void EmitterRate_(ParticleEmitter* emit, float r){
 	emit->EmitterRate(r);
 }
 
-void EmitterParticleLife_(ParticleEmitter* emit, int l){
-	emit->EmitterParticleLife(l);
+void EmitterParticleLife_(ParticleEmitter* emit, int startl, int endl, int randl=0){
+	emit->EmitterParticleLife(startl, endl, randl);
 }
 
 void EmitterParticleFunction_(ParticleEmitter* emit, void (*EmitterFunction)(Entity*, int)){
 	emit->EmitterParticleFunction(EmitterFunction);
 }
 
-
-void EmitterParticleSpeed_(ParticleEmitter* emit, float s){
-	emit->EmitterParticleSpeed(s);
+void EmitterParticleSpeed_(ParticleEmitter* emit, float starts, float ends=0){
+	emit->EmitterParticleSpeed(starts, ends);
 }
 
 void EmitterVariance_(ParticleEmitter* emit, float v){
 	emit->EmitterVariance(v);
 }
 
+void EmitterParticleAlpha_(ParticleEmitter* emit, float starta, float enda, float mida=0, int midlife=0){
+	emit->EmitterParticleAlpha(starta, enda, mida, midlife);
+}
+
+void EmitterParticleScale_(ParticleEmitter* emit, float startsx, float startsy, float endsx, float endsy, float midsx=0, float midsy=0, int midlife=0){
+	emit->EmitterParticleScale(startsx, startsy, endsx, endsy, midsx, midsy, midlife);
+}
+
+void EmitterParticleColor_(ParticleEmitter* emit, float startr, float startg, float startb,float endr, float endg, float endb, float midr=0, float midg=0, float midb=0, int midlife=0){
+	emit->EmitterParticleColor(startr, startg, startb, endr, endg, endb, midr, midg, midb, midlife);
+}
+
+void EmitterParticleRotate_(ParticleEmitter* emit, float startr, float endr, float midr=0, int midlife=0){
+	emit->EmitterParticleRotate(startr, endr, midr, midlife);
+}
 
 
 /*
@@ -2071,29 +2086,6 @@ int EndMax2D(){
 */
 
 //' ***extras***
-
-void BatchSpriteParent_(int id, Entity* ent,int glob){
-	BatchSprite::BatchSpriteParent(id, ent, glob);
-}
-
-Entity* BatchSpriteEntity_(BatchSprite* batch_sprite){
-	return BatchSprite::BatchSpriteEntity(batch_sprite);
-}
-
-void BatchSpriteOrigin_(BatchSprite* batch_sprite,float x,float y,float z){
-	batch_sprite->BatchSpriteOrigin(x, y, z);
-}
-
-BatchSpriteMesh* CreateBatchMesh_(int batchid){
-	return BatchSprite::CreateBatchMesh(batchid);
-}
-
-BatchSprite* CreateBatchSprite_(Entity* parent_ent){
-	return BatchSprite::CreateBatchSprite(parent_ent);
-}
-BatchSpriteMesh* LoadBatchTexture_(char* tex_file, int tex_flag, int id){
-	return BatchSprite::LoadBatchTexture(tex_file, tex_flag, id);
-}
 
 float EntityScaleX_(Entity* ent,bool glob){
 	return ent->EntityScaleX(glob);
