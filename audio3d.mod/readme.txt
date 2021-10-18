@@ -1,14 +1,14 @@
 What is this?
-this is a module for BlitzMax that extends the openb3dmax module with a 3D positional sound system.
+this is a module for BlitzMax that extends the Openb3d module with a 3D positional sound system.
 
 Requirements
-This module is included with the openb3dmax module. Additionaly it requires the BRL.Audio module. It can easily be modified for use as a regular import file if you are not using minib3d as a module, but as an include.
+This module is included with the Openb3d module. Additionaly it requires the BRL.Audio module. It can easily be modified for use as a regular import file if you are not using minib3d as a module, but as an include.
 
 Installation 
 To install in the BlitzMax IDE choose "Build Modules" from the "Program" menu. After building, it is recommended that you chose "Document Modules..." from the Program menu to build/update the documentation for this module in the help system.
 
 Usage
-Install the module and add "Import openb3dmax.b3dsound" to the top of your source (right below "Import openb3dmax.b3dglgraphics").
+Install the module and add "Import Openb3d.b3dsound" to the top of your source (right below "Import Openb3d.b3dglgraphics").
 
 Author/Contact
 If you find any bugs or have any suggestions/requests please contact me via e-mail at:

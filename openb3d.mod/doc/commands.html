@@ -1,14 +1,14 @@
-<html><head><title>OpenB3DMax extended functions, not in B3D reference</title>
+<html><head><title>OpenB3D extended functions, not in B3D reference</title>
 <link rel=stylesheet Type=text/css href='../../../../doc/bmxstyle.css'>
 </head><body>
 <table width=100% cellspacing=0><tr align=center><td class=small>&nbsp;</td>
-<td class=small width=1%><b>Openb3dmax.Openb3dmax:</b></td>
+<td class=small width=1%><b>Openb3d.Openb3d:</b></td>
 <td class=small width=1%><a href=#functions class=small>Functions</a></td>
 <td class=small width=1%><a href=#types class=small>Types</a></td>
 <td class=small width=1%><a href=#modinfo class=small>Modinfo</a></td>
-<td class=small width=1%><a href='../../../../mod/openb3dmax.mod/openb3dmax.mod/openb3dmax.bmx' class=small>Source</a></td>
+<td class=small width=1%><a href='../../../../mod/openb3d.mod/openb3d.mod/openb3d.bmx' class=small>Source</a></td>
 <td class=small>&nbsp;</td></tr></table>
-<h1>OpenB3DMax extended functions, not in B3D</h1>
+<h1>OpenB3D extended functions, not in B3D</h1>
 The wrapper with declarations for library functions.
 <h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
 <tr><td class=docleft width=1%><a href=#ActFadeTo>ActFadeTo</a></td><td class=docright>
@@ -784,7 +784,7 @@ Voxelsprite mesh entity.
 <table class=doc width=100% cellspacing=3 id=BackBufferToTex>
 <tr><td class=doctop colspan=2>Function BackBufferToTex( tex:TTexture,mipmap_no:Int=0,frame:Int=0,fastinvert:Int=True )</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>Copy the contents of the backbuffer to a texture.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>OpenB3DMax does not have the same buffer commands as Blitz3D.
+<tr><td class=docleft width=1%>Information</td><td class=docright>OpenB3D does not have the same buffer commands as Blitz3D.
 The region copied from the backbuffer will start at 0,0 and end at the texture's width and height.
 So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size,
 use RenderWorld to render the camera, then use this command.

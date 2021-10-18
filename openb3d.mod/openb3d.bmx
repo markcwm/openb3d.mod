@@ -1,21 +1,21 @@
-' openb3dmax.bmx
+' openb3d.bmx
 
 Strict
 
 Rem
-bbdoc: OpenB3DMax extended functions, not in B3D
+bbdoc: OpenB3D extended functions, not in B3D
 about:
 The wrapper with declarations for library functions
 End Rem
-Module Openb3dmax.Openb3dmax
+Module Openb3d.Openb3d
 
 ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2021 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
-Import Openb3dmax.Openb3dlib
-Import Openb3dmax.DDSloader
+Import Openb3d.Openb3dlib
+Import Openb3d.DDSloader
 Import Brl.GLMax2d			' imports BRL.Max2D, BRL.GLGraphics
 Import Brl.GLGraphics		' imports BRL.Graphics, BRL.Pixmap, PUB.OpenGL
 Import Brl.Retro			' imports BRL.Basic

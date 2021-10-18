@@ -72,10 +72,15 @@ Type TQuaternion
 		
 	End Function
 	
-	Function Create:TQuaternion()
+	Function Create:TQuaternion( x:Float=0,y:Float=0,z:Float=0,w:Float=0 )
 	
 		Local inst:Byte Ptr=NewQuaternion_()
-		Return CreateObject(inst)
+		Local new_quat:TQuaternion=CreateObject(inst)
+		new_quat.x[0]=x
+		new_quat.y[0]=y
+		new_quat.z[0]=z
+		new_quat.w[0]=w
+		Return new_quat
 		
 	End Function
 	

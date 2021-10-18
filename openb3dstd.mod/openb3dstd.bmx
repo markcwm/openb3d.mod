@@ -3,11 +3,11 @@
 Strict
 
 Rem
-bbdoc: OpenB3DMax standard functions, as in B3D
+bbdoc: OpenB3D standard functions, as in Blitz3D
 about: 
-Links currently point to kippykip.com
+Jump to: <a href=#AddAnimSeq>A</a> &nbsp;<a href=#BrushAlpha>B</a> &nbsp;<a href=#CameraClsColor>C</a> &nbsp;<a href=#DeltaPitch>D</a> &nbsp;<a href=#EntityAlpha>E</a> &nbsp;<a href=#FindChild>F</a> &nbsp;<a href=#GetBrushTexture>G</a> &nbsp;<a href=#HandleSprite>H</a> &nbsp;<a href=#LightColor>L</a> &nbsp;<a href=#MeshDepth>M</a> &nbsp;<a href=#NameEntity>N</a> &nbsp;<a href=#PaintEntity>P</a> &nbsp;<a href=#RenderWorld>R</a> &nbsp;<a href=#ScaleEntity>S</a> &nbsp;<a href=#TerrainHeight>T</a> &nbsp;<a href=#UpdateNormals>U</a> &nbsp;<a href=#VectorPitch>V</a> &nbsp;<a href=#Wireframe>W</a> &nbsp;
 End Rem
-Module Openb3dmax.Openb3dstd
+Module Openb3d.Openb3dstd
 
 ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"

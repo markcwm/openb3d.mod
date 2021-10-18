@@ -5,20 +5,20 @@ SuperStrict
 Rem
 bbdoc: GLGraphics backend
 End Rem
-Module Openb3dmax.B3dglgraphics
+Module Openb3d.B3dglgraphics
 
 ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
 ModuleInfo "Copyright: Wrapper - 2014-2021 Mark Mcvittie, Bruce A Henderson"
 ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
-Import Openb3dmax.Openb3dmax
-Import Openb3dmax.Stbimageloader' imports Brl.Pixmap, Brl.RamStream
+Import Openb3d.Openb3d
+Import Openb3d.Stbimageloader' imports Brl.Pixmap, Brl.RamStream
 Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
 Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
 'Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
 'Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
-Import Openb3dmax.Audio3d
+Import Openb3d.Audio3d
 
 Include "TDebug.bmx"
 

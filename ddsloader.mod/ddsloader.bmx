@@ -7,7 +7,7 @@ bbdoc: DDS image loader
 about:
 The DDS loader module provides the ability to load compressed and uncompressed images as #pixmaps.
 End Rem
-Module Openb3dmax.DDSloader
+Module Openb3d.DDSloader
 
 ModuleInfo "Version: 1.00"
 ModuleInfo "Author: Spinduluz"

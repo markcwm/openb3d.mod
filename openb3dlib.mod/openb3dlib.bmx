@@ -7,7 +7,7 @@ bbdoc: OpenB3D library wrapper
 about:
 The library source with declarations for methods and fields
 End Rem
-Module Openb3dmax.Openb3dlib
+Module Openb3d.Openb3dlib
 
 ModuleInfo "Version: 1.26"
 ModuleInfo "License: zlib"
@@ -236,8 +236,8 @@ Extern
 	Function StaticIterListShadowObject_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListTerrain_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterListTexture_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
-	'Function StaticIterVectorBatchSpriteMesh_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
 	Function StaticIterVectorLight_:Byte Ptr( classid:Int,varid:Int,id:Int Ptr )
+	Function StaticIterVectorFloat_:Float( classid:Int,varid:Int,id:Int Ptr )
 	
 	' Action
 	Function ActionInt_:Int Ptr( obj:Byte Ptr,varid:Int )
@@ -784,6 +784,8 @@ Const TERRAIN_c_col_tree:Int=	9
 Const TERRAIN_eyepoint:Int=		10
 Const TERRAIN_ShaderMat:Int=	11
 Const TERRAIN_Roam_Detail:Int=	12
+Const TERRAIN_NormalsMap:Int=	13
+'Const TERRAIN_TexCoordsMap:Int=14
 
 ' Texture varid
 Const TEXTURE_texture:Int=		1

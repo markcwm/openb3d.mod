@@ -1,9 +1,9 @@
 
-![OpenB3DMax](./media/openb3d_logo_512.png)
+![OpenB3D](./media/openb3d_logo_512.png)
 
 ## Introduction
 
-OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](https://github.com/si-design/minib3d) which was based on [Blitz3D](https://github.com/blitz-research/blitz3d). Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [Minib3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html) or the BlitzCoder [Openb3dmax Board](https://www.blitzcoder.org/forum/topics.php?category=16).
+OpenB3D is a lightweight OpenGL 1.4+ 3D engine written in C++, this is the BlitzMax wrapper for it. OpenB3D is based on [Minib3d](https://github.com/si-design/minib3d) which was based on [Blitz3D](https://github.com/blitz-research/blitz3d). Since the standard commands are the same, the Blitz3d manual can be used as a partial reference. Help can be found at the SyntaxBomb [Minib3d Board](http://www.syntaxbomb.com/index.php/board,20.0.html) or the BlitzCoder [Openb3d Board](https://www.blitzcoder.org/forum/topics.php?category=16).
 
 ## Features
 
@@ -40,17 +40,17 @@ OpenB3DMax is an OpenGL 1.4+ 3D engine for BlitzMax which is based on [Minib3d](
 
 ## Status
 
-This wrapper is in beta stage of development, so there are still a few bugs and missing features. It is not being maintained as regularly now but fixes are still made or accepted. The library has a working GLES2 (WebGL) version but the wrapper still doesn't support this, maybe later! The latest version should work with BRL or NG BlitzMax (on testing with v0.99 release) but there may still be an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so if you can't build the modules you might try using an older compiler.
+The wrapper is in development, so there are still a few bugs and missing features. It is not maintained much now due to time restrictions but fixes from pull requests will be accepted. The library has a working GLES2 (WebGL) version but the wrapper still doesn't support it, maybe later! It should work with BRL or NG BlitzMax (on testing with v0.99 release) but there may be an issue with C++11 compilers like GCC 7.x (or Clang/LLVM 5.x) so if you can't build modules you could try using an older or newer compiler.
 
 ## Installation
 * Click on the Github Download zip link, then extract contents to your `BlitzMax/mod` folder
-* Remove **-master** from the main **openb3dmax.mod-master** folder (module names must end in **.mod**)
-* Also, check the contents of **openb3dmax.mod** contains several different folders with **b3d** in the name
+* Remove **-master** from the main **openb3d.mod-master** folder (module names must end in **.mod**)
+* Also, check the contents of **openb3d.mod** contains several different folders with **b3d** in the name
 * If on Windows, make sure you have a working version of the MinGW compiler
 * If on Mac, make sure you have an appropriate version of XCode installed
 * If on Linux, read this guide: [How To: Install BlitzMax NG on Win/Mac/Ubuntu 64-bit](https://www.syntaxbomb.com/index.php/topic,61.0.html)
-* To build the mod for BRL Blitzmax, open Command/Terminal, cd to `BlitzMax/bin` and type `bmk makemods -d openb3dmax`
-* For Blitzmax NG in 64-bit you use `bmk makemods -d -w -g x64 openb3dmax` (on Mac/Linux you need `./bmk`)
+* To build the mod for BRL Blitzmax, open Command/Terminal, cd to `BlitzMax/bin` and type `bmk makemods -d openb3d`
+* For Blitzmax NG in 64-bit you use `bmk makemods -d -w -g x64 openb3d` (on Mac/Linux you need `./bmk`)
 * Or from MaxIDE make sure Quick Build, Debug, GUI App are on, then click Programs > Build Modules
 
 ## License
@@ -67,5 +67,5 @@ The OpenB3D library is based on source from iMiniB3D with other core parts from 
 * [Warner Engine](https://code.google.com/archive/p/warner-engine/) by Bram den Hond
 * [MiniB3D Extended](https://code.google.com/archive/p/minib3dextended/) by Benjamin Rössig (klepto2)
 * [bOGL 2](https://github.com/Leushenko/bOGL-2) by Alex Gilding (Leushenko)
-* Code contributors: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Spinduluz](https://github.com/Spinduluz), [DruggedBunny](https://github.com/DruggedBunny), [Hezkore](https://bitbucket.org/Hezkore/)
+* Coding assistance from: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Spinduluz](https://github.com/Spinduluz), [DruggedBunny](https://github.com/DruggedBunny), [Hezkore](https://bitbucket.org/Hezkore/)
 
