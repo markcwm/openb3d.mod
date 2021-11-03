@@ -33,6 +33,7 @@ ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id );
 Terrain* StaticIterListTerrain_( int classid,int varid,int &id );
 Texture* StaticIterListTexture_( int classid,int varid,int &id );
 Light* StaticIterVectorLight_( int classid,int varid,int &id );
+float StaticIterVectorFloat_( int classid,int varid,int &id );
 
 // Action
 int* ActionInt_( Action* obj,int varid );
@@ -150,9 +151,24 @@ void GlobalListPushBackTexture_( int varid,Texture* obj );
 void GlobalListRemoveTexture_( int varid,Texture* obj );
 void SetTextureString_( Texture* obj,int varid,char* cstr );
 
-// Vector
-float* VectorFloat_( Vector* obj,int varid );
-Vector* NewVector_();
+// Vector3D
+float* Vector3DFloat_( Vector* obj,int varid );
+Vector* NewVector3D_();
+Vector* Vector3DCopy_( Vector& v );
+Vector* Vector3DNegate_( Vector& v );
+Vector* Vector3DAdd_( Vector& v,Vector& q );
+Vector* Vector3DSubtract_( Vector& v,Vector& q );
+Vector* Vector3DMultiply_( Vector& v,float scale );
+Vector* Vector3DMultiply2_( Vector& v,Vector& q );
+Vector* Vector3DDivide_( Vector& v,float scale );
+Vector* Vector3DDivide2_( Vector& v,Vector& q );
+float Vector3DDot_( Vector& v,Vector &q );
+Vector* Vector3DCross_( Vector& v,Vector &q );
+float Vector3DLength_( Vector& v );
+float Vector3DDistance_( Vector& v,Vector &q );
+Vector* Vector3DNormalized_( Vector& v );
+void Vector3DNormalize_( Vector& v );
+void Vector3DClear_( Vector& v );
 
 #ifdef __cplusplus
 }; // extern "C"

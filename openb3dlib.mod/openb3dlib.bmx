@@ -197,23 +197,6 @@ Extern
 	Function FilterFlags_( obj:Byte Ptr )
 	Function CopyRect_( src:Byte Ptr,srcW:Int,srcH:Int,srcX:Int,srcY:Int,dst:Byte Ptr,dstW:Int,dstH:Int,bPP:Int,invert:Int )
 	
-	' Vector
-	Function VectorCopy_:Byte Ptr( v:Byte Ptr )
-	Function VectorNegate_:Byte Ptr( v:Byte Ptr )
-	Function VectorAdd_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function VectorSubtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function VectorMultiply_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function VectorMultiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function VectorDivide_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function VectorDivide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function VectorDot_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function VectorCross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function VectorLength_:Float( v:Byte Ptr )
-	Function VectorDistance_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function VectorNormalized_:Byte Ptr( v:Byte Ptr )
-	Function VectorNormalize_( v:Byte Ptr )
-	Function VectorClear_( v:Byte Ptr )
-	
 End Extern
 
 ' data.cpp
@@ -355,9 +338,24 @@ Extern
 	Function GlobalListRemoveTexture_( varid:Int,obj:Byte Ptr )
 	Function SetTextureString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
 	
-	' Vector
-	Function VectorFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
-	Function NewVector_:Byte Ptr()
+	' Vector3D
+	Function Vector3DFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewVector3D_:Byte Ptr()
+	Function Vector3DCopy_:Byte Ptr( v:Byte Ptr )
+	Function Vector3DNegate_:Byte Ptr( v:Byte Ptr )
+	Function Vector3DAdd_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DSubtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DMultiply_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function Vector3DMultiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DDivide_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function Vector3DDivide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DDot_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DCross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DLength_:Float( v:Byte Ptr )
+	Function Vector3DDistance_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3DNormalized_:Byte Ptr( v:Byte Ptr )
+	Function Vector3DNormalize_( v:Byte Ptr )
+	Function Vector3DClear_( v:Byte Ptr )
 	
 End Extern
 
@@ -449,7 +447,6 @@ Const ANIMATIONKEYS_qw:Int=		9
 Const ANIMATIONKEYS_qx:Int=		10
 Const ANIMATIONKEYS_qy:Int=		11
 Const ANIMATIONKEYS_qz:Int=		12
-
 
 ' Batch Sprite varid (deprecated)
 'Const BATCHSPRITE_batch_id:Int=	1
@@ -813,6 +810,6 @@ Const TEXTURE_AnIsoSupport:Int=	22
 Const TEXTURE_global_aniso:Int=	23
 
 ' Vector
-Const VECTOR_x:Int=1
-Const VECTOR_y:Int=2
-Const VECTOR_z:Int=3
+Const VECTOR3D_x:Int=1
+Const VECTOR3D_y:Int=2
+Const VECTOR3D_z:Int=3

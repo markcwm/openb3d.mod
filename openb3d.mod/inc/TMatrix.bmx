@@ -127,12 +127,12 @@ Type TMatrix
 	
 	' Warner
 	
-	Method GetMatrixScale:TVector()
+	Method GetMatrixScale:TVector3D()
 	
-		Local s:TVector=TVector.Create()
-		s.x[0] = TVector.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
-		s.y[0] = TVector.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
-		s.z[0] = TVector.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
+		Local s:TVector3D=TVector3D.Create()
+		s.x[0] = TVector3D.Magnitude(grid[(4*0)+0], grid[(4*0)+1], grid[(4*0)+2])
+		s.y[0] = TVector3D.Magnitude(grid[(4*1)+0], grid[(4*1)+1], grid[(4*1)+2])
+		s.z[0] = TVector3D.Magnitude(grid[(4*2)+0], grid[(4*2)+1], grid[(4*2)+2])
 		Return s
 		
 	End Method

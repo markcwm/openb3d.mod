@@ -158,23 +158,6 @@ void FilterFlags_( Texture* obj );
 void CopyRect_(unsigned char* src,unsigned int sW,unsigned int sH,unsigned int sX,unsigned int sY,unsigned char* dst,unsigned int dW,unsigned int dH,unsigned int bPP,int invert);
 //static string Strip_(string filename);
 
-// Vector
-Vector* VectorCopy_( Vector& v );
-Vector* VectorNegate_( Vector& v );
-Vector* VectorAdd_( Vector& v,Vector& q );
-Vector* VectorSubtract_( Vector& v,Vector& q );
-Vector* VectorMultiply_( Vector& v,float scale );
-Vector* VectorMultiply2_( Vector& v,Vector& q );
-Vector* VectorDivide_( Vector& v,float scale );
-Vector* VectorDivide2_( Vector& v,Vector& q );
-float VectorDot_( Vector& v,Vector &q );
-Vector* VectorCross_( Vector& v,Vector &q );
-float VectorLength_( Vector& v );
-float VectorDistance_( Vector& v,Vector &q );
-Vector* VectorNormalized_( Vector& v );
-void VectorNormalize_( Vector* v );
-void VectorClear_( Vector& v );
-
 #ifdef __cplusplus
 }; // extern "C"
 #endif

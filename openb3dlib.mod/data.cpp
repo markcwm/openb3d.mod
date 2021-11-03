@@ -414,6 +414,8 @@ const int TERRAIN_c_col_tree=	9;
 const int TERRAIN_eyepoint=		10;
 const int TERRAIN_ShaderMat=	11;
 const int TERRAIN_Roam_Detail=	12;
+const int TERRAIN_NormalsMap=	13;
+//const int TERRAIN_TexCoordsMap=	14; 
 
 // Texture varid
 const int TEXTURE_texture=		1;
@@ -441,9 +443,9 @@ const int TEXTURE_AnIsoSupport=	22;
 const int TEXTURE_global_aniso=	23;
 
 // Vector
-const int VECTOR_x=1;
-const int VECTOR_y=2;
-const int VECTOR_z=3;
+const int VECTOR3D_x=1;
+const int VECTOR3D_y=2;
+const int VECTOR3D_z=3;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -569,7 +571,6 @@ float* StaticFloat_( int classid,int varid ){
 			break;
 		case TERRAIN_class :
 			switch (varid){
-				case TERRAIN_vertices : return &Terrain::vertices[0];
 				case TERRAIN_Roam_Detail : return &Terrain::Roam_Detail;
 			}
 			break;
@@ -696,6 +697,7 @@ int StaticListSize_( int classid,int varid ){
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_terrain_list : return Terrain::terrain_list.size();
+				case TERRAIN_vertices : return Terrain::vertices.size();
 			}
 			break;
 	}
@@ -878,6 +880,29 @@ Texture* StaticIterListTexture_( int classid,int varid,int &id ){
 					break;
 				case TEXTURE_tex_list_all :
 					for(it=Texture::tex_list_all.begin(); it!=Texture::tex_list_all.end(); it++){
+						obj=*it;
+						if (id == count) break;
+						count++;
+					}
+					id++;
+					break;
+			}
+			break;
+	}
+	
+	return obj;
+}
+
+float StaticIterVectorFloat_( int classid,int varid,int &id ){
+	int count=0;
+	vector<float>::iterator it;
+	float obj;
+	
+	switch (classid){
+		case TERRAIN_class :
+			switch (varid){
+				case TERRAIN_vertices :
+					for(it=Terrain::vertices.begin(); it!=Terrain::vertices.end(); it++){
 						obj=*it;
 						if (id == count) break;
 						count++;
@@ -1747,7 +1772,9 @@ float* TerrainFloat_( Terrain* obj,int varid ){
 		case TERRAIN_size : return &obj->size;
 		case TERRAIN_vsize : return &obj->vsize;
 		case TERRAIN_level2dzsize : return &obj->level2dzsize[0];
-		case TERRAIN_height : return obj->height;
+		case TERRAIN_height : return &obj->height[0];
+		case TERRAIN_NormalsMap : return &obj->NormalsMap[0];
+		//case TERRAIN_TexCoordsMap : return &obj->TexCoordsMap[0];
 	}
 	return NULL;
 }
@@ -1861,20 +1888,100 @@ void SetTextureString_( Texture* obj,int varid,char* cstr ){
 	}
 }
 
-// Vector
+// Vector3D
 
-float* VectorFloat_( Vector* obj,int varid ){
+float* Vector3DFloat_( Vector* obj,int varid ){
 	switch (varid){
-		case VECTOR_x : return &obj->x;
-		case VECTOR_y : return &obj->y;
-		case VECTOR_z : return &obj->z;
+		case VECTOR3D_x : return &obj->x;
+		case VECTOR3D_y : return &obj->y;
+		case VECTOR3D_z : return &obj->z;
 	}
 	return NULL;
 }
 
-Vector* NewVector_(){
+Vector* NewVector3D_(){
 	Vector* vec=new Vector();
 	return vec;
+}
+
+Vector* Vector3DCopy_( Vector& v ){
+	Vector* r=new Vector;
+	r->x=v.x;
+	r->y=v.y;
+	r->z=v.z;
+	return r;
+}
+
+Vector* Vector3DNegate_( Vector& v ){
+	Vector r=Vector( -v.x,-v.y,-v.z );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DAdd_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x+q.x,v.y+q.y,v.z+q.z );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DSubtract_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x-q.x,v.y-q.y,v.z-q.z );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DMultiply_( Vector& v,float scale ){
+	Vector r=Vector( v.x*scale,v.y*scale,v.z*scale );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DMultiply2_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x*q.x,v.y*q.y,v.z*q.z );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DDivide_( Vector& v,float scale ){
+	Vector r=Vector( v.x/scale,v.y/scale,v.z/scale );
+	return Vector3DCopy_(r);
+}
+
+Vector* Vector3DDivide2_( Vector& v,Vector& q ){
+	Vector r=Vector( v.x/q.x,v.y/q.y,v.z/q.z );
+	return Vector3DCopy_(r);
+}
+
+float Vector3DDot_( Vector& v,Vector &q ){
+	return v.x*q.x+v.y*q.y+v.z*q.z;
+}
+
+Vector* Vector3DCross_( Vector& v,Vector &q ){
+	Vector r=Vector( v.y*q.z-v.z*q.y,v.z*q.x-v.x*q.z,v.x*q.y-v.y*q.x );
+	return Vector3DCopy_(r);
+}
+
+float Vector3DLength_( Vector& v ){
+	return sqrtf( v.x*v.x+v.y*v.y+v.z*v.z );
+}
+
+float Vector3DDistance_( Vector& v,Vector &q ){
+	float dx=v.x-q.x, dy=v.y-q.y, dz=v.z-q.z;
+	return sqrtf( dx*dx+dy*dy+dz*dz );
+}
+
+Vector* Vector3DNormalized_( Vector& v ){
+	float l=Vector3DLength_(v);
+	Vector r=Vector( v.x/l,v.y/l,v.z/l );
+	return Vector3DCopy_(r);
+}
+
+void Vector3DNormalize_( Vector& v ){
+	float l=Vector3DLength_(v);
+	v.x=v.x/l;
+	v.y=v.y/l;
+	v.z=v.z/l;
+}
+
+void Vector3DClear_( Vector& v ){
+	v.x=0;
+	v.y=0;
+	v.z=0;
 }
 
 } // end extern C

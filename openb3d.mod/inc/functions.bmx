@@ -400,6 +400,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TSprite object
+about: spr=NewSprite()
 End Rem
 Function NewSprite:TSprite()
 	Return TSprite.Create()
@@ -407,6 +408,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TTexture object
+about: tex=NewTexture()
 End Rem
 Function NewTexture:TTexture()
 	Return TTexture.Create()
@@ -414,6 +416,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TMesh object
+about: mesh=NewMesh()
 End Rem
 Function NewMesh:TMesh()
 	Return TMesh.Create()
@@ -421,6 +424,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TSurface object
+about: surf=NewSurface()
 End Rem
 Function NewSurface:TSurface()
 	Return TSurface.Create()
@@ -428,6 +432,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TBone object
+about: bone=NewBone()
 End Rem
 Function NewBone:TBone()
 	Return TBone.Create()
@@ -435,6 +440,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TAnimationKeys object
+about: keys=NewAnimationKeys()
 End Rem
 Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
 	Return TAnimationKeys.Create( bone )
@@ -442,6 +448,7 @@ End Function
 
 Rem
 bbdoc: Returns a new TMatrix object
+about: mat=NewMatrix()
 End Rem
 Function NewMatrix:TMatrix()
 	Return TMatrix.Create()
@@ -449,16 +456,18 @@ End Function
 
 Rem
 bbdoc: Returns a new TQuaternion object
+about: quat=NewQuaternion()
 End Rem
 Function NewQuaternion:TQuaternion()
 	Return TQuaternion.Create()
 End Function
 
 Rem
-bbdoc: Returns a new TVector object
+bbdoc: Create a new Openb3d TVector3D object, returns a new Float Ptr vector
+about: vec=NewVector3D()
 End Rem
-Function NewVector:TVector()
-	Return TVector.Create()
+Function NewVector3D:TVector3D()
+	Return TVector3D.Create()
 End Function
 
 Rem
@@ -620,7 +629,7 @@ End Function
 
 Rem
 bbdoc: Copy the contents of the backbuffer to a texture
-about: OpenB3DMax does not have the same buffer commands as Blitz3D.
+about: OpenB3D does not have the same buffer commands as Blitz3D.
 The region copied from the backbuffer will start at 0,0 and end at the texture's width and height.
 So if you want to copy a 3D scene to a texture, first resize the camera viewport to the texture size, 
 use RenderWorld to render the camera, then use this command. 
