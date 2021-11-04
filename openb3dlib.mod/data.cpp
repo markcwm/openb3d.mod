@@ -443,9 +443,9 @@ const int TEXTURE_AnIsoSupport=	22;
 const int TEXTURE_global_aniso=	23;
 
 // Vector
-const int VECTOR3D_x=1;
-const int VECTOR3D_y=2;
-const int VECTOR3D_z=3;
+const int VECTOR3_x=1;
+const int VECTOR3_y=2;
+const int VECTOR3_z=3;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -1888,23 +1888,23 @@ void SetTextureString_( Texture* obj,int varid,char* cstr ){
 	}
 }
 
-// Vector3D
+// Vector3
 
-float* Vector3DFloat_( Vector* obj,int varid ){
+float* Vector3Float_( Vector* obj,int varid ){
 	switch (varid){
-		case VECTOR3D_x : return &obj->x;
-		case VECTOR3D_y : return &obj->y;
-		case VECTOR3D_z : return &obj->z;
+		case VECTOR3_x : return &obj->x;
+		case VECTOR3_y : return &obj->y;
+		case VECTOR3_z : return &obj->z;
 	}
 	return NULL;
 }
 
-Vector* NewVector3D_(){
+Vector* NewVector3_(){
 	Vector* vec=new Vector();
 	return vec;
 }
 
-Vector* Vector3DCopy_( Vector& v ){
+Vector* Vector3Copy_( Vector& v ){
 	Vector* r=new Vector;
 	r->x=v.x;
 	r->y=v.y;
@@ -1912,73 +1912,73 @@ Vector* Vector3DCopy_( Vector& v ){
 	return r;
 }
 
-Vector* Vector3DNegate_( Vector& v ){
+Vector* Vector3Negate_( Vector& v ){
 	Vector r=Vector( -v.x,-v.y,-v.z );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DAdd_( Vector& v,Vector& q ){
+Vector* Vector3Add_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x+q.x,v.y+q.y,v.z+q.z );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DSubtract_( Vector& v,Vector& q ){
+Vector* Vector3Subtract_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x-q.x,v.y-q.y,v.z-q.z );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DMultiply_( Vector& v,float scale ){
+Vector* Vector3Multiply_( Vector& v,float scale ){
 	Vector r=Vector( v.x*scale,v.y*scale,v.z*scale );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DMultiply2_( Vector& v,Vector& q ){
+Vector* Vector3Multiply2_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x*q.x,v.y*q.y,v.z*q.z );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DDivide_( Vector& v,float scale ){
+Vector* Vector3Divide_( Vector& v,float scale ){
 	Vector r=Vector( v.x/scale,v.y/scale,v.z/scale );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-Vector* Vector3DDivide2_( Vector& v,Vector& q ){
+Vector* Vector3Divide2_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x/q.x,v.y/q.y,v.z/q.z );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-float Vector3DDot_( Vector& v,Vector &q ){
+float Vector3Dot_( Vector& v,Vector &q ){
 	return v.x*q.x+v.y*q.y+v.z*q.z;
 }
 
-Vector* Vector3DCross_( Vector& v,Vector &q ){
+Vector* Vector3Cross_( Vector& v,Vector &q ){
 	Vector r=Vector( v.y*q.z-v.z*q.y,v.z*q.x-v.x*q.z,v.x*q.y-v.y*q.x );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-float Vector3DLength_( Vector& v ){
+float Vector3Length_( Vector& v ){
 	return sqrtf( v.x*v.x+v.y*v.y+v.z*v.z );
 }
 
-float Vector3DDistance_( Vector& v,Vector &q ){
+float Vector3Distance_( Vector& v,Vector &q ){
 	float dx=v.x-q.x, dy=v.y-q.y, dz=v.z-q.z;
 	return sqrtf( dx*dx+dy*dy+dz*dz );
 }
 
-Vector* Vector3DNormalized_( Vector& v ){
-	float l=Vector3DLength_(v);
+Vector* Vector3Normalized_( Vector& v ){
+	float l=Vector3Length_(v);
 	Vector r=Vector( v.x/l,v.y/l,v.z/l );
-	return Vector3DCopy_(r);
+	return Vector3Copy_(r);
 }
 
-void Vector3DNormalize_( Vector& v ){
-	float l=Vector3DLength_(v);
+void Vector3Normalize_( Vector& v ){
+	float l=Vector3Length_(v);
 	v.x=v.x/l;
 	v.y=v.y/l;
 	v.z=v.z/l;
 }
 
-void Vector3DClear_( Vector& v ){
+void Vector3Clear_( Vector& v ){
 	v.x=0;
 	v.y=0;
 	v.z=0;

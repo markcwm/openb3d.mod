@@ -463,11 +463,11 @@ Function NewQuaternion:TQuaternion()
 End Function
 
 Rem
-bbdoc: Create a new Openb3d TVector3D object, returns a new Float Ptr vector
-about: vec=NewVector3D()
+bbdoc: Create a new Openb3d TVector3 object, returns a new Float Ptr vector
+about: vec=NewVector3()
 End Rem
-Function NewVector3D:TVector3D()
-	Return TVector3D.Create()
+Function NewVector3:TVector3()
+	Return TVector3.Create()
 End Function
 
 Rem

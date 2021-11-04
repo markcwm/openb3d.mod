@@ -1,5 +1,5 @@
-' TVector and TVector3D
-' TVector is Float and TVector3D is Float Ptr, compatible with Openb3d functions
+' TVector and TVector3
+' TVector is Float and TVector3 is Float Ptr, compatible with Openb3d functions
 
 Rem
 bbdoc: TVector functions, 3 x Float
@@ -185,9 +185,9 @@ Type TVector
 End Type
 
 Rem
-bbdoc: TVector3D functions, 3 x Float Ptr
+bbdoc: TVector3 functions, 3 x Float Ptr
 End Rem
-Type TVector3D
+Type TVector3
 
 	Field x:Float Ptr, y:Float Ptr, z:Float Ptr
 	
@@ -195,20 +195,20 @@ Type TVector3D
 	
 	' wrapper
 	?bmxng
-	Global vector3d_map:TPtrMap=New TPtrMap
+	Global vector3_map:TPtrMap=New TPtrMap
 	?Not bmxng
-	Global vector3d_map:TMap=New TMap
+	Global vector3_map:TMap=New TMap
 	?
 	Field instance:Byte Ptr
 	
-	Function CreateObject:TVector3D( inst:Byte Ptr ) ' Create and map object from C++ instance
+	Function CreateObject:TVector3( inst:Byte Ptr ) ' Create and map object from C++ instance
 	
 		If inst=Null Then Return Null
-		Local obj:TVector3D=New TVector3D
+		Local obj:TVector3=New TVector3
 		?bmxng
-		vector3d_map.Insert( inst,obj )
+		vector3_map.Insert( inst,obj )
 		?Not bmxng
-		vector3d_map.Insert( String(Int(inst)),obj )
+		vector3_map.Insert( String(Int(inst)),obj )
 		?
 		obj.instance=inst
 		obj.InitFields()
@@ -219,24 +219,24 @@ Type TVector3D
 	Function FreeObject( inst:Byte Ptr )
 	
 		?bmxng
-		vector3d_map.Remove( inst )
+		vector3_map.Remove( inst )
 		?Not bmxng
-		vector3d_map.Remove( String(Int(inst)) )
+		vector3_map.Remove( String(Int(inst)) )
 		?
 		
 	End Function
 	
-	Function GetObject:TVector3D( inst:Byte Ptr )
+	Function GetObject:TVector3( inst:Byte Ptr )
 	
 		?bmxng
-		Return TVector3D( vector3d_map.ValueForKey( inst ) )
+		Return TVector3( vector3_map.ValueForKey( inst ) )
 		?Not bmxng
-		Return TVector3D( vector3d_map.ValueForKey( String(Int(inst)) ) )
+		Return TVector3( vector3_map.ValueForKey( String(Int(inst)) ) )
 		?
 		
 	End Function
 	
-	Function GetInstance:Byte Ptr( obj:TVector3D ) ' Get C++ instance from object
+	Function GetInstance:Byte Ptr( obj:TVector3 ) ' Get C++ instance from object
 	
 		If obj=Null Then Return Null ' Attempt to pass null object to function
 		Return obj.instance
@@ -245,31 +245,31 @@ Type TVector3D
 	
 	Method InitFields() ' Once per CreateObject
 	
-		x=Vector3DFloat_( GetInstance(Self),VECTOR3D_x )
-		y=Vector3DFloat_( GetInstance(Self),VECTOR3D_y )
-		z=Vector3DFloat_( GetInstance(Self),VECTOR3D_z )
+		x=Vector3Float_( GetInstance(Self),VECTOR3_x )
+		y=Vector3Float_( GetInstance(Self),VECTOR3_y )
+		z=Vector3Float_( GetInstance(Self),VECTOR3_z )
 		
 	End Method
 	
 	Rem
-	bbdoc: Create a new TVector3D object, returns a new Float Ptr vector
-	about: vec=TVector3D.NewVector3D()
+	bbdoc: Create a new TVector3 object, returns a new Float Ptr vector
+	about: vec=TVector3.NewVector3()
 	EndRem
-	Function NewVector3D:TVector3D()
+	Function NewVector3:TVector3()
 	
-		Local inst:Byte Ptr=NewVector3D_()
+		Local inst:Byte Ptr=NewVector3_()
 		Return CreateObject(inst)
 		
 	End Function
 	
 	Rem
-	bbdoc: Create a new TVector3D from three float values, returns a new Float Ptr vector
-	about: new_vec=TVector3D.Create(x,y,z)
+	bbdoc: Create a new TVector3 from three float values, returns a new Float Ptr vector
+	about: new_vec=TVector3.Create(x,y,z)
 	EndRem
-	Function Create:TVector3D( x:Float=0,y:Float=0,z:Float=0 )
+	Function Create:TVector3( x:Float=0,y:Float=0,z:Float=0 )
 	
-		Local inst:Byte Ptr=NewVector3D_()
-		Local new_vec:TVector3D=CreateObject(inst)
+		Local inst:Byte Ptr=NewVector3_()
+		Local new_vec:TVector3=CreateObject(inst)
 		new_vec.x[0]=x
 		new_vec.y[0]=y
 		new_vec.z[0]=z
@@ -282,7 +282,7 @@ Type TVector3D
 	Method New()
 	
 		If TGlobal3D.Log_New
-			DebugLog " New TVector3D"
+			DebugLog " New TVector3"
 		EndIf
 	
 	End Method
@@ -290,19 +290,19 @@ Type TVector3D
 	Method Delete()
 	
 		If TGlobal3D.Log_Del
-			DebugLog " Del TVector3D"
+			DebugLog " Del TVector3"
 		EndIf
 	
 	End Method
 	
-	' float=TVector3D.VectorYaw(x,y,z)
+	' float=TVector3.VectorYaw(x,y,z)
 	Function VectorYaw:Float( vx:Float,vy:Float,vz:Float ) ' by Patmaba, same as Yaw()
 	
 		Return ATan2(-vx,vz)
 		
 	End Function
 	
-	' float=TVector3D.VectorPitch(x,y,z)
+	' float=TVector3.VectorPitch(x,y,z)
 	Function VectorPitch:Float( vx:Float,vy:Float,vz:Float ) ' by Patmaba, same as Pitch()
 	
 		Local ang:Float=ATan2(Sqr(vx*vx + vz*vz), vy)-90.0
@@ -312,8 +312,8 @@ Type TVector3D
 	End Function
 	
 	Rem
-	bbdoc: Magnitude (or length) of a TVector3D from three float values, returns a float
-	about: float=TVector3D.Magnitude(x,y,z)
+	bbdoc: Magnitude (or length) of a TVector3 from three float values, returns a float
+	about: float=TVector3.Magnitude(x,y,z)
 	EndRem
 	Function Magnitude:Float( v0:Float,v1:Float,v2:Float )
 	
@@ -324,172 +324,172 @@ Type TVector3D
 	' Openb3d
 	
 	Rem
-	bbdoc: Copy a TVector3D, returns a new vector
+	bbdoc: Copy a TVector3, returns a new vector
 	about: new_vec=vec.Copy()
 	EndRem
-	Method Copy:TVector3D()
+	Method Copy:TVector3()
 	
-		Local inst:Byte Ptr=Vector3DCopy_( GetInstance(Self) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Copy_( GetInstance(Self) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Negate a TVector3D, returns a new vector
+	bbdoc: Negate a TVector3, returns a new vector
 	about: new_vec=vec.Negate(vec2)
 	EndRem
-	Method Negate:TVector3D()
+	Method Negate:TVector3()
 	
-		Local inst:Byte Ptr=Vector3DNegate_( GetInstance(Self) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Negate_( GetInstance(Self) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Add a TVector3D to another TVector3D, returns a new vector
+	bbdoc: Add a TVector3 to another TVector3, returns a new vector
 	about: new_vec=vec.Add(vec2)
 	EndRem
-	Method Add:TVector3D( vec2:TVector3D )
+	Method Add:TVector3( vec2:TVector3 )
 	
-		Local inst:Byte Ptr=Vector3DAdd_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Add_( GetInstance(Self),GetInstance(vec2) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Subtract another TVector3D from a TVector3D, returns a new vector
+	bbdoc: Subtract another TVector3 from a TVector3, returns a new vector
 	about: new_vec=vec.Subtract(vec2)
 	EndRem
-	Method Subtract:TVector3D( vec2:TVector3D )
+	Method Subtract:TVector3( vec2:TVector3 )
 	
-		Local inst:Byte Ptr=Vector3DSubtract_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Subtract_( GetInstance(Self),GetInstance(vec2) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Multiply a TVector3D by a float, returns a new vector
+	bbdoc: Multiply a TVector3 by a float, returns a new vector
 	about: new_vec=vec.Multiply(scale)
 	EndRem
-	Method Multiply:TVector3D( scale:Float )
+	Method Multiply:TVector3( scale:Float )
 	
-		Local inst:Byte Ptr=Vector3DMultiply_( GetInstance(Self),scale )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Multiply_( GetInstance(Self),scale )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Multiply a TVector3D by another TVector3D, returns a new vector
+	bbdoc: Multiply a TVector3 by another TVector3, returns a new vector
 	about: new_vec=vec.Multiply2(vec2)
 	EndRem
-	Method Multiply2:TVector3D( vec2:TVector3D )
+	Method Multiply2:TVector3( vec2:TVector3 )
 	
-		Local inst:Byte Ptr=Vector3DMultiply2_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Multiply2_( GetInstance(Self),GetInstance(vec2) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Divide a TVector3D by a float, returns a new vector
+	bbdoc: Divide a TVector3 by a float, returns a new vector
 	about: new_vec=vec.Divide(scale)
 	EndRem
-	Method Divide:TVector3D( scale:Float )
+	Method Divide:TVector3( scale:Float )
 	
-		Local inst:Byte Ptr=Vector3DDivide_( GetInstance(Self),scale )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Divide_( GetInstance(Self),scale )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Divide a TVector3D by another TVector3D, returns a new vector
+	bbdoc: Divide a TVector3 by another TVector3, returns a new vector
 	about: new_vec=vec.Divide2(vec2)
 	EndRem
-	Method Divide2:TVector3D( vec2:TVector3D )
+	Method Divide2:TVector3( vec2:TVector3 )
 	
-		Local inst:Byte Ptr=Vector3DDivide2_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Divide2_( GetInstance(Self),GetInstance(vec2) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Dot product (or squared length) of two TVector3Ds, returns a new vector
+	bbdoc: Dot product (or squared length) of two TVector3s, returns a new vector
 	about: float=vec.Dot(vec2)
 	EndRem
-	Method Dot:Float( vec2:TVector3D )
+	Method Dot:Float( vec2:TVector3 )
 	
-		Return Vector3DDot_( GetInstance(Self),GetInstance(vec2) )
+		Return Vector3Dot_( GetInstance(Self),GetInstance(vec2) )
 	
 	End Method
 	
 	Rem
-	bbdoc: Cross product of two TVector3Ds, returns a new vector
+	bbdoc: Cross product of two TVector3s, returns a new vector
 	about: new_vec=vec.Cross(vec2)
 	EndRem
-	Method Cross:TVector3D( vec2:TVector3D )
+	Method Cross:TVector3( vec2:TVector3 )
 	
-		Local inst:Byte Ptr=Vector3DCross_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Cross_( GetInstance(Self),GetInstance(vec2) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Length (or magnitude) of a TVector3D, returns a float
+	bbdoc: Length (or magnitude) of a TVector3, returns a float
 	about: float=vec.Length()
 	EndRem
 	Method Length:Float()
 		
-		Return Vector3DLength_( GetInstance(Self) )
+		Return Vector3Length_( GetInstance(Self) )
 
 	End Method
 	
 	Rem
-	bbdoc: Distance between two TVector3Ds, returns a float
+	bbdoc: Distance between two TVector3s, returns a float
 	about: float=vec.Distance(vec2)
 	EndRem
-	Method Distance:Float( vec2:TVector3D )
+	Method Distance:Float( vec2:TVector3 )
 			
-		Return Vector3DDistance_( GetInstance(Self),GetInstance(vec2) )
+		Return Vector3Distance_( GetInstance(Self),GetInstance(vec2) )
 
 	End Method
 	
 	Rem
-	bbdoc: Normalize a TVector3D, returns a new vector
+	bbdoc: Normalize a TVector3, returns a new vector
 	about: new_vec=vec.Normalized()
 	EndRem
-	Method Normalized:TVector3D()
+	Method Normalized:TVector3()
 	
-		Local inst:Byte Ptr=Vector3DNormalized_( GetInstance(Self) )
-		Local new_vec:TVector3D=TVector3D.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVector3D.CreateObject(inst)
+		Local inst:Byte Ptr=Vector3Normalized_( GetInstance(Self) )
+		Local new_vec:TVector3=TVector3.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVector3.CreateObject(inst)
 		Return new_vec
 		
 	End Method
 	
 	Rem
-	bbdoc: Normalize a TVector3D, returns nothing
+	bbdoc: Normalize a TVector3, returns nothing
 	about: vec.Normalize()
 	EndRem
 	Method Normalize()
 	
-		Vector3DNormalize_( GetInstance(Self) )
+		Vector3Normalize_( GetInstance(Self) )
 		
 	End Method
 	
@@ -514,12 +514,12 @@ Type TVector3D
 	End Method
 	
 	Rem
-	bbdoc: Clear a TVector3Ds values, returns nothing
+	bbdoc: Clear a TVector3s values, returns nothing
 	about: vec.Clear()
 	EndRem
 	Method Clear()
 	
-		Vector3DClear_( GetInstance(Self) )
+		Vector3Clear_( GetInstance(Self) )
 		
 	End Method
 	

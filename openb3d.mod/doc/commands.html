@@ -341,8 +341,8 @@ Returns a new TSurface object.
 <tr><td class=docleft width=1%><a href=#NewTexture>NewTexture</a></td><td class=docright>
 Returns a new TTexture object.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#NewVector3D>NewVector3D</a></td><td class=docright>
-Create a new Openb3d TVector3D object, returns a new Float Ptr vector.
+<tr><td class=docleft width=1%><a href=#NewVector3>NewVector3</a></td><td class=docright>
+Create a new Openb3d TVector3 object, returns a new Float Ptr vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#OctreeBlock>OctreeBlock</a></td><td class=docright>
 Place mesh into a node of an octree, the mesh can be duplicated using no more memory.
@@ -679,8 +679,8 @@ Loader flags for meshes and textures.
 <tr><td class=docleft width=1%><a href=#TVector>TVector</a></td><td class=docright>
 TVector functions, 3 x Float.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#TVector3D>TVector3D</a></td><td class=docright>
-TVector3D functions, 3 x Float Ptr.
+<tr><td class=docleft width=1%><a href=#TVector3>TVector3</a></td><td class=docright>
+TVector3 functions, 3 x Float Ptr.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TVoxelSprite>TVoxelSprite</a></td><td class=docright>
 Voxelsprite mesh entity.
@@ -1275,10 +1275,10 @@ account all animation positions, resulting in the mesh being wrongly culled at e
 <tr><td class=docleft width=1%>Information</td><td class=docright>tex=NewTexture()</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=NewVector3D>
-<tr><td class=doctop colspan=2>Function NewVector3D:TVector3D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new Openb3d TVector3D object, returns a new Float Ptr vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>vec=NewVector3D()</td></tr>
+<table class=doc width=100% cellspacing=3 id=NewVector3>
+<tr><td class=doctop colspan=2>Function NewVector3:TVector3()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new Openb3d TVector3 object, returns a new Float Ptr vector.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>vec=NewVector3()</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=OctreeBlock>
@@ -1906,142 +1906,142 @@ Create a new TVector from three float values, returns a new Float vector.
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=TVector.Create(x,y,z)</td></tr>
 </table>
 <br>
-<table class=doc width=100% cellspacing=3 id=TVector3D>
-<tr><td class=doctop colspan=2>Type TVector3D</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>TVector3D functions, 3 x Float Ptr.</td></tr>
+<table class=doc width=100% cellspacing=3 id=TVector3>
+<tr><td class=doctop colspan=2>Type TVector3</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>TVector3 functions, 3 x Float Ptr.</td></tr>
 </table>
-<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector3D_methods></a>Methods Summary</th></tr>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector3_methods></a>Methods Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Add>Add</a></td><td class=docright>
-Add a TVector3D to another TVector3D, returns a new vector.
+Add a TVector3 to another TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Clear>Clear</a></td><td class=docright>
-Clear a TVector3Ds values, returns nothing.
+Clear a TVector3s values, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Copy>Copy</a></td><td class=docright>
-Copy a TVector3D, returns a new vector.
+Copy a TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Cross>Cross</a></td><td class=docright>
-Cross product of two TVector3Ds, returns a new vector.
+Cross product of two TVector3s, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Distance>Distance</a></td><td class=docright>
-Distance between two TVector3Ds, returns a float.
+Distance between two TVector3s, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Divide>Divide</a></td><td class=docright>
-Divide a TVector3D by a float, returns a new vector.
+Divide a TVector3 by a float, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Divide2>Divide2</a></td><td class=docright>
-Divide a TVector3D by another TVector3D, returns a new vector.
+Divide a TVector3 by another TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Dot>Dot</a></td><td class=docright>
-Dot product (or squared length) of two TVector3Ds, returns a new vector.
+Dot product (or squared length) of two TVector3s, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Length>Length</a></td><td class=docright>
-Length (or magnitude) of a TVector3D, returns a float.
+Length (or magnitude) of a TVector3, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply>Multiply</a></td><td class=docright>
-Multiply a TVector3D by a float, returns a new vector.
+Multiply a TVector3 by a float, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply2>Multiply2</a></td><td class=docright>
-Multiply a TVector3D by another TVector3D, returns a new vector.
+Multiply a TVector3 by another TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Negate>Negate</a></td><td class=docright>
-Negate a TVector3D, returns a new vector.
+Negate a TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Normalize>Normalize</a></td><td class=docright>
-Normalize a TVector3D, returns nothing.
+Normalize a TVector3, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Normalized>Normalized</a></td><td class=docright>
-Normalize a TVector3D, returns a new vector.
+Normalize a TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Pitch>Pitch</a></td><td class=docright>
 Pitch (or x angle) in degrees of a vector, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Subtract>Subtract</a></td><td class=docright>
-Subtract another TVector3D from a TVector3D, returns a new vector.
+Subtract another TVector3 from a TVector3, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Yaw>Yaw</a></td><td class=docright>
 Yaw (or y angle) in degrees of a vector, returns a float.
 </td></tr>
 </table>
-<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector3D_functions></a>Functions Summary</th></tr>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector3_functions></a>Functions Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
-Create a new TVector3D from three float values, returns a new Float Ptr vector.
+Create a new TVector3 from three float values, returns a new Float Ptr vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Magnitude>Magnitude</a></td><td class=docright>
-Magnitude (or length) of a TVector3D from three float values, returns a float.
+Magnitude (or length) of a TVector3 from three float values, returns a float.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#NewVector3D>NewVector3D</a></td><td class=docright>
-Create a new TVector3D object, returns a new Float Ptr vector.
+<tr><td class=docleft width=1%><a href=#NewVector3>NewVector3</a></td><td class=docright>
+Create a new TVector3 object, returns a new Float Ptr vector.
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Add>
-<tr><td class=doctop colspan=2>Method Add:TVector3D( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Add a TVector3D to another TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Add:TVector3( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add a TVector3 to another TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Add(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Clear>
 <tr><td class=doctop colspan=2>Method Clear()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Clear a TVector3Ds values, returns nothing.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Clear a TVector3s values, returns nothing.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>vec.Clear()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Copy>
-<tr><td class=doctop colspan=2>Method Copy:TVector3D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Copy:TVector3()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Copy()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Cross>
-<tr><td class=doctop colspan=2>Method Cross:TVector3D( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of two TVector3Ds, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Cross:TVector3( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of two TVector3s, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Cross(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Distance>
-<tr><td class=doctop colspan=2>Method Distance:Float( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Distance between two TVector3Ds, returns a float.</td></tr>
+<tr><td class=doctop colspan=2>Method Distance:Float( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Distance between two TVector3s, returns a float.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Distance(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Divide>
-<tr><td class=doctop colspan=2>Method Divide:TVector3D( scale:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVector3D by a float, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Divide:TVector3( scale:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVector3 by a float, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Divide(scale)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Divide2>
-<tr><td class=doctop colspan=2>Method Divide2:TVector3D( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVector3D by another TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Divide2:TVector3( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVector3 by another TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Divide2(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Dot>
-<tr><td class=doctop colspan=2>Method Dot:Float( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of two TVector3Ds, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Dot:Float( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of two TVector3s, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Dot(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Length>
 <tr><td class=doctop colspan=2>Method Length:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of a TVector3D, returns a float.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of a TVector3, returns a float.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Length()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply>
-<tr><td class=doctop colspan=2>Method Multiply:TVector3D( scale:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVector3D by a float, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Multiply:TVector3( scale:Float )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVector3 by a float, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Multiply(scale)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply2>
-<tr><td class=doctop colspan=2>Method Multiply2:TVector3D( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVector3D by another TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Multiply2:TVector3( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVector3 by another TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Multiply2(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Negate>
-<tr><td class=doctop colspan=2>Method Negate:TVector3D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Negate a TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Negate:TVector3()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Negate a TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Negate(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Normalize>
 <tr><td class=doctop colspan=2>Method Normalize()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVector3D, returns nothing.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVector3, returns nothing.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>vec.Normalize()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Normalized>
-<tr><td class=doctop colspan=2>Method Normalized:TVector3D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Normalized:TVector3()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Normalized()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Pitch>
@@ -2050,8 +2050,8 @@ Create a new TVector3D object, returns a new Float Ptr vector.
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Pitch()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Subtract>
-<tr><td class=doctop colspan=2>Method Subtract:TVector3D( vec2:TVector3D )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract another TVector3D from a TVector3D, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Subtract:TVector3( vec2:TVector3 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract another TVector3 from a TVector3, returns a new vector.</td></tr>
 <tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Subtract(vec2)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Yaw>
@@ -2060,19 +2060,19 @@ Create a new TVector3D object, returns a new Float Ptr vector.
 <tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Yaw()</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
-<tr><td class=doctop colspan=2>Function Create:TVector3D( x:Float=0,y:Float=0,z:Float=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector3D from three float values, returns a new Float Ptr vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=TVector3D.Create(x,y,z)</td></tr>
+<tr><td class=doctop colspan=2>Function Create:TVector3( x:Float=0,y:Float=0,z:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector3 from three float values, returns a new Float Ptr vector.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=TVector3.Create(x,y,z)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Magnitude>
 <tr><td class=doctop colspan=2>Function Magnitude:Float( v0:Float,v1:Float,v2:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Magnitude (or length) of a TVector3D from three float values, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=TVector3D.Magnitude(x,y,z)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Magnitude (or length) of a TVector3 from three float values, returns a float.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>float=TVector3.Magnitude(x,y,z)</td></tr>
 </table>
-<table class=doc width=100% cellspacing=3 id=NewVector3D>
-<tr><td class=doctop colspan=2>Function NewVector3D:TVector3D()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector3D object, returns a new Float Ptr vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>vec=TVector3D.NewVector3D()</td></tr>
+<table class=doc width=100% cellspacing=3 id=NewVector3>
+<tr><td class=doctop colspan=2>Function NewVector3:TVector3()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector3 object, returns a new Float Ptr vector.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright>vec=TVector3.NewVector3()</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TVoxelSprite>

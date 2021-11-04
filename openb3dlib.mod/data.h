@@ -151,24 +151,24 @@ void GlobalListPushBackTexture_( int varid,Texture* obj );
 void GlobalListRemoveTexture_( int varid,Texture* obj );
 void SetTextureString_( Texture* obj,int varid,char* cstr );
 
-// Vector3D
-float* Vector3DFloat_( Vector* obj,int varid );
-Vector* NewVector3D_();
-Vector* Vector3DCopy_( Vector& v );
-Vector* Vector3DNegate_( Vector& v );
-Vector* Vector3DAdd_( Vector& v,Vector& q );
-Vector* Vector3DSubtract_( Vector& v,Vector& q );
-Vector* Vector3DMultiply_( Vector& v,float scale );
-Vector* Vector3DMultiply2_( Vector& v,Vector& q );
-Vector* Vector3DDivide_( Vector& v,float scale );
-Vector* Vector3DDivide2_( Vector& v,Vector& q );
-float Vector3DDot_( Vector& v,Vector &q );
-Vector* Vector3DCross_( Vector& v,Vector &q );
-float Vector3DLength_( Vector& v );
-float Vector3DDistance_( Vector& v,Vector &q );
-Vector* Vector3DNormalized_( Vector& v );
-void Vector3DNormalize_( Vector& v );
-void Vector3DClear_( Vector& v );
+// Vector3
+float* Vector3Float_( Vector* obj,int varid );
+Vector* NewVector3_();
+Vector* Vector3Copy_( Vector& v );
+Vector* Vector3Negate_( Vector& v );
+Vector* Vector3Add_( Vector& v,Vector& q );
+Vector* Vector3Subtract_( Vector& v,Vector& q );
+Vector* Vector3Multiply_( Vector& v,float scale );
+Vector* Vector3Multiply2_( Vector& v,Vector& q );
+Vector* Vector3Divide_( Vector& v,float scale );
+Vector* Vector3Divide2_( Vector& v,Vector& q );
+float Vector3Dot_( Vector& v,Vector &q );
+Vector* Vector3Cross_( Vector& v,Vector &q );
+float Vector3Length_( Vector& v );
+float Vector3Distance_( Vector& v,Vector &q );
+Vector* Vector3Normalized_( Vector& v );
+void Vector3Normalize_( Vector& v );
+void Vector3Clear_( Vector& v );
 
 #ifdef __cplusplus
 }; // extern "C"

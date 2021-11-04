@@ -338,24 +338,24 @@ Extern
 	Function GlobalListRemoveTexture_( varid:Int,obj:Byte Ptr )
 	Function SetTextureString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
 	
-	' Vector3D
-	Function Vector3DFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
-	Function NewVector3D_:Byte Ptr()
-	Function Vector3DCopy_:Byte Ptr( v:Byte Ptr )
-	Function Vector3DNegate_:Byte Ptr( v:Byte Ptr )
-	Function Vector3DAdd_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DSubtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DMultiply_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function Vector3DMultiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DDivide_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function Vector3DDivide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DDot_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DCross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DLength_:Float( v:Byte Ptr )
-	Function Vector3DDistance_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3DNormalized_:Byte Ptr( v:Byte Ptr )
-	Function Vector3DNormalize_( v:Byte Ptr )
-	Function Vector3DClear_( v:Byte Ptr )
+	' Vector3
+	Function Vector3Float_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewVector3_:Byte Ptr()
+	Function Vector3Copy_:Byte Ptr( v:Byte Ptr )
+	Function Vector3Negate_:Byte Ptr( v:Byte Ptr )
+	Function Vector3Add_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Subtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Multiply_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function Vector3Multiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Divide_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function Vector3Divide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Dot_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Cross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Length_:Float( v:Byte Ptr )
+	Function Vector3Distance_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function Vector3Normalized_:Byte Ptr( v:Byte Ptr )
+	Function Vector3Normalize_( v:Byte Ptr )
+	Function Vector3Clear_( v:Byte Ptr )
 	
 End Extern
 
@@ -810,6 +810,6 @@ Const TEXTURE_AnIsoSupport:Int=	22
 Const TEXTURE_global_aniso:Int=	23
 
 ' Vector
-Const VECTOR3D_x:Int=1
-Const VECTOR3D_y:Int=2
-Const VECTOR3D_z:Int=3
+Const VECTOR3_x:Int=1
+Const VECTOR3_y:Int=2
+Const VECTOR3_z:Int=3
