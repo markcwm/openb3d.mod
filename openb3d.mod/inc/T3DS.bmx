@@ -45,7 +45,7 @@ Type T3DS
 	Field ObjectNames:String[], ObjectIndex:Int
 	Field Red:Byte, Green:Byte, Blue:Byte, Percent:Int
 	Field Meshes:TList, MatrixMap:TMap
-	Field New_matrix:TMatrix
+	Field New_matrix:TMatPtr
 	Field override_texflags:Int
 	
 	Method ReadChunk()
@@ -173,7 +173,7 @@ Type T3DS
 	End Method
 	
 	Method ReadTransMatrix()
-		New_matrix = TMatrix.Create()
+		New_matrix = TMatPtr.Create()
 		New_matrix.LoadIdentity() ' set grid[x,3]
 		
 		For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -504,8 +504,8 @@ Type T3DS
 		'Root.FlipMesh()
 		
 		For Local mesh2:TMesh = EachIn Meshes ' transform vertices, re-positions mesh by matrix
-			Local mat:TMatrix = TMatrix(MapValueForKey( MatrixMap, mesh2 ))
-			Local invmat:TMatrix = TMatrix.Create()
+			Local mat:TMatPtr = TMatPtr(MapValueForKey( MatrixMap, mesh2 ))
+			Local invmat:TMatPtr = TMatPtr.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list

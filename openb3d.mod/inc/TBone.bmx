@@ -12,9 +12,9 @@ Type TBone Extends TEntity
 	Field keys:TAnimationKeys
 	
 	' additional matrices used for animation purposes
-	Field mat2:TMatrix
-	Field inv_mat:TMatrix ' set in TModel, when loading anim mesh
-	Field tform_mat:TMatrix
+	Field mat2:TMatPtr
+	Field inv_mat:TMatPtr ' set in TModel, when loading anim mesh
+	Field tform_mat:TMatPtr
 	
 	' used to store current keyframe in AnimateMesh, for use with transition
 	Field kx:Float Ptr,ky:Float Ptr,kz:Float Ptr
@@ -68,14 +68,14 @@ Type TBone Extends TEntity
 		
 		' matrix
 		inst=BoneMatrix_( GetInstance(Self),BONE_mat2 )
-		mat2=TMatrix.GetObject(inst)
-		If mat2=Null And inst<>Null Then mat2=TMatrix.CreateObject(inst)
+		mat2=TMatPtr.GetObject(inst)
+		If mat2=Null And inst<>Null Then mat2=TMatPtr.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_inv_mat )
-		inv_mat=TMatrix.GetObject(inst)
-		If inv_mat=Null And inst<>Null Then inv_mat=TMatrix.CreateObject(inst)
+		inv_mat=TMatPtr.GetObject(inst)
+		If inv_mat=Null And inst<>Null Then inv_mat=TMatPtr.CreateObject(inst)
 		inst=BoneMatrix_( GetInstance(Self),BONE_tform_mat )
-		tform_mat=TMatrix.GetObject(inst)
-		If tform_mat=Null And inst<>Null Then tform_mat=TMatrix.CreateObject(inst)
+		tform_mat=TMatPtr.GetObject(inst)
+		If tform_mat=Null And inst<>Null Then tform_mat=TMatPtr.CreateObject(inst)
 		
 	End Method
 	
@@ -118,11 +118,11 @@ Type TBone Extends TEntity
 		If debug_subobjects And keys<>Null Then keys.DebugFields( debug_subobjects,debug_base_types )
 		
 		' matrix
-		DebugLog pad+" mat2: "+StringPtr(TMatrix.GetInstance(mat2))
+		DebugLog pad+" mat2: "+StringPtr(TMatPtr.GetInstance(mat2))
 		If debug_subobjects And mat2<>Null Then mat2.DebugFields( debug_subobjects,debug_base_types )
-		DebugLog pad+" inv_mat: "+StringPtr(TMatrix.GetInstance(inv_mat))
+		DebugLog pad+" inv_mat: "+StringPtr(TMatPtr.GetInstance(inv_mat))
 		If debug_subobjects And inv_mat<>Null Then inv_mat.DebugFields( debug_subobjects,debug_base_types )
-		DebugLog pad+" tform_mat: "+StringPtr(TMatrix.GetInstance(tform_mat))
+		DebugLog pad+" tform_mat: "+StringPtr(TMatPtr.GetInstance(tform_mat))
 		If debug_subobjects And tform_mat<>Null Then tform_mat.DebugFields( debug_subobjects,debug_base_types )
 		
 		DebugLog ""
@@ -191,9 +191,9 @@ Type TBone Extends TEntity
 		If exists
 			exists=0
 			TAnimationKeys.FreeObject( TAnimationKeys.GetInstance(keys) ) ; keys=Null
-			TMatrix.FreeObject( TMatrix.GetInstance(mat2) ) ; mat2=Null
-			TMatrix.FreeObject( TMatrix.GetInstance(inv_mat) ) ; inv_mat=Null
-			TMatrix.FreeObject( TMatrix.GetInstance(tform_mat) ) ; tform_mat=Null
+			TMatPtr.FreeObject( TMatPtr.GetInstance(mat2) ) ; mat2=Null
+			TMatPtr.FreeObject( TMatPtr.GetInstance(inv_mat) ) ; inv_mat=Null
+			TMatPtr.FreeObject( TMatPtr.GetInstance(tform_mat) ) ; tform_mat=Null
 			
 			FreeObject( GetInstance(Self) ) ' no FreeEntity_
 		EndIf

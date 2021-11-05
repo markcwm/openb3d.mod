@@ -366,7 +366,7 @@ Type T3DS2
 	
 	Method ParseTriMesh( mesh:TMesh, parent:TEntity, endchunk% )
 		Local count:Short, surface:TSurface = Null
-		Local matrix:TMatrix = Null
+		Local matrix:TMatPtr = Null
 		
 		While StreamPos(Stream) < endchunk
 			Local chunk:TChunk = ReadChunk()
@@ -389,7 +389,7 @@ Type T3DS2
 					If TGlobal3D.Log_3DS Then DebugLog("    CHUNK_MAPLIST")
 					
 				Case CHUNK_TRANSMATRIX ' $4160 - local coords
-					matrix = TMatrix.Create()
+					matrix = TMatPtr.Create()
 					matrix.LoadIdentity() ' set grid[x,3]
 					
 					For Local x% = 0 To 3 ' 4 vectors - X1, X2, X3 (axes), O (origin)
@@ -562,7 +562,7 @@ Type T3DS2
 						mesh.UpdateMat(True)
 					EndIf
 					
-					Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
+					Local matrix:TMatPtr = TMatPtr(MapValueForKey( Matrixmap, mesh ))
 					
 					If parid <> 65535 And matrix = Null 'And mesh.no_surfs[0] = 0 ' if any dummy child mesh found
 						If TGlobal3D.Mesh_Transform = 1 Then TGlobal3D.Mesh_Transform = 0 ' don't transform vertices
@@ -1000,10 +1000,10 @@ Type T3DS2
 		
 		ChangeDir(olddir)
 		
-		'Local vec:TVector
+		'Local vec:TVecPtr
 		'For Local ent:TEntity = EachIn Objlist ' master scale is largest matrix value, ignore CHUNK_MASTERSCALE
 			'Local mesh:TMesh = TMesh(ent)
-			'Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
+			'Local matrix:TMatPtr = TMatPtr(MapValueForKey( Matrixmap, mesh ))
 			
 			'If matrix<>Null And TGlobal3D.Mesh_Transform > 0
 			'	vec = matrix.GetMatrixScale()
@@ -1017,7 +1017,7 @@ Type T3DS2
 		
 		'For Local ent:TEntity = EachIn Objlist ' normalize matrix (scale down) if too large
 			'Local mesh:TMesh = TMesh(ent)
-			'Local matrix:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
+			'Local matrix:TMatPtr = TMatPtr(MapValueForKey( Matrixmap, mesh ))
 			
 			'If matrix<>Null And TGlobal3D.Mesh_Transform > 0 And Master_Scale > 1.0 ' if < 1 it would scale up
 			'	matrix.Scale(1.0 / Master_Scale, 1.0 / Master_Scale, 1.0 / Master_Scale)
@@ -1026,8 +1026,8 @@ Type T3DS2
 		
 		For Local ent:TEntity = EachIn Objlist ' transform vertices, re-positions mesh by matrix
 			Local mesh2:TMesh = TMesh(ent)
-			Local mat:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh2 ))
-			Local invmat:TMatrix = TMatrix.Create()
+			Local mat:TMatPtr = TMatPtr(MapValueForKey( Matrixmap, mesh2 ))
+			Local invmat:TMatPtr = TMatPtr.Create()
 			If mat<>Null Then mat.GetInverse(invmat)
 			
 			For Local surf2:TSurface = EachIn mesh2.surf_list
@@ -1053,7 +1053,7 @@ Type T3DS2
 		Rem ' animation
 		For Local ent:TEntity = EachIn Objlist
 			Local mesh:TMesh = TMesh(ent)
-			Local mat:TMatrix = TMatrix(MapValueForKey( Matrixmap, mesh ))
+			Local mat:TMatPtr = TMatPtr(MapValueForKey( Matrixmap, mesh ))
 			
 			'DebugLog "pos:"+animKeys[0].pos[0]+","+ animKeys[0].pos[1]+","+ animKeys[0].pos[2]
 			Local matrix:Float[,] = ent.GetGlobalMatrix()

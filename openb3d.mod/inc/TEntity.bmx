@@ -9,8 +9,8 @@ Type TEntity
 	Field parent:TEntity ' returned by GetParent - NULL
 	
 	' transform
-	Field mat:TMatrix ' returned by EntityX/Y/Z (global) - LoadIdentity
-	Field rotmat:TMatrix ' rotation matrix: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
+	Field mat:TMatPtr ' returned by EntityX/Y/Z (global) - LoadIdentity
+	Field rotmat:TMatPtr ' rotation matrix: used in EntityPitch/Yaw/Roll (global) - LoadIdentity
 	Field px:Float Ptr,py:Float Ptr,pz:Float Ptr ' returned by EntityX/Y/Z (local) - 0.0/0.0/0.0
 	Field sx:Float Ptr,sy:Float Ptr,sz:Float Ptr ' returned by EntityScaleX/Y/Z (local) - 1.0/1.0/1.0
 	Field rx:Float Ptr,ry:Float Ptr,rz:Float Ptr ' rotation euler (unused) - 0.0/0.0/0.0
@@ -57,7 +57,7 @@ Type TEntity
 	'Field new_x:Float Ptr,new_y:Float Ptr,new_z:Float Ptr ' openb3d - 0.0/0.0/0.0
 	'Field new_no:Int Ptr ' openb3d - 0
 	
-	'Field old_mat:TMatrix ' openb3d - LoadIdentity
+	'Field old_mat:TMatPtr ' openb3d - LoadIdentity
 	'Field dynamic:Int Ptr ' openb3d - false
 	'Field dynamic_x:Float Ptr,dynamic_y:Float Ptr,dynamic_z:Float Ptr ' openb3d - 0.0/0.0/0.0
 	'Field dynamic_yaw:Float Ptr,dynamic_pitch:Float Ptr,dynamic_roll:Float Ptr ' openb3d - 0.0/0.0/0.0
@@ -209,14 +209,14 @@ Type TEntity
 		
 		' matrix
 		inst=EntityMatrix2_( GetInstance(Self),ENTITY_mat )
-		mat=TMatrix.GetObject(inst)
-		If mat=Null And inst<>Null Then mat=TMatrix.CreateObject(inst)
+		mat=TMatPtr.GetObject(inst)
+		If mat=Null And inst<>Null Then mat=TMatPtr.CreateObject(inst)
 		inst=EntityMatrix2_( GetInstance(Self),ENTITY_rotmat )
-		rotmat=TMatrix.GetObject(inst)
-		If rotmat=Null And inst<>Null Then rotmat=TMatrix.CreateObject(inst)
+		rotmat=TMatPtr.GetObject(inst)
+		If rotmat=Null And inst<>Null Then rotmat=TMatPtr.CreateObject(inst)
 		'inst=EntityMatrix2_( GetInstance(Self),ENTITY_old_mat )
-		'old_mat=TMatrix.GetObject(inst)
-		'If old_mat=Null And inst<>Null Then old_mat=TMatrix.CreateObject(inst)
+		'old_mat=TMatPtr.GetObject(inst)
+		'If old_mat=Null And inst<>Null Then old_mat=TMatPtr.CreateObject(inst)
 		
 		' brush
 		inst=EntityBrush_( GetInstance(Self),ENTITY_brush )
@@ -313,11 +313,11 @@ Type TEntity
 		If debug_subobjects And parent<>Null Then parent.DebugFields( debug_subobjects,debug_base_types )
 		
 		' matrix
-		DebugLog pad+" mat: "+StringPtr(TMatrix.GetInstance(mat))
+		DebugLog pad+" mat: "+StringPtr(TMatPtr.GetInstance(mat))
 		If debug_subobjects And mat<>Null Then mat.DebugFields( debug_subobjects,debug_base_types )
-		DebugLog pad+" rotmat: "+StringPtr(TMatrix.GetInstance(rotmat))
+		DebugLog pad+" rotmat: "+StringPtr(TMatPtr.GetInstance(rotmat))
 		If debug_subobjects And rotmat<>Null Then rotmat.DebugFields( debug_subobjects,debug_base_types )
-		'DebugLog pad+" old_mat: "+StringPtr(TMatrix.GetInstance(old_mat))
+		'DebugLog pad+" old_mat: "+StringPtr(TMatPtr.GetInstance(old_mat))
 		'If debug_subobjects And old_mat<>Null Then old_mat.DebugFields( debug_subobjects,debug_base_types )
 		
 		' brush
@@ -605,9 +605,9 @@ Type TEntity
 	' recursively free entity lists and objects
 	Method FreeEntityList()
 	
-		TMatrix.FreeObject( TMatrix.GetInstance(mat) ) ; mat=Null
-		TMatrix.FreeObject( TMatrix.GetInstance(rotmat) ) ; rotmat=Null
-		'TMatrix.FreeObject( TMatrix.GetInstance(old_mat) ) ; old_mat=Null
+		TMatPtr.FreeObject( TMatPtr.GetInstance(mat) ) ; mat=Null
+		TMatPtr.FreeObject( TMatPtr.GetInstance(rotmat) ) ; rotmat=Null
+		'TMatPtr.FreeObject( TMatPtr.GetInstance(old_mat) ) ; old_mat=Null
 		TBrush.FreeObject( TBrush.GetInstance(brush) ) ; brush=Null
 		
 		ListRemove( entity_list,Self ) ; entity_list_id:-1
@@ -1246,16 +1246,16 @@ Type TEntity
 	End Method
 	
 	' inverted matrix - called in RotateEntity, TFormPoint/Vector
-	Method MQ_GetInvMatrix( mat0:TMatrix )
+	Method MQ_GetInvMatrix( mat0:TMatPtr )
 		
-		MQ_GetInvMatrix_( GetInstance(Self),TMatrix.GetInstance(mat0) )
+		MQ_GetInvMatrix_( GetInstance(Self),TMatPtr.GetInstance(mat0) )
 		
 	End Method
 	
 	' global position/rotation - called in EntityParent, EntityPitch/Yaw/Roll, TFormPoint/Vector
-	Method MQ_GetMatrix( mat3:TMatrix )
+	Method MQ_GetMatrix( mat3:TMatPtr )
 		
-		MQ_GetMatrix_( GetInstance(Self),TMatrix.GetInstance(mat3) )
+		MQ_GetMatrix_( GetInstance(Self),TMatPtr.GetInstance(mat3) )
 		
 	End Method
 	

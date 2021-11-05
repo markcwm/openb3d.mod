@@ -72,8 +72,8 @@ Type TGlobal3D
 	Global Flip_Cubemap:Int=1		' flip cubic environment map orientation
 	Global Texture_Flags:Int=9		' override texture flags, use LoadTextureFlags
 	
-	Global Matrix_3DS:TMatrix
-	Global Matrix_MD2:TMatrix
+	Global Matrix_3DS:TMatPtr
+	Global Matrix_MD2:TMatPtr
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
@@ -110,11 +110,11 @@ Type TGlobal3D
 		TTerrain.InitGlobals()
 		TTexture.InitGlobals()
 		
-		Matrix_3DS=TMatrix.Create()
+		Matrix_3DS=TMatPtr.Create()
 		Matrix_3DS.LoadIdentity()
 		UseMatrix3DS 1,0,0, 0,1,0, 0,0,-1 ' swap y/z - removed as not working on multi-mesh
 		
-		Matrix_MD2=TMatrix.Create()
+		Matrix_MD2=TMatPtr.Create()
 		Matrix_MD2.LoadIdentity()
 		UseMatrixMD2 1,0,0, 0,0,1, 0,-1,0 ' swap z/y and invert y
 		

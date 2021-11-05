@@ -271,9 +271,9 @@ Extern
 	Function LightChar_:Byte Ptr( obj:Byte Ptr,varid:Int )
 	Function LightFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
 	
-	' Matrix
-	Function MatrixFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
-	Function NewMatrix_:Byte Ptr()
+	' MatPtr
+	Function MatPtrFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewMatPtr_:Byte Ptr()
 	
 	' Mesh
 	Function MeshInt_:Int Ptr( obj:Byte Ptr,varid:Int )
@@ -300,9 +300,9 @@ Extern
 	' MD2
 	Function SurfaceVectorPushBackFloat_( obj:Byte Ptr,varid:Int,value:Float )
 	
-	' Quaternion
-	Function QuaternionFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
-	Function NewQuaternion_:Byte Ptr()
+	' QuatPtr
+	Function QuatPtrFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewQuatPtr_:Byte Ptr()
 	
 	' ShadowObject
 	Function ShadowObjectChar_:Byte Ptr( obj:Byte Ptr,varid:Int )
@@ -338,24 +338,24 @@ Extern
 	Function GlobalListRemoveTexture_( varid:Int,obj:Byte Ptr )
 	Function SetTextureString_( obj:Byte Ptr,varid:Int,cstr:Byte Ptr )
 	
-	' Vector3
-	Function Vector3Float_:Float Ptr( obj:Byte Ptr,varid:Int )
-	Function NewVector3_:Byte Ptr()
-	Function Vector3Copy_:Byte Ptr( v:Byte Ptr )
-	Function Vector3Negate_:Byte Ptr( v:Byte Ptr )
-	Function Vector3Add_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Subtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Multiply_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function Vector3Multiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Divide_:Byte Ptr( v:Byte Ptr,scale:Float )
-	Function Vector3Divide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Dot_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Cross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Length_:Float( v:Byte Ptr )
-	Function Vector3Distance_:Float( v:Byte Ptr,q:Byte Ptr )
-	Function Vector3Normalized_:Byte Ptr( v:Byte Ptr )
-	Function Vector3Normalize_( v:Byte Ptr )
-	Function Vector3Clear_( v:Byte Ptr )
+	' VecPtr
+	Function VecPtrFloat_:Float Ptr( obj:Byte Ptr,varid:Int )
+	Function NewVecPtr_:Byte Ptr()
+	Function VecPtrCopy_:Byte Ptr( v:Byte Ptr )
+	Function VecPtrNegate_:Byte Ptr( v:Byte Ptr )
+	Function VecPtrAdd_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrSubtract_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrMultiply_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function VecPtrMultiply2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrDivide_:Byte Ptr( v:Byte Ptr,scale:Float )
+	Function VecPtrDivide2_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrDot_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrCross_:Byte Ptr( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrLength_:Float( v:Byte Ptr )
+	Function VecPtrDistance_:Float( v:Byte Ptr,q:Byte Ptr )
+	Function VecPtrNormalized_:Byte Ptr( v:Byte Ptr )
+	Function VecPtrNormalize_( v:Byte Ptr )
+	Function VecPtrClear_( v:Byte Ptr )
 	
 End Extern
 
@@ -386,7 +386,7 @@ Const BLOB_class:Int=			23
 Const FIELDARRAY_class:Int=		24
 Const LIGHT_class:Int=			25
 Const MATERIALPLUGIN_class:Int=	26 ' material.h
-Const MATRIX_class:Int=			27
+Const MATPTR_class:Int=			27
 Const MESH_class:Int=			28
 Const OCTREE_class:Int=			29 ' octree.h
 Const OCTREECHILD_class:Int=	30
@@ -396,7 +396,7 @@ Const CONSTRAINT_class:Int=		33 ' physics.h
 Const RIGIDBODY_class:Int=		34
 Const PICK_class:Int=			35
 Const PIVOT_class:Int=			36
-Const QUATERNION_class:Int=		37
+Const QUATPTR_class:Int=		37
 Const SHADERDATA_class:Int=		38 ' shadermat.h
 Const SAMPLER_class:Int=		39
 Const MATERIAL_class:Int=		40
@@ -670,8 +670,8 @@ Const LIGHT_blue:Int=		11
 Const LIGHT_inner_ang:Int=	12
 Const LIGHT_outer_ang:Int=	13
 
-' Matrix varid
-Const MATRIX_grid:Int=	1
+' MatPtr varid
+Const MATPTR_grid:Int=	1
 
 ' Mesh varid
 Const MESH_no_surfs:Int=		1
@@ -705,10 +705,10 @@ Const PICK_picked_surface:Int=	10
 Const PICK_picked_triangle:Int=	11
 
 ' Quaternion
-Const QUATERNION_x:Int=1
-Const QUATERNION_y:Int=2
-Const QUATERNION_z:Int=3
-Const QUATERNION_w:Int=4
+Const QUATPTR_x:Int=1
+Const QUATPTR_y:Int=2
+Const QUATPTR_z:Int=3
+Const QUATPTR_w:Int=4
 
 ' ShadowObject varid
 Const SHADOWOBJECT_shadow_list:Int=		1
@@ -809,7 +809,7 @@ Const TEXTURE_format:Int=		21
 Const TEXTURE_AnIsoSupport:Int=	22
 Const TEXTURE_global_aniso:Int=	23
 
-' Vector
-Const VECTOR3_x:Int=1
-Const VECTOR3_y:Int=2
-Const VECTOR3_z:Int=3
+' VecPtr
+Const VECPTR_x:Int=1
+Const VECPTR_y:Int=2
+Const VECPTR_z:Int=3

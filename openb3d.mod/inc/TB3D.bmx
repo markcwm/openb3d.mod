@@ -326,7 +326,7 @@ Type TB3D
 					'Local pitch#=0
 					'Local yaw#=0
 					'Local roll#=0
-					'TQuaternion.QuatToEuler(n_qw, n_qx, n_qy, -n_qz, pitch, yaw, roll)
+					'TQuatPtr.QuatToEuler(n_qw, n_qx, n_qy, -n_qz, pitch, yaw, roll)
 					'n_rx=-pitch
 					'n_ry=yaw
 					'n_rz=roll
@@ -365,7 +365,7 @@ Type TB3D
 						' if ent nested then add parent
 						If node_level>0 Then piv.AddParent(parent_ent)
 						
-						TQuaternion.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, piv.mat)
+						TQuatPtr.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, piv.mat)
 						
 						piv.mat.grid[(4*3)+0]=n_px
 						piv.mat.grid[(4*3)+1]=n_py
@@ -374,7 +374,7 @@ Type TB3D
 						piv.mat.Scale(n_sx, n_sy, n_sz)
 						
 						If piv.parent<>Null
-							Local new_mat:TMatrix=piv.parent.mat.Copy()
+							Local new_mat:TMatPtr=piv.parent.mat.Copy()
 							new_mat.Multiply(piv.mat)
 							piv.mat.Overwrite(new_mat)
 						EndIf
@@ -413,7 +413,7 @@ Type TB3D
 					' if ent nested then add parent
 					If node_level>0 Then mesh.AddParent(parent_ent)
 					
-					TQuaternion.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, mesh.mat)
+					TQuatPtr.QuatToMat(-n_qw, n_qx, n_qy, -n_qz, mesh.mat)
 					
 					mesh.mat.grid[(4*3)+0]=n_px
 					mesh.mat.grid[(4*3)+1]=n_py
@@ -422,7 +422,7 @@ Type TB3D
 					mesh.mat.Scale(n_sx, n_sy, n_sz)
 					
 					If mesh.parent<>Null
-						Local new_mat:TMatrix=mesh.parent.mat.Copy()
+						Local new_mat:TMatPtr=mesh.parent.mat.Copy()
 						new_mat.Multiply(mesh.mat)
 						mesh.mat.Overwrite(new_mat)
 					EndIf
@@ -703,7 +703,7 @@ Type TB3D
 					' if ent nested then add parent
 					If node_level>0 Then bo_bone.AddParent(parent_ent)
 					
-					TQuaternion.QuatToMat(-bo_bone.n_qw[0], bo_bone.n_qx[0], bo_bone.n_qy[0], -bo_bone.n_qz[0], bo_bone.mat)
+					TQuatPtr.QuatToMat(-bo_bone.n_qw[0], bo_bone.n_qx[0], bo_bone.n_qy[0], -bo_bone.n_qz[0], bo_bone.mat)
 					
 					bo_bone.mat.grid[(4*3)+0]=bo_bone.n_px[0]
 					bo_bone.mat.grid[(4*3)+1]=bo_bone.n_py[0]
@@ -711,7 +711,7 @@ Type TB3D
 					
 					' And... onwards needed to prevent inv_mat being incorrect if external parent supplied
 					If bo_bone.parent<>Null And TBone(bo_bone.parent)<>Null
-						Local new_mat:TMatrix=bo_bone.parent.mat.Copy()
+						Local new_mat:TMatPtr=bo_bone.parent.mat.Copy()
 						new_mat.Multiply(bo_bone.mat)
 						bo_bone.mat.Overwrite(new_mat)
 						new_mat=Null

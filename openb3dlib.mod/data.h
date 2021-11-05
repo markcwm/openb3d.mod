@@ -84,9 +84,9 @@ void SetEntityString_( Entity* obj,int varid,char* cstr );
 char* LightChar_( Light* obj,int varid );
 float* LightFloat_( Light* obj,int varid );
 
-// Matrix
-float* MatrixFloat_( Matrix* obj,int varid );
-Matrix* NewMatrix_();
+// MatPtr
+float* MatPtrFloat_( Matrix* obj,int varid );
+Matrix* NewMatPtr_();
 
 // Mesh
 int* MeshInt_( Mesh* obj,int varid );
@@ -113,9 +113,9 @@ void MeshSetBoneVector_( Mesh* obj,int varid,int pos,Bone* bone );
 // MD2
 void SurfaceVectorPushBackFloat_( Surface* obj,int varid,float value );
 
-// Quaternion
-float* QuaternionFloat_( Quaternion* obj,int varid );
-Quaternion* NewQuaternion_();
+// QuatPtr
+float* QuatPtrFloat_( Quaternion* obj,int varid );
+Quaternion* NewQuatPtr_();
 
 // ShadowObject
 char* ShadowObjectChar_( ShadowObject* obj,int varid );
@@ -151,24 +151,24 @@ void GlobalListPushBackTexture_( int varid,Texture* obj );
 void GlobalListRemoveTexture_( int varid,Texture* obj );
 void SetTextureString_( Texture* obj,int varid,char* cstr );
 
-// Vector3
-float* Vector3Float_( Vector* obj,int varid );
-Vector* NewVector3_();
-Vector* Vector3Copy_( Vector& v );
-Vector* Vector3Negate_( Vector& v );
-Vector* Vector3Add_( Vector& v,Vector& q );
-Vector* Vector3Subtract_( Vector& v,Vector& q );
-Vector* Vector3Multiply_( Vector& v,float scale );
-Vector* Vector3Multiply2_( Vector& v,Vector& q );
-Vector* Vector3Divide_( Vector& v,float scale );
-Vector* Vector3Divide2_( Vector& v,Vector& q );
-float Vector3Dot_( Vector& v,Vector &q );
-Vector* Vector3Cross_( Vector& v,Vector &q );
-float Vector3Length_( Vector& v );
-float Vector3Distance_( Vector& v,Vector &q );
-Vector* Vector3Normalized_( Vector& v );
-void Vector3Normalize_( Vector& v );
-void Vector3Clear_( Vector& v );
+// VecPtr
+float* VecPtrFloat_( Vector* obj,int varid );
+Vector* NewVecPtr_();
+Vector* VecPtrCopy_( Vector& v );
+Vector* VecPtrNegate_( Vector& v );
+Vector* VecPtrAdd_( Vector& v,Vector& q );
+Vector* VecPtrSubtract_( Vector& v,Vector& q );
+Vector* VecPtrMultiply_( Vector& v,float scale );
+Vector* VecPtrMultiply2_( Vector& v,Vector& q );
+Vector* VecPtrDivide_( Vector& v,float scale );
+Vector* VecPtrDivide2_( Vector& v,Vector& q );
+float VecPtrDot_( Vector& v,Vector &q );
+Vector* VecPtrCross_( Vector& v,Vector &q );
+float VecPtrLength_( Vector& v );
+float VecPtrDistance_( Vector& v,Vector &q );
+Vector* VecPtrNormalized_( Vector& v );
+void VecPtrNormalize_( Vector& v );
+void VecPtrClear_( Vector& v );
 
 #ifdef __cplusplus
 }; // extern "C"

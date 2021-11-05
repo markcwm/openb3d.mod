@@ -32,7 +32,7 @@ const int BLOB_class=			23;
 const int FIELDARRAY_class=		24;
 const int LIGHT_class=			25;
 const int MATERIALPLUGIN_class=	26; // material.h
-const int MATRIX_class=			27;
+const int MATPTR_class=			27;
 const int MESH_class=			28;
 const int OCTREE_class=			29; // octree.h
 const int OCTREECHILD_class=	30;
@@ -42,7 +42,7 @@ const int CONSTRAINT_class=		33; // physics.h
 const int RIGIDBODY_class=		34;
 const int PICK_class=			35;
 const int PIVOT_class=			36;
-const int QUATERNION_class=		37;
+const int QUATPTR_class=		37;
 const int SHADERDATA_class=		38; // shadermat.h
 const int SAMPLER_class=		39;
 const int MATERIAL_class=		40;
@@ -303,8 +303,8 @@ const int LIGHT_blue=		11;
 const int LIGHT_inner_ang=	12;
 const int LIGHT_outer_ang=	13;
 	
-// Matrix varid
-const int MATRIX_grid=	1;
+// MatPtr varid
+const int MATPTR_grid=	1;
 
 // Mesh varid
 const int MESH_no_surfs=		1;
@@ -337,11 +337,11 @@ const int PICK_picked_ent=		9;
 const int PICK_picked_surface=	10;
 const int PICK_picked_triangle=	11;
 
-// Quaternion
-const int QUATERNION_x=1;
-const int QUATERNION_y=2;
-const int QUATERNION_z=3;
-const int QUATERNION_w=4;
+// QuatPtr
+const int QUATPTR_x=1;
+const int QUATPTR_y=2;
+const int QUATPTR_z=3;
+const int QUATPTR_w=4;
 
 // ShadowObject varid
 const int SHADOWOBJECT_shadow_list=		1;
@@ -443,9 +443,9 @@ const int TEXTURE_AnIsoSupport=	22;
 const int TEXTURE_global_aniso=	23;
 
 // Vector
-const int VECTOR3_x=1;
-const int VECTOR3_y=2;
-const int VECTOR3_z=3;
+const int VECPTR_x=1;
+const int VECPTR_y=2;
+const int VECPTR_z=3;
 
 // Define instance of statics
 int Global::mode,Global::depth,Global::rate;
@@ -1364,16 +1364,16 @@ float* LightFloat_( Light* obj,int varid ){
 	return NULL;
 }
 
-// Matrix
+// MatPtr
 
-float* MatrixFloat_( Matrix* obj,int varid ){
+float* MatPtrFloat_( Matrix* obj,int varid ){
 	switch (varid){
-		case MATRIX_grid : return &obj->grid[0][0];
+		case MATPTR_grid : return &obj->grid[0][0];
 	}
 	return NULL;
 }
 
-Matrix* NewMatrix_(){
+Matrix* NewMatPtr_(){
 	Matrix* mat=new Matrix();
 	//mat->LoadIdentity();
 	return mat;
@@ -1630,19 +1630,19 @@ void SurfaceVectorPushBackFloat_( Surface* obj,int varid,float value ){
 	}
 }
 
-// Quaternion
+// QuatPtr
 
-float* QuaternionFloat_( Quaternion* obj,int varid ){
+float* QuatPtrFloat_( Quaternion* obj,int varid ){
 	switch (varid){
-		case QUATERNION_x : return &obj->x;
-		case QUATERNION_y : return &obj->y;
-		case QUATERNION_z : return &obj->z;
-		case QUATERNION_w : return &obj->w;
+		case QUATPTR_x : return &obj->x;
+		case QUATPTR_y : return &obj->y;
+		case QUATPTR_z : return &obj->z;
+		case QUATPTR_w : return &obj->w;
 	}
 	return NULL;
 }
 
-Quaternion* NewQuaternion_(){
+Quaternion* NewQuatPtr_(){
 	Quaternion* quat=new Quaternion();
 	return quat;
 }
@@ -1888,23 +1888,23 @@ void SetTextureString_( Texture* obj,int varid,char* cstr ){
 	}
 }
 
-// Vector3
+// VecPtr
 
-float* Vector3Float_( Vector* obj,int varid ){
+float* VecPtrFloat_( Vector* obj,int varid ){
 	switch (varid){
-		case VECTOR3_x : return &obj->x;
-		case VECTOR3_y : return &obj->y;
-		case VECTOR3_z : return &obj->z;
+		case VECPTR_x : return &obj->x;
+		case VECPTR_y : return &obj->y;
+		case VECPTR_z : return &obj->z;
 	}
 	return NULL;
 }
 
-Vector* NewVector3_(){
+Vector* NewVecPtr_(){
 	Vector* vec=new Vector();
 	return vec;
 }
 
-Vector* Vector3Copy_( Vector& v ){
+Vector* VecPtrCopy_( Vector& v ){
 	Vector* r=new Vector;
 	r->x=v.x;
 	r->y=v.y;
@@ -1912,73 +1912,73 @@ Vector* Vector3Copy_( Vector& v ){
 	return r;
 }
 
-Vector* Vector3Negate_( Vector& v ){
+Vector* VecPtrNegate_( Vector& v ){
 	Vector r=Vector( -v.x,-v.y,-v.z );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Add_( Vector& v,Vector& q ){
+Vector* VecPtrAdd_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x+q.x,v.y+q.y,v.z+q.z );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Subtract_( Vector& v,Vector& q ){
+Vector* VecPtrSubtract_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x-q.x,v.y-q.y,v.z-q.z );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Multiply_( Vector& v,float scale ){
+Vector* VecPtrMultiply_( Vector& v,float scale ){
 	Vector r=Vector( v.x*scale,v.y*scale,v.z*scale );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Multiply2_( Vector& v,Vector& q ){
+Vector* VecPtrMultiply2_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x*q.x,v.y*q.y,v.z*q.z );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Divide_( Vector& v,float scale ){
+Vector* VecPtrDivide_( Vector& v,float scale ){
 	Vector r=Vector( v.x/scale,v.y/scale,v.z/scale );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-Vector* Vector3Divide2_( Vector& v,Vector& q ){
+Vector* VecPtrDivide2_( Vector& v,Vector& q ){
 	Vector r=Vector( v.x/q.x,v.y/q.y,v.z/q.z );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-float Vector3Dot_( Vector& v,Vector &q ){
+float VecPtrDot_( Vector& v,Vector &q ){
 	return v.x*q.x+v.y*q.y+v.z*q.z;
 }
 
-Vector* Vector3Cross_( Vector& v,Vector &q ){
+Vector* VecPtrCross_( Vector& v,Vector &q ){
 	Vector r=Vector( v.y*q.z-v.z*q.y,v.z*q.x-v.x*q.z,v.x*q.y-v.y*q.x );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-float Vector3Length_( Vector& v ){
+float VecPtrLength_( Vector& v ){
 	return sqrtf( v.x*v.x+v.y*v.y+v.z*v.z );
 }
 
-float Vector3Distance_( Vector& v,Vector &q ){
+float VecPtrDistance_( Vector& v,Vector &q ){
 	float dx=v.x-q.x, dy=v.y-q.y, dz=v.z-q.z;
 	return sqrtf( dx*dx+dy*dy+dz*dz );
 }
 
-Vector* Vector3Normalized_( Vector& v ){
-	float l=Vector3Length_(v);
+Vector* VecPtrNormalized_( Vector& v ){
+	float l=VecPtrLength_(v);
 	Vector r=Vector( v.x/l,v.y/l,v.z/l );
-	return Vector3Copy_(r);
+	return VecPtrCopy_(r);
 }
 
-void Vector3Normalize_( Vector& v ){
-	float l=Vector3Length_(v);
+void VecPtrNormalize_( Vector& v ){
+	float l=VecPtrLength_(v);
 	v.x=v.x/l;
 	v.y=v.y/l;
 	v.z=v.z/l;
 }
 
-void Vector3Clear_( Vector& v ){
+void VecPtrClear_( Vector& v ){
 	v.x=0;
 	v.y=0;
 	v.z=0;

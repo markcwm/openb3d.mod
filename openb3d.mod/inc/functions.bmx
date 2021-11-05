@@ -399,7 +399,7 @@ Function SurfsRendered:Int()
 End Function
 
 Rem
-bbdoc: Returns a new TSprite object
+bbdoc: Create a new TSprite object
 about: spr=NewSprite()
 End Rem
 Function NewSprite:TSprite()
@@ -407,7 +407,7 @@ Function NewSprite:TSprite()
 End Function
 
 Rem
-bbdoc: Returns a new TTexture object
+bbdoc: Create a new TTexture object
 about: tex=NewTexture()
 End Rem
 Function NewTexture:TTexture()
@@ -415,7 +415,7 @@ Function NewTexture:TTexture()
 End Function
 
 Rem
-bbdoc: Returns a new TMesh object
+bbdoc: Create a new TMesh object
 about: mesh=NewMesh()
 End Rem
 Function NewMesh:TMesh()
@@ -423,7 +423,7 @@ Function NewMesh:TMesh()
 End Function
 
 Rem
-bbdoc: Returns a new TSurface object
+bbdoc: Create a new TSurface object
 about: surf=NewSurface()
 End Rem
 Function NewSurface:TSurface()
@@ -431,7 +431,7 @@ Function NewSurface:TSurface()
 End Function
 
 Rem
-bbdoc: Returns a new TBone object
+bbdoc: Create a new TBone object
 about: bone=NewBone()
 End Rem
 Function NewBone:TBone()
@@ -439,7 +439,7 @@ Function NewBone:TBone()
 End Function
 
 Rem
-bbdoc: Returns a new TAnimationKeys object
+bbdoc: Create a new TAnimationKeys object
 about: keys=NewAnimationKeys()
 End Rem
 Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
@@ -447,27 +447,27 @@ Function NewAnimationKeys:TAnimationKeys( bone:TBone=Null )
 End Function
 
 Rem
-bbdoc: Returns a new TMatrix object
-about: mat=NewMatrix()
+bbdoc: Create a new TMatPtr object, returns a Float Ptr matrix
+about: mat=NewMatPtr()
 End Rem
-Function NewMatrix:TMatrix()
-	Return TMatrix.Create()
+Function NewMatPtr:TMatPtr()
+	Return TMatPtr.Create()
 End Function
 
 Rem
-bbdoc: Returns a new TQuaternion object
-about: quat=NewQuaternion()
+bbdoc: Create a new TQuatPtr object, returns a Float Ptr quaternion
+about: quat=NewQuatPtr()
 End Rem
-Function NewQuaternion:TQuaternion()
-	Return TQuaternion.Create()
+Function NewQuatPtr:TQuatPtr()
+	Return TQuatPtr.Create()
 End Function
 
 Rem
-bbdoc: Create a new Openb3d TVector3 object, returns a new Float Ptr vector
-about: vec=NewVector3()
+bbdoc: Create a new TVecPtr object, returns a Float Ptr vector
+about: vec=NewVecPtr()
 End Rem
-Function NewVector3:TVector3()
-	Return TVector3.Create()
+Function NewVecPtr:TVecPtr()
+	Return TVecPtr.Create()
 End Function
 
 Rem

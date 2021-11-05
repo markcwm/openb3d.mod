@@ -11,7 +11,7 @@ Type TMesh Extends TEntity
 	
 	Field bones:TList=CreateList() ' Bone vector
 	
-	Field mat_sp:TMatrix ' used in TMesh's Update to provide necessary additional transform matrix for sprites
+	Field mat_sp:TMatPtr ' used in TMesh's Update to provide necessary additional transform matrix for sprites
 	
 	'Field c_col_tree:TMeshCollider ' openb3d: used for terrain collisions - NULL
 	Field reset_col_tree:Int Ptr ' true (reset flag) - 0
@@ -75,8 +75,8 @@ Type TMesh Extends TEntity
 		
 		' matrix
 		Local inst:Byte Ptr=MeshMatrix_( GetInstance(Self),MESH_mat_sp )
-		mat_sp=TMatrix.GetObject(inst)
-		If mat_sp=Null And inst<>Null Then mat_sp=TMatrix.CreateObject(inst)
+		mat_sp=TMatPtr.GetObject(inst)
+		If mat_sp=Null And inst<>Null Then mat_sp=TMatPtr.CreateObject(inst)
 				
 	End Method
 	
@@ -106,7 +106,7 @@ Type TMesh Extends TEntity
 		If max_z<>Null Then DebugLog(pad+" max_z: "+max_z[0]) Else DebugLog(pad+" max_z: Null")
 		
 		' matrix
-		DebugLog pad+" mat_sp: "+StringPtr(TMatrix.GetInstance(mat_sp))
+		DebugLog pad+" mat_sp: "+StringPtr(TMatPtr.GetInstance(mat_sp))
 		If debug_subobjects And mat_sp<>Null Then mat_sp.DebugFields( debug_subobjects,debug_base_types )
 		
 		' lists
@@ -453,7 +453,7 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	Method TransformVertices( matrix:TMatrix )
+	Method TransformVertices( matrix:TMatPtr )
 	
 		Local px:Float, py:Float, pz:Float
 		For Local surf:TSurface = EachIn surf_list
@@ -629,7 +629,7 @@ Type TMesh Extends TEntity
 	Method FreeEntity()
 	
 		If exists
-			TMatrix.FreeObject( TMatrix.GetInstance(mat_sp) ) ; mat_sp=Null
+			TMatPtr.FreeObject( TMatPtr.GetInstance(mat_sp) ) ; mat_sp=Null
 			
 			For Local surf:TSurface=EachIn surf_list
 				TBrush.FreeObject( TBrush.GetInstance(surf.brush) ) ; surf.brush=Null
@@ -905,9 +905,9 @@ Type TMesh Extends TEntity
 	End Method
 	
 	' used by LoadMesh
-	Method TransformMesh( mat:TMatrix )
+	Method TransformMesh( mat:TMatPtr )
 	
-		TransformMesh_( GetInstance(Self),TMatrix.GetInstance(mat) )
+		TransformMesh_( GetInstance(Self),TMatPtr.GetInstance(mat) )
 		
 	End Method
 	
