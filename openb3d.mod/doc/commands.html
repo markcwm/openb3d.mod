@@ -1777,224 +1777,231 @@ Set meshflags to -1 for smooth normals, -2 for flat shaded normals and -4 to loa
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMatPtr_methods></a>Methods Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Copy>Copy</a></td><td class=docright>
-Create new copy and returns it.
+Copy self, returns a new matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FromQuaternion>FromQuaternion</a></td><td class=docright>
-Converts a quaternion to a rotation matrix.
+Convert self to a rotation matrix from a quaternion.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#FromToRotation>FromToRotation</a></td><td class=docright>
-Creates a transformation matrix that rotates a vector to another.
+Transformation self to a rotation matrix from two given vectors.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetInverse>GetInverse</a></td><td class=docright>
-Returns an inverse transformation.
+Get inverse of the given TMatPtr and overwrite it, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetInverse2>GetInverse2</a></td><td class=docright>
-Inverse transformation on the given matrix.
+Get inverse of the given TMatPtr and overwrite it, returns nothing (used in collision2.cpp)
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetMatrix>GetMatrix</a></td><td class=docright>
+Overwrite self with the given TMatrix, returns nothing (like CopyMatrix)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetMatrixScale>GetMatrixScale</a></td><td class=docright>
-Get scale (magnitude) of a matrix, returns a new vector.
+Get scale (magnitude) of self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetPitch>GetPitch</a></td><td class=docright>
-Returns x rotation of matrix.
+Returns pitch of self.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetRoll>GetRoll</a></td><td class=docright>
-Returns z rotation of matrix.
+Returns roll of self.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#GetYaw>GetYaw</a></td><td class=docright>
-Returns y rotation of matrix.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#Inverse>Inverse</a></td><td class=docright>
-Returns the inverse of a matrix.
+Returns yaw of self.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadIdentity>LoadIdentity</a></td><td class=docright>
-Convert into identity matrix.
+Set self as identity matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply>Multiply</a></td><td class=docright>
-Multiply matrix with the given matrix.
+Multiply self by the given matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply2>Multiply2</a></td><td class=docright>
-Multiply matrix with the given matrix.
+Multiply self by the given matrix (same as Multiply)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Overwrite>Overwrite</a></td><td class=docright>
-Overwrites self with matrix passed as parameter.
+Overwrite self with the given TMatPtr.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Rotate>Rotate</a></td><td class=docright>
-Rotate matrix (Euler degrees)
+Rotate self by pitch, yaw, roll (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotatePitch>RotatePitch</a></td><td class=docright>
-Rotate matrix about the x axis (Euler degrees)
+Rotate self about the x axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotateRoll>RotateRoll</a></td><td class=docright>
-Rotate matrix about the z axis (Euler degrees)
+Rotate self about the z axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotateYaw>RotateYaw</a></td><td class=docright>
-Rotate matrix about the y axis (Euler degrees)
+Rotate self about the y axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Scale>Scale</a></td><td class=docright>
-Scale matrix (set the diagonal elements to x, y, z)
+Scale self (set the diagonal elements to x, y, z)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetIdentity>SetIdentity</a></td><td class=docright>
-Set matrix identity (3x3 Float)
+Set matrix identity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetTranslate>SetTranslate</a></td><td class=docright>
-Set the matrix to translate.
+Set translate vector for self.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ToQuat>ToQuat</a></td><td class=docright>
-Convert matrix to quaternion.
+Convert self to the given quaternion.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TransformVec>TransformVec</a></td><td class=docright>
-Transforms the given vector by this matrix.
+Transform the given vector by self.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Translate>Translate</a></td><td class=docright>
-Translate (move) matrix.
+Translate (move) self by the given vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Transpose>Transpose</a></td><td class=docright>
-Transpose matrix.
+Transpose self.
 </td></tr>
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMatPtr_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyMatrix>CopyMatrix</a></td><td class=docright>
+Copy the given TMatrix, returns a new Float Ptr matrix (like GetMatrix)
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
-Create a new TMatPtr object, returns a new Float Ptr matrix.
+Creates a new TMatPtr object, returns a Float Ptr matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#InterpolateMatrix>InterpolateMatrix</a></td><td class=docright>
-Interpolates two matrices at a relative value - called in AlignToVector.
+Interpolate two TMatPtrs by a relative value (used in AlignToVector)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Magnitude>Magnitude</a></td><td class=docright>
-Return magnitude (length) of vector.
+Return magnitude (length) of the given vector, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewMatPtr>NewMatPtr</a></td><td class=docright>
-Create a new TMatPtr object, returns a new Float Ptr matrix.
+Returns a new TMatPtr object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Quaternion_FromAngleAxis>Quaternion_FromAngleAxis</a></td><td class=docright>
-Creates a quaternion from an angle and an axis.
+Create a quaternion from an angle and an axis, sets the given quaternion.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Quaternion_MultiplyQuat>Quaternion_MultiplyQuat</a></td><td class=docright>
-Multiplies a quaternion.
+Multiply two quaternions, sets the given quaternion.
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Copy>
 <tr><td class=doctop colspan=2>Method Copy:TMatPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create new copy and returns it.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy self, returns a new matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=FromQuaternion>
 <tr><td class=doctop colspan=2>Method FromQuaternion( x:Float,y:Float,z:Float,w:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Converts a quaternion to a rotation matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert self to a rotation matrix from a quaternion.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=FromToRotation>
 <tr><td class=doctop colspan=2>Method FromToRotation( ix:Float,iy:Float,iz:Float,jx:Float,jy:Float,jz:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a transformation matrix that rotates a vector to another.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Transformation self to a rotation matrix from two given vectors.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetInverse>
-<tr><td class=doctop colspan=2>Method GetInverse:TMatPtr( mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns an inverse transformation.</td></tr>
+<tr><td class=doctop colspan=2>Method GetInverse( mat:TMatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Get inverse of the given TMatPtr and overwrite it, returns nothing.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetInverse2>
 <tr><td class=doctop colspan=2>Method GetInverse2( mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Inverse transformation on the given matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Get inverse of the given TMatPtr and overwrite it, returns nothing (used in collision2.cpp)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetMatrix>
+<tr><td class=doctop colspan=2>Method GetMatrix:TMatPtr( mat:TMatrix )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TMatrix, returns nothing (like CopyMatrix)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetMatrixScale>
 <tr><td class=doctop colspan=2>Method GetMatrixScale:TVecPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Get scale (magnitude) of a matrix, returns a new vector.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Get scale (magnitude) of self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetPitch>
 <tr><td class=doctop colspan=2>Method GetPitch:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns x rotation of matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns pitch of self.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetRoll>
 <tr><td class=doctop colspan=2>Method GetRoll:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns z rotation of matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns roll of self.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=GetYaw>
 <tr><td class=doctop colspan=2>Method GetYaw:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns y rotation of matrix.</td></tr>
-</table>
-<table class=doc width=100% cellspacing=3 id=Inverse>
-<tr><td class=doctop colspan=2>Method Inverse:TMatPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the inverse of a matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns yaw of self.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=LoadIdentity>
 <tr><td class=doctop colspan=2>Method LoadIdentity()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert into identity matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set self as identity matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply>
 <tr><td class=doctop colspan=2>Method Multiply( mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply matrix with the given matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by the given matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply2>
 <tr><td class=doctop colspan=2>Method Multiply2( mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply matrix with the given matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by the given matrix (same as Multiply)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Overwrite>
 <tr><td class=doctop colspan=2>Method Overwrite( mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrites self with matrix passed as parameter.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TMatPtr.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Rotate>
 <tr><td class=doctop colspan=2>Method Rotate( rx:Float,ry:Float,rz:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix (Euler degrees)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self by pitch, yaw, roll (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotatePitch>
 <tr><td class=doctop colspan=2>Method RotatePitch( ang:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the x axis (Euler degrees)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the x axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotateRoll>
 <tr><td class=doctop colspan=2>Method RotateRoll( ang:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the z axis (Euler degrees)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the z axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotateYaw>
 <tr><td class=doctop colspan=2>Method RotateYaw( ang:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the y axis (Euler degrees)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the y axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Scale>
 <tr><td class=doctop colspan=2>Method Scale( x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Scale matrix (set the diagonal elements to x, y, z)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Scale self (set the diagonal elements to x, y, z)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=SetIdentity>
 <tr><td class=doctop colspan=2>Method SetIdentity( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set matrix identity (3x3 Float)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set matrix identity.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=SetTranslate>
 <tr><td class=doctop colspan=2>Method SetTranslate( x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set the matrix to translate.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set translate vector for self.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=ToQuat>
 <tr><td class=doctop colspan=2>Method ToQuat( qx:Float Var,qy:Float Var,qz:Float Var,qw:Float Var )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert matrix to quaternion.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert self to the given quaternion.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=TransformVec>
 <tr><td class=doctop colspan=2>Method TransformVec( rx:Float Var,ry:Float Var,rz:Float Var,addTranslation:Int=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Transforms the given vector by this matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Transform the given vector by self.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Translate>
 <tr><td class=doctop colspan=2>Method Translate( x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Translate (move) matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Translate (move) self by the given vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Transpose>
 <tr><td class=doctop colspan=2>Method Transpose()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Transpose matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Transpose self.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyMatrix>
+<tr><td class=doctop colspan=2>Function CopyMatrix:TMatPtr( mat:TMatrix )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TMatrix, returns a new Float Ptr matrix (like GetMatrix)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
 <tr><td class=doctop colspan=2>Function Create:TMatPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TMatPtr object, returns a new Float Ptr matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a new TMatPtr object, returns a Float Ptr matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=InterpolateMatrix>
 <tr><td class=doctop colspan=2>Function InterpolateMatrix( m:TMatPtr,a:TMatPtr,alpha:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Interpolates two matrices at a relative value - called in AlignToVector.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Interpolate two TMatPtrs by a relative value (used in AlignToVector)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Magnitude>
 <tr><td class=doctop colspan=2>Function Magnitude:Float( x:Float,y:Float,z:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Return magnitude (length) of vector.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Return magnitude (length) of the given vector, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=NewMatPtr>
 <tr><td class=doctop colspan=2>Function NewMatPtr:TMatPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TMatPtr object, returns a new Float Ptr matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMatPtr object.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Quaternion_FromAngleAxis>
 <tr><td class=doctop colspan=2>Function Quaternion_FromAngleAxis( angle:Float,ax:Float,ay:Float,az:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Creates a quaternion from an angle and an axis.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a quaternion from an angle and an axis, sets the given quaternion.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Quaternion_MultiplyQuat>
 <tr><td class=doctop colspan=2>Function Quaternion_MultiplyQuat( x1:Float,y1:Float,z1:Float,w1:Float,x2:Float,y2:Float,z2:Float,w2:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiplies a quaternion.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply two quaternions, sets the given quaternion.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TMatrix>
@@ -2003,89 +2010,112 @@ Multiplies a quaternion.
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMatrix_methods></a>Methods Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Copy>Copy</a></td><td class=docright>
-Create new copy and returns it.
+Copy self, returns a new matrix.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetMatPtr>GetMatPtr</a></td><td class=docright>
+Overwrite self with the given TMatPtr, returns nothing (like CopyMatPtr)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Inverse>Inverse</a></td><td class=docright>
-Returns the inverse of a matrix.
+Get inverse of self, returns a new matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#LoadIdentity>LoadIdentity</a></td><td class=docright>
-Convert into identity matrix.
+Set self as identity matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply>Multiply</a></td><td class=docright>
-Multiply matrix with the given matrix.
+Multiply self by the given matrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#New>New</a></td><td class=docright>
-Create a new TMatrix object, returns a new 4x4 Float matrix.
+Returns a new TMatrix object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Overwrite>Overwrite</a></td><td class=docright>
-Overwrites self with matrix passed as parameter.
+Overwrite self with the given TMatrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Rotate>Rotate</a></td><td class=docright>
-Rotate matrix (Euler degrees)
+Rotate self by yaw, pitch and roll (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotatePitch>RotatePitch</a></td><td class=docright>
-Rotate matrix about the x axis (Euler degrees)
+Rotate self about the x axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotateRoll>RotateRoll</a></td><td class=docright>
-Rotate matrix about the z axis (Euler degrees)
+Rotate self about the z axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#RotateYaw>RotateYaw</a></td><td class=docright>
-Rotate matrix about the y axis (Euler degrees)
+Rotate self about the y axis (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Scale>Scale</a></td><td class=docright>
-Scale matrix (set the diagonal elements to x, y, z)
+Scale self (set the diagonal elements to x, y, z)
+</td></tr>
+<tr><td class=docleft width=1%><a href=#SetIdentity>SetIdentity</a></td><td class=docright>
+Set matrix identity.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Translate>Translate</a></td><td class=docright>
-Translate (move) matrix.
+Translate (move) self.
+</td></tr>
+</table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TMatrix_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyMatPtr>CopyMatPtr</a></td><td class=docright>
+Copy the given TMatPtr, returns a new Float matrix (like GetMatPtr)
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Copy>
 <tr><td class=doctop colspan=2>Method Copy:TMatrix()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create new copy and returns it.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy self, returns a new matrix.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetMatPtr>
+<tr><td class=doctop colspan=2>Method GetMatPtr:TMatrix( mat:TMatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TMatPtr, returns nothing (like CopyMatPtr)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Inverse>
 <tr><td class=doctop colspan=2>Method Inverse:TMatrix()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Returns the inverse of a matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Get inverse of self, returns a new matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=LoadIdentity>
 <tr><td class=doctop colspan=2>Method LoadIdentity()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert into identity matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set self as identity matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply>
-<tr><td class=doctop colspan=2>Method Multiply(mat:TMatrix)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply matrix with the given matrix.</td></tr>
+<tr><td class=doctop colspan=2>Method Multiply( mat:TMatrix )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by the given matrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=New>
 <tr><td class=doctop colspan=2>Method New()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TMatrix object, returns a new 4x4 Float matrix.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TMatrix object.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Overwrite>
-<tr><td class=doctop colspan=2>Method Overwrite(mat:TMatrix)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrites self with matrix passed as parameter.</td></tr>
+<tr><td class=doctop colspan=2>Method Overwrite( mat:TMatrix )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TMatrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Rotate>
-<tr><td class=doctop colspan=2>Method Rotate(rx#,ry#,rz#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix (Euler degrees)</td></tr>
+<tr><td class=doctop colspan=2>Method Rotate( rx#,ry#,rz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self by yaw, pitch and roll (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotatePitch>
-<tr><td class=doctop colspan=2>Method RotatePitch(ang#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the x axis (Euler degrees)</td></tr>
+<tr><td class=doctop colspan=2>Method RotatePitch( ang# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the x axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotateRoll>
-<tr><td class=doctop colspan=2>Method RotateRoll(ang#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the z axis (Euler degrees)</td></tr>
+<tr><td class=doctop colspan=2>Method RotateRoll( ang# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the z axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=RotateYaw>
-<tr><td class=doctop colspan=2>Method RotateYaw(ang#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate matrix about the y axis (Euler degrees)</td></tr>
+<tr><td class=doctop colspan=2>Method RotateYaw( ang# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Rotate self about the y axis (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Scale>
-<tr><td class=doctop colspan=2>Method Scale(x#,y#,z#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Scale matrix (set the diagonal elements to x, y, z)</td></tr>
+<tr><td class=doctop colspan=2>Method Scale( x#,y#,z# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Scale self (set the diagonal elements to x, y, z)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=SetIdentity>
+<tr><td class=doctop colspan=2>Method SetIdentity( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set matrix identity.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Translate>
-<tr><td class=doctop colspan=2>Method Translate(x#,y#,z#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Translate (move) matrix.</td></tr>
+<tr><td class=doctop colspan=2>Method Translate( x#,y#,z# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Translate (move) self.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyMatPtr>
+<tr><td class=doctop colspan=2>Function CopyMatPtr:TMatrix( mat:TMatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TMatPtr, returns a new Float matrix (like GetMatPtr)</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TMesh>
@@ -2149,92 +2179,115 @@ Call mesh loader implementation.
 <tr><td class=docleft width=1%>Description</td><td class=docright>Quaternion functions (Minib3d)</td></tr>
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TQuaternion_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#GetQuatPtr>GetQuatPtr</a></td><td class=docright>
+Overwrite self with the given TQuatPtr, returns nothing (like CopyQuatPtr)
+</td></tr>
 <tr><td class=docleft width=1%><a href=#New>New</a></td><td class=docright>
-Create a new TQuaternion object, returns a new Float quaternion.
+Returns a new TQuaternion object.
 </td></tr>
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TQuaternion_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyQuatPtr>CopyQuatPtr</a></td><td class=docright>
+Copy the given TQuatPtr, returns a new Float quaternion (like GetQuatPtr)
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
+Create a new TQuaternion from four float values, returns a Float quaternion.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#QuatToEuler>QuatToEuler</a></td><td class=docright>
-Convert Quaternion to Euler.
+Convert a quaternion to the given pitch, yaw, roll (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#QuatToMat>QuatToMat</a></td><td class=docright>
-Convert Quaternion to Matrix.
+Convert a quaternion to the given TMatrix.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Slerp>Slerp</a></td><td class=docright>
-Slerp two quaternions.
+Slerp two quaternions to the given quaternion.
 </td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetQuatPtr>
+<tr><td class=doctop colspan=2>Method GetQuatPtr:TQuaternion( quat:TQuatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TQuatPtr, returns nothing (like CopyQuatPtr)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=New>
 <tr><td class=doctop colspan=2>Method New()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TQuaternion object, returns a new Float quaternion.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuaternion object.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyQuatPtr>
+<tr><td class=doctop colspan=2>Function CopyQuatPtr:TQuaternion( quat:TQuatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TQuatPtr, returns a new Float quaternion (like GetQuatPtr)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Create>
+<tr><td class=doctop colspan=2>Function Create:TQuaternion( x:Float=0,y:Float=0,z:Float=0,w:Float=0 )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TQuaternion from four float values, returns a Float quaternion.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=QuatToEuler>
-<tr><td class=doctop colspan=2>Function QuatToEuler(w#,x#,y#,z#,pitch# Var,yaw# Var,roll# Var)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert Quaternion to Euler.</td></tr>
+<tr><td class=doctop colspan=2>Function QuatToEuler( x#,y#,z#,w#,pitch# Var,yaw# Var,roll# Var )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert a quaternion to the given pitch, yaw, roll (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=QuatToMat>
-<tr><td class=doctop colspan=2>Function QuatToMat(w#,x#,y#,z#,mat:TMatrix Var)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert Quaternion to Matrix.</td></tr>
+<tr><td class=doctop colspan=2>Function QuatToMat( x#,y#,z#,w#,mat:TMatrix Var )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert a quaternion to the given TMatrix.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Slerp>
-<tr><td class=doctop colspan=2>Function Slerp:Int(Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx# Var,Cy# Var,Cz# Var,Cw# Var,t#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Slerp two quaternions.</td></tr>
+<tr><td class=doctop colspan=2>Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx# Var,Cy# Var,Cz# Var,Cw# Var,t# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Slerp two quaternions to the given quaternion.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TQuatPtr>
 <tr><td class=doctop colspan=2>Type TQuatPtr</td></tr>
 <tr><td class=docleft width=1%>Description</td><td class=docright>QuatPtr functions (Openb3d)</td></tr>
 </table>
+<table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TQuatPtr_methods></a>Methods Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#GetQuaternion>GetQuaternion</a></td><td class=docright>
+Overwrite self with the given TQuaternion, returns nothing (like CopyQuaternion)
+</td></tr>
+</table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TQuatPtr_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyQuaternion>CopyQuaternion</a></td><td class=docright>
+Copy the given TQuaternion, returns a new Float Ptr quaternion (like GetQuaternion)
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
-Create a new TQuatPtr from four float values, returns a new Float Ptr quaternion.
+Create a new TQuatPtr from four float values, returns a Float Ptr quaternion.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewQuatPtr>NewQuatPtr</a></td><td class=docright>
-Create a new TQuatPtr object, returns a new Float Ptr quaternion.
+Returns a new TQuatPtr object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#QuatToEuler>QuatToEuler</a></td><td class=docright>
-Convert Quaternion to Euler.
-</td></tr>
-<tr><td class=docleft width=1%><a href=#QuatToEuler2>QuatToEuler2</a></td><td class=docright>
-Convert Quaternion to Euler (alternative version)
+Convert a quaternion to the given pitch, yaw, roll (Euler degrees)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#QuatToMat>QuatToMat</a></td><td class=docright>
-Convert Quaternion to Matrix.
+Convert a quaternion to the given TMatPtr.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Slerp>Slerp</a></td><td class=docright>
-Slerp two quaternions.
+Slerp two quaternions to the given quaternion.
 </td></tr>
-<tr><td class=docleft width=1%><a href=#Slerp2>Slerp2</a></td><td class=docright>
-Slerp two quaternions (alternative version)
-</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetQuaternion>
+<tr><td class=doctop colspan=2>Method GetQuaternion:TQuatPtr( quat:TQuaternion )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TQuaternion, returns nothing (like CopyQuaternion)</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyQuaternion>
+<tr><td class=doctop colspan=2>Function CopyQuaternion:TQuatPtr( quat:TQuaternion )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TQuaternion, returns a new Float Ptr quaternion (like GetQuaternion)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
 <tr><td class=doctop colspan=2>Function Create:TQuatPtr( x:Float=0,y:Float=0,z:Float=0,w:Float=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TQuatPtr from four float values, returns a new Float Ptr quaternion.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TQuatPtr from four float values, returns a Float Ptr quaternion.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=NewQuatPtr>
 <tr><td class=doctop colspan=2>Function NewQuatPtr:TQuatPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TQuatPtr object, returns a new Float Ptr quaternion.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TQuatPtr object.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=QuatToEuler>
-<tr><td class=doctop colspan=2>Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert Quaternion to Euler.</td></tr>
-</table>
-<table class=doc width=100% cellspacing=3 id=QuatToEuler2>
-<tr><td class=doctop colspan=2>Function QuatToEuler2( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert Quaternion to Euler (alternative version)</td></tr>
+<tr><td class=doctop colspan=2>Function QuatToEuler( x:Float,y:Float,z:Float,w:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert a quaternion to the given pitch, yaw, roll (Euler degrees)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=QuatToMat>
-<tr><td class=doctop colspan=2>Function QuatToMat( w:Float,x:Float,y:Float,z:Float,mat:TMatPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Convert Quaternion to Matrix.</td></tr>
+<tr><td class=doctop colspan=2>Function QuatToMat( x:Float,y:Float,z:Float,w:Float,mat:TMatPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Convert a quaternion to the given TMatPtr.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Slerp>
 <tr><td class=doctop colspan=2>Function Slerp:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Slerp two quaternions.</td></tr>
-</table>
-<table class=doc width=100% cellspacing=3 id=Slerp2>
-<tr><td class=doctop colspan=2>Function Slerp2:Int( Ax#,Ay#,Az#,Aw#,Bx#,By#,Bz#,Bw#,Cx:Float Var,Cy:Float Var,Cz:Float Var,Cw:Float Var,t# )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Slerp two quaternions (alternative version)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Slerp two quaternions to the given quaternion.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TRigidBody>
@@ -2293,167 +2346,161 @@ Slerp two quaternions (alternative version)
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVecPtr_methods></a>Methods Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Add>Add</a></td><td class=docright>
-Add a TVecPtr to another TVecPtr, returns a new vector.
+Add self to the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Clear>Clear</a></td><td class=docright>
-Clear a TVecPtrs values, returns nothing.
+Clear (zero) vector values, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Copy>Copy</a></td><td class=docright>
-Copy a TVecPtr, returns a new vector.
+Copy self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Cross>Cross</a></td><td class=docright>
-Cross product of two TVecPtrs, returns a new vector.
+Cross product of self with the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Distance>Distance</a></td><td class=docright>
-Distance between two TVecPtrs, returns a float.
+Distance between self and the given TVecPtr, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Divide>Divide</a></td><td class=docright>
-Divide a TVecPtr by a float, returns a new vector.
+Divide self by a float, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Divide2>Divide2</a></td><td class=docright>
-Divide a TVecPtr by another TVecPtr, returns a new vector.
+Divide self by the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Dot>Dot</a></td><td class=docright>
-Dot product (or squared length) of two TVecPtrs, returns a new vector.
+Dot product (or squared length) of self with the given TVecPtr, returns a float.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetVector>GetVector</a></td><td class=docright>
+Overwrite self with the given TVector, returns nothing (like CopyVector)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Length>Length</a></td><td class=docright>
-Length (or magnitude) of a TVecPtr, returns a float.
+Length (or magnitude) of self, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply>Multiply</a></td><td class=docright>
-Multiply a TVecPtr by a float, returns a new vector.
+Multiply self by a float, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply2>Multiply2</a></td><td class=docright>
-Multiply a TVecPtr by another TVecPtr, returns a new vector.
+Multiply self by the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Negate>Negate</a></td><td class=docright>
-Negate a TVecPtr, returns a new vector.
+Negate self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Normalize>Normalize</a></td><td class=docright>
-Normalize a TVecPtr, returns nothing.
+Normalize self, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Normalized>Normalized</a></td><td class=docright>
-Normalize a TVecPtr, returns a new vector.
+Normalize self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Pitch>Pitch</a></td><td class=docright>
-Pitch (or x angle) in degrees of a vector, returns a float.
+Pitch (or x angle) in degrees of self, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Subtract>Subtract</a></td><td class=docright>
-Subtract a TVecPtr from another TVecPtr, returns a new vector.
+Subtract the given TVecPtr from self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Yaw>Yaw</a></td><td class=docright>
-Yaw (or y angle) in degrees of a vector, returns a float.
+Yaw (or y angle) in degrees of self, returns a float.
 </td></tr>
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVecPtr_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyVector>CopyVector</a></td><td class=docright>
+Copy the given TVector, returns a new Float Ptr vector (like GetVector)
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
-Create a new TVecPtr from three float values, returns a new Float Ptr vector.
+Create a new TVecPtr from three float values, returns a Float Ptr vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Magnitude>Magnitude</a></td><td class=docright>
-Magnitude (or length) of a TVecPtr from three float values, returns a float.
+Magnitude (or length) of a vector from three float values, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#NewVecPtr>NewVecPtr</a></td><td class=docright>
-Create a new TVecPtr object, returns a new Float Ptr vector.
+Returns a new TVecPtr object.
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Add>
-<tr><td class=doctop colspan=2>Method Add:TVecPtr( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Add a TVecPtr to another TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Add(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Add:TVecPtr( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add self to the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Clear>
 <tr><td class=doctop colspan=2>Method Clear()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Clear a TVecPtrs values, returns nothing.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>vec.Clear()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Clear (zero) vector values, returns nothing.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Copy>
 <tr><td class=doctop colspan=2>Method Copy:TVecPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Copy()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Cross>
-<tr><td class=doctop colspan=2>Method Cross:TVecPtr( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of two TVecPtrs, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Cross(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Cross:TVecPtr( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of self with the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Distance>
-<tr><td class=doctop colspan=2>Method Distance:Float( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Distance between two TVecPtrs, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Distance(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Distance:Float( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Distance between self and the given TVecPtr, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Divide>
 <tr><td class=doctop colspan=2>Method Divide:TVecPtr( scale:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVecPtr by a float, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Divide(scale)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide self by a float, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Divide2>
-<tr><td class=doctop colspan=2>Method Divide2:TVecPtr( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVecPtr by another TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Divide2(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Divide2:TVecPtr( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide self by the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Dot>
-<tr><td class=doctop colspan=2>Method Dot:Float( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of two TVecPtrs, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Dot(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Dot:Float( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of self with the given TVecPtr, returns a float.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetVector>
+<tr><td class=doctop colspan=2>Method GetVector:TVecPtr( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TVector, returns nothing (like CopyVector)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Length>
 <tr><td class=doctop colspan=2>Method Length:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of a TVecPtr, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Length()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of self, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply>
 <tr><td class=doctop colspan=2>Method Multiply:TVecPtr( scale:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVecPtr by a float, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Multiply(scale)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by a float, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply2>
-<tr><td class=doctop colspan=2>Method Multiply2:TVecPtr( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVecPtr by another TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Multiply2(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Multiply2:TVecPtr( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Negate>
 <tr><td class=doctop colspan=2>Method Negate:TVecPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Negate a TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Negate(vec2)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Negate self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Normalize>
 <tr><td class=doctop colspan=2>Method Normalize()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVecPtr, returns nothing.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>vec.Normalize()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize self, returns nothing.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Normalized>
 <tr><td class=doctop colspan=2>Method Normalized:TVecPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Normalized()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Pitch>
 <tr><td class=doctop colspan=2>Method Pitch:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Pitch (or x angle) in degrees of a vector, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Pitch()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Pitch (or x angle) in degrees of self, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Subtract>
-<tr><td class=doctop colspan=2>Method Subtract:TVecPtr( vec2:TVecPtr )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract a TVecPtr from another TVecPtr, returns a new vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=vec.Subtract(vec2)</td></tr>
+<tr><td class=doctop colspan=2>Method Subtract:TVecPtr( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract the given TVecPtr from self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Yaw>
 <tr><td class=doctop colspan=2>Method Yaw:Float()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Yaw (or y angle) in degrees of a vector, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=vec.Yaw()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Yaw (or y angle) in degrees of self, returns a float.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyVector>
+<tr><td class=doctop colspan=2>Function CopyVector:TVecPtr( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TVector, returns a new Float Ptr vector (like GetVector)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
 <tr><td class=doctop colspan=2>Function Create:TVecPtr( x:Float=0,y:Float=0,z:Float=0 )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVecPtr from three float values, returns a new Float Ptr vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>new_vec=TVecPtr.Create(x,y,z)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVecPtr from three float values, returns a Float Ptr vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Magnitude>
 <tr><td class=doctop colspan=2>Function Magnitude:Float( v0:Float,v1:Float,v2:Float )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Magnitude (or length) of a TVecPtr from three float values, returns a float.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>float=TVecPtr.Magnitude(x,y,z)</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Magnitude (or length) of a vector from three float values, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=NewVecPtr>
 <tr><td class=doctop colspan=2>Function NewVecPtr:TVecPtr()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVecPtr object, returns a new Float Ptr vector.</td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>vec=TVecPtr.NewVecPtr()</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TVecPtr object.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TVector>
@@ -2462,105 +2509,140 @@ Create a new TVecPtr object, returns a new Float Ptr vector.
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector_methods></a>Methods Summary</th></tr>
 <tr><td class=docleft width=1%><a href=#Add>Add</a></td><td class=docright>
-Add a TVector to another TVector, returns a new vector.
+Add self to the given TVector, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Compare>Compare</a></td><td class=docright>
-Compare a TVector with another TVector, returns 1 or -1.
+Compare the given TVector with self, returns 1 or -1.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Copy>Copy</a></td><td class=docright>
-Copy a TVector, returns a new vector.
+Copy self, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Cross>Cross</a></td><td class=docright>
-Cross product of two TVectors, returns a new vector.
+Cross product of self with the given TVector, returns a new vector.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Distance>Distance</a></td><td class=docright>
+Distance between self and the given TVector, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Divide>Divide</a></td><td class=docright>
-Divide a TVector by a float, returns a new vector.
+Divide self by a float, returns a new vector.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Divide2>Divide2</a></td><td class=docright>
+Divide self by the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Dot>Dot</a></td><td class=docright>
-Dot product (or squared length) of two TVectors, returns a new vector.
+Dot product (or squared length) of self with the given TVector.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#GetVecPtr>GetVecPtr</a></td><td class=docright>
+Overwrite self with the given TVecPtr, returns nothing (like CopyVecPtr)
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Length>Length</a></td><td class=docright>
-Length (or magnitude) of a TVector, returns a float.
+Length (or magnitude) of self, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Multiply>Multiply</a></td><td class=docright>
-Multiply a TVector by a float, returns a new vector.
+Multiply self by a float, returns a new vector.
+</td></tr>
+<tr><td class=docleft width=1%><a href=#Multiply2>Multiply2</a></td><td class=docright>
+Multiply self by the given TVecPtr, returns a new vector.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#New>New</a></td><td class=docright>
-Create a new TVector object, returns a new Float vector.
+Returns a new TVector object.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Normalize>Normalize</a></td><td class=docright>
-Normalize a TVector, returns nothing.
+Normalize self, returns nothing.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SetLength>SetLength</a></td><td class=docright>
-Set normalized length of a TVector, returns a float.
+Set normalized length of self, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#SquaredLength>SquaredLength</a></td><td class=docright>
-Squared length of a TVector, returns a float.
+Squared length of self, returns a float.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Subtract>Subtract</a></td><td class=docright>
-Subtract a TVector from another TVector, returns a new vector.
+Subtract the given TVector from self, returns a new vector.
 </td></tr>
 </table>
 <table class=doc width=90% align=center><tr ><th class=doctop colspan=2 align=left><a name=TVector_functions></a>Functions Summary</th></tr>
+<tr><td class=docleft width=1%><a href=#CopyVecPtr>CopyVecPtr</a></td><td class=docright>
+Copy the given TVecPtr, returns a new Float vector (like GetVecPtr)
+</td></tr>
 <tr><td class=docleft width=1%><a href=#Create>Create</a></td><td class=docright>
-Create a new TVector from three float values, returns a new Float vector.
+Create a new TVector from three float values, returns a Float vector.
 </td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Add>
-<tr><td class=doctop colspan=2>Method Add:TVector(vec:TVector)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Add a TVector to another TVector, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Add:TVector( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Add self to the given TVector, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Compare>
 <tr><td class=doctop colspan=2>Method Compare:Int( with:Object )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Compare a TVector with another TVector, returns 1 or -1.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Compare the given TVector with self, returns 1 or -1.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Copy>
 <tr><td class=doctop colspan=2>Method Copy:TVector()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Copy a TVector, returns a new vector.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy self, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Cross>
-<tr><td class=doctop colspan=2>Method Cross:TVector(vec:TVector)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of two TVectors, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Cross:TVector( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Cross product of self with the given TVector, returns a new vector.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Distance>
+<tr><td class=doctop colspan=2>Method Distance:Float( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Distance between self and the given TVector, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Divide>
-<tr><td class=doctop colspan=2>Method Divide:TVector(val#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Divide a TVector by a float, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Divide:TVector( val# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide self by a float, returns a new vector.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Divide2>
+<tr><td class=doctop colspan=2>Method Divide2:TVector( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Divide self by the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Dot>
-<tr><td class=doctop colspan=2>Method Dot:Float(vec:TVector)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of two TVectors, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Dot:Float( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Dot product (or squared length) of self with the given TVector.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=GetVecPtr>
+<tr><td class=doctop colspan=2>Method GetVecPtr:TVector( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Overwrite self with the given TVecPtr, returns nothing (like CopyVecPtr)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Length>
 <tr><td class=doctop colspan=2>Method Length#()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of a TVector, returns a float.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Length (or magnitude) of self, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Multiply>
-<tr><td class=doctop colspan=2>Method Multiply:TVector(val#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply a TVector by a float, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Multiply:TVector( val# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by a float, returns a new vector.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=Multiply2>
+<tr><td class=doctop colspan=2>Method Multiply2:TVector( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Multiply self by the given TVecPtr, returns a new vector.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=New>
 <tr><td class=doctop colspan=2>Method New()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector object, returns a new Float vector.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Returns a new TVector object.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Normalize>
 <tr><td class=doctop colspan=2>Method Normalize()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize a TVector, returns nothing.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Normalize self, returns nothing.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=SetLength>
-<tr><td class=doctop colspan=2>Method SetLength#(val#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Set normalized length of a TVector, returns a float.</td></tr>
+<tr><td class=doctop colspan=2>Method SetLength#( val# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Set normalized length of self, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=SquaredLength>
 <tr><td class=doctop colspan=2>Method SquaredLength#()</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Squared length of a TVector, returns a float.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Squared length of self, returns a float.</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Subtract>
-<tr><td class=doctop colspan=2>Method Subtract:TVector(vec:TVector)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract a TVector from another TVector, returns a new vector.</td></tr>
+<tr><td class=doctop colspan=2>Method Subtract:TVector( vec:TVector )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Subtract the given TVector from self, returns a new vector.</td></tr>
+</table>
+<table class=doc width=100% cellspacing=3 id=CopyVecPtr>
+<tr><td class=doctop colspan=2>Function CopyVecPtr:TVector( vec:TVecPtr )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Copy the given TVecPtr, returns a new Float vector (like GetVecPtr)</td></tr>
 </table>
 <table class=doc width=100% cellspacing=3 id=Create>
-<tr><td class=doctop colspan=2>Function Create:TVector(x#,y#,z#)</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector from three float values, returns a new Float vector.</td></tr>
+<tr><td class=doctop colspan=2>Function Create:TVector( x#,y#,z# )</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Create a new TVector from three float values, returns a Float vector.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TVoxelSprite>

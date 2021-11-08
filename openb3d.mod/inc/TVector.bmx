@@ -10,7 +10,33 @@ Type TVector
 	Const EPSILON:Float=.0001
 	
 	Rem
-	bbdoc: Create a new TVector object, returns a new Float vector
+	bbdoc: Create a new TVector from three float values, returns a Float vector
+	EndRem
+	Function Create:TVector( x#,y#,z# )
+	
+		Local vec:TVector=New TVector
+		vec.x=x
+		vec.y=y
+		vec.z=z
+		Return vec
+		
+	End Function
+	
+	Rem
+	bbdoc: Copy the given TVecPtr, returns a new Float vector (like GetVecPtr)
+	EndRem
+	Function CopyVecPtr:TVector( vec:TVecPtr )
+	
+		Local new_vec:TVector=New TVector
+		new_vec.x=vec.x[0]
+		new_vec.y=vec.y[0]
+		new_vec.z=vec.z[0]
+		Return new_vec
+		
+	End Function
+	
+	Rem
+	bbdoc: Returns a new TVector object
 	EndRem
 	Method New()
 	
@@ -27,23 +53,20 @@ Type TVector
 		EndIf
 	
 	End Method
-
+	
 	Rem
-	bbdoc: Create a new TVector from three float values, returns a new Float vector
+	bbdoc: Overwrite self with the given TVecPtr, returns nothing (like CopyVecPtr)
 	EndRem
-	Function Create:TVector(x#,y#,z#)
+	Method GetVecPtr:TVector( vec:TVecPtr )
 	
-		Local vec:TVector=New TVector
-		vec.x=x
-		vec.y=y
-		vec.z=z
+		x=vec.x[0]
+		y=vec.y[0]
+		z=vec.z[0]
 		
-		Return vec
-		
-	End Function
+	End Method
 	
 	Rem
-	bbdoc: Copy a TVector, returns a new vector
+	bbdoc: Copy self, returns a new vector
 	EndRem
 	Method Copy:TVector()
 	
@@ -58,91 +81,107 @@ Type TVector
 	End Method
 	
 	Rem
-	bbdoc: Add a TVector to another TVector, returns a new vector
+	bbdoc: Add self to the given TVector, returns a new vector
 	EndRem
-	Method Add:TVector(vec:TVector)
+	Method Add:TVector( vec:TVector )
 	
 		Local new_vec:TVector=New TVector
-		
 		new_vec.x=x+vec.x
 		new_vec.y=y+vec.y
 		new_vec.z=z+vec.z
-		
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Subtract a TVector from another TVector, returns a new vector
+	bbdoc: Subtract the given TVector from self, returns a new vector
 	EndRem
-	Method Subtract:TVector(vec:TVector)
+	Method Subtract:TVector( vec:TVector )
 	
 		Local new_vec:TVector=New TVector
-		
 		new_vec.x=x-vec.x
 		new_vec.y=y-vec.y
 		new_vec.z=z-vec.z
-		
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Multiply a TVector by a float, returns a new vector
+	bbdoc: Multiply self by a float, returns a new vector
 	EndRem
-	Method Multiply:TVector(val#)
+	Method Multiply:TVector( val# )
 	
 		Local new_vec:TVector=New TVector
-		
 		new_vec.x=x*val#
 		new_vec.y=y*val#
 		new_vec.z=z*val#
-		
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Divide a TVector by a float, returns a new vector
+	bbdoc: Multiply self by the given TVecPtr, returns a new vector
 	EndRem
-	Method Divide:TVector(val#)
+	Method Multiply2:TVector( vec:TVector )
 	
 		Local new_vec:TVector=New TVector
+		new_vec.x=x*vec.x
+		new_vec.y=y*vec.y
+		new_vec.z=z*vec.z
+		Return new_vec
 		
+	End Method
+	
+	Rem
+	bbdoc: Divide self by a float, returns a new vector
+	EndRem
+	Method Divide:TVector( val# )
+	
+		Local new_vec:TVector=New TVector
 		new_vec.x=x/val#
 		new_vec.y=y/val#
 		new_vec.z=z/val#
-		
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Dot product (or squared length) of two TVectors, returns a new vector
+	bbdoc: Divide self by the given TVecPtr, returns a new vector
 	EndRem
-	Method Dot:Float(vec:TVector)
+	Method Divide2:TVector( vec:TVector )
+	
+		Local new_vec:TVector=New TVector
+		new_vec.x=x/vec.x
+		new_vec.y=y/vec.y
+		new_vec.z=z/vec.z
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Dot product (or squared length) of self with the given TVector
+	EndRem
+	Method Dot:Float( vec:TVector )
 	
 		Return (x#*vec.x#)+(y#*vec.y#)+(z#*vec.z#)
 	
 	End Method
 	
 	Rem
-	bbdoc: Cross product of two TVectors, returns a new vector
+	bbdoc: Cross product of self with the given TVector, returns a new vector
 	EndRem
-	Method Cross:TVector(vec:TVector)
+	Method Cross:TVector( vec:TVector )
 	
 		Local new_vec:TVector=New TVector
-		
 		new_vec.x=(y*vec.z)-(z*vec.y)
 		new_vec.y=(z*vec.x)-(x*vec.z)
 		new_vec.z=(x*vec.y)-(y*vec.x)
-		
 		Return new_vec
 	
 	End Method
 	
 	Rem
-	bbdoc: Normalize a TVector, returns nothing
+	bbdoc: Normalize self, returns nothing
 	EndRem
 	Method Normalize()
 	
@@ -154,7 +193,17 @@ Type TVector
 	End Method
 	
 	Rem
-	bbdoc: Length (or magnitude) of a TVector, returns a float
+	bbdoc: Distance between self and the given TVector, returns a float
+	EndRem
+	Method Distance:Float( vec:TVector )
+	
+		Local dx#=x-vec.x, dy#=y-vec.y, dz#=z-vec.z
+		Return Sqr( dx*dx+dy*dy+dz*dz )
+		
+	End Method
+	
+	Rem
+	bbdoc: Length (or magnitude) of self, returns a float
 	EndRem
 	Method Length#()
 			
@@ -163,7 +212,7 @@ Type TVector
 	End Method
 	
 	Rem
-	bbdoc: Squared length of a TVector, returns a float
+	bbdoc: Squared length of self, returns a float
 	EndRem
 	Method SquaredLength#()
 	
@@ -172,9 +221,9 @@ Type TVector
 	End Method
 	
 	Rem
-	bbdoc: Set normalized length of a TVector, returns a float
+	bbdoc: Set normalized length of self, returns a float
 	EndRem
-	Method SetLength#(val#)
+	Method SetLength#( val# )
 	
 		Normalize()
 		x=x*val
@@ -184,9 +233,10 @@ Type TVector
 	End Method
 	
 	Rem
-	bbdoc: Compare a TVector with another TVector, returns 1 or -1
+	bbdoc: Compare the given TVector with self, returns 1 or -1
 	EndRem
 	Method Compare:Int( with:Object )
+	
 		Local q:TVector=TVector(with)
 		If x-q.x>EPSILON Return 1
 		If q.x-x>EPSILON Return -1
@@ -195,22 +245,21 @@ Type TVector
 		If z-q.z>EPSILON Return 1
 		If q.z-z>EPSILON Return -1
 		Return 0
+		
 	End Method
 
 	' Function by patmaba
-	Function VectorYaw#(vx#,vy#,vz#)
+	Function VectorYaw#( vx#,vy#,vz# )
 
 		Return ATan2(-vx#,vz#)
 	
 	End Function
 
 	' Function by patmaba
-	Function VectorPitch#(vx#,vy#,vz#)
+	Function VectorPitch#( vx#,vy#,vz# )
 
 		Local ang#=ATan2(Sqr(vx#*vx#+vz#*vz#),vy#)-90.0
-
 		If ang#<=0.0001 And ang#>=-0.0001 Then ang#=0
-	
 		Return ang#
 	
 	End Function
@@ -285,8 +334,7 @@ Type TVecPtr
 	End Method
 	
 	Rem
-	bbdoc: Create a new TVecPtr object, returns a new Float Ptr vector
-	about: vec=TVecPtr.NewVecPtr()
+	bbdoc: Returns a new TVecPtr object
 	EndRem
 	Function NewVecPtr:TVecPtr()
 	
@@ -296,8 +344,7 @@ Type TVecPtr
 	End Function
 	
 	Rem
-	bbdoc: Create a new TVecPtr from three float values, returns a new Float Ptr vector
-	about: new_vec=TVecPtr.Create(x,y,z)
+	bbdoc: Create a new TVecPtr from three float values, returns a Float Ptr vector
 	EndRem
 	Function Create:TVecPtr( x:Float=0,y:Float=0,z:Float=0 )
 	
@@ -306,6 +353,20 @@ Type TVecPtr
 		new_vec.x[0]=x
 		new_vec.y[0]=y
 		new_vec.z[0]=z
+		Return new_vec
+		
+	End Function
+	
+	Rem
+	bbdoc: Copy the given TVector, returns a new Float Ptr vector (like GetVector)
+	EndRem
+	Function CopyVector:TVecPtr( vec:TVector )
+	
+		Local inst:Byte Ptr=NewVecPtr_()
+		Local new_vec:TVecPtr=CreateObject(inst)
+		new_vec.x[0]=vec.x
+		new_vec.y[0]=vec.y
+		new_vec.z[0]=vec.z
 		Return new_vec
 		
 	End Function
@@ -328,6 +389,184 @@ Type TVecPtr
 	
 	End Method
 	
+	Rem
+	bbdoc: Overwrite self with the given TVector, returns nothing (like CopyVector)
+	EndRem
+	Method GetVector:TVecPtr( vec:TVector )
+	
+		x[0]=vec.x
+		y[0]=vec.y
+		z[0]=vec.z
+		
+	End Method
+	
+	Rem
+	bbdoc: Magnitude (or length) of a vector from three float values, returns a float
+	EndRem
+	Function Magnitude:Float( v0:Float,v1:Float,v2:Float )
+	
+		Return Sqr(v0*v0 + v1*v1 + v2*v2)
+		
+	End Function
+	
+	' Openb3d
+	
+	Rem
+	bbdoc: Copy self, returns a new vector
+	EndRem
+	Method Copy:TVecPtr()
+	
+		Local inst:Byte Ptr=VecPtrCopy_( GetInstance(Self) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Negate self, returns a new vector
+	EndRem
+	Method Negate:TVecPtr()
+	
+		Local inst:Byte Ptr=VecPtrNegate_( GetInstance(Self) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Add self to the given TVecPtr, returns a new vector
+	EndRem
+	Method Add:TVecPtr( vec:TVecPtr )
+	
+		Local inst:Byte Ptr=VecPtrAdd_( GetInstance(Self),GetInstance(vec) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Subtract the given TVecPtr from self, returns a new vector
+	EndRem
+	Method Subtract:TVecPtr( vec:TVecPtr )
+	
+		Local inst:Byte Ptr=VecPtrSubtract_( GetInstance(Self),GetInstance(vec) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Multiply self by a float, returns a new vector
+	EndRem
+	Method Multiply:TVecPtr( scale:Float )
+	
+		Local inst:Byte Ptr=VecPtrMultiply_( GetInstance(Self),scale )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+	
+	End Method
+	
+	Rem
+	bbdoc: Multiply self by the given TVecPtr, returns a new vector
+	EndRem
+	Method Multiply2:TVecPtr( vec:TVecPtr )
+	
+		Local inst:Byte Ptr=VecPtrMultiply2_( GetInstance(Self),GetInstance(vec) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Divide self by a float, returns a new vector
+	EndRem
+	Method Divide:TVecPtr( scale:Float )
+	
+		Local inst:Byte Ptr=VecPtrDivide_( GetInstance(Self),scale )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Divide self by the given TVecPtr, returns a new vector
+	EndRem
+	Method Divide2:TVecPtr( vec:TVecPtr )
+	
+		Local inst:Byte Ptr=VecPtrDivide2_( GetInstance(Self),GetInstance(vec) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Dot product (or squared length) of self with the given TVecPtr, returns a float
+	EndRem
+	Method Dot:Float( vec:TVecPtr )
+	
+		Return VecPtrDot_( GetInstance(Self),GetInstance(vec) )
+	
+	End Method
+	
+	Rem
+	bbdoc: Cross product of self with the given TVecPtr, returns a new vector
+	EndRem
+	Method Cross:TVecPtr( vec:TVecPtr )
+	
+		Local inst:Byte Ptr=VecPtrCross_( GetInstance(Self),GetInstance(vec) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Length (or magnitude) of self, returns a float
+	EndRem
+	Method Length:Float()
+		
+		Return VecPtrLength_( GetInstance(Self) )
+
+	End Method
+	
+	Rem
+	bbdoc: Distance between self and the given TVecPtr, returns a float
+	EndRem
+	Method Distance:Float( vec:TVecPtr )
+	
+		Return VecPtrDistance_( GetInstance(Self),GetInstance(vec) )
+		
+	End Method
+	
+	Rem
+	bbdoc: Normalize self, returns a new vector
+	EndRem
+	Method Normalized:TVecPtr()
+	
+		Local inst:Byte Ptr=VecPtrNormalized_( GetInstance(Self) )
+		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
+		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
+		Return new_vec
+		
+	End Method
+	
+	Rem
+	bbdoc: Normalize self, returns nothing
+	EndRem
+	Method Normalize()
+	
+		VecPtrNormalize_( GetInstance(Self) )
+		
+	End Method
+	
 	' float=TVecPtr.VectorYaw(x,y,z)
 	Function VectorYaw:Float( vx:Float,vy:Float,vz:Float ) ' by Patmaba, same as Yaw()
 	
@@ -345,190 +584,7 @@ Type TVecPtr
 	End Function
 	
 	Rem
-	bbdoc: Magnitude (or length) of a TVecPtr from three float values, returns a float
-	about: float=TVecPtr.Magnitude(x,y,z)
-	EndRem
-	Function Magnitude:Float( v0:Float,v1:Float,v2:Float )
-	
-		Return Sqr(v0*v0 + v1*v1 + v2*v2)
-		
-	End Function
-	
-	' Openb3d
-	
-	Rem
-	bbdoc: Copy a TVecPtr, returns a new vector
-	about: new_vec=vec.Copy()
-	EndRem
-	Method Copy:TVecPtr()
-	
-		Local inst:Byte Ptr=VecPtrCopy_( GetInstance(Self) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Negate a TVecPtr, returns a new vector
-	about: new_vec=vec.Negate(vec2)
-	EndRem
-	Method Negate:TVecPtr()
-	
-		Local inst:Byte Ptr=VecPtrNegate_( GetInstance(Self) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Add a TVecPtr to another TVecPtr, returns a new vector
-	about: new_vec=vec.Add(vec2)
-	EndRem
-	Method Add:TVecPtr( vec2:TVecPtr )
-	
-		Local inst:Byte Ptr=VecPtrAdd_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Subtract a TVecPtr from another TVecPtr, returns a new vector
-	about: new_vec=vec.Subtract(vec2)
-	EndRem
-	Method Subtract:TVecPtr( vec2:TVecPtr )
-	
-		Local inst:Byte Ptr=VecPtrSubtract_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Multiply a TVecPtr by a float, returns a new vector
-	about: new_vec=vec.Multiply(scale)
-	EndRem
-	Method Multiply:TVecPtr( scale:Float )
-	
-		Local inst:Byte Ptr=VecPtrMultiply_( GetInstance(Self),scale )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-	
-	End Method
-	
-	Rem
-	bbdoc: Multiply a TVecPtr by another TVecPtr, returns a new vector
-	about: new_vec=vec.Multiply2(vec2)
-	EndRem
-	Method Multiply2:TVecPtr( vec2:TVecPtr )
-	
-		Local inst:Byte Ptr=VecPtrMultiply2_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Divide a TVecPtr by a float, returns a new vector
-	about: new_vec=vec.Divide(scale)
-	EndRem
-	Method Divide:TVecPtr( scale:Float )
-	
-		Local inst:Byte Ptr=VecPtrDivide_( GetInstance(Self),scale )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Divide a TVecPtr by another TVecPtr, returns a new vector
-	about: new_vec=vec.Divide2(vec2)
-	EndRem
-	Method Divide2:TVecPtr( vec2:TVecPtr )
-	
-		Local inst:Byte Ptr=VecPtrDivide2_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Dot product (or squared length) of two TVecPtrs, returns a new vector
-	about: float=vec.Dot(vec2)
-	EndRem
-	Method Dot:Float( vec2:TVecPtr )
-	
-		Return VecPtrDot_( GetInstance(Self),GetInstance(vec2) )
-	
-	End Method
-	
-	Rem
-	bbdoc: Cross product of two TVecPtrs, returns a new vector
-	about: new_vec=vec.Cross(vec2)
-	EndRem
-	Method Cross:TVecPtr( vec2:TVecPtr )
-	
-		Local inst:Byte Ptr=VecPtrCross_( GetInstance(Self),GetInstance(vec2) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Length (or magnitude) of a TVecPtr, returns a float
-	about: float=vec.Length()
-	EndRem
-	Method Length:Float()
-		
-		Return VecPtrLength_( GetInstance(Self) )
-
-	End Method
-	
-	Rem
-	bbdoc: Distance between two TVecPtrs, returns a float
-	about: float=vec.Distance(vec2)
-	EndRem
-	Method Distance:Float( vec2:TVecPtr )
-			
-		Return VecPtrDistance_( GetInstance(Self),GetInstance(vec2) )
-
-	End Method
-	
-	Rem
-	bbdoc: Normalize a TVecPtr, returns a new vector
-	about: new_vec=vec.Normalized()
-	EndRem
-	Method Normalized:TVecPtr()
-	
-		Local inst:Byte Ptr=VecPtrNormalized_( GetInstance(Self) )
-		Local new_vec:TVecPtr=TVecPtr.GetObject(inst)
-		If new_vec=Null And inst<>Null Then new_vec=TVecPtr.CreateObject(inst)
-		Return new_vec
-		
-	End Method
-	
-	Rem
-	bbdoc: Normalize a TVecPtr, returns nothing
-	about: vec.Normalize()
-	EndRem
-	Method Normalize()
-	
-		VecPtrNormalize_( GetInstance(Self) )
-		
-	End Method
-	
-	Rem
-	bbdoc: Yaw (or y angle) in degrees of a vector, returns a float
-	about: float=vec.Yaw()
+	bbdoc: Yaw (or y angle) in degrees of self, returns a float
 	EndRem
 	Method Yaw:Float()
 
@@ -537,8 +593,7 @@ Type TVecPtr
 	End Method
 	
 	Rem
-	bbdoc: Pitch (or x angle) in degrees of a vector, returns a float
-	about: float=vec.Pitch()
+	bbdoc: Pitch (or x angle) in degrees of self, returns a float
 	EndRem
 	Method Pitch:Float()
 	
@@ -547,8 +602,7 @@ Type TVecPtr
 	End Method
 	
 	Rem
-	bbdoc: Clear a TVecPtrs values, returns nothing
-	about: vec.Clear()
+	bbdoc: Clear (zero) vector values, returns nothing
 	EndRem
 	Method Clear()
 	

@@ -8,7 +8,7 @@ Type TMatrix
 	Field grid#[4,4]
 	
 	Rem
-	bbdoc: Create a new TMatrix object, returns a new 4x4 Float matrix
+	bbdoc: Returns a new TMatrix object
 	EndRem
 	Method New()
 	
@@ -27,7 +27,86 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Convert into identity matrix
+	bbdoc: Copy the given TMatPtr, returns a new Float matrix (like GetMatPtr)
+	EndRem
+	Function CopyMatPtr:TMatrix( mat:TMatPtr )
+	
+		Local new_mat:TMatrix=New TMatrix
+		new_mat.grid[0,0]=mat.grid[(4*0)+0]
+		new_mat.grid[1,0]=mat.grid[(4*1)+0]
+		new_mat.grid[2,0]=mat.grid[(4*2)+0]
+		new_mat.grid[3,0]=mat.grid[(4*3)+0]
+		new_mat.grid[0,1]=mat.grid[(4*0)+1]
+		new_mat.grid[1,1]=mat.grid[(4*1)+1]
+		new_mat.grid[2,1]=mat.grid[(4*2)+1]
+		new_mat.grid[3,1]=mat.grid[(4*3)+1]
+		new_mat.grid[0,2]=mat.grid[(4*0)+2]
+		new_mat.grid[1,2]=mat.grid[(4*1)+2]
+		new_mat.grid[2,2]=mat.grid[(4*2)+2]
+		new_mat.grid[3,2]=mat.grid[(4*3)+2]
+		' do not remove
+		new_mat.grid[0,3]=mat.grid[(4*0)+3]
+		new_mat.grid[1,3]=mat.grid[(4*1)+3]
+		new_mat.grid[2,3]=mat.grid[(4*2)+3]
+		new_mat.grid[3,3]=mat.grid[(4*3)+3]
+		Return new_mat
+		
+	End Function
+	
+	Rem
+	bbdoc: Overwrite self with the given TMatPtr, returns nothing (like CopyMatPtr)
+	EndRem
+	Method GetMatPtr:TMatrix( mat:TMatPtr )
+	
+		grid[0,0]=mat.grid[(4*0)+0]
+		grid[1,0]=mat.grid[(4*1)+0]
+		grid[2,0]=mat.grid[(4*2)+0]
+		grid[3,0]=mat.grid[(4*3)+0]
+		grid[0,1]=mat.grid[(4*0)+1]
+		grid[1,1]=mat.grid[(4*1)+1]
+		grid[2,1]=mat.grid[(4*2)+1]
+		grid[3,1]=mat.grid[(4*3)+1]
+		grid[0,2]=mat.grid[(4*0)+2]
+		grid[1,2]=mat.grid[(4*1)+2]
+		grid[2,2]=mat.grid[(4*2)+2]
+		grid[3,2]=mat.grid[(4*3)+2]
+		' do not remove
+		grid[0,3]=mat.grid[(4*0)+3]
+		grid[1,3]=mat.grid[(4*1)+3]
+		grid[2,3]=mat.grid[(4*2)+3]
+		grid[3,3]=mat.grid[(4*3)+3]
+		
+	End Method
+	
+	Rem
+	bbdoc: Set matrix identity
+	EndRem
+	Method SetIdentity( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
+	
+		grid[0,0] = xx
+		grid[0,1] = xy
+		grid[0,2] = xz
+		grid[0,3] = 0
+		
+		grid[1,0] = yx
+		grid[1,1] = yy
+		grid[1,2] = yz
+		grid[1,3] = 0
+		
+		grid[2,0] = zx
+		grid[2,1] = zy
+		grid[2,2] = zz
+		grid[2,3] = 0
+		
+		grid[3,0] = 0
+		grid[3,1] = 0
+		grid[3,2] = 0
+		grid[3,3] = 1
+		
+	End Method
+	
+	Rem
+	bbdoc: Set self as identity matrix
 	EndRem
 	Method LoadIdentity()
 	
@@ -52,12 +131,11 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Create new copy and returns it
+	bbdoc: Copy self, returns a new matrix
 	EndRem
 	Method Copy:TMatrix()
 	
 		Local mat:TMatrix=New TMatrix
-	
 		mat.grid[0,0]=grid[0,0]
 		mat.grid[1,0]=grid[1,0]
 		mat.grid[2,0]=grid[2,0]
@@ -70,21 +148,19 @@ Type TMatrix
 		mat.grid[1,2]=grid[1,2]
 		mat.grid[2,2]=grid[2,2]
 		mat.grid[3,2]=grid[3,2]
-		
 		' do not remove
 		mat.grid[0,3]=grid[0,3]
 		mat.grid[1,3]=grid[1,3]
 		mat.grid[2,3]=grid[2,3]
 		mat.grid[3,3]=grid[3,3]
-		
 		Return mat
 	
 	End Method
 	
 	Rem
-	bbdoc: Overwrites self with matrix passed as parameter
+	bbdoc: Overwrite self with the given TMatrix
 	EndRem
-	Method Overwrite(mat:TMatrix)
+	Method Overwrite( mat:TMatrix )
 	
 		grid[0,0]=mat.grid[0,0]
 		grid[1,0]=mat.grid[1,0]
@@ -107,18 +183,16 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Returns the inverse of a matrix
+	bbdoc: Get inverse of self, returns a new matrix
 	EndRem
 	Method Inverse:TMatrix()
 
 		Local mat:TMatrix=New TMatrix
-	
 		Local tx#=0
 		Local ty#=0
 		Local tz#=0
-	
-	  	' The rotational part of the matrix is simply the transpose of the
-	  	' original matrix.
+		
+	  	' The rotational part of the matrix is simply the transpose of the original matrix.
 	  	mat.grid[0,0] = grid[0,0]
 	  	mat.grid[1,0] = grid[0,1]
 	  	mat.grid[2,0] = grid[0,2]
@@ -155,9 +229,9 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Multiply matrix with the given matrix
+	bbdoc: Multiply self by the given matrix
 	EndRem
-	Method Multiply(mat:TMatrix)
+	Method Multiply( mat:TMatrix )
 	
 		Local m00# = grid#[0,0]*mat.grid#[0,0] + grid#[1,0]*mat.grid#[0,1] + grid#[2,0]*mat.grid#[0,2] + grid#[3,0]*mat.grid#[0,3]
 		Local m01# = grid#[0,1]*mat.grid#[0,0] + grid#[1,1]*mat.grid#[0,1] + grid#[2,1]*mat.grid#[0,2] + grid#[3,1]*mat.grid#[0,3]
@@ -196,9 +270,9 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Translate (move) matrix
+	bbdoc: Translate (move) self
 	EndRem
-	Method Translate(x#,y#,z#)
+	Method Translate( x#,y#,z# )
 	
 		grid[3,0] = grid#[0,0]*x# + grid#[1,0]*y# + grid#[2,0]*z# + grid#[3,0]
 		grid[3,1] = grid#[0,1]*x# + grid#[1,1]*y# + grid#[2,1]*z# + grid#[3,1]
@@ -207,18 +281,18 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Scale matrix (set the diagonal elements to x, y, z)
+	bbdoc: Scale self (set the diagonal elements to x, y, z)
 	EndRem
-	Method Scale(x#,y#,z#)
+	Method Scale( x#,y#,z# )
 	
 		grid[0,0] = grid#[0,0]*x#
 		grid[0,1] = grid#[0,1]*x#
 		grid[0,2] = grid#[0,2]*x#
-
+		
 		grid[1,0] = grid#[1,0]*y#
 		grid[1,1] = grid#[1,1]*y#
 		grid[1,2] = grid#[1,2]*y#
-
+		
 		grid[2,0] = grid#[2,0]*z#
 		grid[2,1] = grid#[2,1]*z#
 		grid[2,2] = grid#[2,2]*z# 
@@ -226,14 +300,13 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix (Euler degrees)
+	bbdoc: Rotate self by yaw, pitch and roll (Euler degrees)
 	EndRem
-	Method Rotate(rx#,ry#,rz#)
+	Method Rotate( rx#,ry#,rz# )
 	
 		Local cos_ang#,sin_ang#
 	
 		' yaw
-	
 		cos_ang#=Cos(ry#)
 		sin_ang#=Sin(ry#)
 	
@@ -250,7 +323,6 @@ Type TMatrix
 		grid[0,2]=m02#
 		
 		' pitch
-		
 		cos_ang#=Cos(rx#)
 		sin_ang#=Sin(rx#)
 	
@@ -267,7 +339,6 @@ Type TMatrix
 		grid[1,2]=m12
 		
 		' roll
-		
 		cos_ang#=Cos(rz#)
 		sin_ang#=Sin(rz#)
 
@@ -286,9 +357,9 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the x axis (Euler degrees)
+	bbdoc: Rotate self about the x axis (Euler degrees)
 	EndRem
-	Method RotatePitch(ang#)
+	Method RotatePitch( ang# )
 	
 		Local cos_ang#=Cos(ang#)
 		Local sin_ang#=Sin(ang#)
@@ -308,9 +379,9 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the y axis (Euler degrees)
+	bbdoc: Rotate self about the y axis (Euler degrees)
 	EndRem
-	Method RotateYaw(ang#)
+	Method RotateYaw( ang# )
 	
 		Local cos_ang#=Cos(ang#)
 		Local sin_ang#=Sin(ang#)
@@ -330,9 +401,9 @@ Type TMatrix
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the z axis (Euler degrees)
+	bbdoc: Rotate self about the z axis (Euler degrees)
 	EndRem
-	Method RotateRoll(ang#)
+	Method RotateRoll( ang# )
 	
 		Local cos_ang#=Cos(ang#)
 		Local sin_ang#=Sin(ang#)
@@ -440,7 +511,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Create a new TMatPtr object, returns a new Float Ptr matrix
+	bbdoc: Returns a new TMatPtr object
 	EndRem
 	Function NewMatPtr:TMatPtr()
 	
@@ -450,7 +521,7 @@ Type TMatPtr
 	End Function
 	
 	Rem
-	bbdoc: Create a new TMatPtr object, returns a new Float Ptr matrix
+	bbdoc: Creates a new TMatPtr object, returns a Float Ptr matrix
 	EndRem
 	Function Create:TMatPtr()
 	
@@ -459,10 +530,127 @@ Type TMatPtr
 		
 	End Function
 	
+	Rem
+	bbdoc: Copy the given TMatrix, returns a new Float Ptr matrix (like GetMatrix)
+	EndRem
+	Function CopyMatrix:TMatPtr( mat:TMatrix )
+	
+		Local inst:Byte Ptr=NewMatPtr_()
+		Local new_mat:TMatPtr=CreateObject(inst)
+		new_mat.grid[(4*0)+0]=mat.grid[0,0]
+		new_mat.grid[(4*1)+0]=mat.grid[1,0]
+		new_mat.grid[(4*2)+0]=mat.grid[2,0]
+		new_mat.grid[(4*3)+0]=mat.grid[3,0]
+		new_mat.grid[(4*0)+1]=mat.grid[0,1]
+		new_mat.grid[(4*1)+1]=mat.grid[1,1]
+		new_mat.grid[(4*2)+1]=mat.grid[2,1]
+		new_mat.grid[(4*3)+1]=mat.grid[3,1]
+		new_mat.grid[(4*0)+2]=mat.grid[0,2]
+		new_mat.grid[(4*1)+2]=mat.grid[1,2]
+		new_mat.grid[(4*2)+2]=mat.grid[2,2]
+		new_mat.grid[(4*3)+2]=mat.grid[3,2]
+		' do not remove
+		new_mat.grid[(4*0)+3]=mat.grid[0,3]
+		new_mat.grid[(4*1)+3]=mat.grid[1,3]
+		new_mat.grid[(4*2)+3]=mat.grid[2,3]
+		new_mat.grid[(4*3)+3]=mat.grid[3,3]
+		Return new_mat
+		
+	End Function
+	
+	' Minib3d
+	
+	Method New()
+	
+		If TGlobal3D.Log_New
+			DebugLog " New TMatPtr"
+		EndIf
+		
+	End Method
+	
+	Method Delete()
+	
+		If TGlobal3D.Log_Del
+			DebugLog " Del TMatPtr"
+		EndIf
+
+	End Method
+	
+	Rem
+	bbdoc: Overwrite self with the given TMatrix, returns nothing (like CopyMatrix)
+	EndRem
+	Method GetMatrix:TMatPtr( mat:TMatrix )
+	
+		grid[(4*0)+0]=mat.grid[0,0]
+		grid[(4*1)+0]=mat.grid[1,0]
+		grid[(4*2)+0]=mat.grid[2,0]
+		grid[(4*3)+0]=mat.grid[3,0]
+		grid[(4*0)+1]=mat.grid[0,1]
+		grid[(4*1)+1]=mat.grid[1,1]
+		grid[(4*2)+1]=mat.grid[2,1]
+		grid[(4*3)+1]=mat.grid[3,1]
+		grid[(4*0)+2]=mat.grid[0,2]
+		grid[(4*1)+2]=mat.grid[1,2]
+		grid[(4*2)+2]=mat.grid[2,2]
+		grid[(4*3)+2]=mat.grid[3,2]
+		' do not remove
+		grid[(4*0)+3]=mat.grid[0,3]
+		grid[(4*1)+3]=mat.grid[1,3]
+		grid[(4*2)+3]=mat.grid[2,3]
+		grid[(4*3)+3]=mat.grid[3,3]
+		
+	End Method
+	
+	Rem
+	bbdoc: Copy self, returns a new matrix
+	EndRem
+	Method Copy:TMatPtr()
+	
+		Local inst:Byte Ptr=MatrixCopy_( GetInstance(Self) )
+		Return CreateObject(inst)
+		
+	End Method
+	
+	Rem
+	bbdoc: Overwrite self with the given TMatPtr
+	EndRem
+	Method Overwrite( mat:TMatPtr )
+	
+		MatrixOverwrite_( GetInstance(Self),GetInstance(mat) )
+		
+	End Method
+	
+	Rem
+	bbdoc: Get inverse of the given TMatPtr and overwrite it, returns nothing
+	EndRem
+	Method GetInverse( mat:TMatPtr )
+	
+		MatrixGetInverse_( GetInstance(Self),GetInstance(mat) )	
+		
+	End Method
+	
+	Rem
+	bbdoc: Get inverse of the given TMatPtr and overwrite it, returns nothing (used in collision2.cpp)
+	EndRem
+	Method GetInverse2( mat:TMatPtr )
+	
+		MatrixGetInverse2_( GetInstance(Self),GetInstance(mat) )
+		
+	End Method
+	
+	Rem
+	bbdoc: Set self as identity matrix
+	EndRem
+	Method LoadIdentity()
+	
+		MatrixLoadIdentity_( GetInstance(Self) )
+		
+	End Method
+	
 	' Extra
 	
 	Rem
-	bbdoc: Set matrix identity (3x3 Float)
+	bbdoc: Set matrix identity
 	EndRem
 	Method SetIdentity( xx#,xy#,xz#,yx#,yy#,yz#,zx#,zy#,zz# )
 	
@@ -491,7 +679,7 @@ Type TMatPtr
 	' Warner
 	
 	Rem
-	bbdoc: Get scale (magnitude) of a matrix, returns a new vector
+	bbdoc: Get scale (magnitude) of self, returns a new vector
 	EndRem
 	Method GetMatrixScale:TVecPtr()
 	
@@ -505,107 +693,8 @@ Type TMatPtr
 	
 	' Minib3d
 	
-	Method New()
-	
-		If TGlobal3D.Log_New
-			DebugLog " New TMatPtr"
-		EndIf
-		
-	End Method
-	
-	Method Delete()
-	
-		If TGlobal3D.Log_Del
-			DebugLog " Del TMatPtr"
-		EndIf
-
-	End Method
-	
 	Rem
-	bbdoc: Convert into identity matrix
-	EndRem
-	Method LoadIdentity()
-	
-		MatrixLoadIdentity_( GetInstance(Self) )
-		
-	End Method
-	
-	Rem
-	bbdoc: Create new copy and returns it
-	EndRem
-	Method Copy:TMatPtr()
-	
-		Local inst:Byte Ptr=MatrixCopy_( GetInstance(Self) )
-		Return CreateObject(inst)
-		
-	End Method
-	
-	Rem
-	bbdoc: Overwrites self with matrix passed as parameter
-	EndRem
-	Method Overwrite( mat:TMatPtr )
-	
-		MatrixOverwrite_( GetInstance(Self),GetInstance(mat) )
-		
-	End Method
-	
-	
-	Rem
-	bbdoc: Returns an inverse transformation
-	EndRem
-	Method GetInverse:TMatPtr( mat:TMatPtr )
-	
-		Local inst:Byte Ptr=MatrixGetInverse_( GetInstance(Self),GetInstance(mat) )	
-		Return GetObject(inst) ' no CreateObject
-		
-	End Method
-	
-	' from minib3d
-	
-	Rem
-	bbdoc: Returns the inverse of a matrix
-	EndRem
-	Method Inverse:TMatPtr()
-	
-		Local mat:TMatPtr=Create()
-		Local tx#=0, ty#=0, tz#=0
-		
-	  	' The rotational part of the matrix is simply the transpose of the original matrix.
-	  	mat.grid[(4*0)+0] = grid[(4*0)+0]
-	  	mat.grid[(4*1)+0] = grid[(4*0)+1]
-	  	mat.grid[(4*2)+0] = grid[(4*0)+2]
-		mat.grid[(4*0)+1] = grid[(4*1)+0]
-		mat.grid[(4*1)+1] = grid[(4*1)+1]
-		mat.grid[(4*2)+1] = grid[(4*1)+2]
-		mat.grid[(4*0)+2] = grid[(4*2)+0]
-		mat.grid[(4*1)+2] = grid[(4*2)+1]
-		mat.grid[(4*2)+2] = grid[(4*2)+2]
-		
-		' The right column vector of the matrix should always be [ 0 0 0 1 ]
-		' in most cases. . . you don't need this column at all because it'll 
-		' never be used in the program, but since this code is used with GL
-		' and it does consider this column, it is here.
-		mat.grid[(4*0)+3] = 0 
-		mat.grid[(4*1)+3] = 0
-		mat.grid[(4*2)+3] = 0
-		mat.grid[(4*3)+3] = 1
-		
-		' The translation components of the original matrix.
-		tx = grid[(4*3)+0]
-		ty = grid[(4*3)+1]
-		tz = grid[(4*3)+2]
-		
-		' Result = -(Tm * Rm) To get the translation part of the inverse
-		mat.grid[(4*3)+0] = -( (grid[(4*0)+0] * tx) + (grid[(4*0)+1] * ty) + (grid[(4*0)+2] * tz) )
-		mat.grid[(4*3)+1] = -( (grid[(4*1)+0] * tx) + (grid[(4*1)+1] * ty) + (grid[(4*1)+2] * tz) )
-		mat.grid[(4*3)+2] = -( (grid[(4*2)+0] * tx) + (grid[(4*2)+1] * ty) + (grid[(4*2)+2] * tz) )
-		
-		Return mat
-		
-	End Method
-	
-	Rem
-	bbdoc: Multiply matrix with the given matrix
+	bbdoc: Multiply self by the given matrix
 	EndRem
 	Method Multiply( mat:TMatPtr )
 	
@@ -614,7 +703,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Translate (move) matrix
+	bbdoc: Translate (move) self by the given vector
 	EndRem
 	Method Translate( x:Float,y:Float,z:Float )
 	
@@ -623,7 +712,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Scale matrix (set the diagonal elements to x, y, z)
+	bbdoc: Scale self (set the diagonal elements to x, y, z)
 	EndRem
 	Method Scale( x:Float,y:Float,z:Float )
 	
@@ -632,7 +721,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix (Euler degrees)
+	bbdoc: Rotate self by pitch, yaw, roll (Euler degrees)
 	EndRem
 	Method Rotate( rx:Float,ry:Float,rz:Float )
 	
@@ -641,7 +730,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the x axis (Euler degrees)
+	bbdoc: Rotate self about the x axis (Euler degrees)
 	EndRem
 	Method RotatePitch( ang:Float )
 	
@@ -650,7 +739,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the y axis (Euler degrees)
+	bbdoc: Rotate self about the y axis (Euler degrees)
 	EndRem
 	Method RotateYaw( ang:Float )
 	
@@ -659,7 +748,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Rotate matrix about the z axis (Euler degrees)
+	bbdoc: Rotate self about the z axis (Euler degrees)
 	EndRem
 	Method RotateRoll( ang:Float )
 	
@@ -670,7 +759,7 @@ Type TMatPtr
 	' Openb3d
 	
 	Rem
-	bbdoc: Converts a quaternion to a rotation matrix
+	bbdoc: Convert self to a rotation matrix from a quaternion
 	EndRem
 	Method FromQuaternion( x:Float,y:Float,z:Float,w:Float )
 	
@@ -679,7 +768,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Transforms the given vector by this matrix
+	bbdoc: Transform the given vector by self
 	EndRem
 	Method TransformVec( rx:Float Var,ry:Float Var,rz:Float Var,addTranslation:Int=0 )
 	
@@ -688,7 +777,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Transpose matrix
+	bbdoc: Transpose self
 	EndRem
 	Method Transpose()
 	
@@ -697,7 +786,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Set the matrix to translate
+	bbdoc: Set translate vector for self
 	EndRem
 	Method SetTranslate( x:Float,y:Float,z:Float )
 	
@@ -706,7 +795,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Multiply matrix with the given matrix
+	bbdoc: Multiply self by the given matrix (same as Multiply)
 	EndRem
 	Method Multiply2( mat:TMatPtr )
 	
@@ -715,16 +804,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Inverse transformation on the given matrix
-	EndRem
-	Method GetInverse2( mat:TMatPtr )
-	
-		MatrixGetInverse2_( GetInstance(Self),GetInstance(mat) )
-		
-	End Method
-	
-	Rem
-	bbdoc: Returns x rotation of matrix
+	bbdoc: Returns pitch of self
 	EndRem
 	Method GetPitch:Float()
 	
@@ -733,7 +813,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Returns y rotation of matrix
+	bbdoc: Returns yaw of self
 	EndRem
 	Method GetYaw:Float()
 	
@@ -742,16 +822,16 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Returns z rotation of matrix
+	bbdoc: Returns roll of self
 	EndRem
 	Method GetRoll:Float()
 	
 		Return MatrixGetRoll_( GetInstance(Self) )
 		
 	End Method
-		
+	
 	Rem
-	bbdoc: Creates a transformation matrix that rotates a vector to another
+	bbdoc: Transformation self to a rotation matrix from two given vectors
 	EndRem
 	Method FromToRotation( ix:Float,iy:Float,iz:Float,jx:Float,jy:Float,jz:Float )
 	
@@ -760,7 +840,7 @@ Type TMatPtr
 	End Method
 	
 	Rem
-	bbdoc: Convert matrix to quaternion
+	bbdoc: Convert self to the given quaternion
 	EndRem
 	Method ToQuat( qx:Float Var,qy:Float Var,qz:Float Var,qw:Float Var )
 	
@@ -770,7 +850,7 @@ Type TMatPtr
 	
 	
 	Rem
-	bbdoc: Return magnitude (length) of vector
+	bbdoc: Return magnitude (length) of the given vector, returns a float
 	EndRem
 	Function Magnitude:Float( x:Float,y:Float,z:Float )
 	
@@ -779,7 +859,7 @@ Type TMatPtr
 	End Function
 	
 	Rem
-	bbdoc: Creates a quaternion from an angle and an axis
+	bbdoc: Create a quaternion from an angle and an axis, sets the given quaternion
 	EndRem
 	Function Quaternion_FromAngleAxis( angle:Float,ax:Float,ay:Float,az:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
 	
@@ -788,7 +868,7 @@ Type TMatPtr
 	End Function
 	
 	Rem
-	bbdoc: Multiplies a quaternion
+	bbdoc: Multiply two quaternions, sets the given quaternion
 	EndRem
 	Function Quaternion_MultiplyQuat( x1:Float,y1:Float,z1:Float,w1:Float,x2:Float,y2:Float,z2:Float,w2:Float,rx:Float Var,ry:Float Var,rz:Float Var,rw:Float Var )
 	
@@ -797,7 +877,7 @@ Type TMatPtr
 	End Function
 	
 	Rem
-	bbdoc: Interpolates two matrices at a relative value - called in AlignToVector
+	bbdoc: Interpolate two TMatPtrs by a relative value (used in AlignToVector)
 	EndRem
 	Function InterpolateMatrix( m:TMatPtr,a:TMatPtr,alpha:Float )
 	

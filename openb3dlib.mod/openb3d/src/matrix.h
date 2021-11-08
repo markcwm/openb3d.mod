@@ -108,8 +108,7 @@ public:
 		float ty=0;
 		float tz=0;
 
-	  	// the rotational part of the matrix is simply the transpose of the
-	  	// original matrix.
+	  	// the rotational part of the matrix is simply the transpose of the original matrix.
 	  	mat.grid[0][0] = grid[0][0];
 	  	mat.grid[1][0] = grid[0][1];
 	  	mat.grid[2][0] = grid[0][2];
@@ -140,10 +139,48 @@ public:
 		mat.grid[3][0] = -( (grid[0][0] * tx) + (grid[0][1] * ty) + (grid[0][2] * tz) );
 		mat.grid[3][1] = -( (grid[1][0] * tx) + (grid[1][1] * ty) + (grid[1][2] * tz) );
 		mat.grid[3][2] = -( (grid[2][0] * tx) + (grid[2][1] * ty) + (grid[2][2] * tz) );
-
-
+		
 	}
+	
+	// GetInverse used in collision2.cpp
+	void GetInverse2(Matrix &mat){
+		
+		float det=grid[0][0] * (grid[1][1] * grid[2][2] - grid[2][1] * grid[1][2])
+						- grid[0][1] * (grid[1][0] * grid[2][2] - grid[1][2] * grid[2][0])
+						+ grid[0][2] * (grid[1][0] * grid[2][1] - grid[1][1] * grid[2][0]);
 
+		float m00 = grid[1][1]*grid[2][2] - grid[2][1]*grid[1][2];
+		float m01 = grid[0][2]*grid[2][1] - grid[0][1]*grid[2][2];
+		float m02 = grid[0][1]*grid[1][2] - grid[0][2]*grid[1][1];
+
+		float m10 = grid[1][2]*grid[2][0] - grid[1][0]*grid[2][2];
+		float m11 = grid[0][0]*grid[2][2] - grid[0][2]*grid[2][0];
+		float m12 = grid[1][0]*grid[0][2] - grid[0][0]*grid[1][2];
+
+		float m20 = grid[1][0]*grid[2][1] - grid[2][0]*grid[1][1];
+		float m21 = grid[2][0]*grid[0][1] - grid[0][0]*grid[2][1];
+		float m22 = grid[0][0]*grid[1][1] - grid[1][0]*grid[0][1];
+
+		mat.grid[0][0]=m00/det;
+		mat.grid[0][1]=m01/det;
+		mat.grid[0][2]=m02/det;
+
+		mat.grid[1][0]=m10/det;
+		mat.grid[1][1]=m11/det;
+		mat.grid[1][2]=m12/det;
+
+		mat.grid[2][0]=m20/det;
+		mat.grid[2][1]=m21/det;
+		mat.grid[2][2]=m22/det;
+		//grid[2][3]=m23;
+		 
+		/*grid[3][0]=m30;
+		grid[3][1]=m31;
+		grid[3][2]=m32;
+		grid[3][3]=m33;*/
+		
+	}
+	
 	void Multiply(Matrix &mat){
 
 		float m00 = grid[0][0]*mat.grid[0][0] + grid[1][0]*mat.grid[0][1] + grid[2][0]*mat.grid[0][2] + grid[3][0]*mat.grid[0][3];
@@ -448,42 +485,6 @@ public:
 		grid[3][3]=m33;
 
 	}
-
-	void GetInverse2(Matrix &mat){
-		float det=grid[0][0]*(grid[1][1]*grid[2][2]-grid[2][1]*grid[1][2])
-                        - grid[0][1]*(grid[1][0]*grid[2][2]-grid[1][2]*grid[2][0])
-                        + grid[0][2]*(grid[1][0]*grid[2][1]-grid[1][1]*grid[2][0]);
-
-		float m00 = grid[1][1]*grid[2][2] - grid[2][1]*grid[1][2];
-		float m01 = grid[0][2]*grid[2][1] - grid[0][1]*grid[2][2];
-		float m02 = grid[0][1]*grid[1][2] - grid[0][2]*grid[1][1];
-
-		float m10 = grid[1][2]*grid[2][0] - grid[1][0]*grid[2][2];
-		float m11 = grid[0][0]*grid[2][2] - grid[0][2]*grid[2][0];
-		float m12 = grid[1][0]*grid[0][2] - grid[0][0]*grid[1][2];
-
-		float m20 = grid[1][0]*grid[2][1] - grid[2][0]*grid[1][1];
-		float m21 = grid[2][0]*grid[0][1] - grid[0][0]*grid[2][1];
-		float m22 = grid[0][0]*grid[1][1] - grid[1][0]*grid[0][1];
-
-		mat.grid[0][0]=m00/det;
-		mat.grid[0][1]=m01/det;
-		mat.grid[0][2]=m02/det;
-
-		mat.grid[1][0]=m10/det;
-		mat.grid[1][1]=m11/det;
-		mat.grid[1][2]=m12/det;
-
-		mat.grid[2][0]=m20/det;
-		mat.grid[2][1]=m21/det;
-		mat.grid[2][2]=m22/det;
-		/*grid[2][3]=m23;
-		grid[3][0]=m30;
-		grid[3][1]=m31;
-		grid[3][2]=m32;
-		grid[3][3]=m33;*/
-	}
-
 
 	float GetPitch(){
 

@@ -103,7 +103,7 @@ Extern
 	Function MatrixLoadIdentity_( obj:Byte Ptr )
 	Function MatrixCopy_:Byte Ptr( obj:Byte Ptr )
 	Function MatrixOverwrite_( obj:Byte Ptr,mat:Byte Ptr )
-	Function MatrixGetInverse_:Byte Ptr( obj:Byte Ptr,mat:Byte Ptr )
+	Function MatrixGetInverse_( obj:Byte Ptr,mat:Byte Ptr )
 	Function MatrixMultiply_( obj:Byte Ptr,mat:Byte Ptr )
 	Function MatrixTranslate_( obj:Byte Ptr,x:Float,y:Float,z:Float )
 	Function MatrixScale_( obj:Byte Ptr,x:Float,y:Float,z:Float )
