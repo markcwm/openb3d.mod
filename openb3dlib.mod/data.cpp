@@ -414,7 +414,7 @@ const int TERRAIN_c_col_tree=	9;
 const int TERRAIN_eyepoint=		10;
 const int TERRAIN_ShaderMat=	11;
 const int TERRAIN_Roam_Detail=	12;
-const int TERRAIN_NormalsMap=	13;
+//const int TERRAIN_NormalsMap=	13;
 //const int TERRAIN_TexCoordsMap=	14; 
 
 // Texture varid
@@ -1773,7 +1773,7 @@ float* TerrainFloat_( Terrain* obj,int varid ){
 		case TERRAIN_vsize : return &obj->vsize;
 		case TERRAIN_level2dzsize : return &obj->level2dzsize[0];
 		case TERRAIN_height : return &obj->height[0];
-		case TERRAIN_NormalsMap : return &obj->NormalsMap[0];
+		//case TERRAIN_NormalsMap : return &obj->NormalsMap[0];
 		//case TERRAIN_TexCoordsMap : return &obj->TexCoordsMap[0];
 	}
 	return NULL;
