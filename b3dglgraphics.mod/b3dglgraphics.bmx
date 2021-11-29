@@ -18,7 +18,6 @@ Import Brl.JpgLoader			' imports Brl.Pixmap, Pub.LibJpeg
 Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
 'Import Brl.BmpLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
 'Import Brl.TgaLoader			' imports Brl.Pixmap, Brl.EndianStream (deprecated)
-Import Openb3d.Audio3d
 
 Include "TDebug.bmx"
 
