@@ -56,4 +56,16 @@ Type TGeosphere Extends TTerrain
 		
 	End Method
 	
+	Method CountVertices:Int()
+	
+		Return TerrainCountVertices_( GetInstance(Self) )
+		
+	End Method
+	
+	Method CountTriangles:Int()
+	
+		Return TerrainCountTriangles_( GetInstance(Self) )
+		
+	End Method
+	
 End Type

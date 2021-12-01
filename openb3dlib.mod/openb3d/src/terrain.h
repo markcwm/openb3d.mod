@@ -22,31 +22,37 @@ const int ROAM_LMAX = 20; 		//<-----------terrain levels of detail, maximum is 2
 class Terrain : public Entity{
 private:
 	float dradius;
-	float* NormalsMap;
+	float* NormalsMapOld; // public
 	float xcf,ycf,zcf; 			//used to store camera position
 
 public:
 	static list<Terrain*> terrain_list;
-	static int triangleindex;
+	//static int triangleindex;
 	static MeshInfo* mesh_info;
-	static vector<float> vertices;
+	//static vector<float> vertices;
 	static float Roam_Detail;
 	
 	float size; 				//terrainsize
 	float vsize; 				//terrainheight
-	
 	float level2dzsize[ROAM_LMAX+1]; 	// Max midpoint displacement per level
-	float* height; 				//heightmap
+	float* HeightMap; 				//heightmap
+	
 	MeshCollider* c_col_tree;
-
 	Camera* eyepoint; 			//reference to camera
-	Pivot* eyepoint_piv;
 #ifdef GLES2
 	unsigned int vbo_id;
 #endif
 	Shader* ShaderMat;
-
-
+	
+	vector<float> vertices;
+	vector<float> tex_coords1;
+	
+	int triangleindex;
+	int vertexindex;
+	float* NormalsMap;
+	
+	float uscale0, vscale0, uscale1, vscale1;
+	
 	static Terrain* CreateTerrain(int tsize=0, Entity* parent_ent=NULL);
 	static Terrain* LoadTerrain(string filename,Entity* parent_ent=NULL);
 	Terrain* CopyEntity(Entity* parent_ent=NULL);
@@ -64,11 +70,12 @@ public:
 	float TerrainY (float x, float y, float z);
 	float TerrainZ (float x, float y, float z);
 	void TerrainDetail(float detail_level);
-	void TerrainRange(float camera_range);
-
+	void ScaleTexCoords(float u_scale,float v_scale,int coords_set);
+	
 	Terrain(){
 		size=0;
 		ShaderMat=0;
+		uscale0=1; vscale0=1; uscale1=1; vscale1=1;
 	};
 
 

@@ -145,11 +145,11 @@ void RemoveTri_( Surface* obj,int tri );
 
 // Terrain
 void UpdateTerrain_( Terrain* obj );
-void RecreateROAM_( Terrain* obj );
-void drawsub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
+//void RecreateROAM_( Terrain* obj );
+//void drawsub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 void TerrainUpdateNormals_( Terrain* obj );
 //virtual void TreeCheck_(CollisionInfo* ci);
-void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
+//void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] );
 
 // Texture
 Texture* TextureCopy_( Texture* obj,int copyflags );

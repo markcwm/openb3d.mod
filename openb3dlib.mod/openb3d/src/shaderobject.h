@@ -8,6 +8,7 @@
 
 class ProgramObject;
 class Surface;
+class Terrain;
 
 //list<ProgramObject*> ProgramObjectList;
 
@@ -88,7 +89,7 @@ class ProgramObject{
 	//-------------------------------------------------------------------------------------
 	//  Array Parameter
 	void SetParameterArray(int name, Surface* surf, int vbo);
-	void SetParameterArray(int name, vector<float>* vertices, int vbo);
+	void SetParameterArray(int name, Terrain* terr, int vbo);
 
 	//-------------------------------------------------------------------------------------
 	// Float Parameter

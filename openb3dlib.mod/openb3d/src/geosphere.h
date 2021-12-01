@@ -14,7 +14,7 @@
 class Geosphere : public Terrain{
 private:
 	float dradius;
-	float* NormalsMap;
+	float* NormalsMapOld; // public
 	//int* EqToToast;
 	float xcf,ycf,zcf; 			//used to store camera position
 

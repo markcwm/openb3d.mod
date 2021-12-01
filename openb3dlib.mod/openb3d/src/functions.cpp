@@ -28,8 +28,16 @@ extern "C" {
 
 // Extra
 
-void TerrainRange_(Terrain* terr, float camera_range){
-   terr->TerrainRange(camera_range);
+int TerrainCountTriangles_( Terrain* terr ){
+	return terr->triangleindex;
+}
+
+int TerrainCountVertices_( Terrain* terr ){
+	return terr->vertexindex;
+}
+
+void TerrainScaleTexCoords_( Terrain* terr, float u_scale, float v_scale, int coords_set ){
+	terr->ScaleTexCoords(u_scale, v_scale, coords_set);
 }
 
 void TerrainDetail_(Terrain* terr, float detail_level){

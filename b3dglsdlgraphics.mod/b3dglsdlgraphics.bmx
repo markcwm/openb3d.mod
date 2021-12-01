@@ -14,7 +14,7 @@ ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 
 ModuleInfo "CC_OPTS: -DGLES2" ' use GLES2+
 
-Import Openb3d.Openb3d
+Import Openb3d.Openb3dcore
 ?opengles
 Import Sdl.GlsdlMax2d
 ?
@@ -27,9 +27,42 @@ Import Brl.PngLoader			' imports Brl.Pixmap, Pub.LibPng
 Include "TDebug.bmx"
 
 Rem
-bbdoc: <a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
-about: The flags argument sets the graphics buffers (back, alpha, depth, stencil and accum). 
-Set usecanvas to true if using maxgui with a canvas context.
+bbdoc: Sets 3D Graphics mode
+about: 
+@Parameters: 
+
+width - width of screen resolution
+
+height - height of screen resolution
+
+depth (optional) - colour depth of screen. Defaults to highest colour depth  available.
+
+mode (optional) - mode of display. Defaults to 0.
+
+0: windowed (if possible) in debug mode, fullscreen in non-debug mode
+
+1: fullscreen always
+
+2. windowed always
+
+3: windowed/scaled always
+
+rate (optional) - refresh rate of display in Hertz, defaults to 60
+
+flags (optional) - sets the graphics buffers used (back, alpha, depth, stencil and accum), defaults to all
+
+usecanvas (optional) - True if using maxgui with a canvas context, defaults to False
+
+@Description: 
+
+Sets 3D Graphics mode. This command must be executed before any other 3D command, otherwise programs will return an error.
+
+Width and height set the resolution of the screen and common values are 640,480  and 800,600. The resolution must be compatible with the 3D card and monitor  being used.
+
+Depth sets the colour mode of the screen. If this value is omitted or set to 0, then the highest available colour depth available will be used. Other values  usually available are 16, 24 and 32. 16-bit colour mode displays the least amount  of colours, 65536. 24-bit and 32-bit colour modes display over 16 million colours and as a result offer a better quality picture, although may result in slower programs than 16-bit.
+
+See also: <a href=#Graphics>Graphics</a>, <a href=#EndGraphics>EndGraphics</a>.
+
 End Rem
 Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanvas%=False )
 
@@ -85,8 +118,27 @@ Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanva
 End Function
 
 Rem
-bbdoc: Draw text, doesn't need BeginMax2D
-EndRem
+bbdoc: Prints a string at the designated screen coordinates, doesn't need BeginMax2D
+about: 
+@Parameters: 
+
+x = starting x coordinate to print text
+
+y = starting 4 coordinate to print text
+
+string$ = string/text to print
+
+center x = optional; true = center horizontally
+
+center y = optional; true = center vertically 
+
+@Description: 
+
+Prints a string at the designated screen coordinates. You can center the  text on the coordiates by setting center x/center y to TRUE. This draws the  text in the current drawing color.
+
+Note: Printing a space with text will NOT render a block - a space is an empty  value. So printing " " will not make a box appear.
+
+End Rem
 Function Text( x:Int,y:Int,txt:String )
 	
 	' set active texture to texture 0 so gldrawtext will work correctly

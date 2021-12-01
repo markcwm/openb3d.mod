@@ -11,13 +11,13 @@
 <h1>SDL GLGraphics backend (not working)</h1>
 <h2><a name=functions></a>Functions Summary</h2><table class=doc width=100%>
 <tr><td class=docleft width=1%><a href=#Graphics3D>Graphics3D</a></td><td class=docright>
-<a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a>
+Sets 3D Graphics mode.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#ShadowText>ShadowText</a></td><td class=docright>
 Draw text with a shadow, doesn't need BeginMax2D.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#Text>Text</a></td><td class=docright>
-Draw text, doesn't need BeginMax2D.
+Prints a string at the designated screen coordinates, doesn't need BeginMax2D.
 </td></tr>
 <tr><td class=docleft width=1%><a href=#TextColor>TextColor</a></td><td class=docright>
 Set draw text color, in bytes.
@@ -33,9 +33,40 @@ Debug functions.
 </h2>
 <table class=doc width=100% cellspacing=3 id=Graphics3D>
 <tr><td class=doctop colspan=2>Function Graphics3D( width%,height%,depth%=0,mode%=0,rate%=60,flags%=-1,usecanvas%=False )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright><a href="http://www.blitzbasic.com/b3ddocs/command.php?name=Graphics3D">Online doc</a></td></tr>
-<tr><td class=docleft width=1%>Information</td><td class=docright>The flags argument sets the graphics buffers (back, alpha, depth, stencil and accum).
-Set usecanvas to true if using maxgui with a canvas context.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Sets 3D Graphics mode.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright><b>Parameters</b>:
+<p>
+width - width of screen resolution
+<p>
+height - height of screen resolution
+<p>
+depth (optional) - colour depth of screen. Defaults to highest colour depth  available.
+<p>
+mode (optional) - mode of display. Defaults to 0.
+<p>
+0: windowed (if possible) in debug mode, fullscreen in non-debug mode
+<p>
+1: fullscreen always
+<p>
+2. windowed always
+<p>
+3: windowed/scaled always
+<p>
+rate (optional) - refresh rate of display in Hertz, defaults to 60
+<p>
+flags (optional) - sets the graphics buffers used (back, alpha, depth, stencil and accum), defaults to all
+<p>
+usecanvas (optional) - True if using maxgui with a canvas context, defaults to False
+<p>
+<b>Description</b>:
+<p>
+Sets 3D Graphics mode. This command must be executed before any other 3D command, otherwise programs will return an error.
+<p>
+Width and height set the resolution of the screen and common values are 640,480  and 800,600. The resolution must be compatible with the 3D card and monitor  being used.
+<p>
+Depth sets the colour mode of the screen. If this value is omitted or set to 0, then the highest available colour depth available will be used. Other values  usually available are 16, 24 and 32. 16-bit colour mode displays the least amount  of colours, 65536. 24-bit and 32-bit colour modes display over 16 million colours and as a result offer a better quality picture, although may result in slower programs than 16-bit.
+<p>
+See also: <a href=#Graphics>Graphics</a>, <a href=#EndGraphics>EndGraphics</a>.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=ShadowText>
@@ -45,7 +76,24 @@ Set usecanvas to true if using maxgui with a canvas context.</td></tr>
 <br>
 <table class=doc width=100% cellspacing=3 id=Text>
 <tr><td class=doctop colspan=2>Function Text( x:Int,y:Int,txt:String )</td></tr>
-<tr><td class=docleft width=1%>Description</td><td class=docright>Draw text, doesn't need BeginMax2D.</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Prints a string at the designated screen coordinates, doesn't need BeginMax2D.</td></tr>
+<tr><td class=docleft width=1%>Information</td><td class=docright><b>Parameters</b>:
+<p>
+x = starting x coordinate to print text
+<p>
+y = starting 4 coordinate to print text
+<p>
+string$ = string/text to print
+<p>
+center x = optional; true = center horizontally
+<p>
+center y = optional; true = center vertically
+<p>
+<b>Description</b>:
+<p>
+Prints a string at the designated screen coordinates. You can center the  text on the coordiates by setting center x/center y to TRUE. This draws the  text in the current drawing color.
+<p>
+Note: Printing a space with text will NOT render a block - a space is an empty  value. So printing " " will not make a box appear.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=TextColor>

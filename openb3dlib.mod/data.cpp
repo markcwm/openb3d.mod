@@ -409,13 +409,13 @@ const int TERRAIN_vertices=		4;
 const int TERRAIN_size=			5;
 const int TERRAIN_vsize=		6;
 const int TERRAIN_level2dzsize=	7;
-const int TERRAIN_height=		8;
+const int TERRAIN_HeightMap=		8;
 const int TERRAIN_c_col_tree=	9;
 const int TERRAIN_eyepoint=		10;
 const int TERRAIN_ShaderMat=	11;
 const int TERRAIN_Roam_Detail=	12;
-//const int TERRAIN_NormalsMap=	13;
-//const int TERRAIN_TexCoordsMap=	14; 
+const int TERRAIN_NormalsMap=	13;
+const int TERRAIN_vertexindex=	14;
 
 // Texture varid
 const int TEXTURE_texture=		1;
@@ -506,11 +506,6 @@ int* StaticInt_( int classid,int varid ){
 			switch (varid){
 				case SHADOWOBJECT_parallel : return &ShadowObject::parallel;
 				case SHADOWOBJECT_midStencilVal : return &ShadowObject::midStencilVal;
-			}
-			break;
-		case TERRAIN_class :
-			switch (varid){
-				case TERRAIN_triangleindex : return &Terrain::triangleindex;
 			}
 			break;
 		case TEXTURE_class :
@@ -697,7 +692,6 @@ int StaticListSize_( int classid,int varid ){
 		case TERRAIN_class :
 			switch (varid){
 				case TERRAIN_terrain_list : return Terrain::terrain_list.size();
-				case TERRAIN_vertices : return Terrain::vertices.size();
 			}
 			break;
 	}
@@ -893,7 +887,7 @@ Texture* StaticIterListTexture_( int classid,int varid,int &id ){
 	return obj;
 }
 
-float StaticIterVectorFloat_( int classid,int varid,int &id ){
+/*float StaticIterVectorFloat_( int classid,int varid,int &id ){
 	int count=0;
 	vector<float>::iterator it;
 	float obj;
@@ -914,7 +908,7 @@ float StaticIterVectorFloat_( int classid,int varid,int &id ){
 	}
 	
 	return obj;
-}
+}*/
 
 Light* StaticIterVectorLight_( int classid,int varid,int &id ){
 	int count=0;
@@ -1767,14 +1761,21 @@ Shader* SurfaceShader_( Surface* obj,int varid ){
 
 // Terrain
 
+int* TerrainInt_( Terrain* obj,int varid ){
+	switch (varid){
+		case TERRAIN_triangleindex : return &obj->triangleindex;
+		case TERRAIN_vertexindex : return &obj->vertexindex;
+	}
+	return NULL;
+}
+
 float* TerrainFloat_( Terrain* obj,int varid ){
 	switch (varid){
 		case TERRAIN_size : return &obj->size;
 		case TERRAIN_vsize : return &obj->vsize;
 		case TERRAIN_level2dzsize : return &obj->level2dzsize[0];
-		case TERRAIN_height : return &obj->height[0];
-		//case TERRAIN_NormalsMap : return &obj->NormalsMap[0];
-		//case TERRAIN_TexCoordsMap : return &obj->TexCoordsMap[0];
+		case TERRAIN_HeightMap : return &obj->HeightMap[0];
+		case TERRAIN_NormalsMap : return &obj->NormalsMap[0];
 	}
 	return NULL;
 }

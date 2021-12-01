@@ -1,22 +1,22 @@
 ' TQuaternion is Float (Minib3d) and TQuatPtr is Float Ptr (Openb3d)
 
-Rem
+Rem 
 bbdoc: Quaternion functions (Minib3d)
 End Rem
 Type TQuaternion
 
-	Field x#,y#,z#,w#
+	Field w#,x#,y#,z#
 	
 	Rem
 	bbdoc: Create a new TQuaternion from four float values, returns a Float quaternion
 	EndRem
-	Function Create:TQuaternion( x:Float=0,y:Float=0,z:Float=0,w:Float=0 )
+	Function Create:TQuaternion( w:Float=0,x:Float=0,y:Float=0,z:Float=0 )
 	
 		Local new_quat:TQuaternion=New TQuaternion
+		new_quat.w=w
 		new_quat.x=x
 		new_quat.y=y
 		new_quat.z=z
-		new_quat.w=w
 		Return new_quat
 		
 	End Function
@@ -27,10 +27,10 @@ Type TQuaternion
 	Function CopyQuatPtr:TQuaternion( quat:TQuatPtr )
 	
 		Local new_quat:TQuaternion=New TQuaternion
+		new_quat.w=quat.w[0]
 		new_quat.x=quat.x[0]
 		new_quat.y=quat.y[0]
 		new_quat.z=quat.z[0]
-		new_quat.w=quat.w[0]
 		Return new_quat
 		
 	End Function
@@ -59,17 +59,17 @@ Type TQuaternion
 	EndRem
 	Method GetQuatPtr:TQuaternion( quat:TQuatPtr )
 	
+		w=quat.w[0]
 		x=quat.x[0]
 		y=quat.y[0]
 		z=quat.z[0]
-		w=quat.w[0]
 		
 	End Method
 	
 	Rem
 	bbdoc: Convert a quaternion to the given TMatrix
 	EndRem
-	Function QuatToMat( x#,y#,z#,w#,mat:TMatrix Var )
+	Function QuatToMat( w#,x#,y#,z#,mat:TMatrix Var )
 	
 		Local q:Float[4]
 		q[0]=w
@@ -111,7 +111,7 @@ Type TQuaternion
 	Rem
 	bbdoc: Convert a quaternion to the given pitch, yaw, roll (Euler degrees)
 	EndRem
-	Function QuatToEuler( x#,y#,z#,w#,pitch# Var,yaw# Var,roll# Var )
+	Function QuatToEuler( w#,x#,y#,z#,pitch# Var,yaw# Var,roll# Var )
 	
 		Local q:Float[4]
 		q[0]=w
@@ -219,7 +219,7 @@ bbdoc: QuatPtr functions (Openb3d)
 End Rem
 Type TQuatPtr
 
-	Field x:Float Ptr, y:Float Ptr, z:Float Ptr, w:Float Ptr
+	Field w:Float Ptr, x:Float Ptr, y:Float Ptr, z:Float Ptr
 	
 	' wrapper
 	?bmxng
@@ -273,24 +273,24 @@ Type TQuatPtr
 	
 	Method InitFields() ' Once per CreateObject
 	
+		w=QuatPtrFloat_( GetInstance(Self),QUATPTR_w )
 		x=QuatPtrFloat_( GetInstance(Self),QUATPTR_x )
 		y=QuatPtrFloat_( GetInstance(Self),QUATPTR_y )
 		z=QuatPtrFloat_( GetInstance(Self),QUATPTR_z )
-		w=QuatPtrFloat_( GetInstance(Self),QUATPTR_w )
 		
 	End Method
 	
 	Rem
 	bbdoc: Create a new TQuatPtr from four float values, returns a Float Ptr quaternion
 	EndRem
-	Function Create:TQuatPtr( x:Float=0,y:Float=0,z:Float=0,w:Float=0 )
+	Function Create:TQuatPtr( w:Float=0,x:Float=0,y:Float=0,z:Float=0 )
 	
 		Local inst:Byte Ptr=NewQuatPtr_()
 		Local new_quat:TQuatPtr=CreateObject(inst)
+		new_quat.w[0]=w
 		new_quat.x[0]=x
 		new_quat.y[0]=y
 		new_quat.z[0]=z
-		new_quat.w[0]=w
 		Return new_quat
 		
 	End Function
@@ -302,10 +302,10 @@ Type TQuatPtr
 	
 		Local inst:Byte Ptr=NewQuatPtr_()
 		Local new_quat:TQuatPtr=CreateObject(inst)
+		new_quat.w[0]=quat.w
 		new_quat.x[0]=quat.x
 		new_quat.y[0]=quat.y
 		new_quat.z[0]=quat.z
-		new_quat.w[0]=quat.w
 		Return new_quat
 		
 	End Function
@@ -343,10 +343,10 @@ Type TQuatPtr
 	EndRem
 	Method GetQuaternion:TQuatPtr( quat:TQuaternion )
 	
+		w[0]=quat.w
 		x[0]=quat.x
 		y[0]=quat.y
 		z[0]=quat.z
-		w[0]=quat.w
 		
 	End Method
 	
@@ -355,7 +355,7 @@ Type TQuatPtr
 	Rem
 	bbdoc: Convert a quaternion to the given TMatPtr
 	EndRem
-	Function QuatToMat( x:Float,y:Float,z:Float,w:Float,mat:TMatPtr )
+	Function QuatToMat( w:Float,x:Float,y:Float,z:Float,mat:TMatPtr )
 	
 		QuaternionToMat_( w,x,y,z,TMatPtr.GetInstance(mat) )
 		
@@ -364,7 +364,7 @@ Type TQuatPtr
 	Rem
 	bbdoc: Convert a quaternion to the given pitch, yaw, roll (Euler degrees)
 	EndRem
-	Function QuatToEuler( x:Float,y:Float,z:Float,w:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
+	Function QuatToEuler( w:Float,x:Float,y:Float,z:Float,pitch:Float Var,yaw:Float Var,roll:Float Var )
 	
 		QuaternionToEuler_( w,x,y,z,Varptr pitch,Varptr yaw,Varptr roll )
 		

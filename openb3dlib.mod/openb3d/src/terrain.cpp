@@ -1,6 +1,6 @@
 /*
  *  terrain.cpp
- *  minib3d
+ *  minib3d 
  *
  *
  */
@@ -26,14 +26,13 @@
 
 #include <stdio.h>
 
-int Terrain::triangleindex;
+//int Terrain::triangleindex;
 float Terrain::Roam_Detail = 100.0;
 
 static Line Ray;
 static float radius;
 
-//static vector<float> vertices;
-vector<float> Terrain::vertices;
+//vector<float> Terrain::vertices;
 
 MeshInfo* Terrain::mesh_info;
 list<Terrain*> Terrain::terrain_list;
@@ -120,15 +119,15 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 		terr->level2dzsize[i] = level2dzsize[i];
 	}
 	int tsize=size;
-	terr->height=new float[(tsize+1)*(tsize+1)];
+	terr->HeightMap=new float[(tsize+1)*(tsize+1)];
 	for (int i = 0; i<= (tsize+1)*(tsize+1); i++){
-		terr->height[i]=height[i];
+		terr->HeightMap[i]=HeightMap[i];
 	}
 	terr->NormalsMap=new float[(tsize+1)*(tsize+1)*3];
 	for (int i = 0; i<= (tsize+1)*(tsize+1)*3; i++){
 		terr->NormalsMap[i]=NormalsMap[i];
 	}
-
+	
 	mesh_info=C_NewMeshInfo();
 	terr->c_col_tree=C_CreateColTree(mesh_info);
 	C_DeleteMeshInfo(mesh_info);
@@ -147,22 +146,6 @@ Terrain* Terrain::CopyEntity(Entity* parent_ent){
 Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 	Terrain* terr=new Terrain;
-	
-	terr->eyepoint_piv=new Pivot;
-	terr->eyepoint_piv->class_name="Pivot";
-	list<Camera*>::iterator it;
-	for(it=Camera::cam_list.begin();it!=Camera::cam_list.end();it++){
-		Global::camera_in_use=*it;
-		if(Global::camera_in_use->Hidden()==true) continue;
-	}
-	terr->eyepoint_piv->AddParent(Global::camera_in_use);
-	// update matrix
-	if(terr->eyepoint_piv->parent!=NULL){
-		terr->eyepoint_piv->mat.Overwrite(terr->eyepoint_piv->parent->mat);
-		terr->eyepoint_piv->UpdateMat();
-	}else{
-		terr->eyepoint_piv->UpdateMat(true);
-	}
 	
 	for (int i = 0; i<= 20; i++){
 		terr->level2dzsize[i] = 0;
@@ -188,7 +171,7 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 	if (tsize!=0){
 		terr->size=tsize;
 		terr->vsize=30;
-		terr->height=new float[(tsize+1)*(tsize+1)];
+		terr->HeightMap=new float[(tsize+1)*(tsize+1)];
 		terr->NormalsMap=new float[(tsize+1)*(tsize+1)*3];
 	}
 
@@ -202,6 +185,9 @@ Terrain* Terrain::CreateTerrain(int tsize, Entity* parent_ent){
 
 void Terrain::UpdateTerrain(){
 
+	int alpha=false;
+	int depth_mask_disabled=false;
+	
 #ifndef GLES2
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 
@@ -212,14 +198,44 @@ void Terrain::UpdateTerrain(){
 	RecreateROAM();
 	if (triangleindex==0) return;
 #endif
-
+	
 	if (order!=0){
 		glDisable(GL_DEPTH_TEST);
 		glDepthMask(GL_FALSE);
+		depth_mask_disabled=true;
 	}else{
 		glEnable(GL_DEPTH_TEST);
 		glDepthMask(GL_TRUE);
 	}
+
+	// check master brush (check alpha value, blend value, force vertex alpha flag)
+	if(brush.alpha<1.0 || brush.blend==2 || brush.blend==3 || brush.fx&32){
+		
+		if(brush.tex[0]){
+			if(brush.tex[0]->blend!=0) alpha=true; // no alpha if blend 0 fix
+		}else{
+			alpha=true;
+		}
+		
+	}else if(brush.blend==0 || (brush.fx&32)==0){ // override alpha flag fix
+	}else{
+		
+		if(brush.tex[0]){
+			if(brush.tex[0]->flags&2){ // tex 0 alpha flag
+				alpha=true;
+			}
+		}
+
+	}
+
+		if(alpha==true){
+			glEnable(GL_BLEND);
+			glDepthMask(GL_FALSE); // must be set to false every time, as it's always equal to true before it's called
+			depth_mask_disabled=true; // set this to true to we know when to enable depth mask at bottom of function
+		}else{
+			glDisable(GL_BLEND);
+			//glDepthMask(GL_TRUE); already set to true
+		}
 
 	switch(brush.blend){
 		case 0:
@@ -388,7 +404,7 @@ void Terrain::UpdateTerrain(){
 	int tex_count=0;
 #endif
 	if(ShaderMat!=NULL){
-		ShaderMat->TurnOn(mat, 0, &vertices, &brush);
+		ShaderMat->TurnOn(mat, 0, this, &brush);
 	}
 	else
 	{
@@ -403,7 +419,7 @@ void Terrain::UpdateTerrain(){
 
 				// Main brush texture takes precedent over surface brush texture
 				unsigned int texture=0;
-				int tex_flags=0,tex_blend=0;
+				int tex_flags=0,tex_blend=0,tex_coords=0;
 				float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 				int tex_cube_mode=0;
 				float tex_aniso=0.0,tex_max_aniso=0.0;
@@ -411,7 +427,7 @@ void Terrain::UpdateTerrain(){
 				texture=brush.cache_frame[ix];
 				tex_flags=brush.tex[ix]->flags;
 				tex_blend=brush.tex[ix]->blend;
-				//tex_coords=brush.tex[ix]->coords;
+				tex_coords=brush.tex[ix]->coords;
 				tex_u_scale=brush.tex[ix]->u_scale;
 				tex_v_scale=brush.tex[ix]->v_scale;
 				tex_u_pos=brush.tex[ix]->u_pos;
@@ -562,8 +578,11 @@ void Terrain::UpdateTerrain(){
 				}
 
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				glTexCoordPointer(2,GL_FLOAT,8*sizeof(float),&vertices[6]);
-
+				if(tex_coords==0){
+					glTexCoordPointer(2,GL_FLOAT,8*sizeof(float),&vertices[6]);
+				}else{
+					glTexCoordPointer(2,GL_FLOAT,3*sizeof(float),&tex_coords1[0]);
+				}
 
 				// reset texture matrix
 				glMatrixMode(GL_TEXTURE);
@@ -645,7 +664,7 @@ void Terrain::UpdateTerrain(){
 
 				tblendflags[ix][0]=tex_blend;
 				tblendflags[ix][1]=tex_flags&(4|128);
-				tcoords[ix]=0;
+				tcoords[ix]=0; //tex_coords1 not in ES
 #endif
 
 
@@ -713,6 +732,11 @@ void Terrain::UpdateTerrain(){
 	}
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 
+	// enable depth mask again if it was disabled when blend was enabled
+	if(depth_mask_disabled==true){
+		glDepthMask(GL_TRUE);
+		depth_mask_disabled=false; // set to false again for when we repeat loop
+	}
 
 	if (brush.fx&8 && Global::fog_enabled==true){
 		glEnable(GL_FOG);
@@ -733,8 +757,7 @@ void Terrain::RecreateROAM(){
 	ycf = eyepoint->EntityY();
 	zcf = -eyepoint->EntityZ();*/
 
-	//TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
-	TFormPoint(eyepoint_piv->EntityX(true), eyepoint_piv->EntityY(true), eyepoint_piv->EntityZ(true), 0, this);
+	TFormPoint(eyepoint->EntityX(true), eyepoint->EntityY(true), eyepoint->EntityZ(true), 0, this);
 	xcf = tformed_x;
 	ycf = tformed_y;
 	zcf = -tformed_z;
@@ -744,16 +767,16 @@ void Terrain::RecreateROAM(){
 
 
 	v[0][0] = 0.0; 		v[0][2] = size;
-	v[0][1] = height[(int)size] * vsize;
+	v[0][1] = HeightMap[(int)size] * vsize;
 
 	v[1][0] = size; 	v[1][2] = size;
-	v[1][1] = height[(int)(size*(size+1))] * vsize;
+	v[1][1] = HeightMap[(int)(size*(size+1))] * vsize;
 
 	v[2][0] = size; 	v[2][2] = 0;
-	v[2][1] = height[(int)(size*size)] * vsize;
+	v[2][1] = HeightMap[(int)(size*size)] * vsize;
 
 	v[3][0] = 0.0; 		v[3][2] = 0;
-	v[3][1] = height[0] * vsize;
+	v[3][1] = HeightMap[0] * vsize;
 
 	// diamond radius - apply entity scale
 	float rx=EntityScaleX(true);
@@ -771,10 +794,11 @@ void Terrain::RecreateROAM(){
 	//MQ_GetMatrix(tmat, true);
 
 
-
+	vertexindex = 0;
 	triangleindex = 0;
 
 	vertices.clear();
+	tex_coords1.clear();
 
 	/* recurse on the two base triangles */
 	drawsub(0, v[0], v[1], v[2]);
@@ -795,7 +819,7 @@ void Terrain::drawsub(int l, float v0[], float v1[], float v2[]){
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
-		vc[1] = height[(int)(vc[0]*size+ vc[2])] * vsize;
+		vc[1] = HeightMap[(int)(vc[0]*size+ vc[2])] * vsize;
 
 
 		ds = level2dzsize[l];
@@ -855,29 +879,40 @@ void Terrain::drawsub(int l, float v0[], float v1[], float v2[]){
 		}
 
 	 }
-	vertices.push_back(v0[0]); vertices.push_back(v0[1]); vertices.push_back(v0[2]);
+	vertices.push_back(v0[0]);
+	vertices.push_back(v0[1]); 
+	vertices.push_back(v0[2]);
 	vertices.push_back(NormalsMap[3*(int)(v0[0]*size+ v0[2])+0]);
 	vertices.push_back(NormalsMap[3*(int)(v0[0]*size+ v0[2])+1]);
 	vertices.push_back(NormalsMap[3*(int)(v0[0]*size+ v0[2])+2]);
-	vertices.push_back(v0[0]);
-	vertices.push_back(v0[2]);
-
-
-	vertices.push_back(v1[0]); vertices.push_back(v1[1]); vertices.push_back(v1[2]);
+	vertices.push_back(v0[0]/uscale0);
+	vertices.push_back(v0[2]/vscale0);
+	tex_coords1.push_back(v0[0]/uscale1);
+	tex_coords1.push_back(v0[2]/vscale1);
+	
+	vertices.push_back(v1[0]);
+	vertices.push_back(v1[1]); 
+	vertices.push_back(v1[2]);
 	vertices.push_back(NormalsMap[3*(int)(v1[0]*size+ v1[2])+0]);
 	vertices.push_back(NormalsMap[3*(int)(v1[0]*size+ v1[2])+1]);
 	vertices.push_back(NormalsMap[3*(int)(v1[0]*size+ v1[2])+2]);
-	vertices.push_back(v1[0]);
-	vertices.push_back(v1[2]);
-
-
-	vertices.push_back(v2[0]); vertices.push_back(v2[1]); vertices.push_back(v2[2]);
+	vertices.push_back(v1[0]/uscale0);
+	vertices.push_back(v1[2]/vscale0);
+	tex_coords1.push_back(v1[0]/uscale1);
+	tex_coords1.push_back(v1[2]/vscale1);
+	
+	vertices.push_back(v2[0]);
+	vertices.push_back(v2[1]); 
+	vertices.push_back(v2[2]);
 	vertices.push_back(NormalsMap[3*(int)(v2[0]*size+ v2[2])+0]);
 	vertices.push_back(NormalsMap[3*(int)(v2[0]*size+ v2[2])+1]);
 	vertices.push_back(NormalsMap[3*(int)(v2[0]*size+ v2[2])+2]);
-	vertices.push_back(v2[0]);
-	vertices.push_back(v2[2]);
-
+	vertices.push_back(v2[0]/uscale0);
+	vertices.push_back(v2[2]/vscale0);
+	tex_coords1.push_back(v2[0]/uscale1);
+	tex_coords1.push_back(v2[2]/vscale1);
+	
+	vertexindex=vertexindex+3;
 	triangleindex++;
 
 }
@@ -887,9 +922,9 @@ void Terrain::UpdateNormals(){
 	//float v0[3],v1[3],v2[3];
 	for (int x=1;x<=size-1;x++){
 		for (int y=1;y<=size-1;y++){
-			NormalsMap[3*(x*(int)size+y)]=height[(x-1)*(int)size+y] - height[(x+1)*(int)size+y];
+			NormalsMap[3*(x*(int)size+y)]=HeightMap[(x-1)*(int)size+y] - HeightMap[(x+1)*(int)size+y];
 			NormalsMap[3*(x*(int)size+y)+1]=2*vsize/size;
-			NormalsMap[3*(x*(int)size+y)+2]=height[x*(int)size+y-1] - height[x*(int)size+y+1];
+			NormalsMap[3*(x*(int)size+y)+2]=HeightMap[x*(int)size+y-1] - HeightMap[x*(int)size+y+1];
 		}
 	}
 	for (int i=0;i<=size;i++){
@@ -936,13 +971,27 @@ Terrain* Terrain::LoadTerrain(string filename,Entity* parent_ent){
 
 		terr->vsize=30;
 		terr->size=width;
-		terr->height=new float[(width+1)*(width+1)];
+		terr->HeightMap=new float[(width+1)*(width+1)];
+		terr->NormalsMap=new float[(width+1)*(width+1)*3];
 		for (int x=0;x<=terr->size-1;x++){
 			for (int y=0;y<=terr->size-1;y++){
-				terr->height[x*(int)terr->size+y]=((float)*buffer)/255.0;
+				terr->HeightMap[x*(int)terr->size+y]=((float)*buffer)/255.0;
 				buffer++;
 			}
 		}
+		
+		buffer=pixels;
+		for (int x=0;x<=terr->size-1;x++){
+			for (int y=0;y<=terr->size-1;y++){
+				if (x==terr->size-1){
+					terr->HeightMap[(x+1)*(int)terr->size+y]=((float)*buffer)/255.0; // blank right edge
+					if (y==0) terr->HeightMap[(x+1)*(int)terr->size+y]=((float)*(buffer))/255.0; // top right pixel
+					if (y==terr->size-1) terr->HeightMap[(x+1)*(int)terr->size+(y+1)]=((float)*(buffer))/255.0; // bottom right pixel
+				}
+				buffer++;
+			}
+		}	
+		
 		stbi_image_free(pixels);
 		pixels=NULL;
 	} else {
@@ -951,10 +1000,10 @@ Terrain* Terrain::LoadTerrain(string filename,Entity* parent_ent){
 		terr=Terrain::CreateTerrain(width, parent_ent);
 		terr->vsize=30;
 		terr->size=width;
-		terr->height=new float[(width+1)*(width+1)];
-		for (int x=0;x<=terr->size-1;x++){
-			for (int y=0;y<=terr->size-1;y++){
-				terr->height[x*(int)terr->size+y]=0.0f;
+		terr->HeightMap=new float[(width+1)*(width+1)];
+		for (int x=0;x<=terr->size;x++){
+			for (int y=0;y<=terr->size;y++){
+				terr->HeightMap[x*(int)terr->size+y]=0.0f;
 			}
 		}
 	}
@@ -966,7 +1015,7 @@ Terrain* Terrain::LoadTerrain(string filename,Entity* parent_ent){
 }
 
 void Terrain::ModifyTerrain (int x, int z, float new_height){
-	height[x*(int)size+z]=new_height;
+	HeightMap[x*(int)size+z]=new_height;
 }
 
 void Terrain::TreeCheck(CollisionInfo* ci){
@@ -1042,7 +1091,7 @@ void Terrain::col_tree_sub(int l, float v0[], float v1[], float v2[]){
 		/* compute split point of base edge */
 		vc[0] = (v0[0] + v2[0]) / 2;
 		vc[2] = (v0[2] + v2[2]) / 2;
-		vc[1] = height[(int)(vc[0]*size+ vc[2])] * vsize;
+		vc[1] = HeightMap[(int)(vc[0]*size+ vc[2])] * vsize;
 
 
 		ds = level2dzsize[l];
@@ -1125,7 +1174,7 @@ void Terrain::col_tree_sub(int l, float v0[], float v1[], float v2[]){
 }
 
 float Terrain::TerrainHeight (int x, int z){
-	return height[x*(int)size+z];
+	return HeightMap[x*(int)size+z];
 }
 
 float Terrain::TerrainX (float x, float y, float z){
@@ -1138,21 +1187,21 @@ float Terrain::TerrainY (float x, float y, float z){
 	float p0[3],p1[3],p2[3];
 	p0[0]=(int)tformed_x;
 	p0[2]=(int)tformed_z;
-	p0[1]=height[(int)((int)tformed_x*size-tformed_z)] * vsize;
+	p0[1]=HeightMap[(int)((int)tformed_x*size-tformed_z)] * vsize;
 
 	p2[0]=(int)tformed_x+1;
 	p2[2]=(int)tformed_z;
-	p2[1]=height[(int)(((int)(tformed_x+1)*size)- tformed_z)] * vsize;
+	p2[1]=HeightMap[(int)(((int)(tformed_x+1)*size)- tformed_z)] * vsize;
 
 	if (tformed_x-floor(tformed_x)-tformed_z+floor(tformed_z)<.5){
 		p1[0]=(int)tformed_x;
 		p1[2]=(int)tformed_z+1;
-		p1[1]=height[(int)(((int)tformed_x*size)- tformed_z-1)] * vsize;
+		p1[1]=HeightMap[(int)(((int)tformed_x*size)- tformed_z-1)] * vsize;
 	}else
 	{
 		p1[0]=(int)tformed_x+1;
 		p1[2]=(int)tformed_z+1;
-		p1[1]=height[(int)(((int)(tformed_x+1)*size)- tformed_z-1)] * vsize;
+		p1[1]=HeightMap[(int)(((int)(tformed_x+1)*size)- tformed_z-1)] * vsize;
 	}
 
 
@@ -1188,15 +1237,9 @@ void Terrain::TerrainDetail(float detail_level){
 	}
 }
 
-void Terrain::TerrainRange(float camera_range){
-	if(camera_range>0 && camera_range<100.0){
-		eyepoint_piv->PositionEntity(0,0,camera_range);
-	}
-}
-
 void Terrain::FreeEntity(){
 
-	delete[] height;
+	delete[] HeightMap;
 	delete[] NormalsMap;
 
 	terrain_list.remove(this);
@@ -1210,3 +1253,14 @@ void Terrain::FreeEntity(){
 
 }
 
+void Terrain::ScaleTexCoords(float u_scale,float v_scale,int coords_set){
+
+	if (coords_set==0){
+		uscale0=u_scale;
+		vscale0=v_scale;
+	}else{
+		uscale1=u_scale;
+		vscale1=v_scale;
+	}
+	
+}

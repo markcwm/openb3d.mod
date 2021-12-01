@@ -5,19 +5,22 @@ End Rem
 Type TTerrain Extends TEntity
 
 	Global terrain_list:TList=CreateList() ' Terrain list
-	Global triangleindex:Int Ptr
 	'Global mesh_info:TMeshInfo ' current collision data
-	Global vertices:Float Ptr
+	'Global vertices:Float[] ' Terrain vector
 	Global Roam_Detail:Float Ptr ' terrain detail
 	
+	Field triangleindex:Int Ptr
 	Field size:Float Ptr ' TerrainSize - 0
 	Field vsize:Float Ptr ' TerrainHeight
 	Field level2dzsize:Float Ptr ' Max midpoint displacement per level - array [ROAM_LMAX+1]
-	Field height:Float Ptr ' heightmap
+	Field HeightMap:Float Ptr ' heightmap
 	
 	'Field c_col_tree:TMeshCollider ' used for terrain collisions
 	Field eyepoint:TCamera ' reference to camera
 	Field ShaderMat:TShader ' NULL
+	
+	Field NormalsMap:Float Ptr
+	Field vertexindex:Int Ptr
 	
 	' wrapper
 	Global terrain_list_id:Int=0
@@ -39,9 +42,6 @@ Type TTerrain Extends TEntity
 	
 	Function InitGlobals() ' Once per Graphics3D
 	
-		' int
-		triangleindex=StaticInt_( TERRAIN_class,TERRAIN_triangleindex )
-		
 		' float
 		Roam_Detail=StaticFloat_( TERRAIN_class,TERRAIN_Roam_Detail )
 		
@@ -51,11 +51,16 @@ Type TTerrain Extends TEntity
 	
 		Super.InitFields()
 		
+		'int
+		triangleindex=TerrainInt_( GetInstance(Self),TERRAIN_triangleindex )
+		vertexindex=TerrainInt_( GetInstance(Self),TERRAIN_vertexindex )
+		
 		' float
 		size=TerrainFloat_( GetInstance(Self),TERRAIN_size )
 		vsize=TerrainFloat_( GetInstance(Self),TERRAIN_vsize )
 		level2dzsize=TerrainFloat_( GetInstance(Self),TERRAIN_level2dzsize )
-		height=TerrainFloat_( GetInstance(Self),TERRAIN_height )
+		HeightMap=TerrainFloat_( GetInstance(Self),TERRAIN_HeightMap )
+		NormalsMap=TerrainFloat_( GetInstance(Self),TERRAIN_NormalsMap )
 		
 		' camera
 		Local inst:Byte Ptr=TerrainCamera_( GetInstance(Self),TERRAIN_eyepoint )
@@ -82,13 +87,11 @@ Type TTerrain Extends TEntity
 		DebugLog pad+" Terrain: "
 		
 		' int
-		If triangleindex<>Null Then DebugLog(pad+" triangleindex: "+triangleindex[0]) Else DebugLog(pad+" triangleindex: Null")
-		If Roam_Detail<>Null Then DebugLog(pad+" Roam_Detail: "+Roam_Detail[0]) Else DebugLog(pad+" Roam_Detail: Null")
+		'If triangleindex<>Null Then DebugLog(pad+" triangleindex: "+triangleindex[0]) Else DebugLog(pad+" triangleindex: Null")
 		
 		' float
-		DebugLog pad+" vertices: "+StringPtr(vertices)
-		If vertices<>Null Then DebugLog(pad+" vertices[0] = "+vertices[0]+" [1] = "+vertices[1]+" [2] = "+vertices[2]+" ...")
-		
+		If Roam_Detail<>Null Then DebugLog(pad+" Roam_Detail: "+Roam_Detail[0]) Else DebugLog(pad+" Roam_Detail: Null")
+		'If vertices.length>0 Then DebugLog(pad+" vertices 0: "+vertices[0]+" 1: "+vertices[0]+" 2: "+vertices[2])
 		DebugLog ""
 		
 	End Function
@@ -109,7 +112,8 @@ Type TTerrain Extends TEntity
 		If size<>Null Then DebugLog(pad+" size: "+size[0]) Else DebugLog(pad+" size: Null")
 		If vsize<>Null Then DebugLog(pad+" vsize: "+vsize[0]) Else DebugLog(pad+" vsize: Null")
 		If level2dzsize<>Null Then DebugLog(pad+" level2dzsize: "+level2dzsize[0]) Else DebugLog(pad+" level2dzsize: Null")
-		If height<>Null Then DebugLog(pad+" height: "+height[0]) Else DebugLog(pad+" height: Null")
+		If HeightMap<>Null Then DebugLog(pad+" HeightMap: "+HeightMap[0]) Else DebugLog(pad+" HeightMap: Null")
+		If NormalsMap<>Null Then DebugLog(pad+" NormalsMap 0: "+NormalsMap[0]+" 1: "+NormalsMap[1]+" 2: "+NormalsMap[2]) Else DebugLog(pad+" NormalsMap: Null")
 		
 		' camera
 		DebugLog pad+" eyepoint: "+StringPtr(TEntity.GetInstance(eyepoint))
@@ -158,23 +162,10 @@ Type TTerrain Extends TEntity
 	
 	' Openb3d
 	
-	Method TerrainRange( camera_range:Float )
-	
-		TerrainRange_( GetInstance(Self),camera_range )
-		
-	End Method
-	
-	Method TerrainDetail( detail_level:Float )
-	
-		TerrainDetail_( GetInstance(Self),detail_level )
-		
-	End Method
-	
 	Method FreeEntity()
 	
 		If exists
 			ListRemove( terrain_list,Self ) ; terrain_list_id:-1
-			
 			Super.FreeEntity()
 		EndIf
 		
@@ -227,7 +218,12 @@ Type TTerrain Extends TEntity
 		
 	End Method
 	
-	' Internal
+	' called in LoadTerrain
+	Method UpdateNormals()
+	
+		TerrainUpdateNormals_( GetInstance(Self) )
+		
+	End Method
 	
 	Method CopyEntity:TTerrain( parent:TEntity=Null )
 	
@@ -238,6 +234,32 @@ Type TTerrain Extends TEntity
 		
 	End Method
 	
+	Method TerrainDetail( detail_level:Float )
+	
+		TerrainDetail_( GetInstance(Self),detail_level )
+		
+	End Method
+	
+	Method TerrainCountVertices:Int()
+	
+		Return TerrainCountVertices_( GetInstance(Self) )
+		
+	End Method
+	
+	Method TerrainCountTriangles:Int()
+	
+		Return TerrainCountTriangles_( GetInstance(Self) )
+		
+	End Method
+	
+	Method TerrainScaleTexCoords( u_scale:Float,v_scale:Float,coords_set:Int=0 )
+	
+		TerrainScaleTexCoords_( GetInstance(Self),u_scale,v_scale,coords_set )
+		
+	End Method
+	
+	' Internal
+	
 	Method Update() ' empty
 	
 		
@@ -247,12 +269,11 @@ Type TTerrain Extends TEntity
 	' called in UpdateEntityRender (in Render)
 	Method UpdateTerrain()
 	
-		UpdateTerrain_( GetInstance(Self) )
-		
-		TTerrain.vertices=StaticFloat_( TERRAIN_class,TERRAIN_vertices )
+		UpdateTerrain_( GetInstance(Self) ) ' crashes
 		
 	End Method
 	
+	Rem
 	' called in UpdateTerrain
 	Method RecreateROAM()
 	
@@ -266,21 +287,17 @@ Type TTerrain Extends TEntity
 		drawsub_( GetInstance(Self),l,v0,v1,v2 )
 		
 	End Method
-	
-	' called in LoadTerrain
-	Method UpdateNormals()
-	
-		TerrainUpdateNormals_( GetInstance(Self) )
-		
-	End Method
+	EndRem
 	
 	'void TreeCheck(CollisionInfo* ci);
 	
+	Rem
 	' called in TreeCheck and recursively
 	Method col_tree_sub( l:Int,v0:Float[],v1:Float[],v2:Float[] )
 	
 		col_tree_sub_( GetInstance(Self),l,v0,v1,v2 )
 		
 	End Method
+	EndRem
 	
 End Type

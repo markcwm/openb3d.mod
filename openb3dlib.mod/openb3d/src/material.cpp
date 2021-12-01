@@ -6,6 +6,7 @@
 
 #include "surface.h"
 #include "camera.h"
+#include "terrain.h"
 #include "shadermat.h"
 #include "file.h"
 #include "global.h"
@@ -323,18 +324,19 @@ Shader* Shader::CreateShaderMaterial(string Name){
 	*/
 
 // internal
-void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* brush){
+void Shader::TurnOn(Matrix& mat, Surface* surf, Terrain* terr, Brush* brush){
 	ProgramAttriBegin();
 	// Update Data
 
 #ifdef GLES2
 	if (surf==0){
-		vector<float>&vert=*vertices;
+		//vector<float>&vert=*vertices;
+		Terrain& terr2=*terr;
 		if (vbo_id==0) {
 			glGenBuffers(1,&vbo_id);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER,vbo_id);
-		glBufferData(GL_ARRAY_BUFFER,(vert.size()*sizeof(float)),&vert[0],GL_STREAM_DRAW);
+		glBufferData(GL_ARRAY_BUFFER,(&terr2.vertices.size()*sizeof(float)),&terr2.vertices[0],GL_STREAM_DRAW);
 	}
 #endif
 
@@ -423,7 +425,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 					if (surf!=0){
 						arb_program->SetParameterArray(Parameters[i].name, surf, Parameters[i].vbo);
 					}else{
-						arb_program->SetParameterArray(Parameters[i].name, vertices, Parameters[i].vbo);
+						arb_program->SetParameterArray(Parameters[i].name, terr, Parameters[i].vbo);
 					}
 				}
 			}
@@ -478,7 +480,7 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 		UpdateSampler = 0;
 	}*/
 	
-	if (surf!=0) {
+	if (surf!=0 || terr!=0) {
 		int DisableCubeSphereMapping=0;
 		for (int ix=0; ix<=254; ix++){
 			if (Shader_Tex[ix]==0) break;
@@ -660,6 +662,8 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 
 			glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 
+		if (surf!=0){
+				
 			if (Shader_Tex[ix]->is3D==0){
 
 				if(surf->vbo_enabled==true && surf->no_tris>=Global::vbo_min_tris){
@@ -697,7 +701,24 @@ void Shader::TurnOn(Matrix& mat, Surface* surf, vector<float>* vertices, Brush* 
 
 				}
 			}
+			
+		}else if (terr!=0){
+			
+			if (Shader_Tex[ix]->is3D==0){
 
+				if(tex_coords==0){
+					glTexCoordPointer(2,GL_FLOAT,8*sizeof(float),&terr->vertices[6]);
+				}else{
+					glTexCoordPointer(2,GL_FLOAT,0,&terr->tex_coords1[0]);
+				}
+				
+			}else{
+				
+				glTexCoordPointer(2,GL_FLOAT,0,&terr->tex_coords1[0]);
+				
+			}
+			
+		}
 							
 			// reset texture matrix
 			glMatrixMode(GL_TEXTURE);
@@ -1498,23 +1519,24 @@ void ProgramObject::SetParameterArray(int name, Surface* surf, int vbo){
 	glEnableVertexAttribArray(loc);
 }
 
-void ProgramObject::SetParameterArray(int name, vector<float>* verticesPtr, int vbo){
+void ProgramObject::SetParameterArray(int name, Terrain* terr, int vbo){
 #ifndef GLES2
-	vector<float>&vertices=*verticesPtr;
+	//vector<float>&vertices=*verticesPtr;
+	Terrain& terr2=*terr;
 	int loc= name;
 
 	//special case, terrain surface
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	switch (vbo){
 	case 1:
-		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), &vertices[0]);
+		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), &terr2.vertices[0]);
 		break;
 	case 2:
 	case 3:
-		glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), &vertices[6]);
+		glVertexAttribPointer(loc, 2, GL_FLOAT, GL_FALSE, 8*sizeof(float), &terr2.vertices[6]);
 		break;
 	case 4:
-		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), &vertices[3]);
+		glVertexAttribPointer(loc, 3, GL_FLOAT, GL_FALSE, 8*sizeof(float), &terr2.vertices[3]);
 		break;
 	}
 	glEnableVertexAttribArray(loc);

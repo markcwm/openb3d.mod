@@ -1,6 +1,6 @@
 /*
  *  geosphere.cpp
- *  openb3d
+ *  openb3d 
  *
  *
  */
@@ -115,9 +115,9 @@ Geosphere* Geosphere::CopyEntity(Entity* parent_ent){
 		geo->level2dzsize[i] = level2dzsize[i];
 	}
 	int tsize=size;
-	geo->height=new float[(tsize+1)*(tsize+1)];
+	geo->HeightMap=new float[(tsize+1)*(tsize+1)];
 	for (int i = 0; i<= (tsize+1)*(tsize+1); i++){
-		geo->height[i]=height[i];
+		geo->HeightMap[i]=HeightMap[i];
 	}
 	geo->NormalsMap=new float[(tsize+1)*(tsize+1)*5];
 	for (int i = 0; i<= (tsize+1)*(tsize+1)*5; i++){
@@ -169,7 +169,7 @@ Geosphere* Geosphere::CreateGeosphere(int tsize, Entity* parent_ent){
 		geo->hsize=tsize/4;
 
 		geo->vsize=.05;
-		geo->height=new float[(tsize+1)*(tsize+1)];
+		geo->HeightMap=new float[(tsize+1)*(tsize+1)];
 		geo->NormalsMap=new float[(tsize+1)*(tsize+1)*5];
 
 		geo->EquirectangularToTOAST();
@@ -373,7 +373,7 @@ void Geosphere::UpdateTerrain(){
 #endif
 
 	if(ShaderMat!=NULL){
-		ShaderMat->TurnOn(mat, 0, &vertices,&brush);
+		ShaderMat->TurnOn(mat, 0, this,&brush);
 	}
 	else
 	{
@@ -388,7 +388,7 @@ void Geosphere::UpdateTerrain(){
 
 				// Main brush texture takes precedent over surface brush texture
 				unsigned int texture=0;
-				int tex_flags=0,tex_blend=0;
+				int tex_flags=0,tex_blend=0,tex_coords=0;
 				float tex_u_scale=1.0,tex_v_scale=1.0,tex_u_pos=0.0,tex_v_pos=0.0,tex_ang=0.0;
 				int tex_cube_mode=0;
 
@@ -396,7 +396,7 @@ void Geosphere::UpdateTerrain(){
 				texture=brush.cache_frame[ix];
 				tex_flags=brush.tex[ix]->flags;
 				tex_blend=brush.tex[ix]->blend;
-				//tex_coords=brush.tex[ix]->coords;
+				tex_coords=brush.tex[ix]->coords;
 				tex_u_scale=brush.tex[ix]->u_scale;
 				tex_v_scale=brush.tex[ix]->v_scale;
 				tex_u_pos=brush.tex[ix]->u_pos;
@@ -535,8 +535,11 @@ void Geosphere::UpdateTerrain(){
 				}
 
 				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-				glTexCoordPointer(2,GL_FLOAT,32,&vertices[6]);
-
+				if(tex_coords==0){
+					glTexCoordPointer(2,GL_FLOAT,8*sizeof(float),&vertices[6]);
+				}else{
+					glTexCoordPointer(2,GL_FLOAT,0,&tex_coords1[0]);
+				}
 
 				// reset texture matrix
 				glMatrixMode(GL_TEXTURE);
@@ -634,8 +637,8 @@ void Geosphere::UpdateTerrain(){
 
 	glPushMatrix();
 	glMultMatrixf(&mat.grid[0][0]);
-	glVertexPointer(3,GL_FLOAT,32,&vertices[0]);
-	glNormalPointer(GL_FLOAT,32,&vertices[3]);
+	glVertexPointer(3,GL_FLOAT,8*sizeof(float),&vertices[0]);
+	glNormalPointer(GL_FLOAT,8*sizeof(float),&vertices[3]);
 #else
 		glUniform2iv(Global::shader->texflag, tex_count , tblendflags[0]);
 		glUniformMatrix3fv(Global::shader->texmat, tex_count, 0, tmatrix[0]);
@@ -714,12 +717,12 @@ void Geosphere::RecreateGeoROAM(){
 
 	//int i;
 
-	float h1= (height[(int)hsize*(int)size+ (int)hsize]*vsize+1)*size;
-	float h2= (height[(int) size*(int)size+ (int)hsize]*vsize+1)*size;
-	float h3= (height[(int)hsize*(int)size+ (int) size]*vsize+1)*size;
-	float h4=-(height[(int)    0*(int)size+ (int)hsize]*vsize+1)*size;
-	float h5=-(height[(int)hsize*(int)size]*vsize+1)*size;
-	float h6=-(height[0]*vsize+1)*size;
+	float h1= (HeightMap[(int)hsize*(int)size+ (int)hsize]*vsize+1)*size;
+	float h2= (HeightMap[(int) size*(int)size+ (int)hsize]*vsize+1)*size;
+	float h3= (HeightMap[(int)hsize*(int)size+ (int) size]*vsize+1)*size;
+	float h4=-(HeightMap[(int)    0*(int)size+ (int)hsize]*vsize+1)*size;
+	float h5=-(HeightMap[(int)hsize*(int)size]*vsize+1)*size;
+	float h6=-(HeightMap[0]*vsize+1)*size;
 
 
 	float v[9][5]={
@@ -878,7 +881,7 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 
 
 			vc[0][3]=(v0[3]+v1[3])/2; vc[0][4]=(v0[4]+v1[4])/2;
-			h=height[(int)vc[0][3]*(int)size+ (int)vc[0][4]]*vsize+1;
+			h=HeightMap[(int)vc[0][3]*(int)size+ (int)vc[0][4]]*vsize+1;
 			if (ds > rc0) {
 				d=sqrt(nx[0]*nx[0]+ny[0]*ny[0]+nz[0]*nz[0])/(size)/h;
 			}else{
@@ -897,7 +900,7 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 			rc = dx*dx+dy*dy+dz*dz+ts;*/
 
 			vc[1][3]=(v1[3]+v2[3])/2; vc[1][4]=(v1[4]+v2[4])/2;
-			h=height[(int)vc[1][3]*(int)size+ (int)vc[1][4]]*vsize+1;
+			h=HeightMap[(int)vc[1][3]*(int)size+ (int)vc[1][4]]*vsize+1;
 			if (ds > rc1) {
 				d=sqrt(nx[1]*nx[1]+ny[1]*ny[1]+nz[1]*nz[1])/(size)/h;
 			}else{
@@ -916,7 +919,7 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 			rc = dx*dx+dy*dy+dz*dz+ts;*/
 
 			vc[2][3]=(v2[3]+v0[3])/2; vc[2][4]=(v2[4]+v0[4])/2;
-			h=height[(int)vc[2][3]*(int)size+ (int)vc[2][4]]*vsize+1;
+			h=HeightMap[(int)vc[2][3]*(int)size+ (int)vc[2][4]]*vsize+1;
 			if (ds > rc2) {
 				d=sqrt(nx[2]*nx[2]+ny[2]*ny[2]+nz[2]*nz[2])/(size)/h;
 			}else{
@@ -940,21 +943,33 @@ void Geosphere::geosub(int l, float v2[], float v1[], float v0[]){
 	n1=&NormalsMap[5*(int)((int)v1[3]*(int)size+ v1[4])];
 	n2=&NormalsMap[5*(int)((int)v2[3]*(int)size+ v2[4])];
 
-	vertices.push_back(v0[0]); vertices.push_back(v0[1]); vertices.push_back(v0[2]);
-	vertices.push_back(n0[0]); vertices.push_back(n0[1]); vertices.push_back(n0[2]);
-	vertices.push_back(n0[3]);
+	vertices.push_back(v0[0]); // v
+	vertices.push_back(v0[1]); 
+	vertices.push_back(v0[2]);
+	vertices.push_back(n0[0]); // n
+	vertices.push_back(n0[1]); 
+	vertices.push_back(n0[2]);
+	vertices.push_back(n0[3]); // t
 	vertices.push_back(n0[4]);
 
 
-	vertices.push_back(v1[0]); vertices.push_back(v1[1]); vertices.push_back(v1[2]);
-	vertices.push_back(n1[0]); vertices.push_back(n1[1]); vertices.push_back(n1[2]);
-	vertices.push_back(n1[3]);
+	vertices.push_back(v1[0]); // v
+	vertices.push_back(v1[1]); 
+	vertices.push_back(v1[2]);
+	vertices.push_back(n1[0]); // n
+	vertices.push_back(n1[1]); 
+	vertices.push_back(n1[2]);
+	vertices.push_back(n1[3]); // t
 	vertices.push_back(n1[4]);
 
 
-	vertices.push_back(v2[0]); vertices.push_back(v2[1]); vertices.push_back(v2[2]);
-	vertices.push_back(n2[0]); vertices.push_back(n2[1]); vertices.push_back(n2[2]);
-	vertices.push_back(n2[3]);
+	vertices.push_back(v2[0]); // v
+	vertices.push_back(v2[1]); 
+	vertices.push_back(v2[2]);
+	vertices.push_back(n2[0]); // n
+	vertices.push_back(n2[1]); 
+	vertices.push_back(n2[2]);
+	vertices.push_back(n2[3]); // t
 	vertices.push_back(n2[4]);
 
 	triangleindex++;
@@ -1009,9 +1024,9 @@ void Geosphere::TOASTsub(int l, float v2[], float v1[], float v0[]){
 	float nx,ny,nz,ns;
 	float h0,h1,h2;
 
-	h0=height[(int)v0[3]*(int)size+ (int)v0[4]]*vsize+1;
-	h1=height[(int)v1[3]*(int)size+ (int)v1[4]]*vsize+1;
-	h2=height[(int)v2[3]*(int)size+ (int)v2[4]]*vsize+1;
+	h0=HeightMap[(int)v0[3]*(int)size+ (int)v0[4]]*vsize+1;
+	h1=HeightMap[(int)v1[3]*(int)size+ (int)v1[4]]*vsize+1;
+	h2=HeightMap[(int)v2[3]*(int)size+ (int)v2[4]]*vsize+1;
 
 	ax = h1*v1[0]-h0*v0[0];
 	ay = h1*v1[1]-h0*v0[1];
@@ -1069,7 +1084,7 @@ void Geosphere::ModifyGeosphere (int x, int y, float new_height){
 				int x1=-NormalsMap[5*(x*(int)size+ y)+3]*2;
 				int y1=NormalsMap[5*(x*(int)size+ y)+4];
 
-				//geo->height[x*(int)geo->size+y]=((float)*(buffer+x1+y1*width))/255.0;
+				//geo->HeightMap[x*(int)geo->size+y]=((float)*(buffer+x1+y1*width))/255.0;
 				if (x1+y1*width<0) {
 					x1=0; y1=0;
 				}
@@ -1078,7 +1093,7 @@ void Geosphere::ModifyGeosphere (int x, int y, float new_height){
 		}
 	}
 
-	height[EqToToast[x+y*width]]=new_height;*/
+	HeightMap[EqToToast[x+y*width]]=new_height;*/
 
 
 	//Less accurate approach: some lines might be distorted, but for little changes on a map should be good enough
@@ -1155,7 +1170,7 @@ void Geosphere::ModifyGeosphere (int x, int y, float new_height){
 	}
 	x+=hsize;
 	y+=hsize;
-	height[x+y*(int)size]=new_height;
+	HeightMap[x+y*(int)size]=new_height;
 }
 
 void Geosphere::EquirectangularToTOAST (){
@@ -1273,7 +1288,7 @@ Geosphere* Geosphere::LoadGeosphere(string filename,Entity* parent_ent){
 					x1=0; y1=0;
 				}
 
-				geo->height[x*(int)geo->size+y]=((float)*(buffer+x1+y1*width))/255.0;
+				geo->HeightMap[x*(int)geo->size+y]=((float)*(buffer+x1+y1*width))/255.0;
 				if (x<geo->size) {
 					geo->NormalsMap[5*(x*(int)geo->size+ y)]=(float)tmpNormals[2*(y1*(int)width+x1)];
 					geo->NormalsMap[5*(x*(int)geo->size+ y)+1]=256;
@@ -1287,10 +1302,10 @@ Geosphere* Geosphere::LoadGeosphere(string filename,Entity* parent_ent){
 		// create a dummy terrain only as a dirty fallback
 		height =128;
 		geo=Geosphere::CreateGeosphere(256, parent_ent);
-		//geo->height=new float[(width+1)*(width+1)];
-		for (int x=0;x<=geo->size-1;x++){
-			for (int y=0;y<=geo->size-1;y++){
-				geo->height[x*(int)geo->size+y]=0.0f;
+		//geo->HeightMap=new float[(width+1)*(width+1)];
+		for (int x=0;x<=geo->size;x++){
+			for (int y=0;y<=geo->size;y++){
+				geo->HeightMap[x*(int)geo->size+y]=0.0f;
 			}
 		}
 	}
@@ -1313,12 +1328,12 @@ void Geosphere::TreeCheck(CollisionInfo* ci){
 
 
 	//int i;
-	float h1= (height[(int)hsize*(int)size+ (int)hsize]*vsize+1)*size;
-	float h2= (height[(int) size*(int)size+ (int)hsize]*vsize+1)*size;
-	float h3= (height[(int)hsize*(int)size+ (int) size]*vsize+1)*size;
-	float h4=-(height[(int)    0*(int)size+ (int)hsize]*vsize+1)*size;
-	float h5=-(height[(int)hsize*(int)size]*vsize+1)*size;
-	float h6=-(height[0]*vsize+1)*size;
+	float h1= (HeightMap[(int)hsize*(int)size+ (int)hsize]*vsize+1)*size;
+	float h2= (HeightMap[(int) size*(int)size+ (int)hsize]*vsize+1)*size;
+	float h3= (HeightMap[(int)hsize*(int)size+ (int) size]*vsize+1)*size;
+	float h4=-(HeightMap[(int)    0*(int)size+ (int)hsize]*vsize+1)*size;
+	float h5=-(HeightMap[(int)hsize*(int)size]*vsize+1)*size;
+	float h6=-(HeightMap[0]*vsize+1)*size;
 
 
 	float v[9][5]={
@@ -1452,7 +1467,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 			nz=(v0[2]+v1[2])/2;
 
 			vc[0][3]=(v0[3]+v1[3])/2; vc[0][4]=(v0[4]+v1[4])/2;
-			h=height[(int)vc[0][3]*(int)size+ (int)vc[0][4]]*vsize+1;
+			h=HeightMap[(int)vc[0][3]*(int)size+ (int)vc[0][4]]*vsize+1;
 			d=sqrt(nx*nx+ny*ny+nz*nz)/(size)/h;
 
 			vc[0][0]=nx/d; vc[0][1]=ny/d; vc[0][2]=nz/d; 
@@ -1463,7 +1478,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 			nz=(v1[2]+v2[2])/2;
 
 			vc[1][3]=(v1[3]+v2[3])/2; vc[1][4]=(v1[4]+v2[4])/2;
-			h=height[(int)vc[1][3]*(int)size+ (int)vc[1][4]]*vsize+1;
+			h=HeightMap[(int)vc[1][3]*(int)size+ (int)vc[1][4]]*vsize+1;
 			d=sqrt(nx*nx+ny*ny+nz*nz)/(size)/h;
 
 			vc[1][0]=nx/d; vc[1][1]=ny/d; vc[1][2]=nz/d; 
@@ -1473,7 +1488,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 			ny=(v2[1]+v0[1])/2;
 			nz=(v2[2]+v0[2])/2;
 			vc[2][3]=(v2[3]+v0[3])/2; vc[2][4]=(v2[4]+v0[4])/2;
-			h=height[(int)vc[2][3]*(int)size+ (int)vc[2][4]]*vsize+1;
+			h=HeightMap[(int)vc[2][3]*(int)size+ (int)vc[2][4]]*vsize+1;
 			d=sqrt(nx*nx+ny*ny+nz*nz)/(size)/h;
 
 			vc[2][0]=nx/d; vc[2][1]=ny/d; vc[2][2]=nz/d; 
@@ -1498,7 +1513,7 @@ void Geosphere::c_col_tree_geosub(int l, float v2[], float v1[], float v0[]){
 
 void Geosphere::FreeEntity(){
 
-	delete[] height;
+	delete[] HeightMap;
 	delete[] NormalsMap;		
 	//delete[] EqToToast;		
 

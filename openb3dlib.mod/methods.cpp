@@ -464,21 +464,21 @@ void UpdateTerrain_( Terrain* obj ){
 	obj->UpdateTerrain();
 }
 
-void RecreateROAM_( Terrain* obj ){
+/*void RecreateROAM_( Terrain* obj ){
 	obj->RecreateROAM();
-}
+}*/
 
-void drawsub_( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
+/*void drawsub_( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
 	obj->drawsub( l,v0,v1,v2 );
-}
+}*/
 
 void TerrainUpdateNormals_( Terrain* obj ){
 	obj->UpdateNormals();
 }
 
-void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
+/*void col_tree_sub_( Terrain* obj,int l,float v0[],float v1[],float v2[] ){
 	obj->col_tree_sub( l,v0,v1,v2 );
-}
+}*/
 
 // Texture
 

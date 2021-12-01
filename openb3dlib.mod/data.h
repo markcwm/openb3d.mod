@@ -32,8 +32,8 @@ Entity* StaticIterListEntity_( int classid,int varid,int &id );
 ShadowObject* StaticIterListShadowObject_( int classid,int varid,int &id );
 Terrain* StaticIterListTerrain_( int classid,int varid,int &id );
 Texture* StaticIterListTexture_( int classid,int varid,int &id );
+//float StaticIterVectorFloat_( int classid,int varid,int &id );
 Light* StaticIterVectorLight_( int classid,int varid,int &id );
-float StaticIterVectorFloat_( int classid,int varid,int &id );
 
 // Action
 int* ActionInt_( Action* obj,int varid );
@@ -136,6 +136,7 @@ Brush* SurfaceBrush_( Surface* obj,int varid );
 Shader* SurfaceShader_( Surface* obj,int varid );
 
 // Terrain
+int* TerrainInt_( Terrain* obj,int varid );
 float* TerrainFloat_( Terrain* obj,int varid );
 Camera* TerrainCamera_( Terrain* obj,int varid );
 Shader* TerrainShader_( Terrain* obj,int varid );
