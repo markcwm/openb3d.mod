@@ -39,7 +39,7 @@ OpenB3D is a lightweight OpenGL 1.4+ 3D engine written in C++, this is the Blitz
 
 ## Status
 
-I haven't any spare time to work on the wrapper now but I will still maintain pull requests if there's anyone who wants to add or fix stuff, contact me if you're interested in doing contract work. The library is compatible with GLES2 (WebGL) but the wrapper still doesn't support this. If you get strange compiler issues please post an issue about it, thanks.
+I haven't any spare time to work on the wrapper any more but I will still maintain any pull requests if there's anyone who wants to add or fix stuff officially, if I can use that word. I apologize if you were working on something with OpenB3D and were hoping for further updates, there were many things I wanted to add but I have had to devote all my time to real-world concerns. I would also like to take this opportunity to apologize to anyone I upset in the past with my thoughtless comments, I remember I misbehaved quite a bit on blitzbasic.com, people are more important than ideas. Thank you.
 
 ## Installation
 * Extract the zip to `BlitzMax/mod` folder
