@@ -39,7 +39,7 @@ OpenB3D is a lightweight OpenGL 1.4+ 3D engine written in C++, this is the Blitz
 
 ## Status
 
-I haven't any spare time to work on the wrapper any more but I will still maintain any pull requests if there's anyone who wants to add or fix stuff officially, if I can use that word. I apologize if you were working on something with OpenB3D and were hoping for further updates, there were many things I wanted to add but I have had to devote all my time to real-world concerns. I would also like to take this opportunity to apologize to anyone I upset in the past with my thoughtless comments, I remember I misbehaved quite a bit on blitzbasic.com, people are more important than ideas. Thank you.
+I haven't any spare time to work on the wrapper any more but I will still try to maintain pull requests if there's anyone who wants to add or fix stuff on this repo. I apologize if you were working on something with OpenB3D and were hoping for more updates, there are many things I would like to add but I have to devote all my time to real-world concerns. If you find a bug, please post it as an issue here. Thanks.
 
 ## Installation
 * Extract the zip to `BlitzMax/mod` folder
@@ -53,10 +53,10 @@ I haven't any spare time to work on the wrapper any more but I will still mainta
 * To syntax highlight the commands use `./makedocs` or MaxIDE's Rebuild Documentation
 
 ## License
-The library is licensed with the GNU LGPL 2.1 or later with an exception to allow static linking. The wrapper is licensed with the zlib license and Assimp has the BSD-2-Clause license.
+The library is licensed with the GNU LGPL 2.1 or later with an exception to allow static linking and the wrapper is licensed with the permissive zlib license.
 
 ## Credits
-The OpenB3D library was based on source from iMiniB3D, other core parts were from Warner Engine and MiniB3D Extended.
+The OpenB3D library was based iMiniB3D, other core parts were ported from Warner Engine and MiniB3D Extended.
 
 * [Blitz3D](https://github.com/blitz-research/blitz3d) by Mark Sibly
 * [MiniB3D](https://github.com/si-design) and iMiniB3D by Simon Harrison
@@ -64,5 +64,5 @@ The OpenB3D library was based on source from iMiniB3D, other core parts were fro
 * [Warner Engine](https://code.google.com/archive/p/warner-engine/) by Bram den Hond
 * [MiniB3D Extended](https://code.google.com/archive/p/minib3dextended/) by Benjamin Rössig (klepto2)
 * [bOGL 2](https://github.com/Leushenko/bOGL-2) by Alex Gilding (Leushenko)
-* Coding help: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Spinduluz](https://github.com/Spinduluz), [DruggedBunny](https://github.com/DruggedBunny), [Hezkore](https://bitbucket.org/Hezkore/)
+* I am grateful to: [RonTek](https://www.blitzcoder.org/forum/), [Krischan](https://github.com/Krischan74), [KippyKip](https://github.com/Kippykip), [Spinduluz](https://github.com/Spinduluz), [DruggedBunny](https://github.com/DruggedBunny), [Hezkore](https://bitbucket.org/Hezkore/) for their coding help
 
