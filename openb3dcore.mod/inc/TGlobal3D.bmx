@@ -425,6 +425,10 @@ Type TGlobal3D
 	
 		RenderWorld_()
 		
+		For Local mesh:TMesh = EachIn TMesh.plane_list
+			TMesh.UpdatePlane(mesh)
+		Next
+		
 	End Function
 	
 	Function AntiAlias( samples:Int )

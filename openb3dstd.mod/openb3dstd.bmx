@@ -18,4 +18,4 @@ ModuleInfo "Copyright: Library - 2010-2021 Angelo Rosina"
 Import Openb3d.Openb3dcore
 
 ' functions
-Include "../openb3dcore.mod/inc/functions_std.bmx"
+Include "functions_std.bmx"

@@ -3,7 +3,8 @@ Rem
 bbdoc: Mesh entity
 End Rem
 Type TMesh Extends TEntity
-
+	Global plane_list:TList=CreateList()
+	
 	Field no_surfs:Int Ptr ' 0
 	
 	Field surf_list:TList=CreateList() ' Surface list
@@ -29,6 +30,7 @@ Type TMesh Extends TEntity
 	' extra
 	Field shared_surf:Int Ptr ' for FreeEntity
 	Field shared_anim_surf:Int Ptr
+	Field plane_divisions:Int = 1
 	
 	' wrapper
 	Field surf_list_id:Int=0
@@ -316,42 +318,69 @@ Type TMesh Extends TEntity
 		
 	End Method
 	
-	' unlike B3d divisions can be more than 16
-	Function CreatePlane:TMesh( divisions:Int=1,parent:TEntity=Null )
+	Function CreatePlane:TMesh(divisions:Int=1, parent:TEntity=Null)
 	
-		'Local inst:Byte Ptr=CreatePlane_( divisions,GetInstance(parent) )
-		'Return CreateObject(inst)
-		
-		Local mesh:TMesh=CreateMesh(parent)
-		Local surf:TSurface=mesh.CreateSurface()
-		
-		Local size#=50000/divisions
-		Local uvscale#=50000/5000 ' 10 - increases texture resolution
-		Local iv%,ix%,iz%,ptx#,ptz#
-		
-		' create grid vertices
-		For iz=0 To divisions
-			For ix=0 To divisions
-				ptx=(ix*size)-(divisions*size*0.5) ' ipos-midpos
-				ptz=(iz*size)-(divisions*size*0.5)
-				iv=ix+(iz*(divisions+1)) ' iv=x+(z*x1)
-				surf.AddVertex(ptx,0,ptz)
-				surf.VertexTexCoords(iv,iz*uvscale,ix*uvscale)
-				surf.VertexNormal(iv,0.0,1.0,0.0)
-			Next
-		Next
-		
-		' fill in quad triangles
-		For iz=0 To divisions-1
-			For ix=0 To divisions-1
-				iv=ix+(iz*(divisions+1))
-				surf.AddTriangle(iv,iv+divisions+1,iv+divisions+2) ' 0,x1,x2
-				surf.AddTriangle(iv+divisions+2,iv+1,iv) ' x2,1,0
-			Next
-		Next
-		
-		mesh.RotateMesh(0,-90,0) ' just to match CreatePlane rotation
+		Local mesh:TMesh = CreateMesh(parent)
+		Local surf:TSurface = CreateSurface(mesh)
+		mesh.plane_divisions = divisions
+		ListAddLast plane_list, mesh
 		Return mesh
+		
+	End Function
+	
+	' planes are updated in RenderWorld
+	Function UpdatePlane(mesh:TMesh)
+	
+		Local iv%,ix%,iz%,ptx#,ptz#
+		Local camera:TCamera = TGlobal3D.camera_in_use
+		Local size# = camera.range_far[0] * 1.5 ' always size of range_far so it can be clipped
+		Local surf:TSurface = GetSurface(mesh,1)
+		If CountVertices(surf)>0 Then ClearSurface surf
+		
+		Local divisions% = mesh.plane_divisions
+		If divisions>64 Then divisions = 64 ' limit of triangles
+		If divisions<1 Then divisions = 1
+		Local subsize# = size / divisions
+		
+		For iz = 0 To divisions
+			For ix = 0 To divisions
+				ptx = ((ix*subsize)-(divisions/2*subsize)) * 2 ' ipos-midpos
+				ptz = ((iz*subsize)-(divisions/2*subsize)) * 2
+				iv = ix+(iz*(divisions+1)) ' iv=x+(z*x1)
+				surf.AddVertex ptx,0,ptz,ptx,-ptz,0
+				surf.VertexNormal iv,0,1,0
+			Next
+		Next
+
+		For iz = 0 To divisions-1
+			For ix = 0 To divisions-1
+				iv = ix+(iz*(divisions+1))
+				surf.AddTriangle iv,iv+divisions+1,iv+divisions+2 ' 0,x1,x2
+				surf.AddTriangle iv+divisions+2,iv+1,iv ' x2,1,0
+			Next
+		Next
+		
+		Rem
+		AddVertex surf,-size,0,size,-size,-size,0
+		AddVertex surf,size,0,size,size,-size,0
+		AddVertex surf,size,0,-size,size,size,0
+		AddVertex surf,-size,0,-size,-size,size,0
+		
+		AddTriangle surf,0,1,2
+		AddTriangle surf,0,2,3
+		
+		VertexNormal surf,0,0,1,0
+		VertexNormal surf,1,0,1,0
+		VertexNormal surf,2,0,1,0
+		VertexNormal surf,3,0,1,0
+		EndRem
+		
+		Local cx# = EntityX(camera,True)
+		Local cz# = EntityZ(camera,True)
+		Local tex:TTexture = mesh.brush.tex[0]
+		
+		If tex<>Null Then PositionTexture tex,-cx*tex.u_scale[0],cz*tex.v_scale[0]
+		PositionEntity mesh,cx,0,cz
 		
 	End Function
 	
