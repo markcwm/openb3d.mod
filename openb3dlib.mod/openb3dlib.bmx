@@ -470,6 +470,9 @@ Extern
 	' Collision
 	Function FreeCollisionPivots_()
 	
+	' Collision2
+	Function ManualCollision_( ent:Byte Ptr,ent2:Byte Ptr,col_method:Int,col_response:Int ) ' KippyKip
+	
 	' Global
 	Function UpdateEntityAnim_( mesh:Byte Ptr )
 	

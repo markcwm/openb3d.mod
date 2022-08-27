@@ -3,6 +3,13 @@
 ' *** Extra
 
 Rem
+bbdoc: Use manual collision mode between entities, diables automatic collisions
+End Rem
+Function ManualCollision( ent:TEntity,ent2:TEntity,col_method:Int,col_response:Int ) ' KippyKip
+	ManualCollision_( TEntity.GetInstance(ent),TEntity.GetInstance(ent2),col_method,col_response )
+End Function
+
+Rem
 bbdoc: Check for framebuffer errors
 End Rem
 Function CheckFramebufferStatus( target% )

@@ -34,6 +34,9 @@ void CameraUpdateEntityRender_( Entity* ent,Entity* cam );
 // Collision
 void FreeCollisionPivots_();
 
+// Collision2
+int ManualCollision_(Entity& ent,Entity& ent2,int col_method,int col_response); // KippyKip
+
 // Entity
 int CountAllChildren_( Entity* obj,int no_children );
 Entity* GetChildFromAll_( Entity* obj,int child_no,int &no_children,Entity* ent );

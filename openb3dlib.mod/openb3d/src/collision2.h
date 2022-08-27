@@ -87,6 +87,7 @@ public:
 //const int COLLISION_RESPONSE_SLIDE=2;
 //const int COLLISION_RESPONSE_SLIDEXZ=3;
 
+int ManualCollision(Entity& ent,Entity& ent2,int col_method,int col_response); // KippyKip
 void UpdateCollisions();
 void ClearStaticCollisions();
 void UpdateStaticCollisions();

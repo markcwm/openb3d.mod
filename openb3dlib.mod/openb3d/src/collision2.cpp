@@ -19,6 +19,8 @@
 #include "tree.h"
 #include "geom.h"
 
+#include "bmaxdebug.h"
+
 #include <vector>
 #include <list>
 #include <iostream>
@@ -27,6 +29,8 @@
 using namespace std;
 
 extern Vector col_coords;
+
+static int collisions_manual=0;
 
 list<CollisionPair*> CollisionPair::cp_list;
 list<Entity*> CollisionPair::ent_lists[MAX_TYPES];
@@ -39,11 +43,149 @@ Pivot* CollisionPair::piv111;
 Pivot* CollisionPair::piv2o;
 Pivot* CollisionPair::piv2;
 
+int ManualCollision(Entity& ent,Entity& ent2,int col_method,int col_response) // KippyKip
+{
+	//DebugLog("Call worked");
+	collisions_manual=1; // disable UpdateCollisions, from UpdateWorld
+	
+	// if src entity is hidden or it's parent is hidden then do not check for collision
+	if(ent.Hidden()==true) return 0;
+
+	Vector c_vec_a(ent.EntityX(true),ent.EntityY(true),ent.EntityZ(true));
+	Vector c_vec_b(ent.old_x,ent.old_y,ent.old_z);
+	Vector c_vec_radius(ent.radius_x,ent.radius_y,ent.radius_x);
+
+	CollisionInfo* c_col_info=C_CreateCollisionInfoObject(&c_vec_a,&c_vec_b,&c_vec_radius);
+
+	Collision* c_coll=NULL;
+
+	int response=0;
+
+	// repeat until there's no collision between src and dest entities
+	for(;;)
+	{
+		int hit=false;
+
+		c_coll=C_CreateCollisionObject();
+		Entity* ent2_hit=NULL;
+
+		// if des entity is hidden or it's parent is hidden then do not check for collision
+		// if src ent is same as des entity then do not check for collision
+		if(ent2.Hidden()==false && &ent!=&ent2)
+		{
+			//if(QuickCheck(ent,ent2)==false) continue; // quick check to see if entities are colliding
+			Matrix mat;
+
+			if(ent2.dynamic!=true){
+				mat.Overwrite(ent2.mat);
+			}else{
+				mat.Overwrite(ent2.old_mat);
+			}
+
+			Vector c_vec_i(mat.grid[0][0],mat.grid[0][1],-mat.grid[0][2]);
+			Vector c_vec_j(mat.grid[1][0],mat.grid[1][1],-mat.grid[1][2]);
+			Vector c_vec_k(-mat.grid[2][0],-mat.grid[2][1],mat.grid[2][2]);
+
+			MMatrix c_mat(c_vec_i,c_vec_j,c_vec_k);
+			Vector c_vec_v(mat.grid[3][0],mat.grid[3][1],-mat.grid[3][2]);
+
+			Transform c_tform(c_mat,c_vec_v);
+
+			// if pick mode is sphere or box then update collision info object to include entity radius/box info
+			if(col_method!=COLLISION_METHOD_POLYGON){
+				C_UpdateCollisionInfoObject(c_col_info,ent2.radius_x,ent2.box_x,ent2.box_y,ent2.box_z,ent2.box_x+ent2.box_w,ent2.box_y+ent2.box_h,ent2.box_z+ent2.box_d);
+			}
+
+			MeshCollider* tree=NULL;
+			if(dynamic_cast<Mesh*>(&ent2)!=0){
+				Mesh* m=dynamic_cast<Mesh*>(&ent2);
+				m->TreeCheck(); // create collision tree for mesh if necessary
+				tree=m->c_col_tree;
+			}else if(dynamic_cast<Terrain*>(&ent2)!=0){
+				Terrain* t=dynamic_cast<Terrain*>(&ent2);
+				t->TreeCheck(c_col_info); // create collision tree for terrain if necessary
+				tree=t->c_col_tree;
+			}
+
+
+			hit=C_CollisionDetect(c_col_info,c_coll,&c_tform,tree,col_method);
+
+			if(hit){
+
+				ent2_hit=&ent2;
+
+			}
+
+			response=col_response;
+
+		} // end of dest ent loop
+
+		if(ent2_hit){
+			//DebugLog("StaticLoop");
+
+			int x=C_CollisionResponse(c_col_info,c_coll,response); // fixes collision functions lag, topic=87446
+			ent.no_collisions=ent.no_collisions+1;
+
+			//int i=ent.no_collisions-1;
+			CollisionImpact* eci=new CollisionImpact;
+			//ent.collision.push_back(eci);
+			ent.collision.insert(ent.collision.begin(),eci); // fixes some collisions breaking, inverts order
+
+			eci->x=C_CollisionX();
+			eci->y=C_CollisionY();
+			eci->z=C_CollisionZ();
+			eci->nx=C_CollisionNX();
+			eci->ny=C_CollisionNY();
+			eci->nz=C_CollisionNZ();
+			eci->ent=ent2_hit;
+
+			if(dynamic_cast<Mesh*>(ent2_hit)!=NULL){
+				eci->surf=dynamic_cast<Mesh*>(ent2_hit)->GetSurface(C_CollisionSurface());
+			}else{
+				eci->surf=NULL;
+			}
+
+			eci->tri=C_CollisionTriangle();
+
+			//if(C_CollisionResponse(c_col_info,c_coll,response)==false) break;
+			if(x==false) break;
+
+		}else{
+
+			break;
+
+		}
+
+		C_DeleteCollisionObject(c_coll);
+
+	} // end of infinite loop
+
+	C_DeleteCollisionObject(c_coll);
+
+	int hits=C_CollisionFinal(c_col_info);
+
+	if(hits){
+		ent.new_x=C_CollisionPosX();
+		ent.new_y=C_CollisionPosY();
+		ent.new_z=C_CollisionPosZ();
+
+		// moved from PositionEntities
+		ent.PositionEntity(ent.new_x,ent.new_y,ent.new_z,true);
+	}
+	
+	C_DeleteCollisionInfoObject(c_col_info);
+	return hits;
+	
+}
+
  // dynamic to static
 void UpdateCollisions(){
-	ClearStaticCollisions(); //Clear all the known collsions first before counting them up
-	UpdateStaticCollisions();
-	UpdateDynamicCollisions();
+	if(collisions_manual==0){
+		ClearStaticCollisions(); // Clear all the known collisions first before counting them up
+		UpdateStaticCollisions();
+		UpdateDynamicCollisions();
+	}
+	collisions_manual=0; // reset flag
 }
 
 int PositionEntities(int update_old,int add_to_new){

@@ -656,6 +656,9 @@ Creates a sprite entity.
 <tr><td class=docleft width=1%><a href=#LoadTerrain>LoadTerrain</a></td><td class=docright>
 Loads a terrain from an image file and returns the terrain's handle.
 </td></tr>
+<tr><td class=docleft width=1%><a href=#ManualCollision>ManualCollision</a></td><td class=docright>
+Use manual collision mode between entities, diables automatic collisions.
+</td></tr>
 <tr><td class=docleft width=1%><a href=#MeshCSG>MeshCSG</a></td><td class=docright>
 Method 0 subtracts mesh2 from mesh1, 1 adds meshes, 2 intersects meshes. Returns a new mesh.
 </td></tr>
@@ -4348,6 +4351,11 @@ Specifying a parent entity will still result in the terrain being created  at po
 A heightmaps dimensions (width and height) must be the same and must be a power of 2, e.g. 32, 64, 128, 256, 512, 1024.
 <p>
 See also: <a href=#CreateTerrain>CreateTerrain</a>.</td></tr>
+</table>
+<br>
+<table class=doc width=100% cellspacing=3 id=ManualCollision>
+<tr><td class=doctop colspan=2>Function ManualCollision( ent:TEntity,ent2:TEntity,col_method:Int,col_response:Int ) ' KippyKip</td></tr>
+<tr><td class=docleft width=1%>Description</td><td class=docright>Use manual collision mode between entities, diables automatic collisions.</td></tr>
 </table>
 <br>
 <table class=doc width=100% cellspacing=3 id=MeshCSG>

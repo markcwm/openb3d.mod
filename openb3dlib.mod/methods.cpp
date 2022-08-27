@@ -9,6 +9,7 @@
 #include "openb3d/src/quaternion.h"
 #include "openb3d/src/maths_helper.h"
 #include "openb3d/src/model.h"
+//#include "openb3d/src/collision2.h"
 
 #include <string.h>
 
@@ -97,6 +98,11 @@ void CameraUpdateEntityRender_( Entity* ent,Entity* cam ){
 // Collision
 void FreeCollisionPivots_(){
 	FreeCollisionPivots();
+}
+
+// Collision2
+int ManualCollision_( Entity& ent,Entity& ent2,int col_method,int col_response ){ // KippyKip
+	ManualCollision( ent,ent2,col_method,col_response );
 }
 
 // Entity
